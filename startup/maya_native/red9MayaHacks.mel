@@ -1,0 +1,121 @@
+/*
+Created on 2 May 2013
+
+------------------------------------------
+Red9 Studio Pack: Maya Pipeline Solutions
+Author: Mark Jackson
+email: rednineinfo@gmail.com
+------------------------------------------
+
+These are simple procs that the hacked scripts call to add to 
+their menu's. These are here so that I'm not hacking each script
+separately, means I have 1 place to modify the calls for the future
+
+Note to self!: menu calls should NOT use '-sourceType "python"' 
+as this would then mean managing versions, 2011 and below has no
+such arg in the menu calls
+================================================================
+*/
+
+
+global proc red9HackChannelBox(string $parent)
+{
+	 //hack the ChannelBox RMB popup menu
+	
+	 menuItem -p $parent -d true;
+	 menuItem -label ("Red9 : HUD")
+	 	-subMenu true 
+	 	-tearOff true
+	 	-p $parent red9HUDsubmenu;
+	 menuItem -label ("HUD: Monitor CB selection") 
+		-p red9HUDsubmenu
+		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDaddCBAttrs()\")" red9HUDaddStaticItem;
+	 menuItem -label ("HUD: Remove CB selection") 
+		-p red9HUDsubmenu
+		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDremoveCBAttrs()\")" red9HUDremoveItem;
+	 menuItem -divider true -p red9HUDsubmenu;
+	 menuItem -label ("HUD: Show as HeadsUp") 
+		-p red9HUDsubmenu
+		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDManagement('refreshHeadsUp')\")" red9HUDrefreshHeadsUpItem;	
+	 menuItem -label ("HUD: Show as Sliders") 
+		-p red9HUDsubmenu
+		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDManagement('refreshSliders')\")" red9HUDrefreshSlidersItem;		 
+	 menuItem -label ("HUD: Show Off") 
+		-p red9HUDsubmenu
+		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDManagement('kill')\")" red9HUDkillItem;	
+	 menuItem -divider true -p red9HUDsubmenu;
+	 menuItem -label ("HUD: Delete") 
+		-p red9HUDsubmenu
+		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDManagement('delete')\")" red9HUDdeleteItem;	
+
+}
+
+
+global proc red9HackGraphCurveMenu(string $parent)
+{
+	 //hack the GraphEditor 'curve' menu
+	 menuItem -d true;
+	 menuItem -label "Red9: Randomizer"
+		-annotation "Add Noise to Curves"	
+		-p $parent			
+		-c "python(\"import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.RandomizeKeys().curveMenuFunc()\")"
+		-dragMenuCommand "python(\"import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.RandomizeKeys().curveMenuFunc()\")"
+		noiseItem;
+	 menuItem -optionBox true
+		-annotation "Noise Settings" 
+		-p $parent
+		-c "python(\"import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.RandomizeKeys.showOptions()\")"
+		-dragMenuCommand "python(\"import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.RandomizeKeys.showOptions()\")"
+		noiseOptionsItem;
+	 menuItem -label "Red9: Interactive Simplify"
+		-annotation "Interactively simplify and filter animCurves"	
+		-p $parent			
+		-c "python(\"import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.FilterCurves.show()\")"
+		-dragMenuCommand "python(\"import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.FilterCurves.show()\")";
+}
+
+
+global proc red9HackScriptEditorPopup(string $parent)
+{
+	 //hack the ScriptEditor marking menu
+	 
+	 menuItem -radialPosition "SW" 
+		 -parent $parent 
+	 	 -label "Red9: InspectFunction"
+	 	 -command "handleScriptEditorAction \"copy\";red9_InspectCode";
+}
+
+
+global proc red9HackTraxMenu(string $parent)
+{
+	//hack Red9_Sound to the Trax Editor menuBar
+     menu -label "Red9_Sound" -tearOff true -allowOptionBoxes true "redNineTraxRoot";
+ 	 menuItem -label ("Delete Selected Audio") 
+		-p "redNineTraxRoot"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().deleteSelected()\")" red9TraxDeleteItem;
+	 menuItem -d true;
+	 menuItem -label ("Activate Selected Audio") 
+		-p "redNineTraxRoot"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioNode().setActive()\")" red9TraxActiveItem;
+	 menuItem -label ("Set Timeline to Selected") 
+		-p "redNineTraxRoot"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().setTimelineToAudio()\")" red9TraxTimelineItem;		
+	 menuItem -label ("Mute Selected") 
+		-p "redNineTraxRoot"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().muteSelected(True)\")" red9TraxMuteSelectedItem;
+	 menuItem -label ("UnMute Selected") 
+		-p "redNineTraxRoot"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().muteSelected(False)\")" red9TraxUnmuteSelectedItem;
+	 menuItem -d true;
+	 menuItem -label ("Combine Audio") 
+		-p "redNineTraxRoot"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.combineAudio()\")" red9TraxCombineItem;
+	 menuItem -d true;
+	 menuItem -label ("Open Audio Path") 
+		-p "redNineTraxRoot"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioNode().openAudioPath()\")" red9TraxOpenPathItem;
+	 menuItem -label ("Inspect Wav Format") 
+		-p "redNineTraxRoot"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.inspect_wav()\")" red9TraxWavInspectItem;
+
+}

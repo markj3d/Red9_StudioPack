@@ -1,0 +1,103 @@
+
+/*
+Hacked popup menu for the Script Editor. Added the Red9_Inspect item
+original source file scriptEditorPanel.mel from C:\Program...\scripts\startup\
+*/
+
+//==================================================
+//HACKED FROM: scripts/startup/scriptEditorPanel.mel
+//==================================================
+
+global proc buildScriptEditorCondensedPopupMenus(string $parent, int $isHistoryPopup)
+//
+// Builds all the necessary menus under the specified menubar/popup
+//
+{		
+	// build the default marking menus
+	menuItem -radialPosition "N" 
+			 -parent $parent 
+			 -label (uiRes("m_scriptEditorPanel.kNewExecuterTab"))
+			 -command "handleScriptEditorAction \"addExecuterTab\"";
+	menuItem -radialPosition "W" 
+			 -parent $parent 
+			 -label (uiRes("m_scriptEditorPanel.kSelectPreviousTab"))
+			 -command "handleScriptEditorAction \"selectPreviousExecuterTab\"";	 
+	menuItem -radialPosition "E" 
+			 -parent $parent 
+			 -label (uiRes("m_scriptEditorPanel.kSelectNextTab"))
+			 -command "handleScriptEditorAction \"selectNextExecuterTab\"";	 
+	 
+	$deleteSM = `menuItem -radialPosition "SE" 
+			 -parent $parent 
+			 -subMenu true
+			 -label (uiRes("m_scriptEditorPanel.kCloseMMLabel"))`;
+		menuItem -parent $deleteSM
+ 				 -radialPosition "E"
+				 -label (uiRes("m_scriptEditorPanel.kCloseCurrentMMLabel"))
+				 -command "handleScriptEditorAction \"removeCurrentExecuterTab\"";	 
+		menuItem -parent $deleteSM
+				 -radialPosition "W"
+				 -label (uiRes("m_scriptEditorPanel.kCloseOthersMMLabel"))
+				 -command "handleScriptEditorAction \"removeOtherExecuterTabs\"";	 
+		setParent -m ..;
+					
+	if (!$isHistoryPopup) {
+		// build the default short rmb menus
+		menuItem -label (uiRes("m_scriptEditorPanel.kExecute")) 
+				 -parent $parent
+				 -command "handleScriptEditorAction \"execute\"";		
+		menuItem -label (uiRes("m_scriptEditorPanel.kQuickHelp")) 
+				 -parent $parent
+				 -command "handleScriptEditorAction \"showSelectedCmdQuickHelp\"";	
+		menuItem -divider on;			
+		menuItem -label (uiRes("m_scriptEditorPanel.kUndo")) 
+				 -parent $parent
+				 -command "handleScriptEditorAction \"undo\"";		
+		menuItem -label (uiRes("m_scriptEditorPanel.kRedo")) 
+				 -parent $parent
+				 -command "handleScriptEditorAction \"redo\"";		
+		menuItem -divider on;		
+		
+		menuItem -label (uiRes("m_scriptEditorPanel.kCut")) 
+					-parent $parent
+					-command "handleScriptEditorAction \"cut\"";		
+		menuItem -label (uiRes("m_scriptEditorPanel.kCopy")) 
+					-parent $parent
+					-command "handleScriptEditorAction \"copy\"";		
+		menuItem -label (uiRes("m_scriptEditorPanel.kPaste")) 
+					-parent $parent
+					-command "handleScriptEditorAction \"paste\"";		
+		menuItem -divider on;
+	
+		menuItem -label (uiRes("m_scriptEditorPanel.kSelectAll"))
+				 -parent $parent
+				 -command "handleScriptEditorAction \"selectAll\"";		
+		menuItem -divider on;
+		menuItem -label (uiRes("m_scriptEditorPanel.kClearInput"))
+				 -parent $parent
+				 -command "handleScriptEditorAction \"clearInput\"";		
+		menuItem -label (uiRes("m_scriptEditorPanel.kClearAll")) 
+				 -parent $parent
+				 -command "handleScriptEditorAction \"clearAll\"";				
+	}else {
+		menuItem -label (uiRes("m_scriptEditorPanel.kCopy")) 
+		 		 -parent $parent
+				 -command "handleScriptEditorAction \"copy\"";				
+	
+		menuItem -label (uiRes("m_scriptEditorPanel.kSelectAll"))
+				 -parent $parent
+				 -command "handleScriptEditorAction \"selectAll\"";		
+		menuItem -divider on;
+		menuItem -label (uiRes("m_scriptEditorPanel.kClearHistory"))
+				 -parent $parent
+				 -command "handleScriptEditorAction \"clearHistory\"";		
+		menuItem -label (uiRes("m_scriptEditorPanel.kClearAll")) 
+				 -parent $parent
+				 -command "handleScriptEditorAction \"clearAll\"";						
+	}
+		
+	//ADD HACKS ===============================================================
+	source red9MayaHacks;
+	red9HackScriptEditorPopup $parent;	
+	//HACK END ================================================================
+}

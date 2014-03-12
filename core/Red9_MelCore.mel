@@ -1,0 +1,57 @@
+/*
+Created on 10 July 2012
+
+------------------------------------------
+Red9 Studio Pack: Maya Pipeline Solutions
+Author: Mark Jackson
+email: rednineinfo@gmail.com
+------------------------------------------
+
+This is a core mel lib, sometimes it's just easier to keep certain
+calls native in mel for the UI functions
+
+Setup : Follow the Install instructions in the Modules package
+================================================================
+*/
+
+
+//
+//	Mel wrapper for the Inspect calls in the Script editor
+//
+global proc red9_InspectCode()
+{
+	string $text;
+	python "import Red9.core.Red9_General as r9General";
+	$text=python("r9General.getScriptEditorSelection()");
+	
+	if(!`python("r9General.inspectFunctionSource('"+$text+"')")`)
+	{
+		python("r9General.inspectFunctionSource("+$text+")");
+	}
+//	//Executer / Editor 
+//	if( $gLastFocusedCommandControl == $gLastFocusedCommandExecuter)
+//	{
+//		$text=`cmdScrollFieldExecuter -q -selectedText $gLastFocusedCommandControl`;
+//		print ("command Caught: " + $text +"\n");
+//		if (`getCurrentExecuterTabLabel`=="MEL"){
+//			python("r9General.inspectFunctionSource('"+$text+"')");}
+//		else{
+//			python("r9General.inspectFunctionSource("+$text+")");}
+//	}
+//	
+//	//Reporter / History
+//	else if( $gLastFocusedCommandControl == $gLastFocusedCommandReporter)
+//	{
+//		//?????for some reason calling this here rather from the popupMenu 
+//		//command fails to copy the text to the clipboard?
+//		//cmdScrollFieldReporter -e -copySelection $gLastFocusedCommandControl;	
+//		$text=python("r9General.Clipboard.getScriptHistory()");
+//		print ("command Caught: " + $text +"\n");
+//
+//
+//		if(!`python("r9General.inspectFunctionSource('"+$text+"')")`)
+//		{
+//			python("r9General.inspectFunctionSource("+$text+")");
+//		}
+//	}
+}

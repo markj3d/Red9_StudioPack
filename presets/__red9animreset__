@@ -1,0 +1,26 @@
+[AnimationUI]
+	poseMode = thumb
+	posePathMode = localPoseMode
+	keyPasteMethod = replace
+	[[checkboxes]]
+		uicbPoseRelative = False
+		uicbPoseHierarchy = True
+		uicbPoseSpace = False
+		uicbMatchMethod = True
+		uicbSnapPriorityOnly = True
+		uicbCAttrHierarchy = False
+		uicbCKeyRange = False
+		uicbCKeyAnimLay = False
+		uicbCKeyHierarchy = False
+		uicbSnapRange = False
+		uicbSnapHierarchy = False
+		uicbStabRots = True
+		uicbStabTrans = True
+		uicbStabRange = False
+		uicbTimeOffsetHierarchy = False
+		uicbTimeOffsetScene = False
+		uicbTimeOffsetRange = False
+		uicbTimeOffsetTimelines = True
+		uicbMirrorHierarchy = False
+
+		

@@ -1,0 +1,257 @@
+[filterNode_settings]
+	metaRig = False
+	searchAttrs = ,
+	hierarchy = False
+	metaClass = ,
+	searchPattern = ,
+	filterPriority = ,
+	transformClamp = True
+	nodeTypes = ,
+	incRoots = True
+[poseData]
+	[[Character1_LeftHandPinky4]]
+		ID = 17
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandPinky1|Character1_LeftHandPinky2|Character1_LeftHandPinky3|Character1_LeftHandPinky4
+		[[[attrs]]]
+			translateX = 1.66661111512
+			translateY = 1.52587927005e-05
+			translateZ = 9.53674544224e-07
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandPinky3]]
+		ID = 18
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandPinky1|Character1_LeftHandPinky2|Character1_LeftHandPinky3
+		[[[attrs]]]
+			translateX = 1.97450303423
+			translateY = 3.05175854294e-05
+			translateZ = -2.38418635945e-07
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandIndex1]]
+		ID = 1
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandIndex1
+		[[[attrs]]]
+			translateX = 8.82197781133
+			translateY = 0.199722337657
+			translateZ = 3.47167026321
+			visibility = True
+			rotateX = 0.0
+			rotateY = -0.000609234863999
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandIndex2]]
+		ID = 10
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandIndex1|Character1_LeftHandIndex2
+		[[[attrs]]]
+			translateX = 4.22275800362
+			translateY = -1.52587926721e-05
+			translateZ = 0.147154049339
+			visibility = True
+			rotateX = 0.0
+			rotateY = -0.000609234835004
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandIndex3]]
+		ID = 9
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandIndex1|Character1_LeftHandIndex2|Character1_LeftHandIndex3
+		[[[attrs]]]
+			translateX = 2.65233010638
+			translateY = -1.52587927573e-05
+			translateZ = 0.0924279217792
+			visibility = True
+			rotateX = 0.0
+			rotateY = -0.000609234835004
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandIndex4]]
+		ID = 8
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandIndex1|Character1_LeftHandIndex2|Character1_LeftHandIndex3|Character1_LeftHandIndex4
+		[[[attrs]]]
+			translateX = 1.95703244175
+			translateY = -1.52587926721e-05
+			translateZ = 0.0681981532937
+			visibility = True
+			rotateX = 0.0
+			rotateY = -0.000609234835004
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandPinky2]]
+		ID = 19
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandPinky1|Character1_LeftHandPinky2
+		[[[attrs]]]
+			translateX = 3.04409862616
+			translateY = 4.5776378073e-05
+			translateZ = -4.4408920985e-16
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandRing4]]
+		ID = 14
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandRing1|Character1_LeftHandRing2|Character1_LeftHandRing3|Character1_LeftHandRing4
+		[[[attrs]]]
+			translateX = 1.92334793171
+			translateY = 0.0
+			translateZ = -8.34465226029e-07
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandRing1]]
+		ID = 3
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandRing1
+		[[[attrs]]]
+			translateX = 8.89376280159
+			translateY = 0.379913420657
+			translateZ = -0.793159077921
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandMiddle2]]
+		ID = 13
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandMiddle1|Character1_LeftHandMiddle2
+		[[[attrs]]]
+			translateX = 4.86325189191
+			translateY = 2.84217094304e-14
+			translateZ = 0.000302434039696
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandRing3]]
+		ID = 15
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandRing1|Character1_LeftHandRing2|Character1_LeftHandRing3
+		[[[attrs]]]
+			translateX = 2.30452783216
+			translateY = 0.0
+			translateZ = -1.19209317861e-07
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandRing2]]
+		ID = 16
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandRing1|Character1_LeftHandRing2
+		[[[attrs]]]
+			translateX = 4.53775895542
+			translateY = 2.84217094304e-14
+			translateZ = 5.96046589862e-08
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandMiddle4]]
+		ID = 11
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandMiddle1|Character1_LeftHandMiddle2|Character1_LeftHandMiddle3|Character1_LeftHandMiddle4
+		[[[attrs]]]
+			translateX = 2.00563097134
+			translateY = -2.84217094304e-14
+			translateZ = 0.000123620062737
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandThumb1]]
+		ID = 0
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandThumb1
+		[[[attrs]]]
+			translateX = 4.34876354903
+			translateY = -0.798507880809
+			translateZ = 4.28243500768
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandThumb2]]
+		ID = 7
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandThumb1|Character1_LeftHandThumb2
+		[[[attrs]]]
+			translateX = 2.51258910002
+			translateY = -0.536087163946
+			translateZ = 0.70745437323
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandThumb3]]
+		ID = 6
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandThumb1|Character1_LeftHandThumb2|Character1_LeftHandThumb3
+		[[[attrs]]]
+			translateX = 2.54313720301
+			translateY = -1.52587927289e-05
+			translateZ = 9.53674543691e-06
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandThumb4]]
+		ID = 5
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandThumb1|Character1_LeftHandThumb2|Character1_LeftHandThumb3|Character1_LeftHandThumb4
+		[[[attrs]]]
+			translateX = 2.66674868268
+			translateY = 2.84217094304e-14
+			translateZ = -8.10623362213e-06
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandMiddle1]]
+		ID = 2
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandMiddle1
+		[[[attrs]]]
+			translateX = 8.80988521812
+			translateY = 0.500885129186
+			translateZ = 1.30468471162
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandPinky1]]
+		ID = 4
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandPinky1
+		[[[attrs]]]
+			translateX = 8.88228056008
+			translateY = -0.31303413225
+			translateZ = -2.49035703906
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+	[[Character1_LeftHandMiddle3]]
+		ID = 12
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandMiddle1|Character1_LeftHandMiddle2|Character1_LeftHandMiddle3
+		[[[attrs]]]
+			translateX = 2.76523656016
+			translateY = 2.84217094304e-14
+			translateZ = 0.000171780627198
+			visibility = True
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+[info]
+	date = Sun May 12 12:06:22 2013
+	metaRigNode = RED_Rig
+	metaRigNodeID = RED_Rig
+	metaPose = False
+	author = dellbert

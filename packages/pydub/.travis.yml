@@ -1,0 +1,14 @@
+env:
+  - CONVERTER=ffmpeg
+  - CONVERTER=libav-tools
+before_install:
+  - sudo apt-get update --fix-missing
+install:
+  - sudo apt-get install -y ${CONVERTER} libavcodec-extra-53
+language: python
+python:
+  - "2.6"
+  - "2.7"
+  - "3.2"
+  - "3.3"
+script: python test/test.py

@@ -1,0 +1,127 @@
+Red9 Studio Pack ChangeLog:
+===========================
+
+v1.29:
+------
+New - Red9_Anim - PoseLib now supports subfolders in the UI
+New - Red9_Anim - CameraTracker now in the Red9 Menu - generates an auto tracked, or panned, camera focusing on the selected node - very usefuyl for visualizing moCap
+New - Red9_Meta - metaHUDNode added - designed as a debug tool to enable you to easily monitor attributes in a managed HUD in the Maya viewports. Any attrs added to the mNode is monitored and added to the drawHud call. This is work in progress
+Mod - Red9_Anim - AnimtionFunctions now has a function for bindNodes, uses the same filtering and matching setups as all the rest of the code and allows you to bind full filtered hierarchies together, either direct connects or parentConstraints
+Mod - Red9_Anim - All animFunctions now accept matchMethod as an arg, this allows you to either accept 'prefix stripping' in any node matches or use 'base' = name for name exact match.
+Fix - Red9_Anim - PoseLib subfolders bug fixes so that you can sync subfolders to project libraries with the 'CopyLocal>>Project Pose' RMB call. This makes the missing subFolder if it's missing in the Project structure
+Mod - Red9_General - Timer decorator now shows module/class and func in the report feedback
+Mod - Red9_Meta - Added **KWS update support to the addAttr call, if the attr exists and you've passed in kws then these will get synced and updated if in the internal 'valid edit kws' list. Great for use in the __bindData__ call to sync properties.
+Mod - Red9_Core - Added more logic to the main MatchedNodeInputs call. Now allows you to pass in 2 hierarchies directly for processing. This means you can by-pass the filter processing in all animation Functions and pass 2 hierarchies directly in for processing!
+
+1.291:
+------
+Fix - Red9_Meta - type 'unicode' value's weren't being supported correctly in the setAttr func
+Fix - Red9_Anim - MirrorSetup - loadMirror was failing to load custom Axis correctly.
+
+1.292:
+------
+Fix - Red9_Meta - isChildNode() wasn't dealing with longNames correctly
+Mod - Red9_PoseSaver - batchPatchPoses() modified to make it more flexible. added arg to stop it always resaving the pose after patchfunc has been run. also now passing poseFile back into patchfunc
+New - Red9_PoseSaver - poseHandler.py support added! - This is a BIG deal for TD's out there as it gives you access to all the internal node handling at a sub-folder level. Allows you to fully customize the pose behaviour on a folder basis!
+Fix - Red9_Anim - PoseUI wasn't remembering the last subFolderyou were in.
+
+1.293:
+------
+New - Red9_Anim - PoseUI now has a RMB Make Directory call
+New - Red9_Anim - PoseUI now has a 'Debug:Copy poseHandler.py to Folder'. This is an avanced option for by-passing the node handlers on a folder by folder basis!
+Mod - Red9_Anim - 'Ctrl' click when launching the AnimationUI will boot it non-docked
+Mod - Red9_Meta - Calls that previously only took an mType/mInstance as a [string] arg now also accept the class too... so r9Meta.getMetaNodes('MetaRig') and r9Meta.getMetaRig(r9Meta.MetaRig) both are accepted.
+Mod - Red9_Meta - getChildren now takes an additional arg 'cAttrs' which can be used to only return children connected via a given attr name (this uses wildcards and will take a list)
+
+1.294:
+------
+Fix - Red9_Anim - added full traceback to the error handling in the AnimUI
+Fix - Red9_Meta - added full traceback to the error handling in the nodeLockManager and thus the main class
+Fix - Red9_Meta - setAttr wasn't raising errors due to the decorator. Patched
+Mod - Red9_Meta - updated MetaHUD, simplified event handler, now connected to refresh by default
+New - Red9_Meta - Added HUD wrappers now being called by the ChannelBox RMB menu - gives you access to the MetaHud monitors and makes the setup more integrated
+Fix - Red9_Meta - Bug fix in the getConnectedMetaNodes. This was returning connected mNodes via all attrs, not just those connected via message links. Hence if 2 mNodes were connected via tx that would have passed through, which is wrong!
+
+1.30:
+------
+New - Red9_Core - added specific handling for blendShape nodetypes in the FilterNode so that in hierarchy mode, blendshpaes attached to meshes in that hierarchy will be returned also
+New - Red9_PoseSaver - added support for blendShapes, now writing the data (using the updated filter above) via the aliasAttr call to extarct the blendTarget channels by name and store as such
+Fix - Red9_Meta - MASSIVE BUG FIX!!! Found a way to check if the internal MObject is valid before being used (in the mNode property) This is what was crashing Maya if you had an mNode in the scene and had deleted it, or reloaded the scene etc. The pointer is now validated before being used
+Mod - Red9_Meta - added isValid func, considered inValid if not linked to anything else.
+
+1.31:
+------
+New - Red9_Meta - added a getMClassInstances() function which returns registered metaClass that are subclasses of the given arg. Good for grouping classes based on core base classes
+Mod - Red9_setup - modified the way I hack the native menu's, pulled the main calls and menu's out into a single mel file for all Maya versions to make things easier
+Fix - Red9_PoseSaver - the buildInternalDict call wasn't resetting the poseDict before running, this meant that if you were running this in a batch mode, the dict would just keep getting extended
+Mod - Red9_PoseSaver - modified the poseHandler.py setup, now allows you to directly hack into the RMB popup menu in the poseUI and add your own items via the 'posePopupAdditions' func
+Mod - Red9_PoseSaver - modified the posePath handler, if either the 'local' or 'project' main folders contain no poses then the UI switches straight to the subFolder handler
+New - Red9_General - added 'Red9_Sound' menu and functions to the TraxEditor!
+
+1.32:
+------
+Mod - Red9_Anim - Modifications to the way the posePopupAdditions() in any poseHandlers.py file are built, I now pass in the main AnimUI class object directly so you can grab things like the poseDir, or selected pose straight from the UI Object. See updated example file for more info
+Fix - Red9_Anim - AnimUI resize behaviour fixed so that the pose and UI resize correctly
+Fix - Red9_Core - FilterNode searches now strip whitespaces from the args prior to running the searches
+New - Red9_Anim - Added the ability to modify the pasteMethod used byt he copyKey calls directly in the UI
+MOD - Red9_Pose - renamed main procs to "poseLaod" and "poseSave", also now allow both of these not to take a filepath so you can use it as a poseCache
+New - Red9_Pose - added a "poseSaveCache" and "poseLoadCache", these are also capable of pushing a pose to an attr on the mNode itself, great for storing internal poses such as zero poses directly onto a rig.
+New - Red9_Meta - added a "poseCacheStore and "poseCacheLoad" to MetaRig which you can use as a pose cache, OR you can serialize a pose to a given attr on the mNode itself. We use this internally to store a zeroPose on the MetaRig directly.
+New - Red9_Anim - Interactive FilterCurves added as new feature and RandomizeKeys also now has interactive mode - BIG DEAL for animators!
+
+1.33:
+------
+Mod - Red9_Anim - Extended the 'FilterCurves' functionality, new 'snap to frms' options and added an interactive resample to it. Also now cache the current state of the curve display so that the toggle returns your last settings for display tangents and buffers.
+Fix - Red9_Anim - MAJOR CRASH under Maya 2014 when using the poseSaver, this is now fixed, something's changed in the way Maya is managing popupMenu's!
+
+1.40:
+-----
+New - Red9_General - added a new ContextManager for the Maya ProgressBar, makes it a damn sight easier to add and manage progressBar's - these will be added to some of the anim functions so they can now be aborted
+Mod - Red9_Startup - added new menuItems to the debug, you can now debug each module seperately.
+Fix - Red9_Meta - fixed connectParent as it wasn't accepting nodelocked classes.
+Mod - Red9_Anim - added the progress context manager to the SnapTransforms call so you can escape out of it!!
+New - Red9_Meta - added a poseCompare function that, given a poseFile (path), will compare the current pose of a metaRig against the file. Returns a PoseCompare class object for processing if needed
+Mod - setup - added a catch so that it boots correctly under batch
+Mod - Red9_Core - modified the lsAnimCurve so that it always bounces 2 leaf's deep. This fixes the AnimUI>Offset so that it works correctly with characterSets and selected nodes
+Mod - Red9_Anim - added Fwd and Back buttons on the Tracker in the UI so you don't have to put negative frameSteps in to run backwards
+New - Red9_Anim - Tracker now supports rot/trans flag to only snap rotate or translate components when tracking. This is actually a mod in the SnapTransform plugin flags and COULD be expanded further now it's at the plugin level
+New - Red9_Pose - added the ability (if using metaRig) to maintain parentSwitche spaces when loading a pose!! ;)
+Fix - Red9_Pose - PoseCompare in the RMB popup in the poseSaver was hard coded to only compare metaRig poses, this limitation is now lifted
+Mod - Red9_Core - FilterNode - lsHierarchy now processes sub-CharacterSets correctly, treating them as a standrad hierarchy for processing
+New - presets - Added AndyRig, TSM and AnimMentors Stewart rig presets, also now have the ability to hold an info block to make it easy on users
+Fix - Red9_Meta - getNodeConnectionMetaDataMap func wasn't using the mTypes flag correctly
+Fix - Red9_Core - FilterNode now handles ObjectSets and subsets correctly in the main calls
+Fix - Red9_Meta - fixed the rename() call as it was bombing out
+New - Red9_Meta - new property mNodeMObject which as it suggests, gives you back the MObject for the mNode directly - passes via validation
+Mod - Red9_Meta - HUD Management upgraded in the channelBox to support sliders or headsUp, ChannelBox menu modified to reflect
+New - Red9_Anim - "Interactive curve UI" now has 2 extra buttons, 'DeleteRedunants' and 'SingleProcess'. Delete will remove curves who's value never changes and are deamed as static. SingleProcess will do just that, run the simplify at the values from the slider
+Mod - Red9_Anim - MirrorSetup now has a new checkbox which allows it to remove all current mirror settings from nodes before loading a mirrorMap
+New - Red9_Anim - SnapTransforms - 'Priority as SnapList' in the hierarchy tab can now be used to say exactly what nodes get snapped during snapTransform. Issue previously is that EVERY node found was snapped making it really slow
+Fix - Red9_Pose - When using the PosePointCloud with a given ref mesh, I now manage the overrides on that geo so it can always be selected in the viewport
+NEW - Red9_Pose - Now respects the 'Priority as SnapList' checkbox. This forces the relative code to ONLY use those nodes in the Node Priority lists when managing in the relative space compensations, everything else is left as the pose data loaded. Gets over a ton of issues on complex rigs!
+Fix - Red9_Core - Offset Anim code was failing on animCurves that were part of an animLayer which was muted. These are now caught correctly
+
+v1.41:
+------
+Mod - Red9_Anim - RED9_ANIMATION_UI - added a global instance of the AnimUI so that external tools can communicate with it
+New - Red9_Anim - RED_ANIMATION_UI_OPENCALLBACK  - added a global that gets called as the AnimUI is opened, we're using it internally to Sync our internal poseLibrary with Perforce as the UI is opened
+New - Red9_Core - added new time offset options to the timeLine RMB menu for adding or collapsing time globally
+New - Red9_Core - offsets now accept timeRange for all type, animCurves, clips, audio
+New - Red9_Meta - added saveAttrMap/loadAttrMap which serialize an attrMap to an attr on the metaNode internally. Means that any metaRig can carry with them a map of all channel lock/keyable/hidden states - see vimeo channel for explaination
+New - Red9_Meta - added storeZeroPose/loadZeroPose which serialize a pose internally to an attr on the metaNode - means a rig can carry with it an internal zeroPose than can be easily called by any ui -- very useful!
+Mod - Red9_General - AudioNode and AudioHandler separated so AudioNode is a class that just operates on a single audio node in Maya, Handler operates on multiple audioNodes
+New - Red9_Audio - new audio handling module, separated from the r9General which was where all audio code used to be located
+New - Red9_Audio - new "COMPILE AUDIO" setup which allows you to mix existing audio inside Maya into a single wav track - great for playblasting! - integrates the pydub module.
+New - Red9_Meta - added a new function 'getMirror_oppositeSet' to MetaRig which uses the MirrorIndexes to return an opposite set of nodes to those passed in... ie, you pass in nodes with mirrorIndexes Left[1],Left[4],Right[3],Centre[5] and get back Right[1],Right[4],Left[3],Centre[5] nodes
+New - Red9_Pose - added the ability to load a percentage of a pose via a blend slider in the UI (on the RMB PoseBlender). This basically mixes in x percent of the selected pose. No support for relative poses yet
+
+
+v1.42:
+------
+New - Red9_Audio - Added BWav support to the AudioNode. This allows you to inspect and retrieve Timecode data from any broadcast wav
+New - Red9_Audio - Added a new 'inspect' item to the Red9 sound menu in the Trax for inspecting the internal properties of the selected sound node
+Mod - Red9_Anim - Stabilizer wasn't respecting the keyer groups when you set it to just track 'rots' or 'trans'
+New - Red9_Anim - CopyKeys now deals with animLayer by pre-merging the data to a temp cache before copying the merged data. The original layers are left in tact!
+
+
+
