@@ -1,9 +1,9 @@
 Red Nine Studio Pack for Maya
 =============================
 
-Contact : Mark Jackson
-Technical Animation Director
-email: rednineinfo@gmail.com
+Contact : Mark Jackson\r
+Technical Animation Director\r
+email: rednineinfo@gmail.com\r
 
 https://vimeo.com/user9491246
 
