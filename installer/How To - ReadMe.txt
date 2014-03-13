@@ -24,32 +24,37 @@ Installation:
 	scripts directory or any directory on the Maya Python path, 
 	OR move it to any folder of your choice and make sure you set the 
 	sys.path.append() correctly
+
 	
 	To Boot for a Maya session:
 	===========================
 	Open up a Python Tab in	the Script Editor and run the following:
-	
 
+	Note: You don't need to set the path if you dropped the "Red9" folder
+	into the Maya scripts directory in your prefs, or any directory already 
+	on a Python path.
+	
 
 	#Set the Python path
 	#--------------------
 	import sys
-	sys.path.append('C:/ExtraSitePackages/RedNine')
+	sys.path.append('C:/ExtraSitePackages/RedNine_v1.42')
+
 	
 	#Launch the pack
 	#--------------------
 	import Red9
 	Red9.start()
 
-
 	
 	This will boot the pack only for this Maya session.
-	Repoint the path above to folder that contains the Red9 folder
-	NOT to the Red9 folder itself
 
-	Note: the first 2 lines arent needed if you dropped the Red9 folder
-	into the Maya scripts directory in your prefs, or any directory already 
-	on a Python path
+	If you do need to set the path then point to folder that contains 
+	the "Red9" folder NOT to the Red9 folder itself.
+
+	if the pack was located : c:\markj\pythonModules\Red9_release141\Red
+	set the path to:          c:\markj\pythonModules\Red9_release141\
+
 
 	
 	To Boot when Maya launches:
@@ -64,11 +69,11 @@ Installation:
 	NOTE: if you have spaces in your path ie:
 	-----------------------------------------
 
-	sys.path.append('D:\My Documents\Maya\2012-x64\Red9\scripts')
+	sys.path.append('D:\My Documents\Maya\2012-x64\Red9_release\')
 
 	then do so like the following (making the string a raw sting stops the escapes)
 	
-	sys.path.append(r'D:\My Documents\Maya\2012-x64\Red9\scripts')
+	sys.path.append(r'D:\My Documents\Maya\2012-x64\Red9_release\')
 
 	
 	
