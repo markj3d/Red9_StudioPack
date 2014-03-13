@@ -196,6 +196,14 @@ from a given poseFile return or select the internal stored objects</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.PoseData.getSkippedAttrs">
+<tt class="descname">getSkippedAttrs</tt><big>(</big><em>rootNode=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseData.getSkippedAttrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>the returned list of attrs from this function will be
+COMPLETELY ignored by the pose system. They will not be saved
+or loaded. Currently only supported under MetaRig</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.PoseData.poseSave">
 <tt class="descname">poseSave</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseData.poseSave" title="Permalink to this definition">¶</a></dt>
 <dd><p>Entry point for the generic PoseSave.</p>
@@ -235,10 +243,9 @@ is True then use the filter on the destination hierarchy.</li>
 relatively to the selected node.</li>
 <li><strong>relativeRots</strong> &#8211; &#8216;projected&#8217; or &#8216;absolute&#8217; - how to calculate the offset.</li>
 <li><strong>relativeTrans</strong> &#8211; &#8216;projected&#8217; or &#8216;absolute&#8217; - how to calculate the offset.</li>
-<li><strong>maintainSpaces</strong> &#8211; ONLY currently valid in MetaRig, this preserves any 
-parentSwitching mismatches between the stored pose and the current 
-rig settings, current spaces are maintained. This only checks those 
-nodes in the snapList and only runs under relative mode.</li>
+<li><strong>maintainSpaces</strong> &#8211; this preserves any parentSwitching mismatches between 
+the stored pose and the current rig settings, current spaces are maintained. 
+This only checks those nodes in the snapList and only runs under relative mode.</li>
 </ul>
 </td>
 </tr>
