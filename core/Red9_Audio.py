@@ -484,6 +484,15 @@ class AudioNode(object):
         against this instance of the audioNode object.
         Note that this code uses a binary seek to first find the starting chunk 
         in the binary file where the 'bext' data is written.
+        
+        .. note::
+            We could, if we could ensure it was available, use ffprobe.exe (part of the ffmpeg project)
+            >>> pipe = subprocess.Popen([ffprobe.exe,'-v','quiet',
+            >>>                        '-print_format','json',
+            >>>                        '-show_format','-show_streams',
+            >>>                         os.path.normpath(path)], stdout=subprocess.PIPE).communicate()
+            >>> pipe = pipe[0].replace('\r', '')
+            >>> metaData= eval(pipe.replace('\n', ''))
         '''
         with open(self.path, 'rb') as filedata:
             binarymap = self.__get_chunkdata(filedata)
