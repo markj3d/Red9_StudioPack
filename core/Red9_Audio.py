@@ -20,6 +20,7 @@ import math
 
 import Red9.startup.setup as r9Setup
 import Red9_General as r9General
+import Red9.startup.setup as r9Setup
 
 import wave
 import contextlib
@@ -487,6 +488,7 @@ class AudioNode(object):
         
         .. note::
             We could, if we could ensure it was available, use ffprobe.exe (part of the ffmpeg project)
+            This would also cover most media file formats including Mov, avi etc
             >>> pipe = subprocess.Popen([ffprobe.exe,'-v','quiet',
             >>>                        '-print_format','json',
             >>>                        '-show_format','-show_streams',
@@ -640,3 +642,41 @@ class AudioNode(object):
         cmds.addAttr(self.audioNode, longName='compiledAudio', dt='string')
         cmds.setAttr('%s.compiledAudio' % self.audioNode, ','.join(audioNodes), type="string")
                 
+
+
+def __ffprobeGet():
+    '''
+    I don not ship ffprobe as it's lgpl license and fairly large, however
+    if you download it for use with the getMediaFileInfo then this is where it goes
+    Red9/packages/ffprobe.exe
+    '''
+    expectedPath=os.path.join(r9Setup.red9ModulePath(),'packages','ffprobe.exe')
+    if os.path.exists(expectedPath):
+        return expectedPath
+    else:
+        log.warning('ffprobe.exe not currently installed, aborting')
+    
+def getMediaFileMetaData(filepath, ffprobePath=None):
+    '''
+    This function is capable of returning most metaData from mediaFiles, the return
+    is in a json format so easily accessed.
+    :param ffprobePath: if not given the code will asume that ffprobe.exe has been 
+        dropped into teh Red9/packages folder, else it'll use the given path
+        
+    .. note::
+        
+        This is a stub function that requires ffprobe.exe, you can download from 
+        http://www.ffmpeg.org/download.html it's part of the ffmpeg tools.
+        Once downloaded drop it here Red9/pakcages/ffprobe.exe
+        This inspect function will then be available to use for many common media formats.
+        More info: http://www.ffmpeg.org/ffprobe.html
+    '''
+    import subprocess
+    pipe = subprocess.Popen([__ffprobeGet(),'-v','quiet',
+                                    '-print_format','json',
+                                  '-show_format','-show_streams',
+                                     os.path.normpath(filepath)], stdout=subprocess.PIPE).communicate()
+    pipe = pipe[0].replace('\r', '')
+    return eval(pipe.replace('\n', ''))
+
+
