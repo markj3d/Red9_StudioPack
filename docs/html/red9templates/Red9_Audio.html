@@ -1,14 +1,16 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_Audio &mdash; Red9 v1.41 documentation</title>
+    <title>Red9_Audio &mdash; Red9 1.41 documentation</title>
+    
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -21,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 v1.41 documentation" href="../index.html" />
+    <link rel="top" title="Red9 1.41 documentation" href="../index.html" />
     <link rel="next" title="Red9_CoreUtils" href="Red9_Core.html" />
     <link rel="prev" title="Red9_AnimationUtils" href="Red9_AnimationUtils.html" /> 
   </head>
@@ -41,7 +43,7 @@
         <li class="right" >
           <a href="Red9_AnimationUtils.html" title="Red9_AnimationUtils"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.41 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 1.41 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -60,40 +62,43 @@ as it&#8217;s a major issue when you&#8217;re dealing with facial sequences. The
 a &#8216;compile&#8217; flag in the playblast command but it&#8217;s never worked.</p>
 <span class="target" id="module-Red9.core.Red9_Audio"></span><p>This is the Audio library of utils used throughout the modules</p>
 <p class="rubric">Core Functions</p>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.milliseconds_to_Timecode" title="Red9.core.Red9_Audio.milliseconds_to_Timecode"><tt class="xref py py-obj docutils literal"><span class="pre">milliseconds_to_Timecode</span></tt></a>(milliseconds[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Audio.milliseconds_to_Timecode" title="Red9.core.Red9_Audio.milliseconds_to_Timecode"><tt class="xref py py-obj docutils literal"><span class="pre">milliseconds_to_Timecode</span></tt></a>(milliseconds[,&nbsp;...])</td>
 <td>convert milliseconds into correctly formatted timecode</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.timecode_to_milliseconds" title="Red9.core.Red9_Audio.timecode_to_milliseconds"><tt class="xref py py-obj docutils literal"><span class="pre">timecode_to_milliseconds</span></tt></a>(timecode[,&nbsp;smpte,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Audio.timecode_to_milliseconds" title="Red9.core.Red9_Audio.timecode_to_milliseconds"><tt class="xref py py-obj docutils literal"><span class="pre">timecode_to_milliseconds</span></tt></a>(timecode[,&nbsp;smpte,&nbsp;...])</td>
 <td>from a properly formatted timecode return it in milliseconds</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.frame_to_milliseconds" title="Red9.core.Red9_Audio.frame_to_milliseconds"><tt class="xref py py-obj docutils literal"><span class="pre">frame_to_milliseconds</span></tt></a>(frame[,&nbsp;framerate])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Audio.frame_to_milliseconds" title="Red9.core.Red9_Audio.frame_to_milliseconds"><tt class="xref py py-obj docutils literal"><span class="pre">frame_to_milliseconds</span></tt></a>(frame[,&nbsp;framerate])</td>
 <td>from a given frame return that time in milliseconds</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.combineAudio" title="Red9.core.Red9_Audio.combineAudio"><tt class="xref py py-obj docutils literal"><span class="pre">combineAudio</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Audio.combineAudio" title="Red9.core.Red9_Audio.combineAudio"><tt class="xref py py-obj docutils literal"><span class="pre">combineAudio</span></tt></a>()</td>
 <td>this is a logic wrapper over the main compile call in the AudioHandler</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.inspect_wav" title="Red9.core.Red9_Audio.inspect_wav"><tt class="xref py py-obj docutils literal"><span class="pre">inspect_wav</span></tt></a>()</td>
-<td>Simple UI to show internal Wav file properties. Supports full Broadcast Wav inspection</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Audio.inspect_wav" title="Red9.core.Red9_Audio.inspect_wav"><tt class="xref py py-obj docutils literal"><span class="pre">inspect_wav</span></tt></a>()</td>
+<td>Simple UI to show internal Wav file properties.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Audio.getMediaFileMetaData" title="Red9.core.Red9_Audio.getMediaFileMetaData"><tt class="xref py py-obj docutils literal"><span class="pre">getMediaFileMetaData</span></tt></a>(filepath[,&nbsp;ffprobePath])</td>
+<td>This function is capable of returning most metaData from mediaFiles, the return is in a json format so easily accessed.</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Main Classes</p>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.AudioHandler" title="Red9.core.Red9_Audio.AudioHandler"><tt class="xref py py-obj docutils literal"><span class="pre">AudioHandler</span></tt></a>([audio])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Audio.AudioHandler" title="Red9.core.Red9_Audio.AudioHandler"><tt class="xref py py-obj docutils literal"><span class="pre">AudioHandler</span></tt></a>([audio])</td>
 <td>process on multiple audio nodes</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.AudioNode" title="Red9.core.Red9_Audio.AudioNode"><tt class="xref py py-obj docutils literal"><span class="pre">AudioNode</span></tt></a>([audioNode])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Audio.AudioNode" title="Red9.core.Red9_Audio.AudioNode"><tt class="xref py py-obj docutils literal"><span class="pre">AudioNode</span></tt></a>([audioNode])</td>
 <td>Single AudioNode handler for simple audio management object</td>
 </tr>
 </tbody>
@@ -106,7 +111,7 @@ a &#8216;compile&#8217; flag in the playblast command but it&#8217;s never worke
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>smpte</strong> &#8211; format the timecode HH:MM:SS:FF where FF is frames</li>
 <li><strong>framerate</strong> &#8211; when using smpte this is the framerate used in the FF block</li>
 </ul>
@@ -132,7 +137,7 @@ r9Audio.timecode_to_milliseconds(&#8216;09:00:00:00&#8217;)</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>timecode</strong> &#8211; &#8216;09:00:00:20&#8217; as a string</li>
 <li><strong>smpte</strong> &#8211; calculate the milliseconds based on HH:MM:SS:FF (frames as last block)</li>
 <li><strong>framerate</strong> &#8211; only used if smpte=True, the framerate to use in the conversion</li>
@@ -214,10 +219,7 @@ the issues with Maya not playblasting multip audio tracks.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; filepath to store the combined audioTrack</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; filepath to store the combined audioTrack</td>
 </tr>
 </tbody>
 </table>
@@ -292,11 +294,31 @@ NOT the Maya audioNode length as it&#8217;s invalid under batch mode!</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_getHeader">
 <tt class="descname">bwav_getHeader</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_getHeader" title="Permalink to this definition">¶</a></dt>
-<dd><p>retrieve the BWav header info and push it into an internal dic
+<dd><blockquote>
+<div><p>retrieve the BWav header info and push it into an internal dic
 that you can inspect self.bwav_HeaderData. This is designed to be cached
 against this instance of the audioNode object.
 Note that this code uses a binary seek to first find the starting chunk 
 in the binary file where the &#8216;bext&#8217; data is written.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We could, if we could ensure it was available, use ffprobe.exe (part of the ffmpeg project)
+This would also cover most media file formats including Mov, avi etc
+&gt;&gt;&gt; pipe = subprocess.Popen([ffprobe.exe,&#8217;-v&#8217;,&#8217;quiet&#8217;,
+&gt;&gt;&gt;                        &#8216;-print_format&#8217;,&#8217;json&#8217;,
+&gt;&gt;&gt;                        &#8216;-show_format&#8217;,&#8217;-show_streams&#8217;,
+&gt;&gt;&gt;                         os.path.normpath(path)], stdout=subprocess.PIPE).communicate()
+&gt;&gt;&gt; pipe = pipe[0].replace(&#8216;</p>
+</div>
+</div></blockquote>
+<dl class="docutils">
+<dt>&#8216;, &#8216;&#8217;)</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">metaData</span><span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>&#8216;, &#8216;&#8217;))</p>
 </dd></dl>
 
 <dl class="method">
@@ -381,6 +403,24 @@ track was compiled from</p>
 
 </dd></dl>
 
+<dl class="function">
+<dt id="Red9.core.Red9_Audio.getMediaFileMetaData">
+<tt class="descname">getMediaFileMetaData</tt><big>(</big><em>filepath</em>, <em>ffprobePath=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.getMediaFileMetaData" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is capable of returning most metaData from mediaFiles, the return
+is in a json format so easily accessed.
+:param ffprobePath: if not given the code will asume that ffprobe.exe has been</p>
+<blockquote>
+<div>dropped into teh Red9/packages folder, else it&#8217;ll use the given path</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a stub function that requires ffprobe.exe, you can download from 
+<a class="reference external" href="http://www.ffmpeg.org/download.html">http://www.ffmpeg.org/download.html</a> it&#8217;s part of the ffmpeg tools.
+Once downloaded drop it here Red9/pakcages/ffprobe.exe
+This inspect function will then be available to use for many common media formats.
+More info: <a class="reference external" href="http://www.ffmpeg.org/ffprobe.html">http://www.ffmpeg.org/ffprobe.html</a></p>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -403,7 +443,7 @@ track was compiled from</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -432,12 +472,12 @@ track was compiled from</p>
         <li class="right" >
           <a href="Red9_AnimationUtils.html" title="Red9_AnimationUtils"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.41 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 1.41 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Mark Jackson.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>
