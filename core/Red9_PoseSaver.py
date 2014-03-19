@@ -825,7 +825,8 @@ class PoseCompare(object):
     >>> compare.compare() #>> bool, True = same
     >>> compare.fails['failedAttrs']
     '''
-    def __init__(self, currentPose, referencePose, angularTolerance=0.1, linearTolerance=0.01, compareDict='poseDict'):
+    def __init__(self, currentPose, referencePose, angularTolerance=0.1, linearTolerance=0.01, 
+                 compareDict='poseDict', filterMap=[], ignoreBlocks=[]):
         '''
         Make sure we have 2 PoseData objects to compare
         :param currentPose: either a PoseData object or a valid pose file
@@ -834,6 +835,9 @@ class PoseCompare(object):
         :param angularTolerance: the tolerance used to check rotate attr float values
         :param linearTolerance: the tolerance used to check all other float attrs
         :param compareDict: the internal main dict in the pose file to compare the data with
+        :param filterMap: if given this is used as a high level filter, only matching nodes get compared
+            others get skipped. Good for passing in a mater core skeleton to test whilst ignoring extra nodes
+        :param ignoreBlocks: allows the given failure blocks to be ignored. We mainly use this for ['missingKeys']
         
         .. note::
             In the new setup if the skeletonRoot jnt is found we add a whole
@@ -851,6 +855,9 @@ class PoseCompare(object):
         
         self.linearTolerance = linearTolerance
         self.linearAttrs = ['translateX', 'translateY', 'translateZ']
+        
+        self.filterMap = filterMap
+        self.ignoreBlocks = ignoreBlocks
         
         if isinstance(currentPose, PoseData):
             self.currentPose = currentPose
@@ -895,16 +902,21 @@ class PoseCompare(object):
             raise StandardError('missing pose section <<%s>> compare aborted' % self.compareDict)
         
         for key, attrBlock in currentDic.items():
+            if self.filterMap and not key in self.filterMap:
+                log.debug('node not in filterMap - skipping key %s' % key)
+                continue
             if key in referenceDic:
                 referenceAttrBlock = referenceDic[key]
             else:
-                # log.info('Key Mismatch : %s' % key)
-                logprint += 'ERROR: Key Mismatch : %s\n' % key
-                if not 'missingKeys' in self.fails:
-                    self.fails['missingKeys'] = []
-                self.fails['missingKeys'].append(key)
+                if not 'missingKeys' in self.ignoreBlocks:
+                    logprint += 'ERROR: Key Mismatch : %s\n' % key
+                    if not 'missingKeys' in self.fails:
+                        self.fails['missingKeys'] = []
+                    self.fails['missingKeys'].append(key)
+                else:
+                    log.debug('missingKeys in ignoreblock : node is missing from data but being skipped "%s"' % key)
                 continue
-
+            
             for attr, value in attrBlock['attrs'].items():
                 # attr missing completely from the key
                 if not attr in referenceAttrBlock['attrs']:
