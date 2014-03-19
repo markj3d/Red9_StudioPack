@@ -89,17 +89,25 @@ def mayaUpAxis():
 # Menu Builders ------------------------------------------------------------------------
    
 def menuSetup(parent='MayaWindow'):
+    
+    #if exists remove all items, means we can update on the fly by restarting the Red9 pack
+    if cmds.menu('redNineMenuItemRoot', exists=True):
+        cmds.deleteUI('redNineMenuItemRoot')
+        log.info("Rebuilding Existing RedNine Menu")
+        
     if cmds.window(parent, exists=True):
         if not cmds.window(parent, q=True, menuBar=True):
             #parent=cmds.window(parent, edit=True, menuBar=True)
             raise StandardError('given parent for Red9 Menu has no menuBarlayout %s' % parent)
+        else:
+            cmds.menu('redNineMenuItemRoot', l="RedNine", p=parent, tearOff=True, allowOptionBoxes=True)
+            log.info('new Red9 Menu added to current window : %s' % parent)
+    elif cmds.menu(parent, exists=True):
+        cmds.menuItem('redNineMenuItemRoot', l='RedNine', sm=True, p=parent)
+        log.info('new Red9 subMenu added to current Menu : %s' % parent)
+    else:
+        raise StandardError('given parent for Red9 Menu is invalid %s' % parent)
     try:
-        #if exists remove all items, means we can update on the fly by restarting the Red9 pack
-        if cmds.menu('redNineMenuItemRoot', exists=True):
-            cmds.deleteUI('redNineMenuItemRoot')
-            log.info("Rebuilding Existing RedNine Menu")
-    
-        cmds.menu('redNineMenuItemRoot', l="RedNine", p=parent, tearOff=True, allowOptionBoxes=True)
         #Add the main Menu items
         cmds.menuItem('redNineAnimItem',l="AnimationToolkit",
                       ann="Main Red9 Animation Toolkit - Note: CTRL+click opens this non-docked",
