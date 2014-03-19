@@ -122,39 +122,39 @@ def decodeString(val):
         #log.debug('ValType : %s > left undecoded' % type(val))
         return val
     if val=='False' or val=='True' or val=='None':
-        log.debug('Decoded as type(bool)')
+        #log.debug('Decoded as type(bool)')
         return eval(val)
     elif val=='[]':
-        log.debug('Decoded as type(empty list)')
+        #log.debug('Decoded as type(empty list)')
         return eval(val)
     elif val=='()':
-        log.debug('Decoded as type(empty tuple)')
+        #log.debug('Decoded as type(empty tuple)')
         return eval(val)
     elif val=='{}':
-        log.debug('Decoded as type(empty dict)')
+        #log.debug('Decoded as type(empty dict)')
         return eval(val)
     elif (val[0]=='[' and val[-1] ==']'):
-        log.debug('Decoded as type(list)')
+        #log.debug('Decoded as type(list)')
         return eval(val)
     elif (val[0] =='(' and val[-1]==')'):
-        log.debug('Decoded as type(tuple)')
+        #log.debug('Decoded as type(tuple)')
         return eval(val)
     elif (val[0] =='{' and val[-1]=='}'):
-        log.debug('Decoded as type(dict)')
+        #log.debug('Decoded as type(dict)')
         return eval(val)
     try:
         encoded=int(val)
-        log.debug('Decoded as type(int)')
+        #log.debug('Decoded as type(int)')
         return encoded
     except:
         pass
     try:
         encoded=float(val)
-        log.debug('Decoded as type(float)')
+        #log.debug('Decoded as type(float)')
         return encoded
     except:
         pass
-    log.debug('Decoded as type(string)')
+    #log.debug('Decoded as type(string)')
     return val
 
 def floatIsEqual(a, b, tolerance=0.01, allowGimbal=True):
@@ -166,18 +166,24 @@ def floatIsEqual(a, b, tolerance=0.01, allowGimbal=True):
     :param tolerance: compare with this tolerance default=0.001 
     :param allowGimbal: allow values differences to be divisible by 180 compensate for gimbal flips 
     
-    TODO: still giving us issues, look into other ways to do this confirm for gimbal!
     '''
-    if abs(a-b)<tolerance:
+    if abs(a - b) < tolerance:
         return True
     else:
         if allowGimbal:
-            if abs(a - b) % 180 < tolerance:
+            mod = abs(a - b) % 180.0
+            if mod < tolerance:
+                log.debug('compare passed with gimbal : %f == %f : diff = %f' % (a, b, mod))
                 return True
-            elif abs(a - b) % 360 < tolerance:
+            elif abs(180.0 - mod) < tolerance:
+                log.debug('compare passed with gimbal 180 : %f == %f : diff = %f' % (a, b, abs(180 - mod)))
                 return True
-            elif abs(a - b) % 90 < tolerance:
+            elif abs(90.0 - mod) < tolerance:
+                log.debug('compare passed with gimbal 90 : %f == %f diff = %f' % (a, b, abs(90.0 - mod)))
                 return True
+            log.debug('compare with gimbal failed against mod 180: best diff :%f' % (abs(180.0-mod)))
+            log.debug('compare with gimbal failed against mod 90: best diff :%f' % (abs(90.0-mod)))
+    log.debug('float is out of tolerance : %f - %f == %f' % (a, b, abs(a - b)))
     return False
 
 def valueToMappedRange(value, currentMin, currentMax, givenMin, givenMax):
