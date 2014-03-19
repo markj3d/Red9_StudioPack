@@ -2177,7 +2177,7 @@ class MetaRig(MetaClass):
             else:
                 self.poseCache.poseLoad(nodes, filepath=filepath, useFilter=False, *args, **kws)
      
-    def poseCompare(self, poseFile, supressWarning=False, compareDict='skeletonDict'):
+    def poseCompare(self, poseFile, supressWarning=False, compareDict='skeletonDict', filterMap=[], ignoreBlocks=[]):
         '''
         Integrated poseCompare, this checks the mRigs current pose against
         a given poseFile. This checks against the 'skeletonDict'
@@ -2185,11 +2185,12 @@ class MetaRig(MetaClass):
         :param poseFile: given .pose file with valid skeletonDict block
         :param supressWarning: if False raise the confirmDialogue
         :param compareDict: what block in the poseFile to compare the data against
+        :param ignoreBlocks: used to stop certain blocks in the compare from causing a fail eg : ['missingKeys']
         :return: returns a 'PoseCompare' class object with all the compare data in it
         '''
         import Red9.core.Red9_PoseSaver as r9Pose  # lazy loaded
         self.poseCacheStore()
-        compare=r9Pose.PoseCompare(self.poseCache,poseFile, compareDict=compareDict)
+        compare=r9Pose.PoseCompare(self.poseCache,poseFile, compareDict=compareDict, filterMap=filterMap, ignoreBlocks=ignoreBlocks)
         if not compare.compare():
             info='Selected Pose is different to the rigs current pose\nsee script editor for debug details'
         else:
