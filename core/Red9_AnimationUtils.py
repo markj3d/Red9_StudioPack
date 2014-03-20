@@ -347,15 +347,32 @@ class AnimationUI(object):
             self.ui_optVarConfig = os.path.join(r9Setup.mayaPrefs(), '__red9config__')
         self.ANIM_UI_OPTVARS = dict()
         self.__uiCache_readUIElements()
-
+        
+        
     @classmethod
     def show(cls):
         global RED_ANIMATION_UI
         global RED_ANIMATION_UI_OPENCALLBACK
         animUI=cls()
-        if r9General.getModifier()=='Ctrl':
-            animUI.dock=False
+
+        if 'ui_docked' in animUI.ANIM_UI_OPTVARS['AnimationUI']:
+            animUI.dock = eval(animUI.ANIM_UI_OPTVARS['AnimationUI']['ui_docked'])
+
+        print 'Recorded DOCKED STATUS : ', animUI.dock
+
+        if r9General.getModifier() == 'Ctrl':
+            if not animUI.dock:
+                print 'switching True'
+                animUI.dock = True
+            else:
+                print 'switching false'
+                animUI.dock = False
+            #animUI.dock = False
+   
         animUI._showUI()
+        animUI.ANIM_UI_OPTVARS['AnimationUI']['ui_docked'] = animUI.dock
+        animUI.__uiCache_storeUIElements()
+        
         RED_ANIMATION_UI=animUI
         if callable(RED_ANIMATION_UI_OPENCALLBACK):
             try:
@@ -363,8 +380,19 @@ class AnimationUI(object):
                 RED_ANIMATION_UI_OPENCALLBACK()
             except:
                 log.warning('RED_ANIMATION_UI_OPENCALLBACK failed')
-           
+    
+    def __uicloseEvent(self,*args):
+        print 'AnimUI close event called'
+        self.__uiCache_storeUIElements()
+        RED_ANIMATION_UI=None
+        del(self)
+    
+    def __del__(self):
+        if cmds.scriptJob(exists=self.jobOnDelete):
+            cmds.scriptJob(kill=self.jobOnDelete, force=True)
+            
     def _showUI(self):
+        
         try:
             #'Maya2011 dock delete'
             if cmds.dockControl(self.dockCnt, exists=True):
@@ -374,6 +402,7 @@ class AnimationUI(object):
         
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
+            
         animwindow = cmds.window(self.win, title=self.label)
         
         cmds.menuBarLayout()
@@ -929,11 +958,13 @@ class AnimationUI(object):
             cmds.showWindow(animwindow)
             cmds.window(self.win, edit=True, widthHeight=(355, 720))
             
+            
         #Set the initial Interface up
         self.__uiPresetsUpdate()
         self.__uiPresetReset()
         self.__uiCache_loadUIElements()
-          
+        #self.jobOnDelete=cmds.scriptJob(uiDeleted=(self.win, self.__uicloseEvent), runOnce=1)
+        
 
     # UI Callbacks
     #------------------------------------------------------------------------------
@@ -1889,7 +1920,7 @@ class AnimationUI(object):
             log.debug('UI configFile being written')
             ConfigObj = configobj.ConfigObj(indent_type='\t')
             self.__uiPresetFillFilter()  # fill the internal filterSettings obj
-            
+            self.ANIM_UI_OPTVARS['AnimationUI']['ui_docked'] = self.dock
             ConfigObj['filterNode_settings'] = self.filterSettings.__dict__
             ConfigObj['AnimationUI'] = self.ANIM_UI_OPTVARS['AnimationUI']
             ConfigObj.filename = self.ui_optVarConfig
