@@ -122,6 +122,8 @@ New - Red9_Audio - Added BWav support to the AudioNode. This allows you to inspe
 New - Red9_Audio - Added a new 'inspect' item to the Red9 sound menu in the Trax for inspecting the internal properties of the selected sound node
 Mod - Red9_Anim - Stabilizer wasn't respecting the keyer groups when you set it to just track 'rots' or 'trans'
 New - Red9_Anim - CopyKeys now deals with animLayer by pre-merging the data to a temp cache before copying the merged data. The original layers are left in tact!
-
+New - Red9_Audio - Added a function getMediaFileMetaData() which is capable of extracting metaData from most media file types via ffprobe.exe
+Mod - Red9_Pose	- added a filterMap param to the poseCompare call. This can be used as a master core list, only nodes that appear on this will be checked against. Useful for checking core skeleton nodes whilst ingnoring others
+Mod - Red9_Anim - modified the AnimUI behaviour sucj that the 'CTRL' key modifier is now stored with the UI. If you laucnh the UI with ctrl held it'll toggle between launching as docked or not.
 
 
