@@ -157,6 +157,8 @@ def registerMClassNodeMapping(nodeTypes=None):
     baseTypes=['network','objectSet','HIKCharacterNode','HIKControlSetNode']
     
     global RED9_META_NODETYPE_REGISTERY
+    if nodeTypes and RED9_META_NODETYPE_REGISTERY:
+        baseTypes = RED9_META_NODETYPE_REGISTERY
     RED9_META_NODETYPE_REGISTERY = []
     
     if nodeTypes:
