@@ -1396,7 +1396,7 @@ class MetaClass(object):
         return False
         
     @nodeLockManager
-    def connectChildren(self, nodes, attr, srcAttr=None, cleanCurrent=False, force=True):
+    def connectChildren(self, nodes, attr, srcAttr=None, cleanCurrent=False, force=True, allowIncest=False):
         '''
         Fast method of connecting multiple nodes to the mNode via a message attr link.
         This call generates a MULTI message on both sides of the connection and is designed
@@ -1411,6 +1411,9 @@ class MetaClass(object):
                         any currently connected nodes to this attr prior to making the new ones
         :param force: Maya's default connectAttr 'force' flag, if the srcAttr is already connected
                         to another node force the connection to the new attr
+        :param allowIncest: Over-ride the default behaviour when dealing with child nodes that are
+                        standard Maya Nodes not metaNodes. Default in this case is to NOT index manage
+                        the plugs, this flag overloads that, allow multiple parents.
         TODO: check the attr type, if attr exists and is a non-multi messgae then don't run the indexBlock
         '''
         
@@ -1432,18 +1435,23 @@ class MetaClass(object):
             if isMetaNode(node):
                 ismeta=True
                 if not issubclass(type(node), MetaClass):  # allows you to pass in an metaClass
-                    MetaClass(node).addAttr(srcAttr,attrType='message')
+                    MetaClass(node).addAttr(srcAttr, attrType='message')
                 else:
-                    node.addAttr(srcAttr,attrType='message')
+                    node.addAttr(srcAttr, attrType='message')
                     node=node.mNode
             elif not cmds.attributeQuery(srcAttr, exists=True, node=node):
-                cmds.addAttr(node,longName=srcAttr,at='message',m=True,im=False)
-
+                if allowIncest:
+                    MetaClass(node).addAttr(srcAttr, attrType='message')
+                else:
+                    cmds.addAttr(node, longName=srcAttr, at='message', m=True, im=False)
             try:
                 #also we need to add the self.allowIncest flag to trigger managed message links like this.
                 if not self.isChildNode(node, attr, srcAttr):
-                    if ismeta:
-                        log.debug('connecting MetaData nodes %s.%s >> %s.%s' % (self.mNode,attr,node,srcAttr))
+                    if ismeta or allowIncest:
+                        if ismeta:
+                            log.debug('connecting MetaData nodes via indexes :  %s.%s >> %s.%s' % (self.mNode,attr,node,srcAttr))
+                        elif allowIncest:
+                            log.debug('connecting Standard Maya nodes via indexes : %s.%s >> %s.%s' % (self.mNode,attr,node,srcAttr))
                         cmds.connectAttr('%s.%s[%i]' % (self.mNode, attr, self._getNextArrayIndex(self.mNode,attr)),
                                      '%s.%s[%i]' % (node, srcAttr, self._getNextArrayIndex(node,srcAttr)), f=force)
                     else:
