@@ -498,14 +498,16 @@ class AudioNode(object):
         in the binary file where the 'bext' data is written.
         
         .. note::
+        
             We could, if we could ensure it was available, use ffprobe.exe (part of the ffmpeg project)
-            This would also cover most media file formats including Mov, avi etc
-            >>> pipe = subprocess.Popen([ffprobe.exe,'-v','quiet',
-            >>>                        '-print_format','json',
-            >>>                        '-show_format','-show_streams',
-            >>>                         os.path.normpath(path)], stdout=subprocess.PIPE).communicate()
+            This would also cover most media file formats including Mov, avi etc 
+            
+            >>> pipe = subprocess.Popen([ffprobe.exe,'-v','quiet', 
+            >>>                        '-print_format','json', 
+            >>>                        '-show_format','-show_streams', 
+            >>>                         os.path.normpath(path)], stdout=subprocess.PIPE).communicate() 
             >>> pipe = pipe[0].replace('\r', '')
-            >>> metaData= eval(pipe.replace('\n', ''))
+            >>> metaData = eval(pipe.replace('\n', ''))
         '''
         with open(self.path, 'r') as filedata:
             binarymap = self.__get_chunkdata(filedata)
