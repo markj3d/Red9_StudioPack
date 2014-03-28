@@ -149,6 +149,17 @@ def audioSelected():
     if selected:
         return selected[0]
 
+def audioPathLoaded(filepath):
+    '''
+    return any soundNodes in Maya that point to the given 
+    audio path
+    '''
+    nodes=[]
+    for audio in cmds.ls(type='audio'):
+        if cmds.getAttr('%s.filename' % audio):
+            nodes.append(audio)
+    return nodes
+    
 def inspect_wav():
     '''
     Simple UI to show internal Wav file properties. Supports full Broadcast Wav inspection
@@ -496,7 +507,7 @@ class AudioNode(object):
             >>> pipe = pipe[0].replace('\r', '')
             >>> metaData= eval(pipe.replace('\n', ''))
         '''
-        with open(self.path, 'rb') as filedata:
+        with open(self.path, 'r') as filedata:
             binarymap = self.__get_chunkdata(filedata)
             if not "bext" in binarymap:
                 log.info('Audio file is not a formatted BWAV')
