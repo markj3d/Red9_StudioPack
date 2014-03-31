@@ -2135,8 +2135,8 @@ def distanceBetween(nodeA, nodeB):
     '''
     simple calculation to return the distance between 2 objects
     '''
-    x1,y1,z1,_,_,_ = cmds.xform(nodeA,q=True,ws=True,piv=True)
-    x2,y2,z2,_,_,_ = cmds.xform(nodeB,q=True,ws=True,piv=True)
+    x1, y1, z1, _,_,_ = cmds.xform(nodeA,q=True,ws=True,piv=True)
+    x2, y2, z2, _,_,_ = cmds.xform(nodeB,q=True,ws=True,piv=True)
     return math.sqrt(math.pow((x1-x2),2) + math.pow((y1-y2),2) + math.pow((z1-z2),2))
 
 
@@ -2144,13 +2144,13 @@ class MatrixOffset(object):
     
     '''
     Given 2 transforms calculate the difference as a Matrix and
-    apply that to a given list of nodes.
+    apply that as an offset matrix to a given list of nodes.
         
-    Matrix=offsetMatrix('inputA','inputB')
-    Matrix=offsetMatrix('inputB','inputA')
-    
-    applyOffsetMatrixToNodes(nodes,Matrix)
+    >>> matrixOffset = MatrixOffset()
+    >>> matrixOffset.getOffsetMatrix('inputA','inputB')
+    >>> applyOffsetMatrixToNodes(nodesToOffset)
     '''
+    
     def __init__(self):
         self.CachedData=[]
         self.OffsetMatrix=OpenMaya.MMatrix
@@ -2163,9 +2163,12 @@ class MatrixOffset(object):
         selList.getDagPath(0, dagpath)
         return dagpath
         
-    def setOffsetMatrix(self, inputA, inputB):
+    def getOffsetMatrix(self, inputA, inputB):
         '''
-        from 2 transform return an offsetMatrix between them
+        from 2 transform return an offsetMatrix between them 
+        
+        :param inputA: MayaNode A
+        :param inputB: MayaNode B
         '''
         DagNodeA=MatrixOffset.get_MDagPath(inputA)
         DagNodeB=MatrixOffset.get_MDagPath(inputB)
@@ -2176,7 +2179,7 @@ class MatrixOffset(object):
         self.OffsetMatrix=initialMatrix.inverse()*newMatrix
         return self.OffsetMatrix
         
-    def cacheCurrentData(self, nodes):
+    def __cacheCurrentData(self, nodes):
         '''
         Return a list of tuples containing the cached state of the nodes
         [(node, MDagpath, worldMatrix, parentInverseMatrix)]
@@ -2198,15 +2201,19 @@ class MatrixOffset(object):
         return self.CachedData
     
     
-    def applyOffsetMatrixToNodes(self, nodes, Matrix=None):
+    def applyOffsetMatrixToNodes(self, nodes, matrix=None):
         '''
         offset all the given nodes by the given MMatrix object
+        
+        :param nodes: Nodes to apply the offset Matrix too
+        :param matrix: Optional OpenMaya.MMatrix to transform the data by
         '''
         offsetMatrix=self.OffsetMatrix
-        if Matrix:
-            offsetMatrix=Matrix
-            
-        for node, dag, initialMatrix, parentInverseMatrix, rotScal in self.cacheCurrentData(nodes):
+        if matrix:
+            offsetMatrix=matrix
+        if not type(nodes)==list:
+            nodes=[nodes]
+        for node, dag, initialMatrix, parentInverseMatrix, rotScal in self.__cacheCurrentData(nodes):
             if parentInverseMatrix:
                 if not initialMatrix.isEquivalent(dag.inclusiveMatrix()):
                     print 'Dag has already been modified by previous parent node', node
