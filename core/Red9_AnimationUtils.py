@@ -302,7 +302,9 @@ def pointOnPolyCmd(nodes):
         nameSpace = sourceName.replace(sourceName.split(':')[-1], '')
         assembled = assembled.replace(nameSpace, '')
     print(cmdstring + assembled)
-    mel.eval(cmdstring + assembled)
+    con=mel.eval(cmdstring)
+    mel.eval(assembled)
+    return con
     
 def eulerSelected():
     '''
