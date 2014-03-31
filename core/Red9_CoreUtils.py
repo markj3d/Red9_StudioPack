@@ -19,6 +19,7 @@ import maya.OpenMaya as OpenMaya
 from functools import partial
 import re
 import random
+import math
 
 import Red9.packages.configobj as configobj
 import Red9.startup.setup as r9Setup
@@ -2130,6 +2131,15 @@ class TimeOffset(object):
             log.info('%i : AnimClips were offset' % len(clips))
  
  
+def distanceBetween(nodeA, nodeB):
+    '''
+    simple calculation to return the distance between 2 objects
+    '''
+    x1,y1,z1,_,_,_ = cmds.xform(nodeA,q=True,ws=True,piv=True)
+    x2,y2,z2,_,_,_ = cmds.xform(nodeB,q=True,ws=True,piv=True)
+    return math.sqrt(math.pow((x1-x2),2) + math.pow((y1-y2),2) + math.pow((z1-z2),2))
+
+
 class MatrixOffset(object):
     
     '''
