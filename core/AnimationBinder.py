@@ -528,7 +528,7 @@ def GetBoundControls(rootNode=None):
     return [node for node in cmds.listRelatives(rootNode, ad=True, f=True)\
              if cmds.attributeQuery('BoundCtr', exists=True, node=node)]
 
-def BakeBinderData(rootNode=None):
+def BakeBinderData(rootNode=None, ignoreInFilter=[]):
     '''
     From a given Root Node search all children for the 'BoundCtr' attr marker. If none
     were found then search for the BindNode attr and use the message links to walk to
@@ -565,9 +565,10 @@ def BakeBinderData(rootNode=None):
                     cmds.deleteAttr('%s.BoundCtr' % node)
                 except StandardError,error:
                     log.info(error)
-                    
+            if ignoreInFilter:
+                BoundCtrls = [node for node in BoundCtrls if node.split('|')[-1].split(':')[-1] not in ignoreInFilter]
             cmds.filterCurve(BoundCtrls)
-            cmds.delete(BoundCtrls,sc=True)  # static channels
+            cmds.delete(BoundCtrls, sc=True)  # static channels
         except StandardError,error:
             raise StandardError(error)
     else:
