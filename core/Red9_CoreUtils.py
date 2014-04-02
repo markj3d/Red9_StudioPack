@@ -2147,7 +2147,7 @@ class MatrixOffset(object):
     apply that as an offset matrix to a given list of nodes.
         
     >>> matrixOffset = MatrixOffset()
-    >>> matrixOffset.getOffsetMatrix('inputA','inputB')
+    >>> matrixOffset.setOffsetMatrix('inputA','inputB')
     >>> applyOffsetMatrixToNodes(nodesToOffset)
     '''
     
@@ -2163,7 +2163,7 @@ class MatrixOffset(object):
         selList.getDagPath(0, dagpath)
         return dagpath
         
-    def getOffsetMatrix(self, inputA, inputB):
+    def setOffsetMatrix(self, inputA, inputB):
         '''
         from 2 transform return an offsetMatrix between them 
         
@@ -2222,10 +2222,12 @@ class MatrixOffset(object):
                 #multiply the offset by the inverse ParentMatrix to put it into the correct space
                     OpenMaya.MFnTransform(dag).set(OpenMaya.MTransformationMatrix(initialMatrix*parentInverseMatrix*offsetMatrix.inverse()))
                     print 'node offset : ', node
-                    #cmds.setAttr('%s.rotatePivot' % node, rotScal[0][0][0],rotScal[0][0][1],rotScal[0][0][2])
-                    #cmds.setAttr('%s.scalePivot' % node, rotScal[1][0][0],rotScal[1][0][1],rotScal[1][0][2])
+                    cmds.setAttr('%s.rotatePivot' % node, rotScal[0][0][0],rotScal[0][0][1],rotScal[0][0][2])
+                    cmds.setAttr('%s.scalePivot' % node, rotScal[1][0][0],rotScal[1][0][1],rotScal[1][0][2])
             else:
                 OpenMaya.MFnTransform(dag).set(OpenMaya.MTransformationMatrix(initialMatrix*offsetMatrix.inverse()))
+                cmds.setAttr('%s.rotatePivot' % node, rotScal[0][0][0],rotScal[0][0][1],rotScal[0][0][2])
+                cmds.setAttr('%s.scalePivot' % node, rotScal[1][0][0],rotScal[1][0][1],rotScal[1][0][2])
 
        
 
