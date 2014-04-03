@@ -238,11 +238,12 @@ def isMetaNode(node, mTypes=[]):
         this does not instantiate the mClass to query it like the
         isMetaNodeInherited which has to figure the subclass mapping
     '''
-
+    mClassInstance=False
     if not node:
         return False
     if issubclass(type(node), MetaClass):
         node=node.mNode
+        mClassInstance=True
     mClass=getMClassDataFromNode(node)
     if mClass:
         if mClass in RED9_META_REGISTERY:
@@ -257,7 +258,11 @@ def isMetaNode(node, mTypes=[]):
             log.debug('isMetaNode>>InValid MetaClass attr : %s' % mClass)
             return False
     else:
-        return False
+        if mClassInstance:
+            log.debug('isMetaNode = True : node is a Wrapped StandardMaya Node MClass instance')
+            return True
+        else:
+            return False
 
 #def isMetaNodeInherited(node, mInstances=[]):
 #    '''
@@ -747,8 +752,10 @@ class MetaClass(object):
                                                '_MObject',
                                                '_MObjectHandle',
                                                '_lockState',
-                                               'lockState'])  # note - UNMANAGED bypasses the Maya node in setattr calls
+                                               'lockState',
+                                               '_forceAsMeta'])  # note - UNMANAGED bypasses the Maya node in setattr calls
         object.__setattr__(self, '_lockState', False)
+        object.__setattr__(self, '_forceAsMeta', False)  # force all getAttr calls to return mClass objects even for starndard Maya nodes
         
         if not node:
             if not name:
@@ -758,7 +765,7 @@ class MetaClass(object):
             self.mNode=node
             self.addAttr('mClass', value=str(self.__class__.__name__))  # ! MAIN ATTR !: used to know what class to instantiate.
             self.addAttr('mNodeID', value=name)                         # ! MAIN NODE ID !: used by pose systems to ID the node.
-            
+
             log.debug('New Meta Node Created')
             cmds.setAttr('%s.%s' % (self.mNode,'mClass'), e=True,l=True)  # lock it
             cmds.setAttr('%s.%s' % (self.mNode,'mNodeID'),e=True,l=True)  # lock it
@@ -1034,14 +1041,17 @@ class MetaClass(object):
         msgLinks=cmds.listConnections('%s.%s' % (self.mNode,attr),destination=True,source=True)
         if msgLinks:
             msgLinks=cmds.ls(msgLinks,l=True)
+            if not cmds.attributeQuery(attr, node=self.mNode, m=True):  # singular message
+                if isMetaNode(msgLinks[0]):
+                    return MetaClass(msgLinks[0])
             for i,link in enumerate(msgLinks):
-                if isMetaNode(link):
+                if isMetaNode(link) or self._forceAsMeta:
                     msgLinks[i]=MetaClass(link)
                     log.debug('%s :  Connected data is an mClass Object, returning the Class' % link)
-            if not cmds.attributeQuery(attr, node=self.mNode, m=True):  # singular message
-                #log.debug('getattr for multi-message attr: connections =[%s]' % ','.join(msgLinks))
-                if isMetaNode(msgLinks[0]):
-                    return msgLinks[0]  # MetaClass(msgLinks[0])
+#             if not cmds.attributeQuery(attr, node=self.mNode, m=True):  # singular message
+#                 #log.debug('getattr for multi-message attr: connections =[%s]' % ','.join(msgLinks))
+#                 if isMetaNode(msgLinks[0]):
+#                     return msgLinks[0]  # MetaClass(msgLinks[0])
             return msgLinks
         else:
             log.debug('nothing connected to msgLink %s.%s' % (self.mNode,attr))
@@ -1075,21 +1085,7 @@ class MetaClass(object):
                     #=====================
                     if attrType=='message':
                         return self.__getMessageAttr__(attr)
-#                        msgLinks=cmds.listConnections('%s.%s' % (mNode,attr),destination=True,source=True)
-#                        if msgLinks:
-#                            msgLinks=cmds.ls(msgLinks,l=True)
-#                            for i,link in enumerate(msgLinks):
-#                                if isMetaNode(link):
-#                                    msgLinks[i]=MetaClass(link)
-#                                    log.debug('%s :  Connected data is an mClass Object, returning the Class' % link)
-#                            if not cmds.attributeQuery(attr, node=mNode, m=True):  # singular message
-#                                #log.debug('getattr for multi-message attr: connections =[%s]' % ','.join(msgLinks))
-#                                if isMetaNode(msgLinks[0]):
-#                                    return msgLinks[0]  # MetaClass(msgLinks[0])
-#                            return msgLinks
-#                        else:
-#                            log.debug('nothing connected to msgLink %s.%s' % (mNode,attr))
-#                            return []
+
                     #Standard Maya Attr handling
                     #===========================
                     attrVal=cmds.getAttr('%s.%s' % (mNode,attr))
@@ -1656,7 +1652,7 @@ class MetaClass(object):
         if key in RED9_META_REGISTERY:
             childClass=RED9_META_REGISTERY[key]
             mChild=childClass(name=nodeName,**kws)
-            self.connectChild(mChild, attr, srcAttr=srcAttr)
+            self.connectChild(mChild, attr, srcAttr=srcAttr, **kws)
             return mChild
         
     @r9General.Timer
@@ -1769,11 +1765,11 @@ class MetaClass(object):
         if walk:
             childMetaNodes.extend([node for node in self.getChildMetaNodes(walk=True, mAttrs=mAttrs)])
         for node in childMetaNodes:
-            #children.extend(self.__getChildren__(node))
-            log.debug('MetaNode : %s' % node.mNode)
+            log.debug('MetaNode getChildren : %s' % node.mNode)
             attrs=cmds.listAttr(node.mNode,ud=True,st=cAttrs)
             if attrs:
                 for attr in attrs:
+                    print 'attrs : ', attr, node
                     if cmds.getAttr('%s.%s' % (node.mNode,attr),type=True)=='message':
                         msgLinked=cmds.listConnections('%s.%s' % (node.mNode,attr),destination=True,source=False)
                         if msgLinked:
@@ -1781,6 +1777,8 @@ class MetaClass(object):
                             children.extend(msgLinked)
             else:
                 log.debug('no matching attrs : %s found on node %s' % (cAttrs,node))
+        if self._forceAsMeta:
+            return [MetaClass(node) for node in children]
         return children
     
     def getNodeConnectionMetaDataMap(self, node, mTypes=[]):
@@ -1822,7 +1820,7 @@ class MetaClass(object):
                 return mNodes
             elif mTypes:
                 continue
-            if not mTypes:  # if not mTypes passed bail the loop and retunr the first connection
+            if not mTypes:  # if not mTypes passed bail the loop and return the first connection
                 return mNodes
         return mNodes
 
