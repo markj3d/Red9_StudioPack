@@ -125,5 +125,6 @@ New - Red9_Anim - CopyKeys now deals with animLayer by pre-merging the data to a
 New - Red9_Audio - Added a function getMediaFileMetaData() which is capable of extracting metaData from most media file types via ffprobe.exe
 Mod - Red9_Pose	- added a filterMap param to the poseCompare call. This can be used as a master core list, only nodes that appear on this will be checked against. Useful for checking core skeleton nodes whilst ingnoring others
 Mod - Red9_Anim - modified the AnimUI behaviour sucj that the 'CTRL' key modifier is now stored with the UI. If you laucnh the UI with ctrl held it'll toggle between launching as docked or not.
+Mod - Red9_Anim - exposed the snapTranslates and snapRotatesflags to the snap() call in AnimFunctions
 
 
