@@ -266,7 +266,24 @@ class Test_MetaClass():
         
         self.MClass.Multiple=[cube1,cube4]
         assert sorted(self.MClass.Multiple)==[cube1,cube4]
+    
+    def test_connections_called_from_wrappedMClass(self):
+        '''
+        lets try connects again and see how it behaves when the mClass calling
+        the code is just a wrapped standard Maya node
+        '''
+        loc1 = cmds.spaceLocator(name="boom")[0]
+        loc2 = cmds.spaceLocator(name="blah")[0]
+        loc3 = cmds.spaceLocator(name="weeh")[0]
+        boom = r9Meta.MetaClass("boom")
         
+        assert r9Meta.isMetaNode(boom)
+        boom.connectChild(loc2,"child","parent")
+        assert boom.child==['|blah']
+        boom.connectChild(loc3,"child","parent")
+        assert boom.child==['|weeh']
+        assert not cmds.attributeQuery('parent', node=loc2, exists=True)
+
     def test_connectionsTo_MayaNodes_Complex(self):
         '''
         This is more to sanity check the connection management, when and how nodes get
