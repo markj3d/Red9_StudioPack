@@ -1582,10 +1582,10 @@ class MetaClass(object):
         sPlug=None
         dPlug=None
         sPlugMeta=None
-        searchConnection='%s.' % self.mNode
+        searchConnection='%s.' % self.mNode.split('|')[-1]
         if attr:
-            searchConnection='%s.%s' % (self.mNode,attr)
-        if isMetaNode(node) and issubclass(type(node), MetaClass):
+            searchConnection='%s.%s' % (self.mNode.split('|')[-1],attr)
+        if isMetaNode(node):  # and issubclass(type(node), MetaClass):
             sPlugMeta=node
             node=node.mNode
         cons=cmds.listConnections(node,s=True,d=False,p=True,c=True)
@@ -1594,6 +1594,8 @@ class MetaClass(object):
             raise StandardError('%s is not connected to the mNode %s' % (node,self.mNode))
         for sPlug,dPlug in zip(cons[0::2],cons[1::2]):
             log.debug('attr Connection inspected : %s << %s' % (sPlug,dPlug))
+            print 'searchCon : ', searchConnection
+            print 'dPlug : ', dPlug
             if searchConnection in dPlug:
                 log.debug('Disconnecting %s >> %s as %s found in dPlug' % (dPlug,sPlug,searchConnection))
                 cmds.disconnectAttr(dPlug,sPlug)
