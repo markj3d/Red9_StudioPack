@@ -1771,7 +1771,6 @@ class MetaClass(object):
             attrs=cmds.listAttr(node.mNode,ud=True,st=cAttrs)
             if attrs:
                 for attr in attrs:
-                    print 'attrs : ', attr, node
                     if cmds.getAttr('%s.%s' % (node.mNode,attr),type=True)=='message':
                         msgLinked=cmds.listConnections('%s.%s' % (node.mNode,attr),destination=True,source=False)
                         if msgLinked:

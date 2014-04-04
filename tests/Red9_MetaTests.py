@@ -321,7 +321,38 @@ class Test_MetaClass():
             assert False
         except:
             assert True
+    
+    def test_forceFlagReturns(self):
+        '''
+        test the _forceAsMeta flag, modifying all returns to be instantiated metaClass objects
+        This is deep integration and needs careful testing
+        '''
+        cube1=cmds.ls(cmds.polyCube()[0],l=True)[0]
+        cube2=cmds.ls(cmds.polyCube()[0],l=True)[0]
+        cube3=cmds.ls(cmds.polyCube()[0],l=True)[0]
+        self.MClass.connectChild(cube1,'singleAttr1')
+        self.MClass.connectChild(cube2,'singleAttr2')
+        assert self.MClass.getChildren()==[cube1,cube2]
         
+        #throw the flag to force returns
+        self.MClass._forceAsMeta=True
+        
+        assert issubclass(type(self.MClass.singleAttr1[0]), r9Meta.MetaClass)
+        assert self.MClass.singleAttr1[0].mNode==cube1
+        assert r9Meta.isMetaNode(self.MClass.singleAttr1[0])
+        nodes=self.MClass.getChildren()
+        for node in nodes:
+            assert r9Meta.isMetaNode(node)
+            assert node.getParentMetaNode()==self.MClass
+            assert cmds.nodeType(node.mNode)=='transform'
+            
+        #connection handler
+        self.MClass.connectChild(r9Meta.MetaClass(cube3),'newConnect')
+        assert self.MClass.newConnect[0].mNode==cube3
+        assert self.MClass.isChildNode(cube3)
+        assert self.MClass.isChildNode(cube3,'newConnect')
+        
+           
     def test_connectParent(self):
         
         parent=r9Meta.MetaFacialRig(name='Facial')
@@ -625,7 +656,7 @@ class Test_Generic_SearchCalls():
         assert r9Meta.isMetaNode('MetaRig_Test', mTypes=r9Meta.MetaRig)
         cube1=cmds.ls(cmds.polyCube()[0],l=True)[0]
         assert not r9Meta.isMetaNode(cube1)
-        
+    
     def test_isMetaNodeInherited(self):
         assert r9Meta.isMetaNodeInherited('MetaFacialRig_Test','MetaRig')
         assert r9Meta.isMetaNodeInherited('MetaFacialRig_Test','MetaClass')
