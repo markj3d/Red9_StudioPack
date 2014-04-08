@@ -60,7 +60,8 @@ class Test_BwavHandler(object):
         
     def test_bwav_handler(self):
         assert self.audioNode.isBwav()
-        assert self.audioNode.bwav_timecodeFormatted()=='1:26:4:172'
+        #print self.audioNode.bwav_timecodeFormatted()
+        assert self.audioNode.bwav_timecodeFormatted()=='1:26:04:172'
         assert self.audioNode.bwav_timecodeReference()==227739993
         assert self.audioNode.bwav_timecodeMS()==5164172.1768707484
         assert self.audioNode.bwav_HeaderData=={'AudioFormat': 0,
