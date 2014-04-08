@@ -223,7 +223,7 @@ class AudioHandler(object):
     
     @audioNodes.setter
     def audioNodes(self, val):
-        print val, type(val)
+        #print val, type(val)
         if not val:
             raise StandardError('No AudioNodes selected or given to process')
         if not type(val)==list:
@@ -533,7 +533,7 @@ class AudioNode(object):
             chunkPos = int(binarymap['bext'][0]) + 8  # starting position in the binary to start reading the 'bext' data from
             filedata.seek(0)
             bufHeader = filedata.read(chunkPos+360)
-            print 'buffdata:', filedata.tell(), bufHeader
+            #print 'buffdata:', filedata.tell(), bufHeader
 
             # Parse fields
             self.bwav_HeaderData['ChunkSize'] = struct.unpack('<L', bufHeader[4:8])[0]
@@ -551,7 +551,7 @@ class AudioNode(object):
             self.bwav_HeaderData['TimeReferenceHigh'] = struct.unpack('<L', bufHeader[chunkPos+342:chunkPos+346])[0]
             self.bwav_HeaderData['BextVersion'] = struct.unpack('<L', bufHeader[chunkPos+346:chunkPos+350])[0]
 
-        print self.bwav_HeaderData
+        #print self.bwav_HeaderData
         return self.bwav_HeaderData
         
     def bwav_timecodeMS(self):
