@@ -33,7 +33,7 @@ log.setLevel(logging.INFO)
 
 
 
-def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=60):
+def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=None):
         '''
         convert milliseconds into correctly formatted timecode
         
@@ -50,6 +50,9 @@ def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=60):
             else:
                 return value
 
+        if not framerate:
+            framerate=r9General.getCurrentFPS()
+            
         if milliseconds > 3600000:
             hours = int(math.floor(milliseconds / 3600000))
             milliseconds -= (hours * 3600000)
@@ -570,11 +573,14 @@ class AudioNode(object):
             self.bwav_getHeader()
         return float(self.bwav_HeaderData['TimeReference'])
     
-    def bwav_timecodeFormatted(self):  # frameRate=29.97):
+    def bwav_timecodeFormatted(self, smpte=True, framerate=None):
         '''
         convert milliseconds into timecode
+
+        :param smpte: format the timecode HH:MM:SS:FF where FF is frames, else milliseconds
+        :param framerate: when using smpte this is the framerate used in the FF block
         '''
-        return milliseconds_to_Timecode(self.bwav_timecodeMS())
+        return milliseconds_to_Timecode(self.bwav_timecodeMS(), smpte=smpte, framerate=framerate)
 
 
     # Bwav end =========================================================
