@@ -2733,7 +2733,7 @@ class AnimFunctions(object):
         raise NotImplemented
     
     @staticmethod
-    def snap(nodes=None):
+    def snap(nodes=None, snapTranslates=True, snapRotates=True):
         '''
         This takes 2 given transform nodes and snaps them together. It takes into
         account offsets in the pivots of the objects. Uses the API MFnTransform nodes
@@ -2755,7 +2755,7 @@ class AnimFunctions(object):
         
         #pass to the plugin SnapCommand
         for node in nodes[1:]:
-            cmds.SnapTransforms(source=nodes[0], destination=node)
+            cmds.SnapTransforms(source=nodes[0], destination=node, snapTranslates=snapTranslates, snapRotates=snapRotates)
  
         
     @staticmethod
