@@ -1841,7 +1841,7 @@ class LockChannels(object):
         
         :param nodes: nodes to process
         :param attrs: set() of attrs
-        :param mode: 'lock' or 'unlock'
+        :param mode: 'lock', 'unlock', 'hide', 'unhide', 'fullkey'
         :param hierarchy: process all child nodes
         :param usedDefined: process all UserDefined attributes on all nodes
         '''
@@ -1854,7 +1854,9 @@ class LockChannels(object):
         if hierarchy:
             #Filter the selection for children including the selected roots
             nodes=FilterNode(nodes).lsHierarchy(incRoots=True)
-
+        
+        if not hasattr(attrs,'__iter__'):
+            attrs=set([attrs])
         if not type(attrs)==set:
             attrs=set(attrs)
             
@@ -1863,10 +1865,8 @@ class LockChannels(object):
         
         if mode=='lock':
             attrKws['lock']=True
-            #attrKws['keyable']=False
         elif mode=='unlock':
             attrKws['lock']=False
-            #attrKws['keyable']=True
         elif mode=='hide':
             attrKws['keyable']=False
         elif mode=='unhide':
