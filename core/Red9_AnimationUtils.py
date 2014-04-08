@@ -389,9 +389,9 @@ class AnimationUI(object):
         RED_ANIMATION_UI=None
         del(self)
     
-    def __del__(self):
-        if cmds.scriptJob(exists=self.jobOnDelete):
-            cmds.scriptJob(kill=self.jobOnDelete, force=True)
+#     def __del__(self):
+#         if cmds.scriptJob(exists=self.jobOnDelete):
+#             cmds.scriptJob(kill=self.jobOnDelete, force=True)
             
     def _showUI(self):
         
@@ -2450,7 +2450,7 @@ class AnimFunctions(object):
         '''
         if not matchMethod:
             matchMethod=self.matchMethod
-        log.debug('CopyKey params : nodes=%s\n : time=%s\n : pasteKey=%s\n : attributes=%s\n : filterSettings=%s\n : matchMethod=%s\n'\
+        log.debug('CopyKey params : nodes=%s : time=%s : pasteKey=%s : attributes=%s : filterSettings=%s : matchMethod=%s'\
                    % (nodes, time, pasteKey, attributes, filterSettings, matchMethod))
                 
         #Build up the node pairs to process
@@ -3755,6 +3755,10 @@ class MirrorHierarchy(object):
         the mirrorSide attr, then process the lists into Side and Index slots
         before Mirroring the animation data. Swapping left for right and
         inversing the required animCurves
+        
+        TODO: Issue where if nodeA on Left has NO key data at all, and nodeB on right
+        does, then nodeB will be left incorrect. We need to clean the data if there
+        are no keys.
         '''
         self.getMirrorSets(nodes)
         
