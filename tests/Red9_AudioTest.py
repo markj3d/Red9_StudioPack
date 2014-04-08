@@ -59,9 +59,21 @@ class Test_BwavHandler(object):
 
         
     def test_bwav_handler(self):
+        '''
+        test the bwav handler and formatting of the data
+        '''
         assert self.audioNode.isBwav()
         #print self.audioNode.bwav_timecodeFormatted()
-        assert self.audioNode.bwav_timecodeFormatted()=='1:26:04:172'
+        cmds.currentUnit(time='ntscf')
+        assert r9General.getCurrentFPS()==60
+        #print 'ntscf' ,  self.audioNode.bwav_timecodeFormatted()
+        assert self.audioNode.bwav_timecodeFormatted()=='01:26:04:11'
+        cmds.currentUnit(time='pal')
+        assert r9General.getCurrentFPS()==25
+        #print 'pal : ', self.audioNode.bwav_timecodeFormatted()
+        assert self.audioNode.bwav_timecodeFormatted()=='01:26:04:05'
+        #print self.audioNode.bwav_timecodeFormatted(smpte=False)
+        assert self.audioNode.bwav_timecodeFormatted(smpte=False)=='01:26:04:172'
         assert self.audioNode.bwav_timecodeReference()==227739993
         assert self.audioNode.bwav_timecodeMS()==5164172.1768707484
         assert self.audioNode.bwav_HeaderData=={'AudioFormat': 0,
