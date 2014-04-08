@@ -374,6 +374,27 @@ class Test_FilterNode():
                                             '|World_Root|Spine_Ctrl|R_Wrist_Ctrl|R_Pole_AttrMarked_Ctrl']
     
         
+class Test_LockNodes(object):
+    def setup(self):
+        cmds.file(new=True,f=True)
+        self.cube=cmds.ls(cmds.polyCube()[0],l=True)[0]
+        
+    def test_processState(self):
+        assert cmds.listAttr(self.cube, k=True, u=True) == ['visibility', 
+                                                            'translateX', 'translateY', 'translateZ', 
+                                                            'rotateX', 'rotateY', 'rotateZ',
+                                                            'scaleX', 'scaleY', 'scaleZ']
+        r9Core.LockChannels.processState(self.cube, 'visibility', 'lock', hierarchy=False, userDefined=False)
+        assert cmds.getAttr('%s.visibility' % self.cube, lock=True)
+        assert cmds.listAttr(self.cube, k=True, u=True) == ['translateX', 'translateY', 'translateZ', 
+                                                            'rotateX', 'rotateY', 'rotateZ',
+                                                            'scaleX', 'scaleY', 'scaleZ'] 
+        r9Core.LockChannels.processState(self.cube, 'visibility', 'unlock', hierarchy=False, userDefined=False)
+        assert cmds.listAttr(self.cube, k=True, u=True) == ['visibility', 
+                                                            'translateX', 'translateY', 'translateZ', 
+                                                            'rotateX', 'rotateY', 'rotateZ',
+                                                            'scaleX', 'scaleY', 'scaleZ'] 
+        
 class Test_Matching_CoreFuncs(object):
     
 #    def setup(self):
@@ -393,3 +414,4 @@ class Test_Matching_CoreFuncs(object):
     def test_MatchedNodeInputs(self):
         #TODO: Fill Test
         pass#          
+    
