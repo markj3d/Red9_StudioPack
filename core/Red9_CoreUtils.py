@@ -1892,7 +1892,16 @@ class LockChannels(object):
                 try:
                     #log.debug('node: %s.%s' % (node,attr))
                     if cmds.attributeQuery(attr, node=node, exists=True):
-                        cmds.setAttr('%s.%s' % (node, attr), **attrKws)
+                        attrString='%s.%s' % (node, attr)
+                        if cmds.getAttr(attrString, type=True) in ['double3','float3']:
+                            #why?? Maya fails to set the 'keyable' flag staus for compound attrs!
+                            childAttrs=cmds.listAttr(attrString, multi=True)
+                            childAttrs.remove(attr)
+                            log.debug('compoundAttr handler for node: %s.%s' % (node,attr))
+                            for child in childAttrs:
+                                cmds.setAttr('%s.%s' % (node, child), **attrKws)
+                        else:
+                            cmds.setAttr(attrString, **attrKws)
                 except StandardError, error:
                     log.info(error)
                 
