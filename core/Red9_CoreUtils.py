@@ -1208,7 +1208,12 @@ class FilterNode(object):
             else:
                 mnodes=r9Meta.getConnectedMetaNodes(root)
                 if mnodes:
-                    meta=mnodes[0]
+                    for mnode in mnodes:
+                        if issubclass(type(mnode), r9Meta.MetaRig):
+                            meta=mnode
+                            break
+                    if not meta:
+                        meta=mnodes[0]
             if meta and meta not in metaNodes:
                 metaNodes.append(meta)
                 
@@ -1834,15 +1839,15 @@ class LockChannels(object):
         log.info('<< AttrMap Processed >>')
         
     @staticmethod
-    def processState(nodes, attrs, mode, hierarchy=True, userDefined=False):
+    def processState(nodes, attrs, mode, hierarchy=False, userDefined=False):
         '''
         Easy wrapper to manage channels that are keyable / locked
         in the channelBox.
         
         :param nodes: nodes to process
         :param attrs: set() of attrs
-        :param mode: 'lock', 'unlock', 'hide', 'unhide', 'fullkey'
-        :param hierarchy: process all child nodes
+        :param mode: 'lock', 'unlock', 'hide', 'unhide', 'fullkey', 'lockall'
+        :param hierarchy: process all child nodes, default is now False
         :param usedDefined: process all UserDefined attributes on all nodes
         '''
         userDefAttrs=set()
@@ -1874,6 +1879,9 @@ class LockChannels(object):
         elif mode=='fullkey':
             attrKws['keyable']=True
             attrKws['lock']=False
+        elif mode=='lockall':
+            attrKws['keyable']=False
+            attrKws['lock']=True
             
         for node in nodes:
             if userDefined:
