@@ -1510,13 +1510,14 @@ class MetaClass(object):
             log.warning(error)
     
     @nodeLockManager
-    def connectParent(self, node, attr, srcAttr=None):
+    def connectParent(self, node, attr, srcAttr=None, cleanCurrent=True):
         '''
         Fast method of connecting message links to the mNode as parents
         :param nodes: Maya nodes to connect to this mNode
         :param attr: Name for the message attribute on eth PARENT!
         :param srcAttr: If given this becomes the attr on the node which connects it
                         to the parent. If NOT given this attr is set to parents shortName
+        :param cleanCurrent: Exposed from teh connectChild code which is basically what this is running in reverse
         TODO: Modify so if a metaClass is passed in use it's addAttr cmd so the new
         attr is registered in the class given
         TODO: Manage connection Index like the connectChildren call does?
@@ -1531,7 +1532,7 @@ class MetaClass(object):
 #                #add to parent node
 #                cmds.addAttr(node,longName=attr, at='message', m=False)
 #            cmds.connectAttr('%s.%s' % (node,attr),'%s.%s' % (self.mNode,srcAttr))
-            node.connectChild(self, attr, srcAttr)
+            node.connectChild(self, attr, srcAttr, cleanCurrent=cleanCurrent)
         except StandardError,error:
                 log.warning(error)
                 
