@@ -1,16 +1,14 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_General &mdash; Red9 1.41 documentation</title>
-    
+    <title>Red9_General &mdash; Red9 v1.41 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -23,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 1.41 documentation" href="../index.html" />
+    <link rel="top" title="Red9 v1.41 documentation" href="../index.html" />
     <link rel="next" title="Red9_Meta" href="Red9_Meta.html" />
     <link rel="prev" title="Red9_CoreUtils" href="Red9_Core.html" /> 
   </head>
@@ -43,7 +41,7 @@
         <li class="right" >
           <a href="Red9_Core.html" title="Red9_CoreUtils"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 1.41 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v1.41 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -61,73 +59,73 @@ This includes most of the context managers and decorators.</p>
 <p class="last">Nothing inside this module should require any other part of Red9</p>
 </div>
 <span class="target" id="module-Red9.core.Red9_General"></span><p class="rubric">Key functions</p>
-<table border="1" class="longtable docutils">
+<table border="1" class="docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.getCurrentFPS" title="Red9.core.Red9_General.getCurrentFPS"><tt class="xref py py-obj docutils literal"><span class="pre">getCurrentFPS</span></tt></a>()</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.getCurrentFPS" title="Red9.core.Red9_General.getCurrentFPS"><tt class="xref py py-obj docutils literal"><span class="pre">getCurrentFPS</span></tt></a>()</td>
 <td>returns the current frames per second as a number, rather than a useless string</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.getModifier" title="Red9.core.Red9_General.getModifier"><tt class="xref py py-obj docutils literal"><span class="pre">getModifier</span></tt></a>()</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.getModifier" title="Red9.core.Red9_General.getModifier"><tt class="xref py py-obj docutils literal"><span class="pre">getModifier</span></tt></a>()</td>
 <td>return the modifier key pressed</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.forceToString" title="Red9.core.Red9_General.forceToString"><tt class="xref py py-obj docutils literal"><span class="pre">forceToString</span></tt></a>(text)</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.forceToString" title="Red9.core.Red9_General.forceToString"><tt class="xref py py-obj docutils literal"><span class="pre">forceToString</span></tt></a>(text)</td>
 <td>simple function to ensure that data can be passed correctly into</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.itersubclasses" title="Red9.core.Red9_General.itersubclasses"><tt class="xref py py-obj docutils literal"><span class="pre">itersubclasses</span></tt></a>(cls)</td>
-<td><a class="reference external" href="http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/">http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/</a></td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.itersubclasses" title="Red9.core.Red9_General.itersubclasses"><tt class="xref py py-obj docutils literal"><span class="pre">itersubclasses</span></tt></a>(cls[,&nbsp;_seen])</td>
+<td>itersubclasses(cls)</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.inspectFunctionSource" title="Red9.core.Red9_General.inspectFunctionSource"><tt class="xref py py-obj docutils literal"><span class="pre">inspectFunctionSource</span></tt></a>(value)</td>
-<td>This is a neat little wrapper over the mel &#8220;whatIs&#8221; and Pythons inspect module that finds the given functions source filePath, either Mel or Python and opens the original file in the default program.</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.inspectFunctionSource" title="Red9.core.Red9_General.inspectFunctionSource"><tt class="xref py py-obj docutils literal"><span class="pre">inspectFunctionSource</span></tt></a>(value)</td>
+<td>This is a neat little wrapper over the mel &#8220;whatIs&#8221; and Pythons inspect</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.getScriptEditorSelection" title="Red9.core.Red9_General.getScriptEditorSelection"><tt class="xref py py-obj docutils literal"><span class="pre">getScriptEditorSelection</span></tt></a>()</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.getScriptEditorSelection" title="Red9.core.Red9_General.getScriptEditorSelection"><tt class="xref py py-obj docutils literal"><span class="pre">getScriptEditorSelection</span></tt></a>()</td>
 <td>this is a hack to bypass an issue with getting the data back from the</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.thumbNailScreen" title="Red9.core.Red9_General.thumbNailScreen"><tt class="xref py py-obj docutils literal"><span class="pre">thumbNailScreen</span></tt></a>(filepath,&nbsp;width,&nbsp;height[,&nbsp;mode])</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.thumbNailScreen" title="Red9.core.Red9_General.thumbNailScreen"><tt class="xref py py-obj docutils literal"><span class="pre">thumbNailScreen</span></tt></a>(filepath,&nbsp;width,&nbsp;height[,&nbsp;mode])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.thumbnailFromPlayBlast" title="Red9.core.Red9_General.thumbnailFromPlayBlast"><tt class="xref py py-obj docutils literal"><span class="pre">thumbnailFromPlayBlast</span></tt></a>(filepath,&nbsp;width,&nbsp;height)</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.thumbnailFromPlayBlast" title="Red9.core.Red9_General.thumbnailFromPlayBlast"><tt class="xref py py-obj docutils literal"><span class="pre">thumbnailFromPlayBlast</span></tt></a>(filepath,&nbsp;width,&nbsp;height)</td>
 <td>Generate a ThumbNail of the screen</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.thumbnailApiFromView" title="Red9.core.Red9_General.thumbnailApiFromView"><tt class="xref py py-obj docutils literal"><span class="pre">thumbnailApiFromView</span></tt></a>(filename,&nbsp;width,&nbsp;height)</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.thumbnailApiFromView" title="Red9.core.Red9_General.thumbnailApiFromView"><tt class="xref py py-obj docutils literal"><span class="pre">thumbnailApiFromView</span></tt></a>(filename,&nbsp;width,&nbsp;height)</td>
 <td>grab the thumbnail direct from the buffer?</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.os_OpenFileDirectory" title="Red9.core.Red9_General.os_OpenFileDirectory"><tt class="xref py py-obj docutils literal"><span class="pre">os_OpenFileDirectory</span></tt></a>(path)</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.os_OpenFileDirectory" title="Red9.core.Red9_General.os_OpenFileDirectory"><tt class="xref py py-obj docutils literal"><span class="pre">os_OpenFileDirectory</span></tt></a>(path)</td>
 <td>open the given folder in the default OS browser</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.os_OpenFile" title="Red9.core.Red9_General.os_OpenFile"><tt class="xref py py-obj docutils literal"><span class="pre">os_OpenFile</span></tt></a>(filePath)</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.os_OpenFile" title="Red9.core.Red9_General.os_OpenFile"><tt class="xref py py-obj docutils literal"><span class="pre">os_OpenFile</span></tt></a>(filePath)</td>
 <td>open the given file in the default program for this OS</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Context Managers / decorators</p>
-<table border="1" class="longtable docutils">
+<table border="1" class="docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.AnimationContext" title="Red9.core.Red9_General.AnimationContext"><tt class="xref py py-obj docutils literal"><span class="pre">AnimationContext</span></tt></a>()</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.AnimationContext" title="Red9.core.Red9_General.AnimationContext"><tt class="xref py py-obj docutils literal"><span class="pre">AnimationContext</span></tt></a>()</td>
 <td>Simple Context Manager for restoring Animation settings</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.undoContext" title="Red9.core.Red9_General.undoContext"><tt class="xref py py-obj docutils literal"><span class="pre">undoContext</span></tt></a></td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.undoContext" title="Red9.core.Red9_General.undoContext"><tt class="xref py py-obj docutils literal"><span class="pre">undoContext</span></tt></a></td>
 <td>Simple Context Manager for chunking the undoState</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.ProgressBarContext" title="Red9.core.Red9_General.ProgressBarContext"><tt class="xref py py-obj docutils literal"><span class="pre">ProgressBarContext</span></tt></a>([maxValue,&nbsp;interruptable])</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.ProgressBarContext" title="Red9.core.Red9_General.ProgressBarContext"><tt class="xref py py-obj docutils literal"><span class="pre">ProgressBarContext</span></tt></a>([maxValue,&nbsp;interruptable])</td>
 <td>Context manager to make it easier to wrap progressBars</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.HIKContext" title="Red9.core.Red9_General.HIKContext"><tt class="xref py py-obj docutils literal"><span class="pre">HIKContext</span></tt></a>(NodeList)</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.HIKContext" title="Red9.core.Red9_General.HIKContext"><tt class="xref py py-obj docutils literal"><span class="pre">HIKContext</span></tt></a>(NodeList)</td>
 <td>Simple Context Manager for restoring HIK Animation settings and managing HIK callbacks</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.SceneRestoreContext" title="Red9.core.Red9_General.SceneRestoreContext"><tt class="xref py py-obj docutils literal"><span class="pre">SceneRestoreContext</span></tt></a>()</td>
-<td>Simple Context Manager for restoring Scene Global settings  Basically we store the state of all the modelPanels and timeLine setups.</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.SceneRestoreContext" title="Red9.core.Red9_General.SceneRestoreContext"><tt class="xref py py-obj docutils literal"><span class="pre">SceneRestoreContext</span></tt></a>()</td>
+<td>Simple Context Manager for restoring Scene Global settings</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.Timer" title="Red9.core.Red9_General.Timer"><tt class="xref py py-obj docutils literal"><span class="pre">Timer</span></tt></a>(func)</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.Timer" title="Red9.core.Red9_General.Timer"><tt class="xref py py-obj docutils literal"><span class="pre">Timer</span></tt></a>(func)</td>
 <td>Simple timer decorator</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.runProfile" title="Red9.core.Red9_General.runProfile"><tt class="xref py py-obj docutils literal"><span class="pre">runProfile</span></tt></a>(func)</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.runProfile" title="Red9.core.Red9_General.runProfile"><tt class="xref py py-obj docutils literal"><span class="pre">runProfile</span></tt></a>(func)</td>
 <td>run the profiler - only ever used when debugging /optimizing function call speeds.</td>
 </tr>
 </tbody>
@@ -153,8 +151,9 @@ textFields for the UI (ensuring lists are converted)</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_General.itersubclasses">
-<tt class="descname">itersubclasses</tt><big>(</big><em>cls</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.itersubclasses" title="Permalink to this definition">¶</a></dt>
-<dd><p><a class="reference external" href="http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/">http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/</a>
+<tt class="descname">itersubclasses</tt><big>(</big><em>cls</em>, <em>_seen=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.itersubclasses" title="Permalink to this definition">¶</a></dt>
+<dd><p>itersubclasses(cls)
+<a class="reference external" href="http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/">http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/</a>
 Iterator to yield full inheritance from a given class, including subclasses. This
 is used in the MetaClass to build the RED9_META_REGISTERY inheritance dict</p>
 </dd></dl>
@@ -389,7 +388,7 @@ CURRENTLY NOT BEING CALLED - switched to pyperclip.py module</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" size="18" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -418,12 +417,12 @@ CURRENTLY NOT BEING CALLED - switched to pyperclip.py module</p>
         <li class="right" >
           <a href="Red9_Core.html" title="Red9_CoreUtils"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 1.41 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v1.41 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
     </div>
   </body>
 </html>
