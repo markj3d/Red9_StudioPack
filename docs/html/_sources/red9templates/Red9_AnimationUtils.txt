@@ -18,6 +18,7 @@ to Mirroring animation data.
       getAnimLayersFromGivenNodes
       timeLineRangeGet
       timeLineRangeProcess
+      mergeAnimLayers
 	  eulerSelected
 
     

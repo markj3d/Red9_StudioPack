@@ -1,14 +1,16 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_PoseSaver &mdash; Red9 v1.41 documentation</title>
+    <title>Red9_PoseSaver &mdash; Red9 1.41 documentation</title>
+    
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -21,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 v1.41 documentation" href="../index.html" />
+    <link rel="top" title="Red9 1.41 documentation" href="../index.html" />
     <link rel="next" title="Red9_Tools" href="Red9_Tools.html" />
     <link rel="prev" title="Red9_Meta" href="Red9_Meta.html" /> 
   </head>
@@ -41,7 +43,7 @@
         <li class="right" >
           <a href="Red9_Meta.html" title="Red9_Meta"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.41 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 1.41 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -67,20 +69,20 @@ posePointCloud and the snapping core</p>
 ALL NODES must have unique names or you may get unexpected  results!</p>
 </div>
 <p class="rubric">Core Pose Classes</p>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PoseData" title="Red9.core.Red9_PoseSaver.PoseData"><tt class="xref py py-obj docutils literal"><span class="pre">PoseData</span></tt></a>([filterSettings])</td>
-<td>The PoseData is stored per node inside an internal dict as follows:</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PoseData" title="Red9.core.Red9_PoseSaver.PoseData"><tt class="xref py py-obj docutils literal"><span class="pre">PoseData</span></tt></a>([filterSettings])</td>
+<td>The PoseData is stored per node inside an internal dict as follows:  &gt;&gt;&gt; node = &#8216;<a href="#id1"><span class="problematic" id="id2">|</span></a>group|Rig|Body|TestCtr&#8217; &gt;&gt;&gt; poseDict[&#8216;TestCtr&#8217;]  &gt;&gt;&gt; poseDict[&#8216;TestCtr&#8217;][&#8216;ID&#8217;] = 0   index in the Hierarchy used to build the data up  &gt;&gt;&gt; poseDict[&#8216;TestCtr&#8217;][&#8216;longName&#8217;] = &#8216;<a href="#id3"><span class="problematic" id="id4">|</span></a>group|Rig|Body|TestCtr&#8217;  &gt;&gt;&gt; poseDict[&#8216;TestCtr&#8217;][&#8216;attrs&#8217;][&#8216;translateX&#8217;] = 0.5  &gt;&gt;&gt; poseDict[&#8216;TestCtr&#8217;][&#8216;attrs&#8217;][&#8216;translateY&#8217;] = 1.0  &gt;&gt;&gt; poseDict[&#8216;TestCtr&#8217;][&#8216;attrs&#8217;][&#8216;translateZ&#8217;] = 22  &gt;&gt;&gt;  &gt;&gt;&gt; #if we&#8217;re storing as MetaData we also include: &gt;&gt;&gt; poseDict[&#8216;TestCtr&#8217;][&#8216;metaData&#8217;][&#8216;metaAttr&#8217;] = CTRL_L_Thing    = the attr that wires this node to the MetaSubsystem &gt;&gt;&gt; poseDict[&#8216;TestCtr&#8217;][&#8216;metaData&#8217;][&#8216;metaNodeID&#8217;] = L_Arm_System  = the metaNode this node is wired to via the above attr  Matching of nodes against this dict is via either the nodeName, nodeIndex (ID) or the metaData block.</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PosePointCloud" title="Red9.core.Red9_PoseSaver.PosePointCloud"><tt class="xref py py-obj docutils literal"><span class="pre">PosePointCloud</span></tt></a>(nodes[,&nbsp;filterSettings,&nbsp;mesh])</td>
-<td>PosePointCloud is the technique inside the PoseSaver used to snap the pose into</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PosePointCloud" title="Red9.core.Red9_PoseSaver.PosePointCloud"><tt class="xref py py-obj docutils literal"><span class="pre">PosePointCloud</span></tt></a>(nodes[,&nbsp;filterSettings,&nbsp;mesh])</td>
+<td>PosePointCloud is the technique inside the PoseSaver used to snap the pose into relative space.</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PoseCompare" title="Red9.core.Red9_PoseSaver.PoseCompare"><tt class="xref py py-obj docutils literal"><span class="pre">PoseCompare</span></tt></a>(currentPose,&nbsp;referencePose[,&nbsp;...])</td>
-<td>This is aimed at comparing a rigs current pose with a given one, be that a</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PoseCompare" title="Red9.core.Red9_PoseSaver.PoseCompare"><tt class="xref py py-obj docutils literal"><span class="pre">PoseCompare</span></tt></a>(currentPose,&nbsp;referencePose[,&nbsp;...])</td>
+<td>This is aimed at comparing a rigs current pose with a given one, be that a pose file on disc, a pose class object, or even a poseObject against another.</td>
 </tr>
 </tbody>
 </table>
@@ -211,7 +213,7 @@ or loaded. Currently only supported under MetaRig</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; nodes to store the data against OR the rootNode if the 
 filter is active.</li>
 <li><strong>filepath</strong> &#8211; posefile to save - if not given the pose is cached on this 
@@ -232,7 +234,7 @@ class instance.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; if given load the data to only these. If given and filter=True 
 this is the rootNode for the filter.</li>
 <li><strong>filepath</strong> &#8211; posefile to load - if not given the pose is loaded from a 
@@ -266,7 +268,7 @@ useful to be able to shift poses in global space.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>rootReference</strong> &#8211; the object to be used as the PPT&#8217;s pivot reference</li>
 <li><strong>nodes</strong> &#8211; feed the nodes to process in as a list, if a filter is given
 then these are the rootNodes for it</li>
@@ -313,7 +315,7 @@ TODO: Make sure that the duplicate message link bug is covered!!</p>
 
 <dl class="class">
 <dt id="Red9.core.Red9_PoseSaver.PoseCompare">
-<em class="property">class </em><tt class="descname">PoseCompare</tt><big>(</big><em>currentPose</em>, <em>referencePose</em>, <em>angularTolerance=0.10000000000000001</em>, <em>linearTolerance=0.01</em>, <em>compareDict='poseDict'</em>, <em>filterMap=</em><span class="optional">[</span><span class="optional">]</span>, <em>ignoreBlocks=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseCompare" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">PoseCompare</tt><big>(</big><em>currentPose</em>, <em>referencePose</em>, <em>angularTolerance=0.1</em>, <em>linearTolerance=0.01</em>, <em>compareDict='poseDict'</em>, <em>filterMap=</em>, <span class="optional">[</span><span class="optional">]</span><em>ignoreBlocks=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseCompare" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>This is aimed at comparing a rigs current pose with a given one, be that a
 pose file on disc, a pose class object, or even a poseObject against another.
@@ -348,15 +350,12 @@ and for key in keys compare, with tolerance, the [attrs] block.</p>
 :param compareDict: the internal main dict in the pose file to compare the data with
 :param filterMap: if given this is used as a high level filter, only matching nodes get compared</p>
 <blockquote>
-others get skipped. Good for passing in a mater core skeleton to test whilst ignoring extra nodes</blockquote>
+<div>others get skipped. Good for passing in a mater core skeleton to test whilst ignoring extra nodes</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ignoreBlocks</strong> &#8211; allows the given failure blocks to be ignored. We mainly use this for [&#8216;missingKeys&#8217;]</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ignoreBlocks</strong> &#8211; allows the given failure blocks to be ignored. We mainly use this for [&#8216;missingKeys&#8217;]</td>
 </tr>
 </tbody>
 </table>
@@ -367,12 +366,12 @@ new dict to serialize the current skeleton data to the pose, this means that
 we can compare a pose on a rig via the internal skeleton transforms as well
 as the actual rig controllers...makes validation a lot more accurate for export</p>
 <blockquote class="last">
-<ul class="simple">
+<div><ul class="simple">
 <li>&#8216;poseDict&#8217;     = [poseData] main controller data</li>
 <li>&#8216;skeletonDict&#8217; = [skeletonDict] block generated if exportSkeletonRoot is connected</li>
 <li>&#8216;infoDict&#8217;     = [info] block</li>
 </ul>
-</blockquote>
+</div></blockquote>
 </div>
 <dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.PoseCompare.compare">
@@ -395,12 +394,12 @@ the systems if needed. If it is then it gets run between the load and save calls
 :param poseroot: root node to the filters - poseTab rootNode/MetaRig root
 :param patchfunc: optional function to run between the load and save call in processing, great for</p>
 <blockquote>
-fixing issues on mass with poses. Note we now pass pose file back into this func as an arg</blockquote>
+<div>fixing issues on mass with poses. Note we now pass pose file back into this func as an arg</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>load</strong> &#8211; should the batch load the pose</li>
 <li><strong>save</strong> &#8211; should the batch resave the pose</li>
 </ul>
@@ -432,7 +431,7 @@ fixing issues on mass with poses. Note we now pass pose file back into this func
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -461,12 +460,12 @@ fixing issues on mass with poses. Note we now pass pose file back into this func
         <li class="right" >
           <a href="Red9_Meta.html" title="Red9_Meta"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.41 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 1.41 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Mark Jackson.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

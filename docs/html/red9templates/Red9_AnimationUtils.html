@@ -1,14 +1,16 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_AnimationUtils &mdash; Red9 v1.41 documentation</title>
+    <title>Red9_AnimationUtils &mdash; Red9 1.41 documentation</title>
+    
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -21,7 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 v1.41 documentation" href="../index.html" />
+    <link rel="top" title="Red9 1.41 documentation" href="../index.html" />
     <link rel="next" title="Red9_Audio" href="Red9_Audio.html" />
     <link rel="prev" title="Welcome to Red9’s documentation!" href="../index.html" /> 
   </head>
@@ -41,7 +43,7 @@
         <li class="right" >
           <a href="../index.html" title="Welcome to Red9’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.41 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 1.41 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -59,23 +61,26 @@ to Mirroring animation data.</p>
 <div class="section" id="processnodes">
 <h2>ProcessNodes<a class="headerlink" href="#processnodes" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-All of the functions which have the ProcessNodes call share the same
+<div>All of the functions which have the ProcessNodes call share the same
 underlying functionality as described below. This is designed to process the
 given input nodes in a consistent manor across all the functions.
 Params: &#8216;nodes&#8217; and &#8216;filterSettings&#8217; are treated as special and build up a
-MatchedNode object that contains a tuple of matching pairs based on the given settings.</blockquote>
+MatchedNode object that contains a tuple of matching pairs based on the given settings.</div></blockquote>
 </div>
 <div class="section" id="animfunctions-example">
 <h2>AnimFunctions example:<a class="headerlink" href="#animfunctions-example" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<p>The main AnimFunctions class is designed to run with an r9Core.FilterNode
+<div><p>The main AnimFunctions class is designed to run with an r9Core.FilterNode
 object that is responsible for how we process hierarchies. If one isn&#8217;t passed
 as an arg then the code simply processes the &#8216;nodes&#8217; args in zipped pairs. 
 See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <p>All the AnimFunctions such as copyKeys, copyAttrs etc use the same base setup</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Red9_CoreUtils</span> <span class="kn">as</span> <span class="nn">r9Core</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">maya.cmds</span> <span class="kn">as</span> <span class="nn">cmds</span>
-<span class="gp">&gt;&gt;&gt; </span>                             
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#===========================</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#When Processing hierarchies:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#===========================</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">#Make a settings object and set the internal filter to find all</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">#child nurbsCurves that have an attr called &#39;Control_Marker&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span> <span class="o">=</span> <span class="n">r9Core</span><span class="o">.</span><span class="n">FilterNode_Settings</span><span class="p">()</span>
@@ -98,65 +103,77 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">#Rather than passing in the settings or nodes, pass in the already processed MatchedNode</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">anim</span><span class="o">.</span><span class="n">snapTransform</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">matched</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">r9Anim</span><span class="o">.</span><span class="n">timeLineRangeGet</span><span class="p">())</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#==============================</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#When processing simple objects:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#==============================</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#If you simple ignore the filterSettings you can just process given nodes directly</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#the nodes are zipped into selected pairs obj[0]&gt;obj[1], obj[2]&gt;obj[3] etc</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">anim</span> <span class="o">=</span> <span class="n">r9Anim</span><span class="o">.</span><span class="n">AnimFunctions</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">anim</span><span class="o">.</span><span class="n">snapTransform</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">time</span><span class="o">=</span><span class="n">r9Anim</span><span class="o">.</span><span class="n">timeLineRangeGet</span><span class="p">())</span>
 </pre></div>
 </div>
-</blockquote>
+</div></blockquote>
 <p class="rubric">Core Functions</p>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getChannelBoxSelection" title="Red9.core.Red9_AnimationUtils.getChannelBoxSelection"><tt class="xref py py-obj docutils literal"><span class="pre">getChannelBoxSelection</span></tt></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getChannelBoxSelection" title="Red9.core.Red9_AnimationUtils.getChannelBoxSelection"><tt class="xref py py-obj docutils literal"><span class="pre">getChannelBoxSelection</span></tt></a>()</td>
 <td>return a list of attributes selected in the ChannelBox</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getChannelBoxAttrs" title="Red9.core.Red9_AnimationUtils.getChannelBoxAttrs"><tt class="xref py py-obj docutils literal"><span class="pre">getChannelBoxAttrs</span></tt></a>([node,&nbsp;asDict,&nbsp;incLocked])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getChannelBoxAttrs" title="Red9.core.Red9_AnimationUtils.getChannelBoxAttrs"><tt class="xref py py-obj docutils literal"><span class="pre">getChannelBoxAttrs</span></tt></a>([node,&nbsp;asDict,&nbsp;incLocked])</td>
 <td>return a dict of attributes in the ChannelBox by their status.</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getSettableChannels" title="Red9.core.Red9_AnimationUtils.getSettableChannels"><tt class="xref py py-obj docutils literal"><span class="pre">getSettableChannels</span></tt></a>([node,&nbsp;incStatics])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getSettableChannels" title="Red9.core.Red9_AnimationUtils.getSettableChannels"><tt class="xref py py-obj docutils literal"><span class="pre">getSettableChannels</span></tt></a>([node,&nbsp;incStatics])</td>
 <td>return a list of settable attributes on a given node.</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes" title="Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes"><tt class="xref py py-obj docutils literal"><span class="pre">getAnimLayersFromGivenNodes</span></tt></a>(nodes)</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes" title="Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes"><tt class="xref py py-obj docutils literal"><span class="pre">getAnimLayersFromGivenNodes</span></tt></a>(nodes)</td>
 <td>return all animLayers associated with the given nodes</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.timeLineRangeGet" title="Red9.core.Red9_AnimationUtils.timeLineRangeGet"><tt class="xref py py-obj docutils literal"><span class="pre">timeLineRangeGet</span></tt></a>([always])</td>
-<td>Return the current PlaybackTimeline OR if a range is selected in the</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.timeLineRangeGet" title="Red9.core.Red9_AnimationUtils.timeLineRangeGet"><tt class="xref py py-obj docutils literal"><span class="pre">timeLineRangeGet</span></tt></a>([always])</td>
+<td>Return the current PlaybackTimeline OR if a range is selected in the TimeLine, (Highlighted in Red) return that instead.</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.timeLineRangeProcess" title="Red9.core.Red9_AnimationUtils.timeLineRangeProcess"><tt class="xref py py-obj docutils literal"><span class="pre">timeLineRangeProcess</span></tt></a>(start,&nbsp;end,&nbsp;step[,&nbsp;incEnds])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.timeLineRangeProcess" title="Red9.core.Red9_AnimationUtils.timeLineRangeProcess"><tt class="xref py py-obj docutils literal"><span class="pre">timeLineRangeProcess</span></tt></a>(start,&nbsp;end,&nbsp;step[,&nbsp;incEnds])</td>
 <td>Simple wrapper function to take a given framerange and return a list[] containing the actual keys required for processing.</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.eulerSelected" title="Red9.core.Red9_AnimationUtils.eulerSelected"><tt class="xref py py-obj docutils literal"><span class="pre">eulerSelected</span></tt></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.mergeAnimLayers" title="Red9.core.Red9_AnimationUtils.mergeAnimLayers"><tt class="xref py py-obj docutils literal"><span class="pre">mergeAnimLayers</span></tt></a>(nodes[,&nbsp;deleteBaked])</td>
+<td>from the given nodes find, merge and remove any animLayers found</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.eulerSelected" title="Red9.core.Red9_AnimationUtils.eulerSelected"><tt class="xref py py-obj docutils literal"><span class="pre">eulerSelected</span></tt></a>()</td>
 <td>cheap trick! for selected objects run a Euler Filter and then delete Static curves</td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Core Classes</p>
-<table border="1" class="docutils">
+<table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.AnimationUI" title="Red9.core.Red9_AnimationUtils.AnimationUI"><tt class="xref py py-obj docutils literal"><span class="pre">AnimationUI</span></tt></a>([dockUI])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.AnimationUI" title="Red9.core.Red9_AnimationUtils.AnimationUI"><tt class="xref py py-obj docutils literal"><span class="pre">AnimationUI</span></tt></a>([dockUI])</td>
 <td></td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.AnimFunctions" title="Red9.core.Red9_AnimationUtils.AnimFunctions"><tt class="xref py py-obj docutils literal"><span class="pre">AnimFunctions</span></tt></a>(**kws)</td>
-<td>Most of the main Animation Functions take a settings object which is</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.AnimFunctions" title="Red9.core.Red9_AnimationUtils.AnimFunctions"><tt class="xref py py-obj docutils literal"><span class="pre">AnimFunctions</span></tt></a>(**kws)</td>
+<td>Most of the main Animation Functions take a settings object which is  responsible for hierarchy processing.</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.RandomizeKeys" title="Red9.core.Red9_AnimationUtils.RandomizeKeys"><tt class="xref py py-obj docutils literal"><span class="pre">RandomizeKeys</span></tt></a>()</td>
-<td>This is a simple implementation of a Key Randomizer, designed to add</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.RandomizeKeys" title="Red9.core.Red9_AnimationUtils.RandomizeKeys"><tt class="xref py py-obj docutils literal"><span class="pre">RandomizeKeys</span></tt></a>()</td>
+<td>This is a simple implementation of a Key Randomizer, designed to add noise to animations.</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.FilterCurves" title="Red9.core.Red9_AnimationUtils.FilterCurves"><tt class="xref py py-obj docutils literal"><span class="pre">FilterCurves</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.FilterCurves" title="Red9.core.Red9_AnimationUtils.FilterCurves"><tt class="xref py py-obj docutils literal"><span class="pre">FilterCurves</span></tt></a>()</td>
 <td></td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy" title="Red9.core.Red9_AnimationUtils.MirrorHierarchy"><tt class="xref py py-obj docutils literal"><span class="pre">MirrorHierarchy</span></tt></a>(**kws[,&nbsp;nodes,&nbsp;filterSettings])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy" title="Red9.core.Red9_AnimationUtils.MirrorHierarchy"><tt class="xref py py-obj docutils literal"><span class="pre">MirrorHierarchy</span></tt></a>([nodes,&nbsp;filterSettings])</td>
 <td>This class is designed to mirror pose and animation data on any given hierarchy.</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.MirrorSetup" title="Red9.core.Red9_AnimationUtils.MirrorSetup"><tt class="xref py py-obj docutils literal"><span class="pre">MirrorSetup</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.MirrorSetup" title="Red9.core.Red9_AnimationUtils.MirrorSetup"><tt class="xref py py-obj docutils literal"><span class="pre">MirrorSetup</span></tt></a>()</td>
 <td></td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.CameraTracker" title="Red9.core.Red9_AnimationUtils.CameraTracker"><tt class="xref py py-obj docutils literal"><span class="pre">CameraTracker</span></tt></a>([fixed])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.CameraTracker" title="Red9.core.Red9_AnimationUtils.CameraTracker"><tt class="xref py py-obj docutils literal"><span class="pre">CameraTracker</span></tt></a>([fixed])</td>
 <td></td>
 </tr>
 </tbody>
@@ -181,7 +198,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>node</strong> &#8211; given node.</li>
 <li><strong>asDict</strong> &#8211; True returns a dict with keys &#8216;keyable&#8217;,&#8217;locked&#8217;,&#8217;nonKeyable&#8217; of attrs 
 False returns a list (non ordered) of all attrs available on the channelBox.</li>
@@ -201,7 +218,7 @@ False returns a list (non ordered) of all attrs available on the channelBox.</li
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>node</strong> &#8211; node to inspect.</li>
 <li><strong>incStatics</strong> &#8211; whether to include non-keyable static channels (On by default).</li>
 </ul>
@@ -235,16 +252,11 @@ TimeLine, (Highlighted in Red) return that instead.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>always</strong> &#8211; always return a timeline range, if none selected return the playbackRange.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>always</strong> &#8211; always return a timeline range, if none selected return the playbackRange.</td>
 </tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">tuple</p>
-</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">(start,end)</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">(start,end)</td>
 </tr>
 </tbody>
 </table>
@@ -390,7 +402,7 @@ filtered nodes, either in hierarchies or just selected pairs.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>nodes</strong> &#8211; List of Maya nodes to process. This combines the filterSettings
 object and the MatchedNodeInputs.processMatchedPairs() call,
 making it capable of powerful hierarchy filtering and node matching methods.</li>
@@ -407,8 +419,8 @@ highlighted range of time selected(in red) it&#8217;ll use this instead.</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name" colspan="2">Paam mergeLayers:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first last">this pre-processes animLayers so that we have a single, temporary merged
+<tr class="field-even field"><th class="field-name" colspan="2">Paam mergeLayers:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">this pre-processes animLayers so that we have a single, temporary merged
 animLayer to extract a compiled version of the animData from. This gets deleted afterwards.</p>
 </td>
 </tr>
@@ -433,7 +445,7 @@ filtered nodes, either in hierarchies or just selected pairs.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; List of Maya nodes to process. This combines the filterSettings
 object and the MatchedNodeInputs.processMatchedPairs() call,
 making it capable of powerful hierarchy filtering and node matching methods.</li>
@@ -461,7 +473,7 @@ The resulting node lists are snapped over time and keyed.
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; List of Maya nodes to process. This combines the filterSettings
 object and the MatchedNodeInputs.processMatchedPairs() call,
 making it capable of powerful hierarchy filtering and node matching methods.</li>
@@ -530,7 +542,7 @@ nodes to this poly&#8217;s normal</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; either single (Stabilize) or twin to track</li>
 <li><strong>time</strong> &#8211; [start,end] for a frameRange</li>
 <li><strong>step</strong> &#8211; int value for frame advance between process runs</li>
@@ -550,7 +562,7 @@ filtered nodes, either in hierarchies or just selected pairs.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; List of Maya nodes to process. This combines the filterSettings
 object and the MatchedNodeInputs.processMatchedPairs() call,
 making it capable of powerful hierarchy filtering and node matching methods.</li>
@@ -583,7 +595,7 @@ to setup the hierarchy filters - See docs on the FilterNode_Settings class</li>
 
 <dl class="class">
 <dt id="Red9.core.Red9_AnimationUtils.curveModifierContext">
-<em class="property">class </em><tt class="descname">curveModifierContext</tt><big>(</big><em>initialUndo=False</em>, <em>undoFuncCache=</em><span class="optional">[</span><span class="optional">]</span>, <em>undoDepth=1</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.curveModifierContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">curveModifierContext</tt><big>(</big><em>initialUndo=False</em>, <em>undoFuncCache=</em>, <span class="optional">[</span><span class="optional">]</span><em>undoDepth=1</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.curveModifierContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Simple Context Manager to allow modifications to animCurves in the
 graphEditor interactively by simply managing the undo stack and making
@@ -594,7 +606,7 @@ Randomizer and FilterCurves</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>initialUndo</strong> &#8211; on first process whether undo on entry to the context manager</li>
 <li><strong>undoFuncCache</strong> &#8211; functions to catch in the undo stack</li>
 <li><strong>undoDepth</strong> &#8211; depth of the undo stack to go to</li>
@@ -636,13 +648,13 @@ implementation is too regular.</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.RandomizeKeys.addNoise">
-<tt class="descname">addNoise</tt><big>(</big><em>curves</em>, <em>time=()</em>, <em>step=1</em>, <em>currentKeys=True</em>, <em>randomRange=</em><span class="optional">[</span>, <em>-1</em>, <em>1</em><span class="optional">]</span>, <em>damp=1</em>, <em>percent=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RandomizeKeys.addNoise" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">addNoise</tt><big>(</big><em>curves, time=(), step=1, currentKeys=True, randomRange=[-1, 1], damp=1, percent=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RandomizeKeys.addNoise" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple noise function designed to add noise to keyframed animation data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>curves</strong> &#8211; Maya animCurves to process</li>
 <li><strong>time</strong> &#8211; timeRange to process</li>
 <li><strong>step</strong> &#8211; frame step used in the processor</li>
@@ -694,7 +706,7 @@ implementation is too regular.</p>
 
 <dl class="class">
 <dt id="Red9.core.Red9_AnimationUtils.MirrorHierarchy">
-<em class="property">class </em><tt class="descname">MirrorHierarchy</tt><big>(</big><em>nodes=</em><span class="optional">[</span><span class="optional">]</span>, <em>filterSettings=None</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">MirrorHierarchy</tt><big>(</big><em>nodes=</em>, <span class="optional">[</span><span class="optional">]</span><em>filterSettings=None</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>This class is designed to mirror pose and animation data on any given
 hierarchy. The hierarchy is filtered like everything else in the Red9
@@ -711,7 +723,7 @@ pack, using a filterSettings node thats passed into the __init__</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; initial nodes to process</li>
 <li><strong>filterSettings</strong> &#8211; filterSettings object to process hierarchies</li>
 </ul>
@@ -727,7 +739,7 @@ pack, using a filterSettings node thats passed into the __init__</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>node</strong> &#8211; nodes to take the attrs</li>
 <li><strong>side</strong> &#8211; valid values are &#8216;Centre&#8217;,&#8217;Left&#8217; or &#8216;Right&#8217; or 0, 1, 2</li>
 <li><strong>slot</strong> &#8211; bool Mainly used to pair up left and right paired controllers</li>
@@ -860,7 +872,7 @@ frame the currently selected objects per frame, or rather per frameStep.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>start</strong> &#8211; start frame</li>
 <li><strong>end</strong> &#8211; end frame</li>
 <li><strong>step</strong> &#8211; frame step to increment between fit</li>
@@ -924,7 +936,7 @@ frame the currently selected objects per frame, or rather per frameStep.</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -953,12 +965,12 @@ frame the currently selected objects per frame, or rather per frameStep.</p>
         <li class="right" >
           <a href="../index.html" title="Welcome to Red9’s documentation!"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.41 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 1.41 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Mark Jackson.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>
