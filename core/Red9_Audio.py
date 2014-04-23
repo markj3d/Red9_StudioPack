@@ -39,6 +39,7 @@ def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=None):
         
         :param smpte: format the timecode HH:MM:SS:FF where FF is frames
         :param framerate: when using smpte this is the framerate used in the FF block
+            default (None) uses the current scenes framerate
         
         .. note::
             * If smpte = False : the format will be HH:MM:SS:MSS = hours, minutes, seconds, milliseconds
@@ -78,15 +79,19 @@ def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=None):
                                         __zeropad(frame))
   
           
-def timecode_to_milliseconds(timecode, smpte=True, framerate=60):
+def timecode_to_milliseconds(timecode, smpte=True, framerate=None):
     '''
     from a properly formatted timecode return it in milliseconds
     r9Audio.timecode_to_milliseconds('09:00:00:00')
     
     :param timecode: '09:00:00:20' as a string
     :param smpte: calculate the milliseconds based on HH:MM:SS:FF (frames as last block)
-    :param framerate: only used if smpte=True, the framerate to use in the conversion
+    :param framerate: only used if smpte=True, the framerate to use in the conversion, 
+        default (None) uses the current scenes framerate
     '''
+    if not framerate:
+        framerate=r9General.getCurrentFPS()
+            
     data = timecode.split(':')
     if not len(data) ==4:
         raise IOError('timecode should be in the format "09:00:00:00"')
@@ -100,11 +105,16 @@ def timecode_to_milliseconds(timecode, smpte=True, framerate=60):
     return actual
 
 
-def frame_to_milliseconds(frame, framerate=60):
+def frame_to_milliseconds(frame, framerate=None):
     '''
     from a given frame return that time in milliseconds 
     relative to the given framerate
+    :param frame: current frame in Maya
+    :param framerate: only used if smpte=True, the framerate to use in the conversion, 
+        default (None) uses the current scenes framerate
     '''
+    if not framerate:
+        framerate=r9General.getCurrentFPS()
     return (frame / framerate) * 1000
     
     
@@ -504,13 +514,7 @@ class AudioNode(object):
         
             We could, if we could ensure it was available, use ffprobe.exe (part of the ffmpeg project)
             This would also cover most media file formats including Mov, avi etc 
-            
-            >>> pipe = subprocess.Popen([ffprobe.exe,'-v','quiet', 
-            >>>                        '-print_format','json', 
-            >>>                        '-show_format','-show_streams', 
-            >>>                         os.path.normpath(path)], stdout=subprocess.PIPE).communicate() 
-            >>> pipe = pipe[0].replace('\r', '')
-            >>> metaData = eval(pipe.replace('\n', ''))
+            There is coverage for this in this module getMediaFileMetaData() does just that
         '''
         with open(self.path, 'r') as filedata:
             binarymap = self.__get_chunkdata(filedata)

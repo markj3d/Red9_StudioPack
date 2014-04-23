@@ -39,7 +39,10 @@ Code examples:
     
     >>> import Red9_CoreUtils as r9Core
     >>> import maya.cmds as cmds
-    >>>                              
+    >>> 
+    >>> #===========================
+    >>> #When Processing hierarchies:
+    >>> #===========================
     >>> #Make a settings object and set the internal filter to find all
     >>> #child nurbsCurves that have an attr called 'Control_Marker'
     >>> settings = r9Core.FilterNode_Settings()
@@ -62,6 +65,15 @@ Code examples:
     >>> 
     >>> #Rather than passing in the settings or nodes, pass in the already processed MatchedNode
     >>> anim.snapTransform(nodes=matched, time=r9Anim.timeLineRangeGet())
+    >>>
+    >>>
+    >>> #==============================
+    >>> #When processing simple objects:
+    >>> #==============================
+    >>> #If you simple ignore the filterSettings you can just process given nodes directly
+    >>> #the nodes are zipped into selected pairs obj[0]>obj[1], obj[2]>obj[3] etc
+    >>> anim = r9Anim.AnimFunctions()
+    >>> anim.snapTransform(nodes=cmds.ls(sl=True), time=r9Anim.timeLineRangeGet())
         
 '''
 

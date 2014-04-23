@@ -145,6 +145,7 @@ def registerMClassNodeMapping(nodeTypes=None):
     Hook to allow you to extend the type of nodes included in all the
     getMeta searches. Allows you to expand into using nodes of any type
     as metaNodes
+    
     :param nodeTypes: allows you to expand metaData and use any nodeType
                     default is always 'network'
  
