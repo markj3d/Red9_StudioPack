@@ -318,7 +318,10 @@ class PoseData(object):
             nodesToStore=self.getNodesFromFolderConfig(nodes,mode='save')
         else:
             nodesToStore=self.getNodes(nodes)
-                    
+            
+        if not nodesToStore:
+            raise IOError('No Matching Nodes found to store the pose data from')
+        
         self.poseDict={}
         self._buildInfoBlock()
         self._buildPoseDict(nodesToStore)
