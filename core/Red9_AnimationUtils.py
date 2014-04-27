@@ -2147,7 +2147,14 @@ class AnimationUI(object):
             except ValueError, error:
                 raise ValueError(error)
         poseHierarchy = cmds.checkBox('uicbPoseHierarchy', q=True, v=True)
-        
+
+#         #Work to hook the poseSave directly to the metaRig.poseCacheStore func directly
+#         if self.filterSettings.metaRig and r9Meta.isMetaNodeInherited(self.__uiCB_getPoseInputNodes(),
+#                                                                       mInstances=r9Meta.MetaRig):
+#             print 'active MetaNode, calling poseCacheSave from metaRig subclass'
+#             r9Meta.MetaClass(self.__uiCB_getPoseInputNodes()).poseCacheStore(filepath=path,
+#                                                                              storeThumbnail=storeThumbnail)
+#         else:
         r9Pose.PoseData(self.filterSettings).poseSave(self.__uiCB_getPoseInputNodes(),
                                                       path,
                                                       useFilter=poseHierarchy,
