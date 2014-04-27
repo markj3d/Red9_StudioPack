@@ -55,11 +55,11 @@ class BindSettings(object):
         self.ResetTranslates = True
         self.ResetRotates = False
         self.BaseScale = 1
+        self.BakeDebug = False
         self.__alignToControlTrans = True
         self.__alignToControlRots = True
         self.__alignToSourceTrans = False
         self.__alignToSourceRots = False
-        
         
     @property
     def AlignToControlTrans(self):
@@ -487,9 +487,14 @@ class AnimBinderUI(object):
                     ann="Select Top Group Node of the Bound Rig", \
                     c=lambda x:pm.select(GetBoundControls(cmds.ls(sl=True,l=True))))
         cmds.setParent('..')
+        cmds.rowColumnLayout(numberOfColumns=2,columnWidth=[(1,220),(2,74)])
         cmds.button(label="Bake Binder", al="center", \
                     ann="Select Top Group Node of the Bound Rig", \
-                    c=lambda x:BakeBinderData(cmds.ls(sl=True,l=True)))
+                    c=lambda x:BakeBinderData(cmds.ls(sl=True,l=True), self.settings.BakeDebug))
+        cmds.checkBox(value=self.settings.BakeDebug, label="Debug View", ann="Keep viewport active to observe the baking process", al="left", \
+                      onc=lambda x:self.settings.__setattr__('BakeDebug', True), \
+                      ofc=lambda x:self.settings.__setattr__('BakeDebug', False))
+        cmds.setParent('..')
         cmds.separator(h=15, style="none")
         cmds.button(label="Link Skeleton Hierarchies", al="center", \
                     ann="Select Root joints of the source and destination skeletons to be connected", \
@@ -528,7 +533,7 @@ def GetBoundControls(rootNode=None):
     return [node for node in cmds.listRelatives(rootNode, ad=True, f=True)\
              if cmds.attributeQuery('BoundCtr', exists=True, node=node)]
 
-def BakeBinderData(rootNode=None, ignoreInFilter=[]):
+def BakeBinderData(rootNode=None, debugView=False, ignoreInFilter=[]):
     '''
     From a given Root Node search all children for the 'BoundCtr' attr marker. If none
     were found then search for the BindNode attr and use the message links to walk to
@@ -549,6 +554,8 @@ def BakeBinderData(rootNode=None, ignoreInFilter=[]):
             
     if BoundCtrls:
         try:
+            if not debugView:
+                cmds.refresh(su=True)
             cmds.bakeResults(BoundCtrls, simulation=True,
                              sampleBy=1,
                              time=(cmds.playbackOptions(q=True, min=True), cmds.playbackOptions(q=True, max=True)),
@@ -571,6 +578,9 @@ def BakeBinderData(rootNode=None, ignoreInFilter=[]):
             cmds.delete(BoundCtrls, sc=True)  # static channels
         except StandardError,error:
             raise StandardError(error)
+        finally:
+            cmds.refresh(su=False)
+            cmds.refresh(f=True)
     else:
         raise StandardError("Couldn't find any BinderMarkers in given hierarchy")
     return True

@@ -206,7 +206,7 @@ def validateString(strText):
     Function to validate that a string has no illegal characters
     '''
     #numerics=['1','2','3','4','5','6','7','8','9','0']
-    illegals=['-', '#', '!']
+    illegals=['-', '#', '!', ' ']
     #if strText[0] in numerics:
     #    raise ValueError('Strings must NOT start with a numeric! >> %s' % strText)
     illegal=[i for i in illegals if i in strText]
@@ -1898,8 +1898,8 @@ class LockChannels(object):
                             childAttrs=cmds.listAttr(attrString, multi=True)
                             childAttrs.remove(attr)
                             log.debug('compoundAttr handler for node: %s.%s' % (node,attr))
-                            for child in childAttrs:
-                                cmds.setAttr('%s.%s' % (node, child), **attrKws)
+                            for childattr in childAttrs:
+                                cmds.setAttr('%s.%s' % (node, childattr), **attrKws)
                         else:
                             cmds.setAttr(attrString, **attrKws)
                 except StandardError, error:
