@@ -71,7 +71,7 @@ def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=None):
             seconds = 0
         frame = int(math.floor(milliseconds))
         if smpte:
-            frame = int(math.ceil((float(frame)/1000) * framerate))
+            frame = int(math.ceil((float(frame)/1000) * float(framerate)))
             
         return "{0}:{1}:{2}:{3}".format(__zeropad(hours),
                                         __zeropad(minutes),
@@ -99,7 +99,7 @@ def timecode_to_milliseconds(timecode, smpte=True, framerate=None):
     actual += int(data[1]) * 60000
     actual += int(data[2]) * 1000
     if smpte:
-        actual += (int(data[3]) * 1000) / framerate
+        actual += (int(data[3]) * 1000) / float(framerate)
     else:
         actual += int(data[3])
     return actual
@@ -115,7 +115,7 @@ def frame_to_milliseconds(frame, framerate=None):
     '''
     if not framerate:
         framerate=r9General.getCurrentFPS()
-    return (frame / framerate) * 1000
+    return (frame / float(framerate)) * 1000
     
     
 def combineAudio():
