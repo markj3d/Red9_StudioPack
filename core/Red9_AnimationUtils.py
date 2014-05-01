@@ -326,6 +326,54 @@ def eulerSelected():
     cmds.delete(cmds.ls(sl=True, l=True), sc=True)
 
 
+class AnimationLayerContext(object):
+
+    """
+    Context Manager for merging animLayers down and restoring 
+    the data as is afterwards
+    """
+    def __init__(self, srcNodes, mergeLayers=True):
+        self.srcNodes=srcNodes
+        self.mergeLayers=mergeLayers
+        self.animLayers=[]
+        print 'mergeLayers : ', self.mergeLayers
+        print 'Nodes : '
+        for n in self.srcNodes:
+            print r9Core.nodeNameStrip(n)
+    
+    def __enter__(self):
+        self.animLayers=getAnimLayersFromGivenNodes(self.srcNodes)
+        if self.animLayers:
+            if self.mergeLayers:
+                try:
+                    layerCache={}
+                    for layer in self.animLayers:
+                        layerCache[layer]={'mute':cmds.animLayer(layer, q=True, mute=True),
+                                           'locked':cmds.animLayer(layer, q=True, lock=True)}
+                    mergeAnimLayers(self.srcNodes, deleteBaked=False)
+
+                    #return the original mute and lock states and select the new
+                    #MergedLayer ready for the rest of the copy code to deal with
+                    for layer,cache in layerCache.items():
+                        for layer,cache in layerCache.items():
+                            cmds.animLayer(layer, edit=True, mute=cache['mute'])
+                            cmds.animLayer(layer, edit=True, mute=cache['locked'])
+                    mel.eval("source buildSetAnimLayerMenu")
+                    mel.eval('selectLayer("Merged_Layer")')
+                except:
+                    log.debug('CopyKeys internal : AnimLayer Merge Failed')
+            else:
+                log.warning('SrcNodes have animLayers, results may be eratic unless Baked!')
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        # Close the undo chunk, warn if any exceptions were caught:
+        if self.mergeLayers:
+            if self.animLayers and cmds.animLayer('Merged_Layer', query=True, exists=True):
+                cmds.delete('Merged_Layer')
+        if exc_type:
+            log.exception('%s : %s'%(exc_type, exc_value))
+        # If this was false, it would re-raise the exception when complete
+        return True
 
 class AnimationUI(object):
     
@@ -2284,9 +2332,13 @@ class AnimationUI(object):
         '''
         Internal UI call for Mirror Animation / Pose
         '''
-        self.kws['pasteKey']=cmds.optionMenu('om_PasteMethod', q=True, v=True)
+        self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
+        self.kws['mergeLayers'] = False
         
-        mirror=MirrorHierarchy(nodes=cmds.ls(sl=True, l=True), filterSettings=self.filterSettings, **self.kws)
+        mirror=MirrorHierarchy(nodes=cmds.ls(sl=True, l=True),
+                               filterSettings=self.filterSettings,
+                               mergeLayers=cmds.checkBox('uicbCKeyAnimLay', q=True, v=True),
+                               **self.kws)
         mirrorMode='Anim'
         if func=='MirrorPose':
             mirrorMode='Pose'
@@ -2299,7 +2351,13 @@ class AnimationUI(object):
         '''
         Internal UI call for Mirror Animation / Pose
         '''
-        mirror=MirrorHierarchy(nodes=cmds.ls(sl=True, l=True), filterSettings=self.filterSettings)
+        self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
+        self.kws['mergeLayers'] = False
+        
+        mirror=MirrorHierarchy(nodes=cmds.ls(sl=True, l=True),
+                               filterSettings=self.filterSettings,
+                               mergeLayers=cmds.checkBox('uicbCKeyAnimLay', q=True, v=True),
+                               **self.kws)
         mirrorMode='Anim'
         if func=='SymmetryPose':
             mirrorMode='Pose'
@@ -2494,7 +2552,7 @@ class AnimFunctions(object):
                     mergeAnimLayers(srcNodes, deleteBaked=False)
 
                     #return the original mute and lock states and select the new
-                    #MergedLayer ready for the rest of teh copy code to deal with
+                    #MergedLayer ready for the rest of the copy code to deal with
                     for layer,cache in layerCache.items():
                         for layer,cache in layerCache.items():
                             cmds.animLayer(layer, edit=True, mute=cache['mute'])
@@ -3485,7 +3543,7 @@ class MirrorHierarchy(object):
     TODO: We need to do a UI for managing these marker attrs and the Index lists
     '''
     
-    def __init__(self, nodes=[], filterSettings=None, **kws):
+    def __init__(self, nodes=[], filterSettings=None, mergeLayers=False, **kws):
         '''
         :param nodes: initial nodes to process
         :param filterSettings: filterSettings object to process hierarchies
@@ -3501,6 +3559,7 @@ class MirrorHierarchy(object):
         self.mirrorIndex = 'mirrorIndex'
         self.mirrorAxis = 'mirrorAxis'
         self.mirrorDict = {'Centre': {}, 'Left': {}, 'Right': {}}
+        self.mergeLayers=mergeLayers
         self.kws = kws  # allows us to pass kws into the copyKey and copyAttr call if needed, ie, pasteMethod!
         #print 'kws in Mirror call : ', self.kws
         
@@ -3640,11 +3699,14 @@ class MirrorHierarchy(object):
         # reset the current Dict prior to rescanning
         self.mirrorDict = {'Centre': {}, 'Left': {}, 'Right': {}}
         self.unresolved = {'Centre': {}, 'Left': {}, 'Right': {}}
-        if not nodes:
-            nodes = self.getNodes()
-        if not nodes:
+        self.indexednodes=nodes
+
+        if not self.indexednodes:
+            self.indexednodes = self.getNodes()
+
+        if not self.indexednodes:
             raise StandardError('no mirrorMarkers found in node list/hierarchy')
-        for node in nodes:
+        for node in self.indexednodes:
             try:
                 side = self.getMirrorSide(node)
                 index = self.getMirrorIndex(node)
@@ -3778,34 +3840,39 @@ class MirrorHierarchy(object):
         TODO: Issue where if nodeA on Left has NO key data at all, and nodeB on right
         does, then nodeB will be left incorrect. We need to clean the data if there
         are no keys.
-        '''
-        self.getMirrorSets(nodes)
         
+        TODO: fix the animLayer merge call so it's only processed once!
+        '''
+
+        self.getMirrorSets(nodes)
+
         if mode == 'Anim':
             inverseCall = AnimFunctions.inverseAnimChannels
         else:
             inverseCall = AnimFunctions.inverseAttributes
+
         # with r9General.HIKContext(nodes):
-        # Switch Pairs on the Left and Right and inverse the channels
-        for index, leftData in self.mirrorDict['Left'].items():
-            if not index in self.mirrorDict['Right'].keys():
-                log.warning('No matching Index Key found for Left mirrorIndex : %s >> %s' % (index, r9Core.nodeNameStrip(leftData['node'])))
-            else:
-                rightData = self.mirrorDict['Right'][index]
-                log.debug('SwitchingPairs : %s >> %s' % (r9Core.nodeNameStrip(leftData['node']), \
-                                     r9Core.nodeNameStrip(rightData['node'])))
-                self.switchPairData(leftData['node'], rightData['node'], mode=mode)
-                
-                log.debug('Axis Inversions: left: %s' % ','.join(leftData['axis']))
-                log.debug('Axis Inversions: right: %s' % ','.join(rightData['axis']))
-                if leftData['axis']:
-                    inverseCall(leftData['node'], leftData['axis'])
-                if rightData['axis']:
-                    inverseCall(rightData['node'], rightData['axis'])
-                
-        # Inverse the Centre Nodes
-        for data in self.mirrorDict['Centre'].values():
-            inverseCall(data['node'], data['axis'])
+        with AnimationLayerContext(self.indexednodes, mergeLayers=self.mergeLayers):
+            # Switch Pairs on the Left and Right and inverse the channels
+            for index, leftData in self.mirrorDict['Left'].items():
+                if not index in self.mirrorDict['Right'].keys():
+                    log.warning('No matching Index Key found for Left mirrorIndex : %s >> %s' % (index, r9Core.nodeNameStrip(leftData['node'])))
+                else:
+                    rightData = self.mirrorDict['Right'][index]
+                    log.debug('SwitchingPairs : %s >> %s' % (r9Core.nodeNameStrip(leftData['node']), \
+                                         r9Core.nodeNameStrip(rightData['node'])))
+                    self.switchPairData(leftData['node'], rightData['node'], mode=mode)
+                    
+                    log.debug('Axis Inversions: left: %s' % ','.join(leftData['axis']))
+                    log.debug('Axis Inversions: right: %s' % ','.join(rightData['axis']))
+                    if leftData['axis']:
+                        inverseCall(leftData['node'], leftData['axis'])
+                    if rightData['axis']:
+                        inverseCall(rightData['node'], rightData['axis'])
+                    
+            # Inverse the Centre Nodes
+            for data in self.mirrorDict['Centre'].values():
+                inverseCall(data['node'], data['axis'])
      
     def saveMirrorSetups(self, filepath):
         '''
