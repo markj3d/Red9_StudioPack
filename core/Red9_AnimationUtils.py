@@ -327,17 +327,21 @@ def eulerSelected():
 
 
 class AnimationLayerContext(object):
-
     """
     Context Manager for merging animLayers down and restoring 
     the data as is afterwards
     """
-    def __init__(self, srcNodes, mergeLayers=True):
-        self.srcNodes=srcNodes
-        self.mergeLayers=mergeLayers
+    def __init__(self, srcNodes, mergeLayers=True, restoreOnExit=True):
+        self.srcNodes = srcNodes  # nodes to check for animLayer membership / process
+        self.mergeLayers = mergeLayers  # mute the behaviour of this context
+        self.restoreOnExit = restoreOnExit  # restore the original layers after processing
+        
+        self.deleteBaked=True
+        if self.restoreOnExit:
+            self.deleteBaked=False
         self.animLayers=[]
-        print 'mergeLayers : ', self.mergeLayers
-        print 'Nodes : '
+        log.info('Context Manager : mergeLayers : %s' % self.mergeLayers)
+        #print 'Nodes : '
         for n in self.srcNodes:
             print r9Core.nodeNameStrip(n)
     
@@ -350,16 +354,16 @@ class AnimationLayerContext(object):
                     for layer in self.animLayers:
                         layerCache[layer]={'mute':cmds.animLayer(layer, q=True, mute=True),
                                            'locked':cmds.animLayer(layer, q=True, lock=True)}
-                    mergeAnimLayers(self.srcNodes, deleteBaked=False)
-
-                    #return the original mute and lock states and select the new
-                    #MergedLayer ready for the rest of the copy code to deal with
-                    for layer,cache in layerCache.items():
+                    mergeAnimLayers(self.srcNodes, deleteBaked=self.deleteBaked)
+                    if self.restoreOnExit:
+                        #return the original mute and lock states and select the new
+                        #MergedLayer ready for the rest of the copy code to deal with
                         for layer,cache in layerCache.items():
-                            cmds.animLayer(layer, edit=True, mute=cache['mute'])
-                            cmds.animLayer(layer, edit=True, mute=cache['locked'])
-                    mel.eval("source buildSetAnimLayerMenu")
-                    mel.eval('selectLayer("Merged_Layer")')
+                            for layer,cache in layerCache.items():
+                                cmds.animLayer(layer, edit=True, mute=cache['mute'])
+                                cmds.animLayer(layer, edit=True, mute=cache['locked'])
+                        mel.eval("source buildSetAnimLayerMenu")
+                        mel.eval('selectLayer("Merged_Layer")')
                 except:
                     log.debug('CopyKeys internal : AnimLayer Merge Failed')
             else:
@@ -367,7 +371,7 @@ class AnimationLayerContext(object):
 
     def __exit__(self, exc_type, exc_value, traceback):
         # Close the undo chunk, warn if any exceptions were caught:
-        if self.mergeLayers:
+        if self.mergeLayers and self.restoreOnExit:
             if self.animLayers and cmds.animLayer('Merged_Layer', query=True, exists=True):
                 cmds.delete('Merged_Layer')
         if exc_type:
@@ -2333,7 +2337,7 @@ class AnimationUI(object):
         Internal UI call for Mirror Animation / Pose
         '''
         self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
-        self.kws['mergeLayers'] = False
+        #self.kws['mergeLayers'] = False
         
         mirror=MirrorHierarchy(nodes=cmds.ls(sl=True, l=True),
                                filterSettings=self.filterSettings,
@@ -2352,7 +2356,7 @@ class AnimationUI(object):
         Internal UI call for Mirror Animation / Pose
         '''
         self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
-        self.kws['mergeLayers'] = False
+        #self.kws['mergeLayers'] = False
         
         mirror=MirrorHierarchy(nodes=cmds.ls(sl=True, l=True),
                                filterSettings=self.filterSettings,
@@ -2503,7 +2507,7 @@ class AnimFunctions(object):
                
     @r9General.Timer
     def copyKeys(self, nodes=None, time=(), pasteKey='replace', attributes=None,
-                 filterSettings=None, toMany=False, matchMethod=None, mergeLayers=True, **kws):
+                 filterSettings=None, toMany=False, matchMethod=None, mergeLayers=False, **kws):
         '''
         Copy Keys is a Hi-Level wrapper function to copy animation data between
         filtered nodes, either in hierarchies or just selected pairs.
@@ -3559,7 +3563,8 @@ class MirrorHierarchy(object):
         self.mirrorIndex = 'mirrorIndex'
         self.mirrorAxis = 'mirrorAxis'
         self.mirrorDict = {'Centre': {}, 'Left': {}, 'Right': {}}
-        self.mergeLayers=mergeLayers
+        self.mergeLayers = mergeLayers
+        self.indexednodes = []  # all nodes to process - passed to the Animlayer context
         self.kws = kws  # allows us to pass kws into the copyKey and copyAttr call if needed, ie, pasteMethod!
         #print 'kws in Mirror call : ', self.kws
         
@@ -3815,20 +3820,21 @@ class MirrorHierarchy(object):
         else:
             masterAxis = 'Right'
             slaveAxis = 'Left'
-               
-        for index, masterSide in self.mirrorDict[masterAxis].items():
-            if not index in self.mirrorDict[slaveAxis].keys():
-                log.warning('No matching Index Key found for %s mirrorIndex : %s >> %s' % \
-                            (masterAxis, index, r9Core.nodeNameStrip(masterSide['node'])))
-            else:
-                slaveData = self.mirrorDict[slaveAxis][index]
-                log.debug('SymmetricalPairs : %s >> %s' % (r9Core.nodeNameStrip(masterSide['node']), \
-                                     r9Core.nodeNameStrip(slaveData['node'])))
-                transferCall([masterSide['node'], slaveData['node']], **self.kws)
-                
-                log.debug('Symmetrical Axis Inversion: %s' % ','.join(slaveData['axis']))
-                if slaveData['axis']:
-                    inverseCall(slaveData['node'], slaveData['axis'])
+            
+        with AnimationLayerContext(self.indexednodes, mergeLayers=self.mergeLayers, restoreOnExit=False):      
+            for index, masterSide in self.mirrorDict[masterAxis].items():
+                if not index in self.mirrorDict[slaveAxis].keys():
+                    log.warning('No matching Index Key found for %s mirrorIndex : %s >> %s' % \
+                                (masterAxis, index, r9Core.nodeNameStrip(masterSide['node'])))
+                else:
+                    slaveData = self.mirrorDict[slaveAxis][index]
+                    log.debug('SymmetricalPairs : %s >> %s' % (r9Core.nodeNameStrip(masterSide['node']), \
+                                         r9Core.nodeNameStrip(slaveData['node'])))
+                    transferCall([masterSide['node'], slaveData['node']], **self.kws)
+                    
+                    log.debug('Symmetrical Axis Inversion: %s' % ','.join(slaveData['axis']))
+                    if slaveData['axis']:
+                        inverseCall(slaveData['node'], slaveData['axis'])
              
     def mirrorData(self, nodes=None, mode='Anim'):
         '''
@@ -3852,7 +3858,7 @@ class MirrorHierarchy(object):
             inverseCall = AnimFunctions.inverseAttributes
 
         # with r9General.HIKContext(nodes):
-        with AnimationLayerContext(self.indexednodes, mergeLayers=self.mergeLayers):
+        with AnimationLayerContext(self.indexednodes, mergeLayers=self.mergeLayers, restoreOnExit=False):
             # Switch Pairs on the Left and Right and inverse the channels
             for index, leftData in self.mirrorDict['Left'].items():
                 if not index in self.mirrorDict['Right'].keys():
