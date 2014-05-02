@@ -196,16 +196,50 @@ def getAnimLayersFromGivenNodes(nodes):
         nodes=[nodes]
     return cmds.animLayer(nodes, q=True, affectedLayers=True)
 
+def animLayersConfirmCheck(nodes=None):
+    '''
+    return all animLayers associated with the given nodes
+    '''
+    animLayers=[]
+    if nodes:
+        if not isinstance(nodes, list):
+            nodes=[nodes]
+        animLayers=getAnimLayersFromGivenNodes(nodes)
+    else:
+        animLayers=cmds.ls(type='animLayer')
+    if animLayers and not len(animLayers)==1:
+        result = cmds.confirmDialog(
+                title='AnimLayers - Confirm',
+                button=['Yes', 'Cancel'],
+                message='animLayers found in scene: this process needs to merge them',
+                defaultButton='Confirm - Merge',
+                cancelButton='Cancel',
+                dismissString='Cancel')
+        if result == 'Confirm - Merge':
+            return False
+    return True
+        
 
 def mergeAnimLayers(nodes, deleteBaked=True):
     '''
     from the given nodes find, merge and remove any animLayers found
+    
+    FOR THE LOVE OF GOD AUTODESK, fix animLayers and give us a decent api for them,
+    oh, and stop building massive mel commands on the fly based on bloody optVars!!!!
     '''
     animLayers=getAnimLayersFromGivenNodes(nodes)
     if animLayers:
         try:
-            deleteMerged=cmds.optionVar(query='animLayerMergeDeleteLayers')
-            cmds.optionVar(iv=('animLayerMergeDeleteLayers', deleteBaked))
+            #deal with Maya's optVars for animLayers as the call that sets the defaults 
+            #for these, via the UI call, is a local proc to the performAnimLayerMerge.
+            deleteMerged=True
+            if cmds.optionVar(exists='animLayerMergeDeleteLayers'):
+                deleteMerged=cmds.optionVar(query='animLayerMergeDeleteLayers')
+            cmds.optionVar(intValue=('animLayerMergeDeleteLayers', deleteBaked))
+            
+            if not cmds.optionVar(exists='animLayerMergeByTime'):
+                cmds.optionVar(floatValue=('animLayerMergeByTime', 1.0))
+                                    
             mel.eval('animLayerMerge {"%s"}' % '","'.join(animLayers))
 
 #        cmds.bakeResults(nodes,
@@ -219,7 +253,7 @@ def mergeAnimLayers(nodes, deleteBaked=True):
         except:
             log.warning('animLayer Merge failed!')
         finally:
-            cmds.optionVar(iv=('animLayerMergeDeleteLayers',deleteMerged))
+            cmds.optionVar(intValue=('animLayerMergeDeleteLayers',deleteMerged))
     return 'Merged_Layer'
 
 def timeLineRangeGet(always=True):
@@ -340,10 +374,7 @@ class AnimationLayerContext(object):
         if self.restoreOnExit:
             self.deleteBaked=False
         self.animLayers=[]
-        log.info('Context Manager : mergeLayers : %s' % self.mergeLayers)
-        #print 'Nodes : '
-        for n in self.srcNodes:
-            print r9Core.nodeNameStrip(n)
+        log.debug('Context Manager : mergeLayers : %s, restoreOnExit : %s' % (self.mergeLayers, self.restoreOnExit))
     
     def __enter__(self):
         self.animLayers=getAnimLayersFromGivenNodes(self.srcNodes)
@@ -367,7 +398,7 @@ class AnimationLayerContext(object):
                 except:
                     log.debug('CopyKeys internal : AnimLayer Merge Failed')
             else:
-                log.warning('SrcNodes have animLayers, results may be eratic unless Baked!')
+                log.warning('SrcNodes have animLayers, results may be erratic unless Baked!')
 
     def __exit__(self, exc_type, exc_value, traceback):
         # Close the undo chunk, warn if any exceptions were caught:
@@ -378,6 +409,7 @@ class AnimationLayerContext(object):
             log.exception('%s : %s'%(exc_type, exc_value))
         # If this was false, it would re-raise the exception when complete
         return True
+
 
 class AnimationUI(object):
     
@@ -1006,14 +1038,18 @@ class AnimationUI(object):
         #====================
         # Show and Dock
         #====================
+
+#         floating = True
+#         if self.dock:
+#             floating = False
+            
         if self.dock:
             try:
                 # Maya2011 QT docking
-                allowedAreas = ['right', 'left']
                 cmds.dockControl(self.dockCnt, area='right', label=self.label,
                                  content=animwindow,
                                  floating=False,
-                                 allowedArea=allowedAreas,
+                                 allowedArea=['right', 'left'],
                                  width=350)
             except:
                 # Dock failed, opening standard Window
@@ -1023,18 +1059,20 @@ class AnimationUI(object):
         else:
             cmds.showWindow(animwindow)
             cmds.window(self.win, edit=True, widthHeight=(355, 720))
-            
+
             
         #Set the initial Interface up
         self.__uiPresetsUpdate()
         self.__uiPresetReset()
         self.__uiCache_loadUIElements()
         #self.jobOnDelete=cmds.scriptJob(uiDeleted=(self.win, self.__uicloseEvent), runOnce=1)
-        
+#         if not self.dock:
+#             cmds.dockControl(self.dockCnt, edit=True, floating=True)
+#             cmds.dockControl(self.dockCnt, edit=True, width=360, height=740)
 
     # UI Callbacks
     #------------------------------------------------------------------------------
-    
+        
     def __uiCB_manageSnapHierachy(self, *args):
         '''
         Disable all hierarchy filtering ui's when not running hierarchys
@@ -1094,9 +1132,18 @@ class AnimationUI(object):
         cmds.textFieldGrp('uitfgSpecificNodeTypes', e=True, text=','.join(nodeTypes))
  
     def __uiCB_resizeMainScroller(self, *args):
-        if self.dock:
-            width=cmds.dockControl(self.dockCnt, q=True, w=True)
-            height=cmds.dockControl(self.dockCnt, q=True, h=True)
+        try:
+            if cmds.dockControl(self.dockCnt, query=True, floating=True):
+                width=cmds.dockControl(self.dockCnt, q=True, w=True)
+                height=cmds.dockControl(self.dockCnt, q=True, h=True)
+            else:
+                newSize=cmds.window(self.win, q=True, wh=True)
+                width=newSize[0]
+                height=newSize[1]
+        except:
+            newSize=cmds.window(self.win, q=True, wh=True)
+            width=newSize[0]
+            height=newSize[1]
         else:
             newSize=cmds.window(self.win, q=True, wh=True)
             width=newSize[0]
@@ -1108,7 +1155,7 @@ class AnimationUI(object):
             cmds.scrollLayout(self.MainLayout, e=True, w=350)
         if height>440:
             cmds.scrollLayout('uiglPoseScroll', e=True, h=height-430)
-            
+                                   
     def __uiCB_setCopyKeyPasteMethod(self, *args):
         self.ANIM_UI_OPTVARS['AnimationUI']['keyPasteMethod'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
         self.__uiCache_storeUIElements()
@@ -2079,6 +2126,9 @@ class AnimationUI(object):
         '''
         Internal UI call for CopyAttrs
         '''
+        if not len(cmds.ls(sl=True, l=True)) > 2:
+            log.warning('Please Select at least 2 nodes to Process!!')
+            return
         self.kws['toMany'] = cmds.checkBox(self.uicbCAttrToMany, q=True, v=True)
         if cmds.checkBox(self.uicbCAttrChnAttrs, q=True, v=True):
             self.kws['attributes'] = getChannelBoxSelection()
@@ -2097,6 +2147,9 @@ class AnimationUI(object):
         '''
         Internal UI call for CopyKeys call
         '''
+        if not len(cmds.ls(sl=True, l=True)) > 2:
+            log.warning('Please Select at least 2 nodes to Process!!')
+            return
         self.kws['toMany'] = cmds.checkBox(self.uicbCKeyToMany, q=True, v=True)
         self.kws['pasteKey']=cmds.optionMenu('om_PasteMethod', q=True, v=True)
         self.kws['mergeLayers']=cmds.checkBox('uicbCKeyAnimLay', q=True, v=True)
@@ -2118,12 +2171,16 @@ class AnimationUI(object):
         '''
         Internal UI call for Snap Transforms
         '''
+        if not len(cmds.ls(sl=True, l=True)) > 2:
+            log.warning('Please Select at least 2 nodes to Process!!')
+            return
         self.kws['preCopyKeys'] = False
         self.kws['preCopyAttrs'] = False
         self.kws['prioritySnapOnly'] = False
         self.kws['iterations'] = cmds.intFieldGrp('uiifSnapIterations', q=True, v=True)[0]
         self.kws['step'] = cmds.intFieldGrp('uiifgSnapStep', q=True, v=True)[0]
         self.kws['pasteKey']=cmds.optionMenu('om_PasteMethod', q=True, v=True)
+        self.kws['mergeLayers']=True
         
         if cmds.checkBox(self.uicbSnapRange, q=True, v=True):
             self.kws['time'] = timeLineRangeGet()
@@ -2141,6 +2198,9 @@ class AnimationUI(object):
         '''
         Internal UI call for Stabilize
         '''
+        if not len(cmds.ls(sl=True, l=True)) > 2:
+            log.warning('Please Select at least 2 nodes to Process!!')
+            return
         time = ()
         step = cmds.floatFieldGrp('uiffgStabStep', q=True, v=True)[0]
         if direction=='back':
@@ -2336,8 +2396,13 @@ class AnimationUI(object):
         '''
         Internal UI call for Mirror Animation / Pose
         '''
+        if not cmds.ls(sl=True, l=True):
+            log.warning('Nothing selected to process from!!')
+            return
+        if not animLayersConfirmCheck():
+            return
+
         self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
-        #self.kws['mergeLayers'] = False
         
         mirror=MirrorHierarchy(nodes=cmds.ls(sl=True, l=True),
                                filterSettings=self.filterSettings,
@@ -2355,6 +2420,12 @@ class AnimationUI(object):
         '''
         Internal UI call for Mirror Animation / Pose
         '''
+        if not cmds.ls(sl=True, l=True):
+            log.warning('Nothing selected to process from!!')
+            return
+        if not animLayersConfirmCheck():
+            return
+        
         self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
         #self.kws['mergeLayers'] = False
         
@@ -2545,49 +2616,49 @@ class AnimFunctions(object):
         # FUCKING ANIM LAYERS ARE SATAN'S TESTICLES!!
         # with very poor wrapper code in mel only!
         #-------------------------------------------------
-        animLayers=getAnimLayersFromGivenNodes(srcNodes)
-        if animLayers:
-            if mergeLayers:
-                try:
-                    layerCache={}
-                    for layer in animLayers:
-                        layerCache[layer]={'mute':cmds.animLayer(layer, q=True, mute=True),
-                                           'locked':cmds.animLayer(layer, q=True, lock=True)}
-                    mergeAnimLayers(srcNodes, deleteBaked=False)
-
-                    #return the original mute and lock states and select the new
-                    #MergedLayer ready for the rest of the copy code to deal with
-                    for layer,cache in layerCache.items():
-                        for layer,cache in layerCache.items():
-                            cmds.animLayer(layer, edit=True, mute=cache['mute'])
-                            cmds.animLayer(layer, edit=True, mute=cache['locked'])
-                    mel.eval("source buildSetAnimLayerMenu")
-                    mel.eval('selectLayer("Merged_Layer")')
-                except:
-                    log.debug('CopyKeys internal : AnimLayer Merge Failed')
+#         animLayers=getAnimLayersFromGivenNodes(srcNodes)
+#         if animLayers:
+#             if mergeLayers:
+#                 try:
+#                     layerCache={}
+#                     for layer in animLayers:
+#                         layerCache[layer]={'mute':cmds.animLayer(layer, q=True, mute=True),
+#                                            'locked':cmds.animLayer(layer, q=True, lock=True)}
+#                     mergeAnimLayers(srcNodes, deleteBaked=False)
+# 
+#                     #return the original mute and lock states and select the new
+#                     #MergedLayer ready for the rest of the copy code to deal with
+#                     for layer,cache in layerCache.items():
+#                         for layer,cache in layerCache.items():
+#                             cmds.animLayer(layer, edit=True, mute=cache['mute'])
+#                             cmds.animLayer(layer, edit=True, mute=cache['locked'])
+#                     mel.eval("source buildSetAnimLayerMenu")
+#                     mel.eval('selectLayer("Merged_Layer")')
+#                 except:
+#                     log.debug('CopyKeys internal : AnimLayer Merge Failed')
+#             else:
+#                 log.warning('SrcNodes have animLayers, results may be eratic unless Baked!')
+        with AnimationLayerContext(srcNodes, mergeLayers=mergeLayers, restoreOnExit=True):
+            if nodeList:
+                with r9General.HIKContext([d for _, d in nodeList]):
+                    for src, dest in nodeList:
+                        try:
+                            if attributes:
+                                #copy only specific attributes
+                                for attr in attributes:
+                                    if cmds.copyKey(src, attribute=attr, hierarchy=False, time=time):
+                                        cmds.pasteKey(dest, attribute=attr, option=pasteKey)
+                            else:
+                                if cmds.copyKey(src, hierarchy=False, time=time):
+                                    cmds.pasteKey(dest, option=pasteKey)
+                        except:
+                            log.debug('Failed to copyKeys between : %s >> %s' % (src, dest))
             else:
-                log.warning('SrcNodes have animLayers, results may be eratic unless Baked!')
-                
-        if nodeList:
-            with r9General.HIKContext([d for _, d in nodeList]):
-                for src, dest in nodeList:
-                    try:
-                        if attributes:
-                            #copy only specific attributes
-                            for attr in attributes:
-                                if cmds.copyKey(src, attribute=attr, hierarchy=False, time=time):
-                                    cmds.pasteKey(dest, attribute=attr, option=pasteKey)
-                        else:
-                            if cmds.copyKey(src, hierarchy=False, time=time):
-                                cmds.pasteKey(dest, option=pasteKey)
-                    except:
-                        log.debug('Failed to copyKeys between : %s >> %s' % (src, dest))
-        else:
-            raise StandardError('Nothing found by the Hierarchy Code to process')
+                raise StandardError('Nothing found by the Hierarchy Code to process')
         
-        if mergeLayers:
-            if animLayers and cmds.animLayer('Merged_Layer', query=True, exists=True):
-                cmds.delete('Merged_Layer')
+#         if mergeLayers:
+#             if animLayers and cmds.animLayer('Merged_Layer', query=True, exists=True):
+#                 cmds.delete('Merged_Layer')
         return True
     
     
@@ -3547,10 +3618,11 @@ class MirrorHierarchy(object):
     TODO: We need to do a UI for managing these marker attrs and the Index lists
     '''
     
-    def __init__(self, nodes=[], filterSettings=None, mergeLayers=False, **kws):
+    def __init__(self, nodes=[], filterSettings=None, mergeLayers=True, **kws):
         '''
         :param nodes: initial nodes to process
         :param filterSettings: filterSettings object to process hierarchies
+        :param mergeLayers: set to True by default, merge down and animLayers active on the given nodes
         '''
         
         self.nodes = nodes
@@ -3700,17 +3772,20 @@ class MirrorHierarchy(object):
         '''
         Filter the given nodes into the mirrorDict
         such that {'Centre':{id:node,},'Left':{id:node,},'Right':{id:node,}}
+        :param nodes: only process a given list of nodes, else run the filterSettings 
+            call from the initial nodes passed to the class
         '''
         # reset the current Dict prior to rescanning
         self.mirrorDict = {'Centre': {}, 'Left': {}, 'Right': {}}
         self.unresolved = {'Centre': {}, 'Left': {}, 'Right': {}}
         self.indexednodes=nodes
-
-        if not self.indexednodes:
+        
+        if not nodes and self.nodes:
             self.indexednodes = self.getNodes()
 
         if not self.indexednodes:
-            raise StandardError('no mirrorMarkers found in node list/hierarchy')
+            raise StandardError('No mirrorMarkers found from the given node list/hierarchy')
+        
         for node in self.indexednodes:
             try:
                 side = self.getMirrorSide(node)
@@ -3805,8 +3880,17 @@ class MirrorHierarchy(object):
         one side of the mirrorDict and pass that data to the opposite matching node, thus
         making the anim/pose symmetrical according to the mirror setups.
         Really useful for facial setups!
+        
+        :param nodes: optional specific listy of nodes to process, else we run the filterSetting code 
+            on the initial nodes past to the class
+        :param mode: 'Anim' ot 'Pose' process as a single pose or an animation
+        :param primeAxis: 'Left' or 'Right' whether to take the data from the left or right side of the setup
         '''
         self.getMirrorSets(nodes)
+    
+        if not self.indexednodes:
+            raise IOError('No nodes mirrorIndexed nodes found from given / selected nodes')
+        
         if mode == 'Anim':
             transferCall = self.transferCallKeys  # AnimFunctions().copyKeys
             inverseCall = AnimFunctions.inverseAnimChannels
@@ -3821,7 +3905,7 @@ class MirrorHierarchy(object):
             masterAxis = 'Right'
             slaveAxis = 'Left'
             
-        with AnimationLayerContext(self.indexednodes, mergeLayers=self.mergeLayers, restoreOnExit=False):      
+        with AnimationLayerContext(self.indexednodes, mergeLayers=self.mergeLayers, restoreOnExit=False):
             for index, masterSide in self.mirrorDict[masterAxis].items():
                 if not index in self.mirrorDict[slaveAxis].keys():
                     log.warning('No matching Index Key found for %s mirrorIndex : %s >> %s' % \
@@ -3843,15 +3927,19 @@ class MirrorHierarchy(object):
         before Mirroring the animation data. Swapping left for right and
         inversing the required animCurves
         
+        :param nodes: optional specific listy of nodes to process, else we run the filterSetting code 
+            on the initial nodes past to the class
+        :param mode: 'Anim' ot 'Pose' process as a single pose or an animation
+        
         TODO: Issue where if nodeA on Left has NO key data at all, and nodeB on right
         does, then nodeB will be left incorrect. We need to clean the data if there
         are no keys.
-        
-        TODO: fix the animLayer merge call so it's only processed once!
         '''
 
         self.getMirrorSets(nodes)
-
+        if not self.indexednodes:
+            raise IOError('No nodes mirrorIndexed nodes found from given / selected nodes')
+        
         if mode == 'Anim':
             inverseCall = AnimFunctions.inverseAnimChannels
         else:
