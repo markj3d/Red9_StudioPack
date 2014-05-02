@@ -196,11 +196,19 @@ def getAnimLayersFromGivenNodes(nodes):
         nodes=[nodes]
     return cmds.animLayer(nodes, q=True, affectedLayers=True)
 
-def animLayersConfirmCheck(nodes=None):
+def animLayersConfirmCheck(nodes=None, deleteMerged=True):
     '''
     return all animLayers associated with the given nodes
+    
+    :param nodes: nodes to check membership of animLayers. If not pass the check will be at sceneLevel
+    :param deleteMerged: modifies the warning message
     '''
     animLayers=[]
+    message=''
+    if deleteMerged:
+        message='AnimLayers found in scene:\nThis process needs to merge them down and they will NOT be restored afterwards'
+    else:
+        message='AnimLayers found in scene:\nThis process needs to merge them but they will be restored afterwards'
     if nodes:
         if not isinstance(nodes, list):
             nodes=[nodes]
@@ -210,12 +218,14 @@ def animLayersConfirmCheck(nodes=None):
     if animLayers and not len(animLayers)==1:
         result = cmds.confirmDialog(
                 title='AnimLayers - Confirm',
-                button=['Yes', 'Cancel'],
-                message='animLayers found in scene: this process needs to merge them',
+                button=['Confirm - Merge', 'Cancel'],
+                message=message,
                 defaultButton='Confirm - Merge',
                 cancelButton='Cancel',
                 dismissString='Cancel')
         if result == 'Confirm - Merge':
+            return True
+        else:
             return False
     return True
         
@@ -2126,7 +2136,7 @@ class AnimationUI(object):
         '''
         Internal UI call for CopyAttrs
         '''
-        if not len(cmds.ls(sl=True, l=True)) > 2:
+        if not len(cmds.ls(sl=True, l=True)) >= 2:
             log.warning('Please Select at least 2 nodes to Process!!')
             return
         self.kws['toMany'] = cmds.checkBox(self.uicbCAttrToMany, q=True, v=True)
@@ -2147,7 +2157,7 @@ class AnimationUI(object):
         '''
         Internal UI call for CopyKeys call
         '''
-        if not len(cmds.ls(sl=True, l=True)) > 2:
+        if not len(cmds.ls(sl=True, l=True)) >= 2:
             log.warning('Please Select at least 2 nodes to Process!!')
             return
         self.kws['toMany'] = cmds.checkBox(self.uicbCKeyToMany, q=True, v=True)
@@ -2171,7 +2181,7 @@ class AnimationUI(object):
         '''
         Internal UI call for Snap Transforms
         '''
-        if not len(cmds.ls(sl=True, l=True)) > 2:
+        if not len(cmds.ls(sl=True, l=True)) >= 2:
             log.warning('Please Select at least 2 nodes to Process!!')
             return
         self.kws['preCopyKeys'] = False
@@ -2198,7 +2208,7 @@ class AnimationUI(object):
         '''
         Internal UI call for Stabilize
         '''
-        if not len(cmds.ls(sl=True, l=True)) > 2:
+        if not len(cmds.ls(sl=True, l=True)) >= 2:
             log.warning('Please Select at least 2 nodes to Process!!')
             return
         time = ()
@@ -2392,54 +2402,46 @@ class AnimationUI(object):
         elif func=='update':
             self.ppc.updatePosePointCloud()
          
-    def __MirrorPoseAnim(self, func):
+    def __MirrorPoseAnim(self, process, mirrorMode):
         '''
         Internal UI call for Mirror Animation / Pose
         '''
+
         if not cmds.ls(sl=True, l=True):
             log.warning('Nothing selected to process from!!')
             return
-        if not animLayersConfirmCheck():
-            return
-
+  
         self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
+        hierarchy=cmds.checkBox('uicbMirrorHierarchy', q=True, v=True)
         
         mirror=MirrorHierarchy(nodes=cmds.ls(sl=True, l=True),
                                filterSettings=self.filterSettings,
-                               mergeLayers=cmds.checkBox('uicbCKeyAnimLay', q=True, v=True),
                                **self.kws)
-        mirrorMode='Anim'
-        if func=='MirrorPose':
-            mirrorMode='Pose'
-        if not cmds.checkBox('uicbMirrorHierarchy', q=True, v=True):
-            mirror.mirrorData(cmds.ls(sl=True, l=True), mode=mirrorMode)
-        else:
-            mirror.mirrorData(mode=mirrorMode)
+        
+        #Check for AnimLayers and throw the warning
+        if mirrorMode=='Anim':
+            #slower as we're processing the mirrorSets twice for hierarchy
+            #BUT this is vital info that the user needs prior to running.
+            if hierarchy:
+                animCheckNodes=mirror.getMirrorSets()
+            else:
+                animCheckNodes=cmds.ls(sl=True, l=True)
+            print animCheckNodes
+            if not animLayersConfirmCheck(animCheckNodes):
+                log.warning('Process Aborted by User')
+                return
 
-    def __SymmetryPoseAnim(self, func):
-        '''
-        Internal UI call for Mirror Animation / Pose
-        '''
-        if not cmds.ls(sl=True, l=True):
-            log.warning('Nothing selected to process from!!')
-            return
-        if not animLayersConfirmCheck():
-            return
-        
-        self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
-        #self.kws['mergeLayers'] = False
-        
-        mirror=MirrorHierarchy(nodes=cmds.ls(sl=True, l=True),
-                               filterSettings=self.filterSettings,
-                               mergeLayers=cmds.checkBox('uicbCKeyAnimLay', q=True, v=True),
-                               **self.kws)
-        mirrorMode='Anim'
-        if func=='SymmetryPose':
-            mirrorMode='Pose'
-        if not cmds.checkBox('uicbMirrorHierarchy', q=True, v=True):
-            mirror.makeSymmetrical(cmds.ls(sl=True, l=True), mode=mirrorMode)
+        if not hierarchy:
+            if process=='mirror':
+                mirror.mirrorData(cmds.ls(sl=True, l=True), mode=mirrorMode)
+            else:
+                mirror.makeSymmetrical(cmds.ls(sl=True, l=True), mode=mirrorMode)
         else:
-            mirror.makeSymmetrical(mode=mirrorMode)
+            if process=='mirror':
+                mirror.mirrorData(mode=mirrorMode)
+            else:
+                mirror.makeSymmetrical(mode=mirrorMode)
+
                       
     # MAIN CALL
     #------------------------------------------------------------------------------
@@ -2500,13 +2502,13 @@ class AnimationUI(object):
             elif func == 'PoseBlender':
                 self.__PoseBlend()
             elif func =='MirrorAnim':
-                self.__MirrorPoseAnim(func)
+                self.__MirrorPoseAnim('mirror', 'Anim')
             elif func =='MirrorPose':
-                self.__MirrorPoseAnim(func)
+                self.__MirrorPoseAnim('mirror', 'Pose')
             elif func =='SymmetryPose':
-                self.__SymmetryPoseAnim(func)
+                self.__MirrorPoseAnim('symmetry', 'Pose')
             elif func =='SymmetryAnim':
-                self.__SymmetryPoseAnim(func)
+                self.__MirrorPoseAnim('symmetry', 'Anim')
                 
         except StandardError, error:
             traceback = sys.exc_info()[2]  # get the full traceback
@@ -3618,11 +3620,10 @@ class MirrorHierarchy(object):
     TODO: We need to do a UI for managing these marker attrs and the Index lists
     '''
     
-    def __init__(self, nodes=[], filterSettings=None, mergeLayers=True, **kws):
+    def __init__(self, nodes=[], filterSettings=None, **kws):
         '''
         :param nodes: initial nodes to process
         :param filterSettings: filterSettings object to process hierarchies
-        :param mergeLayers: set to True by default, merge down and animLayers active on the given nodes
         '''
         
         self.nodes = nodes
@@ -3635,7 +3636,7 @@ class MirrorHierarchy(object):
         self.mirrorIndex = 'mirrorIndex'
         self.mirrorAxis = 'mirrorAxis'
         self.mirrorDict = {'Centre': {}, 'Left': {}, 'Right': {}}
-        self.mergeLayers = mergeLayers
+        self.mergeLayers = True
         self.indexednodes = []  # all nodes to process - passed to the Animlayer context
         self.kws = kws  # allows us to pass kws into the copyKey and copyAttr call if needed, ie, pasteMethod!
         #print 'kws in Mirror call : ', self.kws
@@ -3815,6 +3816,8 @@ class MirrorHierarchy(object):
             except StandardError, error:
                 log.debug(error)
                 log.info('Failed to add Node to Mirror System : %s' % r9Core.nodeNameStrip(node))
+                
+        return self.indexednodes
     
     def printMirrorDict(self, short=True):
         '''
@@ -3894,9 +3897,11 @@ class MirrorHierarchy(object):
         if mode == 'Anim':
             transferCall = self.transferCallKeys  # AnimFunctions().copyKeys
             inverseCall = AnimFunctions.inverseAnimChannels
+            self.mergeLayers=True
         else:
             transferCall = self.transferCallAttrs  # AnimFunctions().copyAttributes
             inverseCall = AnimFunctions.inverseAttributes
+            self.mergeLayers=False
             
         if primeAxis == 'Left':
             masterAxis = 'Left'
@@ -3942,9 +3947,11 @@ class MirrorHierarchy(object):
         
         if mode == 'Anim':
             inverseCall = AnimFunctions.inverseAnimChannels
+            self.mergeLayers=True
         else:
             inverseCall = AnimFunctions.inverseAttributes
-
+            self.mergeLayers=False
+            
         # with r9General.HIKContext(nodes):
         with AnimationLayerContext(self.indexednodes, mergeLayers=self.mergeLayers, restoreOnExit=False):
             # Switch Pairs on the Left and Right and inverse the channels
