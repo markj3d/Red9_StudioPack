@@ -1142,18 +1142,10 @@ class AnimationUI(object):
         cmds.textFieldGrp('uitfgSpecificNodeTypes', e=True, text=','.join(nodeTypes))
  
     def __uiCB_resizeMainScroller(self, *args):
-        try:
-            if cmds.dockControl(self.dockCnt, query=True, floating=True):
-                width=cmds.dockControl(self.dockCnt, q=True, w=True)
-                height=cmds.dockControl(self.dockCnt, q=True, h=True)
-            else:
-                newSize=cmds.window(self.win, q=True, wh=True)
-                width=newSize[0]
-                height=newSize[1]
-        except:
-            newSize=cmds.window(self.win, q=True, wh=True)
-            width=newSize[0]
-            height=newSize[1]
+        if self.dock:
+            #if not cmds.dockControl(self.dockCnt, query=True, floating=True):
+            width=cmds.dockControl(self.dockCnt, q=True, w=True)
+            height=cmds.dockControl(self.dockCnt, q=True, h=True)
         else:
             newSize=cmds.window(self.win, q=True, wh=True)
             width=newSize[0]
@@ -2058,7 +2050,8 @@ class AnimationUI(object):
             log.debug('Loading UI Elements from the config file')
             def __uiCache_LoadCheckboxes():
                 #if self.ANIM_UI_OPTVARS['AnimationUI'].has_key('checkboxes'):
-                if 'checkboxes' in self.ANIM_UI_OPTVARS['AnimationUI']:
+                if 'checkboxes' in self.ANIM_UI_OPTVARS['AnimationUI'] and \
+                            self.ANIM_UI_OPTVARS['AnimationUI']['checkboxes']:
                     for cb, status in self.ANIM_UI_OPTVARS['AnimationUI']['checkboxes'].items():
                         cmds.checkBox(cb, e=True, v=r9Core.decodeString(status))
                 
@@ -2086,7 +2079,8 @@ class AnimationUI(object):
             __uiCache_LoadCheckboxes()
             
             #callbacks
-            cmds.radioCollection(self.uircbPosePathMethod, edit=True, select=self.posePathMode)
+            if self.posePathMode:
+                cmds.radioCollection(self.uircbPosePathMethod, edit=True, select=self.posePathMode)
             self.__uiCB_enableRelativeSwitches()  # relativePose switch enables
             self.__uiCB_managePoseRootMethod()  # metaRig or SetRootNode for Pose Root
             self.__uiCB_switchPosePathMode(self.posePathMode)  # pose Mode - 'local' or 'project'
