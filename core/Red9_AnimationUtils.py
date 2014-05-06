@@ -515,18 +515,22 @@ class AnimationUI(object):
         
         cmds.menuBarLayout()
         cmds.menu(l="VimeoHelp")
-        cmds.menuItem(l="Open Vimeo > WalkThrough",
+        cmds.menuItem(l="Open Vimeo > WalkThrough v1.27",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/56431983')")
+        cmds.menuItem(l="Open Vimeo > Update v1.40",
+                      c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/78577760')")
         cmds.menuItem(l="Open Vimeo > HierarchyControl",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/56551684')")
         cmds.menuItem(l="Open Vimeo > Track or Stabilize",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/33440361')")
         cmds.menuItem(l="Open Vimeo > CopyKeys & TimeOffsets",
-                      c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/33440348')")
+                      c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/81731510')")
         cmds.menuItem(l="Open Vimeo > MirrorSetups",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/57882801')")
         cmds.menuItem(l="Open Vimeo > PoseSaver - Advanced Topics",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/66269033')")
+        cmds.menuItem(l="Open Vimeo > PoseSaver - Blending and maintain spaces",
+                      c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/88391202')")
         cmds.menuItem(divider=True)
         cmds.menuItem(l="Contact Me", c=lambda *args: (r9Setup.red9ContactInfo()))
         cmds.menu(l="Tools")
