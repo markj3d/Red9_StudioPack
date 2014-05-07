@@ -2206,8 +2206,8 @@ class AnimationUI(object):
         '''
         Internal UI call for Stabilize
         '''
-        if not len(cmds.ls(sl=True, l=True)) >= 2:
-            log.warning('Please Select at least 2 nodes to Process!!')
+        if not len(cmds.ls(sl=True, l=True)) >= 1:
+            log.warning('Please Select at least 1 nodes to Process!!')
             return
         time = ()
         step = cmds.floatFieldGrp('uiffgStabStep', q=True, v=True)[0]
