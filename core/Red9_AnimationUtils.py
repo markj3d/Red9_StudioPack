@@ -939,10 +939,12 @@ class AnimationUI(object):
         if r9Setup.mayaVersion() > 2012:  # tcc flag not supported in earlier versions
             self.searchFilter = cmds.textFieldGrp('tfPoseSearchFilter', label='searchFilter : ', text='',
                                                 cw=((1, 87), (2, 160)),
+                                                ann='Filter the folder, allows multiple filters separated by ","',
                                                 tcc=lambda x: self.__uiCB_fillPoses(searchFilter=cmds.textFieldGrp('tfPoseSearchFilter', q=True, text=True)))
         else:
             self.searchFilter = cmds.textFieldGrp('tfPoseSearchFilter', label='searchFilter : ', text='',
                                                 cw=((1, 87), (2, 160)), fcc=True,
+                                                ann='Filter the folder, allows multiple filters separated by ","',
                                                 cc=lambda x: self.__uiCB_fillPoses(searchFilter=cmds.textFieldGrp('tfPoseSearchFilter', q=True, text=True)))
         cmds.separator(h=10, style='none')
         
@@ -1365,12 +1367,15 @@ class AnimationUI(object):
         return self.poses
   
     def buildFilteredPoseList(self, searchFilter):
-        filteredPoses = []
-        for pose in self.poses:
-            if searchFilter and not searchFilter.upper() in pose.upper():
-                continue
-            filteredPoses.append(pose)
-        return filteredPoses
+        '''
+        build the list of poses to show in the poseUI
+        '''
+        filteredPoses = self.poses
+        if searchFilter:
+            filters=searchFilter.replace(' ','').split(',')
+            filteredPoses = [pose for pose in self.poses for srch in filters if srch and srch.upper() in pose.upper()]
+
+        return list(set(filteredPoses))
     
     def __validatePoseFunc(self, func):
         '''
