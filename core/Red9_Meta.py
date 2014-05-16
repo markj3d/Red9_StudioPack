@@ -1784,7 +1784,7 @@ class MetaClass(object):
             return [MetaClass(node) for node in children]
         return children
     
-    def getNodeConnectionMetaDataMap(self, node, mTypes=[]):
+    def getNodeConnectionMetaDataMap(self, node, mTypes=[]):  #  toself=False, allplugs=False):
         '''
         This is a generic wrapper to extract metaData connection info for any given node
         used currently to build the pose dict up, and compare / match the data on load.
@@ -1832,12 +1832,34 @@ class MetaClass(object):
         really light wrapper, designed to return the attr via which a node
         is connected to this metaNode
         :param node: node to test connection attr for
+        
+        .. note::
+            This will be depricated soon and replaced by getNodeConnections which is
+            more flexible as it returns and filters all plugs between self and the given node.
         '''
+        log.info('getNodeConnectionAttr will be depricated soon!!!!')
         for con in cmds.listConnections(node,s=True,d=False,p=True):
             if self.mNode in con.split('.')[0]:
                 return con.split('.')[1]
         
-
+    def getNodeConnections(self, node, filters=[]):
+        '''
+        really light wrapper, designed to return all connections
+        between a given node and the mNode
+        :param node: node to test connection attr for
+        :param filters: filter string to match for the returns
+        '''
+        cons=[]
+        for con in cmds.listConnections(node,s=True,d=False,p=True):
+            if self.mNode in con.split('.')[0]:
+                if filters:
+                    for flt in filters:
+                        if flt in con.split('.')[1]:
+                            cons.append(con.split('.')[1])
+                else:
+                    cons.append(con.split('.')[1])
+        return cons
+            
 def deleteEntireMetaRigStructure(searchNode=None):
     '''
     This is a hard core unplug and cleanup of all attrs added by the
