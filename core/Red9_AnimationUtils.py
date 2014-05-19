@@ -2347,10 +2347,20 @@ class AnimationUI(object):
         poseNode.filepath = self.getPosePath()
         poseNode.useFilter = cmds.checkBox('uicbPoseHierarchy', q=True, v=True)
         poseNode._poseLoad_buildcache(self.__uiCB_getPoseInputNodes())
+        self._poseBlendUndoChunkOpen=False
         
         def blendPose(*args):
+            if not self._poseBlendUndoChunkOpen:
+                cmds.undoInfo(openChunk=True)
+                self._poseBlendUndoChunkOpen=True
+                log.debug('Opening Undo Chunk for PoseBlender')
             poseNode._applyPose(percent=cmds.floatSliderGrp('poseBlender', q=True, v=True))
-            
+        
+        def closeChunk(*args):
+            cmds.undoInfo(closeChunk=True)
+            self._poseBlendUndoChunkOpen = False
+            log.debug('Closing Undo Chunk for PoseBlender')
+             
         if cmds.window('poseBlender', exists=True):
             cmds.deleteUI('poseBlender')
         cmds.window('poseBlender')
@@ -2361,7 +2371,8 @@ class AnimationUI(object):
                             minValue=0.0,
                             maxValue=100.0,
                             value=0,
-                            dc=blendPose)
+                            dc=blendPose,
+                            cc=closeChunk)
         cmds.showWindow()
             
     def __PosePointCloud(self, func):
