@@ -2343,11 +2343,13 @@ class AnimationUI(object):
         basically we'd add a new poseObject per pose and bind each one top the slider
         but with a consistent poseCurrentCache via the _cacheCurrentNodeStates() call
         '''
+        objs=cmds.ls(sl=True,l=True)
         poseNode = r9Pose.PoseData(self.filterSettings)
         poseNode.filepath = self.getPosePath()
         poseNode.useFilter = cmds.checkBox('uicbPoseHierarchy', q=True, v=True)
         poseNode._poseLoad_buildcache(self.__uiCB_getPoseInputNodes())
         self._poseBlendUndoChunkOpen=False
+        cmds.select(objs)
         
         def blendPose(*args):
             if not self._poseBlendUndoChunkOpen:
