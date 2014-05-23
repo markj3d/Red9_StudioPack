@@ -1369,13 +1369,14 @@ class AnimationUI(object):
     def buildFilteredPoseList(self, searchFilter):
         '''
         build the list of poses to show in the poseUI
+        TODO: hook up an order based by date in here as an option to tie into the UI
         '''
         filteredPoses = self.poses
         if searchFilter:
             filters=searchFilter.replace(' ','').split(',')
             filteredPoses = [pose for pose in self.poses for srch in filters if srch and srch.upper() in pose.upper()]
 
-        return list(set(filteredPoses))
+        return sorted(list(set(filteredPoses)))
     
     def __validatePoseFunc(self, func):
         '''
@@ -2349,7 +2350,8 @@ class AnimationUI(object):
         poseNode.useFilter = cmds.checkBox('uicbPoseHierarchy', q=True, v=True)
         poseNode._poseLoad_buildcache(self.__uiCB_getPoseInputNodes())
         self._poseBlendUndoChunkOpen=False
-        cmds.select(objs)
+        if objs:
+            cmds.select(objs)
         
         def blendPose(*args):
             if not self._poseBlendUndoChunkOpen:
