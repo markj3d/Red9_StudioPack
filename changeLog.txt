@@ -125,8 +125,18 @@ New - Red9_Anim - CopyKeys now deals with animLayer by pre-merging the data to a
 New - Red9_Audio - added a function getMediaFileMetaData() which is capable of extracting metaData from most media file types via ffprobe.exe
 Mod - Red9_Pose	- added a filterMap param to the poseCompare call. This can be used as a master core list, only nodes that appear on this will be checked against. Useful for checking core skeleton nodes whilst ingnoring others
 Mod - Red9_Pose - added an ignoreBlocks to the poseCompare call. This allows the code to ignore complete sections of the compare data, we mainly use this for ['missingKeys'] so that the compare skipps them
-Mod - Red9_Anim - modified the AnimUI behaviour such that the 'CTRL' key modifier is now stored with the UI. If you laucnh the UI with ctrl held it'll toggle between launching as docked or not.
+Mod - Red9_Anim - modified the AnimUI behaviour such that the 'CTRL' key modifier is now stored with the UI. If you launch the UI with ctrl held it'll toggle between launching as docked or not.
 Mod - Red9_Anim - exposed the snapTranslates and snapRotatesflags to the snap() call in AnimFunctions
 Mod - Red9_Core - Mods to the LockChannels class for better behaviour, set hierarchy flag to false by default.
 NEW - Red9_Meta - new flag exposed at class level '_forceAsMeta'. This forces the code to ALWAYS return instansiated MetaClass objects when dealing with nodes rather than dag paths.
+
+
+v1.43:
+------
+Fix - Red9_Anim - fixes to the poseBlender code so it now handles the undoQueue correctly, as chunks and returns object selection correctly.
+New - Red9_Anim - Pose search now accepts multiple strings, comma separated ie 'walk,run,idle'
+Fix - Red9_Anim - fix's in the way that all the commands wrappers in the UI handle AnimLayers - more info and dialog's added to guide you through.
+New - Red9_Meta - added new call 'getNodeConnections' which will replace the 'getNodeConnectionAttr' in calls, designed to return all connections between a given node and the mNode, with filtering
+Mod - Red9_Core - added double3 handling to the lockChannels call, this was causing issues when passed double3 like 'translate' 
+Fix - Red9_Audio - added correct float conversion to all the timecode and framerate conversion functions
 
