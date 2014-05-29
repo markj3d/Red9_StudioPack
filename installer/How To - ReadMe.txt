@@ -25,7 +25,11 @@ Installation:
 	OR move it to any folder of your choice and make sure you set the 
 	sys.path.append() correctly
 
-	
+	Note: the main folder containing all the Red9 subfolders must be called 'Red9',
+	if you've downloaded a versioned zip file make sure to rename the folder correctly
+
+
+
 	To Boot for a Maya session:
 	===========================
 	Open up a Python Tab in	the Script Editor and run the following:
