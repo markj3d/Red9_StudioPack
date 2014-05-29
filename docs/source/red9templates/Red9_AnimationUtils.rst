@@ -32,6 +32,7 @@ to Mirroring animation data.
       FilterCurves
       MirrorHierarchy
 	  MirrorSetup
+      AnimationLayerContext	  
 	  CameraTracker
    
 
