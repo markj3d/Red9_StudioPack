@@ -77,13 +77,19 @@ def mayaPrefs():
     '''
     return os.path.dirname(cmds.about(env=True))
 
-def mayaUpAxis():
+def mayaUpAxis(setAxis=None):
     import maya.OpenMaya as OpenMaya
-    vect=OpenMaya.MGlobal.upAxis()
-    if vect.z:
-        return 'z'
-    if vect.y:
-        return 'y'
+    if setAxis:
+        if setAxis.lower()=='y':
+            OpenMaya.MGlobal.setYAxisUp()
+        if setAxis.lower()=='z':
+            OpenMaya.MGlobal.setZAxisUp()
+    else:
+        vect=OpenMaya.MGlobal.upAxis()
+        if vect.z:
+            return 'z'
+        if vect.y:
+            return 'y'
     
     
 # Menu Builders ------------------------------------------------------------------------
