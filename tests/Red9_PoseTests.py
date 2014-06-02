@@ -26,6 +26,10 @@ import Red9.core.Red9_PoseSaver as r9Pose
 import Red9.startup.setup as r9Setup
 r9Setup.start(Menu=False)
 
+#force the upAxis, just in case
+r9Setup.mayaUpAxis('y')
+
+
 red9MetaRigConfig=os.path.join(r9Setup.red9Presets(),'Red9_MetaRig_unitTest.cfg')
                                  
 def getPoseFolder():
@@ -136,17 +140,21 @@ class Test_PoseData():
         load the pose with relative and check against the store 'projected' posefile
         '''
         cmds.currentTime(0)
+        requiredPose=os.path.join(self.poseFolder,'jump_f218_projected.pose')
+        
         filepath=os.path.join(self.poseFolder,'jump_f218.pose')
         cmds.select('L_Foot_Ctrl')
         self.poseData.poseLoad(self.mRig.mNode, filepath=filepath, useFilter=True,
                                relativePose=True,
                                relativeRots='projected',
                                relativeTrans='projected')
+        print '\n\n\n##########   MAYA UP AXIS : ###################', r9Setup.mayaUpAxis()
+        print 'status : ', self.mRig.poseCompare(requiredPose, compareDict='poseDict', supressWarning=False).status
+        assert self.mRig.poseCompare(requiredPose, compareDict='poseDict', supressWarning=False).status  # using the mRig internal wrap
         
         self.mRig.poseCacheStore()  # build an internal poseObj on the mRig now that we've loaded in relative space
         assert not r9Pose.PoseCompare(self.mRig.poseCache, filepath, compareDict='poseDict').compare()
-        assert r9Pose.PoseCompare(self.mRig.poseCache, os.path.join(self.poseFolder,'jump_f218_projected.pose'),
-                                  compareDict='poseDict').compare()
+        assert r9Pose.PoseCompare(self.mRig.poseCache, requiredPose, compareDict='poseDict').compare()
 
     def test_poseLoadMeta_relativeAbsolute(self):
         '''

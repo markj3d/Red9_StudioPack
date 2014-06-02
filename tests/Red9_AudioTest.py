@@ -23,6 +23,9 @@ import Red9.core.Red9_Audio as r9Audio
 import Red9.core.Red9_General as r9General
 import Red9.startup.setup as r9Setup
 r9Setup.start(Menu=False)
+
+#force the upAxis, just in case
+r9Setup.mayaUpAxis('y')
    
 import maya.cmds as cmds
 import os

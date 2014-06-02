@@ -27,6 +27,9 @@ import Red9.core.Red9_Meta as r9Meta
 import Red9.startup.setup as r9Setup
 r9Setup.start(Menu=False)
 
+#force the upAxis, just in case
+r9Setup.mayaUpAxis('y')
+
 class Test_MetaRegistryCalls():
     
     def test_registerMClassNodeMapping(self):

@@ -22,6 +22,9 @@ import os
 import Red9.core.Red9_CoreUtils as r9Core
 import Red9.startup.setup as r9Setup
 
+#force the upAxis, just in case
+r9Setup.mayaUpAxis('y')
+
 class Test_FilterSettings():
     def setup(self):
         self.filter=r9Core.FilterNode_Settings()
