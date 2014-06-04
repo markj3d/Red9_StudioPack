@@ -1329,13 +1329,18 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
     '''
     Matches 2 given NODE LISTS by node name via various methods.
     
-    :param matchMethod: default 'stripPrefix' 
+    :param matchMethod: default 'stripPrefix'
+        *index*: No intelligent matching, just purely zip the
+        lists together in the order they were given
+        
         *base*:  Match each element by exact name (shortName)
         such that Spine==Spine or REF1:Spine==REF2:Spine
         
         *stripPrefix*: Match each element by a relaxed naming convention
         allowing for prefixes such that RigX_Spine == Spine
+        
     :return: matched pairs of tuples for processing [(a1,b2),[(a2,b2)]
+    
     '''
 
     infoPrint = ""
@@ -1344,31 +1349,34 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
     #take a copy of B as we modify the data here
     hierarchyB=list(nodeListB)
     
-    for nodeA in nodeListA:
-        strippedA = nodeNameStrip(nodeA)
-        for nodeB in hierarchyB:
-            #strip the path off for the compare
-            #strippedA = nodeNameStrip(nodeA)
-            strippedB = nodeNameStrip(nodeB)
-            
-            #BaseMatch is a direct compare ONLY
-            if matchMethod == 'base':
-                if strippedA.upper() == strippedB.upper():
-                    infoPrint += '\nMatch Method : %s : %s == %s' % \
-                            (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
-                    matchedData.append((nodeA, nodeB))
-                    hierarchyB.remove(nodeB)
-                    break
+    if matchMethod == 'index':
+        matchedData = zip(nodeListA,nodeListB)
+    else:
+        for nodeA in nodeListA:
+            strippedA = nodeNameStrip(nodeA)
+            for nodeB in hierarchyB:
+                #strip the path off for the compare
+                #strippedA = nodeNameStrip(nodeA)
+                strippedB = nodeNameStrip(nodeB)
                 
-            #Compare allowing for prefixing which is stripped off
-            elif matchMethod == 'stripPrefix':
-                if strippedA.upper().endswith(strippedB.upper()) \
-                    or strippedB.upper().endswith(strippedA.upper()):
-                    infoPrint += '\nMatch Method : %s : %s == %s' % \
-                            (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
-                    matchedData.append((nodeA, nodeB))
-                    hierarchyB.remove(nodeB)
-                    break
+                #BaseMatch is a direct compare ONLY
+                if matchMethod == 'base':
+                    if strippedA.upper() == strippedB.upper():
+                        infoPrint += '\nMatch Method : %s : %s == %s' % \
+                                (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
+                        matchedData.append((nodeA, nodeB))
+                        hierarchyB.remove(nodeB)
+                        break
+                    
+                #Compare allowing for prefixing which is stripped off
+                elif matchMethod == 'stripPrefix':
+                    if strippedA.upper().endswith(strippedB.upper()) \
+                        or strippedB.upper().endswith(strippedA.upper()):
+                        infoPrint += '\nMatch Method : %s : %s == %s' % \
+                                (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
+                        matchedData.append((nodeA, nodeB))
+                        hierarchyB.remove(nodeB)
+                        break
                 
     log.debug('\nMatched Log : \n%s' % infoPrint)
     infoPrint = None
