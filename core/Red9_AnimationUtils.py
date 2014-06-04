@@ -137,25 +137,35 @@ def getChannelBoxSelection():
     '''
     return cmds.channelBox('mainChannelBox', q=True, selectedMainAttributes=True)
 
+def getNodeAttrStatus(node=None, asDict=True, incLocked=True):
+    '''
+    stub function/ wrapper of getChannelBoxAttrs as the name is a
+    little misleading and not really what the function is doing in hindsight.
+    '''
+    return getChannelBoxAttrs(node=None, asDict=True, incLocked=True)
+
 def getChannelBoxAttrs(node=None, asDict=True, incLocked=True):
     '''
-    return a dict of attributes in the ChannelBox by their status.
+    return the status of all attrs on the given node, either as a flat list or
+    a dict. As dict it contains all data which controls the lock, keyable, hidden states etc
     
+    statusDict={'keyable':attrs, 'nonKeyable':attrs, 'locked':attrs}
+        
     :param node: given node.
     :param asDict: True returns a dict with keys 'keyable','locked','nonKeyable' of attrs 
-        False returns a list (non ordered) of all attrs available on the channelBox.
+        False returns a list (non ordered) of all attr states.
     :param incLocked: True by default - whether to include locked channels in the return (only valid if not asDict)
     '''
     statusDict={}
     if not node:
         node = cmds.ls(sl=True, l=True)[0]
-    statusDict['keyable']=cmds.listAttr(node, k=True, u=True)
-    statusDict['locked'] =cmds.listAttr(node, k=True, l=True)
-    statusDict['nonKeyable'] =cmds.listAttr(node, cb=True)
+    statusDict['keyable'] = cmds.listAttr(node, keyable=True, unlocked=True)
+    statusDict['locked'] = cmds.listAttr(node, keyable=True, locked=True)
+    statusDict['nonKeyable'] = cmds.listAttr(node, channelBox=True)
     if asDict:
         return statusDict
     else:
-        attrs=[]
+        attrs = []
         if statusDict['keyable']:
             attrs.extend(statusDict['keyable'])
         if statusDict['nonKeyable']:
@@ -861,25 +871,28 @@ class AnimationUI(object):
         except:
             cmds.text('filterSettingsInfo', label='')
         cmds.separator('filterInfoBase', style='in', vis=False)
-        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 140), (2, 162)])
+        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 140), (2, 180)])
         self.uicbIncRoots = cmds.checkBox('uicbIncRoots',
                                             ann='include RootNodes in the Filter',
                                             l='Include Roots',
                                             al='left', v=True,
                                             cc=self.__uiCache_storeUIElements)
         
-#        cmds.optionMenuGrp('uiomMatchMethod',label='MatchMethod:',
-#                        ann='Default = "replace", paste method used by the copy code internally',
-#                        cc=partial(self.__uiCB_setCopyKeyPasteMethod))
-#        for preset in ["base","stripPrefix","index"]:
-#            cmds.menuItem(l=preset)
-#        cmds.optionMenu('om_PasteMethod', e=True, v='replace')
+        cmds.optionMenu('om_MatchMethod', label='MatchMethod:', w=70,
+                        ann='Method used to match nodes in different hierarchies, default="stripPrefix"',
+                        cc=self.__uiCB_setMatchMethod)
+        #for preset in ["base","stripPrefix","index"]:
+        cmds.menuItem(l="base", ann='Exact shortName matching of nodes only, ignores namespaces : Fred:MainCtrl == Bert:MainCtrl')
+        cmds.menuItem(l="stripPrefix", ann='Allows one hierarchy to be prefixed when matching, ignores namespaces : Fred:New_MainCtrl == Bert:MainCtrl')
+        cmds.menuItem(l="index", ann='No matching logic at all, just matched in the order the nodes were found in the hierarchies')
+        
+        cmds.optionMenu('om_MatchMethod', e=True, v='stripPrefix')
             
-        self.uicbMatchMethod = cmds.checkBox('uicbMatchMethod',
-                                            ann='Match method allow prefix stripping?',
-                                            l='MatchMethod = stripPrefixes',
-                                            al='left', v=True,
-                                            cc=lambda x: self.__uiCache_addCheckbox('uicbMatchMethod'))
+#         self.uicbMatchMethod = cmds.checkBox('uicbMatchMethod',
+#                                             ann='Match method allow prefix stripping?',
+#                                             l='MatchMethod = stripPrefixes',
+#                                             al='left', v=True,
+#                                             cc=lambda x: self.__uiCache_addCheckbox('uicbMatchMethod'))
         cmds.setParent(self.FilterLayout)
         cmds.separator(h=10, style='none')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 162), (2, 162)])
@@ -1168,7 +1181,10 @@ class AnimationUI(object):
         self.ANIM_UI_OPTVARS['AnimationUI']['keyPasteMethod'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
         self.__uiCache_storeUIElements()
         
-    
+    def __uiCB_setMatchMethod(self, *args):
+        self.ANIM_UI_OPTVARS['AnimationUI']['matchMethod'] = cmds.optionMenu('om_MatchMethod', q=True, v=True)
+        self.__uiCache_storeUIElements()
+         
     # Preset FilterSettings Object Management
     #------------------------------------------------------------------------------
     
@@ -2072,6 +2088,8 @@ class AnimationUI(object):
                 self.__uiPresetSelection(Read=True)  # ##not sure on this yet????
             if 'keyPasteMethod' in AnimationUI and AnimationUI['keyPasteMethod']:
                 cmds.optionMenu('om_PasteMethod', e=True, v=AnimationUI['keyPasteMethod'])
+            if 'matchMethod' in AnimationUI and AnimationUI['matchMethod']:
+                cmds.optionMenu('om_MatchMethod', e=True, v=AnimationUI['matchMethod'])
             if 'poseMode' in AnimationUI and AnimationUI['poseMode']:
                 self.poseGridMode = AnimationUI['poseMode']
             if 'posePathMode' in AnimationUI and AnimationUI['posePathMode']:
@@ -2299,6 +2317,10 @@ class AnimationUI(object):
         rotRelMethod = cmds.radioCollection(self.uircbPoseRotMethod, q=True, select=True)
         tranRelMethod = cmds.radioCollection(self.uircbPoseTranMethod, q=True, select=True)
         
+        if poseRelative and not cmds.ls(sl=True, l=True):
+            log.warning('No node selected to use for reference!!')
+            return
+        
         relativeRots='projected'
         relativeTrans='projected'
         if not rotRelMethod=='rotProjected':
@@ -2310,6 +2332,9 @@ class AnimationUI(object):
         log.info('PosePath : %s' % path)
         poseNode=r9Pose.PoseData(self.filterSettings)
         poseNode.prioritySnapOnly=cmds.checkBox(self.uicbSnapPriorityOnly, q=True, v=True)
+        
+        poseNode.matchMethod=self.matchMethod  # needs proving as not fully tested yet!!
+        
         poseNode.poseLoad(self.__uiCB_getPoseInputNodes(),
                                                       path,
                                                       useFilter=poseHierarchy,
@@ -2480,10 +2505,11 @@ class AnimationUI(object):
             
         # Main Hierarchy Filters =============
         self.__uiPresetFillFilter()  # fill the filterSettings Object
-        if cmds.checkBox('uicbMatchMethod', q=True, v=True):
-            self.matchMethod='stripPrefix'
-        else:
-            self.matchMethod='base'
+        self.matchMethod = cmds.optionMenu('om_MatchMethod', q=True, v=True)
+#         if cmds.checkBox('uicbMatchMethod', q=True, v=True):
+#             self.matchMethod='stripPrefix'
+#         else:
+#             self.matchMethod='base'
         #self.filterSettings.transformClamp = True
          
         try:
