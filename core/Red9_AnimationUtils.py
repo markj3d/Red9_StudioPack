@@ -948,7 +948,7 @@ class AnimationUI(object):
         cmds.setParent(self.poseUILayout)
          
         cmds.separator(h=10, style='in')
-        
+        cmds.rowColumnLayout(nc=3, columnWidth=[(1, 260), (2, 22), (3, 22)], columnSpacing=[(2,20)])
         if r9Setup.mayaVersion() > 2012:  # tcc flag not supported in earlier versions
             self.searchFilter = cmds.textFieldGrp('tfPoseSearchFilter', label='searchFilter : ', text='',
                                                 cw=((1, 87), (2, 160)),
@@ -959,6 +959,16 @@ class AnimationUI(object):
                                                 cw=((1, 87), (2, 160)), fcc=True,
                                                 ann='Filter the folder, allows multiple filters separated by ","',
                                                 cc=lambda x: self.__uiCB_fillPoses(searchFilter=cmds.textFieldGrp('tfPoseSearchFilter', q=True, text=True)))
+        
+        cmds.iconTextButton('sortByName', style='iconOnly', image1='sortByName.bmp',
+                            w=22, h=20, ann='sortBy Name',
+                            c=lambda * args: self.__uiCB_fillPoses(rebuildFileList=True, sortBy='name'))
+              
+        cmds.iconTextButton('sortByDate', style='iconOnly', image1='sortByDate.bmp',
+                            w=22, h=20, ann='sortBy Date',
+                            c=lambda * args:self.__uiCB_fillPoses(rebuildFileList=True, sortBy='date'))
+              
+        cmds.setParent('..')
         cmds.separator(h=10, style='none')
         
         # SubFolder Scroller
@@ -1366,7 +1376,7 @@ class AnimationUI(object):
             raise StandardError('No Pose Selected in the UI')
         return self.poseSelected
 
-    def buildPoseList(self):
+    def buildPoseList(self, sortBy='name'):
         '''
         Get a list of poses from the PoseRootDir, this allows us to
         filter much faster as it stops all the os calls, cached list instead
@@ -1376,7 +1386,12 @@ class AnimationUI(object):
             log.debug('posePath is invalid')
             return self.poses
         files=os.listdir(self.posePath)
-        files.sort()
+        if sortBy == 'name':
+            files.sort()
+        elif sortBy == 'date':
+            files.sort(key=lambda x: os.stat(os.path.join(self.posePath, x)).st_mtime)
+            files.reverse()
+        
         for f in files:
             if f.lower().endswith('.pose'):
                 self.poses.append(f.split('.pose')[0])
@@ -1389,10 +1404,18 @@ class AnimationUI(object):
         '''
         filteredPoses = self.poses
         if searchFilter:
+            filteredPoses=[]
             filters=searchFilter.replace(' ','').split(',')
-            filteredPoses = [pose for pose in self.poses for srch in filters if srch and srch.upper() in pose.upper()]
-
-        return sorted(list(set(filteredPoses)))
+            for pose in self.poses:
+                for srch in filters:
+                    if srch and srch.upper() in pose.upper():
+                        if not pose in filteredPoses:
+                            filteredPoses.append(pose)
+            #filteredPoses = [pose for pose in self.poses for srch in filters if srch and srch.upper() in pose.upper()]
+        
+        #filteredPoses = sorted(list(set(filteredPoses)))
+        #filteredPoses.sort(key=lambda x: os.stat(os.path.join(self.posePath, x)).st_mtime)
+        return filteredPoses
     
     def __validatePoseFunc(self, func):
         '''
@@ -1570,7 +1593,7 @@ class AnimationUI(object):
         '''
         return os.path.join(self.getPoseDir(), '%s.bmp' % self.getPoseSelected())
                            
-    def __uiCB_fillPoses(self, rebuildFileList=False, searchFilter=None, *args):
+    def __uiCB_fillPoses(self, rebuildFileList=False, searchFilter=None, sortBy='name', *args):
         '''
         Fill the Pose List/Grid from the given directory
         '''
@@ -1579,9 +1602,9 @@ class AnimationUI(object):
         self.ANIM_UI_OPTVARS['AnimationUI']['poseMode'] = self.poseGridMode
         self.__uiCache_storeUIElements()
         searchFilter = cmds.textFieldGrp('tfPoseSearchFilter', q=True, text=True)
-        
+
         if rebuildFileList:
-            self.buildPoseList()
+            self.buildPoseList(sortBy=sortBy)
             log.debug('Rebuilt Pose internal Lists')
             # Project mode and folder contains NO poses so switch to subFolders
             if not self.poses and self.posePathMode == 'projectPoseMode':
@@ -1589,7 +1612,7 @@ class AnimationUI(object):
                 self.__uiCB_switchSubFolders()
                 return
         log.debug('searchFilter  : %s : rebuildFileList : %s' % (searchFilter, rebuildFileList))
-            
+
         # TextScroll Layout
         # ================================
         if not self.poseGridMode == 'thumb':

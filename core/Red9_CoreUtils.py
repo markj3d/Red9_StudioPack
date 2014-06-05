@@ -1329,15 +1329,15 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
     '''
     Matches 2 given NODE LISTS by node name via various methods.
     
-    :param matchMethod: default 'stripPrefix'
-        *index*: No intelligent matching, just purely zip the
+    :param matchMethod: default 'stripPrefix' 
+        *index*: No intelligent matching, just purely zip the 
         lists together in the order they were given
         
-        *base*:  Match each element by exact name (shortName)
+        *base*:  Match each element by exact name (shortName) 
         such that Spine==Spine or REF1:Spine==REF2:Spine
         
-        *stripPrefix*: Match each element by a relaxed naming convention
-        allowing for prefixes such that RigX_Spine == Spine
+        *stripPrefix*: Match each element by a relaxed naming convention 
+        allowing for prefixes one side such that RigX_Spine == Spine
         
     :return: matched pairs of tuples for processing [(a1,b2),[(a2,b2)]
     
