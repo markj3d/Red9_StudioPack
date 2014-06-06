@@ -4081,7 +4081,11 @@ class MirrorHierarchy(object):
                     if r9Core.matchNodeLists([node], [leftData['node']], matchMethod=matchMethod):
                         log.debug('NodeMatched: %s, Side=Left, index=%i, axis=%s' % (node, int(index), leftData['axis']))
                         if r9Core.decodeString(leftData['axisAttr']):
-                            self.setMirrorIDs(node, side='Left', slot=int(index), axis=','.join(leftData['axis']))
+                            if not leftData['axis']:
+                                axis='None'
+                            else:
+                                axis=','.join(leftData['axis'])
+                            self.setMirrorIDs(node, side='Left', slot=int(index), axis=axis)  # ','.join(leftData['axis']))
                         else:
                             self.setMirrorIDs(node, side='Left', slot=int(index))
                         found = True
@@ -4091,7 +4095,11 @@ class MirrorHierarchy(object):
                         if r9Core.matchNodeLists([node], [rightData['node']], matchMethod=matchMethod):
                             log.debug('NodeMatched: %s, Side=Right, index=%i, axis=%s' % (node, int(index), rightData['axis']))
                             if r9Core.decodeString(rightData['axisAttr']):
-                                self.setMirrorIDs(node, side='Right', slot=int(index), axis=','.join(rightData['axis']))
+                                if not rightData['axis']:
+                                    axis='None'
+                                else:
+                                    axis=','.join(rightData['axis'])
+                                self.setMirrorIDs(node, side='Right', slot=int(index), axis=axis)  # ','.join(rightData['axis']))
                             else:
                                 self.setMirrorIDs(node, side='Right', slot=int(index))
                             found = True
@@ -4101,7 +4109,11 @@ class MirrorHierarchy(object):
                         if r9Core.matchNodeLists([node], [centreData['node']], matchMethod=matchMethod):
                             log.debug('NodeMatched: %s, Side=Centre, index=%i, axis=%s' % (node, int(index), centreData['axis']))
                             if r9Core.decodeString(centreData['axisAttr']):
-                                self.setMirrorIDs(node, side='Centre', slot=int(index), axis=','.join(centreData['axis']))
+                                if not centreData['axis']:
+                                    axis='None'
+                                else:
+                                    axis=','.join(centreData['axis'])
+                                self.setMirrorIDs(node, side='Centre', slot=int(index), axis=axis)  # ','.join(centreData['axis']))
                             else:
                                 self.setMirrorIDs(node, side='Centre', slot=int(index))
                             break
