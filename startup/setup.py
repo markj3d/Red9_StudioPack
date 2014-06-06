@@ -91,7 +91,10 @@ def mayaUpAxis(setAxis=None):
         if vect.y:
             return 'y'
     
-    
+def mayaIsBatch():
+    return cmds.about(batch=True)
+
+  
 # Menu Builders ------------------------------------------------------------------------
    
 def menuSetup(parent='MayaWindow'):
