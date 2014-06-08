@@ -12,6 +12,7 @@ This is the Audio library of utils used throughout the modules
 
 
 '''
+from __future__ import with_statement  # required only for Maya2009/8
 import maya.cmds as cmds
 import maya.mel as mel
 import os
