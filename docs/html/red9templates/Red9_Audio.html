@@ -69,8 +69,17 @@ a &#8216;compile&#8217; flag in the playblast command but it&#8217;s never worke
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.milliseconds_to_Timecode" title="Red9.core.Red9_Audio.milliseconds_to_Timecode"><tt class="xref py py-obj docutils literal"><span class="pre">milliseconds_to_Timecode</span></tt></a>(milliseconds[,&nbsp;...])</td>
 <td>convert milliseconds into correctly formatted timecode</td>
 </tr>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.milliseconds_to_frame" title="Red9.core.Red9_Audio.milliseconds_to_frame"><tt class="xref py py-obj docutils literal"><span class="pre">milliseconds_to_frame</span></tt></a>(milliseconds[,&nbsp;framerate])</td>
+<td>convert milliseconds into frames</td>
+</tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.timecode_to_milliseconds" title="Red9.core.Red9_Audio.timecode_to_milliseconds"><tt class="xref py py-obj docutils literal"><span class="pre">timecode_to_milliseconds</span></tt></a>(timecode[,&nbsp;smpte,&nbsp;...])</td>
 <td>from a properly formatted timecode return it in milliseconds</td>
+</tr>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.timecode_to_frame" title="Red9.core.Red9_Audio.timecode_to_frame"><tt class="xref py py-obj docutils literal"><span class="pre">timecode_to_frame</span></tt></a>(timecode[,&nbsp;smpte,&nbsp;framerate])</td>
+<td>from a properly formatted timecode return it in frames</td>
+</tr>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.frame_to_timecode" title="Red9.core.Red9_Audio.frame_to_timecode"><tt class="xref py py-obj docutils literal"><span class="pre">frame_to_timecode</span></tt></a>(frame[,&nbsp;smpte,&nbsp;framerate])</td>
+<td>from a given frame return that time as timecode</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.frame_to_milliseconds" title="Red9.core.Red9_Audio.frame_to_milliseconds"><tt class="xref py py-obj docutils literal"><span class="pre">frame_to_milliseconds</span></tt></a>(frame[,&nbsp;framerate])</td>
 <td>from a given frame return that time in milliseconds</td>
@@ -110,6 +119,7 @@ a &#8216;compile&#8217; flag in the playblast command but it&#8217;s never worke
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>milliseconds</strong> &#8211; time in milliseconds</li>
 <li><strong>smpte</strong> &#8211; format the timecode HH:MM:SS:FF where FF is frames</li>
 <li><strong>framerate</strong> &#8211; when using smpte this is the framerate used in the FF block
 default (None) uses the current scenes framerate</li>
@@ -125,6 +135,25 @@ default (None) uses the current scenes framerate</li>
 <li>If smpte = True  : the format will be HH:MM:SS:FF  = hours, minutes, seconds, frames</li>
 </ul>
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_Audio.milliseconds_to_frame">
+<tt class="descname">milliseconds_to_frame</tt><big>(</big><em>milliseconds</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.milliseconds_to_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert milliseconds into frames</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>milliseconds</strong> &#8211; time in milliseconds</li>
+<li><strong>framerate</strong> &#8211; when using smpte this is the framerate used in the FF block
+default (None) uses the current scenes framerate</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -149,21 +178,72 @@ default (None) uses the current scenes framerate</li>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_Audio.timecode_to_frame">
+<tt class="descname">timecode_to_frame</tt><big>(</big><em>timecode</em>, <em>smpte=True</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.timecode_to_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a properly formatted timecode return it in frames
+r9Audio.timecode_to_milliseconds(&#8216;09:00:00:00&#8217;)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>timecode</strong> &#8211; &#8216;09:00:00:20&#8217; as a string</li>
+<li><strong>smpte</strong> &#8211; calculate the milliseconds based on HH:MM:SS:FF (frames as last block)</li>
+<li><strong>framerate</strong> &#8211; only used if smpte=True, the framerate to use in the conversion, 
+default (None) uses the current scenes framerate</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_Audio.frame_to_timecode">
+<tt class="descname">frame_to_timecode</tt><big>(</big><em>frame</em>, <em>smpte=True</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.frame_to_timecode" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a given frame return that time as timecode
+relative to the given framerate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>frame</strong> &#8211; current frame in Maya</li>
+<li><strong>smpte</strong> &#8211; calculate the milliseconds based on HH:MM:SS:FF (frames as last block)</li>
+<li><strong>framerate</strong> &#8211; the framerate to use in the conversion, 
+default (None) uses the current scenes framerate</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_Audio.frame_to_milliseconds">
 <tt class="descname">frame_to_milliseconds</tt><big>(</big><em>frame</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.frame_to_milliseconds" title="Permalink to this definition">¶</a></dt>
 <dd><p>from a given frame return that time in milliseconds 
-relative to the given framerate
-:param frame: current frame in Maya
-:param framerate: only used if smpte=True, the framerate to use in the conversion,</p>
-<blockquote>
-default (None) uses the current scenes framerate</blockquote>
+relative to the given framerate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>frame</strong> &#8211; current frame in Maya</li>
+<li><strong>framerate</strong> &#8211; only used if smpte=True, the framerate to use in the conversion, 
+default (None) uses the current scenes framerate</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Audio.combineAudio">
 <tt class="descname">combineAudio</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.combineAudio" title="Permalink to this definition">¶</a></dt>
-<dd><p>this is a logic wrapper over the main compile call in the AudioHandler
-I wanted to keep things simple in the base class</p>
+<dd><p>this is a logic wrapper over the main compile call in the AudioHandler 
+I wanted to keep things simple in the base class.</p>
 </dd></dl>
 
 <dl class="function">

@@ -124,7 +124,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <td>return a list of attributes selected in the ChannelBox</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getChannelBoxAttrs" title="Red9.core.Red9_AnimationUtils.getChannelBoxAttrs"><tt class="xref py py-obj docutils literal"><span class="pre">getChannelBoxAttrs</span></tt></a>([node,&nbsp;asDict,&nbsp;incLocked])</td>
-<td>return a dict of attributes in the ChannelBox by their status.</td>
+<td>return the status of all attrs on the given node, either as a flat list or</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getSettableChannels" title="Red9.core.Red9_AnimationUtils.getSettableChannels"><tt class="xref py py-obj docutils literal"><span class="pre">getSettableChannels</span></tt></a>([node,&nbsp;incStatics])</td>
 <td>return a list of settable attributes on a given node.</td>
@@ -192,9 +192,18 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_AnimationUtils.getNodeAttrStatus">
+<tt class="descname">getNodeAttrStatus</tt><big>(</big><em>node=None</em>, <em>asDict=True</em>, <em>incLocked=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getNodeAttrStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>stub function/ wrapper of getChannelBoxAttrs as the name is a
+little misleading and not really what the function is doing in hindsight.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.getChannelBoxAttrs">
 <tt class="descname">getChannelBoxAttrs</tt><big>(</big><em>node=None</em>, <em>asDict=True</em>, <em>incLocked=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getChannelBoxAttrs" title="Permalink to this definition">¶</a></dt>
-<dd><p>return a dict of attributes in the ChannelBox by their status.</p>
+<dd><p>return the status of all attrs on the given node, either as a flat list or
+a dict. As dict it contains all data which controls the lock, keyable, hidden states etc</p>
+<p>statusDict={&#8216;keyable&#8217;:attrs, &#8216;nonKeyable&#8217;:attrs, &#8216;locked&#8217;:attrs}</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -202,7 +211,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>node</strong> &#8211; given node.</li>
 <li><strong>asDict</strong> &#8211; True returns a dict with keys &#8216;keyable&#8217;,&#8217;locked&#8217;,&#8217;nonKeyable&#8217; of attrs 
-False returns a list (non ordered) of all attrs available on the channelBox.</li>
+False returns a list (non ordered) of all attr states.</li>
 <li><strong>incLocked</strong> &#8211; True by default - whether to include locked channels in the return (only valid if not asDict)</li>
 </ul>
 </td>
@@ -348,7 +357,7 @@ the data as is afterwards</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.AnimationUI.buildPoseList">
-<tt class="descname">buildPoseList</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimationUI.buildPoseList" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">buildPoseList</tt><big>(</big><em>sortBy='name'</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimationUI.buildPoseList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of poses from the PoseRootDir, this allows us to
 filter much faster as it stops all the os calls, cached list instead</p>
 </dd></dl>

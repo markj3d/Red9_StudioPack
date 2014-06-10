@@ -1180,12 +1180,20 @@ class AnimationUI(object):
             width=newSize[0]
             height=newSize[1]
         if width>350:
+            #cmds.scrollLayout(self.MainLayout, e=True, w=width) #new?
             cmds.formLayout(self.form, edit=True, w=width-10)
             #cmds.iconTextButton(self.r9strap, e=True, w=width-10)
         else:
             cmds.scrollLayout(self.MainLayout, e=True, w=350)
-        if height>440:
-            cmds.scrollLayout('uiglPoseScroll', e=True, h=height-430)
+            
+        if height>440:  # 440 
+            cmds.scrollLayout('uiglPoseScroll', e=True, h=max(height-430, 200))
+        
+        print 'width self.dockCnt:', cmds.dockControl(self.dockCnt, q=True, w=True)
+        print 'width self.MainLayout:', cmds.scrollLayout(self.MainLayout, q=True, w=True)
+        print 'width self.form:', cmds.formLayout(self.form, q=True, w=True)
+        print 'width poseScroll:', cmds.scrollLayout('uiglPoseScroll', q=True, w=True)
+        
                                    
     def __uiCB_setCopyKeyPasteMethod(self, *args):
         self.ANIM_UI_OPTVARS['AnimationUI']['keyPasteMethod'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)

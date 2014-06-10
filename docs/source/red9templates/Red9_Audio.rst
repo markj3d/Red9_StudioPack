@@ -17,7 +17,10 @@ a 'compile' flag in the playblast command but it's never worked.
    .. autosummary::
    
       milliseconds_to_Timecode
+      milliseconds_to_frame
       timecode_to_milliseconds
+      timecode_to_frame
+      frame_to_timecode
       frame_to_milliseconds
       combineAudio
       inspect_wav

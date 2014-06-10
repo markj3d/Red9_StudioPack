@@ -25,19 +25,25 @@ import Red9.startup.setup as r9Setup
 
 import wave
 import contextlib
-from ..packages.pydub.pydub import audio_segment
-
+   
 import logging
 logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
-
+try:
+    from ..packages.pydub.pydub import audio_segment
+except:
+    log.debug('unable to import pydub libs')
+    
+    
+## Timecode conversion utilities   -----------------------------------------------------
 
 def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=None):
         '''
         convert milliseconds into correctly formatted timecode
         
+        :param milliseconds: time in milliseconds
         :param smpte: format the timecode HH:MM:SS:FF where FF is frames
         :param framerate: when using smpte this is the framerate used in the FF block
             default (None) uses the current scenes framerate
@@ -79,7 +85,20 @@ def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=None):
                                         __zeropad(seconds),
                                         __zeropad(frame))
   
-          
+
+def milliseconds_to_frame(milliseconds, framerate=None):
+    '''
+    convert milliseconds into frames
+        
+    :param milliseconds: time in milliseconds
+    :param framerate: when using smpte this is the framerate used in the FF block
+        default (None) uses the current scenes framerate
+    '''
+    if not framerate:
+        framerate=r9General.getCurrentFPS()
+    return  (float(milliseconds) / 1000) * framerate    
+    
+             
 def timecode_to_milliseconds(timecode, smpte=True, framerate=None):
     '''
     from a properly formatted timecode return it in milliseconds
@@ -105,11 +124,37 @@ def timecode_to_milliseconds(timecode, smpte=True, framerate=None):
         actual += int(data[3])
     return actual
 
-
+def timecode_to_frame(timecode, smpte=True, framerate=None): 
+    '''
+    from a properly formatted timecode return it in frames
+    r9Audio.timecode_to_milliseconds('09:00:00:00')
+    
+    :param timecode: '09:00:00:20' as a string
+    :param smpte: calculate the milliseconds based on HH:MM:SS:FF (frames as last block)
+    :param framerate: only used if smpte=True, the framerate to use in the conversion, 
+        default (None) uses the current scenes framerate
+    ''' 
+    ms=timecode_to_milliseconds(timecode, smpte=smpte, framerate=framerate)
+    return milliseconds_to_frame(ms, framerate)
+    
+def frame_to_timecode(frame, smpte=True, framerate=None):
+    '''
+    from a given frame return that time as timecode
+    relative to the given framerate
+    
+    :param frame: current frame in Maya
+    :param smpte: calculate the milliseconds based on HH:MM:SS:FF (frames as last block)
+    :param framerate: the framerate to use in the conversion, 
+        default (None) uses the current scenes framerate
+    '''
+    ms=frame_to_milliseconds(frame, framerate)
+    return milliseconds_to_Timecode(ms, smpte=smpte, framerate=framerate)
+    
 def frame_to_milliseconds(frame, framerate=None):
     '''
     from a given frame return that time in milliseconds 
     relative to the given framerate
+    
     :param frame: current frame in Maya
     :param framerate: only used if smpte=True, the framerate to use in the conversion, 
         default (None) uses the current scenes framerate
@@ -118,11 +163,13 @@ def frame_to_milliseconds(frame, framerate=None):
         framerate=r9General.getCurrentFPS()
     return (frame / float(framerate)) * 1000
     
-    
+
+
 def combineAudio():
     '''
-    this is a logic wrapper over the main compile call in the AudioHandler
-    I wanted to keep things simple in the base class
+    this is a logic wrapper over the main compile call in the AudioHandler 
+    I wanted to keep things simple in the base class. 
+    
     '''
     prompt=False
     filepath = None
