@@ -22,6 +22,7 @@ maya.standalone.initialize(name='python')
 import Red9.core.Red9_Audio as r9Audio
 import Red9.core.Red9_General as r9General
 import Red9.startup.setup as r9Setup
+import Red9.core.Red9_CoreUtils as r9Core
 r9Setup.start(Menu=False)
 
 #force the upAxis, just in case
@@ -97,4 +98,41 @@ class Test_BwavHandler(object):
     def test_compiler(self):
         self.audioNode.stampCompiled(self.audioNode.audioNode)
         assert self.audioNode.isCompiled
+        
+        
+class Test_timecode_converts(object):
+    def setup(self):
+        cmds.file(new=True,f=True)
+
+    def test_full_convert(self):
+        '''
+        full round the houses process back to input value through all converts
+        '''
+        framerate=30.0
+        timecode='00:10:13:22'
+        
+        a=r9Audio.timecode_to_milliseconds(timecode, smpte=True, framerate=framerate)
+        assert r9Core.floatIsEqual(a, 613733.333333, 0.0001)
+        
+        b=r9Audio.milliseconds_to_frame(a, framerate=framerate)
+        assert r9Core.floatIsEqual(b, 18412.0, 0.0001)
+        
+        c=r9Audio.frame_to_milliseconds(b, framerate=framerate)
+        assert r9Core.floatIsEqual(c, 613733.333333, 0.0001)
+        
+        d=r9Audio.milliseconds_to_Timecode(c, smpte=False, framerate=framerate)
+        assert d=='00:10:13:733'  # note converted to non-smpte
+        
+        e=r9Audio.timecode_to_frame(d, smpte=False, framerate=framerate)
+        assert r9Core.floatIsEqual(e, 18411.99, 0.0001)
+        
+        f=r9Audio.frame_to_timecode(e, smpte=True, framerate=framerate)
+        assert f=='00:10:13:22'
+        
+        assert f==timecode
+        
+        
+    
+
+        
                                                         
