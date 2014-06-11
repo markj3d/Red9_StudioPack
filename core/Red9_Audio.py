@@ -96,7 +96,7 @@ def milliseconds_to_frame(milliseconds, framerate=None):
     '''
     if not framerate:
         framerate=r9General.getCurrentFPS()
-    return  (float(milliseconds) / 1000) * framerate    
+    return  (float(milliseconds) / 1000) * framerate
     
              
 def timecode_to_milliseconds(timecode, smpte=True, framerate=None):
@@ -115,6 +115,8 @@ def timecode_to_milliseconds(timecode, smpte=True, framerate=None):
     data = timecode.split(':')
     if not len(data) ==4:
         raise IOError('timecode should be in the format "09:00:00:00"')
+    if smpte and int(data[3])>framerate:
+        raise IOError('timecode is badly formatted, frameblock is greater than given framerate')
     actual = int(data[0]) * 3600000
     actual += int(data[1]) * 60000
     actual += int(data[2]) * 1000
@@ -124,7 +126,7 @@ def timecode_to_milliseconds(timecode, smpte=True, framerate=None):
         actual += int(data[3])
     return actual
 
-def timecode_to_frame(timecode, smpte=True, framerate=None): 
+def timecode_to_frame(timecode, smpte=True, framerate=None):
     '''
     from a properly formatted timecode return it in frames
     r9Audio.timecode_to_milliseconds('09:00:00:00')
