@@ -329,6 +329,11 @@ class AudioHandler(object):
         for a in self.audioNodes:
             a.delete()
     
+    def bwav_sync_to_Timecode(self):
+        for audio in self.audioNodes:
+            if audio.isBwav():
+                audio.bwav_sync_to_Timecode()
+            
 #     def delCombined(self):
 #         audioNodes=cmds.ls(type='audio')
 #         if not audioNodes:
@@ -472,7 +477,11 @@ class AudioNode(object):
             return cmds.getAttr('%s.endFrame' % self.audioNode)  # why the hell does this always come back 1 frame over??
         else:
             return self.getLengthFromWav() + self.startFrame
-        
+         
+    @endFrame.setter
+    def endFrame(self, val):
+        cmds.setAttr('%s.offset' % self.audioNode, val)
+           
     @property
     def startTime(self):
         '''
@@ -480,12 +489,26 @@ class AudioNode(object):
         '''
         return (self.startFrame / r9General.getCurrentFPS()) * 1000
     
+    @startTime.setter
+    def startTime(self, val):
+        '''
+        this is in milliseconds
+        '''
+        cmds.setAttr('%s.offset' % self.audioNode, milliseconds_to_frame(val, framerate=None))
+       
     @property
     def endTime(self):
         '''
         this is in milliseconds
         '''
         return (self.endFrame / r9General.getCurrentFPS()) * 1000
+    
+    @endTime.setter
+    def endTime(self, val):
+        '''
+        this is in milliseconds
+        '''
+        cmds.setAttr('%s.offset' % self.audioNode, milliseconds_to_frame(val, framerate=None))
     
     # BWAV support ##=============================================
 
@@ -636,7 +659,16 @@ class AudioNode(object):
         '''
         return milliseconds_to_Timecode(self.bwav_timecodeMS(), smpte=smpte, framerate=framerate)
 
-
+    def bwav_sync_to_Timecode(self):
+        '''
+        given that self is a Bwav and has timecode reference, sync it's position
+        in the Maya timeline to match
+        '''
+        print milliseconds_to_Timecode(self.bwav_timecodeMS(), smpte=True, framerate=None)
+        print milliseconds_to_frame(self.bwav_timecodeMS(), framerate=None)
+        self.startTime=self.bwav_timecodeMS()
+        
+        
     # Bwav end =========================================================
     
     def isValid(self):
