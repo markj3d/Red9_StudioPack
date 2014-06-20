@@ -330,6 +330,12 @@ class AudioHandler(object):
             a.delete()
     
     def bwav_sync_to_Timecode(self):
+        '''
+        process either selected or all audio nodes and IF they are found to be
+        BWav's with valid timecode references, sync them in Maya such
+        that their offset = Bwav's timecode ie: sync them on the timeline to
+        the bwavs internal timecode.
+        '''
         for audio in self.audioNodes:
             if audio.isBwav():
                 audio.bwav_sync_to_Timecode()
