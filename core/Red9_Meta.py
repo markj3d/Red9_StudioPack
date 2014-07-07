@@ -1215,7 +1215,7 @@ class MetaClass(object):
             log.debug('"%s" :  Attr already exists on the Node' % attr)
 
             #allow some of the standard edit flags to be run even if the attr exists
-            addCmdEditFlags=['minValue','maxValue','defaultValue','dv',
+            addCmdEditFlags=['min','minValue','max','maxValue','defaultValue','dv',
                              'softMinValue','smn','softMaxValue','smx','enumName']
             setCmdEditFlags=['keyable','k','lock','l','channelBox','cb']
             
@@ -1567,19 +1567,19 @@ class MetaClass(object):
         :param deleteDestPlug: if True delete the DESTINATION side attribiute after disconnection
                         but ONLY if it's no longer connected to anything else.
         
-        #testCode:
-        master  = r9Meta.MetaClass(name = 'master')
-        master2 = r9Meta.MetaClass(name = 'master2')
-        child1 = r9Meta.MetaClass(name = 'child1')
-        child2 = r9Meta.MetaClass(name = 'child2')
-        cube=cmds.ls(cmds.polyCube()[0],l=True)[0]
-        master.connectChildren([child1,child2,cube],'modules','puppet')
-        master2.connectChildren([child1.mNode,child2.mNode,cube],'time','master',force=True)
-        master.connectChildren([child1,child2],'time','master',cleanCurrent=True)
-        
-        master.disconnectChild(child2,'time')
-        or
-        master.disconnectChild(child2)
+        >>> #testCode:
+        >>> master  = r9Meta.MetaClass(name = 'master')
+        >>> master2 = r9Meta.MetaClass(name = 'master2')
+        >>> child1 = r9Meta.MetaClass(name = 'child1')
+        >>> child2 = r9Meta.MetaClass(name = 'child2')
+        >>> cube=cmds.ls(cmds.polyCube()[0],l=True)[0]
+        >>> master.connectChildren([child1,child2,cube],'modules','puppet')
+        >>> master2.connectChildren([child1.mNode,child2.mNode,cube],'time','master',force=True)
+        >>> master.connectChildren([child1,child2],'time','master',cleanCurrent=True)
+        >>> 
+        >>> master.disconnectChild(child2,'time')
+        >>> #or
+        >>> master.disconnectChild(child2)
         '''
         sPlug=None
         dPlug=None

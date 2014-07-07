@@ -5,7 +5,6 @@
 
 import Red9.core.Red9_Meta as r9Meta
 import maya.cmds as cmds
-reload(r9Meta)
 
 #make a new blank mClass MayaNode
 node=r9Meta.MetaClass()
@@ -63,19 +62,26 @@ node.enum=2
 node.enum   #>>2
 
 
-#dict handling
-data=dict(node.__dict__)        #make a new test dict for this demo
-node.addAttr('jsonTest', data)  #create a string attr with JSON serialized data
-node.jsonTest['stringTest']     #will deserialize the MayaNode jsonTest attr back to a dict and return its key['stringTest']
+#JSON handling
+#make a new test dict for this demo
+testDict={'jsonFloat':1.05,'Int':3,'jsonString':'string says hello','jsonBool':True}
+node.addAttr('jsonTest', testDict)  #create a string attr with JSON serialized data
+node.jsonTest['jsonString']     #will deserialize the MayaNode jsonTest attr back to a dict and return its key['stringTest']
 
 #double handling
-#adds a double3 attr with subAttrs 'dblA,dblB,dblC', sets them as doubles with min/max vaules, 
+#adds a double3 attr with subAttrs 'doubleTestX,doubleTestY,doubleTesZ', sets them as doubles with min/max vaules, 
 #sets their values to 1,2,10, then exposes them to the channelBox!
 node.addAttr('doubleTest', attrType='double3', value=(1.0,2.0,10.0), min=1, max=15, hidden=False)
 
 
 #message attribute handling:
 #----------------------------
+
+cmds.ls(cmds.polyCube()[0],l=True)[0]
+cmds.ls(cmds.polyCube()[0],l=True)[0]
+cmds.ls(cmds.polyCube()[0],l=True)[0]
+cmds.ls(cmds.polyCube()[0],l=True)[0]
+
 #create a non multi-message attr and wire pCube1 to it     
 node.addAttr('msgSingleTest', value='pCube1', attrType='messageSimple')
 node.msgSingleTest  #>> ['pCube1']   
@@ -90,7 +96,12 @@ node.msgMultiTest   #>> ['pCube1'] #pCube2 and pCube3 have now been disconnected
 node.msgMultiTest=['pCube2','pCube3']
 node.msgMultiTest   #>>['pCube2','pCube3']
 
+#connect the cube up using the main connectChild call
+node.connectChild('pCube4','myChild')
+node.myChild 
 
+#deleting an attribute is the same as standard Python
+delattr(node,'attr_to_delete')
 
 '''
 Blind Usage for any Maya Node
