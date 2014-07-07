@@ -3656,6 +3656,7 @@ class FilterCurves(object):
     def resampleCurves(self, *args):
         '''
         straight resample of curves using a managed cmds.bakeResults call
+        :param args[0]: this is the step used in the resample
         '''
         step = args[0]
         if self.snapToFrame:
