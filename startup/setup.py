@@ -16,7 +16,7 @@ THIS SHOULD NOT REQUIRE ANY OF THE RED9.core modules
 
 
 __author__ = 'Mark Jackson'
-__buildVersionID__ = 1.43
+__buildVersionID__ = 1.44
 installedVersion= False
 
 import sys
@@ -296,17 +296,19 @@ def red9ButtonBGC(colour):
         return [0.5, 0.5, 0.5]
    
 def red9ContactInfo(*args):
+    import Red9.core.Red9_General as r9General  # lazy load
     result=cmds.confirmDialog(title='Red9_StudioPack : build %f' % red9_getVersion(),
                        message=("Author: Mark Jackson\r\r"+
                                 "Technical Animation Director\r\r"+
                                 "Contact me at rednineinfo@gmail.com for more information\r\r"+
                                 "thanks for trying the toolset. If you have any\r"+
                                 "suggestions or bugs please let me know!"),
-                       button=['thankyou','ChangeLog'],messageAlign='center')
+                       button=['Red9Consultancy.com','ChangeLog','Close'],messageAlign='center')
     if result == 'ChangeLog':
-        import Red9.core.Red9_General as r9General  # lazy load
         r9General.os_OpenFile(os.path.join(red9ModulePath(),'changeLog.txt'))
-    
+    if result =='Red9Consultancy.com':
+        r9General.os_OpenFile('http://red9consultancy.com/')
+        
 def red9Presets():
     return os.path.join(red9ModulePath(), 'presets')
     
