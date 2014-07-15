@@ -1,0 +1,24 @@
+[mirror]
+	[[Right]]
+		[[[1]]]
+			node = |rigRoot|rightWrist
+			axisAttr = True
+			axis = translateZ, rotateX, rotateY
+		[[[2]]]
+			node = |rigRoot|rightFoot
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+	[[Left]]
+		[[[1]]]
+			node = |rigRoot|leftWrist
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[2]]]
+			node = |rigRoot|leftFoot
+			axisAttr = True
+			axis = ,
+	[[Centre]]
+		[[[2]]]
+			node = |rigRoot|root
+			axisAttr = True
+			axis = rotateY,
