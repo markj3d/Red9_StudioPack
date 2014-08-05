@@ -1395,7 +1395,8 @@ class AnimationUI(object):
             return self.poses
         files=os.listdir(self.posePath)
         if sortBy == 'name':
-            files.sort()
+            files=r9Core.sortNumerically(files)
+            #files.sort()
         elif sortBy == 'date':
             files.sort(key=lambda x: os.stat(os.path.join(self.posePath, x)).st_mtime)
             files.reverse()
@@ -1419,10 +1420,6 @@ class AnimationUI(object):
                     if srch and srch.upper() in pose.upper():
                         if not pose in filteredPoses:
                             filteredPoses.append(pose)
-            #filteredPoses = [pose for pose in self.poses for srch in filters if srch and srch.upper() in pose.upper()]
-        
-        #filteredPoses = sorted(list(set(filteredPoses)))
-        #filteredPoses.sort(key=lambda x: os.stat(os.path.join(self.posePath, x)).st_mtime)
         return filteredPoses
     
     def __validatePoseFunc(self, func):
@@ -4350,7 +4347,7 @@ class MirrorSetup(object):
         self.mirrorClass.saveMirrorSetups(filepath=filepath)
 
     def __loadMirrorSetups(self):
-        filepath = cmds.fileDialog2(fileFilter="mirrorMap Files (*.mirrorMap *.mirrorMap);;", okc='Load', cap='Load MirrorSetups')[0]
+        filepath = cmds.fileDialog2(fileFilter="mirrorMap Files (*.mirrorMap *.mirrorMap);;", okc='Load', cap='Load MirrorSetups', fileMode=1)[0]
         if cmds.checkBox('mirrorSaveLoadHierarchy', q=True, v=True):
             self.mirrorClass.nodes = cmds.ls(sl=True, l=True)
             self.mirrorClass.loadMirrorSetups(filepath=filepath, clearCurrent=cmds.checkBox('mirrorClearCurrent', q=True, v=True))
