@@ -143,6 +143,10 @@ Fix - Red9_Audio - added correct float conversion to all the timecode and framer
 v1.44:
 -----
 Fix - Red9_Anim - MirrorSetup wasn't loading axis data correctly when set to none
-Mod - Red9_Anim - Pose search now allows sort by name or date
-Mod - Red9_Anim - mods to the way the AnimUI passes and manages the matchMethod flag. PoseLoad now respects the flag, also added matchMethod as an optionMenu and included 'index' method
-Fix - Red9_Anim - Managed the UndoStack for the poseBlender UI so all drag goes to a single undoChunk
+Mod - Red9_Anim - Pose search now allows sort by name or date, sort by name has proper numeric handling
+Mod - Red9_Anim - mods to the way the AnimUI passes and manages the matchMethod flag. PoseLoad now respects the flag, also added matchMethod as an optionMenu and included 'index' method. Index matches hierarchies purely on their hierarchy order like Maya natively does - no filtering or matching carried out.
+Fix - Red9_Anim - Managed the UndoStack for the poseBlender UI so all drag goes to a single undoChunk.
+Fix - Red9_Anim - MirrorMap Load now has dialog set so that it doesn't prompt to over-write
+
+
+
