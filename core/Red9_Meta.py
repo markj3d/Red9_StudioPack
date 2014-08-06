@@ -66,6 +66,10 @@ except:
     #Meta Fails under Maya2009 because of Python2.5 issues
     log.warning('json is not supported in Python2.5')
     #import Red9.packages.simplejson as json
+    
+    
+global RED9_META_NODECACHE
+RED9_META_NODECACHE = {}
 
 '''
 CRUCIAL - REGISTER INHERITED CLASSES! ==============================================
@@ -193,6 +197,63 @@ def getMClassNodeTypes():
 def resetMClassNodeTypes():
     registerMClassNodeMapping(nodeTypes=None)
 
+    
+    
+    
+    
+# NodeCache Management ---------------------------
+  
+ 
+def registerMClassNodeCache(mNode):
+    '''
+    Hook to allow you to extend the type of nodes included in all the
+    getMeta searches. Allows you to expand into using nodes of any type
+    as metaNodes
+    
+    :param nodeTypes: allows you to expand metaData and use any nodeType
+                    default is always 'network'
+ 
+    .. note::
+        this now validates 'nodeTypes' against Maya registered nodeTypes before being
+        allowed into the registry. Why, well lets say you have a new nodeType from a
+        plugin but that plugin isn't currently loaded, this now stops that type being
+        generically added by any custom boot sequence.
+    '''
+    global RED9_META_NODECACHE
+    if RED9_META_NODECACHE or not mNode.mNode in RED9_META_NODECACHE.keys():
+        log.debug('CACHE : Adding to MetaNode Cache : %s' % mNode.mNode)
+        RED9_META_NODECACHE[mNode.mNode]=mNode
+  
+def printMetaCacheRegistry():
+    for k,v in RED9_META_NODECACHE.items():
+        print k,v
+
+def getMetaFromCache(mNode):
+    if mNode in RED9_META_NODECACHE.keys():
+        if RED9_META_NODECACHE[mNode].isValidMObject():
+            log.debug('CACHE : %s Returning mNode from cache!' % mNode)
+            return RED9_META_NODECACHE[mNode]
+        else:
+            #RED9_META_NODECACHE.pop(mNode)
+            #log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
+            cleanCache()
+    
+def cleanCache():
+    for k, v in RED9_META_NODECACHE.items():
+        try:
+            if not v.isValidMObject():
+                RED9_META_NODECACHE.pop(k)
+                log.debug('CACHE : %s being Removed from the cache due to invalid MObject' % k)
+        except:
+            log.debug('CACHE : clean failure')
+       
+def getMClassNodeCache():
+    '''
+    Generic getWrapper for all nodeTypes registered in the Meta_NodeType global
+    '''
+    return RED9_META_NODECACHE
+
+    
     
 # ====================================================================================
     
@@ -695,7 +756,9 @@ def pymelHandler(func):
 # Main Meta Class ==========================================================
 
 class MetaClass(object):
-           
+    
+    cached = None
+        
     def __new__(cls, *args, **kws):
         '''
         Idea here is if a MayaNode is passed in and has the mClass attr
@@ -706,6 +769,12 @@ class MetaClass(object):
         mNode=None
         if args:
             mNode=args[0]
+            
+            if mNode:
+                MetaClass.cached=getMetaFromCache(mNode)
+                if MetaClass.cached:
+                    return MetaClass.cached
+                
             if isMetaNode(mNode):
                 mClass=getMClassDataFromNode(mNode)
         if mClass:
@@ -721,7 +790,7 @@ class MetaClass(object):
             else:
                 raise StandardError('Node has an unRegistered mClass attr set')
         else:
-            log.debug("mClass not found or Registered")
+            log.debug("mClass not found, given or registered")
             return super(cls.__class__, cls).__new__(cls)
     
     #@pymelHandler
@@ -746,6 +815,10 @@ class MetaClass(object):
         .. note::  
             mNode is now a wrap on the MObject so will always be in sync even if the node is renamed/parented
         '''
+        if node and MetaClass.cached:
+            log.debug('CACHE : Aborting __init__ on pre-cached Object')
+            return
+
         #data that will not get pushed to the Maya node
         object.__setattr__(self, '_MObject', '')
         object.__setattr__(self, '_MObjectHandle', '')
@@ -790,6 +863,9 @@ class MetaClass(object):
         #Maya node attrs, so you get autocomplete on ALL attrs in the script editor!
         if autofill=='all' or autofill=='messageOnly':
             self.__fillAttrCache__(autofill)
+        
+        #register the class to the Cache
+        registerMClassNodeCache(self)
      
      
     def __bindData__(self):
@@ -1015,7 +1091,7 @@ class MetaClass(object):
                         try:
                             cmds.setAttr(attrString, value[0], value[1], value[2])
                         except ValueError, error:
-                            raise ValueError(error)      
+                            raise ValueError(error)
                     elif attrType == 'doubleArray':
                         cmds.setAttr(attrString, value, type='doubleArray')
                     elif attrType == 'matrix':
@@ -2367,7 +2443,7 @@ class MetaHIKCharacterNode(MetaRig):
     and useful for management in the systems
     '''
     def __init__(self, *args, **kws):
-        #kws.setdefault('autofill','messageOnly')
+        kws.setdefault('autofill','messageOnly')
         super(MetaHIKCharacterNode, self).__init__(*args,**kws)
 
     def __getMessageAttr__(self, attr):
