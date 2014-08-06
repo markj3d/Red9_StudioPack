@@ -856,6 +856,7 @@ class MetaClass(object):
                 self.mNodeID=node.split('|')[-1].split(':')[-1]
             if isMetaNode(node):
                 log.debug('Meta Node Passed in : %s' % node)
+                registerMClassNodeCache(self)
             else:
                 log.debug('Standard Maya Node being metaManaged')
                 
@@ -871,8 +872,7 @@ class MetaClass(object):
             self.__fillAttrCache__(autofill)
         
         #register the class to the Cache
-        registerMClassNodeCache(self)
-        #self.cached=True  # set the internal cache attr
+        #registerMClassNodeCache(self)
      
      
     def __bindData__(self):
