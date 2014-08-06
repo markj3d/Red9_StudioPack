@@ -206,18 +206,10 @@ def resetMClassNodeTypes():
  
 def registerMClassNodeCache(mNode):
     '''
-    Hook to allow you to extend the type of nodes included in all the
-    getMeta searches. Allows you to expand into using nodes of any type
-    as metaNodes
+    Add a given mNode to the global RED9_META_NODECACHE cache of currently instantiated 
+    MetaNode objects.
     
-    :param nodeTypes: allows you to expand metaData and use any nodeType
-                    default is always 'network'
- 
-    .. note::
-        this now validates 'nodeTypes' against Maya registered nodeTypes before being
-        allowed into the registry. Why, well lets say you have a new nodeType from a
-        plugin but that plugin isn't currently loaded, this now stops that type being
-        generically added by any custom boot sequence.
+    :param mNode: instantiated mNode to add
     '''
     global RED9_META_NODECACHE
     if RED9_META_NODECACHE or not mNode.mNode in RED9_META_NODECACHE.keys():
@@ -225,20 +217,34 @@ def registerMClassNodeCache(mNode):
         RED9_META_NODECACHE[mNode.mNode]=mNode
   
 def printMetaCacheRegistry():
+    '''
+    print the current VALID Cache of instantiated MetaNodes 
+    Note that we call a cleanCache before printing to remove any 
+    currently invalid MObjects from the Cache.
+    '''
+    cleanCache()
     for k,v in RED9_META_NODECACHE.items():
         print k,v
 
 def getMetaFromCache(mNode):
+    '''
+    Pull the given mNode from the RED9_META_NODECACHE if it's
+    already be instantiated.
+    '''
     if mNode in RED9_META_NODECACHE.keys():
         if RED9_META_NODECACHE[mNode].isValidMObject():
             log.debug('CACHE : %s Returning mNode from cache!' % mNode)
             return RED9_META_NODECACHE[mNode]
         else:
             #RED9_META_NODECACHE.pop(mNode)
-            #log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
+            log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
             cleanCache()
     
 def cleanCache():
+    '''
+    Run through the current cache of metaNodes and confirm that their all
+    still valid by testing the MObjectHandles
+    '''
     for k, v in RED9_META_NODECACHE.items():
         try:
             if not v.isValidMObject():
@@ -771,7 +777,7 @@ class MetaClass(object):
             mNode=args[0]
             
             if mNode:
-                MetaClass.cached=getMetaFromCache(mNode)
+                MetaClass.cached = getMetaFromCache(mNode)  # Do Not run __new__ if the node is in the Cache
                 if MetaClass.cached:
                     return MetaClass.cached
                 
@@ -866,6 +872,7 @@ class MetaClass(object):
         
         #register the class to the Cache
         registerMClassNodeCache(self)
+        #self.cached=True  # set the internal cache attr
      
      
     def __bindData__(self):
