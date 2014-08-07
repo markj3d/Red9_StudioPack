@@ -232,13 +232,16 @@ def getMetaFromCache(mNode):
     already be instantiated.
     '''
     if mNode in RED9_META_NODECACHE.keys():
-        if RED9_META_NODECACHE[mNode].isValidMObject():
-            log.debug('CACHE : %s Returning mNode from cache!' % mNode)
-            return RED9_META_NODECACHE[mNode]
-        else:
-            #RED9_META_NODECACHE.pop(mNode)
-            log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
-            cleanCache()
+        try:
+            if RED9_META_NODECACHE[mNode].isValidMObject():
+                log.debug('CACHE : %s Returning mNode from cache!' % mNode)
+                return RED9_META_NODECACHE[mNode]
+            else:
+                #RED9_META_NODECACHE.pop(mNode)
+                log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
+                cleanCache()
+        except:
+            log.debug('CACHE : inspection failure')
     
 def cleanCache():
     '''
@@ -2617,7 +2620,13 @@ class MetaHUDNode(MetaClass):
         for hud in HUDS:
             if 'MetaHUDConnector' in hud:
                 self.hudGroupActive=True
-                    
+    
+    def __compute__(self, attr, *args):
+        '''
+        Allows us to modify the data being draw when over-loading this class
+        '''
+        return getattr(self, attr)
+                          
     def addMonitoredAttr(self, attr, value=None, attrType=None, refresh=True):
         '''
         wrapper that not only adds an attr to the metaNode, but also adds it
@@ -2682,7 +2691,8 @@ class MetaHUDNode(MetaClass):
                                         label=attr,
                                         labelFontSize=self.size,
                                         allowOverlap=True,
-                                        command=partial(getattr,self,attr),
+                                        #command=partial(getattr,self,attr),
+                                        command=partial(self.__compute__,attr),
                                         event='timeChanged')
                 else:
                     cmds.headsUpDisplay(metaHudItem,
@@ -2693,7 +2703,8 @@ class MetaHUDNode(MetaClass):
                                         labelFontSize=self.size,
                                         allowOverlap=True,
                                         attachToRefresh=True,
-                                        command=partial(getattr,self,attr))
+                                        command=partial(self.__compute__,attr))
+                                        #command=partial(getattr,self,attr))
             else:
                 print 'node : ', self.mNode,' attrs : ', attr
                 connectedData=cmds.listConnections('%s.%s' % (self.mNode,attr),
