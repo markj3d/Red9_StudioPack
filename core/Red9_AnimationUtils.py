@@ -3058,12 +3058,12 @@ class AnimFunctions(object):
                 if trans:
                     cmds.setKeyframe(destObj, at='translate')
             except:
-                pass
+                log.debug('failed to set translate key on %s' % destObj)
             try:
                 if rots:
                     cmds.setKeyframe(destObj, at='rotate')
             except:
-                pass
+                log.debug('failed to set rotate key on %s' % destObj)
                       
         cmds.delete(deleteMe)
         cmds.autoKeyframe(state=autokeyState)
