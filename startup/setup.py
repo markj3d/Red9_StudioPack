@@ -506,6 +506,9 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
     #mel.eval('global float $buildInstalled=%f' % red9_getVersion())
     
     log.info('Red9 StudioPack Complete!')
+    
+    if os.path.exists(os.path.join(red9ModulePath(),'pro_pack')):
+        cmds.evalDeferred("import Red9.pro_pack",lp=True)  # Unresolved Import
 
     
     
