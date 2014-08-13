@@ -712,6 +712,10 @@ class FilterNode(object):
             would return the shape node, this clamps the return to it's Transform node, default=False
 
         :return: a list of nodes who type match the given search list
+        
+        TODO: Add the ability to use the NOT: operator in this, so for example, nodeTypes=transform
+        would return all mesh nodes too, or rather the transform from a mesh, maybe you'd want to
+        clamp that and prevent mesh transforms being returned? Is this even reasonable???
         '''
       
         self.foundNodeTypes = []
@@ -724,7 +728,7 @@ class FilterNode(object):
             nodeTypes = [nodeTypes]
         
         if self.processMode=='Selected' and len(self.rootNodes)==1:
-            #PreProcess Set selections and add all members to the test
+            #PreProcess set selections and add all members to the test
             #TO DO: have this process multiple selected Sets
             if cmds.nodeType(self.rootNodes[0])=='character':
                 nodes = self.lsCharacterMembers()
