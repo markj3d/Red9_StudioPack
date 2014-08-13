@@ -158,48 +158,6 @@ def decodeString(val):
     #log.debug('Decoded as type(string)')
     return val
 
-def floatIsEqual(a, b, tolerance=0.01, allowGimbal=True):
-    '''
-    compare 2 floats with tolerance.
-    
-    :param a: value 1 
-    :param b: value 2 
-    :param tolerance: compare with this tolerance default=0.001 
-    :param allowGimbal: allow values differences to be divisible by 180 compensate for gimbal flips 
-    
-    '''
-    if abs(a - b) < tolerance:
-        return True
-    else:
-        if allowGimbal:
-            mod = abs(a - b) % 180.0
-            if mod < tolerance:
-                log.debug('compare passed with gimbal : %f == %f : diff = %f' % (a, b, mod))
-                return True
-            elif abs(180.0 - mod) < tolerance:
-                log.debug('compare passed with gimbal 180 : %f == %f : diff = %f' % (a, b, abs(180 - mod)))
-                return True
-            elif abs(90.0 - mod) < tolerance:
-                log.debug('compare passed with gimbal 90 : %f == %f diff = %f' % (a, b, abs(90.0 - mod)))
-                return True
-            log.debug('compare with gimbal failed against mod 180: best diff :%f' % (abs(180.0-mod)))
-            log.debug('compare with gimbal failed against mod 90: best diff :%f' % (abs(90.0-mod)))
-    log.debug('float is out of tolerance : %f - %f == %f' % (a, b, abs(a - b)))
-    return False
-
-def valueToMappedRange(value, currentMin, currentMax, givenMin, givenMax):
-    '''
-    we have a min max range, lets say 0.5 - 15 and we want to map the
-    range to a new range say 0-1 and return where the value given is
-    in that new range
-    '''
-    # Figure out how 'wide' each range is
-    currentSpan = currentMax - currentMin
-    givenSpan = givenMax - givenMin
-    # Convert the left range into a 0-1 range (float)
-    valueScaled = float(value - currentMin) / float(currentSpan)
-    # Convert the 0-1 range into a value in the right range.
-    return givenMin + (valueScaled * givenSpan)
     
 def validateString(strText):
     '''
@@ -1327,6 +1285,20 @@ class FilterNode(object):
             return self.intersectionData
 
 
+def getBlendTargetsFromMesh(mesh):
+    '''
+    quick func to return the blendshape targets found from a give mesh's connected blendshape's
+    '''
+    targetList=[]
+    blendshapes=[node for node in cmds.listHistory('parrish_head_geoShape') if cmds.nodeType(node)=='blendShape']
+    if blendshapes:
+        for blend in blendshapes:
+            weights=cmds.aliasAttr(blend,q=True)
+            targetList=(zip(weights[1::2],weights[0::2]))
+    return targetList
+    
+    
+
 #Node Matching -------------------------------------------------------------------------
             
 def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
@@ -2160,6 +2132,52 @@ class TimeOffset(object):
             log.info('%i : AnimClips were offset' % len(clips))
  
  
+
+#Math functions ----------------------------------------------------------------------
+
+def floatIsEqual(a, b, tolerance=0.01, allowGimbal=True):
+    '''
+    compare 2 floats with tolerance.
+    
+    :param a: value 1 
+    :param b: value 2 
+    :param tolerance: compare with this tolerance default=0.001 
+    :param allowGimbal: allow values differences to be divisible by 180 compensate for gimbal flips 
+    
+    '''
+    if abs(a - b) < tolerance:
+        return True
+    else:
+        if allowGimbal:
+            mod = abs(a - b) % 180.0
+            if mod < tolerance:
+                log.debug('compare passed with gimbal : %f == %f : diff = %f' % (a, b, mod))
+                return True
+            elif abs(180.0 - mod) < tolerance:
+                log.debug('compare passed with gimbal 180 : %f == %f : diff = %f' % (a, b, abs(180 - mod)))
+                return True
+            elif abs(90.0 - mod) < tolerance:
+                log.debug('compare passed with gimbal 90 : %f == %f diff = %f' % (a, b, abs(90.0 - mod)))
+                return True
+            log.debug('compare with gimbal failed against mod 180: best diff :%f' % (abs(180.0-mod)))
+            log.debug('compare with gimbal failed against mod 90: best diff :%f' % (abs(90.0-mod)))
+    log.debug('float is out of tolerance : %f - %f == %f' % (a, b, abs(a - b)))
+    return False
+
+def valueToMappedRange(value, currentMin, currentMax, givenMin, givenMax):
+    '''
+    we have a min max range, lets say 0.5 - 15 and we want to map the
+    range to a new range say 0-1 and return where the value given is
+    in that new range
+    '''
+    # Figure out how 'wide' each range is
+    currentSpan = currentMax - currentMin
+    givenSpan = givenMax - givenMin
+    # Convert the left range into a 0-1 range (float)
+    valueScaled = float(value - currentMin) / float(currentSpan)
+    # Convert the 0-1 range into a value in the right range.
+    return givenMin + (valueScaled * givenSpan)
+
 def distanceBetween(nodeA, nodeB):
     '''
     simple calculation to return the distance between 2 objects
@@ -2167,7 +2185,6 @@ def distanceBetween(nodeA, nodeB):
     x1, y1, z1, _,_,_ = cmds.xform(nodeA,q=True,ws=True,piv=True)
     x2, y2, z2, _,_,_ = cmds.xform(nodeB,q=True,ws=True,piv=True)
     return math.sqrt(math.pow((x1-x2),2) + math.pow((y1-y2),2) + math.pow((z1-z2),2))
-
 
 class MatrixOffset(object):
     
