@@ -1285,17 +1285,39 @@ class FilterNode(object):
             return self.intersectionData
 
 
-def getBlendTargetsFromMesh(mesh):
+def getBlendTargetsFromMesh(node, asList=True, returnAll=False):
     '''
     quick func to return the blendshape targets found from a give mesh's connected blendshape's
+    
+    TODO: missing index's used to be an issue if you'd deleted a target Maya would leave the 
+    index free resulting in blank targets, doesn't seem to do that now?? Also what do we 
+    return and in what format if we have multiple blendShapes on the node?
+    
+    :param node: node to inspect for blendShapes, or the blendshape itself
+    :param asList: return as a straight list of target names or a dict of data
+    :param returnAll: if multiple blendshapes are found do we return all, or just the first
     '''
-    targetList=[]
-    blendshapes=[node for node in cmds.listHistory('parrish_head_geoShape') if cmds.nodeType(node)=='blendShape']
+
+    if asList:
+        targetData=[]
+    else:
+        targetData={}
+        
+    blendshapes=[b for b in cmds.listHistory(node) if cmds.nodeType(b)=='blendShape']
     if blendshapes:
         for blend in blendshapes:
             weights=cmds.aliasAttr(blend,q=True)
-            targetList=(zip(weights[1::2],weights[0::2]))
-    return targetList
+            if asList:
+                data=weights[0::2]
+                if returnAll:
+                    targetData.extend(data)
+                else:
+                    #means we only return the last blend in the history
+                    targetData=data
+            else:
+                data=(zip(weights[1::2],weights[0::2]))
+                targetData[blend]=data
+    return targetData
     
     
 
