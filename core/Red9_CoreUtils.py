@@ -1285,7 +1285,7 @@ class FilterNode(object):
             return self.intersectionData
 
 
-def getBlendTargetsFromMesh(node, asList=True, returnAll=False):
+def getBlendTargetsFromMesh(node, asList=True, returnAll=False, levels=1):
     '''
     quick func to return the blendshape targets found from a give mesh's connected blendshape's
     
@@ -1296,6 +1296,7 @@ def getBlendTargetsFromMesh(node, asList=True, returnAll=False):
     :param node: node to inspect for blendShapes, or the blendshape itself
     :param asList: return as a straight list of target names or a dict of data
     :param returnAll: if multiple blendshapes are found do we return all, or just the first
+    :param levels: same as the 'levels' flag in listHistory as that's ultimately what grabs the blendShape nodes here
     '''
 
     if asList:
@@ -1303,7 +1304,7 @@ def getBlendTargetsFromMesh(node, asList=True, returnAll=False):
     else:
         targetData={}
         
-    blendshapes=[b for b in cmds.listHistory(node) if cmds.nodeType(b)=='blendShape']
+    blendshapes=[b for b in cmds.listHistory(node, levels=levels) if cmds.nodeType(b)=='blendShape']
     if blendshapes:
         for blend in blendshapes:
             weights=cmds.aliasAttr(blend,q=True)
@@ -1312,8 +1313,8 @@ def getBlendTargetsFromMesh(node, asList=True, returnAll=False):
                 if returnAll:
                     targetData.extend(data)
                 else:
-                    #means we only return the last blend in the history
-                    targetData=data
+                    #means we only return the first blend in the history
+                    return data
             else:
                 data=(zip(weights[1::2],weights[0::2]))
                 targetData[blend]=data
