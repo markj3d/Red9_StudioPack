@@ -94,6 +94,13 @@ def mayaUpAxis(setAxis=None):
 def mayaIsBatch():
     return cmds.about(batch=True)
 
+def getCurrentFPS():
+    '''
+    returns the current frames per second as a number, rather than a useless string
+    '''
+    fpsDict = {"game": 15.0, "film": 24.0, "pal": 25.0, "ntsc": 30.0, "show": 48.0, "palf": 50.0, "ntscf": 60.0}
+    return  fpsDict[cmds.currentUnit(q=True, fullName=True, time=True)]
+
   
 # Menu Builders ------------------------------------------------------------------------
    
