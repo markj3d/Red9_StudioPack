@@ -71,6 +71,9 @@ except:
 global RED9_META_NODECACHE
 RED9_META_NODECACHE = {}
 
+global RED9_META_CALLBACKS
+RED9_META_CALLBACKS = {}
+
 '''
 CRUCIAL - REGISTER INHERITED CLASSES! ==============================================
 Register available MetaClass's to a global so that other modules could externally
@@ -255,7 +258,13 @@ def cleanCache():
                 log.debug('CACHE : %s being Removed from the cache due to invalid MObject' % k)
         except:
             log.debug('CACHE : clean failure')
-       
+
+def resetCacheOnSceneNew(*args):
+    global RED9_META_NODECACHE
+    RED9_META_NODECACHE={}
+    log.info('"file Open" or "file new" called - Red9 MetaCache being cleared')
+    
+          
 def getMClassNodeCache():
     '''
     Generic getWrapper for all nodeTypes registered in the Meta_NodeType global
@@ -1923,7 +1932,7 @@ class MetaClass(object):
             This will be depricated soon and replaced by getNodeConnections which is
             more flexible as it returns and filters all plugs between self and the given node.
         '''
-        log.info('getNodeConnectionAttr will be depricated soon!!!!')
+        log.debug('getNodeConnectionAttr will be depricated soon!!!!')
         for con in cmds.listConnections(node,s=True,d=False,p=True):
             if self.mNode in con.split('.')[0]:
                 return con.split('.')[1]
@@ -2801,3 +2810,9 @@ the nodes will fall out of sync and invalidate the systems. This is a catch
 to that.
 '''
 #registerMClassInheritanceMapping()
+
+
+
+#Setup the callbacks to clear the cache when required
+RED9_META_CALLBACKS['Open'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kAfterOpen, resetCacheOnSceneNew)
+RED9_META_CALLBACKS['New'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kAfterNew, resetCacheOnSceneNew)
