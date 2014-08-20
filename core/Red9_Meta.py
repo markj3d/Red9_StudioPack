@@ -785,11 +785,14 @@ class MetaClass(object):
         '''
         mClass=None
         mNode=None
+        MetaClass.cached = None
+        
         if args:
             mNode=args[0]
             
             if mNode:
                 MetaClass.cached = getMetaFromCache(mNode)  # Do Not run __new__ if the node is in the Cache
+                log.debug('### MetaClass.cached being set in the __new__ ###')
                 if MetaClass.cached:
                     return MetaClass.cached
                 
@@ -800,7 +803,7 @@ class MetaClass(object):
             if mClass in RED9_META_REGISTERY:
                 _registeredMClass=RED9_META_REGISTERY[mClass]
                 try:
-                    log.debug('Instantiating existing mClass : %s >> %s' % (mClass,_registeredMClass))
+                    log.debug('### Instantiating existing mClass : %s >> %s ###' % (mClass,_registeredMClass))
                     return super(cls.__class__, cls).__new__(_registeredMClass,*args,**kws)
                 except:
                     log.debug('Failed to initialize mClass : %s' % _registeredMClass)
@@ -834,9 +837,9 @@ class MetaClass(object):
             mNode is now a wrap on the MObject so will always be in sync even if the node is renamed/parented
         '''
         if node and MetaClass.cached:
-            log.debug('CACHE : Aborting __init__ on pre-cached Object')
+            log.debug('CACHE : Aborting __init__ on pre-cached MetaClass Object')
             return
-
+        
         #data that will not get pushed to the Maya node
         object.__setattr__(self, '_MObject', '')
         object.__setattr__(self, '_MObjectHandle', '')
@@ -859,6 +862,7 @@ class MetaClass(object):
             self.addAttr('mNodeID', value=name)                         # ! MAIN NODE ID !: used by pose systems to ID the node.
 
             log.debug('New Meta Node Created')
+            registerMClassNodeCache(self)
             cmds.setAttr('%s.%s' % (self.mNode,'mClass'), e=True,l=True)  # lock it
             cmds.setAttr('%s.%s' % (self.mNode,'mNodeID'),e=True,l=True)  # lock it
         else:
@@ -996,20 +1000,20 @@ class MetaClass(object):
         else:
             return "%s(Wrapped Standard MayaNode, node: '%s')" % (self.__class__, self.mNode.split('|')[-1])
     
-    def __eq__(self, obj):
-        '''
-        Equals calls are handled via the MObject cache
-        '''
-        if isinstance(obj, self.__class__):
-            if obj._MObject and self._MObject:
-                if obj._MObject == self._MObject:
-                    return True
-                else:
-                    return False
-            else:
-                return False
-        else:
-            return False
+#    def __eq__(self, obj):
+#        '''
+#        Equals calls are handled via the MObject cache
+#        '''
+#        if isinstance(obj, self.__class__):
+#            if obj._MObject and self._MObject:
+#                if obj._MObject == self._MObject:
+#                    return True
+#                else:
+#                    return False
+#            else:
+#                return False
+#        else:
+#            return False
     
     @r9General.Timer
     def __fillAttrCache__(self, level):
@@ -1411,8 +1415,13 @@ class MetaClass(object):
         WORKAROUND: Looks like there's a bug in the Network node in that deletion of a node
         will also delete all other connected networks...BIG DEAL. AD are looking into this for us
         '''
+        global RED9_META_NODECACHE
+        
         if cmds.lockNode(self.mNode, q=True):
             cmds.lockNode(self.mNode,lock=False)
+            
+        RED9_META_NODECACHE.pop(self.mNode)
+        
         cmds.delete(self.mNode)
         del(self)
     
@@ -1879,7 +1888,8 @@ class MetaClass(object):
             return [MetaClass(node) for node in children]
         return children
     
-    def getNodeConnectionMetaDataMap(self, node, mTypes=[]):  #  toself=False, allplugs=False):
+    @staticmethod
+    def getNodeConnectionMetaDataMap(node, mTypes=[]):  #  toself=False, allplugs=False):
         '''
         This is a generic wrapper to extract metaData connection info for any given node
         used currently to build the pose dict up, and compare / match the data on load.
@@ -2000,6 +2010,11 @@ class MetaRig(MetaClass):
         :param name: name of the node and in this case, the RigSystem itself
         '''
         super(MetaRig, self).__init__(*args,**kws)
+        
+        if self.cached:
+            log.debug('CACHE : Aborting __init__ on pre-cached %s Object' % self.__class__)
+            return
+        
         self.CTRL_Prefix='CTRL'  # prefix for all connected CTRL_ links added
         self.rigGlobalCtrlAttr='CTRL_Main'  # attribute linked to the top globalCtrl in the rig
         self.lockState = True  # lock the node to avoid accidental removal
@@ -2613,6 +2628,11 @@ class MetaHUDNode(MetaClass):
     '''
     def __init__(self,*args,**kws):
         super(MetaHUDNode, self).__init__(*args,**kws)
+        
+        if self.cached:
+            log.debug('CACHE : Aborting __init__ on pre-cached %s Object' % self.__class__)
+            return
+        
         self.hudGroupActive=False
         self.eventTriggers=cmds.headsUpDisplay(le=True)
         self.size='small'
@@ -2814,5 +2834,5 @@ to that.
 
 
 #Setup the callbacks to clear the cache when required
-RED9_META_CALLBACKS['Open'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kAfterOpen, resetCacheOnSceneNew)
-RED9_META_CALLBACKS['New'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kAfterNew, resetCacheOnSceneNew)
+RED9_META_CALLBACKS['Open'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeOpen, resetCacheOnSceneNew)
+RED9_META_CALLBACKS['New'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeNew, resetCacheOnSceneNew)
