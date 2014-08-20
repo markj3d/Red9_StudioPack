@@ -93,6 +93,14 @@ class Test_MetaClass():
         
         #isReferenced ?? Why is this failing ??
         assert not self.MClass.isReferenced()
+    
+    def test_isValid(self):
+        assert self.MClass.isValid() #strange one, isValid fails if the mNode has no connections.... is this a good decision?
+        cube1=cmds.ls(cmds.polyCube()[0],l=True)[0]
+        newMeta=r9Meta.MetaClass(cube1)
+        assert newMeta.isValid()
+        cmds.delete(newMeta.mNode)
+        assert not self.MClass.isValid()
         
     def test_MObject_Handling(self):
         #mNode is now handled via an MObject
@@ -400,6 +408,14 @@ class Test_MetaClass():
         self.MClass.newTest=4
         assert self.MClass.newTest==4
 
+    def test_lockState(self):
+        assert not self.MClass.lockState
+        assert not cmds.lockNode(self.MClass.mNode, query=True)[0]
+        self.MClass.lockState=True
+        assert cmds.lockNode(self.MClass.mNode, query=True)[0]
+        
+        
+        
     def test_attributeHandling(self):
         '''
         This tests the standard attribute handing in the MetaClass.__setattr__ 
@@ -664,7 +680,7 @@ class Test_Generic_SearchCalls():
         r9Meta.MetaFacialRigSupport(name='MetaFacialRigSupport_Test')
 
     def teardown(self):
-        self.setup()    
+        self.setup()
            
     def test_isMetaNode(self):
         assert r9Meta.isMetaNode('MetaRig_Test')
@@ -918,6 +934,13 @@ class Test_MetaRig():
         assert self.mRig.R_ArmSystem.getChildren(walk=False)==['|World_Ctrl|R_Wrist_Ctrl', 
                                                      '|World_Ctrl|COG__Ctrl|R_Elbow_Ctrl', 
                                                      '|World_Ctrl|COG__Ctrl|Chest_Ctrl|R_Clav_Ctrl']  
+    
+    def test_getNodeConnectionMetaDataMap(self):
+        assert self.mRig.getNodeConnectionMetaDataMap('|World_Ctrl|L_Foot_grp|L_Foot_Ctrl') == {'metaAttr': u'CTRL_L_Foot', 'metaNodeID': u'L_LegSystem'} 
+    
+    def test_getNodeConnections(self):
+        assert self.mRig.L_Leg_System.getNodeConnections('|World_Ctrl|L_Foot_grp|L_Foot_Ctrl') == ['CTRL_L_Foot']
+        
     def test_getChildren_mAttrs(self):
         #TODO: Fill Test
         pass
@@ -925,7 +948,7 @@ class Test_MetaRig():
     def test_getConnectedMetaNodes(self):
         #TODO: Fill Test
         pass
-    
+
     def test_getConnectedMetaNodes_mTypes(self):
         #TODO: Fill Test
         pass
