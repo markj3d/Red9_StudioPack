@@ -75,6 +75,18 @@ time the tools process a hierarchy it&#8217;s these classes that deal with it.</
 <tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.stringReplace" title="Red9.core.Red9_CoreUtils.stringReplace"><tt class="xref py py-obj docutils literal"><span class="pre">stringReplace</span></tt></a>(text,&nbsp;replace_dict)</td>
 <td>Replace words in a text that match a key in replace_dict with the associated value, return the modified text.</td>
 </tr>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Red9.core.Red9_CoreUtils.matchNodeLists"><tt class="xref py py-obj docutils literal"><span class="pre">matchNodeLists</span></tt></a>(nodeListA,&nbsp;nodeListB[,&nbsp;...])</td>
+<td>Matches 2 given NODE LISTS by node name via various methods.</td>
+</tr>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh" title="Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh"><tt class="xref py py-obj docutils literal"><span class="pre">getBlendTargetsFromMesh</span></tt></a>(node[,&nbsp;asList,&nbsp;...])</td>
+<td>quick func to return the blendshape targets found from a give mesh&#8217;s connected blendshape&#8217;s</td>
+</tr>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.timeOffset_addPadding" title="Red9.core.Red9_CoreUtils.timeOffset_addPadding"><tt class="xref py py-obj docutils literal"><span class="pre">timeOffset_addPadding</span></tt></a>([pad,&nbsp;padfrom,&nbsp;scene])</td>
+<td>simple wrap of the timeoffset class which will add padding into the</td>
+</tr>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.timeOffset_collapse" title="Red9.core.Red9_CoreUtils.timeOffset_collapse"><tt class="xref py py-obj docutils literal"><span class="pre">timeOffset_collapse</span></tt></a>([scene])</td>
+<td>simple wrap of the timeoffset that given a selected range in the timeline will</td>
+</tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.decodeString" title="Red9.core.Red9_CoreUtils.decodeString"><tt class="xref py py-obj docutils literal"><span class="pre">decodeString</span></tt></a>(val)</td>
 <td>From configObj the return is a string, we want to encode</td>
 </tr>
@@ -83,6 +95,9 @@ time the tools process a hierarchy it&#8217;s these classes that deal with it.</
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.valueToMappedRange" title="Red9.core.Red9_CoreUtils.valueToMappedRange"><tt class="xref py py-obj docutils literal"><span class="pre">valueToMappedRange</span></tt></a>(value,&nbsp;currentMin,&nbsp;...)</td>
 <td>we have a min max range, lets say 0.5 - 15 and we want to map the</td>
+</tr>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.distanceBetween" title="Red9.core.Red9_CoreUtils.distanceBetween"><tt class="xref py py-obj docutils literal"><span class="pre">distanceBetween</span></tt></a>(nodeA,&nbsp;nodeB)</td>
+<td>simple calculation to return the distance between 2 objects</td>
 </tr>
 </tbody>
 </table>
@@ -168,34 +183,6 @@ quotes and punctuation marks are neutral.</p>
 <tt class="descname">decodeString</tt><big>(</big><em>val</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.decodeString" title="Permalink to this definition">¶</a></dt>
 <dd><p>From configObj the return is a string, we want to encode
 it back to it&#8217;s original state so we pass it through this</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Red9.core.Red9_CoreUtils.floatIsEqual">
-<tt class="descname">floatIsEqual</tt><big>(</big><em>a</em>, <em>b</em>, <em>tolerance=0.01</em>, <em>allowGimbal=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.floatIsEqual" title="Permalink to this definition">¶</a></dt>
-<dd><p>compare 2 floats with tolerance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>a</strong> &#8211; value 1</li>
-<li><strong>b</strong> &#8211; value 2</li>
-<li><strong>tolerance</strong> &#8211; compare with this tolerance default=0.001</li>
-<li><strong>allowGimbal</strong> &#8211; allow values differences to be divisible by 180 compensate for gimbal flips</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="Red9.core.Red9_CoreUtils.valueToMappedRange">
-<tt class="descname">valueToMappedRange</tt><big>(</big><em>value</em>, <em>currentMin</em>, <em>currentMax</em>, <em>givenMin</em>, <em>givenMax</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.valueToMappedRange" title="Permalink to this definition">¶</a></dt>
-<dd><p>we have a min max range, lets say 0.5 - 15 and we want to map the
-range to a new range say 0-1 and return where the value given is
-in that new range</p>
 </dd></dl>
 
 <dl class="function">
@@ -367,6 +354,9 @@ would return the shape node, this clamps the return to it&#8217;s Transform node
 </tr>
 </tbody>
 </table>
+<p>TODO: Add the ability to use the NOT: operator in this, so for example, nodeTypes=transform
+would return all mesh nodes too, or rather the transform from a mesh, maybe you&#8217;d want to
+clamp that and prevent mesh transforms being returned? Is this even reasonable???</p>
 </dd></dl>
 
 <dl class="method">
@@ -577,6 +567,29 @@ Uses the FilterNode_Settings object for all args such that:</p>
 </table>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh">
+<tt class="descname">getBlendTargetsFromMesh</tt><big>(</big><em>node</em>, <em>asList=True</em>, <em>returnAll=False</em>, <em>levels=1</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>quick func to return the blendshape targets found from a give mesh&#8217;s connected blendshape&#8217;s</p>
+<p>TODO: missing index&#8217;s used to be an issue if you&#8217;d deleted a target Maya would leave the 
+index free resulting in blank targets, doesn&#8217;t seem to do that now?? Also what do we 
+return and in what format if we have multiple blendShapes on the node?</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node</strong> &#8211; node to inspect for blendShapes, or the blendshape itself</li>
+<li><strong>asList</strong> &#8211; return as a straight list of target names or a dict of data</li>
+<li><strong>returnAll</strong> &#8211; if multiple blendshapes are found do we return all, or just the first</li>
+<li><strong>levels</strong> &#8211; same as the &#8216;levels&#8217; flag in listHistory as that&#8217;s ultimately what grabs the blendShape nodes here</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -885,6 +898,34 @@ keyframe(option=&#8217;insert&#8217;) BUT this has a MAJOR crash bug!</li>
 </table>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.floatIsEqual">
+<tt class="descname">floatIsEqual</tt><big>(</big><em>a</em>, <em>b</em>, <em>tolerance=0.01</em>, <em>allowGimbal=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.floatIsEqual" title="Permalink to this definition">¶</a></dt>
+<dd><p>compare 2 floats with tolerance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>a</strong> &#8211; value 1</li>
+<li><strong>b</strong> &#8211; value 2</li>
+<li><strong>tolerance</strong> &#8211; compare with this tolerance default=0.001</li>
+<li><strong>allowGimbal</strong> &#8211; allow values differences to be divisible by 180 compensate for gimbal flips</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.valueToMappedRange">
+<tt class="descname">valueToMappedRange</tt><big>(</big><em>value</em>, <em>currentMin</em>, <em>currentMax</em>, <em>givenMin</em>, <em>givenMax</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.valueToMappedRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>we have a min max range, lets say 0.5 - 15 and we want to map the
+range to a new range say 0-1 and return where the value given is
+in that new range</p>
 </dd></dl>
 
 <dl class="function">

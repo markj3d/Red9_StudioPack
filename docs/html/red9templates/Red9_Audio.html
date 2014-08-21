@@ -103,9 +103,9 @@ a &#8216;compile&#8217; flag in the playblast command but it&#8217;s never worke
 </colgroup>
 <tbody valign="top">
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.AudioHandler" title="Red9.core.Red9_Audio.AudioHandler"><tt class="xref py py-obj docutils literal"><span class="pre">AudioHandler</span></tt></a>([audio])</td>
-<td>process on multiple audio nodes</td>
+<td>process on multiple audio nodes within the Maya scene, ie, already loaded</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.AudioNode" title="Red9.core.Red9_Audio.AudioNode"><tt class="xref py py-obj docutils literal"><span class="pre">AudioNode</span></tt></a>([audioNode])</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.AudioNode" title="Red9.core.Red9_Audio.AudioNode"><tt class="xref py py-obj docutils literal"><span class="pre">AudioNode</span></tt></a>([audioNode,&nbsp;filepath])</td>
 <td>Single AudioNode handler for simple audio management object</td>
 </tr>
 </tbody>
@@ -268,7 +268,7 @@ audio path</p>
 <dt id="Red9.core.Red9_Audio.AudioHandler">
 <em class="property">class </em><tt class="descname">AudioHandler</tt><big>(</big><em>audio=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>process on multiple audio nodes</p>
+<p>process on multiple audio nodes within the Maya scene, ie, already loaded</p>
 <dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioHandler.audioNodes">
 <tt class="descname">audioNodes</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.audioNodes" title="Permalink to this definition">¶</a></dt>
@@ -302,6 +302,15 @@ audio path</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode">
+<tt class="descname">bwav_sync_to_Timecode</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
+<dd><p>process either selected or all audio nodes and IF they are found to be
+BWav&#8217;s with valid timecode references, sync them in Maya such
+that their offset = Bwav&#8217;s timecode ie: sync them on the timeline to
+the bwavs internal timecode.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.combineAudio">
 <tt class="descname">combineAudio</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.combineAudio" title="Permalink to this definition">¶</a></dt>
 <dd><p>Combine audio tracks into a single wav file. This by-passes
@@ -324,7 +333,7 @@ the issues with Maya not playblasting multip audio tracks.</p>
 
 <dl class="class">
 <dt id="Red9.core.Red9_Audio.AudioNode">
-<em class="property">class </em><tt class="descname">AudioNode</tt><big>(</big><em>audioNode=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">AudioNode</tt><big>(</big><em>audioNode=None</em>, <em>filepath=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Single AudioNode handler for simple audio management object</p>
 <p>&#8220;Broadcast Wav&#8221; format now supported using specs from :
@@ -332,6 +341,11 @@ the issues with Maya not playblasting multip audio tracks.</p>
 <dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioNode.path">
 <tt class="descname">path</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.core.Red9_Audio.AudioNode.audioNode">
+<tt class="descname">audioNode</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.audioNode" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -432,6 +446,13 @@ There is coverage for this in this module getMediaFileMetaData() does just that<
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioNode.bwav_sync_to_Timecode">
+<tt class="descname">bwav_sync_to_Timecode</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
+<dd><p>given that self is a Bwav and has timecode reference, sync it&#8217;s position
+in the Maya timeline to match</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.isValid">
 <tt class="descname">isValid</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.isValid" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -446,10 +467,19 @@ There is coverage for this in this module getMediaFileMetaData() does just that<
 <tt class="descname">offsetTime</tt><big>(</big><em>offset</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.offsetTime" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.importAndActivate">
-<em class="property">static </em><tt class="descname">importAndActivate</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.importAndActivate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descname">importAndActivate</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.importAndActivate" title="Permalink to this definition">¶</a></dt>
+<dd><p>If self was instantiated with filepath then this will import that wav
+into Maya and activate it on the timeline. Note that if there is already
+an instance of a sound node in Maya that points to this path them the 
+class will bind itself to that node.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#example of use:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">audio</span> <span class="o">=</span> <span class="n">r9Audio</span><span class="o">.</span><span class="n">AudioNode</span><span class="p">(</span><span class="n">filepath</span> <span class="o">=</span> <span class="s">&#39;c:/my_audio.wav&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">audio</span><span class="o">.</span><span class="n">importAndActivate</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.setActive">
@@ -492,6 +522,11 @@ call in the AudioHandler.</p>
 <dd><p>Used by the compiler - stamp the audioNodes from which this audio
 track was compiled from</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioNode.select">
+<tt class="descname">select</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

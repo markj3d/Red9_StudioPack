@@ -45,6 +45,8 @@ There are also some basic examples in the Red9 Package itself found under the ex
       MetaFacialRig
       MetaFacialRigSupport
       MetaHIKCharacterNode
+      MetaHIKControlSetNode
+      MetaHUDNode
     
 
 

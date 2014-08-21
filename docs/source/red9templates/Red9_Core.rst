@@ -18,9 +18,16 @@ time the tools process a hierarchy it's these classes that deal with it.
       prioritizeNodeList
       sortNumerically
       stringReplace
+      matchNodeLists
+      getBlendTargetsFromMesh
+      
+      timeOffset_addPadding
+      timeOffset_collapse
+      
       decodeString
       floatIsEqual
       valueToMappedRange
+      distanceBetween
 
     
    .. rubric:: Core Classes

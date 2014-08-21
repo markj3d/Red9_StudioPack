@@ -136,8 +136,25 @@ what each function is expected to return</p>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Meta.MetaHIKCharacterNode" title="Red9.core.Red9_Meta.MetaHIKCharacterNode"><tt class="xref py py-obj docutils literal"><span class="pre">MetaHIKCharacterNode</span></tt></a>(*args,&nbsp;**kws)</td>
 <td>Casting HIK directly to a metaClass so it&#8217;s treated as meta by default.</td>
 </tr>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_Meta.MetaHIKControlSetNode" title="Red9.core.Red9_Meta.MetaHIKControlSetNode"><tt class="xref py py-obj docutils literal"><span class="pre">MetaHIKControlSetNode</span></tt></a>(*args,&nbsp;**kws)</td>
+<td>Casting HIK directly to a metaClass so it&#8217;s treated as meta by default.</td>
+</tr>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_Meta.MetaHUDNode" title="Red9.core.Red9_Meta.MetaHUDNode"><tt class="xref py py-obj docutils literal"><span class="pre">MetaHUDNode</span></tt></a>(*args,&nbsp;**kws)</td>
+<td>SubClass of the MetaClass, designed as a simple interface</td>
+</tr>
 </tbody>
 </table>
+<dl class="data">
+<dt id="Red9.core.Red9_Meta.RED9_META_CALLBACKS">
+<tt class="descname">RED9_META_CALLBACKS</tt><a class="headerlink" href="#Red9.core.Red9_Meta.RED9_META_CALLBACKS" title="Permalink to this definition">¶</a></dt>
+<dd><p>CRUCIAL - REGISTER INHERITED CLASSES! ==============================================
+Register available MetaClass&#8217;s to a global so that other modules could externally
+extend the functionality and use the base MetaClass. Note we&#8217;re building this up
+from only those active Python classes who inherit from MetaClass
+global RED9_META_REGISTERY
+====================================================================================</p>
+</dd></dl>
+
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.registerMClassInheritanceMapping">
 <tt class="descname">registerMClassInheritanceMapping</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.registerMClassInheritanceMapping" title="Permalink to this definition">¶</a></dt>
@@ -230,6 +247,57 @@ generically added by any custom boot sequence.</p>
 <dt id="Red9.core.Red9_Meta.resetMClassNodeTypes">
 <tt class="descname">resetMClassNodeTypes</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.resetMClassNodeTypes" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_Meta.registerMClassNodeCache">
+<tt class="descname">registerMClassNodeCache</tt><big>(</big><em>mNode</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.registerMClassNodeCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a given mNode to the global RED9_META_NODECACHE cache of currently instantiated 
+MetaNode objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mNode</strong> &#8211; instantiated mNode to add</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_Meta.printMetaCacheRegistry">
+<tt class="descname">printMetaCacheRegistry</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.printMetaCacheRegistry" title="Permalink to this definition">¶</a></dt>
+<dd><p>print the current VALID Cache of instantiated MetaNodes 
+Note that we call a cleanCache before printing to remove any 
+currently invalid MObjects from the Cache.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_Meta.getMetaFromCache">
+<tt class="descname">getMetaFromCache</tt><big>(</big><em>mNode</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.getMetaFromCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pull the given mNode from the RED9_META_NODECACHE if it&#8217;s
+already be instantiated.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_Meta.cleanCache">
+<tt class="descname">cleanCache</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.cleanCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run through the current cache of metaNodes and confirm that their all
+still valid by testing the MObjectHandles</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_Meta.resetCacheOnSceneNew">
+<tt class="descname">resetCacheOnSceneNew</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.resetCacheOnSceneNew" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_Meta.getMClassNodeCache">
+<tt class="descname">getMClassNodeCache</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.getMClassNodeCache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic getWrapper for all nodeTypes registered in the Meta_NodeType global</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.attributeDataType">
@@ -475,7 +543,9 @@ and refil the mNode property back in.... maybe??</p>
 <dl class="attribute">
 <dt id="Red9.core.Red9_Meta.MetaClass.mNode">
 <tt class="descname">mNode</tt><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.mNode" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>mNode is the pointer to the Maya object itself, retrieved via the MObject
+under the hood so it&#8217;s always in sync.</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.core.Red9_Meta.MetaClass.mNodeMObject">
@@ -487,7 +557,8 @@ to ensure that the MObject cached is still valid</p>
 <dl class="attribute">
 <dt id="Red9.core.Red9_Meta.MetaClass.lockState">
 <tt class="descname">lockState</tt><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.lockState" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Lockstate is just that, the lockNode state of the Maya node</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.hasAttr">
@@ -499,12 +570,14 @@ Note this is not run in some of the core internal calls in this baseClass</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.attrIsLocked">
 <tt class="descname">attrIsLocked</tt><big>(</big><em>attr</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.attrIsLocked" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>check the attribute on the mNode to see if it&#8217;s locked</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.attrSetLocked">
 <tt class="descname">attrSetLocked</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.attrSetLocked" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>set the lockState of a given attr on the mNode</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.addAttr">
@@ -566,7 +639,7 @@ TODO: expand the Type support here</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.rename">
 <tt class="descname">rename</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.rename" title="Permalink to this definition">¶</a></dt>
-<dd><p>rename the mNode itself</p>
+<dd><p>rename the mNode itself, again because we get the mNode via the MObject renaming is handled correctly</p>
 </dd></dl>
 
 <dl class="method">
@@ -722,18 +795,21 @@ but ONLY if it&#8217;s no longer connected to anything else.</li>
 </tr>
 </tbody>
 </table>
-<p>#testCode:
-master  = r9Meta.MetaClass(name = &#8216;master&#8217;)
-master2 = r9Meta.MetaClass(name = &#8216;master2&#8217;)
-child1 = r9Meta.MetaClass(name = &#8216;child1&#8217;)
-child2 = r9Meta.MetaClass(name = &#8216;child2&#8217;)
-cube=cmds.ls(cmds.polyCube()[0],l=True)[0]
-master.connectChildren([child1,child2,cube],&#8217;modules&#8217;,&#8217;puppet&#8217;)
-master2.connectChildren([child1.mNode,child2.mNode,cube],&#8217;time&#8217;,&#8217;master&#8217;,force=True)
-master.connectChildren([child1,child2],&#8217;time&#8217;,&#8217;master&#8217;,cleanCurrent=True)</p>
-<p>master.disconnectChild(child2,&#8217;time&#8217;)
-or
-master.disconnectChild(child2)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c">#testCode:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">master</span>  <span class="o">=</span> <span class="n">r9Meta</span><span class="o">.</span><span class="n">MetaClass</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;master&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">master2</span> <span class="o">=</span> <span class="n">r9Meta</span><span class="o">.</span><span class="n">MetaClass</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;master2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">child1</span> <span class="o">=</span> <span class="n">r9Meta</span><span class="o">.</span><span class="n">MetaClass</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;child1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">child2</span> <span class="o">=</span> <span class="n">r9Meta</span><span class="o">.</span><span class="n">MetaClass</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;child2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cube</span><span class="o">=</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">cmds</span><span class="o">.</span><span class="n">polyCube</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span><span class="n">l</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">master</span><span class="o">.</span><span class="n">connectChildren</span><span class="p">([</span><span class="n">child1</span><span class="p">,</span><span class="n">child2</span><span class="p">,</span><span class="n">cube</span><span class="p">],</span><span class="s">&#39;modules&#39;</span><span class="p">,</span><span class="s">&#39;puppet&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">master2</span><span class="o">.</span><span class="n">connectChildren</span><span class="p">([</span><span class="n">child1</span><span class="o">.</span><span class="n">mNode</span><span class="p">,</span><span class="n">child2</span><span class="o">.</span><span class="n">mNode</span><span class="p">,</span><span class="n">cube</span><span class="p">],</span><span class="s">&#39;time&#39;</span><span class="p">,</span><span class="s">&#39;master&#39;</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">master</span><span class="o">.</span><span class="n">connectChildren</span><span class="p">([</span><span class="n">child1</span><span class="p">,</span><span class="n">child2</span><span class="p">],</span><span class="s">&#39;time&#39;</span><span class="p">,</span><span class="s">&#39;master&#39;</span><span class="p">,</span><span class="n">cleanCurrent</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">master</span><span class="o">.</span><span class="n">disconnectChild</span><span class="p">(</span><span class="n">child2</span><span class="p">,</span><span class="s">&#39;time&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c">#or</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">master</span><span class="o">.</span><span class="n">disconnectChild</span><span class="p">(</span><span class="n">child2</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -759,13 +835,23 @@ RED9_META_REGISTERY ie &#8216;MetaRig&#8217; OR a class object, ie r9Meta.MetaRi
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.getChildMetaNodes">
 <tt class="descname">getChildMetaNodes</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.getChildMetaNodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find any connected Child MetaNodes to this mNode
-:param walk: walk the connected network and return ALL children conntected in the tree
-:param mAttrs: only return connected nodes that pass the given attribute filter</p>
+<dd><p>Find any connected Child MetaNodes to this mNode.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>walk</strong> &#8211; walk the connected network and return ALL children conntected in the tree</li>
+<li><strong>mAttrs</strong> &#8211; only return connected nodes that pass the given attribute filter</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">mAttrs is only searching attrs on the mNodes themselves, not all children
-and although there is no mTypes flag, you can use mAttrs to get chilnodes of type
+and although there is no mTypes flag, you can use mAttrs to get childnodes of type
 by going getChildMetaNodes(mAttrs=&#8217;mClass=MetaRig&#8217;)</p>
 </div>
 <div class="admonition note">
@@ -778,12 +864,12 @@ source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType=&
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Todo :</th><td class="field-body">allow this to walk over nodes, at the moment if the direct child isn&#8217;t of the correct</td>
+<tr class="field"><th class="field-name">Todo :</th><td class="field-body">allow this to walk over nodes, at the moment if the direct child isn&#8217;t of the correct 
+type (if using the mTypes flag) then the walk will stop. This should continue over non matching 
+nodes down the hierarchy so all children are tested.</td>
 </tr>
 </tbody>
 </table>
-<p>type (if using the mTypes flag) then the walk will stop. This should continue over non matching
-nodes down the hierarchy so all children are tested.</p>
 </dd></dl>
 
 <dl class="method">
@@ -806,10 +892,20 @@ source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType=&
 This is now being run in the MetaUI on doubleClick. This is a generic call, implemented
 and over-loaded on a case by case basis. At the moment the MetaRig class simple calls
 mRig.getRigCtrls() in the call, but it means that we don&#8217;t call .mRig.getRigCtrls()
-in generic meta functions.
-:param walk: walk all subMeta connections and include all their children too
-:param mAttrs: only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)
-:param cAttrs: only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)</p>
+in generic meta functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>walk</strong> &#8211; walk all subMeta connections and include all their children too</li>
+<li><strong>mAttrs</strong> &#8211; only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)</li>
+<li><strong>cAttrs</strong> &#8211; only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">mAttrs is only searching attrs on the mNodes themselves, not the children
@@ -817,9 +913,9 @@ cAttrs is searching the connection attr names from the mNodes, uses the cmds.lis
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="Red9.core.Red9_Meta.MetaClass.getNodeConnectionMetaDataMap">
-<tt class="descname">getNodeConnectionMetaDataMap</tt><big>(</big><em>node</em>, <em>mTypes=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.getNodeConnectionMetaDataMap" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">getNodeConnectionMetaDataMap</tt><big>(</big><em>node</em>, <em>mTypes=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.getNodeConnectionMetaDataMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a generic wrapper to extract metaData connection info for any given node
 used currently to build the pose dict up, and compare / match the data on load.
 In the base implementation this gives you a dict of mNodeID and attr which the nodes is connected too.</p>
@@ -848,8 +944,18 @@ poseFiles, allows you to craft the data you want to store against a node.</p>
 <dt id="Red9.core.Red9_Meta.MetaClass.getNodeConnetionAttr">
 <tt class="descname">getNodeConnetionAttr</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.getNodeConnetionAttr" title="Permalink to this definition">¶</a></dt>
 <dd><p>really light wrapper, designed to return the attr via which a node
-is connected to this metaNode
-:param node: node to test connection attr for</p>
+is connected to this metaNode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node</strong> &#8211; node to test connection attr for</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This will be depricated soon and replaced by getNodeConnections which is
@@ -861,9 +967,19 @@ more flexible as it returns and filters all plugs between self and the given nod
 <dt id="Red9.core.Red9_Meta.MetaClass.getNodeConnections">
 <tt class="descname">getNodeConnections</tt><big>(</big><em>node</em>, <em>filters=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.getNodeConnections" title="Permalink to this definition">¶</a></dt>
 <dd><p>really light wrapper, designed to return all connections
-between a given node and the mNode
-:param node: node to test connection attr for
-:param filters: filter string to match for the returns</p>
+between a given node and the mNode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node</strong> &#8211; node to test connection attr for</li>
+<li><strong>filters</strong> &#8211; filter string to match for the returns</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -1141,16 +1257,18 @@ will load the cached pose from this objects instance, if there is one stored.</p
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>nodes</strong> &#8211; if given load only the cached pose to the given nodes</li>
 <li><strong>attr</strong> &#8211; optional - attr in which a pose has been stored internally on the mRig</li>
 <li><strong>filepath</strong> &#8211; optional - posefile to load back</li>
 </ul>
 </td>
 </tr>
+<tr class="field"><th class="field-name">Todo :</th><td class="field-body"><p class="first last">add relative flags so that they can pass through this call</p>
+</td>
+</tr>
 </tbody>
 </table>
-<p>TODO: add relative flags so that they can pass through this call</p>
 </dd></dl>
 
 <dl class="method">
@@ -1232,10 +1350,20 @@ Controllers should NOT be wired to this node</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRigSupport.addSupportNode">
 <tt class="descname">addSupportNode</tt><big>(</big><em>node</em>, <em>attr</em>, <em>boundData=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRigSupport.addSupportNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a single MAYA node flagged as a SUPPORT node of managed type
-:param node: Maya node to add
-:param attr: Attr name to assign this too
-:param boundData: {} Data to set on the given node as attrs</p>
+<dd><p>Add a single MAYA node flagged as a SUPPORT node of managed type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node</strong> &#8211; Maya node to add</li>
+<li><strong>attr</strong> &#8211; Attr name to assign this too</li>
+<li><strong>boundData</strong> &#8211; {} Data to set on the given node as attrs</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -1258,10 +1386,20 @@ Controllers should NOT be wired to this node</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaFacialRigSupport.addSupportNode">
 <tt class="descname">addSupportNode</tt><big>(</big><em>node</em>, <em>attr</em>, <em>boundData=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaFacialRigSupport.addSupportNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a single MAYA node flagged as a SUPPORT node of managed type
-:param node: Maya node to add
-:param attr: Attr name to assign this too
-:param boundData: {} Data to set on the given node as attrs</p>
+<dd><p>Add a single MAYA node flagged as a SUPPORT node of managed type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node</strong> &#8211; Maya node to add</li>
+<li><strong>attr</strong> &#8211; Attr name to assign this too</li>
+<li><strong>boundData</strong> &#8211; {} Data to set on the given node as attrs</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -1303,20 +1441,21 @@ and useful for management in the systems</p>
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.monitorHUDaddCBAttrs">
 <tt class="descname">monitorHUDaddCBAttrs</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.monitorHUDaddCBAttrs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds selected attrs from the CB to a MetaHUD node for monitoring,
+<dd><p>ChannelBox wrappers for the HUD : 
+Adds selected attrs from the CB to a MetaHUD node for monitoring,
 if HUD node already exists this will simply add more attrs to it</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.monitorHUDManagement">
 <tt class="descname">monitorHUDManagement</tt><big>(</big><em>func</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.monitorHUDManagement" title="Permalink to this definition">¶</a></dt>
-<dd><p>kill any current MetaHUD headsUpDisplay blocks</p>
+<dd><p>ChannelBox wrappers for the HUD : kill any current MetaHUD headsUpDisplay blocks</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.monitorHUDremoveCBAttrs">
 <tt class="descname">monitorHUDremoveCBAttrs</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.monitorHUDremoveCBAttrs" title="Permalink to this definition">¶</a></dt>
-<dd><p>remove attrs from the MetaHUD</p>
+<dd><p>ChannelBox wrappers for the HUD : remove attrs from the MetaHUD</p>
 </dd></dl>
 
 <dl class="class">
@@ -1325,34 +1464,75 @@ if HUD node already exists this will simply add more attrs to it</p>
 <dd><p>Bases: <a class="reference internal" href="#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><tt class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></tt></a></p>
 <p>SubClass of the MetaClass, designed as a simple interface
 for HUD management in Maya. Any monitored attrs added to the MetaNode
-will show in the HUD when drawn.
-TODO: Look if we can link the Section and Block attrs to the refresh func
-via an attrChange callback</p>
+will show in the HUD when drawn.</p>
+<p>The idea is that we have a single MetaNode with attrs that are monitored
+and managed for HUD display. To get an attr onto the HUD all you need to do
+is add it using addMonitoredAttr(), then drawHUD(). All I do is connect the HUD
+attr to the attr that you want to monitor, it just sits as a new wired node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Todo :</th><td class="field-body">Look if we can link the Section and Block attrs to the refresh func 
+via an attrChange callback</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHUDNode.addMonitoredAttr">
 <tt class="descname">addMonitoredAttr</tt><big>(</big><em>attr</em>, <em>value=None</em>, <em>attrType=None</em>, <em>refresh=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHUDNode.addMonitoredAttr" title="Permalink to this definition">¶</a></dt>
 <dd><p>wrapper that not only adds an attr to the metaNode, but also adds it
 to the internal list of attributes that are monitored and added
-to the HUD when drawn</p>
+to the HUD when drawn.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>attr</strong> &#8211; attr to be added to the node for monitoring in the HUD</li>
+<li><strong>value</strong> &#8211; Initial value of the attr so the node can figure out what type of attr it is</li>
+<li><strong>attrType</strong> &#8211; specifiy the attr type directly</li>
+<li><strong>refresh</strong> &#8211; whether to refresh the HUD after adding a new attr</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this ties in with the default addAttr call hence the args are very similar in function</p>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHUDNode.removeMonitoredAttr">
 <tt class="descname">removeMonitoredAttr</tt><big>(</big><em>attr</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHUDNode.removeMonitoredAttr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove an attr from the MetaNode and refresh the HUD to reflect the removal</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>attr</strong> &#8211; attr to be removed from monitoring</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHUDNode.getHudDisplays">
 <tt class="descname">getHudDisplays</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHUDNode.getHudDisplays" title="Permalink to this definition">¶</a></dt>
-<dd><p>each line ing the HUD is actually a separate HUD in itself so we need
+<dd><p>each line in the HUD is actually a separate HUD in itself so we need
 to carefully manage this list</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHUDNode.drawHUD">
 <tt class="descname">drawHUD</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHUDNode.drawHUD" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Push the monitored attrs up to the Maya HUD in the viewport</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHUDNode.getConnectedAttr">
@@ -1372,22 +1552,49 @@ to carefully manage this list</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHUDNode.resetSlider">
 <tt class="descname">resetSlider</tt><big>(</big><em>slider</em>, <em>attr</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHUDNode.resetSlider" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>If the HUD is made up of sliders this resets them</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>slider</strong> &#8211; slider to reset in the HUD</li>
+<li><strong>attr</strong> &#8211; attr to reset on the mNode</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHUDNode.showHud">
 <tt class="descname">showHud</tt><big>(</big><em>value</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHUDNode.showHud" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>manage the visibility state of the HUD</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>value</strong> &#8211; show or hide the HUD</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHUDNode.killHud">
 <tt class="descname">killHud</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHUDNode.killHud" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>kill the HUD display altogether</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHUDNode.refreshHud">
 <tt class="descname">refreshHud</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHUDNode.refreshHud" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Refresh the HUD by killing it and re-drawing it from scratch</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHUDNode.delete">
