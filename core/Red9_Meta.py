@@ -1419,9 +1419,10 @@ class MetaClass(object):
         
         if cmds.lockNode(self.mNode, q=True):
             cmds.lockNode(self.mNode,lock=False)
-            
-        RED9_META_NODECACHE.pop(self.mNode)
-        
+        #clear the node from the cache
+        if RED9_META_NODECACHE:
+            RED9_META_NODECACHE.pop(self.mNode)
+        #delete the Maya node and this python object
         cmds.delete(self.mNode)
         del(self)
     
