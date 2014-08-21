@@ -31,24 +31,61 @@ r9Setup.mayaUpAxis('y')
 import maya.cmds as cmds
 import os
 
+
+class Test_AudioNode(object):
+    def setup(self):
+        cmds.file(new=True,f=True)
+        self.path=r9General.formatPath(os.path.join(r9Setup.red9ModulePath(),'tests','testFiles','bwav_test.wav'))
+        
+    def test_path_given(self):
+        pathNode = r9Audio.AudioNode(filepath=self.path)
+        assert not pathNode.isLoaded
+        assert pathNode.path == self.path
+        assert not pathNode.audioNode
+        assert int(pathNode.endFrame) == 199
+        assert int(pathNode.endTime) == 8294
+        assert pathNode.startTime == 0
+        assert pathNode.startFrame == 0
+        pathNode.importAndActivate()
+        assert pathNode.isLoaded
+        assert pathNode.audioNode
+        assert pathNode.isValid()
+       
+    def test_audioNode_given(self):
+        cmds.file(self.path, i=True, type='audio', options='o=0')
+        node=cmds.ls(type='audio')[0]
+        audio=r9Audio.AudioNode(node)
+        assert audio.audioNode == node
+        assert audio.isLoaded
+        
+    def test_path_but_Loaded(self):
+        cmds.file(self.path, i=True, type='audio', options='o=0')
+        node=cmds.ls(type='audio')[0]
+        assert node
+        audio = r9Audio.AudioNode(filepath=self.path)
+        assert audio.path == self.path
+        assert audio.isLoaded
+        assert audio.audioNode == node
+        
+    
 class Test_BwavHandler(object):
     def setup(self):
-        self.bwavpath=os.path.join(r9Setup.red9ModulePath(),'tests','testFiles','bwav_test.wav')
-        self.audioNode = r9Audio.AudioNode.importAndActivate(self.bwavpath)
-    
-    def teardown(self):
         cmds.file(new=True,f=True)
-        
+        self.bwavpath=os.path.join(r9Setup.red9ModulePath(),'tests','testFiles','bwav_test.wav')
+        self.audioNode = r9Audio.AudioNode(filepath=self.bwavpath)
+        self.audioNode.importAndActivate()
+            
     def test_basics(self):
         assert isinstance(self.audioNode, r9Audio.AudioNode)
         assert r9General.formatPath(self.audioNode.path)==r9General.formatPath(self.bwavpath)
+        assert self.audioNode.isLoaded
+        assert cmds.ls(type='audio')[0] == 'bwav_test'
         assert self.audioNode.audioNode=='bwav_test'
         assert self.audioNode.sample_width==2
         assert self.audioNode.sampleRate==44100
         assert self.audioNode.sample_bits==16
         assert self.audioNode.channels==1
 
-    
     def test_funcs(self):
         assert self.audioNode.startFrame==0
         self.audioNode.startFrame=10
