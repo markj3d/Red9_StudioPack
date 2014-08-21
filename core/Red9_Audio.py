@@ -219,7 +219,7 @@ def audioPathLoaded(filepath):
     '''
     nodes=[]
     for audio in cmds.ls(type='audio'):
-        if cmds.getAttr('%s.filename' % audio):
+        if r9General.formatPath(cmds.getAttr('%s.filename' % audio)) == r9General.formatPath(filepath):
             nodes.append(audio)
     return nodes
     
@@ -266,7 +266,7 @@ def inspect_wav():
     
 class AudioHandler(object):
     '''
-    process on multiple audio nodes
+    process on multiple audio nodes within the Maya scene, ie, already loaded
     '''
     def __init__(self, audio=None):
         self._audioNodes = None
@@ -401,7 +401,8 @@ class AudioHandler(object):
             baseTrack = baseTrack.overlay(sound, position=(insertFrame / r9General.getCurrentFPS()) * 1000)
 
         baseTrack.export(filepath, format="wav")
-        compiled=AudioNode.importAndActivate(filepath)
+        compiled=AudioNode(filepath=filepath)
+        compiled.importAndActivate()
         compiled.stampCompiled(self.mayaNodes)
         compiled.startFrame=neg_adjustment
         
@@ -418,33 +419,69 @@ class AudioNode(object):
     https://tech.ebu.ch/docs/tech/tech3285.pdf
 
     '''
-
-    def __init__(self, audioNode=None):
-        self.audioNode = audioNode
-        if not self.audioNode:
-            self.audioNode = audioSelected()
+    def __init__(self, audioNode=None, filepath=None):
+        self.__path=''
+        self.__audioNode=None
+        self.isLoaded=False  # if true we're only working on an audioPath, NOT an active Maya soundNode
+        
+        if not filepath:
+            if audioNode:
+                self.audioNode = audioNode
+            else:
+                self.audioNode = audioSelected()
+            if self.audioNode:
+                self.isLoaded=True
+        else:
+            #You can't load a wav more than once, if path is mapped to a current node, switch the class to that
+            isAudioloaded = audioPathLoaded(filepath)
+            if isAudioloaded:
+                log.info('given audio filePath is already assigned to a Maya node, connecting to that : %s' % isAudioloaded[0])
+                self.isLoaded=True
+                self.audioNode=isAudioloaded[0]
+            else:
+                self.isLoaded=False
+            self.path=filepath
     
     def __repr__(self):
-        if self.audioNode:
-            return "%s(AudioNode InternalAudioNodes: '%s')" % (self.__class__, self.audioNode)
+        if self.isLoaded:
+            if self.audioNode:
+                return "%s(AudioNode InternalAudioNodes: '%s')" % (self.__class__, self.audioNode)
+            else:
+                return "%s(AudioNode NO AudioNodes: )" % self.__class__
         else:
-            return "%s(AudioNode NO AudioNodes: )" % self.__class__
-    
+            return "%s(AudioNode from file: %s)" % (self.__class__, self.path)
+        
     def __eq__(self, val):
-        if isinstance(val, AudioNode):
-            if self.audioNode==val.audioNode:
-                return True
-        elif cmds.nodeType(val)=='audio':
-            if self.audioNode==val:
-                return True
-            
+        if self.isLoaded:
+            if isinstance(val, AudioNode):
+                return self.audioNode==val.audioNode
+            elif cmds.nodeType(val)=='audio':
+                return self.audioNode==val
+        else:
+            return self.path==val.path
+
     def __ne__(self, val):
         return not self.__eq__(val)
 
     @property
     def path(self):
-        return cmds.getAttr('%s.filename' % self.audioNode)
-        
+        if self.isLoaded and self.audioNode:
+            return cmds.getAttr('%s.filename' % self.audioNode)
+        else:
+            return self.__path
+    @path.setter
+    def path(self,path):
+        self.__path=path
+    
+    @property
+    def audioNode(self):
+        return self.__audioNode
+    @audioNode.setter
+    def audioNode(self, node):
+        if cmds.objExists(node):
+            self.isLoaded=True
+            self.__audioNode=node
+            
     @property
     def sampleRate(self):
         '''
@@ -467,11 +504,14 @@ class AudioNode(object):
     
     @property
     def startFrame(self):
-        return cmds.getAttr('%s.offset' % self.audioNode)
+        if self.isLoaded:
+            return cmds.getAttr('%s.offset' % self.audioNode)
+        return 0
     
     @startFrame.setter
     def startFrame(self, val):
-        cmds.setAttr('%s.offset' % self.audioNode, val)
+        if self.isLoaded:
+            cmds.setAttr('%s.offset' % self.audioNode, val)
         
     @property
     def endFrame(self):
@@ -479,29 +519,33 @@ class AudioNode(object):
         Note in batch mode we calculate via the Wav duration
         NOT the Maya audioNode length as it's invalid under batch mode!
         '''
-        if not cmds.about(batch=True):
+        if not cmds.about(batch=True) and self.isLoaded:
             return cmds.getAttr('%s.endFrame' % self.audioNode)  # why the hell does this always come back 1 frame over??
         else:
             return self.getLengthFromWav() + self.startFrame
          
     @endFrame.setter
     def endFrame(self, val):
-        cmds.setAttr('%s.offset' % self.audioNode, val)
+        if self.isLoaded:
+            cmds.setAttr('%s.offset' % self.audioNode, val)
            
     @property
     def startTime(self):
         '''
         this is in milliseconds
         '''
-        return (self.startFrame / r9General.getCurrentFPS()) * 1000
+        if self.isLoaded:
+            return (self.startFrame / r9General.getCurrentFPS()) * 1000
+        return 0
     
     @startTime.setter
     def startTime(self, val):
         '''
         this is in milliseconds
         '''
-        cmds.setAttr('%s.offset' % self.audioNode, milliseconds_to_frame(val, framerate=None))
-       
+        if self.isLoaded:
+            cmds.setAttr('%s.offset' % self.audioNode, milliseconds_to_frame(val, framerate=None))
+
     @property
     def endTime(self):
         '''
@@ -514,7 +558,8 @@ class AudioNode(object):
         '''
         this is in milliseconds
         '''
-        cmds.setAttr('%s.offset' % self.audioNode, milliseconds_to_frame(val, framerate=None))
+        if self.isLoaded:
+            cmds.setAttr('%s.offset' % self.audioNode, milliseconds_to_frame(val, framerate=None))
     
     # BWAV support ##=============================================
 
@@ -670,49 +715,57 @@ class AudioNode(object):
         given that self is a Bwav and has timecode reference, sync it's position
         in the Maya timeline to match
         '''
-        print milliseconds_to_Timecode(self.bwav_timecodeMS(), smpte=True, framerate=None)
-        print milliseconds_to_frame(self.bwav_timecodeMS(), framerate=None)
-        self.startTime=self.bwav_timecodeMS()
+        if self.isLoaded:
+            print milliseconds_to_Timecode(self.bwav_timecodeMS(), smpte=True, framerate=None)
+            print milliseconds_to_frame(self.bwav_timecodeMS(), framerate=None)
+            self.startTime=self.bwav_timecodeMS()
         
         
     # Bwav end =========================================================
     
     def isValid(self):
-        return (self.audioNode and cmds.objExists(self.audioNode)) or False
+        if self.isLoaded:
+            return (self.audioNode and cmds.objExists(self.audioNode)) or False
+        else:
+            return os.path.exists(self.path)
     
     def delete(self):
-        cmds.delete(self.audioNode)
+        if self.isLoaded:
+            cmds.delete(self.audioNode)
             
     def offsetTime(self, offset):
-        if r9Setup.mayaVersion() == 2011:
-            #Autodesk fucked up in 2011 and we need to manage both these attrs
-            cmds.setAttr('%s.offset' % self.audioNode, self.startFrame + offset)
-            cmds.setAttr('%s.endFrame' % self.audioNode, self.length + offset)
-        else:
-            cmds.setAttr('%s.offset' % self.audioNode, self.startFrame + offset)
-    
-    @staticmethod
-    def importAndActivate(path):
-        a=cmds.ls(type='audio')
-        cmds.file(path, i=True, type='audio', options='o=0')
-        b=cmds.ls(type='audio')
-        if not a == b:
-            audio = AudioNode(list(set(a) ^ set(b))[0])
-        else:
-            matchingnode = [audio for audio in a if cmds.getAttr('%s.filename' % audio) == path]
-            if matchingnode:
-                audio = AudioNode(matchingnode[0])
+        if self.isLoaded:
+            if r9Setup.mayaVersion() == 2011:
+                #Autodesk fucked up in 2011 and we need to manage both these attrs
+                cmds.setAttr('%s.offset' % self.audioNode, self.startFrame + offset)
+                cmds.setAttr('%s.endFrame' % self.audioNode, self.length + offset)
             else:
+                cmds.setAttr('%s.offset' % self.audioNode, self.startFrame + offset)
+    
+    def importAndActivate(self):
+        a=cmds.ls(type='audio')
+        cmds.file(self.path, i=True, type='audio', options='o=0')
+        b=cmds.ls(type='audio')
+        print 'a: ', a, 'b:', b
+        if not a == b:
+            self.audioNode = (list(set(a) ^ set(b))[0])
+        else:
+            matchingnode = [audio for audio in a if cmds.getAttr('%s.filename' % audio) == self.path]
+            if matchingnode:
+                self.audioNode = matchingnode[0]
+            else:
+                log.warning("can't find match audioNode for path : %s" % self.path)
                 return
-        audio.setActive()
-        return audio
+        self.isLoaded=True
+        self.setActive()
         
     def setActive(self):
         '''
         Set sound node as active on the timeSlider
         '''
-        gPlayBackSlider = mel.eval("string $temp=$gPlayBackSlider")
-        cmds.timeControl(gPlayBackSlider, e=True, ds=1, sound=self.audioNode)
+        if self.isLoaded:
+            gPlayBackSlider = mel.eval("string $temp=$gPlayBackSlider")
+            cmds.timeControl(gPlayBackSlider, e=True, ds=1, sound=self.audioNode)
 
     def getLengthFromWav(self):
         '''
@@ -726,10 +779,12 @@ class AudioNode(object):
             return (duration) * r9General.getCurrentFPS()
                     
     def setTimeline(self):
-        cmds.playbackOptions(min=int(self.startFrame), max=int(self.endFrame))
+        if self.isLoaded:
+            cmds.playbackOptions(min=int(self.startFrame), max=int(self.endFrame))
 
     def mute(self, state=True):
-        cmds.setAttr('%s.mute' % self.audioNode, state)
+        if self.isLoaded:
+            cmds.setAttr('%s.mute' % self.audioNode, state)
 
     def openAudioPath(self):
         path=self.path
@@ -742,18 +797,23 @@ class AudioNode(object):
         return if the audioNode in Maya was generated via the compileAudio
         call in the AudioHandler.
         '''
-        if cmds.attributeQuery('compiledAudio', exists=True, node=self.audioNode):
-            return True
+        if self.isLoaded:
+            if cmds.attributeQuery('compiledAudio', exists=True, node=self.audioNode):
+                return True
 
     def stampCompiled(self, audioNodes):
         '''
         Used by the compiler - stamp the audioNodes from which this audio
         track was compiled from
         '''
-        cmds.addAttr(self.audioNode, longName='compiledAudio', dt='string')
-        cmds.setAttr('%s.compiledAudio' % self.audioNode, ','.join(audioNodes), type="string")
+        if self.isLoaded:
+            cmds.addAttr(self.audioNode, longName='compiledAudio', dt='string')
+            cmds.setAttr('%s.compiledAudio' % self.audioNode, ','.join(audioNodes), type="string")
                 
-
+    def select(self):
+        if self.isLoaded:
+            cmds.select(self.audioNode)
+            
 
 def __ffprobeGet():
     '''
