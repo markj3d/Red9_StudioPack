@@ -76,10 +76,10 @@ RED9_META_CALLBACKS = {}
 
 '''
 CRUCIAL - REGISTER INHERITED CLASSES! ==============================================
-Register available MetaClass's to a global so that other modules could externally
-extend the functionality and use the base MetaClass. Note we're building this up
-from only those active Python classes who inherit from MetaClass
-global RED9_META_REGISTERY
+Register available MetaClass's to a global so that other modules could externally 
+extend the functionality and use the base MetaClass. Note we're building this up 
+from only those active Python classes who inherit from MetaClass 
+global RED9_META_REGISTERY 
 ====================================================================================
 '''
 def registerMClassInheritanceMapping():
@@ -932,6 +932,10 @@ class MetaClass(object):
     #Cast the mNode attr to the actual MObject so it's no longer limited by string dagpaths
     #yes I know Pymel does this for us but I don't want the overhead!
     def __get_mNode(self):
+        '''
+        mNode is the pointer to the Maya object itself, retrieved via the MObject
+        under the hood so it's always in sync.
+        '''
         mobjHandle=object.__getattribute__(self, "_MObjectHandle")
         if mobjHandle:
             try:
@@ -984,6 +988,9 @@ class MetaClass(object):
         
     #property managing the lockNode state of the mNode
     def __get_lockState(self):
+        '''
+        Lockstate is just that, the lockNode state of the Maya node
+        '''
         return self._lockState
     def __set_lockState(self, state):
         try:
@@ -1250,10 +1257,16 @@ class MetaClass(object):
         return cmds.attributeQuery(attr, exists=True, node=self.mNode)
     
     def attrIsLocked(self,attr):
+        '''
+        check the attribute on the mNode to see if it's locked
+        '''
         return cmds.getAttr('%s.%s' % (self.mNode,attr),l=True)
     
     @nodeLockManager
     def attrSetLocked(self, attr, state):
+        '''
+        set the lockState of a given attr on the mNode
+        '''
         try:
             if not self.isReferenced():
                 cmds.setAttr('%s.%s' % (self.mNode,attr),l=state)
@@ -1404,7 +1417,7 @@ class MetaClass(object):
     @nodeLockManager
     def rename(self, name):
         '''
-        rename the mNode itself
+        rename the mNode itself, again because we get the mNode via the MObject renaming is handled correctly
         '''
         cmds.rename(self.mNode, name)
         #self.mNode=name
@@ -1421,7 +1434,8 @@ class MetaClass(object):
             cmds.lockNode(self.mNode,lock=False)
         #clear the node from the cache
         if RED9_META_NODECACHE:
-            RED9_META_NODECACHE.pop(self.mNode)
+            if self.mNode in RED9_META_NODECACHE.keys():
+                RED9_META_NODECACHE.pop(self.mNode)
         #delete the Maya node and this python object
         cmds.delete(self.mNode)
         del(self)
@@ -1767,13 +1781,14 @@ class MetaClass(object):
     @r9General.Timer
     def getChildMetaNodes(self, walk=False, mAttrs=None, **kws):
         '''
-        Find any connected Child MetaNodes to this mNode
-        :param walk: walk the connected network and return ALL children conntected in the tree
-        :param mAttrs: only return connected nodes that pass the given attribute filter
+        Find any connected Child MetaNodes to this mNode.
+        
+        :param walk: walk the connected network and return ALL children conntected in the tree 
+        :param mAttrs: only return connected nodes that pass the given attribute filter 
         
         .. note:: 
             mAttrs is only searching attrs on the mNodes themselves, not all children
-            and although there is no mTypes flag, you can use mAttrs to get chilnodes of type
+            and although there is no mTypes flag, you can use mAttrs to get childnodes of type
             by going getChildMetaNodes(mAttrs='mClass=MetaRig')
         
         .. note:: 
@@ -1781,9 +1796,9 @@ class MetaClass(object):
             also take ALL of that functions **kws functionality in the initial search:
             source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType='mClass'
         
-        :TODO: allow this to walk over nodes, at the moment if the direct child isn't of the correct
-        type (if using the mTypes flag) then the walk will stop. This should continue over non matching
-        nodes down the hierarchy so all children are tested.
+        :TODO: allow this to walk over nodes, at the moment if the direct child isn't of the correct 
+            type (if using the mTypes flag) then the walk will stop. This should continue over non matching 
+            nodes down the hierarchy so all children are tested.
         '''
 
         if not walk:
@@ -1861,6 +1876,7 @@ class MetaClass(object):
         and over-loaded on a case by case basis. At the moment the MetaRig class simple calls
         mRig.getRigCtrls() in the call, but it means that we don't call .mRig.getRigCtrls()
         in generic meta functions.
+        
         :param walk: walk all subMeta connections and include all their children too
         :param mAttrs: only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)
         :param cAttrs: only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)
@@ -1937,6 +1953,7 @@ class MetaClass(object):
         '''
         really light wrapper, designed to return the attr via which a node
         is connected to this metaNode
+        
         :param node: node to test connection attr for
         
         .. note::
@@ -1952,6 +1969,7 @@ class MetaClass(object):
         '''
         really light wrapper, designed to return all connections
         between a given node and the mNode
+        
         :param node: node to test connection attr for
         :param filters: filter string to match for the returns
         '''
@@ -2307,7 +2325,7 @@ class MetaRig(MetaClass):
         :param attr: optional - attr in which a pose has been stored internally on the mRig
         :param filepath: optional - posefile to load back
         
-        TODO: add relative flags so that they can pass through this call
+        :TODO: add relative flags so that they can pass through this call
         '''
         import Red9.core.Red9_PoseSaver as r9Pose  # lazy loaded
         if attr or filepath:
@@ -2418,6 +2436,7 @@ class MetaRigSupport(MetaClass):
     def addSupportNode(self, node, attr, boundData=None):
         '''
         Add a single MAYA node flagged as a SUPPORT node of managed type
+        
         :param node: Maya node to add
         :param attr: Attr name to assign this too
         :param boundData: {} Data to set on the given node as attrs
@@ -2458,7 +2477,8 @@ class MetaFacialRigSupport(MetaClass):
         
     def addSupportNode(self, node, attr, boundData=None):
         '''
-        Add a single MAYA node flagged as a SUPPORT node of managed type
+        Add a single MAYA node flagged as a SUPPORT node of managed type.
+        
         :param node: Maya node to add
         :param attr: Attr name to assign this too
         :param boundData: {} Data to set on the given node as attrs
@@ -2542,6 +2562,7 @@ class MetaHIKControlSetNode(MetaRig):
 
 def monitorHUDaddCBAttrs():
     '''
+    ChannelBox wrappers for the HUD : 
     Adds selected attrs from the CB to a MetaHUD node for monitoring,
     if HUD node already exists this will simply add more attrs to it
     '''
@@ -2566,7 +2587,7 @@ def monitorHUDaddCBAttrs():
     
 def monitorHUDManagement(func):
     '''
-    kill any current MetaHUD headsUpDisplay blocks
+    ChannelBox wrappers for the HUD : kill any current MetaHUD headsUpDisplay blocks
     '''
     metaHUD=None
     currentHUDs=getMetaNodes(mTypes=MetaHUDNode,mAttrs='mNodeID=CBMonitorHUD')
@@ -2596,7 +2617,7 @@ def monitorHUDManagement(func):
                 
 def monitorHUDremoveCBAttrs():
     '''
-    remove attrs from the MetaHUD
+    ChannelBox wrappers for the HUD : remove attrs from the MetaHUD
     '''
     import Red9_CoreUtils as r9Core
     currentHUDs=getMetaNodes(mTypes=MetaHUDNode,mAttrs='mNodeID=CBMonitorHUD')
@@ -2624,8 +2645,14 @@ class MetaHUDNode(MetaClass):
     SubClass of the MetaClass, designed as a simple interface
     for HUD management in Maya. Any monitored attrs added to the MetaNode
     will show in the HUD when drawn.
-    TODO: Look if we can link the Section and Block attrs to the refresh func
-    via an attrChange callback
+    
+    The idea is that we have a single MetaNode with attrs that are monitored
+    and managed for HUD display. To get an attr onto the HUD all you need to do
+    is add it using addMonitoredAttr(), then drawHUD(). All I do is connect the HUD
+    attr to the attr that you want to monitor, it just sits as a new wired node.
+    
+    :TODO: Look if we can link the Section and Block attrs to the refresh func 
+        via an attrChange callback
     '''
     def __init__(self,*args,**kws):
         super(MetaHUDNode, self).__init__(*args,**kws)
@@ -2653,7 +2680,8 @@ class MetaHUDNode(MetaClass):
     
     def __compute__(self, attr, *args):
         '''
-        Allows us to modify the data being draw when over-loading this class
+        The monitored attrs passs through this compute block before being draw. This
+        allows us to modify the data being draw when over-loading this class.
         '''
         return getattr(self, attr)
                           
@@ -2661,7 +2689,15 @@ class MetaHUDNode(MetaClass):
         '''
         wrapper that not only adds an attr to the metaNode, but also adds it
         to the internal list of attributes that are monitored and added
-        to the HUD when drawn
+        to the HUD when drawn. 
+        
+        :param attr: attr to be added to the node for monitoring in the HUD
+        :param value: Initial value of the attr so the node can figure out what type of attr it is
+        :param attrType: specifiy the attr type directly
+        :param refresh: whether to refresh the HUD after adding a new attr
+        
+        .. note::
+            this ties in with the default addAttr call hence the args are very similar in function
         '''
         if not attr in self.monitorAttrs:
             self.addAttr(attr, value=value, attrType=attrType)
@@ -2679,6 +2715,8 @@ class MetaHUDNode(MetaClass):
     def removeMonitoredAttr(self,attr):
         '''
         Remove an attr from the MetaNode and refresh the HUD to reflect the removal
+        
+        :param attr: attr to be removed from monitoring
         '''
         self.__delattr__(attr)
         
@@ -2687,12 +2725,15 @@ class MetaHUDNode(MetaClass):
     
     def getHudDisplays(self):
         '''
-        each line ing the HUD is actually a separate HUD in itself so we need
+        each line in the HUD is actually a separate HUD in itself so we need
         to carefully manage this list
         '''
         return ['MetaHUDConnector%s' % attr for attr in self.monitorAttrs]
             
     def drawHUD(self):
+        '''
+        Push the monitored attrs up to the Maya HUD in the viewport
+        '''
         #Attributes:
         #        - Section 1, block 0, represents the top second slot of the view.
         #        - Set the blockSize to "medium", instead of the default "small"
@@ -2779,6 +2820,12 @@ class MetaHUDNode(MetaClass):
         cmds.setAttr(attr, cmds.hudSliderButton(slider, query=True, v=True))
         
     def resetSlider(self, slider, attr):
+        '''
+        If the HUD is made up of sliders this resets them
+        
+        :param slider: slider to reset in the HUD
+        :param attr: attr to reset on the mNode
+        '''
         value=0
         try:
             value=cmds.addAttr(q=True,dv=True)
@@ -2788,16 +2835,27 @@ class MetaHUDNode(MetaClass):
         cmds.hudSliderButton(slider, e=True, v=value)
                                        
     def showHud(self,value):
+        '''
+        manage the visibility state of the HUD
+        
+        :param value: show or hide the HUD
+        '''
         for hud in self.getHudDisplays():
             cmds.headsUpDisplay(hud, edit=True, visible=value)
              
     def killHud(self):
+        '''
+        kill the HUD display altogether
+        '''
         for hud in self.getHudDisplays():
             if cmds.headsUpDisplay(hud,exists=True):
                 cmds.headsUpDisplay(hud,remove=True)
         self.hudGroupActive=False
     
     def refreshHud(self):
+        '''
+        Refresh the HUD by killing it and re-drawing it from scratch
+        '''
         if self.hudGroupActive==True:
             self.killHud()
         self.drawHUD()
