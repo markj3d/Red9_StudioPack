@@ -1007,20 +1007,20 @@ class MetaClass(object):
         else:
             return "%s(Wrapped Standard MayaNode, node: '%s')" % (self.__class__, self.mNode.split('|')[-1])
     
-#    def __eq__(self, obj):
-#        '''
-#        Equals calls are handled via the MObject cache
-#        '''
-#        if isinstance(obj, self.__class__):
-#            if obj._MObject and self._MObject:
-#                if obj._MObject == self._MObject:
-#                    return True
-#                else:
-#                    return False
-#            else:
-#                return False
-#        else:
-#            return False
+    def __eq__(self, obj):
+        '''
+        Equals calls are handled via the MObject cache
+        '''
+        if isinstance(obj, self.__class__):
+            if obj._MObject and self._MObject:
+                if obj._MObject == self._MObject:
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
     
     @r9General.Timer
     def __fillAttrCache__(self, level):
