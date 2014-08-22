@@ -297,30 +297,71 @@ class AudioHandler(object):
     def mayaNodes(self):
         return [audio.audioNode for audio in self.audioNodes]
     
-    def getOverallRange(self, ms=False):
+    def getOverallRange(self):
         '''
         return the overall frame range of the given audioNodes (min/max)
         '''
-        maxV = self.audioNodes[0].startFrame  # initialize backwards
-        minV = self.audioNodes[0].endFrame  # initialize backwards
+        minV=None
+        maxV=None
         for a in self.audioNodes:
-            audioOffset=a.startFrame
-            audioEnd=a.endFrame  # why the hell does this always come back 1 frame over??
-            if audioOffset<minV:
-                minV=audioOffset
-            if audioEnd>maxV:
-                maxV=audioEnd
-        #print 'min : ', minV
-        #print 'max : ', maxV
+            if not minV:
+                minV=a.startFrame
+                maxV=a.endFrame
+            else:
+                minV=min(minV, a.startFrame)
+                maxV=max(maxV, a.endFrame)  # why the hell does this always come back 1 frame over??
         return (minV, maxV)
+
+    def getOverallBwavTimecodeRange(self, ms=False):
+        '''
+        return the overall internal BWAV timecode range for the given nodes
+        NOte this is the internal timecode plus the length of the files
         
+        :param ms: return the (minV,maxV) in milliseconds or SMPTE timecode 
+        '''
+        maxV = None
+        minV = None
+        for a in self.audioNodes:
+            if a.isBwav():
+                tcStart = a.bwav_timecodeMS()
+                tcEnd = tcStart + frame_to_milliseconds(a.getLengthFromWav())
+                if not minV:
+                    minV=tcStart
+                    maxV=tcEnd
+                else:
+                    minV=min(minV, tcStart)
+                    maxV=max(maxV, tcEnd)
+        if ms:
+            return (minV,maxV)
+        else:
+            return (milliseconds_to_Timecode(minV), milliseconds_to_Timecode(maxV))
+         
     def setTimelineToAudio(self, audioNodes=None):
         '''
         set the current TimeSlider to the extent of the given audioNodes
         '''
         frmrange=self.getOverallRange()
         cmds.playbackOptions(min=int(frmrange[0]), max=int(frmrange[1]))
-        
+      
+      
+    def offsetBy(self, offset):
+        '''
+        offset all audioNode by a given frame offset
+        '''
+        for node in self.audioNodes:
+            node.offsetTime(offset)
+            
+    def offsetTo(self, startFrame):
+        '''
+        offset all audio such that they start relative to a given frame,
+        takes the earliest startpoint of the given audio to calculate how much
+        to offset by
+        '''
+        minV, _ = self.getOverallRange()
+        offset = startFrame-minV
+        for node in self.audioNodes:
+            node.offsetTime(offset)
+            
     def muteSelected(self, state=True):
         for a in self.audioNodes:
             a.mute(state)
@@ -329,17 +370,30 @@ class AudioHandler(object):
         for a in self.audioNodes:
             a.delete()
     
-    def bwav_sync_to_Timecode(self):
+    def bwav_sync_to_Timecode(self, relativeToo=None):
         '''
         process either selected or all audio nodes and IF they are found to be
         BWav's with valid timecode references, sync them in Maya such
         that their offset = Bwav's timecode ie: sync them on the timeline to
         the bwavs internal timecode.
+        
+        :param relativeToo: This is fucking clever, even though I do say so. Pass in another bWav node and I 
+            calculate it's internal timecode against where it is in the timeline. I then use any difference in 
+            that nodes time as an offset for all the other nodes in self.audioNodes. Basically syncing multiple 
+            bwav's against a given sound.
         '''
-        for audio in self.audioNodes:
-            if audio.isBwav():
-                audio.bwav_sync_to_Timecode()
-            
+        if not relativeToo:
+            for audio in self.audioNodes:
+                if audio.isBwav():
+                    audio.bwav_sync_to_Timecode()
+        else:
+            relativeNode=AudioNode(relativeToo)
+            relativeTC=milliseconds_to_frame(relativeNode.bwav_timecodeMS())
+            actualframe=relativeNode.startFrame
+            diff=actualframe-relativeTC
+            print 'offset required : ', diff
+            self.offsetBy(diff)
+              
 #     def delCombined(self):
 #         audioNodes=cmds.ls(type='audio')
 #         if not audioNodes:
@@ -823,8 +877,58 @@ class AudioNode(object):
     def select(self):
         if self.isLoaded:
             cmds.select(self.audioNode)
-            
 
+
+
+class AudioToolsWrap(object):
+    def __init__(self):
+        self.win = 'AudioOffset'
+        
+    @classmethod
+    def show(cls):
+        cls()._showUI()
+    
+    def _showUI(self):
+        if cmds.window(self.win, exists=True):
+            cmds.deleteUI(self.win, window=True)
+        cmds.window(self.win, title=self.win, widthHeight=(350, 180))
+        cmds.columnLayout(adjustableColumn=True)
+        cmds.separator(h=15, style='none')
+        cmds.button('cacheAudioNodes', label='Set Audio To Process', command=self.__uicb_cacheAudioNodes)
+        cmds.separator(h=15, style='in')
+        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 130), (2, 130), (3, 130)])
+        cmds.button(label='Offset -', command=self.offsetSelectedBy)
+        cmds.floatField('AudioOffsetBy', value=10)
+        cmds.button(label='Offset +', command=self.offsetSelectedBy)
+        cmds.setParent('..')
+        cmds.separator(h=15, style='in')
+        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 130), (2, 130)])
+        cmds.button(label='Offset Range Too:', command=self.offsetSelectedTo)
+        cmds.floatField('AudioOffsetToo', value=10)
+        cmds.setParent('..')
+        cmds.separator(h=15, style='in')
+        cmds.button(label='Bwavs relative to Selected', command=self.offsetBwavRelativeToo)
+        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
+                             c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.showWindow(self.win)
+        cmds.window(self.win, e=True, widthHeight=(263, 180))
+
+    def __uicb_cacheAudioNodes(self,*args):
+        self.audioHandler=AudioHandler()
+        
+    def offsetSelectedBy(self,*args):
+        offset=cmds.floatField('AudioOffsetBy', q=True,v=True)
+        self.audioHandler.offsetBy(float(offset))
+           
+    def offsetSelectedTo(self,*args):
+        offset=cmds.floatField('AudioOffsetToo', q=True,v=True)
+        self.audioHandler.offsetTo(float(offset))
+     
+    def offsetBwavRelativeToo(self,*args):
+        relativeNode=cmds.ls(sl=True, type='audio')
+        if relativeNode:
+            self.audioHandler.bwav_sync_to_Timecode(relativeNode[0])
+        
 def __ffprobeGet():
     '''
     I don not ship ffprobe as it's lgpl license and fairly large, however
