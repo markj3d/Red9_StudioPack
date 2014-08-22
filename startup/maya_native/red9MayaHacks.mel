@@ -29,23 +29,29 @@ global proc red9HackChannelBox(string $parent)
 	 	-p $parent red9HUDsubmenu;
 	 menuItem -label ("HUD: Monitor CB selection") 
 		-p red9HUDsubmenu
+		-ann "Add the selected ChannelBox attrs to the HUD node for monitoring"
 		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDaddCBAttrs()\")" red9HUDaddStaticItem;
 	 menuItem -label ("HUD: Remove CB selection") 
 		-p red9HUDsubmenu
+		-ann "Remove the selected ChannelBox attrs from the HUD"
 		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDremoveCBAttrs()\")" red9HUDremoveItem;
 	 menuItem -divider true -p red9HUDsubmenu;
 	 menuItem -label ("HUD: Show as HeadsUp") 
 		-p red9HUDsubmenu
+		-ann "switch to standard Heads up data"
 		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDManagement('refreshHeadsUp')\")" red9HUDrefreshHeadsUpItem;	
 	 menuItem -label ("HUD: Show as Sliders") 
 		-p red9HUDsubmenu
+		-ann "switch the HUD mode to sliders"
 		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDManagement('refreshSliders')\")" red9HUDrefreshSlidersItem;		 
 	 menuItem -label ("HUD: Show Off") 
 		-p red9HUDsubmenu
+		-ann "turn off the HUD but leave the attrs wired to it"
 		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDManagement('kill')\")" red9HUDkillItem;	
 	 menuItem -divider true -p red9HUDsubmenu;
 	 menuItem -label ("HUD: Delete") 
 		-p red9HUDsubmenu
+		-ann "destroy the HUD itself and cleanup"
 		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDManagement('delete')\")" red9HUDdeleteItem;	
 
 }
@@ -94,11 +100,17 @@ global proc red9HackTraxMenu(string $parent)
 		-p "redNineTraxRoot"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().deleteSelected()\")" red9TraxDeleteItem;
 	 menuItem -d true;
+	 menuItem -label ("Offset Audio") 
+		-p "redNineTraxRoot"
+		-ann "offset / nudge multiple audio nodes in one go"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioToolsWrap().show()\")" red9TraxOffsetItem;	 
 	 menuItem -label ("Activate Selected Audio") 
 		-p "redNineTraxRoot"
+		-ann "set the current selected audio node to be active in the timeline"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioNode().setActive()\")" red9TraxActiveItem;
 	 menuItem -label ("Set Timeline to Selected") 
 		-p "redNineTraxRoot"
+		-ann "set the timeline to the extents of the selected, or all audio nodes"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().setTimelineToAudio()\")" red9TraxTimelineItem;		
 	 menuItem -label ("Mute Selected") 
 		-p "redNineTraxRoot"
@@ -109,17 +121,21 @@ global proc red9HackTraxMenu(string $parent)
 	 menuItem -d true;
 	 menuItem -label ("Combine Audio") 
 		-p "redNineTraxRoot"
+		-ann "Combine either selected, or ALL wavs into a single audio track - perfect for playblasting multiple audios"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.combineAudio()\")" red9TraxCombineItem;
 	 menuItem -d true;
 	 menuItem -label ("Open Audio Path") 
 		-p "redNineTraxRoot"
+		-ann "show the path in an OS Explorer"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioNode().openAudioPath()\")" red9TraxOpenPathItem;
 	 menuItem -label ("Inspect Wav Format") 
 		-p "redNineTraxRoot"
+		-ann "open up the inspector and show internal details about wav formats"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.inspect_wav()\")" red9TraxWavInspectItem;
 	 menuItem -d true;
-	 menuItem -label ("Sync BWavs") 
+	 menuItem -label ("Sync BWavs to Timecode") 
 		-p "redNineTraxRoot"
+		-ann "Use the internal timecode of bwav's to sync audionodes"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().bwav_sync_to_Timecode()\")" red9TraxWavBwavSyncItem;
 
 }
