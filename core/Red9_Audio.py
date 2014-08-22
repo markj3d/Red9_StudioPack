@@ -478,7 +478,7 @@ class AudioNode(object):
         return self.__audioNode
     @audioNode.setter
     def audioNode(self, node):
-        if cmds.objExists(node):
+        if node and cmds.objExists(node):
             self.isLoaded=True
             self.__audioNode=node
             
