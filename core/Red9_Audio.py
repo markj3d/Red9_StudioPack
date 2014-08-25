@@ -15,6 +15,7 @@ This is the Audio library of utils used throughout the modules
 from __future__ import with_statement  # required only for Maya2009/8
 import maya.cmds as cmds
 import maya.mel as mel
+from functools import partial
 import os
 import struct
 import math
@@ -370,7 +371,7 @@ class AudioHandler(object):
         for a in self.audioNodes:
             a.delete()
     
-    def bwav_sync_to_Timecode(self, relativeToo=None):
+    def bwav_sync_to_Timecode(self, relativeToo=None, *args):
         '''
         process either selected or all audio nodes and IF they are found to be
         BWav's with valid timecode references, sync them in Maya such
@@ -882,7 +883,8 @@ class AudioNode(object):
 
 class AudioToolsWrap(object):
     def __init__(self):
-        self.win = 'AudioOffset'
+        self.win = 'AudioOffsetManager'
+        self.__bwav_reference=None
         
     @classmethod
     def show(cls):
@@ -891,44 +893,88 @@ class AudioToolsWrap(object):
     def _showUI(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        cmds.window(self.win, title=self.win, widthHeight=(350, 180))
+        cmds.window(self.win, title=self.win, widthHeight=(400, 180))
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=15, style='none')
-        cmds.button('cacheAudioNodes', label='Set Audio To Process', command=self.__uicb_cacheAudioNodes)
         cmds.separator(h=15, style='in')
-        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 130), (2, 130), (3, 130)])
-        cmds.button(label='Offset -', command=self.offsetSelectedBy)
+        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 90), (3, 100)])
+        cmds.button(label='<< Offset', 
+                    ann='Nudge selected Audio Backwards',
+                    command=partial(self.offsetSelectedBy,'negative'))
         cmds.floatField('AudioOffsetBy', value=10)
-        cmds.button(label='Offset +', command=self.offsetSelectedBy)
+        cmds.button(label='Offset >>', 
+                    ann='Nudge selected Audio Forwards',
+                    command=partial(self.offsetSelectedBy,'positive'))
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
-        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 130), (2, 130)])
-        cmds.button(label='Offset Range Too:', command=self.offsetSelectedTo)
+        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 200), (2, 90)])
+        cmds.button(label='Offset Range to Start at:', 
+                    ann='offset the selected range of audionodes such that they start at the given frame',
+                    command=self.offsetSelectedTo)
         cmds.floatField('AudioOffsetToo', value=10)
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
-        cmds.button(label='Bwavs relative to Selected', command=self.offsetBwavRelativeToo)
+        cmds.text(label='Broadcast Wav Timecode Support:')
+        cmds.separator(h=10, style='none')
+        cmds.button(label='Sync Bwavs to Internal Timecode', 
+                    ann='Sync audio nodes to their originally recorded internal timecode reference',
+                    command=self.sync_bwavs)
+        cmds.separator(h=5, style='in')
+        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 100)], columnSpacing=[(2,20)])
+        cmds.button(label='Set Timecode Ref', 
+                    ann="Set the audio node to use as the reference timecode so all other become relative to this offset",
+                    command=self.__uicb_setReferenceBwavNode)
+        cmds.text('bwavRefTC', label='No Reference Set')
+        cmds.setParent('..')
+        cmds.button(label='Sync Bwavs Relative to Selected', 
+                    ann="Sync audio nodes via their internal timecodes such that they're relative to that of the given reference",
+                    command=self.sync_bwavsRelativeToo)
+        
+        cmds.separator(h=15, style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                              c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
         cmds.showWindow(self.win)
-        cmds.window(self.win, e=True, widthHeight=(263, 180))
+        cmds.window(self.win, e=True, widthHeight=(290, 260))
 
     def __uicb_cacheAudioNodes(self,*args):
         self.audioHandler=AudioHandler()
         
-    def offsetSelectedBy(self,*args):
+    def offsetSelectedBy(self,direction,*args):
+        self.audioHandler=AudioHandler()
         offset=cmds.floatField('AudioOffsetBy', q=True,v=True)
+        if direction == 'negative':
+            offset=0-offset
         self.audioHandler.offsetBy(float(offset))
            
     def offsetSelectedTo(self,*args):
+        self.audioHandler=AudioHandler()
         offset=cmds.floatField('AudioOffsetToo', q=True,v=True)
         self.audioHandler.offsetTo(float(offset))
-     
-    def offsetBwavRelativeToo(self,*args):
-        relativeNode=cmds.ls(sl=True, type='audio')
-        if relativeNode:
-            self.audioHandler.bwav_sync_to_Timecode(relativeNode[0])
-        
+    
+    def __uicb_setReferenceBwavNode(self,*args):
+        selected=cmds.ls(sl=True, type='audio') 
+        if selected:
+            reference=AudioNode(selected[0])
+            if reference.isBwav():
+                self.__bwav_reference=selected
+                cmds.text('bwavRefTC', edit=True, 
+                          label='frame %s == %s' % (reference.startFrame,reference.bwav_timecodeFormatted()))
+            else:
+                raise IOError("selected Audio node is NOT a Bwav so can't be used as reference")
+        else:
+              raise IOError("No reference audio track selected for reference")
+       
+    def sync_bwavsRelativeToo(self, *args):
+        self.audioHandler=AudioHandler()
+        if self.__bwav_reference:
+            self.audioHandler.bwav_sync_to_Timecode(self.__bwav_reference)
+        else:
+            raise IOError("No timecode reference currently set")
+            
+    def sync_bwavs(self, *args):
+        self.audioHandler=AudioHandler()
+        self.audioHandler.bwav_sync_to_Timecode() 
+            
 def __ffprobeGet():
     '''
     I don not ship ffprobe as it's lgpl license and fairly large, however
