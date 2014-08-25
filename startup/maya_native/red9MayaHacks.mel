@@ -96,14 +96,12 @@ global proc red9HackTraxMenu(string $parent)
 {
 	//hack Red9_Sound to the Trax Editor menuBar
      menu -label "Red9_Sound" -tearOff true -allowOptionBoxes true "redNineTraxRoot";
- 	 menuItem -label ("Delete Selected Audio") 
-		-p "redNineTraxRoot"
-		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().deleteSelected()\")" red9TraxDeleteItem;
-	 menuItem -d true;
-	 menuItem -label ("Offset Audio") 
+ 
+	 menuItem -label ("Audio Offset Manager") 
 		-p "redNineTraxRoot"
 		-ann "offset / nudge multiple audio nodes in one go"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioToolsWrap().show()\")" red9TraxOffsetItem;	 
+	 menuItem -d true;
 	 menuItem -label ("Activate Selected Audio") 
 		-p "redNineTraxRoot"
 		-ann "set the current selected audio node to be active in the timeline"
@@ -118,6 +116,9 @@ global proc red9HackTraxMenu(string $parent)
 	 menuItem -label ("UnMute Selected") 
 		-p "redNineTraxRoot"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().muteSelected(False)\")" red9TraxUnmuteSelectedItem;
+	 menuItem -label ("Delete Selected Audio") 
+		-p "redNineTraxRoot"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().deleteSelected()\")" red9TraxDeleteItem;
 	 menuItem -d true;
 	 menuItem -label ("Combine Audio") 
 		-p "redNineTraxRoot"
