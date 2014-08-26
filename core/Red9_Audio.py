@@ -219,6 +219,8 @@ def audioPathLoaded(filepath):
     audio path
     '''
     nodes=[]
+    if not os.path.exists(filepath):
+        return nodes
     for audio in cmds.ls(type='audio'):
         if r9General.formatPath(cmds.getAttr('%s.filename' % audio)) == r9General.formatPath(filepath):
             nodes.append(audio)
@@ -677,7 +679,7 @@ class AudioNode(object):
             fopen=True
         self.__readchunk(filedata, data)
         if fopen:
-            print 'file closed'
+            #print 'file closed'
             filedata.close()
         return data
         
@@ -894,47 +896,50 @@ class AudioToolsWrap(object):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
         cmds.window(self.win, title=self.win, widthHeight=(400, 180))
-        cmds.columnLayout(adjustableColumn=True)
+        cmds.columnLayout('uicl_audioMain',adjustableColumn=True)
         cmds.separator(h=15, style='none')
         cmds.separator(h=15, style='in')
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 90), (3, 100)])
-        cmds.button(label='<< Offset', 
+        cmds.button(label='<< Offset',
                     ann='Nudge selected Audio Backwards',
                     command=partial(self.offsetSelectedBy,'negative'))
         cmds.floatField('AudioOffsetBy', value=10)
-        cmds.button(label='Offset >>', 
+        cmds.button(label='Offset >>',
                     ann='Nudge selected Audio Forwards',
                     command=partial(self.offsetSelectedBy,'positive'))
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 200), (2, 90)])
-        cmds.button(label='Offset Range to Start at:', 
+        cmds.button(label='Offset Range to Start at:',
                     ann='offset the selected range of audionodes such that they start at the given frame',
                     command=self.offsetSelectedTo)
         cmds.floatField('AudioOffsetToo', value=10)
         cmds.setParent('..')
-        cmds.separator(h=15, style='in')
-        cmds.text(label='Broadcast Wav Timecode Support:')
+        cmds.separator(h=15, style='none')
+        cmds.frameLayout(label='Broadcast Wav support', cll=True, borderStyle='etchedOut')
+        cmds.columnLayout(adjustableColumn=True)
+        cmds.separator(h=5, style='none')
+        cmds.text(label="NOTE: These will only run if the audio is\nin the Bwav format and has internal timecode data.")
         cmds.separator(h=10, style='none')
-        cmds.button(label='Sync Bwavs to Internal Timecode', 
+        cmds.button(label='Sync Bwavs to Internal Timecode',
                     ann='Sync audio nodes to their originally recorded internal timecode reference',
                     command=self.sync_bwavs)
-        cmds.separator(h=5, style='in')
+        cmds.separator(h=10, style='in')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 100)], columnSpacing=[(2,20)])
-        cmds.button(label='Set Timecode Ref', 
+        cmds.button(label='Set Timecode Ref',
                     ann="Set the audio node to use as the reference timecode so all other become relative to this offset",
                     command=self.__uicb_setReferenceBwavNode)
         cmds.text('bwavRefTC', label='No Reference Set')
         cmds.setParent('..')
-        cmds.button(label='Sync Bwavs Relative to Selected', 
+        cmds.button(label='Sync Bwavs Relative to Selected',
                     ann="Sync audio nodes via their internal timecodes such that they're relative to that of the given reference",
                     command=self.sync_bwavsRelativeToo)
-        
-        cmds.separator(h=15, style='none')
+        cmds.setParent('uicl_audioMain')
+        cmds.separator(h=10, style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                              c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
         cmds.showWindow(self.win)
-        cmds.window(self.win, e=True, widthHeight=(290, 260))
+        cmds.window(self.win, e=True, widthHeight=(290, 300))
 
     def __uicb_cacheAudioNodes(self,*args):
         self.audioHandler=AudioHandler()
@@ -952,17 +957,21 @@ class AudioToolsWrap(object):
         self.audioHandler.offsetTo(float(offset))
     
     def __uicb_setReferenceBwavNode(self,*args):
-        selected=cmds.ls(sl=True, type='audio') 
+        selected=cmds.ls(sl=True, type='audio')
         if selected:
+            if not len(selected)==1:
+                log.warning("Please only select 1 piece of Audio to use for reference")
+                return
             reference=AudioNode(selected[0])
             if reference.isBwav():
-                self.__bwav_reference=selected
-                cmds.text('bwavRefTC', edit=True, 
+                self.__bwav_reference=selected[0]
+                cmds.text('bwavRefTC', edit=True,
                           label='frame %s == %s' % (reference.startFrame,reference.bwav_timecodeFormatted()))
             else:
                 raise IOError("selected Audio node is NOT a Bwav so can't be used as reference")
         else:
-              raise IOError("No reference audio track selected for reference")
+            log.warning("No reference audio track selected for reference")
+            return
        
     def sync_bwavsRelativeToo(self, *args):
         self.audioHandler=AudioHandler()
@@ -973,7 +982,7 @@ class AudioToolsWrap(object):
             
     def sync_bwavs(self, *args):
         self.audioHandler=AudioHandler()
-        self.audioHandler.bwav_sync_to_Timecode() 
+        self.audioHandler.bwav_sync_to_Timecode()
             
 def __ffprobeGet():
     '''
