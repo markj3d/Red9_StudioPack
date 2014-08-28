@@ -394,8 +394,10 @@ class AudioHandler(object):
             relativeTC=milliseconds_to_frame(relativeNode.bwav_timecodeMS())
             actualframe=relativeNode.startFrame
             diff=actualframe-relativeTC
-            print 'offset required : ', diff
-            self.offsetBy(diff)
+            log.info('internalTC: %s , internalStartFrm %s, offset required : %f' % (relativeNode.bwav_timecodeFormatted(), relativeTC, diff))
+            for audio in self.audioNodes:
+                audio.bwav_sync_to_Timecode(offset=diff)
+            #self.offsetBy(diff)
               
 #     def delCombined(self):
 #         audioNodes=cmds.ls(type='audio')
@@ -767,17 +769,17 @@ class AudioNode(object):
         '''
         return milliseconds_to_Timecode(self.bwav_timecodeMS(), smpte=smpte, framerate=framerate)
 
-    def bwav_sync_to_Timecode(self):
+    def bwav_sync_to_Timecode(self, offset=0):
         '''
         given that self is a Bwav and has timecode reference, sync it's position
         in the Maya timeline to match
         '''
         if self.isLoaded:
-            print milliseconds_to_Timecode(self.bwav_timecodeMS(), smpte=True, framerate=None)
-            print milliseconds_to_frame(self.bwav_timecodeMS(), framerate=None)
-            self.startTime=self.bwav_timecodeMS()
-        
-        
+            #print milliseconds_to_Timecode(self.bwav_timecodeMS(), smpte=True, framerate=None)
+            #print milliseconds_to_frame(self.bwav_timecodeMS(), framerate=None)
+            self.startFrame=milliseconds_to_frame(self.bwav_timecodeMS()) + offset
+      
+
     # Bwav end =========================================================
     
     def isValid(self):
