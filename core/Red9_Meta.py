@@ -42,6 +42,7 @@ import sys
 import os
 
 import Red9_General as r9General
+import Red9_CoreUtils as r9Core
 import Red9.startup.setup as r9Setup
 from Red9_AnimationUtils import MirrorHierarchy
 
@@ -138,11 +139,17 @@ def getMClassDataFromNode(node):
     from the node get the class to instantiate, this gives us a level of
     flexibility over mClass attr rather than pure hard coding as it was previously
     '''
-    if cmds.attributeQuery('mClass', exists=True, node=node):
-        return cmds.getAttr('%s.%s' % (node,'mClass'))
-    elif 'Meta%s' % cmds.nodeType(node) in RED9_META_REGISTERY.keys():
-        return 'Meta%s' % cmds.nodeType(node)
-    
+    try:
+        if cmds.attributeQuery('mClass', exists=True, node=node):
+            return cmds.getAttr('%s.%s' % (node,'mClass'))
+        elif 'Meta%s' % cmds.nodeType(node) in RED9_META_REGISTERY.keys():
+            return 'Meta%s' % cmds.nodeType(node)
+    except:
+        #node is ALREADY MetaClass instance?
+        if issubclass(type(node), MetaClass):
+            log.debug('getMClassFromNode was given an already instanciated MNode')
+        raise StandardError('getMClassFromNode was given an already instanciated MNode')
+
     
 # NodeType Management ---------------------------
   
@@ -789,15 +796,21 @@ class MetaClass(object):
         
         if args:
             mNode=args[0]
-            
+
             if mNode:
                 MetaClass.cached = getMetaFromCache(mNode)  # Do Not run __new__ if the node is in the Cache
                 log.debug('### MetaClass.cached being set in the __new__ ###')
                 if MetaClass.cached:
                     return MetaClass.cached
-                
-            if isMetaNode(mNode):
-                mClass=getMClassDataFromNode(mNode)
+            try:
+                if isMetaNode(mNode):
+                    mClass=getMClassDataFromNode(mNode)
+            except:
+                if issubclass(type(mNode), MetaClass):
+                    log.debug('NodePassed is already an instanciated MetaNode!!')
+                    #print type(mNode), mNode.cached
+                    MetaClass.cached=True
+                    return mNode
         if mClass:
             log.debug("mClass derived from MayaNode Attr : %s" % mClass)
             if mClass in RED9_META_REGISTERY:
@@ -2882,6 +2895,77 @@ class MetaHUDNode(MetaClass):
         if wasActive==True:
             self.drawHUD()
             
+
+class MetaTimeCodeHUD(MetaHUDNode):
+    '''
+    Generate's a HUD node connected to the main timecode attrs,
+    allows us to show the actual internal timecode attrs as their 
+    original SMPTE time's
+    
+    Crucial things to be aware of:
+    
+    We construct timecode from 3 attrs on the given node:
+    timecode_ref        : the original timecode converted to milliseconds
+    timecode_count      : a linear curve that increments every frame based on the samplerate
+    timecode_samplerate : samplerate that the linear counter was generated against
+    
+    SMPTE timecode is then reconstructed like so:
+    r9Audio.milliseconds_to_Timecode(ref + ((count / samplerate) * 1000))
+    
+    tcHUD=cFacialMeta.MetaTimeCodeHUD()
+    tcHUD.addMonitoredTimecodeNode(cmds.ls(sl=True)[0])
+    tcHUD.drawHUD()
+    '''
+    def __init__(self, *args, **kws):
+        super(MetaTimeCodeHUD, self).__init__(*args, **kws)
+        
+        if self.cached:
+            log.debug('CACHE : Aborting __init__ on pre-cached %s Object' % self.__class__)
+            return
+        
+        self.tc_count = 'timecode_count'
+        self.tc_samplerate = 'timecode_samplerate'
+        self.tc_ref = 'timecode_ref'
+        self.attrCache={}
+        import Red9.core.Red9_Audio as r9Audio
+        self.func=r9Audio.milliseconds_to_Timecode
+
+    def addMonitoredTimecodeNode(self, nodes, valid=True):
+        '''
+        add a node with the TimeCode attrs on it to monitor
+        '''
+        if not type(nodes)==list:
+            nodes=[nodes]
+            
+        for node in nodes:
+            node=MetaClass(node)
+            monitoredAttr='%s_%s_%s' % (r9Core.nodeNameStrip(node.nameSpace()[0]),
+                                        r9Core.nodeNameStrip(node.mNode),
+                                        'Timecode')
+            if not node.timecode_ref >1000 and valid:
+                log.warning('%s : Skipping as timecode is invalid' % monitoredAttr)
+                continue
+            
+            self.addMonitoredAttr(monitoredAttr, value=getattr(node, self.tc_count), refresh=False)
+            cmds.connectAttr('%s.%s' % (node.mNode, self.tc_count), '%s.%s' % (self.mNode, monitoredAttr))
+            
+            #add the data that we can to the cache for speed
+            self.attrCache[monitoredAttr]={'mNode':node, 'ref':getattr(node, self.tc_ref), 'samplerate':getattr(node, self.tc_samplerate)}
+            
+    def __compute__(self, attr, *args):
+        '''
+        Data computed on the refresh - convert all the attrs to meaningful timecode
+        '''
+        cacheData=self.attrCache[attr]
+        try:
+            return self.func(cacheData['ref'] + ((float(getattr(self, attr)) / cacheData['samplerate']) * 1000))
+        except:
+            return 'InvalidDataSet'
+  
+    def removeMonitoredAttr(self,attr):
+        super(MetaTimeCodeHUD,self).removeMonitoredAttr(attr)
+        self.attrCache.pop(attr)
+
             
 '''
 if we reload r9Meta on it's own then the registry used in construction of
