@@ -97,7 +97,7 @@ global proc red9HackTraxMenu(string $parent)
 	//hack Red9_Sound to the Trax Editor menuBar
      menu -label "Red9_Sound" -tearOff true -allowOptionBoxes true "redNineTraxRoot";
  
-	 menuItem -label ("Audio Offset Manager") 
+	 menuItem -label ("Offset Manager") 
 		-p "redNineTraxRoot"
 		-ann "offset / nudge multiple audio nodes in one go"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioToolsWrap().show()\")" red9TraxOffsetItem;	 
@@ -133,10 +133,5 @@ global proc red9HackTraxMenu(string $parent)
 		-p "redNineTraxRoot"
 		-ann "open up the inspector and show internal details about wav formats"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.inspect_wav()\")" red9TraxWavInspectItem;
-	 menuItem -d true;
-	 menuItem -label ("Sync BWavs to Timecode") 
-		-p "redNineTraxRoot"
-		-ann "Use the internal timecode of bwav's to sync audionodes"
-		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().bwav_sync_to_Timecode()\")" red9TraxWavBwavSyncItem;
 
 }
