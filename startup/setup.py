@@ -260,7 +260,7 @@ def addToMayaMenus():
                 mel.eval('buildFileMenu()')
             cmds.menuItem(divider=True,p=mainFileMenu)
             cmds.menuItem('redNineOpenFolderItem',
-                          l="Red9: OpenSceneFolder",
+                          l="Red9: Open in Explorer",
                           ann="Open the folder containing the current Maya Scene",
                           p=mainFileMenu,
                           echoCommand=True,
