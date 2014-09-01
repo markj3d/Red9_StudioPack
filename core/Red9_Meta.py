@@ -2418,7 +2418,7 @@ class MetaRig(MetaClass):
         self.poseCacheLoad(nodes=nodes, attr='zeroPose')
     
     
-class MetaRigSubSystem(MetaRig):
+class MetaRigSubSystem(MetaClass):  # MetaRig):
     '''
     SubClass of the MRig, designed to organize Rig sub-systems (ie L_ArmSystem, L_LegSystem..)
     within a complex rig structure. This or MetaRig should have the Controllers wired to it
@@ -2649,7 +2649,18 @@ def monitorHUDremoveCBAttrs():
                     pass
         metaHUD.refreshHud()
         
-        
+def hardKillMetaHUD():
+    '''
+    If the MetaNodes are left behind in a scene and you can't remove them
+    then this is a hard coded kill to remove the hud element. This situation 
+    happens if you'd deleted the MetaHUDNode but left the draw on, meaning
+    we now have invalid HUD data drawn.
+    '''
+    HUDS=cmds.headsUpDisplay(lh=True)
+    for hud in HUDS:
+        if 'MetaHUDConnector' in hud:
+            cmds.headsUpDisplay(hud,remove=True)
+    
 # EXPERIMENTAL CALLS ==========================================================
      
      
@@ -2965,6 +2976,19 @@ class MetaTimeCodeHUD(MetaHUDNode):
     def removeMonitoredAttr(self,attr):
         super(MetaTimeCodeHUD,self).removeMonitoredAttr(attr)
         self.attrCache.pop(attr)
+        
+    @r9General.Timer
+    def connectTimecodeSystems(self, metaRigs=True):
+        if metaRigs:
+            rigs=getMetaNodes(mInstances=MetaRig)
+            flt=r9Core.FilterNode([rig for rig in rigs if rig.isValid()])
+            flt.settings.metaRig=True
+        else:
+            flt=r9Core.FilterNode()
+            flt.settings.nodeTypes='transform'
+        flt.settings.searchAttrs=self.tc_ref
+        
+        self.addMonitoredTimecodeNode(flt.ProcessFilter())
 
             
 '''
