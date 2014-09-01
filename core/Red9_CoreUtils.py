@@ -370,18 +370,24 @@ class FilterNode_UI(object):
         # Intersector
         #====================
         cmds.rowColumnLayout(ann='nodeTypeSelectors', numberOfColumns=3, columnWidth=[(1, 130), (2, 130), (3, 130)], columnSpacing=[(1, 10)])
-        cmds.checkBox(l='Meshes', v=False,
-                        onc=lambda x: self.cbNodeTypes.append('mesh'),
-                        ofc=lambda x: self.cbNodeTypes.remove('mesh'))
-        cmds.checkBox(l='Locators', v=False,
-                        onc=lambda x: self.cbNodeTypes.append('locator'),
-                        ofc=lambda x: self.cbNodeTypes.remove('locator'))
-        cmds.checkBox(l='Joints', v=False,
-                        onc=lambda x: self.cbNodeTypes.append('joint'),
-                        ofc=lambda x: self.cbNodeTypes.remove('joint'))
         cmds.checkBox(l='NurbsCurve', v=False,
                         onc=lambda x: self.cbNodeTypes.append('nurbsCurve'),
                         ofc=lambda x: self.cbNodeTypes.remove('nurbsCurve'))
+        cmds.checkBox(l='Meshes', v=False,
+                        onc=lambda x: self.cbNodeTypes.append('mesh'),
+                        ofc=lambda x: self.cbNodeTypes.remove('mesh'))
+        cmds.checkBox(l='Joints', v=False,
+                        onc=lambda x: self.cbNodeTypes.append('joint'),
+                        ofc=lambda x: self.cbNodeTypes.remove('joint'))
+        cmds.checkBox(l='Locators', v=False,
+                        onc=lambda x: self.cbNodeTypes.append('locator'),
+                        ofc=lambda x: self.cbNodeTypes.remove('locator'))
+        cmds.checkBox(l='Cameras', v=False,
+                        onc=lambda x: self.cbNodeTypes.append('camera'),
+                        ofc=lambda x: self.cbNodeTypes.remove('camera'))
+        cmds.checkBox(l='Audio', v=False,
+                        onc=lambda x: self.cbNodeTypes.append('audio'),
+                        ofc=lambda x: self.cbNodeTypes.remove('audio'))
         cmds.checkBox(l='OrientConstraint', v=False,
                         onc=lambda x: self.cbNodeTypes.append('orientConstraint'),
                         ofc=lambda x: self.cbNodeTypes.remove('orientConstraint'))
@@ -391,7 +397,7 @@ class FilterNode_UI(object):
         cmds.checkBox(l='ParentConstraint', v=False,
                         onc=lambda x: self.cbNodeTypes.append('parentConstraint'),
                         ofc=lambda x: self.cbNodeTypes.remove('parentConstraint'))
-        cmds.checkBox(l='ikHandle', v=False,
+        cmds.checkBox(l='IKHandles', v=False,
                         onc=lambda x: self.cbNodeTypes.append('ikHandle'),
                         ofc=lambda x: self.cbNodeTypes.remove('ikHandle'))
         cmds.checkBox(l='Transforms', v=False,
@@ -431,7 +437,7 @@ class FilterNode_UI(object):
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                              c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
         cmds.showWindow(window)
-        cmds.window(self.win, e=True, widthHeight=(400, 380))
+        cmds.window(self.win, e=True, widthHeight=(400, 400))
         
         
     def __uiCall(self, mode):
