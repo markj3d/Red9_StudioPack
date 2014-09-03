@@ -3691,6 +3691,9 @@ class MirrorHierarchy(object):
     >>> mirror.mirrorData(mode='Anim')
     
     TODO: We need to do a UI for managing these marker attrs and the Index lists
+    
+    TODO: allow the mirror block to include an offset so that if you need to inverse AND offset 
+        by 180 to get left and right working you can still do so.
     '''
     
     def __init__(self, nodes=[], filterSettings=None, **kws):
