@@ -2090,6 +2090,9 @@ class MetaRig(MetaClass):
         .. note::
             | mirrorData[slot] must NOT == 0 as it'll be handled as not set by the core.
             | ctrType >> 'Main' is the equivalent of the RootNode in the FilterNode calls.
+            
+        TODO: allow the mirror block to include an offset so that if you need to inverse AND offset 
+        by 180 to get left and right working you can still do so.
         '''
         #import Red9_AnimationUtils as r9Anim  # lazy load to avoid cyclic imports
         
@@ -2947,11 +2950,15 @@ class MetaTimeCodeHUD(MetaHUDNode):
         '''
         if not type(nodes)==list:
             nodes=[nodes]
-            
+
         for node in nodes:
             node=MetaClass(node)
-            monitoredAttr='%s_%s_%s' % (r9Core.nodeNameStrip(node.nameSpace()[0]),
+            if node.nameSpace():
+                monitoredAttr='%s_%s_%s' % (r9Core.nodeNameStrip(node.nameSpace()[0]),
                                         r9Core.nodeNameStrip(node.mNode),
+                                        'Timecode')
+            else:
+                monitoredAttr='%s_%s' % (r9Core.nodeNameStrip(node.mNode),
                                         'Timecode')
             if not node.timecode_ref >1000 and valid:
                 log.warning('%s : Skipping as timecode is invalid' % monitoredAttr)
@@ -2987,8 +2994,11 @@ class MetaTimeCodeHUD(MetaHUDNode):
             flt=r9Core.FilterNode()
             flt.settings.nodeTypes='transform'
         flt.settings.searchAttrs=self.tc_ref
-        
-        self.addMonitoredTimecodeNode(flt.ProcessFilter())
+        nodes=flt.ProcessFilter()
+        if nodes:
+            self.addMonitoredTimecodeNode(nodes)
+        else:
+            raise StandardError('No nodes found through the filters that contain timecode attrs')
 
             
 '''
