@@ -1118,7 +1118,7 @@ class MetaClass(object):
                     attrType=cmds.getAttr(attrString, type=True)  # the MayaNode attribute valueType
                     valueType=attributeDataType(value)            # DataType passed in to be set as Value
                     log.debug('valueType : %s' % valueType)
-                    log.debug('setting %s attribute' % attrType)
+                    log.debug('setting %s attribute to value : %s' % (attrType,value))
                     
                     if attrType=='string':
                         if valueType=='string' or valueType=='unicode':
