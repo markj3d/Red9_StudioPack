@@ -2421,7 +2421,7 @@ class MetaRig(MetaClass):
         self.poseCacheLoad(nodes=nodes, attr='zeroPose')
     
     
-class MetaRigSubSystem(MetaClass):  # MetaRig):
+class MetaRigSubSystem(MetaRig):
     '''
     SubClass of the MRig, designed to organize Rig sub-systems (ie L_ArmSystem, L_LegSystem..)
     within a complex rig structure. This or MetaRig should have the Controllers wired to it
