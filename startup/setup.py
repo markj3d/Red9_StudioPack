@@ -266,14 +266,14 @@ def addToMayaMenus():
                           echoCommand=True,
                           c="import maya.cmds as cmds;import Red9.core.Red9_General as r9General;r9General.os_OpenFileDirectory(cmds.file(q=True,sn=True))")
         # timeSlider additions
-        if not cmds.menuItem('redNineTimeSliderItem',q=True,ex=True):
+        if not cmds.menuItem('redNineTimeSliderCollapseItem',q=True,ex=True):
             if mayaVersion >= 2011:
                 mel.eval('updateTimeSliderMenu TimeSliderMenu')
                 
             TimeSliderMenu='TimeSliderMenu'
             cmds.menuItem(divider=True, p=TimeSliderMenu)
             cmds.menuItem(subMenu=True, label='Red9: Collapse Range', p=TimeSliderMenu)
-            cmds.menuItem(label='Collapse : Selected Only',
+            cmds.menuItem('redNineTimeSliderCollapseItem', label='Collapse : Selected Only',
                           ann='Collapse the keys in the selected TimeRange (Red highlighted)',
                           c='import Red9.core.Red9_CoreUtils as r9Core;r9Core.timeOffset_collapse(scene=False)')
             cmds.menuItem(label='Collapse : Full Scene',
@@ -287,6 +287,8 @@ def addToMayaMenus():
             cmds.menuItem(label='Pad : Full Scene',
                           ann='Insert time in the selected TimeRange (Red highlighted)',
                           c='import Red9.core.Red9_CoreUtils as r9Core;r9Core.timeOffset_addPadding(scene=True)')
+        else:
+            log.debug('Red9 Timeslider menus already built')
     except:
         log.debug('gMainFileMenu not found >> catch for unitTesting')
 
