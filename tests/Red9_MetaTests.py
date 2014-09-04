@@ -574,6 +574,21 @@ class Test_MetaClass():
         assert not cmds.attributeQuery('boolTest',node=node.mNode,exists=True)
     
 
+    def test_attributeHandlingMath(self):
+        '''
+        This tests the python attr handling with math args
+        '''
+        node=self.MClass
+
+        node.addAttr('fltTest', 1.5)
+        node.fltTest+=1
+        assert node.fltTest==2.5
+        node.fltTest-=1
+        assert node.fltTest == 1.5
+        node.fltTest*=2
+        assert node.fltTest == 3.0
+
+        
         
     def test_attributeHandling_MessageAttr(self):
         '''
