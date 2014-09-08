@@ -2937,12 +2937,14 @@ class MetaTimeCodeHUD(MetaHUDNode):
             log.debug('CACHE : Aborting __init__ on pre-cached %s Object' % self.__class__)
             return
         
-        self.tc_count = 'timecode_count'
-        self.tc_samplerate = 'timecode_samplerate'
-        self.tc_ref = 'timecode_ref'
-        self.attrCache={}
         import Red9.core.Red9_Audio as r9Audio
         self.func=r9Audio.milliseconds_to_Timecode
+        
+        self.tc_count = r9Audio.Timecode.count
+        self.tc_samplerate = r9Audio.Timecode.samplerate
+        self.tc_ref = r9Audio.Timecode.ref
+        self.attrCache={}
+        
 
     def addMonitoredTimecodeNode(self, nodes, valid=True):
         '''
@@ -2993,7 +2995,7 @@ class MetaTimeCodeHUD(MetaHUDNode):
         else:
             flt=r9Core.FilterNode()
             flt.settings.nodeTypes='transform'
-        flt.settings.searchAttrs=self.tc_ref
+        flt.settings.searchAttrs = self.tc_ref
         nodes=flt.ProcessFilter()
         if nodes:
             self.addMonitoredTimecodeNode(nodes)
