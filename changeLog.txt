@@ -149,7 +149,9 @@ Fix - Red9_Anim - Managed the UndoStack for the poseBlender UI so all drag goes 
 Fix - Red9_Anim - MirrorMap Load now has dialog set so that it doesn't prompt to over-write
 New - Red9_Core - add a getBlendTargetsFromMesh() call to inspect and return blendshape target data either as a list of targetNames or a dic of blendshape data including indes etc
 Mod - Red9_Meta - Now uses a CACHE to stop it always instantiating the same node multiple times, speeds up the code and means you only get a single instance of a given node back, it's just pulled from the cache when called a second time
-Mod - Red9_Audio -BIG changes to the AudioNode! This now accepts EITHER a maya sound node, or a filepath. Advantage of filepath is that the audio no longer has to be loaded in Maya to be inspected or queried. If the path exisits in a current soundNode then we bind that node to the class
-
-
+Mod - Red9_Audio - BIG changes to the AudioNode! This now accepts EITHER a maya sound node, or a filepath. Advantage of filepath is that the audio no longer has to be loaded in Maya to be inspected or queried. If the path exisits in a current soundNode then we bind that node to the class
+New - Red9_Audio - Added new OffsetManager for the audio that better handles and wraps offset / offset relative and bwav offset behaviours.
+New - Red9_Meta - Added new timecode HUD class for mionitoring correctly formatted timecode nodes in the scene
+Fix - Red9Setup - MAYA 2015 support put back in for building some of the Red9 sub-menu's that I'd missed off, thought I'd already put the 2015 handlers in, obviously not !!!!!!! sorry!!!!
+Mod - Red9_Core - added more options to the searchUI checkbox lists
 
