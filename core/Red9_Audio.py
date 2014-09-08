@@ -40,6 +40,28 @@ except:
     
 ## Timecode conversion utilities   -----------------------------------------------------
 
+class Timecode(object):
+
+    count = 'timecode_count'  # linear key-per-frame data used to keep track of timecode during animation
+    samplerate = 'timecode_samplerate'  # fps used to generate the linear count curve
+    ref = 'timecode_ref'  # milliseconds start point used as the initial reference
+    
+    @staticmethod
+    def getTimecode_from_node(node):
+        '''
+        wrapper method to get the timecode back from a given node
+        :param node: node containing correctly formatted timecode data
+        
+        .. note:
+                the node passed in has to have the correctly formatted timecode data to compute
+        '''
+        import Red9.core.Red9_Meta as r9Meta
+        node = r9Meta.MetaClass(node)
+        if node.hasAttr(Timecode.ref):
+            ms = (getattr(node, Timecode.ref) + ((float(getattr(node, Timecode.count)) / getattr(node,Timecode.samplerate)) * 1000))
+            return milliseconds_to_Timecode(ms)
+
+
 def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=None):
         '''
         convert milliseconds into correctly formatted timecode
@@ -373,7 +395,7 @@ class AudioHandler(object):
         for a in self.audioNodes:
             a.delete()
     
-    def bwav_sync_to_Timecode(self, relativeToo=None, *args):
+    def bwav_sync_to_Timecode(self, relativeToo=None, offset=0, *args):
         '''
         process either selected or all audio nodes and IF they are found to be
         BWav's with valid timecode references, sync them in Maya such
@@ -384,16 +406,19 @@ class AudioHandler(object):
             calculate it's internal timecode against where it is in the timeline. I then use any difference in 
             that nodes time as an offset for all the other nodes in self.audioNodes. Basically syncing multiple 
             bwav's against a given sound.
+        :param offset: given offset to pass to the sync call, does not process with the relativeToo flag
         '''
         if not relativeToo:
             for audio in self.audioNodes:
                 if audio.isBwav():
-                    audio.bwav_sync_to_Timecode()
+                    audio.bwav_sync_to_Timecode(offset=offset)
         else:
             relativeNode=AudioNode(relativeToo)
-            relativeTC=milliseconds_to_frame(relativeNode.bwav_timecodeMS())
-            actualframe=relativeNode.startFrame
-            diff=actualframe-relativeTC
+            
+            relativeTC = milliseconds_to_frame(relativeNode.bwav_timecodeMS())
+            actualframe = relativeNode.startFrame
+            diff = actualframe - relativeTC
+            
             log.info('internalTC: %s , internalStartFrm %s, offset required : %f' % (relativeNode.bwav_timecodeFormatted(), relativeTC, diff))
             for audio in self.audioNodes:
                 audio.bwav_sync_to_Timecode(offset=diff)
@@ -773,6 +798,8 @@ class AudioNode(object):
         '''
         given that self is a Bwav and has timecode reference, sync it's position
         in the Maya timeline to match
+        
+        :param offset: offset to apply to the internal timecode of the given wav's
         '''
         if self.isLoaded:
             #print milliseconds_to_Timecode(self.bwav_timecodeMS(), smpte=True, framerate=None)
@@ -958,8 +985,17 @@ class AudioToolsWrap(object):
         offset=cmds.floatField('AudioOffsetToo', q=True,v=True)
         self.audioHandler.offsetTo(float(offset))
     
-    def __uicb_setReferenceBwavNode(self,*args):
+    def __uicb_setReferenceBwavNode(self, *args):
+        '''
+        set the internal reference offset used to offset the audionode. 
+        
+        .. note:
+                If you pass this a bwav then it caches that bwav for use as the offset. If you 
+                pass it a node, and that node has the timecode attrs, then it caches the offset itself.
+        '''
         selected=cmds.ls(sl=True, type='audio')
+        self.__bwav_reference=None
+        self.__cached_tc_offset=None
         if selected:
             if not len(selected)==1:
                 log.warning("Please only select 1 piece of Audio to use for reference")
@@ -972,13 +1008,23 @@ class AudioToolsWrap(object):
             else:
                 raise IOError("selected Audio node is NOT a Bwav so can't be used as reference")
         else:
-            log.warning("No reference audio track selected for reference")
+            selected = cmds.ls(sl=True)
+            if len(selected)==1:
+                relativeTC = Timecode.getTimecode_from_node(cmds.ls(sl=True)[0])
+                actualframe = cmds.currentTime(q=True)
+                self.__cached_tc_offset = actualframe - timecode_to_frame(relativeTC)
+                cmds.text('bwavRefTC', edit=True,
+                          label='frame %s == %s' % (cmds.currentTime(q=True), relativeTC))
+            else:
+                log.warning("No reference audio track selected for reference")
             return
        
     def sync_bwavsRelativeToo(self, *args):
         self.audioHandler=AudioHandler()
         if self.__bwav_reference:
-            self.audioHandler.bwav_sync_to_Timecode(self.__bwav_reference)
+            self.audioHandler.bwav_sync_to_Timecode(relativeToo=self.__bwav_reference)
+        elif self.__cached_tc_offset:
+            self.audioHandler.bwav_sync_to_Timecode(offset=self.__cached_tc_offset)
         else:
             raise IOError("No timecode reference currently set")
             
