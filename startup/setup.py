@@ -206,7 +206,7 @@ def menuSetup(parent='MayaWindow'):
         cmds.menuItem('redNineDebuggerItem',l='Red9 Debugger',sm=True,p='redNineMenuItemRoot')
         cmds.menuItem('redNineLostAnimItem',l="Reconnect Lost Anim", p='redNineDebuggerItem',
                       ann="Reconnect lost animation data via a chSet - see my blog post for more details",
-                      echoCommand=True, c="import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.reConnectReferencedAnimData()")
+                      echoCommand=True, c="import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.ReconnectAnimData().show()")
         cmds.menuItem(divider=True,p='redNineDebuggerItem')
         cmds.menuItem('redNineDebugItem',l="systems: DEBUG",ann="Turn all the logging to Debug",
                       echoCommand=True, c="Red9.core._setlogginglevel_debug()")
