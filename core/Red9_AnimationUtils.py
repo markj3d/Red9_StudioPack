@@ -4525,7 +4525,7 @@ class ReconnectAnimData(object):
         '''
         As per my blog posts on Lost Animaton's see here for details:
         http://markj3d.blogspot.co.uk/2011/07/lost-animation-when-loading-referenced.html
-        http://markj3d.blogspot.co.uk/2012/09/lost-animation-part2.html
+        
         '''
         import pymel.core as pm
         
@@ -4554,7 +4554,8 @@ class ReconnectAnimData(object):
     @staticmethod
     def reConnectAnimDataBlind(stripNamespace=True, stripLayerNaming=False, *args):
         '''
-        Blind reconnect based on names
+        Blind reconnect based on names. As per my blog posts on Lost Animaton's see here for details:
+        http://markj3d.blogspot.co.uk/2012/09/lost-animation-part2.html
         
         :param stripNamespace: Change this to False if the curves are not in the rootNamespace but
             in the sameNamespace as the controllers.
