@@ -4505,7 +4505,7 @@ class ReconnectAnimData(object):
         
         cmds.separator(h=15, style='in')
         cmds.checkBox('StripNamespaces', l='StripNamespaces in Match', v=True)
-        cmds.checkBox('AllowMergedLayers', l='StripNamespaces MergedLayer data', v=False)
+        cmds.checkBox('AllowMergedLayers', l='Strip MergedLayer data conventions', v=False)
         cmds.button(label='Reconnect Via >> Blind Names & Selected Nodes',
                     ann='Select nodes that you want to recover via a blind animCurve name match method',
                     command=self.__uiCB_reConnectAnimDataBlind)
