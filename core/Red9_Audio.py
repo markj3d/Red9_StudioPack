@@ -408,12 +408,17 @@ class AudioHandler(object):
             bwav's against a given sound.
         :param offset: given offset to pass to the sync call, does not process with the relativeToo flag
         '''
+        fails=[]
         if not relativeToo:
             for audio in self.audioNodes:
                 if audio.isBwav():
                     audio.bwav_sync_to_Timecode(offset=offset)
+                else:
+                    fails.append(audio.audioNode)
         else:
             relativeNode=AudioNode(relativeToo)
+            if not relativeNode.isBwav():
+                raise StandardError('Given Reference audio node is NOT  a Bwav!!')
             
             relativeTC = milliseconds_to_frame(relativeNode.bwav_timecodeMS())
             actualframe = relativeNode.startFrame
@@ -421,7 +426,14 @@ class AudioHandler(object):
             
             log.info('internalTC: %s , internalStartFrm %s, offset required : %f' % (relativeNode.bwav_timecodeFormatted(), relativeTC, diff))
             for audio in self.audioNodes:
-                audio.bwav_sync_to_Timecode(offset=diff)
+                if audio.isBwav():
+                    audio.bwav_sync_to_Timecode(offset=diff)
+                else:
+                    fails.append(audio.audioNode)
+        if fails:
+            for f in fails:
+                print 'Error : Audio node is not in Bwav format : %s' % f
+            log.warning('Some Audio Node were not in Bwav format, see script editor for debug')
             #self.offsetBy(diff)
               
 #     def delCombined(self):
@@ -773,6 +785,8 @@ class AudioNode(object):
         '''
         read the internal timecode reference form the bwav and convert that number into milliseconds
         '''
+        if not self.isBwav():
+            raise StandardError('audioNode is not in BWav format')
         if not hasattr(self, 'bwav_HeaderData'):
             self.bwav_getHeader()
         return float(self.bwav_HeaderData['TimeReference']) / float(self.sampleRate) * 1000.0
@@ -801,7 +815,7 @@ class AudioNode(object):
         
         :param offset: offset to apply to the internal timecode of the given wav's
         '''
-        if self.isLoaded:
+        if self.isLoaded and self.isBwav():
             #print milliseconds_to_Timecode(self.bwav_timecodeMS(), smpte=True, framerate=None)
             #print milliseconds_to_frame(self.bwav_timecodeMS(), framerate=None)
             self.startFrame=milliseconds_to_frame(self.bwav_timecodeMS()) + offset
