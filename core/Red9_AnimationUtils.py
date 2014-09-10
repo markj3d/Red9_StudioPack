@@ -4483,31 +4483,109 @@ class CameraTracker():
         self.cameraTrackView(fixed=self.fixed)
 
 
-def reConnectReferencedAnimData():
-    '''
-    As per my blog posts on Lost Animaton's see here for details:
-    http://markj3d.blogspot.co.uk/2011/07/lost-animation-when-loading-referenced.html
-    http://markj3d.blogspot.co.uk/2012/09/lost-animation-part2.html
-    '''
-    import pymel.core as pm
+class ReconnectAnimData(object):
     
-    objs = pm.ls(sl=True, st=True)
-    if not objs:
-        raise StandardError('nothing selected to process, please select the characterSet of the broken reference')
+    def __init__(self):
+        self.win = 'ReconnectAnimData'
+        
+    @classmethod
+    def show(cls):
+        cls()._showUI()
     
-    cSet, nodetype = objs
-    refNode = cSet.referenceFile().refNode
+    def _showUI(self):
+        if cmds.window(self.win, exists=True):
+            cmds.deleteUI(self.win, window=True)
+        cmds.window(self.win, title=self.win, widthHeight=(400, 180))
+        cmds.columnLayout('uicl_audioMain',adjustableColumn=True)
+        cmds.separator(h=15, style='none')
+        
+        cmds.button(label='Reconnect Via >> Referenced ChSet',
+                    ann='Select the CharacterSet that you want to try and recover',
+                    command=ReconnectAnimData.reConnectReferencedAnimData)
+        
+        cmds.separator(h=15, style='in')
+        cmds.checkBox('StripNamespaces', l='StripNamespaces in Match', v=True)
+        cmds.checkBox('AllowMergedLayers', l='StripNamespaces MergedLayer data', v=False)
+        cmds.button(label='Reconnect Via >> Blind Names & Selected Nodes',
+                    ann='Select nodes that you want to recover via a blind animCurve name match method',
+                    command=self.__uiCB_reConnectAnimDataBlind)
+        cmds.separator(h=15, style='none')
 
-    if not nodetype == 'character':
-        raise StandardError('You must select a CharacterSet to reconnect')
-    if not refNode:
-        raise StandardError('Given characterSet is not from a referenced file')
+        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
+                             c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.showWindow(self.win)
+        cmds.window(self.win, e=True, widthHeight=(300, 160))
     
-    animCurves = refNode.listConnections(type='animCurve', s=True)
-    cSetPlugs = pm.aliasAttr(cSet, q=True)
+    def __uiCB_reConnectAnimDataBlind(self, *args):
+        ReconnectAnimData.reConnectAnimDataBlind(stripNamespace=cmds.checkBox('StripNamespaces', q=True, v=True),
+                                                 stripLayerNaming=cmds.checkBox('AllowMergedLayers', q=True, v=True))
+                                                                             
+    @staticmethod
+    def reConnectReferencedAnimData(*args):
+        '''
+        As per my blog posts on Lost Animaton's see here for details:
+        http://markj3d.blogspot.co.uk/2011/07/lost-animation-when-loading-referenced.html
+        http://markj3d.blogspot.co.uk/2012/09/lost-animation-part2.html
+        '''
+        import pymel.core as pm
+        
+        objs = pm.ls(sl=True, st=True)
+        if not objs:
+            raise StandardError('nothing selected to process, please select the characterSet of the broken reference')
+        
+        cSet, nodetype = objs
+        refNode = cSet.referenceFile().refNode
     
-    for plug in cSetPlugs[::2]:
-        for anim in animCurves:
-            if anim.split(':')[-1].endswith(plug):
-                print '%s >> %s' % (anim, plug)
-                pm.connectAttr('%s.output' % anim, '%s.%s' % (cSet, plug), force=True)
+        if not nodetype == 'character':
+            raise StandardError('You must select a CharacterSet to reconnect')
+        if not refNode:
+            raise StandardError('Given characterSet is not from a referenced file')
+        
+        animCurves = refNode.listConnections(type='animCurve', s=True)
+        cSetPlugs = pm.aliasAttr(cSet, q=True)
+        
+        for plug in cSetPlugs[::2]:
+            for anim in animCurves:
+                if anim.split(':')[-1].endswith(plug):
+                    print '%s >> %s' % (anim, plug)
+                    pm.connectAttr('%s.output' % anim, '%s.%s' % (cSet, plug), force=True)
+                    
+                    
+    @staticmethod
+    def reConnectAnimDataBlind(stripNamespace=True, stripLayerNaming=False, *args):
+        '''
+        Blind reconnect based on names
+        
+        :param stripNamespace: Change this to False if the curves are not in the rootNamespace but
+            in the sameNamespace as the controllers.
+        :param stripLayerNaming: allows for the additional 'Merged_Layer_inputB' naming conventions
+        '''
+        nodes=cmds.ls(sl=True,l=True)
+        chns=[]
+        
+        #build up the main lists
+        animCurves=cmds.ls(type='animCurve',s=True)
+        [chns.extend(cmds.listAnimatable(node)) for node in nodes]
+            
+        for chn in chns:
+            if stripNamespace:
+                animCurveExpected=chn.split(':')[-1].split('|')[-1].replace('.','_')
+            else:
+                animCurveExpected=chn.split('|')[-1].replace('.','_')
+            if animCurveExpected in animCurves:
+                if not cmds.isConnected('%s.output' % animCurveExpected,chn):
+                    print '%s >> %s' % (animCurveExpected,chn)
+                    cmds.connectAttr('%s.output' % animCurveExpected,chn,force=True)
+            elif stripLayerNaming:
+                for curve in animCurves:
+                    curveStripped=curve.replace('_Merged_Layer_inputB','')
+                    if curveStripped == animCurveExpected:
+                        if not cmds.isConnected(curve, chn):
+                            print '%s >> %s' % (curve, chn)
+                            cmds.connectAttr('%s.output' % curve,chn,force=True)
+        
+        
+    
+    
+    
+    
