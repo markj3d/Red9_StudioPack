@@ -2123,7 +2123,7 @@ class MetaRig(MetaClass):
         
     def getChildren(self, walk=False, mAttrs=None, cAttrs=None):
         '''
-        Massively important big of code, this is used by most bits of code
+        Massively important bit of code, this is used by most bits of code
         to find the child controllers linked to this metaRig instance.
         '''
         if not cAttrs:
@@ -2255,7 +2255,15 @@ class MetaRig(MetaClass):
         subSystem.systemType=systemType
         subSystem.mirrorSide=side
         return subSystem
-                             
+    
+    def set_ctrlColour(self):       
+        for ctrl in self.getChildren(walk=False):
+            shapes = cmds.listRelatives(ctrl,type='shape',f=True)
+            if shapes:
+                for shape in shapes: 
+                    cmds.setAttr('%s.overrideEnabled' % shape, 1)
+                    cmds.setAttr('%s.overrideColor' % shape, 4)
+                                  
     def getMirrorData(self):
         '''
         Bind the MirrorObject to this instance of MetaRig.
@@ -2301,6 +2309,23 @@ class MetaRig(MetaClass):
                 oppositeNodes.append(node)
         return oppositeNodes
     
+    def getMirror_ctrlSets(self, set='Centre'):
+        '''
+        from  the metaNode grab all controllers and return sets of nodes
+        based on their mirror side data
+        '''
+#         submNodes=mRig.getChildMetaNodes(mAttrs=['mirrorSide=2'], walk=True)
+#         ctrls=[]
+#         for node in submNodes:
+#             ctrls.extend(node.getChildren())
+#         return ctrls
+        ctrls=[]
+        if not self.MirrorClass:
+            self.MirrorClass = self.getMirrorData()
+        for _, value in self.MirrorClass.mirrorDict[set].items():
+            ctrls.append(value['node'])
+        return ctrls 
+                
     def mirror(self, nodes=None, mode='Anim'):
         '''
         direct mapper call to the Mirror functions
