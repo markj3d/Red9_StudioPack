@@ -598,7 +598,7 @@ class AnimationUI(object):
                     command=partial(self.__uiCall, 'CopyKeys'))
        
         cmds.separator(h=5, style='none')
-        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)])
+        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)], rowSpacing=[(1,5)])
         self.uicbCKeyHierarchy = cmds.checkBox('uicbCKeyHierarchy', l='Hierarchy', al='left', v=False,
                                             ann='Copy Keys Hierarchy : Filter Hierarchies for transforms & joints then Match NodeNames',
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbCKeyHierarchy'))
@@ -606,17 +606,12 @@ class AnimationUI(object):
                                             ann='Copy Animation from First selected to all Subsequently selected nodes')
         self.uicbCKeyChnAttrs = cmds.checkBox(ann='Copy only those channels selected in the channelBox',
                                             l='ChBox Attrs', al='left', v=False)
-
-        cmds.setParent('..')
-        cmds.separator(h=2, style='none')
-        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)])
         self.uicbCKeyRange = cmds.checkBox('uicbCKeyRange', l='TimeRange', al='left', v=False,
                                             ann='ONLY Copy Keys over PlaybackTimeRange or Selected TimeRange (in Red on the timeline)',
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbCKeyRange'))
         self.uicbCKeyAnimLay = cmds.checkBox('uicbCKeyAnimLay', l='MergeLayers', al='left', v=False,
                                             ann='If AnimLayers are found pre-compile the anim and copy the resulting data',
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbCKeyAnimLay'))
-        #cmds.text(l='Paste by ', align='right')
         cmds.optionMenu('om_PasteMethod',
                         ann='Paste Method Used: Default = "replace", paste method used by the copy code internally',
                         cc=partial(self.__uiCB_setCopyKeyPasteMethod))
@@ -646,7 +641,7 @@ class AnimationUI(object):
                      command=partial(self.__uiCall, 'Snap'))
         cmds.separator(h=5, style='none')
 
-        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)])
+        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)], rowSpacing=[(1,2)])
 
         self.uicbSnapRange = cmds.checkBox('uicbSnapRange', l='TimeRange', al='left', v=False,
                                             ann='Snap Nodes over PlaybackTimeRange or Selected TimeRange (in Red on the timeline)',
@@ -656,9 +651,7 @@ class AnimationUI(object):
                                                  en=False, v=True)
         self.uiifgSnapStep = cmds.intFieldGrp('uiifgSnapStep', l='FrmStep', en=False, value1=1, cw2=(50, 40),
                                            ann='Frames to advance the timeline after each Process Run')
-        cmds.separator(h=2, style='none')
-        cmds.separator(h=2, style='none')
-        cmds.separator(h=2, style='none')
+
         self.uicbSnapHierarchy = cmds.checkBox('uicbSnapHierarchy', l='Hierarchy', al='left', v=False,
                                                ann='Filter Hierarchies with given args - then Snap Transforms for matched nodes',
                                                cc=self.__uiCB_manageSnapHierachy)
@@ -710,7 +703,7 @@ class AnimationUI(object):
         cmds.frameLayout(label='TimeOffset', cll=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         #cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 100), (2, 55), (3, 55), (4, 100)], columnSpacing=[(1, 10), (3, 5)])
-        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)])
+        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)], rowSpacing=[(1,5),(2,5)])
         self.uicbTimeOffsetHierarchy = cmds.checkBox('uicbTimeOffsetHierarchy',
                                             l='Hierarchy', al='left', en=True, v=False,
                                             ann='Offset Hierarchy',
@@ -723,21 +716,19 @@ class AnimationUI(object):
                                             ann='ON:Scene Level Processing: OFF:SelectedNode Processing - Offsets Animation, Sound and Clip data as appropriate',
                                             al='left', v=False,
                                             ofc=partial(self.__uiCB_manageTimeOffsetChecks, 'Off'),
-                                            onc=partial(self.__uiCB_manageTimeOffsetChecks, 'Full'))
-                                            #cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetScene'))
+                                            onc=partial(self.__uiCB_manageTimeOffsetChecks, 'Full'),
+                                            cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetScene'))
         
         self.uicbTimeOffsetPlayback = cmds.checkBox('uicbTimeOffsetTimelines', l='OffsetTimelines',
                                             ann='ON:Scene Level Processing: OFF:SelectedNode Processing - Offsets Animation, Sound and Clip data as appropriate',
                                             al='left', v=False, en=False,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetTimelines'))
-#        self.uiffgTimeOffset = cmds.floatFieldGrp('uiffgTimeOffset', l='Offset ', value1=1, cw2=(35, 50),
-#                                            ann='Frames to offset the data by')
-        cmds.setParent('..')
-        cmds.separator(h=2, style='none')
-        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)])
+
         self.uicbTimeOffsetRange = cmds.checkBox('uicbTimeOffsetRange',
                                             l='TimeRange', al='left', en=True, v=False,
                                             ann='Offset nodes by range : PlaybackTimeRange or Selected TimeRange (in Red on the timeline)',
+                                            ofc=partial(self.__uiCB_manageTimeOffsetChecks, 'Ripple'),
+                                            onc=partial(self.__uiCB_manageTimeOffsetChecks, 'Ripple'),
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetRange'))
         self.uicbTimeOffsetFlocking = cmds.checkBox('uicbTimeOffsetFlocking',
                                             l='Flocking', al='left', en=True, v=False,
@@ -745,8 +736,11 @@ class AnimationUI(object):
         self.uicbTimeOffsetRandom = cmds.checkBox('uicbTimeOffsetRandom', l='Randomizer',
                                             ann='Randomize the offsets using the offset field as the max such that offsets are random(0,offset)',
                                             al='left', v=False)
-        #self.uiffgTimeOffset = cmds.floatFieldGrp('uiffgTimeOffset', l='Offset ', value1=1, cw2=(35, 50),
-        #                                    ann='Frames to offset the data by')
+        self.uicbTimeOffsetRipple = cmds.checkBox('uicbTimeOffsetRipple', l='RippleEdits',
+                                            ann='Ripple the edits to the upper bounds, keys, clips, audio etc will get pushed',
+                                            al='left', v=False,
+                                            cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetRipple'))
+        cmds.separator(style='none')
         cmds.setParent('..')
         cmds.separator(h=2, style='none')
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 250), (2, 60)], columnSpacing=[(2, 5)])
@@ -1136,14 +1130,19 @@ class AnimationUI(object):
         
     def __uiCB_manageTimeOffsetChecks(self, *args):
         '''
-        Disable the frmStep and PreCopy when not running timeline
+        Manage timeOffset checks
         '''
         if args[0] == 'Full':
             cmds.checkBox(self.uicbTimeOffsetHierarchy, e=True, v=False)
             cmds.checkBox(self.uicbTimeOffsetPlayback, e=True, en=True)
             cmds.checkBox(self.uicbTimeOffsetFlocking, e=True, en=False)
             cmds.checkBox(self.uicbTimeOffsetRandom, e=True, en=False)
-            cmds.checkBox(self.uicbTimeOffsetRange, e=True, en=False)
+            cmds.checkBox(self.uicbTimeOffsetRange, e=True, en=True)  # en=False)
+        elif args[0] == 'Ripple':
+            if cmds.checkBox(self.uicbTimeOffsetRange, q=True, v=True):
+                cmds.checkBox(self.uicbTimeOffsetRipple, e=True, en=True)
+            else:
+                cmds.checkBox(self.uicbTimeOffsetRipple, e=True, en=False)
         else:
             cmds.checkBox(self.uicbTimeOffsetPlayback, e=True, en=False)
             cmds.checkBox(self.uicbTimeOffsetScene, e=True, v=False)
@@ -2276,17 +2275,18 @@ class AnimationUI(object):
         Internal UI call for TimeOffset
         '''
         offset = cmds.floatFieldGrp('uiffgTimeOffset', q=True, v=True)[0]
-
+        if cmds.checkBox(self.uicbTimeOffsetRange, q=True, v=True):
+            self.kws['timerange'] = timeLineRangeGet()
+        self.kws['ripple'] = cmds.checkBox(self.uicbTimeOffsetRipple, q=True, v=True)
+            
         if cmds.checkBox(self.uicbTimeOffsetScene, q=True, v=True):
-            r9Core.TimeOffset.fullScene(offset, cmds.checkBox(self.uicbTimeOffsetPlayback, q=True, v=True))
+            r9Core.TimeOffset.fullScene(offset, cmds.checkBox(self.uicbTimeOffsetPlayback, q=True, v=True), **self.kws)
         else:
             self.kws['flocking']= cmds.checkBox(self.uicbTimeOffsetFlocking, q=True, v=True)
             self.kws['randomize'] = cmds.checkBox(self.uicbTimeOffsetRandom, q=True, v=True)
-            if cmds.checkBox(self.uicbTimeOffsetRange, q=True, v=True):
-                self.kws['timerange'] = timeLineRangeGet()
-                #self.kws['option'] = "insert" #, "segmentOver"
+
+            #self.kws['option'] = "insert" #, "segmentOver"
             if cmds.checkBox(self.uicbTimeOffsetHierarchy, q=True, v=True):
-                print self.kws
                 r9Core.TimeOffset.fromSelected(offset, filterSettings=self.filterSettings, **self.kws)
             else:
                 r9Core.TimeOffset.fromSelected(offset, **self.kws)
@@ -4495,10 +4495,23 @@ class ReconnectAnimData(object):
     def _showUI(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        cmds.window(self.win, title=self.win, widthHeight=(400, 180))
-        cmds.columnLayout('uicl_audioMain',adjustableColumn=True)
-        cmds.separator(h=15, style='none')
+        cmds.window(self.win, title=self.win, widthHeight=(300, 220))
         
+        cmds.menuBarLayout()
+        cmds.menu(l="Help")
+        cmds.menuItem(l="Bug post -LostAnimPart1", \
+                      c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('http://markj3d.blogspot.co.uk/2011/07/lost-animation-when-loading-referenced.html')")
+        cmds.menuItem(l="Bug post -LostAnimPart1", \
+                      c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('http://markj3d.blogspot.co.uk/2012/09/lost-animation-part2.html')")
+        cmds.menuItem(l="Bug post -LostAnimPart3", \
+                      c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('http://markj3d.blogspot.co.uk/2014/09/lost-animation-part-3.html')")
+        cmds.menuItem(divider=True)
+        cmds.menuItem(l="Contact Me", c=lambda *args: (r9Setup.red9ContactInfo()))
+        
+        cmds.columnLayout('uicl_audioMain',adjustableColumn=True)
+        cmds.separator(h=10, style='none')
+        cmds.text(l='BUG: Symtoms - Maya file loaded but character\nwas left in T-Pose and all animation looks lost!', align='center')
+        cmds.separator(h=15, style='none')
         cmds.button(label='Reconnect Via >> Referenced ChSet',
                     ann='Select the CharacterSet that you want to try and recover',
                     command=ReconnectAnimData.reConnectReferencedAnimData)
@@ -4507,14 +4520,14 @@ class ReconnectAnimData(object):
         cmds.checkBox('StripNamespaces', l='StripNamespaces in Match', v=True)
         cmds.checkBox('AllowMergedLayers', l='Strip MergedLayer data conventions', v=False)
         cmds.button(label='Reconnect Via >> Blind Names & Selected Nodes',
-                    ann='Select nodes that you want to recover via a blind animCurve name match method',
+                    ann='Select nodes or CharacterSet that you want to recover via a blind animCurve name match methods',
                     command=self.__uiCB_reConnectAnimDataBlind)
         cmds.separator(h=15, style='none')
 
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                              c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
         cmds.showWindow(self.win)
-        cmds.window(self.win, e=True, widthHeight=(300, 160))
+        cmds.window(self.win, e=True, widthHeight=(300, 210))
     
     def __uiCB_reConnectAnimDataBlind(self, *args):
         ReconnectAnimData.reConnectAnimDataBlind(stripNamespace=cmds.checkBox('StripNamespaces', q=True, v=True),
