@@ -148,7 +148,9 @@ def getMClassDataFromNode(node):
         #node is ALREADY MetaClass instance?
         if issubclass(type(node), MetaClass):
             log.debug('getMClassFromNode was given an already instanciated MNode')
-        raise StandardError('getMClassFromNode was given an already instanciated MNode')
+            return node.mClass
+        else:
+            raise StandardError('getMClassFromNode failed')
 
     
 # NodeType Management ---------------------------
@@ -576,11 +578,38 @@ class MClassNodeUI():
         cmds.scrollLayout('slMetaNodeScroll',rc=lambda *args:self.fitTextScrollFucker())
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=15, style='none')
-        txt=self.mTypes
-        if not self.mTypes:
-                txt='All'
-        cmds.text(label='Scene MetaNodes of type : %s' % txt)
-        cmds.separator(h=15, style='none')
+        
+        #Build the class options to filter by
+        cmds.rowColumnLayout('rc_useMetaFilterUI', numberOfColumns=3,
+                             columnWidth=[(1, 120), (2, 120), (3,200)],
+                             columnSpacing=[(1, 10), (2, 10), (3,20)])
+        cmds.checkBox('cb_filter_mTypes', label='mTypes filter : ', v=False, onc=partial(self.__uicb_setfilterMode,'mTypes'))
+        cmds.checkBox('cb_filter_mInstances', label='mInstances filter : ', v=False, onc=partial(self.__uicb_setfilterMode,'mInstance'))
+        cmds.optionMenu('om_MetaUI_Filter', ni=len(RED9_META_REGISTERY),
+                        ann='Registered MetaCalsses to use as filters',
+                        cc=partial(self.fillScroll))
+        for preset in sorted(RED9_META_REGISTERY):
+            cmds.menuItem(l=preset)
+        cmds.setParent('..')
+        cmds.separator(h=15, style='in')
+        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 120), (2, 120), (3,120)],
+                             columnSpacing=[(1, 10), (2, 10), (3,10)])
+        self.uircbMetaUIShowStatus = cmds.radioCollection('uircbMetaUIShowStatus')
+        cmds.radioButton('metaUISatusAll', label='all', cc=partial(self.fillScroll))
+        cmds.radioButton('metaUISatusValids', label='Valids', cc=partial(self.fillScroll))
+        cmds.radioButton('metaUISatusinValids', label='inValids', cc=partial(self.fillScroll))
+        cmds.setParent('..')
+        
+        #You've passed in the filter types directly to the UI Class
+        if self.mTypes or self.mInstances:
+            #cmds.separator(h=15, style='none')
+            cmds.rowColumnLayout('rc_useMetaFilterUI', e=True, en=False, vis=False)
+            if self.mTypes:
+                cmds.text(label='UI launch with filter MetaNodes: mTypes : %s' % self.mTypes)
+            else:
+                cmds.text(label='UI launch with filter MetaNodes: mInstances : %s' % self.mInstances)
+            cmds.separator(h=15, style='none')
+            
         if not self.allowMulti:
             cmds.textScrollList('slMetaNodeList',font="fixedWidthFont")
         else:
@@ -596,22 +625,26 @@ class MClassNodeUI():
         cmds.menuItem(label='Graph Selected Networks', command=partial(self.graphNetwork))
         cmds.menuItem(divider=True)
         cmds.menuItem(label='Class : All Registered', command=partial(self.fillScroll,'byName'))
-        cmds.menuItem(divider=True)
-        for mCls in sorted(RED9_META_REGISTERY):
-            cmds.menuItem(label='Class : %s' % mCls, command=partial(self.fillScroll,'byName', mCls))
-        
         cmds.button(label='Refresh', command=partial(self.fillScroll))
         cmds.separator(h=15,style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7,0,0), image1='Rocket9_buttonStrap2.bmp',
                                  c=lambda *args:(r9Setup.red9ContactInfo()),h=22,w=200)
         cmds.showWindow(window)
+        cmds.radioCollection(self.uircbMetaUIShowStatus, edit=True, select='metaUISatusAll')
         self.fillScroll()
  
+    def __uicb_setfilterMode(self, mode, *args):
+        if mode=='mTypes':
+            cmds.checkBox('cb_filter_mInstances', e=True, v=False)
+        elif  mode=='mInstance':
+            cmds.checkBox('cb_filter_mTypes', e=True, v=False)
+        self.fillScroll(*args)
+            
     def fitTextScrollFucker(self):
         '''
         bodge to resize tghe textScroll as the default Maya control is SHITE!
         '''
-        cmds.textScrollList('slMetaNodeList',e=True,h=int(cmds.scrollLayout('slMetaNodeScroll',q=True,h=True))-120)
+        cmds.textScrollList('slMetaNodeList',e=True,h=int(cmds.scrollLayout('slMetaNodeScroll',q=True,h=True))-150)
         cmds.textScrollList('slMetaNodeList',e=True,w=int(cmds.scrollLayout('slMetaNodeScroll',q=True,w=True))-10)
 
     def graphNetwork(self,*args):
@@ -675,14 +708,45 @@ class MClassNodeUI():
             log.warning('no child nodes found from given metaNode')
         #cmds.select(self.mNodes[cmds.textScrollList('slMetaNodeList',q=True,sii=True)[0]-1].getChildren(walk=True))
         
-    def fillScroll(self, sortBy=None, mClassToShow=None, *args):
+    def fillScroll(self, sortBy=None, *args):  # , mClassToShow=None, *args):
+        
         cmds.textScrollList('slMetaNodeList', edit=True, ra=True)
-        if mClassToShow:
-            self.mNodes=getMetaNodes(mTypes=mClassToShow,mInstances=None,dataType='node')
-        else:
-            mClassToShow=self.mTypes
-            self.mNodes=getMetaNodes(mTypes=mClassToShow,mInstances=self.mInstances,dataType='node')
+        
+        states=cmds.radioCollection(self.uircbMetaUIShowStatus, q=True, select=True)
+        self.dataType='node'
+        if states=='metaUISatusinValids' or states=='metaUISatusValids':
+            self.dataType='mClass'
+        
+
+        #showStatus = cmds.radioCollection(self.uircbMetaUIShowStatus, q=True, select=True)
+        #build the metaNode list up from the filters =====================
+        if cmds.rowColumnLayout('rc_useMetaFilterUI', q=True, en=True):
+            mTypesFilter = cmds.checkBox('cb_filter_mTypes', q=True, v=True)
+            mInstanceFilter = cmds.checkBox('cb_filter_mInstances', q=True, v=True)
+            mCalssSelected = cmds.optionMenu('om_MetaUI_Filter', q=True, v=True)
             
+            if mTypesFilter:
+                self.mNodes=getMetaNodes(mTypes=mCalssSelected, mInstances=None, dataType=self.dataType)
+                print 'mTypeFilter : ', mCalssSelected
+            elif mInstanceFilter:
+                self.mNodes=getMetaNodes(mTypes=None, mInstances=mCalssSelected, dataType=self.dataType)
+                print 'mInstanceFilter : ', mCalssSelected
+            else:
+                self.mNodes=getMetaNodes(mTypes=self.mTypes, mInstances=self.mInstances, dataType=self.dataType)
+        else:
+            self.mNodes=getMetaNodes(mTypes=self.mTypes, mInstances=self.mInstances, dataType=self.dataType)
+            print 'none', self.mTypes, self.mInstances
+                        
+        if not self.mNodes:
+            log.warning('no metaNodes found that match the filters')
+            return
+        
+        if states=='metaUISatusinValids':
+            self.mNodes=[node.mNode for node in self.mNodes if not node.isValid()]
+        if states=='metaUISatusValids':
+            self.mNodes=[node.mNode for node in self.mNodes if node.isValid()]
+            
+        #Sort the list ==================================================
         if not sortBy:
             sortBy=self.sortBy
           
@@ -693,6 +757,7 @@ class MClassNodeUI():
             #self.mNodes=sorted(self.mNodes, key=lambda x: x.mNode.upper())
             self.mNodes=sorted(self.mNodes, key=lambda x: x.upper())
 
+        #fill the textScroller =========================================     
         if self.mNodes:
             width=len(self.mNodes[0])
             #figure out the width of the first cell
@@ -706,6 +771,7 @@ class MClassNodeUI():
                                         append=('{0:<%i}:{1:}' % width).format(meta, getMClassDataFromNode(meta)),
                                         sc=lambda *args:self.selectCmd(),
                                         dcc=lambda *x:self.doubleClick())
+                    
 
     def printRegisteredNodeTypes(self,*args):
         print '\nRED9_META_NODETYPE_REGISTERY:\n============================='
@@ -1424,8 +1490,11 @@ class MetaClass(object):
     # Utity Functions
     #-------------------------------------------------------------------------------------
                   
-    def select(self):
-        cmds.select(self.mNode)
+    def select(self, *args, **kws):
+        '''
+        args and kws are now passed through into the Maya select call
+        '''
+        cmds.select(self.mNode, *args, **kws)
         
     @nodeLockManager
     def rename(self, name):
