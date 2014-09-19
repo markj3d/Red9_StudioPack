@@ -154,4 +154,6 @@ New - Red9_Audio - Added new OffsetManager for the audio that better handles and
 New - Red9_Meta - Added new timecode HUD class for mionitoring correctly formatted timecode nodes in the scene
 Fix - Red9Setup - MAYA 2015 support put back in for building some of the Red9 sub-menu's that I'd missed off, thought I'd already put the 2015 handlers in, obviously not !!!!!!! sorry!!!!
 Mod - Red9_Core - added more options to the searchUI checkbox lists
+New - Red9_Anim - New handling of timeoffset to allow for 'ripple' mode which will either push, or hold keys / nodes outside of the given timerange. Also new hooks to MetaNodes for those building their own systems
+Mod - Red9_Meta - big upgrades to the MetaNodeUI to allow for more powerful filtering of systems 
 
