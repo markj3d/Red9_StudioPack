@@ -142,18 +142,20 @@ Fix - Red9_Audio - added correct float conversion to all the timecode and framer
 
 v1.44:
 -----
+New - Red9_Core - add a getBlendTargetsFromMesh() call to inspect and return blendshape target data either as a list of targetNames or a dic of blendshape data including indexes etc
+New - Red9_Audio - Added new OffsetManager for the audio that better handles and wraps offset / offset relative and bwav offset behaviours.
+New - Red9_Meta - Added new timecode HUD class for monitoring correctly formatted timecode nodes in the scene
+New - Red9_Anim - New handling of timeoffset to allow for 'ripple' mode which will either push, or hold keys / nodes outside of the given timerange. Also new hooks to MetaNodes for those building their own systems
+
 Fix - Red9_Anim - MirrorSetup wasn't loading axis data correctly when set to none
-Mod - Red9_Anim - Pose search now allows sort by name or date, sort by name has proper numeric handling
-Mod - Red9_Anim - mods to the way the AnimUI passes and manages the matchMethod flag. PoseLoad now respects the flag, also added matchMethod as an optionMenu and included 'index' method. Index matches hierarchies purely on their hierarchy order like Maya natively does - no filtering or matching carried out.
+Fix - Red9Setup - MAYA 2015 support put back in for building some of the Red9 sub-menu's that I'd missed off, thought I'd already put the 2015 handlers in, obviously not !!!!!!! sorry!!!!
 Fix - Red9_Anim - Managed the UndoStack for the poseBlender UI so all drag goes to a single undoChunk.
 Fix - Red9_Anim - MirrorMap Load now has dialog set so that it doesn't prompt to over-write
-New - Red9_Core - add a getBlendTargetsFromMesh() call to inspect and return blendshape target data either as a list of targetNames or a dic of blendshape data including indes etc
+
+Mod - Red9_Anim - Pose search now allows sort by name or date, sort by name has proper numeric handling
+Mod - Red9_Anim - mods to the way the AnimUI passes and manages the matchMethod flag. PoseLoad now respects the flag, also added matchMethod as an optionMenu and included 'index' method. Index matches hierarchies purely on their hierarchy order like Maya natively does - no filtering or matching carried out.
 Mod - Red9_Meta - Now uses a CACHE to stop it always instantiating the same node multiple times, speeds up the code and means you only get a single instance of a given node back, it's just pulled from the cache when called a second time
 Mod - Red9_Audio - BIG changes to the AudioNode! This now accepts EITHER a maya sound node, or a filepath. Advantage of filepath is that the audio no longer has to be loaded in Maya to be inspected or queried. If the path exisits in a current soundNode then we bind that node to the class
-New - Red9_Audio - Added new OffsetManager for the audio that better handles and wraps offset / offset relative and bwav offset behaviours.
-New - Red9_Meta - Added new timecode HUD class for mionitoring correctly formatted timecode nodes in the scene
-Fix - Red9Setup - MAYA 2015 support put back in for building some of the Red9 sub-menu's that I'd missed off, thought I'd already put the 2015 handlers in, obviously not !!!!!!! sorry!!!!
 Mod - Red9_Core - added more options to the searchUI checkbox lists
-New - Red9_Anim - New handling of timeoffset to allow for 'ripple' mode which will either push, or hold keys / nodes outside of the given timerange. Also new hooks to MetaNodes for those building their own systems
 Mod - Red9_Meta - big upgrades to the MetaNodeUI to allow for more powerful filtering of systems 
 
