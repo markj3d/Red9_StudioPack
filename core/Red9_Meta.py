@@ -2168,6 +2168,7 @@ class MetaRig(MetaClass):
         self.addAttr('rigType', '')  # ensure these are added by default
         self.addAttr('renderMeshes', attrType='message')
         self.addAttr('exportSkeletonRoot', attrType='messageSimple')
+        self.addAttr('scaleSystem', attrType='messageSimple')
     
     @property
     def characterSet(self):
