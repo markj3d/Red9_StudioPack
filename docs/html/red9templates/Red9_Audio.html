@@ -110,6 +110,19 @@ a &#8216;compile&#8217; flag in the playblast command but it&#8217;s never worke
 </tr>
 </tbody>
 </table>
+<dl class="class">
+<dt id="Red9.core.Red9_Audio.Timecode">
+<em class="property">class </em><tt class="descname">Timecode</tt><a class="headerlink" href="#Red9.core.Red9_Audio.Timecode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="staticmethod">
+<dt id="Red9.core.Red9_Audio.Timecode.getTimecode_from_node">
+<em class="property">static </em><tt class="descname">getTimecode_from_node</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.Timecode.getTimecode_from_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper method to get the timecode back from a given node
+:param node: node containing correctly formatted timecode data</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="function">
 <dt id="Red9.core.Red9_Audio.milliseconds_to_Timecode">
 <tt class="descname">milliseconds_to_Timecode</tt><big>(</big><em>milliseconds</em>, <em>smpte=True</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.milliseconds_to_Timecode" title="Permalink to this definition">¶</a></dt>
@@ -281,14 +294,46 @@ audio path</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.getOverallRange">
-<tt class="descname">getOverallRange</tt><big>(</big><em>ms=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.getOverallRange" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">getOverallRange</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.getOverallRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the overall frame range of the given audioNodes (min/max)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioHandler.getOverallBwavTimecodeRange">
+<tt class="descname">getOverallBwavTimecodeRange</tt><big>(</big><em>ms=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.getOverallBwavTimecodeRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the overall internal BWAV timecode range for the given nodes
+NOte this is the internal timecode plus the length of the files</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ms</strong> &#8211; return the (minV,maxV) in milliseconds or SMPTE timecode</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.setTimelineToAudio">
 <tt class="descname">setTimelineToAudio</tt><big>(</big><em>audioNodes=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.setTimelineToAudio" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the current TimeSlider to the extent of the given audioNodes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioHandler.offsetBy">
+<tt class="descname">offsetBy</tt><big>(</big><em>offset</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.offsetBy" title="Permalink to this definition">¶</a></dt>
+<dd><p>offset all audioNode by a given frame offset</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioHandler.offsetTo">
+<tt class="descname">offsetTo</tt><big>(</big><em>startFrame</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.offsetTo" title="Permalink to this definition">¶</a></dt>
+<dd><p>offset all audio such that they start relative to a given frame,
+takes the earliest startpoint of the given audio to calculate how much
+to offset by</p>
 </dd></dl>
 
 <dl class="method">
@@ -303,11 +348,26 @@ audio path</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode">
-<tt class="descname">bwav_sync_to_Timecode</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">bwav_sync_to_Timecode</tt><big>(</big><em>relativeToo=None</em>, <em>offset=0</em>, <em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
 <dd><p>process either selected or all audio nodes and IF they are found to be
 BWav&#8217;s with valid timecode references, sync them in Maya such
 that their offset = Bwav&#8217;s timecode ie: sync them on the timeline to
 the bwavs internal timecode.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>relativeToo</strong> &#8211; This is fucking clever, even though I do say so. Pass in another bWav node and I 
+calculate it&#8217;s internal timecode against where it is in the timeline. I then use any difference in 
+that nodes time as an offset for all the other nodes in self.audioNodes. Basically syncing multiple 
+bwav&#8217;s against a given sound.</li>
+<li><strong>offset</strong> &#8211; given offset to pass to the sync call, does not process with the relativeToo flag</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -447,9 +507,20 @@ There is coverage for this in this module getMediaFileMetaData() does just that<
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_sync_to_Timecode">
-<tt class="descname">bwav_sync_to_Timecode</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">bwav_sync_to_Timecode</tt><big>(</big><em>offset=0</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
 <dd><p>given that self is a Bwav and has timecode reference, sync it&#8217;s position
 in the Maya timeline to match</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>offset</strong> &#8211; offset to apply to the internal timecode of the given wav&#8217;s</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -526,6 +597,37 @@ track was compiled from</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.select">
 <tt class="descname">select</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.core.Red9_Audio.AudioToolsWrap">
+<em class="property">class </em><tt class="descname">AudioToolsWrap</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="classmethod">
+<dt id="Red9.core.Red9_Audio.AudioToolsWrap.show">
+<em class="property">classmethod </em><tt class="descname">show</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioToolsWrap.offsetSelectedBy">
+<tt class="descname">offsetSelectedBy</tt><big>(</big><em>direction</em>, <em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.offsetSelectedBy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioToolsWrap.offsetSelectedTo">
+<tt class="descname">offsetSelectedTo</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.offsetSelectedTo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavsRelativeToo">
+<tt class="descname">sync_bwavsRelativeToo</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavsRelativeToo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavs">
+<tt class="descname">sync_bwavs</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

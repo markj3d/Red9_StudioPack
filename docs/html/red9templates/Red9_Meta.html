@@ -460,7 +460,7 @@ in by the funcOnSelection arg</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MClassNodeUI.fillScroll">
-<tt class="descname">fillScroll</tt><big>(</big><em>sortBy=None</em>, <em>mClassToShow=None</em>, <em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MClassNodeUI.fillScroll" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">fillScroll</tt><big>(</big><em>sortBy=None</em>, <em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MClassNodeUI.fillScroll" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -633,8 +633,9 @@ TODO: expand the Type support here</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.select">
-<tt class="descname">select</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.select" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descname">select</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>args and kws are now passed through into the Maya select call</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.rename">
@@ -1046,6 +1047,8 @@ so don&#8217;t have the search capability that the funct below gives</p>
 <div class="line">ctrType &gt;&gt; &#8216;Main&#8217; is the equivalent of the RootNode in the FilterNode calls.</div>
 </div>
 </div>
+<p>TODO: allow the mirror block to include an offset so that if you need to inverse AND offset 
+by 180 to get left and right working you can still do so.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1057,7 +1060,7 @@ so don&#8217;t have the search capability that the funct below gives</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.getChildren">
 <tt class="descname">getChildren</tt><big>(</big><em>walk=False</em>, <em>mAttrs=None</em>, <em>cAttrs=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getChildren" title="Permalink to this definition">¶</a></dt>
-<dd><p>Massively important big of code, this is used by most bits of code
+<dd><p>Massively important bit of code, this is used by most bits of code
 to find the child controllers linked to this metaRig instance.</p>
 </dd></dl>
 
@@ -1196,6 +1199,11 @@ to transerve the Dag tree so use something sensible!</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRig.set_ctrlColour">
+<tt class="descname">set_ctrlColour</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.set_ctrlColour" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.getMirrorData">
 <tt class="descname">getMirrorData</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getMirrorData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bind the MirrorObject to this instance of MetaRig.</p>
@@ -1218,6 +1226,13 @@ the inbuilt mirror functions</p>
 <dd><p>from the given nodes return a map of the opposite pairs of controllers
 so if you pass in a right controller of mirrorIndex 4 you get back the
 left[4] mirror node and visa versa. Centre controllers pass straight through</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRig.getMirror_ctrlSets">
+<tt class="descname">getMirror_ctrlSets</tt><big>(</big><em>set='Centre'</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getMirror_ctrlSets" title="Permalink to this definition">¶</a></dt>
+<dd><p>from  the metaNode grab all controllers and return sets of nodes
+based on their mirror side data</p>
 </dd></dl>
 
 <dl class="method">
@@ -1458,6 +1473,15 @@ if HUD node already exists this will simply add more attrs to it</p>
 <dd><p>ChannelBox wrappers for the HUD : remove attrs from the MetaHUD</p>
 </dd></dl>
 
+<dl class="function">
+<dt id="Red9.core.Red9_Meta.hardKillMetaHUD">
+<tt class="descname">hardKillMetaHUD</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.hardKillMetaHUD" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the MetaNodes are left behind in a scene and you can&#8217;t remove them
+then this is a hard coded kill to remove the hud element. This situation 
+happens if you&#8217;d deleted the MetaHUDNode but left the draw on, meaning
+we now have invalid HUD data drawn.</p>
+</dd></dl>
+
 <dl class="class">
 <dt id="Red9.core.Red9_Meta.MetaHUDNode">
 <em class="property">class </em><tt class="descname">MetaHUDNode</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHUDNode" title="Permalink to this definition">¶</a></dt>
@@ -1601,6 +1625,41 @@ to carefully manage this list</p>
 <tt class="descname">delete</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHUDNode.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>full cleanup, remove the metaNode and all HUDs in the process</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.core.Red9_Meta.MetaTimeCodeHUD">
+<em class="property">class </em><tt class="descname">MetaTimeCodeHUD</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaTimeCodeHUD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.core.Red9_Meta.MetaHUDNode" title="Red9.core.Red9_Meta.MetaHUDNode"><tt class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaHUDNode</span></tt></a></p>
+<p>Generate&#8217;s a HUD node connected to the main timecode attrs,
+allows us to show the actual internal timecode attrs as their 
+original SMPTE time&#8217;s</p>
+<p>Crucial things to be aware of:</p>
+<p>We construct timecode from 3 attrs on the given node:
+timecode_ref        : the original timecode converted to milliseconds
+timecode_count      : a linear curve that increments every frame based on the samplerate
+timecode_samplerate : samplerate that the linear counter was generated against</p>
+<p>SMPTE timecode is then reconstructed like so:
+r9Audio.milliseconds_to_Timecode(ref + ((count / samplerate) * 1000))</p>
+<p>tcHUD=cFacialMeta.MetaTimeCodeHUD()
+tcHUD.addMonitoredTimecodeNode(cmds.ls(sl=True)[0])
+tcHUD.drawHUD()</p>
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaTimeCodeHUD.addMonitoredTimecodeNode">
+<tt class="descname">addMonitoredTimecodeNode</tt><big>(</big><em>nodes</em>, <em>valid=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaTimeCodeHUD.addMonitoredTimecodeNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a node with the TimeCode attrs on it to monitor</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaTimeCodeHUD.removeMonitoredAttr">
+<tt class="descname">removeMonitoredAttr</tt><big>(</big><em>attr</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaTimeCodeHUD.removeMonitoredAttr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaTimeCodeHUD.connectTimecodeSystems">
+<tt class="descname">connectTimecodeSystems</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaTimeCodeHUD.connectTimecodeSystems" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

@@ -765,6 +765,10 @@ pack, using a filterSettings node thats passed into the __init__</p>
 </pre></div>
 </div>
 <p>TODO: We need to do a UI for managing these marker attrs and the Index lists</p>
+<dl class="docutils">
+<dt>TODO: allow the mirror block to include an offset so that if you need to inverse AND offset </dt>
+<dd>by 180 to get left and right working you can still do so.</dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -972,12 +976,42 @@ frame the currently selected objects per frame, or rather per frameStep.</p>
 
 </dd></dl>
 
-<dl class="function">
-<dt id="Red9.core.Red9_AnimationUtils.reConnectReferencedAnimData">
-<tt class="descname">reConnectReferencedAnimData</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.reConnectReferencedAnimData" title="Permalink to this definition">¶</a></dt>
+<dl class="class">
+<dt id="Red9.core.Red9_AnimationUtils.ReconnectAnimData">
+<em class="property">class </em><tt class="descname">ReconnectAnimData</tt><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.ReconnectAnimData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<dl class="classmethod">
+<dt id="Red9.core.Red9_AnimationUtils.ReconnectAnimData.show">
+<em class="property">classmethod </em><tt class="descname">show</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.ReconnectAnimData.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="Red9.core.Red9_AnimationUtils.ReconnectAnimData.reConnectReferencedAnimData">
+<em class="property">static </em><tt class="descname">reConnectReferencedAnimData</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.ReconnectAnimData.reConnectReferencedAnimData" title="Permalink to this definition">¶</a></dt>
 <dd><p>As per my blog posts on Lost Animaton&#8217;s see here for details:
-<a class="reference external" href="http://markj3d.blogspot.co.uk/2011/07/lost-animation-when-loading-referenced.html">http://markj3d.blogspot.co.uk/2011/07/lost-animation-when-loading-referenced.html</a>
+<a class="reference external" href="http://markj3d.blogspot.co.uk/2011/07/lost-animation-when-loading-referenced.html">http://markj3d.blogspot.co.uk/2011/07/lost-animation-when-loading-referenced.html</a></p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="Red9.core.Red9_AnimationUtils.ReconnectAnimData.reConnectAnimDataBlind">
+<em class="property">static </em><tt class="descname">reConnectAnimDataBlind</tt><big>(</big><em>stripNamespace=True</em>, <em>stripLayerNaming=False</em>, <em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.ReconnectAnimData.reConnectAnimDataBlind" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blind reconnect based on names. As per my blog posts on Lost Animaton&#8217;s see here for details:
 <a class="reference external" href="http://markj3d.blogspot.co.uk/2012/09/lost-animation-part2.html">http://markj3d.blogspot.co.uk/2012/09/lost-animation-part2.html</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>stripNamespace</strong> &#8211; Change this to False if the curves are not in the rootNamespace but
+in the sameNamespace as the controllers.</li>
+<li><strong>stripLayerNaming</strong> &#8211; allows for the additional &#8216;Merged_Layer_inputB&#8217; naming conventions</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>

@@ -795,13 +795,27 @@ collapse the keys within that range and shift forward keys back to close the gap
 </div>
 <dl class="classmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.fullScene">
-<em class="property">classmethod </em><tt class="descname">fullScene</tt><big>(</big><em>offset</em>, <em>timelines=False</em>, <em>timerange=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.fullScene" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">fullScene</tt><big>(</big><em>offset</em>, <em>timelines=False</em>, <em>timerange=None</em>, <em>ripple=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.fullScene" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the entire scene and time offset all suitable nodes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>offset</strong> &#8211; number of frames to offset</li>
+<li><strong>timelines</strong> &#8211; offset the playback timelines</li>
+<li><strong>timerange</strong> &#8211; only offset times within a given timerange</li>
+<li><strong>ripple</strong> &#8211; manage the upper range of data and ripple them with the offset</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.fromSelected">
-<em class="property">classmethod </em><tt class="descname">fromSelected</tt><big>(</big><em>offset</em>, <em>nodes=None</em>, <em>filterSettings=None</em>, <em>flocking=False</em>, <em>randomize=False</em>, <em>timerange=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.fromSelected" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><tt class="descname">fromSelected</tt><big>(</big><em>offset</em>, <em>nodes=None</em>, <em>filterSettings=None</em>, <em>flocking=False</em>, <em>randomize=False</em>, <em>timerange=None</em>, <em>ripple=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.fromSelected" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the current selection list and offset as appropriate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -813,6 +827,7 @@ collapse the keys within that range and shift forward keys back to close the gap
 <li><strong>flocking</strong> &#8211; wether to sucessively increment nodes during offset</li>
 <li><strong>randomize</strong> &#8211; whether to add a ramdon factor to each succesive nodes offset</li>
 <li><strong>timerange</strong> &#8211; only offset times within a given timerange</li>
+<li><strong>ripple</strong> &#8211; manage the upper range of data and ripple them with the offset</li>
 <li><strong>filterSettings</strong> &#8211; <p>this is a FilterSettings_Node object used to pass all 
 the filter types into the FilterNode code. Internally the following is true:</p>
 <div class="line-block">
@@ -845,6 +860,7 @@ a number of aggressive searches to find all linked animation data.</p>
 <li><strong>timerange</strong> &#8211; if timerange given [start,end] then we cut the keys in that 
 range before shifting associated keys. Now we could just use the 
 keyframe(option=&#8217;insert&#8217;) BUT this has a MAJOR crash bug!</li>
+<li><strong>ripple</strong> &#8211; manage the upper range of keys and ripple them with the offset</li>
 </ul>
 </td>
 </tr>
@@ -860,7 +876,7 @@ keyframe(option=&#8217;insert&#8217;) BUT this has a MAJOR crash bug!</li>
 
 <dl class="staticmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.sound">
-<em class="property">static </em><tt class="descname">sound</tt><big>(</big><em>offset</em>, <em>mode='Scene'</em>, <em>audioNodes=None</em>, <em>timerange=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.sound" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">sound</tt><big>(</big><em>offset</em>, <em>mode='Scene'</em>, <em>audioNodes=None</em>, <em>timerange=None</em>, <em>ripple=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.sound" title="Permalink to this definition">¶</a></dt>
 <dd><p>Offset Audio nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -871,6 +887,8 @@ keyframe(option=&#8217;insert&#8217;) BUT this has a MAJOR crash bug!</li>
 <li><strong>mode</strong> &#8211; either process entire scene or selected</li>
 <li><strong>audioNodes</strong> &#8211; optional, given nodes to process</li>
 <li><strong>timerange</strong> &#8211; optional timerange to process (outer bounds only)</li>
+<li><strong>ripple</strong> &#8211; when shifting nodes ripple the offset to sounds after the range, 
+if ripple=False we only shift audio that starts in tghe bounds of the timerange</li>
 </ul>
 </td>
 </tr>
@@ -880,7 +898,7 @@ keyframe(option=&#8217;insert&#8217;) BUT this has a MAJOR crash bug!</li>
 
 <dl class="staticmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.animClips">
-<em class="property">static </em><tt class="descname">animClips</tt><big>(</big><em>offset</em>, <em>mode='Scene'</em>, <em>clips=None</em>, <em>timerange=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.animClips" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">animClips</tt><big>(</big><em>offset</em>, <em>mode='Scene'</em>, <em>clips=None</em>, <em>timerange=None</em>, <em>ripple=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.animClips" title="Permalink to this definition">¶</a></dt>
 <dd><p>Offset Trax Clips</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -891,6 +909,29 @@ keyframe(option=&#8217;insert&#8217;) BUT this has a MAJOR crash bug!</li>
 <li><strong>mode</strong> &#8211; either process entire scene or selected</li>
 <li><strong>clips</strong> &#8211; optional, given clips to offset</li>
 <li><strong>timerange</strong> &#8211; optional timerange to process (outer bounds only)</li>
+<li><strong>ripple</strong> &#8211; when shifting nodes ripple the offset to clips after the range, 
+if ripple=False we only shift clips that starts in tghe bounds of the timerange</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="Red9.core.Red9_CoreUtils.TimeOffset.metaNodes">
+<em class="property">static </em><tt class="descname">metaNodes</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.metaNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Offset special handling for MetaNodes. Inspect the metaNode and see if 
+the &#8216;timeOffset&#8217; method has been implemented and if so, call it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>offset</strong> &#8211; amount to offset the sounds nodes by</li>
+<li><strong>timerange</strong> &#8211; optional timerange to process (outer bounds only)</li>
+<li><strong>ripple</strong> &#8211; when shifting nodes ripple the offset to clips after the range, 
+if ripple=False we only shift clips that starts in tghe bounds of the timerange</li>
 </ul>
 </td>
 </tr>
