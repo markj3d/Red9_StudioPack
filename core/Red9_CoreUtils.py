@@ -1889,6 +1889,10 @@ class LockChannels(object):
             attrKws['keyable']=False
         elif mode=='unhide':
             attrKws['keyable']=True
+        elif mode=='nonkeyable':
+            attrKws['cb']=True
+        elif mode=='keyable':
+            attrKws['cb']=False
         elif mode=='fullkey':
             attrKws['keyable']=True
             attrKws['lock']=False
@@ -1907,7 +1911,7 @@ class LockChannels(object):
                     if cmds.attributeQuery(attr, node=node, exists=True):
                         attrString='%s.%s' % (node, attr)
                         if cmds.getAttr(attrString, type=True) in ['double3','float3']:
-                            #why?? Maya fails to set the 'keyable' flag staus for compound attrs!
+                            #why?? Maya fails to set the 'keyable' flag status for compound attrs!
                             childAttrs=cmds.listAttr(attrString, multi=True)
                             childAttrs.remove(attr)
                             log.debug('compoundAttr handler for node: %s.%s' % (node,attr))
