@@ -2827,8 +2827,8 @@ class AnimFunctions(object):
     #===========================================================================
     
     @r9General.Timer
-    def snapTransform(self, nodes=None, time=(), step=1, preCopyKeys=1, preCopyAttrs=1,
-                      filterSettings=None, iterations=1, matchMethod=None, prioritySnapOnly=False, **kws):
+    def snapTransform(self, nodes=None, time=(), step=1, preCopyKeys=1, preCopyAttrs=1, filterSettings=None,
+                      iterations=1, matchMethod=None, prioritySnapOnly=False, snapRotates=True, snapTranslates=True, **kws):
         '''
         Snap objects over a timeRange. This wraps the default hierarchy filters
         so it's capable of multiple hierarchy filtering and matching methods.
@@ -2922,11 +2922,13 @@ class AnimFunctions(object):
                                     #to update the scene without refreshing the Viewports
                                     cmds.currentTime(t, e=True, u=False)
                                     #pass to the plug-in SnapCommand
-                                    cmds.SnapTransforms(source=src, destination=dest, timeEnabled=True)
+                                    cmds.SnapTransforms(source=src, destination=dest, timeEnabled=True, snapRotates=snapRotates, snapTranslates=snapTranslates)
                                     #fill the snap cache for error checking later
                                     #self.snapCacheData[dest]=data
-                                    cmds.setKeyframe(dest, at='translate')
-                                    cmds.setKeyframe(dest, at='rotate')
+                                    if snapTranslates:
+                                        cmds.setKeyframe(dest, at='translate')
+                                    if snapRotates:
+                                        cmds.setKeyframe(dest, at='rotate')
                                     log.debug('Snapfrm %s : %s - %s : to : %s' % (str(t), r9Core.nodeNameStrip(src), dest, src))
 
                                 processRepeat -= 1
@@ -2937,7 +2939,7 @@ class AnimFunctions(object):
             else:
                 for _ in range(0, iterations):
                     for src, dest in self.nodesToSnap:  # nodeList.MatchedPairs:
-                        cmds.SnapTransforms(source=src, destination=dest, timeEnabled=False)
+                        cmds.SnapTransforms(source=src, destination=dest, timeEnabled=False, snapRotates=snapRotates, snapTranslates=snapTranslates)
                         #self.snapCacheData[dest]=data
                         log.debug('Snapped : %s - %s : to : %s' % (r9Core.nodeNameStrip(src), dest, src))
                          
