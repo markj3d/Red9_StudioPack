@@ -848,6 +848,7 @@ class AnimationUI(object):
         cmds.menuItem(label='Move Down', command=lambda x: self.__uiSetPriorities('moveDown'))
         self.uicbSnapPriorityOnly = cmds.checkBox('uicbSnapPriorityOnly', v=False,
                                                 label='Use Priority as SnapList',
+                                                onc=self.__uiCB_setPriorityFlag,
                                                 cc=lambda x: self.__uiCache_addCheckbox('uicbSnapPriorityOnly'))
         cmds.separator(h=20, style='in')
         cmds.text('Available Presets:')
@@ -1192,8 +1193,7 @@ class AnimationUI(object):
         print 'width self.MainLayout:', cmds.scrollLayout(self.MainLayout, q=True, w=True)
         print 'width self.form:', cmds.formLayout(self.form, q=True, w=True)
         print 'width poseScroll:', cmds.scrollLayout('uiglPoseScroll', q=True, w=True)
-        
-                                   
+                                
     def __uiCB_setCopyKeyPasteMethod(self, *args):
         self.ANIM_UI_OPTVARS['AnimationUI']['keyPasteMethod'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
         self.__uiCache_storeUIElements()
@@ -1202,6 +1202,15 @@ class AnimationUI(object):
         self.ANIM_UI_OPTVARS['AnimationUI']['matchMethod'] = cmds.optionMenu('om_MatchMethod', q=True, v=True)
         self.__uiCache_storeUIElements()
          
+    def __uiCB_setPriorityFlag(self, *args):
+        '''
+        check if the priority list has any entries, if not this flag is invalid
+        '''
+        if not cmds.textScrollList('uitslFilterPriority', q=True, ai=True):
+            log.warning("Internal Node Priority list is empty, you can't set this flag without something in the Priority list itself")
+            cmds.checkBox('uicbSnapPriorityOnly', e=True, v=False)
+            return
+        
     # Preset FilterSettings Object Management
     #------------------------------------------------------------------------------
     
@@ -2852,7 +2861,9 @@ class AnimFunctions(object):
             all channel Values on all nodes will have their data taken across
         :param iterations: Number of times to process the frame.
         :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names
-        :param prioritySnapOnly: if True ONLY snap the nodes in the filterPriority list = Super speed up!!
+        :param prioritySnapOnly: if True ONLY snap the nodes in the filterPriority list withing the filterSettings object = Super speed up!!
+        :param snapTranslates: only snap the translate data
+        :param snapRotates: only snap the rotate data
         
         .. note:: 
             you can also pass the CopyKey kws in to the preCopy call, see copyKeys above
@@ -2883,9 +2894,9 @@ class AnimFunctions(object):
         if nodeList.MatchedPairs:
             nodeList.MatchedPairs.reverse()  # reverse order so we're dealing with children before their parents
             #if prioritySnap then we snap align ONLY those nodes that
-            #arein the filterSettings priority list. VAST speed increase
-            #by doing this
-            if prioritySnapOnly:
+            #are in the filterSettings priority list. VAST speed increase
+            #by doing this. If the list is empty we revert to turning the flag off
+            if prioritySnapOnly and filterSettings.filterPriority:
                 for pNode in filterSettings.filterPriority:
                     for src, dest in nodeList.MatchedPairs:
                         if re.search(pNode, r9Core.nodeNameStrip(dest)):
@@ -2922,7 +2933,10 @@ class AnimFunctions(object):
                                     #to update the scene without refreshing the Viewports
                                     cmds.currentTime(t, e=True, u=False)
                                     #pass to the plug-in SnapCommand
-                                    cmds.SnapTransforms(source=src, destination=dest, timeEnabled=True, snapRotates=snapRotates, snapTranslates=snapTranslates)
+                                    cmds.SnapTransforms(source=src, destination=dest,
+                                                        timeEnabled=True,
+                                                        snapRotates=snapRotates,
+                                                        snapTranslates=snapTranslates)
                                     #fill the snap cache for error checking later
                                     #self.snapCacheData[dest]=data
                                     if snapTranslates:
@@ -2939,7 +2953,10 @@ class AnimFunctions(object):
             else:
                 for _ in range(0, iterations):
                     for src, dest in self.nodesToSnap:  # nodeList.MatchedPairs:
-                        cmds.SnapTransforms(source=src, destination=dest, timeEnabled=False, snapRotates=snapRotates, snapTranslates=snapTranslates)
+                        cmds.SnapTransforms(source=src, destination=dest,
+                                            timeEnabled=False,
+                                            snapRotates=snapRotates,
+                                            snapTranslates=snapTranslates)
                         #self.snapCacheData[dest]=data
                         log.debug('Snapped : %s - %s : to : %s' % (r9Core.nodeNameStrip(src), dest, src))
                          
