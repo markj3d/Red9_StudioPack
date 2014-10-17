@@ -188,6 +188,10 @@ def menuSetup(parent='MayaWindow'):
                       p='redNineMenuItemRoot', echoCommand=True,
                       c="import Red9.core.AnimationBinder as animBnd;animBnd.AnimBinderUI()._UI()")
         cmds.menuItem(divider=True,p='redNineMenuItemRoot')
+        
+        cmds.menuItem('redNineBlogItem',l="Red9_HomePage",ann="Open Red9Consultancy HomePage",
+                      p='redNineMenuItemRoot', echoCommand=True,
+                      c="Red9.setup.red9_website_home()")
         cmds.menuItem('redNineBlogItem',l="Red9_Blog",ann="Open Red9Blog",
                       p='redNineMenuItemRoot', echoCommand=True,
                       c="Red9.setup.red9_blog()")
@@ -353,7 +357,14 @@ def red9_blog(*args):
     '''
     import Red9.core.Red9_General as r9General  # lazy load
     r9General.os_OpenFile('http://red9-consultancy.blogspot.com/')
-
+    
+def red9_website_home(*args):
+    '''
+    open up the Red9 Consultancy homepage
+    '''
+    import Red9.core.Red9_General as r9General  # lazy load
+    r9General.os_OpenFile('http://red9consultancy.com/')
+    
 def red9_facebook(*args):
     '''
     open up the Red9 Facebook Page
