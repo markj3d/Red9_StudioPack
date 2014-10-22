@@ -4611,7 +4611,7 @@ class ReconnectAnimData(object):
                     cmds.connectAttr('%s.output' % animCurveExpected,chn,force=True)
             elif stripLayerNaming:
                 for curve in animCurves:
-                    curveStripped=curve.replace('_Merged_Layer_inputB','')
+                    curveStripped=curve.replace('_Merged_Layer_inputB','').rstrip('123456789')
                     if curveStripped == animCurveExpected:
                         if not cmds.isConnected(curve, chn):
                             print '%s >> %s' % (curve, chn)
