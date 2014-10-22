@@ -2794,6 +2794,13 @@ def hardKillMetaHUD():
     happens if you'd deleted the MetaHUDNode but left the draw on, meaning
     we now have invalid HUD data drawn.
     '''
+    huds=getMetaNodes(mInstances=MetaHUDNode)
+    if huds:
+        for hud in huds:
+            try:
+                hud.killHud()
+            except:
+                log.debug('failed to remove HUD metanode')
     HUDS=cmds.headsUpDisplay(lh=True)
     for hud in HUDS:
         if 'MetaHUDConnector' in hud:
@@ -3145,8 +3152,15 @@ to that.
 '''
 #registerMClassInheritanceMapping()
 
-
+def metaData_sceneCleanups(*args):
+    '''
+    Registered on SceneOpen and SceneNew callbacks so that the MetaData Cache is cleared and 
+    any registered HUD is killed off
+    '''
+    hardKillMetaHUD()
+    resetCacheOnSceneNew()
+    
 
 #Setup the callbacks to clear the cache when required
-RED9_META_CALLBACKS['Open'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeOpen, resetCacheOnSceneNew)
-RED9_META_CALLBACKS['New'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeNew, resetCacheOnSceneNew)
+RED9_META_CALLBACKS['Open'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeOpen, metaData_sceneCleanups)
+RED9_META_CALLBACKS['New'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeNew, metaData_sceneCleanups)
