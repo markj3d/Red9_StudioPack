@@ -16,7 +16,7 @@ THIS SHOULD NOT REQUIRE ANY OF THE RED9.core modules
 
 
 __author__ = 'Mark Jackson'
-__buildVersionID__ = 1.44
+__buildVersionID__ = 1.5
 installedVersion= False
 
 import sys

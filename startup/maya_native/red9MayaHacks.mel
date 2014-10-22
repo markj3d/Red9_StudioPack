@@ -105,19 +105,33 @@ global proc red9HackTraxMenu(string $parent)
 	 menuItem -label ("Activate Selected Audio") 
 		-p "redNineTraxRoot"
 		-ann "set the current selected audio node to be active in the timeline"
-		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioNode().setActive()\")" red9TraxActiveItem;
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().setActive()\")" red9TraxActiveItem;
 	 menuItem -label ("Set Timeline to Selected") 
 		-p "redNineTraxRoot"
 		-ann "set the timeline to the extents of the selected, or all audio nodes"
-		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().setTimelineToAudio()\")" red9TraxTimelineItem;		
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().setTimelineToAudio()\")" red9TraxTimelineItem;	
+	menuItem -label ("Focus on Selected") 
+		-p "redNineTraxRoot"
+		-ann "Runs the setActive then the setTimelines in one go for speed"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().setTimelineToAudio();r9Audio.AudioHandler().setActive()\")" red9TraxFocusItem;		
+	 menuItem -d true;
 	 menuItem -label ("Mute Selected") 
 		-p "redNineTraxRoot"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().muteSelected(True)\")" red9TraxMuteSelectedItem;
 	 menuItem -label ("UnMute Selected") 
 		-p "redNineTraxRoot"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().muteSelected(False)\")" red9TraxUnmuteSelectedItem;
+	 menuItem -label ("Lock Selected") 
+		-p "redNineTraxRoot"
+		-ann "Locks the time inputs for the selected audio nodes, stopping them being accidentally dragged in time"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().lockTimeInputs(True)\")" red9TraxLockSelectedItem;
+	 menuItem -label ("UnLock Selected") 
+		-p "redNineTraxRoot"
+		-ann "UnLock the time inputs for the selected audio nodes, allowing them to be moved in time"
+		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().lockTimeInputs(False)\")" red9TraxUnlockSelectedItem;
 	 menuItem -label ("Delete Selected Audio") 
 		-p "redNineTraxRoot"
+		-ann "Mainly for Maya2013 where the delete of audio nodes was broken!"
 		-c "python(\"import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().deleteSelected()\")" red9TraxDeleteItem;
 	 menuItem -d true;
 	 menuItem -label ("Combine Audio") 
