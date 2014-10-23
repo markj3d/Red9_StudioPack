@@ -1455,7 +1455,7 @@ class AnimationUI(object):
         Both have different caches to store the 2 mapped root paths
         :param mode: 'local' or 'project', in project the poses are load only, save=disabled
         '''
-        if mode == 'local':
+        if mode == 'local' or mode =='localPoseMode':
             self.posePath = os.path.join(self.posePathLocal, self.getPoseSubFolder())
             if not os.path.exists(self.posePath):
                 log.warning('No Matching Local SubFolder path found - Reverting to Root')
@@ -1465,7 +1465,7 @@ class AnimationUI(object):
             self.posePathMode = 'localPoseMode'
             cmds.button('savePoseButton', edit=True, en=True, bgc=r9Setup.red9ButtonBGC(1))
             cmds.textFieldButtonGrp('uitfgPosePath', edit=True, text=self.posePathLocal)
-        elif mode == 'project':
+        elif mode == 'project' or mode =='projectPoseMode':
             self.posePath = os.path.join(self.posePathProject, self.getPoseSubFolder())
             if not os.path.exists(self.posePath):
                 log.warning('No Matching Project SubFolder path found - Reverting to Root')
@@ -2144,6 +2144,7 @@ class AnimationUI(object):
             
             #callbacks
             if self.posePathMode:
+                print 'setting : ', self.posePathMode
                 cmds.radioCollection(self.uircbPosePathMethod, edit=True, select=self.posePathMode)
             self.__uiCB_enableRelativeSwitches()  # relativePose switch enables
             self.__uiCB_managePoseRootMethod()  # metaRig or SetRootNode for Pose Root
