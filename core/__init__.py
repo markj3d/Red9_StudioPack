@@ -36,7 +36,8 @@ def _reload():
     reload(Red9_CoreUtils)
     reload(Red9_AnimationUtils)
     reload(Red9_PoseSaver)
-        
+    
+    Red9_Meta.metaData_sceneCleanups()
     Red9_Meta.registerMClassInheritanceMapping()
     print('Red9 Core Reloaded and META REGISTRY updated')
     

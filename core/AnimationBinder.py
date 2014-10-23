@@ -419,7 +419,7 @@ class AnimBinderUI(object):
     
     @staticmethod
     def _contactDetails(opentype='email'):
-        if type=='email':
+        if opentype=='email':
             cmds.confirmDialog(title='Contact', \
                            message=("Autodesk MasterClass - Live Animation Binding\n" +
                                     "Mark Jackson\n" +
@@ -439,9 +439,11 @@ class AnimBinderUI(object):
         cmds.window(self.win, title=self.win, menuBar=True, sizeable=False, widthHeight=(300,360))
         
         cmds.menu(label='Help')
-        cmds.menuItem(label='Watch MasterClass Video', c=lambda x:self._contactDetails(type='vimeo'))
-        cmds.menuItem(label='Contact', c=lambda x:self._contactDetails(type='email'))
-        cmds.menuItem(label='Blog', c=lambda x:self._contactDetails(type='blog'))
+        cmds.menuItem(label='Watch MasterClass Video', c=lambda x:self._contactDetails(opentype='vimeo'))
+        cmds.menuItem(label='Contact', c=r9Setup.red9ContactInfo)
+        #cmds.menuItem(label='Contact', c=lambda x:self._contactDetails(opentype='email'))
+        cmds.menuItem(label='Blog', c=r9Setup.red9_blog)
+        cmds.menuItem(label='Red9HomePage', c=r9Setup.red9_website_home)
 
 
         cmds.columnLayout(adjustableColumn=True)

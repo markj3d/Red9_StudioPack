@@ -326,15 +326,11 @@ class AudioHandler(object):
         '''
         return the overall frame range of the given audioNodes (min/max)
         '''
-        minV=None
-        maxV=None
+        minV=self.audioNodes[0].startFrame
+        maxV=self.audioNodes[0].endFrame
         for a in self.audioNodes:
-            if not minV:
-                minV=a.startFrame
-                maxV=a.endFrame
-            else:
-                minV=min(minV, a.startFrame)
-                maxV=max(maxV, a.endFrame)  # why the hell does this always come back 1 frame over??
+            minV=min(minV, a.startFrame)
+            maxV=max(maxV, a.endFrame)  # why the hell does this always come back 1 frame over??
         return (minV, maxV)
 
     def getOverallBwavTimecodeRange(self, ms=False):
@@ -368,7 +364,13 @@ class AudioHandler(object):
         frmrange=self.getOverallRange()
         cmds.playbackOptions(min=int(frmrange[0]), max=int(frmrange[1]))
       
-      
+    def setActive(self):
+        if len(self.audioNodes)==1:
+            self.audioNodes[0].setActive()
+        else:
+            gPlayBackSlider = mel.eval("string $temp=$gPlayBackSlider")
+            cmds.timeControl(gPlayBackSlider, e=True, ds=1, sound="")
+        
     def offsetBy(self, offset):
         '''
         offset all audioNode by a given frame offset
@@ -390,6 +392,10 @@ class AudioHandler(object):
     def muteSelected(self, state=True):
         for a in self.audioNodes:
             a.mute(state)
+    
+    def lockTimeInputs(self, state=True):
+        for a in self.audioNodes:
+            a.lockTimeInputs(state)
             
     def deleteSelected(self):
         for a in self.audioNodes:
@@ -900,7 +906,16 @@ class AudioNode(object):
         path=self.path
         if path and os.path.exists(path):
             r9General.os_OpenFileDirectory(path)
-            
+    
+    def lockTimeInputs(self, state=True):
+        '''
+        lock the audio in time so it can't be accidentally shifted
+        '''
+        cmds.setAttr('%s.offset' % self.audioNode, l=state)
+        cmds.setAttr('%s.sourceEnd' % self.audioNode, l=state)
+        cmds.setAttr('%s.sourceStart' % self.audioNode, l=state)
+        cmds.setAttr('%s.endFrame' % self.audioNode, l=state)
+        
     @property
     def isCompiled(self):
         '''

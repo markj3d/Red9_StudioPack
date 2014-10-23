@@ -159,3 +159,9 @@ Mod - Red9_Audio - BIG changes to the AudioNode! This now accepts EITHER a maya 
 Mod - Red9_Core - added more options to the searchUI checkbox lists
 Mod - Red9_Meta - big upgrades to the MetaNodeUI to allow for more powerful filtering of systems 
 
+v1.5:
+-----
+Fix - Red9_Anim - 'use Priority as snaplist' if the priority list was empty then the snap call matched no objects and stopped running. There's now a catch on the checkbox to warn you that the priority list has to have entries before the flag can be set on
+Bug - Red9_Audio - if you gave the setTimeRange 2 bits of Audio both starting at frame 0 then only the first audio was taken into account.
+Mod - Red9_Audio - Add lock / unlock so that you can lock audio nodes in time so they can't be accidentally shifted
+
