@@ -268,9 +268,12 @@ def cleanCache():
         except:
             log.debug('CACHE : clean failure')
 
-def resetCacheOnSceneNew(*args):
+def resetCache(*args):
     global RED9_META_NODECACHE
     RED9_META_NODECACHE={}
+
+def resetCacheOnSceneNew(*args):
+    resetCache()
     log.info('"file Open" or "file new" called - Red9 MetaCache being cleared')
     
           
@@ -575,6 +578,13 @@ class MClassNodeUI():
         cmds.menuItem(l="Print :Registered MetaClasses",
                       ann='Prints the currently registered MetaClasses from the Meta Registry',
                       c=self.printRegisteredMetaClasses)
+        cmds.menuItem(l="Print :MetaCached Nodes",
+                      ann='Prints all currently cached nodes in the MetaCache',
+                      c=self.printMetaNodeCache)
+        
+        cmds.menuItem(l="Clear Cache",
+                      ann='Prints all currently cached nodes in the MetaCache',
+                      c=resetCache)
         cmds.scrollLayout('slMetaNodeScroll',rc=lambda *args:self.fitTextScrollFucker())
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=15, style='none')
@@ -820,6 +830,12 @@ class MClassNodeUI():
     def printRegisteredMetaClasses(self,*args):
         data = getMClassMetaRegistry()
         print '\nRED9_META_REGISTERY:\n===================='
+        for key, value in sorted(data.items()):
+            print key, ' : ', value
+            
+    def printMetaNodeCache(self,*args):
+        data = getMClassNodeCache()
+        print '\nRED9_META_NODECACHE:\n===================='
         for key, value in sorted(data.items()):
             print key, ' : ', value
 
