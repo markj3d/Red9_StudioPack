@@ -641,24 +641,33 @@ class AnimationUI(object):
                      command=partial(self.__uiCall, 'Snap'))
         cmds.separator(h=5, style='none')
 
-        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)], rowSpacing=[(1,2)])
+        #cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)], rowSpacing=[(1,2)])
+        cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 75), (2, 50), (3, 90), (4, 85)],
+                             columnSpacing=[(1, 8), (2, 8), (3, 8)], rowSpacing=[(1,2)])
 
         self.uicbSnapRange = cmds.checkBox('uicbSnapRange', l='TimeRange', al='left', v=False,
                                             ann='Snap Nodes over PlaybackTimeRange or Selected TimeRange (in Red on the timeline)',
                                             cc=self.__uiCB_manageSnapTime)
+        self.uicbSnapTrans = cmds.checkBox('uicbStanTrans', l='Trans', al='left', v=True,
+                                           ann='Track the Translation data',
+                                           cc=lambda x: self.__uiCache_addCheckbox('uicbStanTrans'))
         self.uicbSnapPreCopyKeys = cmds.checkBox('uicbSnapPreCopyKeys', l='PreCopyKeys', al='left',
                                                  ann='Copy all animation data for all channels prior to running the Snap over Time',
                                                  en=False, v=True)
-        self.uiifgSnapStep = cmds.intFieldGrp('uiifgSnapStep', l='FrmStep', en=False, value1=1, cw2=(50, 40),
+        self.uiifgSnapStep = cmds.intFieldGrp('uiifgSnapStep', l='FrmStep', en=False, value1=1, cw2=(45, 30),
                                            ann='Frames to advance the timeline after each Process Run')
 
         self.uicbSnapHierarchy = cmds.checkBox('uicbSnapHierarchy', l='Hierarchy', al='left', v=False,
                                                ann='Filter Hierarchies with given args - then Snap Transforms for matched nodes',
                                                cc=self.__uiCB_manageSnapHierachy)
+        self.uicbStanRots = cmds.checkBox('uicbStanRots', l='Rots', al='left', v=True,
+                                          ann='Track the Rotational data',
+                                          cc=lambda x: self.__uiCache_addCheckbox('uicbStanRots'))
         self.uicbSnapPreCopyAttrs = cmds.checkBox(ann='Copy all Values for all channels prior to running the Snap',
                                             l='PreCopyAttrs', al='left', en=False, v=True)
-        self.uiifSnapIterations = cmds.intFieldGrp('uiifSnapIterations', l='Iterations', en=False, value1=1, cw2=(50, 40),
+        self.uiifSnapIterations = cmds.intFieldGrp('uiifSnapIterations', l='Iteration', en=False, value1=1, cw2=(45, 30),
                                            ann='This is the number of iterations over each hierarchy node during processing, if you get issues during snap then increase this')
+
         cmds.setParent(self.AnimLayout)
 
 
@@ -2248,9 +2257,11 @@ class AnimationUI(object):
         self.kws['prioritySnapOnly'] = False
         self.kws['iterations'] = cmds.intFieldGrp('uiifSnapIterations', q=True, v=True)[0]
         self.kws['step'] = cmds.intFieldGrp('uiifgSnapStep', q=True, v=True)[0]
-        self.kws['pasteKey']=cmds.optionMenu('om_PasteMethod', q=True, v=True)
-        self.kws['mergeLayers']=True
-        
+        self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
+        self.kws['mergeLayers'] = True
+        self.kws['snapTranslates'] = cmds.checkBox('uicbStanTrans', q=True, v=True)
+        self.kws['snapRotates'] = cmds.checkBox('uicbStanRots', q=True, v=True)
+
         if cmds.checkBox(self.uicbSnapRange, q=True, v=True):
             self.kws['time'] = timeLineRangeGet()
         if cmds.checkBox(self.uicbSnapPreCopyKeys, q=True, v=True):
@@ -2680,9 +2691,10 @@ class AnimFunctions(object):
             highlighted range of time selected(in red) it'll use this instead.
         :param attributes: Only copy the given attributes[]
         :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names
-        :paam mergeLayers: this pre-processes animLayers so that we have a single, temporary merged
+        :param mergeLayers: this pre-processes animLayers so that we have a single, temporary merged
             animLayer to extract a compiled version of the animData from. This gets deleted afterwards.
         
+        TODO: this needs to support 'skipAttrs' param liek the copyAttrs does - needed for the snapTransforms calls
         '''
         if not matchMethod:
             matchMethod=self.matchMethod
@@ -2887,8 +2899,8 @@ class AnimFunctions(object):
         cancelled = False
         
         log.debug('snapTransform params : nodes=%s : time=%s : step=%s : preCopyKeys=%s : \
-                    preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s' \
-                   % (nodes, time, step, preCopyKeys, preCopyAttrs, filterSettings, matchMethod, prioritySnapOnly))
+preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : snapTransforms=%s : snapRotates=%s' \
+                   % (nodes, time, step, preCopyKeys, preCopyAttrs, filterSettings, matchMethod, prioritySnapOnly, snapTranslates, snapRotates))
         
         #Build up the node pairs to process
         nodeList = r9Core.processMatchedNodes(nodes, filterSettings, matchMethod=matchMethod)
