@@ -462,7 +462,20 @@ def sourceMelFolderContents(path):
         mel.eval('source %s' % script)
 
 
-
+def has_pro_pack():
+    '''
+    Red9 Pro_Pack is available
+    '''
+    if os.path.exists(os.path.join(red9ModulePath(),'pro_pack')):
+        return True
+    
+def has_internal_systems():
+    '''
+    Red9 Consultancy internal modules only
+    '''
+    if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(red9ModulePath())),'Red9_Internals')):
+        return True
+       
 #=========================================================================================
 # BOOT CALL ------------------------------------------------------------------------------
 #=========================================================================================
@@ -527,8 +540,10 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
     
     log.info('Red9 StudioPack Complete!')
     
-    if os.path.exists(os.path.join(red9ModulePath(),'pro_pack')):
-        cmds.evalDeferred("import Red9.pro_pack",lp=True)  # Unresolved Import
+    if has_pro_pack():
+        cmds.evalDeferred("import Red9.pro_pack", lp=True)  # Unresolved Import
+    if has_internal_systems():
+        cmds.evalDeferred("import Red9_Internals", lp=True)  # Unresolved Import
 
     
     
