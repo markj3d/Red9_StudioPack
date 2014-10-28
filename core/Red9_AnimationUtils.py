@@ -3834,7 +3834,26 @@ class MirrorHierarchy(object):
         except:
             pass
         del(mClass)
-        
+    
+    def copyMirrorIDs(self, src, dest):
+        '''
+        Copy mirrorIDs between nodes, note the nodes list passed in is zipped into pairs
+        '''
+        pairs=zip(src, dest)
+        for src, dest in pairs:
+            axis=None
+            src=r9Meta.MetaClass(src)
+            if not src.hasAttr(self.mirrorAxis):
+                log.warning('Node has no mirrorData : %s' % src.shortName())
+                continue
+            if src.hasAttr(self.mirrorAxis):
+                axis=getattr(src, self.mirrorAxis)
+
+            self.setMirrorIDs(dest,
+                              side=getattr(src, self.mirrorSide),
+                              slot=getattr(src, self.mirrorIndex),
+                              axis=axis)
+
     def getNodes(self):
         '''
         Get the list of nodes to start processing
@@ -4118,7 +4137,6 @@ class MirrorHierarchy(object):
                 if clearCurrent:
                     self.deleteMirrorIDs(node)
                 for index, leftData in self.mirrorDict['Left'].items():
-                    # print node, leftData['node']
                     if r9Core.matchNodeLists([node], [leftData['node']], matchMethod=matchMethod):
                         log.debug('NodeMatched: %s, Side=Left, index=%i, axis=%s' % (node, int(index), leftData['axis']))
                         if r9Core.decodeString(leftData['axisAttr']):
