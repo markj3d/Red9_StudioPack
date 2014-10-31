@@ -665,6 +665,8 @@ class MClassNodeUI():
         else:
             cmds.textScrollList('slMetaNodeList',font="fixedWidthFont", allowMultiSelection=True)
         cmds.popupMenu('r9MetaNodeUI_Popup')
+        cmds.menuItem(label='Graph Selected Networks', command=partial(self.graphNetwork))
+        cmds.menuItem(divider=True)
         cmds.menuItem(label='Select Children', ann='NOTE doubleClick on the UI also runs the selectChildren call"',
                       command=partial(self.doubleClick))
         cmds.menuItem(label='Delete Selected mNodes', ann='call self.delete() on the selected nModes',
@@ -672,7 +674,6 @@ class MClassNodeUI():
         cmds.menuItem(divider=True)
         cmds.menuItem(label='SortBy : ClassName', command=partial(self.fillScroll,'byClass'))
         cmds.menuItem(label='SortBy : NodeName', command=partial(self.fillScroll,'byName'))
-        cmds.menuItem(label='Graph Selected Networks', command=partial(self.graphNetwork))
         cmds.menuItem(divider=True)
         cmds.menuItem(label='Class : All Registered', command=partial(self.fillScroll,'byName'))
         cmds.menuItem(divider=True)
