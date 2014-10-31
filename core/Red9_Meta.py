@@ -214,8 +214,8 @@ def resetMClassNodeTypes():
     
     
 # NodeCache Management ---------------------------
-  
- 
+
+
 def registerMClassNodeCache(mNode):
     '''
     Add a given mNode to the global RED9_META_NODECACHE cache of currently instantiated 
@@ -228,16 +228,6 @@ def registerMClassNodeCache(mNode):
         log.debug('CACHE : Adding to MetaNode Cache : %s' % mNode.mNode)
         RED9_META_NODECACHE[mNode.mNode]=mNode
   
-def printMetaCacheRegistry():
-    '''
-    print the current VALID Cache of instantiated MetaNodes 
-    Note that we call a cleanCache before printing to remove any 
-    currently invalid MObjects from the Cache.
-    '''
-    cleanCache()
-    for k,v in RED9_META_NODECACHE.items():
-        print k,v
-
 def getMetaFromCache(mNode):
     '''
     Pull the given mNode from the RED9_META_NODECACHE if it's
@@ -254,6 +244,56 @@ def getMetaFromCache(mNode):
                 cleanCache()
         except:
             log.debug('CACHE : inspection failure')
+            
+            
+ 
+#def registerMClassNodeCache(mNode):
+#    '''
+#    Add a given mNode to the global RED9_META_NODECACHE cache of currently instantiated 
+#    MetaNode objects.
+#    
+#    :param mNode: instantiated mNode to add
+#    '''
+#    global RED9_META_NODECACHE
+#    if RED9_META_NODECACHE or not mNode.mNode in RED9_META_NODECACHE.keys():
+#        log.debug('CACHE : Adding to MetaNode Cache : %s >> %s' % (mNode._MObjectHandle.hashCode(), mNode))
+#        #RED9_META_NODECACHE[mNode.mNode]=mNode
+#        RED9_META_NODECACHE[mNode._MObjectHandle.hashCode()]=mNode
+#
+#def getMetaFromCache(mNode):
+#    '''
+#    Pull the given mNode from the RED9_META_NODECACHE if it's
+#    already be instantiated.
+#    '''
+#    
+#    mobj=OpenMaya.MObject()
+#    selList=OpenMaya.MSelectionList()
+#    selList.add(mNode)
+#    selList.getDependNode(0, mobj)
+#    handleID=OpenMaya.MObjectHandle(mobj).hashCode()
+#    if handleID in RED9_META_NODECACHE.keys():
+#        try:
+#            #if handle.isValid():
+#            log.debug('CACHE : Returning mNode from cached MObjectHandle : %s!' % mNode)
+#            return RED9_META_NODECACHE[handleID]
+#            #else:
+#                #log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
+#                #cleanCache()
+#        except StandardError, error:
+#            log.debug('CACHE : inspection failure')
+#            raise StandardError(error)
+        
+        
+  
+def printMetaCacheRegistry():
+    '''
+    print the current VALID Cache of instantiated MetaNodes 
+    Note that we call a cleanCache before printing to remove any 
+    currently invalid MObjects from the Cache.
+    '''
+    cleanCache()
+    for k,v in RED9_META_NODECACHE.items():
+        print k,v
     
 def cleanCache():
     '''
@@ -2818,10 +2858,11 @@ def hardKillMetaHUD():
             except:
                 log.debug('failed to remove HUD metanode')
     HUDS=cmds.headsUpDisplay(lh=True)
-    for hud in HUDS:
-        if 'MetaHUDConnector' in hud:
-            cmds.headsUpDisplay(hud,remove=True)
-    
+    if HUDS:
+        for hud in HUDS:
+            if 'MetaHUDConnector' in hud:
+                cmds.headsUpDisplay(hud,remove=True)
+        
 # EXPERIMENTAL CALLS ==========================================================
      
      
