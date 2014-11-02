@@ -3848,9 +3848,8 @@ class MirrorHierarchy(object):
                 continue
             if src.hasAttr(self.mirrorAxis):
                 axis=getattr(src, self.mirrorAxis)
-
             self.setMirrorIDs(dest,
-                              side=getattr(src, self.mirrorSide),
+                              side=str(cmds.getAttr('%s.%s' % (src.mNode, self.mirrorSide), asString=True)),
                               slot=getattr(src, self.mirrorIndex),
                               axis=axis)
 
