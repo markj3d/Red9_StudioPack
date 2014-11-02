@@ -47,7 +47,7 @@ def nodeNameStrip(node):
     return node.split('|')[-1].split(':')[-1]
 
 
-def prioritizeNodeList(nList, priorityList, regex=True, prioritysOnly=False):
+def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False):
     '''
     Simple function to force the order of a given nList such that nodes
     in the given priority list are moved to the front of the list.
@@ -55,7 +55,8 @@ def prioritizeNodeList(nList, priorityList, regex=True, prioritysOnly=False):
     :param nList: main input list
     :param priorityList: list which is used to prioritize/order the main nList
     '''
-    stripped = [nodeNameStrip(node) for node in nList]  # stripped back to nodeName
+    stripped = [nodeNameStrip(node) for node in inputlist]  # stripped back to nodeName
+    nList=list(inputlist)  # take a copy so we don't mutate the input list
     reordered = []
     
     if regex:
@@ -72,6 +73,8 @@ def prioritizeNodeList(nList, priorityList, regex=True, prioritysOnly=False):
                 reordered.append(nList[index])
                 nList.pop(index)
                 stripped.pop(index)
+    print nList
+    print reordered
     if not prioritysOnly:
         reordered.extend(nList)
     # [log.debug('Prioritized Index: %i = %s  <: ORIGINALLY :>  %s' % (i,nodeNameStrip(reordered[i]),n))\
