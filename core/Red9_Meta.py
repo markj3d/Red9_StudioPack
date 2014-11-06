@@ -44,7 +44,7 @@ import os
 import Red9_General as r9General
 import Red9_CoreUtils as r9Core
 import Red9.startup.setup as r9Setup
-from Red9_AnimationUtils import MirrorHierarchy
+import Red9_AnimationUtils as r9Anim
 
 
 '''
@@ -2410,7 +2410,7 @@ class MetaRig(MetaClass):
         :param nodeName: Name of the MetaClass network node created
         :param mClass: the class to be used for the support node - 'MetaRigSubSystem' by default
         '''
-        MirrorHierarchy()._validateMirrorEnum(side)  # ??? do we just let the enum __setattr__ handle this?
+        r9Anim.MirrorHierarchy()._validateMirrorEnum(side)  # ??? do we just let the enum __setattr__ handle this?
 
         if not attr:
             attr='%s_%s_System' % (side[0],systemType)
@@ -2423,7 +2423,7 @@ class MetaRig(MetaClass):
         subSystem.mirrorSide=side
         return subSystem
     
-    def set_ctrlColour(self):       
+    def set_ctrlColour(self):
         for ctrl in self.getChildren(walk=False):
             shapes = cmds.listRelatives(ctrl,type='shape',f=True)
             if shapes:
@@ -2439,7 +2439,7 @@ class MetaRig(MetaClass):
             you must run this binding function before using any of
             the inbuilt mirror functions
         '''
-        self.MirrorClass = MirrorHierarchy(nodes=self.getRigCtrls(walk=True))
+        self.MirrorClass = r9Anim.MirrorHierarchy(nodes=self.getRigCtrls(walk=True))
         self.MirrorClass.getMirrorSets()
         log.debug('Filling the MirrorClass attr on demand')
         return self.MirrorClass
@@ -2452,7 +2452,7 @@ class MetaRig(MetaClass):
             self.MirrorClass = self.getMirrorData()
         if not os.path.exists(mirrorMap):
             raise IOError('Given MirrorMap file not found : %s' % mirrorMap)
-        MirrorHierarchy(self.getChildren()).loadMirrorSetups(mirrorMap)
+        r9Anim.MirrorHierarchy(self.getChildren()).loadMirrorSetups(mirrorMap)
     
     def getMirror_opposites(self, nodes):
         '''
@@ -2612,6 +2612,53 @@ class MetaRig(MetaClass):
         '''
         self.poseCacheLoad(nodes=nodes, attr='zeroPose')
     
+    def saveAnimation(self, filepath, output='config'):
+        '''
+        DEV TESTS ONLY TO NOT USE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        test for an animSaver idea, follows the pose formatting, maybe we'll wrap all
+        of this inside the poseHandler, that way all the logic for psoes is maintained and
+        we just overload the actual data block that currnelty just gets the static attr
+        DEV TESTS ONLY TO NOT USE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        '''
+        animData = {}
+        for ctrl in self.getChildren():
+            mapping = self.getNodeConnectionMetaDataMap(ctrl)
+            attrs = r9Anim.getChannelBoxAttrs(node=ctrl, asDict=True, incLocked=False)
+            shortName = r9Core.nodeNameStrip(ctrl)
+            if not attrs['keyable']:
+                continue
+            for attr in attrs['keyable']:
+                channel = '%s.%s' % (ctrl, attr)
+                keyList = cmds.keyframe(channel, q=True, vc=True, tc=True, t=())
+                if keyList:
+                    if not shortName in animData:
+                        animData[shortName] = {}
+                        animData[shortName]['longName'] = ctrl
+                        animData[shortName]['metaData'] = mapping
+                        animData[shortName]['attrs'] = {}
+                    animData[shortName]['attrs'][attr] = ''
+                    
+                    # save key & tangent data
+                    for key, value in zip(keyList[0::2], keyList[1::2]):
+                        tangentData = cmds.keyTangent(channel, q=True, t=(key, key), itt=True, ott=True)
+                        animData[shortName]['attrs'][attr] += '(%.02f,%f,"%s","%s"),' % (key, value, tangentData[0], tangentData[1])
+                        # animData[ctrl][attr].append(('%.02f' % key, value, tangentData[0], tangentData[1]))
+        if animData:
+            print animData
+            if output=='json':
+                animFile = open(filepath, 'w+')
+                json.dump(animData, animFile, indent=0)
+                animFile.close()
+            elif output=='config':
+                import Red9.packages.configobj as configobj
+                ConfigObj = configobj.ConfigObj(indent_type='\t')
+                ConfigObj['poseData']=animData
+                ConfigObj.filename = filepath
+                ConfigObj.write()
+            return animData
+            
+    def loadAnimation(self, filepath):
+        pass
     
 class MetaRigSubSystem(MetaRig):
     '''
