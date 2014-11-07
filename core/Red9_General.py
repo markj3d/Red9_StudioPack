@@ -23,6 +23,7 @@ import time
 import inspect
 import sys
 import tempfile
+import subprocess
 
 #Only valid Red9 import
 import Red9.startup.setup as r9Setup
@@ -740,7 +741,7 @@ def os_listFiles(folder, filters=[], byDate=False, fullPath=False):
         files=[os_formatPath(os.path.join(folder, f)) for f in files]
     return files
     
-def os_OpenCrashFile(openDir=False):
+def os_openCrashFile(openDir=False):
     '''
     Open the default temp dir where Maya stores it's crash files and logs
     '''
@@ -751,6 +752,46 @@ def os_OpenCrashFile(openDir=False):
         mayafiles = os_listFiles(tempdir, filters=['.ma','.mb'], byDate=True, fullPath=True)
         cmds.file(mayafiles[0], open=True, f=True)
         
+def os_fileCompare(file1, file2, openDiff=False):
+    '''
+    Pass in 2 files for diffComparision. If files are identical, ie there are no
+    differences then the code returns 0
+    
+    :param file1: first file to compare with second file
+    :param file2: second file to compare against the first
+    :param openDiff: if a difference was found then boot Diffmerge UI, highlighting the diff
+    
+    .. note::
+        
+        This is a stub function that requires Diffmerge.exe, you can download from 
+        https://sourcegear.com/diffmerge/.
+        Once downloaded drop it here Red9/pakcages/diffMerge.exe
+    '''
+    diffmerge=os.path.join(r9Setup.red9ModulePath(),'packages','diffMerge.exe')
+    outputDir=tempfile.gettempdir()
+    if os.path.exists(diffmerge):
+        process=subprocess.Popen([diffmerge, '-d', os.path.join(outputDir, 'diffmergeOutput.diff'), file1, file2],
+                                 stdout=subprocess.PIPE,
+                                 stderr=subprocess.STDOUT,
+                                 universal_newlines=True)
+        #output = process.communicate()
+        process.wait()
+        retcode = process.poll()
+        if not retcode:
+            log.info('Files are Identical')
+            return retcode
+        elif retcode==1:
+            log.info('Files are not Identical - use the openDiff flag to open up the differences in the editor')
+            if openDiff:
+                process=subprocess.Popen([diffmerge, file1, file2], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+            return retcode
+        elif retcode==2:
+            raise IOError('Files failed to compare - issues prevented the compare processing both files')
+            return retcode
+    else:
+        log.warning('Diffmerge commandline was not found, compare aborted')
+    
+    
     
     
     
