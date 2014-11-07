@@ -40,6 +40,7 @@ from functools import partial
 from functools import wraps
 import sys
 import os
+import uuid
 
 import Red9_General as r9General
 import Red9_CoreUtils as r9Core
@@ -239,51 +240,22 @@ def getMetaFromCache(mNode):
                 log.debug('CACHE : %s Returning mNode from cache!' % mNode)
                 return RED9_META_NODECACHE[mNode]
             else:
-                #RED9_META_NODECACHE.pop(mNode)
                 log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
                 cleanCache()
         except:
             log.debug('CACHE : inspection failure')
-            
-            
- 
-#def registerMClassNodeCache(mNode):
-#    '''
-#    Add a given mNode to the global RED9_META_NODECACHE cache of currently instantiated 
-#    MetaNode objects.
-#    
-#    :param mNode: instantiated mNode to add
-#    '''
-#    global RED9_META_NODECACHE
-#    if RED9_META_NODECACHE or not mNode.mNode in RED9_META_NODECACHE.keys():
-#        log.debug('CACHE : Adding to MetaNode Cache : %s >> %s' % (mNode._MObjectHandle.hashCode(), mNode))
-#        #RED9_META_NODECACHE[mNode.mNode]=mNode
-#        RED9_META_NODECACHE[mNode._MObjectHandle.hashCode()]=mNode
-#
-#def getMetaFromCache(mNode):
-#    '''
-#    Pull the given mNode from the RED9_META_NODECACHE if it's
-#    already be instantiated.
-#    '''
-#    
-#    mobj=OpenMaya.MObject()
-#    selList=OpenMaya.MSelectionList()
-#    selList.add(mNode)
-#    selList.getDependNode(0, mobj)
-#    handleID=OpenMaya.MObjectHandle(mobj).hashCode()
-#    if handleID in RED9_META_NODECACHE.keys():
-#        try:
-#            #if handle.isValid():
-#            log.debug('CACHE : Returning mNode from cached MObjectHandle : %s!' % mNode)
-#            return RED9_META_NODECACHE[handleID]
-#            #else:
-#                #log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
-#                #cleanCache()
-#        except StandardError, error:
-#            log.debug('CACHE : inspection failure')
-#            raise StandardError(error)
         
-        
+def upgradeSystemsToUUID():
+    '''
+    take a current scene and upgrade all the mNodes to include the new
+    mNode UUID cache support id
+    '''
+    for node in getMetaNodes():
+        if not node.hasAttr('mNodeUUID'):
+            mNodeuuid=str(uuid.uuid4())
+            node.addAttr('mNodeUUID', value=mNodeuuid)
+            node.attrSetLocked('mNodeUUID', True)
+            log.info('Upgraded node : %s  to UUID : %s' % (r9Core.nodeNameStrip(node.mNode),mNodeuuid))
   
 def printMetaCacheRegistry():
     '''
@@ -902,17 +874,17 @@ def nodeLockManager(func):
         try:
             locked=False
             mNode=args[0]  # args[0] is self
-            #log.debug('nodeLockManager > func : %s : metaNode / self: %s' % (func.__name__,mNode.mNode))
+            log.debug('nodeLockManager > func : %s : metaNode / self: %s' % (func.__name__,mNode.mNode))
             if mNode.mNode and mNode._lockState:
                 locked=True
+                log.debug('nodeLockManager > func : %s : node being unlocked' % func.__name__)
                 cmds.lockNode(mNode.mNode,lock=False)
-                #log.debug( 'nodeLockManager > func : %s : node being unlocked' % func.__name__)
             res=func(*args, **kws)
         except StandardError, error:
             err=error
         finally:
             if locked:
-                #log.debug( 'nodeLockManager > func : %s : node being relocked' % func.__name__)
+                #log.debug('nodeLockManager > func : %s : node being relocked' % func.__name__)
                 cmds.lockNode(mNode.mNode, lock=True)
             if err:
                 traceback = sys.exc_info()[2]  # get the full traceback
@@ -1036,11 +1008,13 @@ class MetaClass(object):
             self.mNode=node
             self.addAttr('mClass', value=str(self.__class__.__name__))  # ! MAIN ATTR !: used to know what class to instantiate.
             self.addAttr('mNodeID', value=name)                         # ! MAIN NODE ID !: used by pose systems to ID the node.
+            self.addAttr('mNodeUUID', value=str(uuid.uuid4()))
 
             log.debug('New Meta Node Created')
             registerMClassNodeCache(self)
             cmds.setAttr('%s.%s' % (self.mNode,'mClass'), e=True,l=True)  # lock it
             cmds.setAttr('%s.%s' % (self.mNode,'mNodeID'),e=True,l=True)  # lock it
+            cmds.setAttr('%s.%s' % (self.mNode,'mNodeUUID'),e=True,l=True)  # lock it
         else:
             self.mNode=node
             if not self.hasAttr('mNodeID'):
@@ -1104,7 +1078,7 @@ class MetaClass(object):
             return mobjHandle.isValid()
         except:
             log.info('_MObjectHandle not yet setup')
-         
+     
     #Cast the mNode attr to the actual MObject so it's no longer limited by string dagpaths
     #yes I know Pymel does this for us but I don't want the overhead!
     def __get_mNode(self):
