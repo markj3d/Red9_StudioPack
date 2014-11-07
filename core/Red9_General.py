@@ -740,7 +740,7 @@ def os_listFiles(folder, filters=[], byDate=False, fullPath=False):
         files=[os_formatPath(os.path.join(folder, f)) for f in files]
     return files
     
-def os_OpenLastCrashfile(openDir=False):
+def os_OpenCrashFile(openDir=False):
     '''
     Open the default temp dir where Maya stores it's crash files and logs
     '''
