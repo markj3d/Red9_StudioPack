@@ -2268,7 +2268,7 @@ class MetaRig(MetaClass):
         
         self.connectChild(node,'%s_%s' % (self.CTRL_Prefix,ctrType))
         if mirrorData:
-            mirror = MirrorHierarchy()
+            mirror = r9Anim.MirrorHierarchy()
             axis=None
             if 'axis' in mirrorData:
                 axis = mirrorData['axis']
