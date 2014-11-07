@@ -213,7 +213,7 @@ def menuSetup(parent='MayaWindow'):
                       echoCommand=True, c="import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.ReconnectAnimData().show()")
         cmds.menuItem('redNineOpenCrashItem',l="Open last CrashFile", p='redNineDebuggerItem',
                       ann="Open the last Maya crash file from your temp dir",
-                      echoCommand=True, c="import Red9.core.Red9_General as r9General;r9General.os_OpenCrashFile()")
+                      echoCommand=True, c="import Red9.core.Red9_General as r9General;r9General.os_openCrashFile()")
         cmds.menuItem(divider=True,p='redNineDebuggerItem')
         cmds.menuItem('redNineDebugItem',l="systems: DEBUG",ann="Turn all the logging to Debug",
                       echoCommand=True, c="Red9.core._setlogginglevel_debug()")
