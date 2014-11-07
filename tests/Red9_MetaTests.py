@@ -737,7 +737,8 @@ class Test_Generic_SearchCalls():
         assert not r9Meta.isMetaNode('MetaRig_Test', mTypes='MetaFacialRigSupport_Test')
         assert r9Meta.isMetaNode('MetaRig_Test', mTypes=[r9Meta.MetaRig])
         assert r9Meta.isMetaNode('MetaRig_Test', mTypes=r9Meta.MetaRig)
-        assert r9Meta.isMetaNode(self.metaA, mTypes=r9Meta.MetaRig)
+        assert r9Meta.isMetaNode(self.metaB, mTypes=r9Meta.MetaRig)
+        assert not r9Meta.isMetaNode(self.metaB, mTypes=r9Meta.MetaRigSupport)
         cube1=cmds.ls(cmds.polyCube()[0],l=True)[0]
         assert not r9Meta.isMetaNode(cube1)
     
