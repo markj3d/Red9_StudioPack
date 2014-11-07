@@ -22,6 +22,7 @@ import os
 import time
 import inspect
 import sys
+import tempfile
 
 #Only valid Red9 import
 import Red9.startup.setup as r9Setup
@@ -709,4 +710,47 @@ def os_OpenFile(filePath):
             subprocess.Popen(['xdg-open', filePath])
         except OSError:
             raise OSError('unsupported xdg-open call??')
+
+def os_formatPath(path):
+    '''
+    take the given path and format it for Maya path
+    '''
+    return os.path.normpath(path).replace('\\','/').replace('\t','/t').replace('\n','/n').replace('\a', '/a')
+    
+def os_listFiles(folder, filters=[], byDate=False, fullPath=False):
+    '''
+    simple os wrap to list a dir with filters for file type and sort byDate
+    
+    :param folder: folder to dir list
+    :param filters: list of file extensions to filter for
+    :param byData: sort the list by modified date, newest first!
+    '''
+    files = os.listdir(folder)
+    filtered=[]
+    if filters:
+        for f in files:
+            for flt in filters:
+                if f.lower().endswith(flt):
+                    filtered.append(f)
+        files=filtered
+    if byDate and files:
+        files.sort(key=lambda x: os.stat(os.path.join(folder, x)).st_mtime)
+        files.reverse()
+    if fullPath:
+        files=[os_formatPath(os.path.join(folder, f)) for f in files]
+    return files
+    
+def os_OpenLastCrashfile(openDir=False):
+    '''
+    Open the default temp dir where Maya stores it's crash files and logs
+    '''
+    tempdir=tempfile.gettempdir()
+    if openDir:
+        os_OpenFileDirectory(tempdir)
+    else:
+        mayafiles = os_listFiles(tempdir, filters=['.ma','.mb'], byDate=True, fullPath=True)
+        cmds.file(mayafiles[0], open=True, f=True)
         
+    
+    
+    
