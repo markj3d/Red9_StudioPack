@@ -2428,13 +2428,13 @@ class MetaRig(MetaClass):
             raise IOError('Given MirrorMap file not found : %s' % mirrorMap)
         r9Anim.MirrorHierarchy(self.getChildren()).loadMirrorSetups(mirrorMap)
     
-    def getMirror_opposites(self, nodes):
+    def getMirror_opposites(self, nodes, forceRefresh=False):
         '''
         from the given nodes return a map of the opposite pairs of controllers
         so if you pass in a right controller of mirrorIndex 4 you get back the
         left[4] mirror node and visa versa. Centre controllers pass straight through
         '''
-        if not self.MirrorClass:
+        if not self.MirrorClass or forceRefresh:
             self.MirrorClass = self.getMirrorData()
         oppositeNodes=[]
         
