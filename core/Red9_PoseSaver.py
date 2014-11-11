@@ -223,6 +223,7 @@ class PoseData(object):
         Build the internal poseDict up from the given nodes. This is the
         core of the Pose System
         '''
+        getMirrorID=r9Anim.MirrorHierarchy().getMirrorCompiledID
         if self.metaPose:
             getMetaDict=self.metaRig.getNodeConnectionMetaDataMap  # optimisation
 
@@ -232,6 +233,9 @@ class PoseData(object):
             self.poseDict[key]['ID']=i           # selection order index
             self.poseDict[key]['longName']=node  # longNode name
             
+            mirrorID=getMirrorID(node)
+            if mirrorID:
+                self.poseDict[key]['mirrorID']=mirrorID
             if self.metaPose:
                 self.poseDict[key]['metaData']=getMetaDict(node)  # metaSystem the node is wired too
 
@@ -430,6 +434,17 @@ class PoseData(object):
                     if int(self.poseDict[key]['ID'])==i:
                         matchedPairs.append((key,node))
                         log.info('poseKey : %s %s >> matchedSource : %s %i' % (key, self.poseDict[key]['ID'], node, i))
+                        break
+        if self.matchMethod=='mirrorIndex':
+            getMirrorID=r9Anim.MirrorHierarchy().getMirrorCompiledID
+            for node in nodes:
+                mirrorID=getMirrorID(node)
+                if not mirrorID:
+                    continue
+                for key in self.poseDict.keys():
+                    if self.poseDict[key]['mirrorID'] and self.poseDict[key]['mirrorID']==mirrorID:
+                        matchedPairs.append((key,node))
+                        log.info('poseKey : %s %s >> matched MirrorIndex : %s' % (key, node, self.poseDict[key]['mirrorID']))
                         break
         if self.matchMethod=='metaData':
             getMetaDict=self.metaRig.getNodeConnectionMetaDataMap  # optimisation
