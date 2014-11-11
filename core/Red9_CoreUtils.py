@@ -1356,12 +1356,15 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
     
     #take a copy of B as we modify the data here
     hierarchyB=list(nodeListB)
-    
+    if matchMethod == 'mirrorIndex':
+        getMirrorID=r9Anim.MirrorHierarchy().getMirrorCompiledID
     if matchMethod == 'index':
         matchedData = zip(nodeListA,nodeListB)
     else:
         for nodeA in nodeListA:
             strippedA = nodeNameStrip(nodeA)
+            if matchMethod == 'mirrorIndex':
+                indexA=getMirrorID(nodeA)
             for nodeB in hierarchyB:
                 #strip the path off for the compare
                 #strippedA = nodeNameStrip(nodeA)
@@ -1385,7 +1388,16 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
                         matchedData.append((nodeA, nodeB))
                         hierarchyB.remove(nodeB)
                         break
-                
+                    
+                #Compare using the nodes internal mirrorIndex if found
+                elif matchMethod == 'mirrorIndex':
+                    if indexA and indexA==getMirrorID(nodeB):
+                        infoPrint += '\nMatch Method : %s : %s == %s' % \
+                                (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
+                        matchedData.append((nodeA, nodeB))
+                        hierarchyB.remove(nodeB)
+                        break
+                    
     log.debug('\nMatched Log : \n%s' % infoPrint)
     infoPrint = None
     return matchedData

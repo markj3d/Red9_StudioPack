@@ -889,6 +889,7 @@ class AnimationUI(object):
         cmds.menuItem(l="base", ann='Exact shortName matching of nodes only, ignores namespaces : Fred:MainCtrl == Bert:MainCtrl')
         cmds.menuItem(l="stripPrefix", ann='Allows one hierarchy to be prefixed when matching, ignores namespaces : Fred:New_MainCtrl == Bert:MainCtrl')
         cmds.menuItem(l="index", ann='No matching logic at all, just matched in the order the nodes were found in the hierarchies')
+        cmds.menuItem(l="mirrorIndex", ann='Match nodes via their internal r9MirrorIndexes if found')
         
         cmds.optionMenu('om_MatchMethod', e=True, v='stripPrefix')
             
@@ -2422,6 +2423,7 @@ class AnimationUI(object):
         poseNode = r9Pose.PoseData(self.filterSettings)
         poseNode.filepath = self.getPosePath()
         poseNode.useFilter = cmds.checkBox('uicbPoseHierarchy', q=True, v=True)
+        poseNode.matchMethod=self.matchMethod 
         poseNode._poseLoad_buildcache(self.__uiCB_getPoseInputNodes())
         self._poseBlendUndoChunkOpen=False
         if objs:
@@ -3878,6 +3880,17 @@ class MirrorHierarchy(object):
         except:
             log.debug('%s node has no "mirrorIndex" attr' % r9Core.nodeNameStrip(node))
    
+    def getMirrorCompiledID(self, node):
+        '''
+        This return the mirror data in a compiled mannor for the poseSaver
+        such that mirror data  for a node : Center, ID 10 == Center_10
+        '''
+        try:
+            return '%s_%s' % (self.getMirrorSide(node), self.getMirrorIndex(node))
+        except:
+            log.debug('%s node has no MirrorData' % r9Core.nodeNameStrip(node))
+            return ''
+    
     def getMirrorAxis(self, node):
         '''
         get any custom attributes set at node level to inverse, if none found
