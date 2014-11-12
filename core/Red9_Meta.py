@@ -225,19 +225,40 @@ def registerMClassNodeCache(mNode):
     :param mNode: instantiated mNode to add
     '''
     global RED9_META_NODECACHE
-    if RED9_META_NODECACHE or not mNode.mNode in RED9_META_NODECACHE.keys():
-        log.debug('CACHE : Adding to MetaNode Cache : %s' % mNode.mNode)
-        RED9_META_NODECACHE[mNode.mNode]=mNode
-  
+    if mNode.hasAttr('mNodeUUID'):
+        UUID=mNode.mNodeUUID
+        if RED9_META_NODECACHE or not UUID in RED9_META_NODECACHE.keys():
+            log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
+            RED9_META_NODECACHE[UUID]=mNode
+            
+    elif RED9_META_NODECACHE or not mNode.mNode in RED9_META_NODECACHE.keys():
+            log.debug('CACHE : Adding to MetaNode Cache : %s' % mNode.mNode)
+            RED9_META_NODECACHE[mNode.mNode]=mNode
+            
 def getMetaFromCache(mNode):
     '''
     Pull the given mNode from the RED9_META_NODECACHE if it's
     already be instantiated.
+    
+    :param mNode: str(name) of node from DAG
     '''
-    if mNode in RED9_META_NODECACHE.keys():
+    UUID=''
+    if cmds.attributeQuery('mNodeUUID', node=mNode, exists=True):
+        UUID=cmds.getAttr('%s.mNodeUUID' % mNode)
+    if UUID in RED9_META_NODECACHE.keys():
+        try:
+            if RED9_META_NODECACHE[UUID].isValidMObject():
+                log.debug('CACHE : %s Returning mNode from UUID cache! = %s' % (mNode,UUID))
+                return RED9_META_NODECACHE[UUID]
+            else:
+                log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
+                cleanCache()
+        except:
+            log.debug('CACHE : inspection failure')
+    elif mNode in RED9_META_NODECACHE.keys():
         try:
             if RED9_META_NODECACHE[mNode].isValidMObject():
-                log.debug('CACHE : %s Returning mNode from cache!' % mNode)
+                log.debug('CACHE : %s Returning mNode from nameBased cache!' % mNode)
                 return RED9_META_NODECACHE[mNode]
             else:
                 log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
@@ -245,7 +266,7 @@ def getMetaFromCache(mNode):
         except:
             log.debug('CACHE : inspection failure')
         
-def upgradeSystemsToUUID():
+def upgradeSystemsToUUID(*args):
     '''
     take a current scene and upgrade all the mNodes to include the new
     mNode UUID cache support id
@@ -597,6 +618,9 @@ class MClassNodeUI():
         cmds.menuItem(l="Clear Cache",
                       ann='Prints all currently cached nodes in the MetaCache',
                       c=resetCache)
+        cmds.menuItem(l="Upgrade mNodes to UUIDs",
+                      ann='Upgrades any current mNodes in the scene to the new UIID system for caching',
+                      c=upgradeSystemsToUUID)
         cmds.scrollLayout('slMetaNodeScroll',rc=lambda *args:self.fitTextScrollFucker())
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=15, style='none')
@@ -1419,7 +1443,7 @@ class MetaClass(object):
         '''
         try:
             if not self.isReferenced():
-                cmds.setAttr('%s.%s' % (self.mNode,attr),l=state)
+                cmds.setAttr('%s.%s' % (self.mNode,attr), l=state)
         except StandardError,error:
             log.debug(error)
             
@@ -1587,7 +1611,10 @@ class MetaClass(object):
             cmds.lockNode(self.mNode,lock=False)
         #clear the node from the cache
         if RED9_META_NODECACHE:
-            if self.mNode in RED9_META_NODECACHE.keys():
+            if self.hasAttr('mNodeUUID'):
+                if self.mNodeUUID in RED9_META_NODECACHE.keys():
+                    RED9_META_NODECACHE.pop(self.mNodeUUID)
+            elif self.mNode in RED9_META_NODECACHE.keys():
                 RED9_META_NODECACHE.pop(self.mNode)
         #delete the Maya node and this python object
         cmds.delete(self.mNode)
