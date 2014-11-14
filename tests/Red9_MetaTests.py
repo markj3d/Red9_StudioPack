@@ -93,7 +93,7 @@ class Test_MetaCache():
     def test_uuid(self):
         a=r9Meta.MetaRig(name='rig')
         UUID = a.UUID
-        UUID in r9Meta.RED9_META_NODECACHE
+        assert UUID in r9Meta.RED9_META_NODECACHE
         cmds.duplicate(a.mNode)
         nodes=r9Meta.getMetaNodes()
         assert len(nodes)==2
