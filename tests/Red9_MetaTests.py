@@ -70,6 +70,12 @@ class Test_MetaRegistryCalls():
         assert r9Meta.getMClassDataFromNode(b)=='MetaRigSubSystem'
         assert r9Meta.getMClassDataFromNode(b.mNode)=='MetaRigSubSystem'
     
+
+class Test_MetaCache():
+    
+    def teardown(self):
+        cmds.file(new=True,f=True)
+    
     def test_MetaCache(self):
         a=r9Meta.MetaRig(name='rig')
         dagpath=str(a.mNode)
@@ -83,7 +89,18 @@ class Test_MetaRegistryCalls():
         dagpath=str(a.mNode)
         a.delete()
         assert not r9Meta.RED9_META_NODECACHE
-    
+        
+    def test_uuid(self):
+        a=r9Meta.MetaRig(name='rig')
+        UUID = a.UUID
+        UUID in r9Meta.RED9_META_NODECACHE
+        cmds.duplicate(a.mNode)
+        nodes=r9Meta.getMetaNodes()
+        assert len(nodes)==2
+        assert len(r9Meta.RED9_META_NODECACHE.keys()) == 2
+        assert r9Meta.RED9_META_NODECACHE[UUID]==a
+        assert r9Meta.MetaClass(a.mNode).UUID == UUID
+       
 
 class Test_MetaClass():
     
