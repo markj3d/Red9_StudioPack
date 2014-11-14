@@ -376,6 +376,8 @@ class PoseData(object):
         for key, dest in self.matchedPairs:
             log.debug('caching current node data : %s' % key)
             self.poseCurrentCache[key]={}
+            if not 'attrs' in self.poseDict[key]:
+                continue
             for attr, _ in self.poseDict[key]['attrs'].items():
                 self.poseCurrentCache[key][attr]=cmds.getAttr('%s.%s' % (dest, attr))
                 
@@ -393,6 +395,8 @@ class PoseData(object):
         for key, dest in self.matchedPairs:
             log.debug('Applying Key Block : %s' % key)
             try:
+                if not 'attrs' in self.poseDict[key]:
+                    continue
                 for attr, val in self.poseDict[key]['attrs'].items():
                     if attr in self.skipAttrs:
                         log.debug('Skipping attr as requested : %s' % attr)
