@@ -233,13 +233,14 @@ def registerMClassNodeCache(mNode):
     :param mNode: instantiated mNode to add
     '''
     global RED9_META_NODECACHE
-    if mNode.hasAttr('UUID'):
+    try:
+        #if mNode.hasAttr('UUID'):
         UUID=mNode.setUUID()
         if RED9_META_NODECACHE or not UUID in RED9_META_NODECACHE.keys():
             log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
             RED9_META_NODECACHE[UUID]=mNode
-            
-    elif RED9_META_NODECACHE or not mNode.mNode in RED9_META_NODECACHE.keys():
+    except:
+        if RED9_META_NODECACHE or not mNode.mNode in RED9_META_NODECACHE.keys():
             log.debug('CACHE : Adding to MetaNode Cache : %s' % mNode.mNode)
             RED9_META_NODECACHE[mNode.mNode]=mNode
             
@@ -250,29 +251,29 @@ def getMetaFromCache(mNode):
     
     :param mNode: str(name) of node from DAG
     '''
-    UUID=''
-    if cmds.attributeQuery('UUID', node=mNode, exists=True):
+    try:
         UUID=cmds.getAttr('%s.UUID' % mNode)
-    if UUID in RED9_META_NODECACHE.keys():
-        try:
-            if RED9_META_NODECACHE[UUID].isValidMObject():
-                log.debug('CACHE : %s Returning mNode from UUID cache! = %s' % (mNode,UUID))
-                return RED9_META_NODECACHE[UUID]
-            else:
-                log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
-                cleanCache()
-        except:
-            log.debug('CACHE : inspection failure')
-    elif mNode in RED9_META_NODECACHE.keys():
-        try:
-            if RED9_META_NODECACHE[mNode].isValidMObject():
-                log.debug('CACHE : %s Returning mNode from nameBased cache!' % mNode)
-                return RED9_META_NODECACHE[mNode]
-            else:
-                log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
-                cleanCache()
-        except:
-            log.debug('CACHE : inspection failure')
+        if UUID in RED9_META_NODECACHE.keys():
+            try:
+                if RED9_META_NODECACHE[UUID].isValidMObject():
+                    log.debug('CACHE : %s Returning mNode from UUID cache! = %s' % (mNode,UUID))
+                    return RED9_META_NODECACHE[UUID]
+                else:
+                    log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
+                    cleanCache()
+            except:
+                log.debug('CACHE : inspection failure')
+    except:
+        if mNode in RED9_META_NODECACHE.keys():
+            try:
+                if RED9_META_NODECACHE[mNode].isValidMObject():
+                    log.debug('CACHE : %s Returning mNode from nameBased cache!' % mNode)
+                    return RED9_META_NODECACHE[mNode]
+                else:
+                    log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
+                    cleanCache()
+            except:
+                log.debug('CACHE : inspection failure')
         
 def upgradeSystemsToUUID(*args):
     '''
@@ -283,7 +284,6 @@ def upgradeSystemsToUUID(*args):
         if not node.hasAttr('UUID'):
             node.addAttr('UUID', value='')
             uuid=node.setUUID()
-            #node.attrSetLocked('UUID', True)
             log.info('Upgraded node : %s  to UUID : %s' % (r9Core.nodeNameStrip(node.mNode), uuid))
   
 def printMetaCacheRegistry():
@@ -326,7 +326,7 @@ def getMClassNodeCache():
 def __preDuplicateCache(*args):
     global __RED9_META_NODESTORE__
     __RED9_META_NODESTORE__= getMetaNodes(dataType='dag')
-    print 'pre-callback : nodelist :', __RED9_META_NODESTORE__
+    #print 'pre-callback : nodelist :', __RED9_META_NODESTORE__
     
 def __poseDuplicateCache(*args):
     global __RED9_META_NODESTORE__
@@ -335,8 +335,7 @@ def __poseDuplicateCache(*args):
         #note we set this via cmds so that the node isn't instantiated until the UUID is modified
         if cmds.attributeQuery('UUID', node=node, exists=True):
             cmds.setAttr('%s.UUID' % node, generateUUID(), type='string')
-            #MetaClass(node)
-    print 'post-callback : nodelist :', newNodes
+    #print 'post-callback : nodelist :', newNodes
     
 # ====================================================================================
     
@@ -1052,14 +1051,13 @@ class MetaClass(object):
             self.mNode=node
             self.addAttr('mClass', value=str(self.__class__.__name__))  # ! MAIN ATTR !: used to know what class to instantiate.
             self.addAttr('mNodeID', value=name)                         # ! MAIN NODE ID !: used by pose systems to ID the node.
-            if r9Setup.mayaVersion()<2015:
-                print '__init__ setting uuid'
+            if r9Setup.mayaVersion()<=2015:
+                #print '__init__ setting uuid'
                 self.addAttr('UUID', value='')          # ! Cache UUID attr which the Cache itself is in control of
             log.debug('New Meta Node Created')
             registerMClassNodeCache(self)
             cmds.setAttr('%s.%s' % (self.mNode,'mClass'), e=True,l=True)  # lock it
             cmds.setAttr('%s.%s' % (self.mNode,'mNodeID'),e=True,l=True)  # lock it
-            #cmds.setAttr('%s.%s' % (self.mNode,'UUID'),e=True,l=True)  # lock it
         else:
             self.mNode=node
             if not self.hasAttr('mNodeID'):
@@ -1243,10 +1241,10 @@ class MetaClass(object):
         '''
         unique UUID used by the caching system
         '''
-        print 'setting new UUID : ', self.mNode
-        newUUid = generateUUID()
-        self.UUID = newUUid
-        return newUUid
+        newUUID = generateUUID()
+        self.UUID = newUUID
+        log.debug('setting new UUID : %s on %s' % (newUUID, self.mNode))
+        return newUUID
     
     def getUUID(self):
         return self.UUID
@@ -3303,8 +3301,9 @@ def metaData_sceneCleanups(*args):
 RED9_META_CALLBACKS['Open'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeOpen, metaData_sceneCleanups)
 RED9_META_CALLBACKS['New'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeNew, metaData_sceneCleanups)
 
-#dulplicate cache callbacks so the UUIDs are managed correctly
-RED9_META_CALLBACKS['DuplicatePre'] = OpenMaya.MModelMessage.addBeforeDuplicateCallback(__preDuplicateCache)
-RED9_META_CALLBACKS['DuplicatePost'] = OpenMaya.MModelMessage.addAfterDuplicateCallback(__poseDuplicateCache)
+if r9Setup.mayaVersion()<=2015:
+    #dulplicate cache callbacks so the UUIDs are managed correctly
+    RED9_META_CALLBACKS['DuplicatePre'] = OpenMaya.MModelMessage.addBeforeDuplicateCallback(__preDuplicateCache)
+    RED9_META_CALLBACKS['DuplicatePost'] = OpenMaya.MModelMessage.addAfterDuplicateCallback(__poseDuplicateCache)
 
 
