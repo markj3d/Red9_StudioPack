@@ -165,3 +165,5 @@ Fix - Red9_Anim - 'use Priority as snaplist' if the priority list was empty then
 Bug - Red9_Audio - if you gave the setTimeRange 2 bits of Audio both starting at frame 0 then only the first audio was taken into account.
 Mod - Red9_Audio - Add lock / unlock so that you can lock audio nodes in time so they can't be accidentally shifted
 New - Red9_Anim -  Lots of people been after this, the SnapTransforms call now supports flags to isolate 'rots' and 'trans'
+New - Red9_Anim - Added matchMethod = 'mirrorIndex for all the systems, allows data to be transfered via the MirrorMarkers so totally flexible, supported in everything including the poseSaver
+Mod - Red9_Meta - New Caching system which used unique UUID's on the nodes rather that the dag path. Far safer and more flexible for the future
