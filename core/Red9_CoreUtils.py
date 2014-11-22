@@ -1317,16 +1317,17 @@ def getBlendTargetsFromMesh(node, asList=True, returnAll=False, levels=1):
     if blendshapes:
         for blend in blendshapes:
             weights=cmds.aliasAttr(blend,q=True)
-            if asList:
-                data=weights[0::2]
-                if returnAll:
-                    targetData.extend(data)
+            if weights:
+                if asList:
+                    data=weights[0::2]
+                    if returnAll:
+                        targetData.extend(data)
+                    else:
+                        #means we only return the first blend in the history
+                        return data
                 else:
-                    #means we only return the first blend in the history
-                    return data
-            else:
-                data=(zip(weights[1::2],weights[0::2]))
-                targetData[blend]=data
+                    data=(zip(weights[1::2],weights[0::2]))
+                    targetData[blend]=data
     return targetData
     
     
