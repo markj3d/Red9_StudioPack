@@ -1307,7 +1307,6 @@ def getBlendTargetsFromMesh(node, asList=True, returnAll=False, levels=1):
     :param returnAll: if multiple blendshapes are found do we return all, or just the first
     :param levels: same as the 'levels' flag in listHistory as that's ultimately what grabs the blendShape nodes here
     '''
-
     if asList:
         targetData=[]
     else:
@@ -1318,17 +1317,30 @@ def getBlendTargetsFromMesh(node, asList=True, returnAll=False, levels=1):
         for blend in blendshapes:
             weights=cmds.aliasAttr(blend,q=True)
             if weights:
+                data=zip(weights[1::2], weights[0::2])
+                weightKey=lambda x:int(x[0].replace('weight[','').replace(']',''))
+                weightSorted=sorted(data, key=weightKey)
                 if asList:
-                    data=weights[0::2]
+                    data=[t for _, t in weightSorted]
                     if returnAll:
                         targetData.extend(data)
                     else:
                         #means we only return the first blend in the history
                         return data
                 else:
-                    data=(zip(weights[1::2],weights[0::2]))
-                    targetData[blend]=data
+                    targetData[blend] = weightSorted
     return targetData
+
+def getBlendTargetIndex(blendNode, targetName):
+    '''
+    given a blendshape node return the weight index for a given targetName
+    
+    :param blendNode: blendShape node to inspect
+    :param targetName: target Alias Name of the channel we're trying to find the index for
+    '''
+    weights=cmds.aliasAttr(blendNode,q=True)
+    if targetName in weights:
+        return int(weights[weights.index(targetName) + 1].replace('weight[','').replace(']',''))
     
     
 
