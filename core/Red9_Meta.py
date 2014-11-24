@@ -257,6 +257,7 @@ def getMetaFromCache(mNode):
             try:
                 if RED9_META_NODECACHE[UUID].isValidMObject():
                     log.debug('CACHE : %s Returning mNode from UUID cache! = %s' % (mNode,UUID))
+                    #print 'UUID returned from cache : ', UUID
                     return RED9_META_NODECACHE[UUID]
                 else:
                     log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
@@ -267,6 +268,7 @@ def getMetaFromCache(mNode):
         if mNode in RED9_META_NODECACHE.keys():
             try:
                 if RED9_META_NODECACHE[mNode].isValidMObject():
+                    #print 'namebased returned from cache ', mNode
                     log.debug('CACHE : %s Returning mNode from nameBased cache!' % mNode)
                     return RED9_META_NODECACHE[mNode]
                 else:
@@ -281,6 +283,8 @@ def upgradeSystemsToUUID(*args):
     mNode UUID cache support id
     '''
     for node in getMetaNodes():
+        if node.hasAttr('mNodeUUID'):
+            delattr(node, 'mNodeUUID')
         if not node.hasAttr('UUID'):
             node.addAttr('UUID', value='')
             uuid=node.setUUID()
@@ -1448,6 +1452,7 @@ class MetaClass(object):
             log.debug('attribute delete  : %s , %s' % (self,attr))
             object.__delattr__(self, attr)
             if cmds.attributeQuery(attr, exists=True, node=self.mNode):
+                cmds.setAttr('%s.%s' % (self.mNode,attr), l=False)
                 cmds.deleteAttr('%s.%s' % (self.mNode, attr))
                 
         except StandardError,error:
