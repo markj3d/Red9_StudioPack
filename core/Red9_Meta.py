@@ -2252,7 +2252,7 @@ class MetaRig(MetaClass):
         self.CTRL_Prefix='CTRL'  # prefix for all connected CTRL_ links added
         self.rigGlobalCtrlAttr='CTRL_Main'  # attribute linked to the top globalCtrl in the rig
         self.lockState = True  # lock the node to avoid accidental removal
-        self.parentSwitchAttr='parent'  # attr used for parentSwitching
+        self.parentSwitchAttr=['parent','Parent']  # attr used for parentSwitching
         self.MirrorClass = None  # capital as this binds to the MirrorClass directly
         #self.poseSkippedAttrs = []  # attributes which are to be IGNORED by the posesaver
         
