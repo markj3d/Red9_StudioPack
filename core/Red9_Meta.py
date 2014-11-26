@@ -458,6 +458,7 @@ def getMetaNodes(mTypes=[], mInstances=[], mAttrs=None, dataType='mClass', nType
     :param mAttrs: uses the FilterNode.lsSearchAttributes call to match nodes via given attrs
     :param dataType: default='mClass' return the nodes already instantiated to
                 the correct class object. If not then return the Maya node itself
+    :param nTypes: only inspect nodes of a given Type
     '''
     mNodes=[]
     if not nTypes:
@@ -483,7 +484,18 @@ def getMetaNodes(mTypes=[], mInstances=[], mAttrs=None, dataType='mClass', nType
         return[MetaClass(node,**kws) for node in mNodes]
     else:
         return mNodes
- 
+
+def getUnregisteredMetaNodes():
+    '''
+    Inspect all nodes for the mClass attrs, then see if those nodes and mClass
+    types are currently registered in the systems. This means you can inspect
+    files from others who have bespoke MClass's and still see their node structures
+    even though you won't be able to use or return their class objects
+    '''
+    mNodes=getMetaNodes(dataType='node')
+    return [node for node in cmds.ls('*.mClass',l=True, o=True) if not node in mNodes]
+    
+    
 @r9General.Timer
 def getConnectedMetaNodes(nodes, source=True, destination=True, mTypes=[], mInstances=[], \
                           mAttrs=None, dataType='mClass', nTypes=None, **kws):
@@ -661,12 +673,13 @@ class MClassNodeUI():
             cmds.menuItem(l=preset)
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
-        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 120), (2, 120), (3,120)],
+        cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 100), (2, 100), (3,100), (4,100)],
                              columnSpacing=[(1, 10), (2, 10), (3,10)])
         self.uircbMetaUIShowStatus = cmds.radioCollection('uircbMetaUIShowStatus')
         cmds.radioButton('metaUISatusAll', label='all', cc=partial(self.fillScroll))
-        cmds.radioButton('metaUISatusValids', label='Valids', cc=partial(self.fillScroll))
+        cmds.radioButton('metaUISatusValids', label='valids', cc=partial(self.fillScroll))
         cmds.radioButton('metaUISatusinValids', label='inValids', cc=partial(self.fillScroll))
+        cmds.radioButton('metaUISatusUnregistered', label='unRegistered', cc=partial(self.fillScroll))
         cmds.setParent('..')
         
         #You've passed in the filter types directly to the UI Class
@@ -789,14 +802,16 @@ class MClassNodeUI():
         if states=='metaUISatusinValids' or states=='metaUISatusValids':
             self.dataType='mClass'
         
-
-        #showStatus = cmds.radioCollection(self.uircbMetaUIShowStatus, q=True, select=True)
         #build the metaNode list up from the filters =====================
-        if cmds.rowColumnLayout('rc_useMetaFilterUI', q=True, en=True):
+        
+        if states =='metaUISatusUnregistered':
+            self.mNodes=getUnregisteredMetaNodes()
+        
+        elif cmds.rowColumnLayout('rc_useMetaFilterUI', q=True, en=True):
             mTypesFilter = cmds.checkBox('cb_filter_mTypes', q=True, v=True)
             mInstanceFilter = cmds.checkBox('cb_filter_mInstances', q=True, v=True)
             mCalssSelected = cmds.optionMenu('om_MetaUI_Filter', q=True, v=True)
-            
+
             if mTypesFilter:
                 self.mNodes=getMetaNodes(mTypes=mCalssSelected, mInstances=None, dataType=self.dataType)
                 print 'mTypeFilter : ', mCalssSelected
