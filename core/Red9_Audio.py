@@ -20,9 +20,10 @@ import os
 import struct
 import math
 
-import Red9.startup.setup as r9Setup
 import Red9_General as r9General
 import Red9.startup.setup as r9Setup
+import Red9.core.Red9_Meta as r9Meta
+import Red9.core.Red9_CoreUtils as r9Core
 
 import wave
 import contextlib
@@ -55,11 +56,20 @@ class Timecode(object):
         .. note:
                 the node passed in has to have the correctly formatted timecode data to compute
         '''
-        import Red9.core.Red9_Meta as r9Meta
         node = r9Meta.MetaClass(node)
         if node.hasAttr(Timecode.ref):
             ms = (getattr(node, Timecode.ref) + ((float(getattr(node, Timecode.count)) / getattr(node,Timecode.samplerate)) * 1000))
             return milliseconds_to_Timecode(ms)
+        
+    @staticmethod
+    def addTimecode_to_node(node):
+        '''
+        wrapper to add the timecode attrs to a node ready for propagating
+        '''
+        node = r9Meta.MetaClass(node)
+        node.addAttr(Timecode.count, attrType='float')
+        node.addAttr(Timecode.samplerate, attrType='float')
+        node.addAttr(Timecode.ref, attrType='int')
 
 
 def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=None):
@@ -907,6 +917,15 @@ class AudioNode(object):
         if path and os.path.exists(path):
             r9General.os_OpenFileDirectory(path)
     
+    def formatAudioNode_to_Path(self):
+        '''
+        rename the AudioNode so it ties to the wav name
+        '''
+        try:
+            cmds.rename(self.audioNode, r9Core.nodeNameStrip(os.path.splitext(os.path.basename(self.path))[0]))
+        except:
+            log.debug('failed to Rename node : %s' % self.audioNode)
+        
     def lockTimeInputs(self, state=True):
         '''
         lock the audio in time so it can't be accidentally shifted
