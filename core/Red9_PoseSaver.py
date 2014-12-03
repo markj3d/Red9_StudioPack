@@ -379,7 +379,10 @@ class PoseData(object):
             if not 'attrs' in self.poseDict[key]:
                 continue
             for attr, _ in self.poseDict[key]['attrs'].items():
-                self.poseCurrentCache[key][attr]=cmds.getAttr('%s.%s' % (dest, attr))
+                try:
+                    self.poseCurrentCache[key][attr]=cmds.getAttr('%s.%s' % (dest, attr))
+                except:
+                    log.debug('Attr mismatch on destination : %s.%s' % (dest, attr))
                 
     @r9General.Timer
     def _applyPose(self, percent=None):
