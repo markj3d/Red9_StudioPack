@@ -93,11 +93,13 @@ import os
 import random
 import sys
 import re
+import shutil
 
 import Red9.packages.configobj as configobj
 #import configobj
 
 import logging
+from test.test_logging import handlerFunc
 logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -111,7 +113,6 @@ we use this internally to fire an asset sync call on our project pose library
 '''
 global RED_ANIMATION_UI_OPENCALLBACK
 RED_ANIMATION_UI_OPENCALLBACK=None
-
 
 
 #===========================================================================
@@ -458,6 +459,8 @@ class AnimationUI(object):
         self.poseButtonBGC = [0.27, 0.3, 0.3]
         self.poseButtonHighLight = [0.7, 0.95, 0.75]
         
+        self.poseHandlerPaths=[]  # ['J:/Games/hf2/Tools/CryMayaCore/core/crycore/resources/poseHandlers']
+        
         # Internal config file setup for the UI state
         if self.internalConfigPath:
             self.ui_optVarConfig = os.path.join(self.presetDir, '__red9config__')
@@ -495,7 +498,7 @@ class AnimationUI(object):
         if callable(RED_ANIMATION_UI_OPENCALLBACK):
             try:
                 log.debug('calling RED_ANIMATION_UI_OPENCALLBACK')
-                RED_ANIMATION_UI_OPENCALLBACK()
+                RED_ANIMATION_UI_OPENCALLBACK(animUI)
             except:
                 log.warning('RED_ANIMATION_UI_OPENCALLBACK failed')
     
@@ -1716,7 +1719,7 @@ class AnimationUI(object):
             cmds.menuItem(label='Update : Thumb Only', p=parent, command=partial(self.__uiPoseUpdateThumb))
             
         cmds.menuItem(divider=True, p=parent)
-        cmds.menuItem(label='Make Subfolder', en=enableState, p=parent, command=partial(self.__uiPoseMakeSubFolder))
+        cmds.menuItem(label='Add Subfolder', en=enableState, p=parent, command=partial(self.__uiPoseMakeSubFolder))
         cmds.menuItem(label='Refresh List', en=True, p=parent, command=lambda x: self.__uiCB_fillPoses(rebuildFileList=True))
         cmds.menuItem(label='Open Pose File', p=parent, command=partial(self.__uiPoseOpenFile))
         cmds.menuItem(label='Open Pose Directory', p=parent, command=partial(self.__uiPoseOpenDir))
@@ -1739,8 +1742,30 @@ class AnimationUI(object):
             cmds.menuItem(label='Grid Size: Large', p=parent, command=partial(self.__uiCB_setPoseGrid, 'large'))
             
         if self.posePath:
+            cmds.menuItem(divider=True, p=parent)
             self.addPopupMenusFromFolderConfig(parent)
-                                    
+        if self.poseHandlerPaths:
+            cmds.menuItem(divider=True, p=parent)
+            self.addPopupMenus_PoseHandlers(parent)
+    
+    def addPopupMenus_PoseHandlers(self, parentPopup):
+        '''
+        for a given list of folders containing poseHandler files add these as 
+        default 'make subfolder' types to the main poseUI popup menu
+        '''
+        if self.poseHandlerPaths:
+            for path in self.poseHandlerPaths:
+                if os.path.exists(path):
+                    poseHandlers=os.listdir(path)
+                    if poseHandlers:
+                        for handler in poseHandlers:
+                            if handler.endswith('_poseHandler.py'):
+                                handlerPath=os.path.join(path,handler)
+                                log.debug('poseHandler file being copied into new folder : %s' % handlerPath)
+                                cmds.menuItem(label='Add Subfolder : %s' % handler.replace('_poseHandler.py', '').upper(),
+                                              en=True, p=parentPopup,
+                                              command=partial(self.__uiPoseMakeSubFolder, handlerPath))
+                        
     def addPopupMenusFromFolderConfig(self, parentPopup):
         '''
         if the poseFolder has a poseHandler.py file see if it has the 'posePopupAdditions' func
@@ -1999,7 +2024,7 @@ class AnimationUI(object):
         else:
             raise StandardError('RootNode not Set for Hierarchy Processing')
       
-    def __uiPoseMakeSubFolder(self, *args):
+    def __uiPoseMakeSubFolder(self, handlerFile=None, *args):
         '''
         Insert a new SubFolder to the posePath, makes the dir and sets
         it up in the UI to be the current active path
@@ -2007,8 +2032,11 @@ class AnimationUI(object):
         basePath=cmds.textFieldButtonGrp('uitfgPosePath', query=True, text=True)
         if not os.path.exists(basePath):
             raise StandardError('Base Pose Path is inValid or not yet set')
+        promptstring='New Pose Folder Name'
+        if handlerFile:
+            promptstring='New %s POSE Folder Name' % os.path.basename(handlerFile).replace('_poseHandler.py','').upper()
         result = cmds.promptDialog(
-                title='New Folder Name',
+                title=promptstring,
                 message='Enter Name:',
                 button=['OK', 'Cancel'],
                 defaultButton='OK',
@@ -2019,6 +2047,8 @@ class AnimationUI(object):
             cmds.textFieldButtonGrp('uitfgPoseSubPath', edit=True, text=subFolder)
             self.posePath=os.path.join(basePath, subFolder)
             os.mkdir(self.posePath)
+            if handlerFile and os.path.exists(handlerFile):
+                shutil.copy(handlerFile, self.posePath)
             self.__uiCB_pathSwitchInternals()
                 
     def __uiPoseCopyToProject(self, *args):
