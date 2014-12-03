@@ -96,7 +96,6 @@ import re
 import shutil
 
 import Red9.packages.configobj as configobj
-import configobj
 
 import logging
 logging.basicConfig()
