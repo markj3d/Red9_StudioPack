@@ -412,6 +412,10 @@ class AudioHandler(object):
         for a in self.audioNodes:
             a.delete()
     
+    def formatNodes_to_Path(self):
+        for a in self.audioNodes:
+            a.formatAudioNode_to_Path()
+            
     def bwav_sync_to_Timecode(self, relativeToo=None, offset=0, *args):
         '''
         process either selected or all audio nodes and IF they are found to be
@@ -925,7 +929,10 @@ class AudioNode(object):
         try:
             cmds.rename(self.audioNode, r9Core.nodeNameStrip(os.path.splitext(os.path.basename(self.path))[0]))
         except:
-            log.debug('failed to Rename node : %s' % self.audioNode)
+            if cmds.referenceQuery(self.audioNode,inr=True):
+                log.info('failed to Rename Referenced Audio Node : %s' % self.audioNode)
+            else:
+                log.info('failed to Rename Audio node : %s' % self.audioNode)
         
     def lockTimeInputs(self, state=True):
         '''
