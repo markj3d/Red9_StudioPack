@@ -936,10 +936,10 @@ def nodeLockManager(func):
         try:
             locked=False
             mNode=args[0]  # args[0] is self
-            log.debug('nodeLockManager > func : %s : metaNode / self: %s' % (func.__name__,mNode.mNode))
+            #log.debug('nodeLockManager > func : %s : metaNode / self: %s' % (func.__name__,mNode.mNode))
             if mNode.mNode and mNode._lockState:
                 locked=True
-                log.debug('nodeLockManager > func : %s : node being unlocked' % func.__name__)
+                #log.debug('nodeLockManager > func : %s : node being unlocked' % func.__name__)
                 cmds.lockNode(mNode.mNode,lock=False)
             res=func(*args, **kws)
         except StandardError, error:
