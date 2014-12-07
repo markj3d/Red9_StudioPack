@@ -1525,6 +1525,10 @@ class MetaClass(object):
         .. note::
             max values for int is 2,147,483,647 (int32)
         '''
+        
+        if attrType and attrType=='enum' and not 'enumName' in kws:
+            raise ValueError('enum attrType must be passed with "enumName" keyword in args')
+        
         DataTypeKws = {'string': {'longName':attr, 'dt':'string'}, \
                      'unicode': {'longName':attr, 'dt':'string'}, \
                      'int': {'longName':attr, 'at':'long'}, \
@@ -1537,37 +1541,35 @@ class MetaClass(object):
                      'complex': {'longName':attr, 'dt':'string'}, \
                      'message': {'longName':attr, 'at':'message', 'm':True, 'im':True}, \
                      'messageSimple':{'longName':attr, 'at':'message', 'm':False}}
-        
-        Keyable=['int','float','bool','enum','double3']
-
-        if attrType and attrType=='enum' and not 'enumName' in kws:
-            raise ValueError('enum attrType must be passed with "enumName" keyword in args')
-        
+                
+        keyable=['int','float','bool','enum','double3']
+        addCmdEditFlags=['min','minValue','max','maxValue','defaultValue','dv',
+                             'softMinValue','smn','softMaxValue','smx','enumName']
+        setCmdEditFlags=['keyable','k','lock','l','channelBox','cb']
+            
+        addkwsToEdit={}
+        setKwsToEdit={}
+        if kws:
+            for kw,v in kws.items():
+                if kw in addCmdEditFlags:
+                    addkwsToEdit[kw]=v
+                elif kw in setCmdEditFlags:
+                    setKwsToEdit[kw]=v
+                     
         #ATTR EXSISTS - EDIT CURRENT
         #---------------------------
         if cmds.attributeQuery(attr, exists=True, node=self.mNode):
-            #if attr exists do we force the value here?? NOOOO as I'm using this only
-            #to ensure that when we initialize certain classes base attrs exist with certain properties.
+            # if attr exists do we force the value here?? NOOOO as I'm using this only
+            # to ensure that when we initialize certain classes base attrs exist with certain properties.
             log.debug('"%s" :  Attr already exists on the Node' % attr)
 
-            #allow some of the standard edit flags to be run even if the attr exists
-            addCmdEditFlags=['min','minValue','max','maxValue','defaultValue','dv',
-                             'softMinValue','smn','softMaxValue','smx','enumName']
-            setCmdEditFlags=['keyable','k','lock','l','channelBox','cb']
-            
-            addkwsToEdit={}
-            setKwsToEdit={}
+            # allow some of the standard edit flags to be run even if the attr exists
             if kws:
-                for kw,v in kws.items():
-                    if kw in addCmdEditFlags:
-                        addkwsToEdit[kw]=v
-                    elif kw in setCmdEditFlags:
-                        setKwsToEdit[kw]=v
                 if addkwsToEdit:
-                    cmds.addAttr('%s.%s' % (self.mNode,attr),e=True,**addkwsToEdit)
+                    cmds.addAttr('%s.%s' % (self.mNode, attr), e=True, **addkwsToEdit)
                     log.debug('addAttr Edit flags run : %s = %s' % (attr, addkwsToEdit))
                 if setKwsToEdit:
-                    cmds.setAttr('%s.%s' % (self.mNode,attr),**setKwsToEdit)
+                    cmds.setAttr('%s.%s' % (self.mNode, attr), **setKwsToEdit)
                     log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
             return
         
@@ -1576,36 +1578,42 @@ class MetaClass(object):
         else:
             try:
                 if not attrType:
-                    attrType=attributeDataType(value)
-                DataTypeKws[attrType].update(kws)  # merge in **kws, allows you to pass in all the standard addAttr kws
-                log.debug('addAttr : valueType : %s > dataType kws: %s' % (attrType,DataTypeKws[attrType]))
+                    attrType = attributeDataType(value)
+                DataTypeKws[attrType].update(addkwsToEdit)  # merge in **kws, allows you to pass in all the standard addAttr kws
+                log.debug('addAttr : valueType : %s > dataType kws: %s' % (attrType, DataTypeKws[attrType]))
                 cmds.addAttr(self.mNode, **DataTypeKws[attrType])
 
-                if attrType=='double3' or attrType=='float3':
-                    attr1='%sX' % attr
-                    attr2='%sY' % attr
-                    attr3='%sZ' % attr
-                    cmds.addAttr(self.mNode,longName=attr1,at='double',parent=attr,**kws)
-                    cmds.addAttr(self.mNode,longName=attr2,at='double',parent=attr,**kws)
-                    cmds.addAttr(self.mNode,longName=attr3,at='double',parent=attr,**kws)
+                if attrType == 'double3' or attrType == 'float3':
+                    attr1 = '%sX' % attr
+                    attr2 = '%sY' % attr
+                    attr3 = '%sZ' % attr
+                    cmds.addAttr(self.mNode, longName=attr1, at='double', parent=attr, **kws)
+                    cmds.addAttr(self.mNode, longName=attr2, at='double', parent=attr, **kws)
+                    cmds.addAttr(self.mNode, longName=attr3, at='double', parent=attr, **kws)
                     object.__setattr__(self, attr1, None)  # don't set it, just add it to the object
                     object.__setattr__(self, attr2, None)  # don't set it, just add it to the object
                     object.__setattr__(self, attr3, None)  # don't set it, just add it to the object
-                    if attrType in Keyable and not hidden:
-                        cmds.setAttr('%s.%s' % (self.mNode,attr1),e=True,keyable=True)
-                        cmds.setAttr('%s.%s' % (self.mNode,attr2),e=True,keyable=True)
-                        cmds.setAttr('%s.%s' % (self.mNode,attr3),e=True,keyable=True)
-                elif attrType=='doubleArray':
-                    #have to initialize this type or Maya doesn't pick the attrType up!
-                    cmds.setAttr('%s.%s' % (self.mNode, attr),[],type='doubleArray')
+                    if attrType in keyable and not hidden:
+                        cmds.setAttr('%s.%s' % (self.mNode, attr1), e=True, keyable=True)
+                        cmds.setAttr('%s.%s' % (self.mNode, attr2), e=True, keyable=True)
+                        cmds.setAttr('%s.%s' % (self.mNode, attr3), e=True, keyable=True)
+                elif attrType == 'doubleArray':
+                    # have to initialize this type or Maya doesn't pick the attrType up!
+                    cmds.setAttr('%s.%s' % (self.mNode, attr), [], type='doubleArray')
                 else:
-                    if attrType in Keyable and not hidden:
-                        cmds.setAttr('%s.%s' % (self.mNode, attr),e=True,keyable=True)
+                    if attrType in keyable and not hidden:
+                        cmds.setAttr('%s.%s' % (self.mNode, attr), e=True, keyable=True)
                 if value:
                     self.__setattr__(attr, value, force=False)
                 else:
-                    #bind the attr to the python object if no value passed in
+                    # bind the attr to the python object if no value passed in
                     object.__setattr__(self, attr, None)
+                    
+                # allow the addAttr to set any secondarty kws via the setAttr calls
+                if setKwsToEdit:
+                    cmds.setAttr('%s.%s' % (self.mNode, attr), **setKwsToEdit)
+                    log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
+                    
             except StandardError,error:
                 raise StandardError(error)
      
