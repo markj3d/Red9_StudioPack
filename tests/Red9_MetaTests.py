@@ -462,6 +462,16 @@ class Test_MetaClass():
         self.MClass.lockState=True
         assert cmds.lockNode(self.MClass.mNode, query=True)[0]
         
+    def test_addAttrHandling(self):
+        self.MClass.addAttr('floatAttr', 1, l=True)
+        assert self.MClass.attrIsLocked('floatAttr')
+        self.MClass.addAttr('max', 1, max=10)
+        assert self.MClass.max==1
+        try:
+            self.MClass.max=30
+        except:
+            assert True
+        assert cmds.addAttr('%s.max' % self.MClass.mNode, q=True,max=True) == 10
         
         
     def test_attributeHandling(self):
