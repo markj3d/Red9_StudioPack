@@ -1484,7 +1484,7 @@ class MetaClass(object):
         '''
         check the attribute on the mNode to see if it's locked
         '''
-        return cmds.getAttr('%s.%s' % (self.mNode,attr),l=True)
+        return cmds.getAttr('%s.%s' % (self.mNode,attr), l=True)
     
     @nodeLockManager
     def attrSetLocked(self, attr, state):
@@ -2090,24 +2090,9 @@ class MetaClass(object):
         mNodes=getConnectedMetaNodes(self.mNode,source=True,destination=False, **kws)
         if mNodes:
             return mNodes[0]
-    
-#    def __getChildren__(self, mNode, mAttrs=None, cAttrs=[]):
-#        log.debug('MetaNode : %s' % mNode)
-#        attrs=cmds.listAttr(mNode,ud=True,st=cAttrs)
-#        children=[]
-#        if attrs:
-#            for attr in attrs:
-#                if cmds.getAttr('%s.%s' % (mNode,attr),type=True)=='message':
-#                    msgLinked=cmds.listConnections('%s.%s' % (mNode,attr),destination=True,source=False)
-#                    if msgLinked:
-#                        msgLinked=cmds.ls(msgLinked,l=True) #cast to longNames!
-#                        children.extend(msgLinked)
-#        else:
-#            log.debug('no matching attrs : %s found on node %s' % (cAttrs,mNode))
-#        return children
 
     @r9General.Timer
-    def getChildren(self, walk=True, mAttrs=None, cAttrs=[]):
+    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[]):
         '''
         This finds all UserDefined attrs of type message and returns all connected nodes
         This is now being run in the MetaUI on doubleClick. This is a generic call, implemented
@@ -2118,6 +2103,7 @@ class MetaClass(object):
         :param walk: walk all subMeta connections and include all their children too
         :param mAttrs: only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)
         :param cAttrs: only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)
+        :param nAttrs: search returned MayaNodes for given set of attrs and only return matched nodes
         
         .. note:: 
             mAttrs is only searching attrs on the mNodes themselves, not the children
@@ -2128,15 +2114,24 @@ class MetaClass(object):
         if walk:
             childMetaNodes.extend([node for node in self.getChildMetaNodes(walk=True, mAttrs=mAttrs)])
         for node in childMetaNodes:
-            log.debug('MetaNode getChildren : %s' % node.mNode)
-            attrs=cmds.listAttr(node.mNode,ud=True,st=cAttrs)
+            log.debug('MetaNode getChildren : %s >> %s' % (type(node), node.mNode))
+            attrs = cmds.listAttr(node.mNode, ud=True, st=cAttrs)
             if attrs:
                 for attr in attrs:
-                    if cmds.getAttr('%s.%s' % (node.mNode,attr),type=True)=='message':
-                        msgLinked=cmds.listConnections('%s.%s' % (node.mNode,attr),destination=True,source=False)
+                    if cmds.getAttr('%s.%s' % (node.mNode, attr), type=True) == 'message':
+                        msgLinked = cmds.listConnections('%s.%s' % (node.mNode, attr), destination=True, source=False)
                         if msgLinked:
-                            msgLinked=cmds.ls(msgLinked,l=True)  # cast to longNames!
-                            children.extend(msgLinked)
+                            if not nAttrs:
+                                msgLinked = cmds.ls(msgLinked, l=True)  # cast to longNames!
+                                children.extend(msgLinked)
+                            else:
+                                for linkedNode in msgLinked:
+                                    for attr in nAttrs:
+                                        if cmds.attributeQuery(attr, exists=True, node=linkedNode):
+                                            linkedNode = cmds.ls(linkedNode, l=True)  # cast to longNames!
+                                            children.extend(linkedNode)
+                                            break
+                                            break
             else:
                 log.debug('no matching attrs : %s found on node %s' % (cAttrs,node))
         if self._forceAsMeta:
@@ -2275,7 +2270,7 @@ class MetaRig(MetaClass):
         self.CTRL_Prefix='CTRL'  # prefix for all connected CTRL_ links added
         self.rigGlobalCtrlAttr='CTRL_Main'  # attribute linked to the top globalCtrl in the rig
         self.lockState = True  # lock the node to avoid accidental removal
-        self.parentSwitchAttr=['parent','Parent']  # attr used for parentSwitching
+        self.parentSwitchAttr=['parent']  # attr used for parentSwitching
         self.MirrorClass = None  # capital as this binds to the MirrorClass directly
         #self.poseSkippedAttrs = []  # attributes which are to be IGNORED by the posesaver
         
@@ -2347,14 +2342,14 @@ class MetaRig(MetaClass):
         '''
         return self.getChildren(walk, mAttrs)
         
-    def getChildren(self, walk=False, mAttrs=None, cAttrs=None):
+    def getChildren(self, walk=False, mAttrs=None, cAttrs=None, nAttrs=[]):
         '''
         Massively important bit of code, this is used by most bits of code
         to find the child controllers linked to this metaRig instance.
         '''
         if not cAttrs:
             cAttrs=['RigCtrls', '%s_*' % self.CTRL_Prefix]
-        return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs)
+        return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs)
         #return self.getRigCtrls(walk=walk, mAttrs=mAttrs)
        
     def getSkeletonRoots(self):
