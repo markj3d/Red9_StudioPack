@@ -53,7 +53,7 @@ log.setLevel(logging.INFO)
   2013 EXT2     .  2013  .  201355  .  2.6.4    4.7.1  .  2013.5  . 2013-01-22  . 2013 binary incompatible
 
   2014          .  2014  .  201400  .  2.6.4    4.8.2  .  2014    . 2013-04-10
-
+  2015          .  2015  .  201500  .  2.7      4.8.5  .  2015    . 2014-04-15
 ------------------------------------------------------------------------------------
 '''
 
@@ -454,7 +454,17 @@ def addPythonPackages():
         sys.path.append(red9Packages)
     else:
         log.info('Red9Packages Path already setup : %s' % red9Packages)
-
+    
+    #PySide management
+    if mayaVersion()<2014.0:
+        pysidePath=os.path.join(red9Packages, 'PySide')
+        if mayaVersion()==2012.0:
+            pysidePath=os.path.join(pysidePath, 'PySide_2012_x64')
+        elif mayaVersion()==2013.0:
+            pysidePath=os.path.join(pysidePath, 'PySide_2013_x64')
+        if os.path.exists(pysidePath) and not pysidePath in sys.path:
+            sys.path.append(pysidePath)
+            log.info('Adding Red9Packages:PySide To Python Paths : %s' % pysidePath)
      
 def sourceMelFolderContents(path):
     '''
@@ -516,7 +526,8 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
     addScriptsPath(os.path.join(red9ModulePath(),'core'))
     
     #Add the Packages folder
-    #AddPythonPackages()
+    addPythonPackages()
+    
     if not cmds.about(batch=True):
         if Menu:
             try:
@@ -538,9 +549,7 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
         
             #Add custom items to standard built Maya menus
             addToMayaMenus()
-        
-    #mel.eval('global float $buildInstalled=%f' % red9_getVersion())
-    
+
     log.info('Red9 StudioPack Complete!')
     
     if has_pro_pack():
