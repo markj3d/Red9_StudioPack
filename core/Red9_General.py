@@ -694,7 +694,7 @@ def os_OpenFileDirectory(path):
         except OSError:
             raise OSError('unsupported xdg-open call??')
     
-def os_OpenFile(filePath):
+def os_OpenFile(filePath, *args):
     '''
     open the given file in the default program for this OS
     '''

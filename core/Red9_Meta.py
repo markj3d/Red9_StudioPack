@@ -2629,7 +2629,7 @@ class MetaRig(MetaClass):
         return compare
     
     @nodeLockManager
-    def saveAttrMap(self):
+    def saveAttrMap(self, *args):
         '''
         store AttrMap to the metaRig, saving the chBox state of ALL attrs for ALL nodes in the hierarchy
         '''
@@ -2640,7 +2640,7 @@ class MetaRig(MetaClass):
                            hierarchy=True,
                            serializeNode=self.mNode)
         
-    def loadAttrMap(self):
+    def loadAttrMap(self, *args):
         '''
         load AttrMap from the metaRig, returning the chBox state of ALL attrs for ALL nodes in the hierarchy
         '''
@@ -2652,13 +2652,13 @@ class MetaRig(MetaClass):
                            serializeNode=self.mNode)
     
     @nodeLockManager
-    def saveZeroPose(self):
+    def saveZeroPose(self, *args):
         '''
         serialize the r9Pose file to the node itself
         '''
         self.poseCacheStore(attr='zeroPose')
 
-    def loadZeroPose(self, nodes=None):
+    def loadZeroPose(self, nodes=None, *args):
         '''
         load the zeroPose form the internal dict
         
