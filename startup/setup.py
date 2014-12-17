@@ -455,8 +455,8 @@ def addPythonPackages():
     else:
         log.info('Red9Packages Path already setup : %s' % red9Packages)
     
-    #PySide management
-    if mayaVersion()<2014.0:
+    # PySide Management for pre 2014 x64 builds
+    if mayaVersion()<2014.0 and os.path.exists(os.path.join(red9Packages, 'PySide')):
         pysidePath=os.path.join(red9Packages, 'PySide')
         if mayaVersion()==2012.0:
             pysidePath=os.path.join(pysidePath, 'PySide_2012_x64')
