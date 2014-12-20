@@ -289,7 +289,12 @@ def upgradeSystemsToUUID(*args):
             node.addAttr('UUID', value='')
             uuid=node.setUUID()
             log.info('Upgraded node : %s  to UUID : %s' % (r9Core.nodeNameStrip(node.mNode), uuid))
-  
+        if not node.hasAttr('mClassGrp'):
+            node.addAttr('mClassGrp', value='MetaClass')
+            log.info('Upgraded node : %s  to mClassGrp' % r9Core.nodeNameStrip(node.mNode))
+    resetCache()
+            
+            
 def printMetaCacheRegistry():
     '''
     print the current VALID Cache of instantiated MetaNodes 
@@ -446,15 +451,30 @@ def isMetaNodeInherited(node, mInstances=[]):
                 log.debug('MetaNode %s is of subclass >> %s' % (mClass,inst))
                 return True
     return False
-                 
+
+def isMetaNodeClassGrp(node, mClassGrps=[]):
+    '''
+    check the mClassGrp attr to see if it matches the given
+    '''
+    if not node:
+        return False
+    if issubclass(type(node), MetaClass):
+        node=node.mNode
+    for grp in mClassGrps:
+        print node,'testing: '
+        if cmds.getAttr('%s.mClassGrp' % node) == grp:
+            return True
+       
 @r9General.Timer
-def getMetaNodes(mTypes=[], mInstances=[], mAttrs=None, dataType='mClass', nTypes=None, **kws):
+def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType='mClass', nTypes=None, **kws):
     '''
     Get all mClass nodes in scene and return as mClass objects if possible
     :param mTypes: only return meta nodes of a given type
     :param mInstances: idea - this will check subclass inheritance, ie, MetaRig would
             return ALL nodes who's class is inherited from MetaRig. Allows you to
             group the data more efficiently by base classes and their inheritance
+    :param mClassGrps: checks the mClassGrp used to soft grp nodes and mark ones as a certain
+            system type without looking at class inheritance. Good for marking key classes as bases
     :param mAttrs: uses the FilterNode.lsSearchAttributes call to match nodes via given attrs
     :param dataType: default='mClass' return the nodes already instantiated to
                 the correct class object. If not then return the Maya node itself
@@ -468,11 +488,20 @@ def getMetaNodes(mTypes=[], mInstances=[], mAttrs=None, dataType='mClass', nType
     #if mTypes and not type(mTypes)==list:mTypes=[mTypes]
     for node in nodes:
     #for node in cmds.ls(type=getMClassNodeTypes(), l=True):
+        mNode=False
         if not mInstances:
             if isMetaNode(node, mTypes=mTypes):
-                mNodes.append(node)
+                mNode=True
+                #mNodes.append(node)
         else:
             if isMetaNodeInherited(node,mInstances):
+                mNode=True
+                #mNodes.append(node)
+        if mNode:
+            if mClassGrps:
+                if isMetaNodeClassGrp(node, mClassGrps):
+                    mNodes.append(node)
+            else:
                 mNodes.append(node)
     if not mNodes:
         return mNodes
@@ -592,7 +621,7 @@ class MClassNodeUI():
     '''
     Simple UI to display all MetaNodes in the scene
     '''
-    def __init__(self, mTypes=None, mInstances=None, closeOnSelect=False, \
+    def __init__(self, mTypes=None, mInstances=None, mClassGrp=None, closeOnSelect=False, \
                  funcOnSelection=None, sortBy='byClass', allowMulti=True):
         '''
         :param mTypes: MetaNode class to search and display 'MetaRig'
@@ -606,6 +635,7 @@ class MClassNodeUI():
         '''
         self.mInstances=mInstances
         self.mTypes=mTypes
+        self.mClassGrp=mClassGrp
         self.closeOnSelect=closeOnSelect
         self.func=funcOnSelection  # Given Function to run on the selected node when UI selected
         self.sortBy=sortBy
@@ -1059,7 +1089,8 @@ class MetaClass(object):
                                                '_lockState',
                                                'lockState',
                                                '_forceAsMeta'])  # note - UNMANAGED bypasses the Maya node in setattr calls
-        object.__setattr__(self, '_lockState', False)
+        
+        object.__setattr__(self, '_lockState', False)    # lock the Maya node so network cleanups don't accidentally delete it
         object.__setattr__(self, '_forceAsMeta', False)  # force all getAttr calls to return mClass objects even for starndard Maya nodes
         
         if not node:
@@ -1070,13 +1101,17 @@ class MetaClass(object):
             self.mNode=node
             self.addAttr('mClass', value=str(self.__class__.__name__))  # ! MAIN ATTR !: used to know what class to instantiate.
             self.addAttr('mNodeID', value=name)                         # ! MAIN NODE ID !: used by pose systems to ID the node.
+            self.addAttr('mClassGrp', value='MetaClass', l=True)        # ! CLASS GRP  : this is used mainly by MetaRig and other complex
+                                                                        #                systems to denote a classes intended system base
+                                                                        
             if r9Setup.mayaVersion()<=2015:
                 #print '__init__ setting uuid'
                 self.addAttr('UUID', value='')          # ! Cache UUID attr which the Cache itself is in control of
             log.debug('New Meta Node Created')
             registerMClassNodeCache(self)
-            cmds.setAttr('%s.%s' % (self.mNode,'mClass'), e=True,l=True)  # lock it
-            cmds.setAttr('%s.%s' % (self.mNode,'mNodeID'),e=True,l=True)  # lock it
+            cmds.setAttr('%s.%s' % (self.mNode,'mClass'), e=True,l=True)    # lock it
+            cmds.setAttr('%s.%s' % (self.mNode,'mNodeID'),e=True,l=True)    # lock it
+            #cmds.setAttr('%s.%s' % (self.mNode,'mClassGrp'),e=True,l=True)  # lock it
         else:
             self.mNode=node
             if not self.hasAttr('mNodeID'):
@@ -2262,17 +2297,18 @@ class MetaRig(MetaClass):
         :param name: name of the node and in this case, the RigSystem itself
         '''
         super(MetaRig, self).__init__(*args,**kws)
-        
+
         if self.cached:
             log.debug('CACHE : Aborting __init__ on pre-cached %s Object' % self.__class__)
             return
         
-        self.CTRL_Prefix='CTRL'  # prefix for all connected CTRL_ links added
+        self.mClassGrp = 'MetaRig'          # get the Grp code marking this as a SystemBase
+        self.CTRL_Prefix='CTRL'             # prefix for all connected CTRL_ links added
         self.rigGlobalCtrlAttr='CTRL_Main'  # attribute linked to the top globalCtrl in the rig
-        self.lockState = True  # lock the node to avoid accidental removal
-        self.parentSwitchAttr=['parent']  # attr used for parentSwitching
-        self.MirrorClass = None  # capital as this binds to the MirrorClass directly
-        #self.poseSkippedAttrs = []  # attributes which are to be IGNORED by the posesaver
+        self.lockState = True               # lock the node to avoid accidental removal
+        self.parentSwitchAttr=['parent']    # attr used for parentSwitching
+        self.MirrorClass = None             # capital as this binds to the MirrorClass directly
+        #self.poseSkippedAttrs = []         # attributes which are to be IGNORED by the posesaver
         
     def __bindData__(self):
         self.addAttr('version',1.0)  # ensure these are added by default
@@ -2346,9 +2382,17 @@ class MetaRig(MetaClass):
         '''
         Massively important bit of code, this is used by most bits of code
         to find the child controllers linked to this metaRig instance.
+        
+        .. note::
+            MetaRig getChildren has overloads adding the CTRL_Prefix to the cAttrs so that
+            the retunr is just the controllers in the rig. It also now has additional logic
+            to add any FacialCore system chidren by adding it's internal CTRL_Prefix to the list
         '''
         if not cAttrs:
             cAttrs=['RigCtrls', '%s_*' % self.CTRL_Prefix]
+            if self.getFacialSystem():
+                cAttrs.append('%s_*' % self.FacialCore.CTRL_Prefix)
+
         return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs)
         #return self.getRigCtrls(walk=walk, mAttrs=mAttrs)
        
@@ -2361,6 +2405,14 @@ class MetaRig(MetaClass):
         if self.hasAttr('exportSkeletonRoot'):
             return self.exportSkeletonRoot
         return None
+    
+    def getFacialSystem(self):
+        '''
+        if we have a FacialCore node return it
+        '''
+        if self.hasAttr('FacialCore'):
+            if isMetaNode(self.FacialCore):
+                return self.FacialCore
     
 #    def getParentSwitchData(self):
 #        '''
@@ -2477,13 +2529,16 @@ class MetaRig(MetaClass):
         subSystem.mirrorSide=side
         return subSystem
     
-    def set_ctrlColour(self):
+    def set_ctrlColour(self, colourIndex=4):
+        '''
+        set the override colour of a given nodes shapes
+        '''
         for ctrl in self.getChildren(walk=False):
             shapes = cmds.listRelatives(ctrl,type='shape',f=True)
             if shapes:
-                for shape in shapes: 
+                for shape in shapes:
                     cmds.setAttr('%s.overrideEnabled' % shape, 1)
-                    cmds.setAttr('%s.overrideColor' % shape, 4)
+                    cmds.setAttr('%s.overrideColor' % shape, colourIndex)
                                   
     def getMirrorData(self):
         '''
@@ -2545,7 +2600,7 @@ class MetaRig(MetaClass):
             self.MirrorClass = self.getMirrorData()
         for _, value in self.MirrorClass.mirrorDict[set].items():
             ctrls.append(value['node'])
-        return ctrls 
+        return ctrls
                 
     def mirror(self, nodes=None, mode='Anim'):
         '''
@@ -2713,6 +2768,7 @@ class MetaRig(MetaClass):
             
     def loadAnimation(self, filepath):
         pass
+
     
 class MetaRigSubSystem(MetaRig):
     '''
@@ -2721,6 +2777,7 @@ class MetaRigSubSystem(MetaRig):
     '''
     def __init__(self,*args,**kws):
         super(MetaRigSubSystem, self).__init__(*args,**kws)
+        self.mClassGrp = 'MetaClass'    # set the Grp removing the MetaRig systemBase Grp code
 
     def __bindData__(self):
         self.addAttr('systemType', attrType='string')
@@ -2765,6 +2822,7 @@ class MetaFacialRig(MetaRig):
     '''
     def __init__(self,*args,**kws):
         super(MetaFacialRig, self).__init__(*args,**kws)
+        self.mClassGrp = 'MetaFacialRig'
         self.CTRL_Prefix='FACE'
         
     def __bindData__(self):
