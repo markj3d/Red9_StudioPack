@@ -168,3 +168,5 @@ New - Red9_Anim -  Lots of people been after this, the SnapTransforms call now s
 New - Red9_Anim - Added matchMethod = 'mirrorIndex for all the systems, allows data to be transfered via the MirrorMarkers so totally flexible, supported in everything including the poseSaver
 Mod - Red9_Meta - New Caching system which used unique UUID's on the nodes rather that the dag path. Far safer and more flexible for the future
 New - Red9_Core - Added more OS wrapping and an 'open last crash file' item in the debugging menu
+New - Red9_Meta - Added new handling for grouping and marking key classes - "mClassGrp" which allows us to mark classes in a dynamic fashion.
+New - Red9_Meta - Added new mClassGrp flag to getMetaNodes to accomodate the above new attrs
