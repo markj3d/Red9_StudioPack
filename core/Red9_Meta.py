@@ -1055,7 +1055,7 @@ class MetaClass(object):
             return super(cls.__class__, cls).__new__(cls)
     
     #@pymelHandler
-    def __init__(self, node=None, name=None, nodeType='network', autofill='all', **kws):
+    def __init__(self, node=None, name=None, nodeType='network', autofill='all', *args, **kws):
         '''
         Base Class for Meta support. This manages all the attribute and class 
         management for all subsequent inherited classes. This is the core of
@@ -1126,7 +1126,7 @@ class MetaClass(object):
         self.lockState=False
         
         #bind any default attrs up - note this should be overloaded where required
-        self.__bindData__()
+        self.__bindData__(*args, **kws)
         
         #This is useful! so we have a node with a lot of attrs, or just a simple node
         #this block if activated will auto-fill the object.__dict__ with all the available
@@ -1138,7 +1138,7 @@ class MetaClass(object):
         #registerMClassNodeCache(self)
      
      
-    def __bindData__(self):
+    def __bindData__(self, *args, **kws):
         '''
         This is intended as an entry point to allow you to bind whatever attrs or extras 
         you need at a class level. It's called by the __init__ ... 
@@ -1560,7 +1560,7 @@ class MetaClass(object):
         .. note::
             max values for int is 2,147,483,647 (int32)
         '''
-        
+        added=False
         if attrType and attrType=='enum' and not 'enumName' in kws:
             raise ValueError('enum attrType must be passed with "enumName" keyword in args')
         
@@ -1649,8 +1649,10 @@ class MetaClass(object):
                     cmds.setAttr('%s.%s' % (self.mNode, attr), **setKwsToEdit)
                     log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
                     
+                added=True
             except StandardError,error:
                 raise StandardError(error)
+        return added
      
     def listAttrsOfType(self, Type='message'):
         '''
