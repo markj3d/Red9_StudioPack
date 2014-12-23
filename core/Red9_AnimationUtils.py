@@ -3844,6 +3844,9 @@ class MirrorHierarchy(object):
             else:
                 mClass.addAttr(self.mirrorAxis, axis)
                 mClass.__setattr__(self.mirrorAxis, axis)
+        else:
+            if mClass.hasAttr(self.mirrorAxis):
+                delattr(mClass, self.mirrorAxis)
         del(mClass)  # cleanup
         
     def deleteMirrorIDs(self, node):
@@ -3883,6 +3886,15 @@ class MirrorHierarchy(object):
                               slot=getattr(src, self.mirrorIndex),
                               axis=axis)
 
+    def incrementIDs(self, nodes, offset):
+        '''
+        offset the mirrorIndex on selected nodes by a given offset
+        '''
+        for node in nodes:
+            current = self.getMirrorIndex(node)
+            if current:
+                cmds.setAttr('%s.%s' % (node, self.mirrorIndex), (int(current) + offset))
+        
     def getNodes(self):
         '''
         Get the list of nodes to start processing
@@ -4235,7 +4247,7 @@ class MirrorSetup(object):
                  
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        window = cmds.window(self.win, title="MirrorSetup", s=False, widthHeight=(260, 410))
+        window = cmds.window(self.win, title="MirrorSetup", s=False, widthHeight=(280, 410))
         cmds.menuBarLayout()
         cmds.menu(l="VimeoHelp")
         cmds.menuItem(l="Open Vimeo Help File", \
@@ -4244,7 +4256,7 @@ class MirrorSetup(object):
         cmds.menuItem(l="Contact Me", c=lambda *args: (r9Setup.red9ContactInfo()))
         cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
         cmds.separator(h=15, style='none')
-        cmds.text(l='MirrorSide')
+        cmds.text(l='MirrorSide:')
         cmds.rowColumnLayout(nc=3, columnWidth=[(1, 90), (2, 90), (3, 90)])
         self.uircbMirrorSide = cmds.radioCollection('mirrorSide')
         cmds.radioButton('Right', label='Right')
@@ -4253,17 +4265,21 @@ class MirrorSetup(object):
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 110), (2, 60)])
-        cmds.text(label='MirrorIndex')
+        cmds.text(label='MirrorIndex:')
         cmds.intField('ifg_mirrorIndex', v=1, min=1, w=50)
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
-        cmds.text(l='MirrorAxis')
-        cmds.checkBox('default', l='use default settings', v=True,
+        cmds.text(l='MirrorAxis:')
+        cmds.separator(h=5, style='none')
+        cmds.rowColumnLayout(nc=2, columnWidth=[(1, 130), (2, 130)])
+        cmds.checkBox('default', l='Use Default Axis', v=True,
                       onc=lambda x: self.__uicb_default(False),
                       ofc=lambda x: self.__uicb_default(True))
-#        cmds.checkBox('directCopy',l='directCopy', v=True,
-#                      onc=lambda x:cmds.checkBox('default',e=True, v=False),
-#                      ofc=lambda x:cmds.checkBox('default',e=True, v=True))
+        cmds.checkBox('setDirectCopy',l='No Inversing', v=False,
+                      ann='Set the marker so that data is copied over but NO inversing is done on the data, straight copy from left to right',
+                      onc=lambda x:cmds.checkBox('default',e=True, v=False),
+                      ofc=lambda x:cmds.checkBox('default',e=True, v=True))
+        cmds.setParent('..')
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(ann='attrs', numberOfColumns=3,
                                  columnWidth=[(1, 90), (2, 90), (3, 90)])
@@ -4305,6 +4321,7 @@ class MirrorSetup(object):
                              c=r9Setup.red9ContactInfo, h=22, w=200)
         cmds.showWindow(window)
         self.__uicb_default(False)
+        cmds.window(self.win, e=True, widthHeight=(280, 410))
         cmds.radioCollection('mirrorSide', e=True, select='Centre')
 
     def __uicb_getMirrorIDsFromNode(self):
@@ -4312,19 +4329,26 @@ class MirrorSetup(object):
         axis = None
         index = self.mirrorClass.getMirrorIndex(node)
         side = self.mirrorClass.getMirrorSide(node)
-        if cmds.attributeQuery(self.mirrorClass.mirrorAxis, node=node, exists=True):
-            axis = self.mirrorClass.getMirrorAxis(node)
-            
-        # print side,index,axis
-
+        cmds.checkBox('setDirectCopy', e=True, v=False)
+        cmds.checkBox('default', e=True, v=False)
+        
         if side and index:
             cmds.radioCollection('mirrorSide', e=True, select=side)
             cmds.intField('ifg_mirrorIndex', e=True, v=index)
         else:
             raise StandardError('mirror Data not setup on this node')
+        
+        if cmds.attributeQuery(self.mirrorClass.mirrorAxis, node=node, exists=True):
+            axis = self.mirrorClass.getMirrorAxis(node)
+            if not axis:
+                cmds.checkBox('setDirectCopy', e=True, v=True)
+                return
+            
+        print side,index,axis
+
         if axis:
             self.__uicb_default(True)
-            cmds.checkBox('default', e=True, v=False)
+            #cmds.checkBox('default', e=True, v=False)
             for a in axis:
                 if a == 'translateX':
                     cmds.checkBox('translateX', e=True, v=True)
@@ -4354,6 +4378,8 @@ class MirrorSetup(object):
                 log.info('deleted MirrorMarkers from : %s' % r9Core.nodeNameStrip(node))
         
     def __uicb_default(self, mode):
+        if not mode:
+            cmds.checkBox('setDirectCopy', e=True, v=False)
         cmds.checkBox('translateX', e=True, en=mode, v=False)
         cmds.checkBox('translateY', e=True, en=mode, v=False)
         cmds.checkBox('translateZ', e=True, en=mode, v=False)
@@ -4382,8 +4408,8 @@ class MirrorSetup(object):
         '''
         if cmds.checkBox('default', q=True, v=True):
             return None
-        # elif cmds.checkBox('directCopy', q=True, v=True):
-        #    return 'None'
+        elif cmds.checkBox('setDirectCopy', q=True, v=True):
+            return 'None'
         else:
             axis = []
             if cmds.checkBox('translateX', q=True, v=True):
