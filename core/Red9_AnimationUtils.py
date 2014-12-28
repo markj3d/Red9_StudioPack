@@ -4273,12 +4273,12 @@ class MirrorSetup(object):
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 130), (2, 130)])
         cmds.checkBox('default', l='Use Default Axis', v=True,
-                      onc=lambda x: self.__uicb_default(False),
-                      ofc=lambda x: self.__uicb_default(True))
+                      onc=lambda x: self.__uicb_setDefaults('default'),
+                      ofc=lambda x: self.__uicb_setDefaults('custom'))
         cmds.checkBox('setDirectCopy',l='No Inversing', v=False,
                       ann='Set the marker so that data is copied over but NO inversing is done on the data, straight copy from left to right',
-                      onc=lambda x:cmds.checkBox('default',e=True, v=False),
-                      ofc=lambda x:cmds.checkBox('default',e=True, v=True))
+                      onc=lambda x:self.__uicb_setDefaults('direct'),  # cmds.checkBox('default',e=True, v=False),
+                      ofc=lambda x:self.__uicb_setDefaults('default'))  # cmds.checkBox('default',e=True, v=True))
         cmds.setParent('..')
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(ann='attrs', numberOfColumns=3,
@@ -4320,11 +4320,14 @@ class MirrorSetup(object):
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                              c=r9Setup.red9ContactInfo, h=22, w=200)
         cmds.showWindow(window)
-        self.__uicb_default(False)
+        self.__uicb_setDefaults('default')
         cmds.window(self.win, e=True, widthHeight=(280, 410))
         cmds.radioCollection('mirrorSide', e=True, select='Centre')
 
     def __uicb_getMirrorIDsFromNode(self):
+        '''
+        set the flags based on the given nodes mirror setup
+        '''
         node = cmds.ls(sl=True)[0]
         axis = None
         index = self.mirrorClass.getMirrorIndex(node)
@@ -4344,11 +4347,8 @@ class MirrorSetup(object):
                 cmds.checkBox('setDirectCopy', e=True, v=True)
                 return
             
-        print side,index,axis
-
         if axis:
-            self.__uicb_default(True)
-            #cmds.checkBox('default', e=True, v=False)
+            self.__uicb_setDefaults('custom')
             for a in axis:
                 if a == 'translateX':
                     cmds.checkBox('translateX', e=True, v=True)
@@ -4364,7 +4364,7 @@ class MirrorSetup(object):
                     cmds.checkBox('rotateZ', e=True, v=True)
         else:
             cmds.checkBox('default', e=True, v=True)
-            self.__uicb_default(False)
+            self.__uicb_setDefaults('default')
         
     def __printDebugs(self):
         self.mirrorClass.nodes = cmds.ls(sl=True)
@@ -4377,17 +4377,21 @@ class MirrorSetup(object):
                 self.mirrorClass.deleteMirrorIDs(node)
                 log.info('deleted MirrorMarkers from : %s' % r9Core.nodeNameStrip(node))
         
-    def __uicb_default(self, mode):
-        if not mode:
-            cmds.checkBox('setDirectCopy', e=True, v=False)
-        cmds.checkBox('translateX', e=True, en=mode, v=False)
-        cmds.checkBox('translateY', e=True, en=mode, v=False)
-        cmds.checkBox('translateZ', e=True, en=mode, v=False)
-        cmds.checkBox('rotateX', e=True, en=mode, v=False)
-        cmds.checkBox('rotateY', e=True, en=mode, v=False)
-        cmds.checkBox('rotateZ', e=True, en=mode, v=False)
+    def __uicb_setDefaults(self, mode):
+        enable=False
+        if mode =='direct':
+            cmds.checkBox('default', e=True, v=False)
+        if mode =='custom':
+            enable=True
+        cmds.checkBox('translateX', e=True, en=enable, v=False)
+        cmds.checkBox('translateY', e=True, en=enable, v=False)
+        cmds.checkBox('translateZ', e=True, en=enable, v=False)
+        cmds.checkBox('rotateX', e=True, en=enable, v=False)
+        cmds.checkBox('rotateY', e=True, en=enable, v=False)
+        cmds.checkBox('rotateZ', e=True, en=enable, v=False)
         # now set
-        if not mode:
+        if mode=='default':
+            cmds.checkBox('setDirectCopy', e=True, v=False)
             for axis in self.mirrorClass.defaultMirrorAxis:
                 if axis == 'translateX':
                     cmds.checkBox('translateX', e=True, v=True)

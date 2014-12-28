@@ -1339,9 +1339,11 @@ def getBlendTargetIndex(blendNode, targetName):
     :param targetName: target Alias Name of the channel we're trying to find the index for
     '''
     weights=cmds.aliasAttr(blendNode,q=True)
-    if targetName in weights:
-        return int(weights[weights.index(targetName) + 1].replace('weight[','').replace(']',''))
-    
+    if weights:
+        if targetName in weights:
+            return int(weights[weights.index(targetName) + 1].replace('weight[','').replace(']',''))
+    else:
+        return 0
     
 
 #Node Matching -------------------------------------------------------------------------
