@@ -287,7 +287,7 @@ class ProgressBarContext(object):
         self._maxValue = maxValue
         self._interruptable = interruptable
         
-        self._gMainProgressBar = mel.eval('$tmp = $gMainProgressBar')
+        self._gMainProgressBar = mel.eval('$gmtmp = $gMainProgressBar')
                 
     def isCanceled(self):
         if not self.disable:
