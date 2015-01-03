@@ -654,6 +654,16 @@ class MClassNodeUI():
         window = cmds.window(self.win, title=self.win)
         cmds.menuBarLayout()
         cmds.menu(l="VimeoHelp")
+        cmds.menuItem(l="Vimeo Help: Develop Conference MetaData-Part1",
+                      ann='Develop Conference 2014 - MetaData in a Production Pipeline Video1',
+                      c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/100882408')")
+        cmds.menuItem(l="Vimeo Help: Develop Conference MetaData-Part2",
+                      ann='Develop Conference 2014 - MetaData in a Production Pipeline Video2',
+                      c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/100883383')")
+        cmds.menuItem(l="Vimeo Help: Develop Conference MetaData-Part3",
+                      ann='Develop Conference 2014 - MetaData in a Production Pipeline Video3',
+                      c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/102463373')")
+        cmds.menuItem(divider=True)
         cmds.menuItem(l="Vimeo Help: MetaData-Part1",
                       ann='Part1 goes through the main attribute handling inside Meta',
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/61841345')")
@@ -1531,7 +1541,14 @@ class MetaClass(object):
                 cmds.setAttr('%s.%s' % (self.mNode,attr), l=state)
         except StandardError,error:
             log.debug(error)
-            
+    
+    @nodeLockManager
+    def renameAttr(self, currentAttr, newName):
+        '''
+        wrap over cmds.renameAttr
+        '''
+        cmds.renameAttr('%s.%s' % (self.mNode, currentAttr), newName)
+        
     @nodeLockManager
     def addAttr(self, attr, value=None, attrType=None, hidden=False, **kws):
         '''
