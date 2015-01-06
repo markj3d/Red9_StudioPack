@@ -405,6 +405,9 @@ class AudioHandler(object):
             a.mute(state)
     
     def lockTimeInputs(self, state=True):
+        '''
+        lock the time attrs of thie audio nodes so they can't be slipped or moved by accident
+        '''
         for a in self.audioNodes:
             a.lockTimeInputs(state)
             
@@ -413,6 +416,9 @@ class AudioHandler(object):
             a.delete()
     
     def formatNodes_to_Path(self):
+        '''
+        rename the sound nodes to match their internal audioPath filename
+        '''
         for a in self.audioNodes:
             a.formatAudioNode_to_Path()
             
@@ -526,7 +532,6 @@ class AudioHandler(object):
         if not status:
             raise StandardError('combine completed with errors: see script Editor for details')
 
-        
         
 class AudioNode(object):
     '''

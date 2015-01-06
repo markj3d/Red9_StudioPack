@@ -532,16 +532,17 @@ def getConnectedMetaNodes(nodes, source=True, destination=True, mTypes=[], mInst
     From a given set of Maya Nodes return all connected mNodes
     Default return is mClass objects
     
-    :param nodes: nodes to inspect for connected meta data
+    :param nodes: nodes to inspect for connected meta data, note these are cmds MAYA nodes
     :param source: `bool` clamp the search to the source side of the graph
     :param destination: `bool` clamp the search to the destination side of the graph
     :param mTypes: return only given MetaClass's
-    :param mInstances: idea - this will check subclass inheritance, ie, MetaRig would
+    :param mInstances: this will check subclass inheritance, ie, 'MetaRig' would
             return ALL nodes who's class is inherited from MetaRig. Allows you to
             group the data more efficiently by base classes and their inheritance
     :param mAttrs: uses the FilterNode.lsSearchAttributes call to match nodes via given attrs
     :param dataType: default='mClass' return the nodes already instantiated to
                     the correct class object. If not then return the Maya node
+    :param nTypes: only return nodes of a given type, note this type must be registered to meta!
     '''
     mNodes=[]
     connections=[]
@@ -2091,6 +2092,7 @@ class MetaClass(object):
         :TODO: allow this to walk over nodes, at the moment if the direct child isn't of the correct 
             type (if using the mTypes flag) then the walk will stop. This should continue over non matching 
             nodes down the hierarchy so all children are tested.
+            !!!!!!!!!!!!!! THIS NEEDS FIXING ASAP !!!!!!!!!!!!!! or at least a flag to 'skip_over_unmatched'
         '''
 
         if not walk:
@@ -2432,7 +2434,7 @@ class MetaRig(MetaClass):
         if self.hasAttr('FacialCore'):
             if isMetaNode(self.FacialCore):
                 return self.FacialCore
-    
+
 #    def getParentSwitchData(self):
 #        '''
 #        Simple func for over-loading. This returns a list of tuples [(node,attr)] for all
@@ -3294,19 +3296,19 @@ class MetaTimeCodeHUD(MetaHUDNode):
     allows us to show the actual internal timecode attrs as their 
     original SMPTE time's
     
-    Crucial things to be aware of:
+    Crucial things to be aware of: 
     
-    We construct timecode from 3 attrs on the given node:
-    timecode_ref        : the original timecode converted to milliseconds
-    timecode_count      : a linear curve that increments every frame based on the samplerate
-    timecode_samplerate : samplerate that the linear counter was generated against
+    We construct timecode from 3 attrs on the given node: 
+    timecode_ref        : the original timecode converted to milliseconds 
+    timecode_count      : a linear curve that increments every frame based on the samplerate 
+    timecode_samplerate : samplerate that the linear counter was generated against 
     
-    SMPTE timecode is then reconstructed like so:
-    r9Audio.milliseconds_to_Timecode(ref + ((count / samplerate) * 1000))
-    
-    tcHUD=cFacialMeta.MetaTimeCodeHUD()
-    tcHUD.addMonitoredTimecodeNode(cmds.ls(sl=True)[0])
-    tcHUD.drawHUD()
+    SMPTE timecode is then reconstructed like so: 
+    >>> r9Audio.milliseconds_to_Timecode(ref + ((count / samplerate) * 1000)) 
+    >>> 
+    >>> tcHUD=cFacialMeta.MetaTimeCodeHUD() 
+    >>> tcHUD.addMonitoredTimecodeNode(cmds.ls(sl=True)[0]) 
+    >>> tcHUD.drawHUD() 
     '''
     def __init__(self, *args, **kws):
         super(MetaTimeCodeHUD, self).__init__(*args, **kws)
