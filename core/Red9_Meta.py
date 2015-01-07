@@ -233,13 +233,20 @@ def registerMClassNodeCache(mNode):
     :param mNode: instantiated mNode to add
     '''
     global RED9_META_NODECACHE
-    try:
-        #if mNode.hasAttr('UUID'):
-        UUID=mNode.setUUID()
-        if RED9_META_NODECACHE or not UUID in RED9_META_NODECACHE.keys():
-            log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
-            RED9_META_NODECACHE[UUID]=mNode
-    except:
+    #UUID=None
+    if mNode.hasAttr('UUID'):
+        try:
+            if r9Setup.mayaVersion()<=2015:
+                UUID=mNode.setUUID()
+            else:
+                UUID=mNode.UUID
+            if RED9_META_NODECACHE or not UUID in RED9_META_NODECACHE.keys():
+                log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
+                RED9_META_NODECACHE[UUID]=mNode
+        except:
+            log.debug('CACHE : Failed to set UUID for mNode : %s' % mNode.mNode)
+    else:
+        log.debug('CACHE : UUID attr not bound to this node, must be an older system')
         if RED9_META_NODECACHE or not mNode.mNode in RED9_META_NODECACHE.keys():
             log.debug('CACHE : Adding to MetaNode Cache : %s' % mNode.mNode)
             RED9_META_NODECACHE[mNode.mNode]=mNode
@@ -304,11 +311,11 @@ def printMetaCacheRegistry():
     cleanCache()
     for k,v in RED9_META_NODECACHE.items():
         print k,v
-    
+ 
 def cleanCache():
     '''
-    Run through the current cache of metaNodes and confirm that their all
-    still valid by testing the MObjectHandles
+    Run through the current cache of metaNodes and confirm that they're 
+    all still valid by testing the MObjectHandles.
     '''
     for k, v in RED9_META_NODECACHE.items():
         try:
@@ -1739,9 +1746,9 @@ class MetaClass(object):
         change the current mClass type of the node and re-initialize the object
         '''
         if newMClass in RED9_META_REGISTERY:
-            #cmds.setAttr('%s.%s' % (self.mNode,'mClass'),e=True,l=False)
-            self.mClass=newMClass
-            #cmds.setAttr('%s.%s' % (self.mNode,'mClass'),e=True,l=True)
+            self.mClass=newMClass 
+            #we reset the cache so that the UUID's are all updated to account for the change in mClass
+            resetCache()
             return MetaClass(self.mNode, **kws)
         else:
             raise StandardError('given class is not in the mClass Registry : %s' % newMClass)
