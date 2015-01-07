@@ -108,6 +108,13 @@ global RED_ANIMATION_UI
 '''
 Callback global so you can fire a command prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
+and to setup some additional paths
+
+def myProjectCallback()
+    cls.poseHandlerPaths=['MyProjects/resources/poseHandlers']
+    cls.posePathProject ='My_projects/global/project/pose/lib'
+    
+r9Anim.RED_ANIMATION_UI_OPENCALLBACK = myProjectCallback
 '''
 global RED_ANIMATION_UI_OPENCALLBACK
 RED_ANIMATION_UI_OPENCALLBACK=None
@@ -444,6 +451,7 @@ class AnimationUI(object):
         self.filterSettings = r9Core.FilterNode_Settings()
         self.filterSettings.transformClamp = True
         self.presetDir = r9Setup.red9Presets()  # os.path.join(r9Setup.red9ModulePath(), 'presets')
+        self.basePreset = ''
         
         # Pose Management variables
         self.posePath = None  # working variable
@@ -477,8 +485,6 @@ class AnimationUI(object):
         if 'ui_docked' in animUI.ANIM_UI_OPTVARS['AnimationUI']:
             animUI.dock = eval(animUI.ANIM_UI_OPTVARS['AnimationUI']['ui_docked'])
 
-        print 'Recorded DOCKED STATUS : ', animUI.dock
-
         if r9General.getModifier() == 'Ctrl':
             if not animUI.dock:
                 print 'switching True'
@@ -488,10 +494,6 @@ class AnimationUI(object):
                 animUI.dock = False
             #animUI.dock = False
    
-        animUI._showUI()
-        animUI.ANIM_UI_OPTVARS['AnimationUI']['ui_docked'] = animUI.dock
-        animUI.__uiCache_storeUIElements()
-        
         RED_ANIMATION_UI=animUI
         if callable(RED_ANIMATION_UI_OPENCALLBACK):
             try:
@@ -499,6 +501,10 @@ class AnimationUI(object):
                 RED_ANIMATION_UI_OPENCALLBACK(animUI)
             except:
                 log.warning('RED_ANIMATION_UI_OPENCALLBACK failed')
+                
+        animUI._showUI()
+        animUI.ANIM_UI_OPTVARS['AnimationUI']['ui_docked'] = animUI.dock
+        animUI.__uiCache_storeUIElements()
     
     def __uicloseEvent(self,*args):
         print 'AnimUI close event called'
@@ -2157,6 +2163,12 @@ class AnimationUI(object):
                 
             AnimationUI = self.ANIM_UI_OPTVARS['AnimationUI']
 
+            if self.basePreset:
+                try:
+                    cmds.textScrollList(self.uitslPresets, e=True, si=self.basePreset)
+                    self.__uiPresetSelection(Read=True)
+                except:
+                    log.debug('given basePreset not found')
             if 'filterNode_preset' in AnimationUI and AnimationUI['filterNode_preset']:
                 cmds.textScrollList(self.uitslPresets, e=True, si=AnimationUI['filterNode_preset'])
                 self.__uiPresetSelection(Read=True)  # ##not sure on this yet????
