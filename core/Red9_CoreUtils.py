@@ -1892,6 +1892,8 @@ class LockChannels(object):
         :param mode: 'lock', 'unlock', 'hide', 'unhide', 'fullkey', 'lockall'
         :param hierarchy: process all child nodes, default is now False
         :param usedDefined: process all UserDefined attributes on all nodes
+        
+        >>> r9Core.LockChannels.processState(nodes, attrs=["sx", "sy", "sz", "v"], mode='lockall')
         '''
         userDefAttrs=set()
         if not nodes:
