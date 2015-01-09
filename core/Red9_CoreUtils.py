@@ -2290,6 +2290,7 @@ def floatIsEqual(a, b, tolerance=0.01, allowGimbal=True):
 
 def valueToMappedRange(value, currentMin, currentMax, givenMin, givenMax):
     '''
+    Acts like the setRange node but code side
     we have a min max range, lets say 0.5 - 15 and we want to map the
     range to a new range say 0-1 and return where the value given is
     in that new range
