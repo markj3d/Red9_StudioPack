@@ -1712,12 +1712,32 @@ class MetaClass(object):
         cmds.select(self.mNode, *args, **kws)
         
     @nodeLockManager
-    def rename(self, name):
+    def rename(self, name, renameChildLinks=False):
         '''
         rename the mNode itself, again because we get the mNode via the MObject renaming is handled correctly
+        
+        :param name: new name for the mNode
+        :param renameChildLinks: set to False by default, this will rename connections back to the mNode 
+            from children who are connected directly to it, via an attr that matches the current mNode name. 
+            These connected Attrs will be renamed to reflect the change in node name
         '''
+        currentName=self.shortName()
         cmds.rename(self.mNode, name)
-        #self.mNode=name
+        # UNDER TEST
+        if renameChildLinks:
+            plugs=cmds.listConnections(self.mNode,s=True,d=True,p=True)
+            for plug in plugs:
+                split=plug.split('.')
+                attr=split[-1].split('[')[0]
+                child=split[0]
+                #print 'attr : ', attr, ' child : ', child, ' plug : ', plug, ' curName : ', currentName
+                if attr==currentName:
+                    try:
+                        child=MetaClass(child)
+                        child.renameAttr(attr, name)
+                        log.debug('Renamed Child attr to match new mNode name : %s.%s' % (child.mNode, attr))
+                    except:
+                        log.debug('Failed to rename attr : %s on node : %s' % (attr, child.mNode))
               
     def delete(self):
         '''
