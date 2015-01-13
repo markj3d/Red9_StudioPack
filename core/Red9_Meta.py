@@ -233,13 +233,15 @@ def registerMClassNodeCache(mNode):
     :param mNode: instantiated mNode to add
     '''
     global RED9_META_NODECACHE
+    version=r9Setup.mayaVersion()
     #UUID=None
-    if mNode.hasAttr('UUID'):
+    if mNode.hasAttr('UUID') or version>=2015:
         try:
-            if r9Setup.mayaVersion()<=2015:
+            if version<=2015:
                 UUID=mNode.setUUID()
             else:
-                UUID=mNode.UUID
+                UUID=cmds.ls(mNode.mNode, uuid=True)[0]
+            print 'UUID found from node : ', UUID
             if RED9_META_NODECACHE or not UUID in RED9_META_NODECACHE.keys():
                 log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
                 RED9_META_NODECACHE[UUID]=mNode
@@ -259,7 +261,11 @@ def getMetaFromCache(mNode):
     :param mNode: str(name) of node from DAG
     '''
     try:
-        UUID=cmds.getAttr('%s.UUID' % mNode)
+        if r9Setup.mayaVersion()<=2015:
+            UUID=cmds.getAttr('%s.UUID' % mNode)
+        else:
+            UUID=cmds.ls(mNode, uuid=True)[0]
+            print '2016 UUID ', UUID
         if UUID in RED9_META_NODECACHE.keys():
             try:
                 if RED9_META_NODECACHE[UUID].isValidMObject():
@@ -2175,7 +2181,7 @@ class MetaClass(object):
             return mNodes[0]
 
     @r9General.Timer
-    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[]):
+    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False):
         '''
         This finds all UserDefined attrs of type message and returns all connected nodes
         This is now being run in the MetaUI on doubleClick. This is a generic call, implemented
@@ -2187,6 +2193,7 @@ class MetaClass(object):
         :param mAttrs: only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)
         :param cAttrs: only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)
         :param nAttrs: search returned MayaNodes for given set of attrs and only return matched nodes
+        :param asMeta: return instantiated mNodes regardless of type
         
         .. note:: 
             mAttrs is only searching attrs on the mNodes themselves, not the children
@@ -2217,7 +2224,7 @@ class MetaClass(object):
                                             break
             else:
                 log.debug('no matching attrs : %s found on node %s' % (cAttrs,node))
-        if self._forceAsMeta:
+        if self._forceAsMeta or asMeta:
             return [MetaClass(node) for node in children]
         return children
     
