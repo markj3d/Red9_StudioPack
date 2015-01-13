@@ -2457,8 +2457,10 @@ class MetaRig(MetaClass):
         for a message link via the attr "exportSkeletonRoot" to the skeletons root jnt
         always returns a list!
         '''
-        if self.hasAttr('exportSkeletonRoot'):
+        if self.hasAttr('exportSkeletonRoot') and self.exportSkeletonRoot:
             return self.exportSkeletonRoot
+        elif self.hasAttr('skeletonRoot') and self.skeletonRoot:
+            return self.skeletonRoot
         return None
     
     def getFacialSystem(self):
@@ -2482,7 +2484,7 @@ class MetaRig(MetaClass):
 #            if cmds.attributeQuery(self.parentSwitchAttr, exists=True,node=child):
 #                parentSwitches.append((child, self.parentSwitchAttr, cmds.getAttr('%s.%s' % (child,self.parentSwitchAttr))))
 #        return parentSwitches
-#
+
 
     #Do we supply a few generic presets?
     #---------------------------------------------------------------------------------
