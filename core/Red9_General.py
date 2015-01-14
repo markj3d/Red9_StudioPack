@@ -434,7 +434,7 @@ class SceneRestoreContext(object):
             self.dataStore['panelStore'][panel]['settings'] = cmds.modelEditor(panel, q=True, sts=True)
             activeCam = cmds.modelPanel(panel, q=True, camera=True)
             if not cmds.nodeType(activeCam) == 'camera':
-                activeCam = cmds.listRelatives(activeCam)[0]
+                activeCam = cmds.listRelatives(activeCam, f=True)[0]
             self.dataStore['panelStore'][panel]['activeCam'] = activeCam
                         
         #camera management
@@ -472,18 +472,24 @@ class SceneRestoreContext(object):
         
         #panel management
         for panel, data in self.dataStore['panelStore'].items():
-            cmdString = data['settings'].replace('$editorName', panel)
-            mel.eval(cmdString)
-            log.info("Restored Panel Settings Data >> %s" % panel)
-            mel.eval('lookThroughModelPanel("%s","%s")' % (data['activeCam'], panel))
-            log.info("Restored Panel Active Camera Data >> %s >> cam : %s" % (panel, data['activeCam']))
+            try:
+                cmdString = data['settings'].replace('$editorName', panel)
+                mel.eval(cmdString)
+                log.info("Restored Panel Settings Data >> %s" % panel)
+                mel.eval('lookThroughModelPanel("%s","%s")' % (data['activeCam'], panel))
+                log.info("Restored Panel Active Camera Data >> %s >> cam : %s" % (panel, data['activeCam']))
+            except:
+                log.debug("Failed to fully Restore ActiveCamera Data >> %s >> cam : %s" % (panel, data['activeCam']))
             
         # camera management
         for cam, settings in self.dataStore['cameraTransforms'].items():
-            cmds.setAttr('%s.translate' % cam, settings[0][0][0], settings[0][0][1], settings[0][0][2])
-            cmds.setAttr('%s.rotate' % cam, settings[1][0][0], settings[1][0][1], settings[1][0][2])
-            cmds.setAttr('%s.scale' % cam, settings[2][0][0], settings[2][0][1], settings[2][0][2])
-            log.info('Restored Default Camera Transform Data : % s' % cam)
+            try:
+                cmds.setAttr('%s.translate' % cam, settings[0][0][0], settings[0][0][1], settings[0][0][2])
+                cmds.setAttr('%s.rotate' % cam, settings[1][0][0], settings[1][0][1], settings[1][0][2])
+                cmds.setAttr('%s.scale' % cam, settings[2][0][0], settings[2][0][1], settings[2][0][2])
+                log.info('Restored Default Camera Transform Data : % s' % cam)
+            except:
+                log.debug("Failed to fully Restore Default Camera Transform Data : % s" % cam)
 
         #sound management
         if self.dataStore['displaySound']:
