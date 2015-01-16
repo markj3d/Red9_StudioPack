@@ -497,6 +497,7 @@ class SceneRestoreContext(object):
             log.info('Restored Audio setup')
         else:
             cmds.timeControl(self.gPlayBackSlider, e=True, ds=0)
+        log.debug('Scene Restored fully')
         return True
     
                     
