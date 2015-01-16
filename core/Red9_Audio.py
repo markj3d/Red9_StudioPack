@@ -389,6 +389,19 @@ class AudioHandler(object):
         for node in self.audioNodes:
             node.offsetTime(offset)
             
+    def offsetRipple(self):
+        '''
+        offset all audioNodes so that they ripple in the
+        order of self.audioNodes
+        '''
+        offset=None
+        for node in self.audioNodes:
+            if not offset:
+                offset=node.endFrame
+            else:
+                node.offsetTime(offset)
+                offset=node.endFrame
+                 
     def offsetTo(self, startFrame):
         '''
         offset all audio such that they start relative to a given frame,
