@@ -51,53 +51,13 @@ def getFolderPoseHandler(posePath):
         poseHandler=poseHandlers[0]
     return poseHandler
 
-def addPoseReference(frame,posefile):
-    pass
 
-class PoseData(object):
+class DataMap(object):
     '''
-    The PoseData is stored per node inside an internal dict as follows:
-    
-    >>> node = '|group|Rig|Body|TestCtr'
-    >>> poseDict['TestCtr'] 
-    >>> poseDict['TestCtr']['ID'] = 0   index in the Hierarchy used to build the data up 
-    >>> poseDict['TestCtr']['longName'] = '|group|Rig|Body|TestCtr' 
-    >>> poseDict['TestCtr']['attrs']['translateX'] = 0.5 
-    >>> poseDict['TestCtr']['attrs']['translateY'] = 1.0 
-    >>> poseDict['TestCtr']['attrs']['translateZ'] = 22 
-    >>> 
-    >>> #if we're storing as MetaData we also include:
-    >>> poseDict['TestCtr']['metaData']['metaAttr'] = CTRL_L_Thing    = the attr that wires this node to the MetaSubsystem
-    >>> poseDict['TestCtr']['metaData']['metaNodeID'] = L_Arm_System  = the metaNode this node is wired to via the above attr
-    
-    Matching of nodes against this dict is via either the nodeName, nodeIndex (ID) or
-    the metaData block.
-    
-    New functionality allows you to use the main calls to cache a pose and reload it
-    from this class instance, wraps things up nicely for you:
-    
-        >>> pose=r9Pose.PoseData()
-        >>> pose.metaPose=True
-        >>>
-        >>> #cache the pose (just don't pass in a filePath)
-        >>> pose.poseSave(cmds.ls(sl=True))
-        >>> #reload the cache you just stored
-        >>> pose.poseLoad(cmds.ls(sl=True))
-    
-    .. note::
-    
-        If the root node of the hierarchy passed into the poseSave() has a message attr 
-        'exportSkeletonRoot' or 'animSkeletonRoot' and that message is connected to a 
-        skeleton then the pose will also include an internal 'skeleton' pose, storing all 
-        child joints into a separate block in the poseFile that can be used by the 
-        PoseCompare class/function. 
-        
-        For metaData based rigs this calls a function on the metaRig class getSkeletonRoots()
-        which wraps the 'exportSkeletonRoot' attr, allowing you to overload this behaviour
-        in your own MetaRig subclasses.
+    New base class for handling data
     '''
     
-    def __init__(self, filterSettings=None):
+    def __init__(self, filterSettings=None, *args, **kws):
         '''
         I'm not passing any data in terms of nodes here, We'll deal with
         those in the PoseSave and PoseLoad calls. Leaves this open for
@@ -106,18 +66,13 @@ class PoseData(object):
         self.poseDict={}
         self.infoDict={}
         self.skeletonDict={}
-        self.posePointCloudNodes=[]
         self.filepath=''
         self.mayaUpAxis=r9Setup.mayaUpAxis()
         self.thumbnailRes=[128,128]
-        self.poseCurrentCache={}  # cached dict storing the current state of the objects prior to applying the pose
         
         self.__metaPose=False
         self.metaRig=None  # filled by the code as we process
         self.matchMethod='base'  # method used to match nodes internally in the poseDict
-        self.relativePose=False
-        self.relativeRots='projected'
-        self.relativeTrans='projected'
         self.useFilter=True
         self.prioritySnapOnly=False
         self.skipAttrs=[]  # attrs to completely ignore in any pose handling
@@ -132,7 +87,6 @@ class PoseData(object):
         else:
             self.settings=r9Core.FilterNode_Settings()
             self.__metaPose=self.settings.metaRig
-    
         self.settings.printSettings()
     
     #Property so we sync the settings metaRig bool to the class metaPose bool
@@ -191,19 +145,88 @@ class PoseData(object):
         if not type(nodes)==list:
             nodes=[nodes]
         if self.useFilter:
-            log.debug('getNodes - useFilter=True : no custom poseHandler')
+            log.debug('getNodes - useFilter=True : filteActive=True  - no custom poseHandler')
             if self.settings.filterIsActive():
                 return r9Core.FilterNode(nodes,self.settings).ProcessFilter()  # main node filter
+            else:
+                log.debug('getNodes - useFilter=True : filteActive=False - no custom poseHandler')
+                return nodes
         else:
             log.debug('getNodes - useFilter=False : no custom poseHandler')
             return nodes
         
-                      
-    # Save Block Build the poseDict data ---------------------------------------------
-       
-    def _buildInfoBlock(self):
+    def getSkippedAttrs(self, rootNode=None):
         '''
-        Basic info for the pose file, this could do with expanding
+        the returned list of attrs from this function will be
+        COMPLETELY ignored by the pose system. They will not be saved
+        or loaded. Currently only supported under MetaRig
+        '''
+        if self.metaRig and self.metaRig.hasAttr('poseSkippedAttrs'):
+            return self.metaRig.poseSkippedAttrs
+        return []
+                      
+                      
+    # Data Collection - Build the dataMap ---------------------------------------------
+             
+    @r9General.Timer
+    def _collectNodeData_keyframes(self, node, key):
+        '''
+        Capture and build keyframe data from this node and fill the
+        data to the datamap[key]
+        '''
+        attrs = r9Anim.getChannelBoxAttrs(node=node, asDict=True, incLocked=False)
+        if not attrs['keyable']:
+            return
+        else:
+            if not 'keydata' in self.poseDict[key]:
+                self.poseDict[key]['keydata'] = {}
+        for attr in attrs['keyable']:
+            #print 'node : ', node, 'attr : ', attr
+            channel = '%s.%s' % (node, attr)
+            keyList = cmds.keyframe(channel, q=True, vc=True, tc=True, t=())
+            tangents = cmds.keyTangent(channel, q=True, t=(), itt=True, ott=True)
+            if keyList:
+                self.poseDict[key]['keydata'][attr] = ''
+                for keyframe, value, t1, t2 in zip(keyList[0::2], keyList[1::2], tangents[0::2], tangents[1::2]):
+                    self.poseDict[key]['keydata'][attr] += '(%.02f,%f,"%s","%s"),' % (keyframe, value, t1, t2)
+                # save key & tangent data
+                #for keyframe, value in zip(keyList[0::2], keyList[1::2]):
+                #    tangentData = cmds.keyTangent(channel, q=True, t=(keyframe, keyframe), itt=True, ott=True)
+                #    self.poseDict[key]['attrs'][attr] += '(%.02f,%f,"%s","%s"),' % (keyframe, value, tangentData[0], tangentData[1])
+   
+    def _collectNodeData_attrs(self, node, key):
+        '''
+        Capture and build attribute data from this node and fill the
+        data to the datamap[key]
+        '''
+        channels=r9Anim.getSettableChannels(node,incStatics=True)
+        if channels:
+            self.poseDict[key]['attrs']={}
+            for attr in channels:
+                if attr in self.skipAttrs:
+                    log.debug('Skipping attr as requested : %s' % attr)
+                    continue
+                try:
+                    if cmds.getAttr('%s.%s' % (node,attr),type=True)=='TdataCompound':  # blendShape weights support
+                        attrs=cmds.aliasAttr(node, q=True)[::2]  # extract the target channels from the multi
+                        for attr in attrs:
+                            self.poseDict[key]['attrs'][attr]=cmds.getAttr('%s.%s' % (node,attr))
+                    else:
+                        self.poseDict[key]['attrs'][attr]=cmds.getAttr('%s.%s' % (node,attr))
+                except:
+                    log.debug('%s : attr is invalid in this instance' % attr)
+                     
+    def _collectNodeData(self, node, key):
+        '''
+        To Be Overloaded : what data to push into the main dataMap 
+        for each node found collected
+        '''
+        self._collectNodeData_keyframes(node,key)
+        self._collectNodeData_attrs(node, key)
+    
+    def _buildBlock_info(self):
+        '''
+        Generic Info block for the data file, this could do with expanding
         '''
         self.infoDict['author']=getpass.getuser()
         self.infoDict['date']=time.ctime()
@@ -217,8 +240,8 @@ class PoseData(object):
                 self.infoDict['rigType'] = self.metaRig.rigType
         if self.rootJnt:
             self.infoDict['skeletonRootJnt']=self.rootJnt
-        
-    def _buildPoseDict(self, nodes):
+                
+    def _buildBlock_poseDict(self, nodes):
         '''
         Build the internal poseDict up from the given nodes. This is the
         core of the Pose System
@@ -239,50 +262,19 @@ class PoseData(object):
             if self.metaPose:
                 self.poseDict[key]['metaData']=getMetaDict(node)  # metaSystem the node is wired too
 
-            channels=r9Anim.getSettableChannels(node,incStatics=True)
-            if channels:
-                self.poseDict[key]['attrs']={}
-                for attr in channels:
-                    if attr in self.skipAttrs:
-                        log.debug('Skipping attr as requested : %s' % attr)
-                        continue
-                    try:
-                        if cmds.getAttr('%s.%s' % (node,attr),type=True)=='TdataCompound':  # blendShape weights support
-                            attrs=cmds.aliasAttr(node, q=True)[::2]  # extract the target channels from the multi
-                            for attr in attrs:
-                                self.poseDict[key]['attrs'][attr]=cmds.getAttr('%s.%s' % (node,attr))
-                        else:
-                            self.poseDict[key]['attrs'][attr]=cmds.getAttr('%s.%s' % (node,attr))
-                    except:
-                        log.debug('%s : attr is invalid in this instance' % attr)
+            self._collectNodeData(node, key)
 
-    def _buildSkeletonData(self, rootJnt):
+    def _buildBlocks_to_run(self, nodes):
         '''
-        :param rootNode: root of the skeleton to process
+        To Be Overloaded : What capture routines to run in order to build the DataMap
         '''
-        self.skeletonDict={}
-        if not rootJnt:
-            log.info('skeleton rootJnt joint was not found')
-            return
-        
-        fn=r9Core.FilterNode(rootJnt)
-        fn.settings.nodeTypes='joint'
-        fn.settings.incRoots=False
-        skeleton=fn.ProcessFilter()
-        
-        for jnt in skeleton:
-            key=r9Core.nodeNameStrip(jnt)
-            self.skeletonDict[key]={}
-            self.skeletonDict[key]['attrs']={}
-            for attr in ['translateX','translateY','translateZ', 'rotateX','rotateY','rotateZ']:
-                try:
-                    self.skeletonDict[key]['attrs'][attr]=cmds.getAttr('%s.%s' % (jnt,attr))
-                except:
-                    log.debug('%s : attr is invalid in this instance' % attr)
+        self.poseDict={}
+        self._buildBlock_info()
+        self._buildBlock_poseDict(nodes)
 
-    def buildInternalPoseData(self, nodes):
+    def buildDataMap(self, nodes):
         '''
-        build the internal pose dict's, useful as a separate func so it
+        build the internal dataMap dict, useful as a separate func so it
         can be used in the PoseCompare class easily. This is the main internal call
         for managing the actual pose data for save
         '''
@@ -326,12 +318,108 @@ class PoseData(object):
         if not nodesToStore:
             raise IOError('No Matching Nodes found to store the pose data from')
         
-        self.poseDict={}
-        self._buildInfoBlock()
-        self._buildPoseDict(nodesToStore)
-        self._buildSkeletonData(self.rootJnt)
+        self._buildBlocks_to_run(nodesToStore)
         
+    
+    # Data Mapping - Apply the dataMap ------------------------------------------------
+
+    def _matchNodes_to_file(self, nodes):
+        '''
+        pre-loader function that processes all the nodes and data prior to
+        actually calling the load... why? this is for the poseMixer for speed.
+        This reads the file, matches the nodes to the internal file data and fills
+        up the self.matchedPairs data [(src,dest),(src,dest)]
+        '''
+        if not type(nodes)==list:
+            nodes=[nodes]  # cast to list for consistency
+            
+        if self.metaPose:
+            self.setMetaRig(nodes[0])
+            
+        if self.filepath and not os.path.exists(self.filepath):
+            raise StandardError('Given Path does not Exist')
+                
+        if self.filepath and self.hasFolderOverload():  # and useFilter:
+            nodesToLoad = self.getNodesFromFolderConfig(nodes, mode='load')
+        else:
+            nodesToLoad=self.getNodes(nodes)
+        if not nodesToLoad:
+            raise StandardError('Nothing selected or returned by the filter to load the pose onto')
         
+        if self.filepath:
+            self._readPose(self.filepath)
+            log.info('Pose Read Successfully from : %s' % self.filepath)
+
+        if self.metaPose:
+            if 'metaPose' in self.infoDict and self.metaRig:
+                try:
+                    if eval(self.infoDict['metaPose']):
+                        self.matchMethod = 'metaData'
+                except:
+                    self.matchMethod = 'metaData'
+            else:
+                log.debug('Warning, trying to load a NON metaPose to a MRig - switching to NameMatching')
+        
+        #fill the skip list, these attrs will be totally ignored by the code
+        self.skipAttrs=self.getSkippedAttrs(nodes[0])
+                 
+        #Build the master list of matched nodes that we're going to apply data to
+        #Note: this is built up from matching keys in the poseDict to the given nodes
+        self.matchedPairs = self._matchNodesToPoseData(nodesToLoad)
+        
+        return nodesToLoad
+    
+    @r9General.Timer
+    def _applyData_attrs(self, *args, **kws):
+        '''
+        Load Example for attrs : 
+        use self.matchedPairs for the process list of pre-matched 
+        tuples of (poseDict[key], node in scene)
+        '''
+        for key, dest in self.matchedPairs:
+            log.debug('Applying Key Block : %s' % key)
+            try:
+                if not 'attrs' in self.poseDict[key]:
+                    continue
+                for attr, val in self.poseDict[key]['attrs'].items():
+                    try:
+                        val = eval(val)
+                    except:
+                        pass
+                    log.debug('node : %s : attr : %s : val %s' % (dest, attr, val))
+                    try:
+                        cmds.setAttr('%s.%s' % (dest, attr), val)
+                    except StandardError, err:
+                        log.debug(err)
+            except:
+                log.debug('Pose Object Key : %s : has no Attr block data' % key)
+                
+    @r9General.Timer
+    def _applyData_keyframes(self, offset=0.0, *args, **kws):
+        '''
+        Load Example for keyframe data : 
+        use self.matchedPairs for the process list of pre-matched 
+        tuples of (poseDict[key], node in scene)
+        '''
+        for key, dest in self.matchedPairs:
+            log.debug('Applying Key Block : %s' % key)
+            if not 'keydata' in self.poseDict[key]:
+                continue
+            for attr, keydata in self.poseDict[key]['keydata'].items():
+                try:
+                    chn='%s.%s' % (dest, attr)
+                    #log.debug('node : %s : attr : %s : keydata : %s' % (dest, attr, str(keydata)))
+                    for ktime, value, inTan, outTan in eval(keydata):
+                        cmds.setKeyframe(chn, t=ktime, v=value, itt=inTan, ott=outTan)
+                except StandardError, err:
+                    log.debug('failed to set animData for key : %s.%s' % (dest,attr))
+                
+    def _applyData(self, *args, **kws):
+        '''
+        To Be Overloaded
+        '''
+        self._applyData_keyframes()
+                  
     # Process the data -------------------------------------------------
                                               
     def _writePose(self, filepath):
@@ -366,62 +454,7 @@ class PoseData(object):
                 raise StandardError('Given filepath doesnt not exist : %s' % filename)
         else:
             raise StandardError('No FilePath given to read the pose from')
-    
-    def _cacheCurrentNodeStates(self):
-        '''
-        this is purely for the _applyPose with percent and optimization for the UI's
-        '''
-        log.info('updating the currentCache')
-        self.poseCurrentCache={}
-        for key, dest in self.matchedPairs:
-            log.debug('caching current node data : %s' % key)
-            self.poseCurrentCache[key]={}
-            if not 'attrs' in self.poseDict[key]:
-                continue
-            for attr, _ in self.poseDict[key]['attrs'].items():
-                try:
-                    self.poseCurrentCache[key][attr]=cmds.getAttr('%s.%s' % (dest, attr))
-                except:
-                    log.debug('Attr mismatch on destination : %s.%s' % (dest, attr))
-                
-    @r9General.Timer
-    def _applyPose(self, percent=None):
-        '''
-        :param matchedPairs: pre-matched tuples of (poseDict[key], node in scene)
-        '''
-        mix_percent=False  # gets over float values of zero from failing
-        if percent or type(percent)==float:
-            mix_percent=True
-            if not self.poseCurrentCache:
-                self._cacheCurrentNodeStates()
-            
-        for key, dest in self.matchedPairs:
-            log.debug('Applying Key Block : %s' % key)
-            try:
-                if not 'attrs' in self.poseDict[key]:
-                    continue
-                for attr, val in self.poseDict[key]['attrs'].items():
-                    if attr in self.skipAttrs:
-                        log.debug('Skipping attr as requested : %s' % attr)
-                        continue
-                    try:
-                        val = eval(val)
-                    except:
-                        pass
-                    log.debug('node : %s : attr : %s : val %s' % (dest, attr, val))
-                    try:
-                        if not mix_percent:
-                            cmds.setAttr('%s.%s' % (dest, attr), val)
-                        else:
-                            current = self.poseCurrentCache[key][attr]
-                            blendVal = ((val - current) / 100) * percent
-                            # print 'loading at percent : %s (current=%s , stored=%s' % (percent,current,current+blendVal)
-                            cmds.setAttr('%s.%s' % (dest, attr), current + blendVal)
-                    except StandardError, err:
-                        log.debug(err)
-            except:
-                log.debug('Pose Object Key : %s : has no Attr block data' % key)
-                  
+                      
     @r9General.Timer
     def _matchNodesToPoseData(self, nodes):
         '''
@@ -494,77 +527,11 @@ class PoseData(object):
         if not InternalNodes:
             raise StandardError('No Matching Nodes found!!')
         return InternalNodes
-    
-    def getMaintainedAttrs(self, nodesToLoad, parentSpaceAttrs):
-        parentSwitches=[]
-        if not type(parentSpaceAttrs)==list:
-            parentSpaceAttrs=[parentSpaceAttrs]
-        for child in nodesToLoad:
-            for attr in parentSpaceAttrs:
-                if cmds.attributeQuery(attr, exists=True,node=child):
-                    parentSwitches.append((child, attr, cmds.getAttr('%s.%s' % (child,attr))))
-                    log.debug('parentAttrCache : %s > %s' % (child,attr))
-        return parentSwitches
-    
-    def getSkippedAttrs(self, rootNode=None):
-        '''
-        the returned list of attrs from this function will be
-        COMPLETELY ignored by the pose system. They will not be saved
-        or loaded. Currently only supported under MetaRig
-        '''
-        if self.metaRig and self.metaRig.hasAttr('poseSkippedAttrs'):
-            return self.metaRig.poseSkippedAttrs
-        return []
-    
-    def _poseLoad_buildcache(self, nodes):
-        '''
-        pre loader function that processes all the nodes and data prior to
-        actually calling the load... why? this is for the poseMixer for speed
-        '''
-        if not type(nodes)==list:
-            nodes=[nodes]  # cast to list for consistency
-            
-        if self.metaPose:
-            self.setMetaRig(nodes[0])
-            
-        if self.filepath and not os.path.exists(self.filepath):
-            raise StandardError('Given Path does not Exist')
-                
-        if self.filepath and self.hasFolderOverload():  # and useFilter:
-            nodesToLoad = self.getNodesFromFolderConfig(nodes, mode='load')
-        else:
-            nodesToLoad=self.getNodes(nodes)
-        if not nodesToLoad:
-            raise StandardError('Nothing selected or returned by the filter to load the pose onto')
-        
-        if self.filepath:
-            self._readPose(self.filepath)
-            log.info('Pose Read Successfully from : %s' % self.filepath)
-
-        if self.metaPose:
-            if 'metaPose' in self.infoDict and self.metaRig:
-                try:
-                    if eval(self.infoDict['metaPose']):
-                        self.matchMethod = 'metaData'
-                except:
-                    self.matchMethod = 'metaData'
-            else:
-                log.debug('Warning, trying to load a NON metaPose to a MRig - switching to NameMatching')
-        
-        #fill the skip list, these attrs will be totally ignored by the code
-        self.skipAttrs=self.getSkippedAttrs(nodes[0])
-                 
-        #Build the master list of matched nodes that we're going to apply data to
-        #Note: this is built up from matching keys in the poseDict to the given nodes
-        self.matchedPairs = self._matchNodesToPoseData(nodesToLoad)
-        
-        return nodesToLoad
-        
 
     #Main Calls ----------------------------------------
   
     @r9General.Timer
-    def poseSave(self, nodes, filepath=None, useFilter=True, storeThumbnail=True):
+    def saveData(self, nodes, filepath=None, useFilter=True, storeThumbnail=True):
         '''
         Entry point for the generic PoseSave.
         
@@ -580,7 +547,253 @@ class PoseData(object):
         if self.filepath:
             log.debug('PosePath given : %s' % filepath)
             
-        self.buildInternalPoseData(nodes)
+        self.buildDataMap(nodes)
+        
+        if self.filepath:
+            self._writePose(filepath)
+            
+            if storeThumbnail:
+                sel=cmds.ls(sl=True,l=True)
+                cmds.select(cl=True)
+                r9General.thumbNailScreen(filepath,self.thumbnailRes[0],self.thumbnailRes[1])
+                if sel:
+                    cmds.select(sel)
+        log.info('Data Saved Successfully to : %s' % filepath)
+        
+        
+    @r9General.Timer
+    def loadData(self, nodes, filepath=None, useFilter=True, *args, **kws):
+        '''
+        Entry point for the generic DataLoad.
+        
+        :param nodes:  if given load the data to only these. If given and filter=True 
+            this is the rootNode for the filter.
+        :param filepath: posefile to load - if not given the pose is loaded from a 
+            cached instance on this class.
+        :param useFilter: If the pose has an active Filter_Settings block and this 
+            is True then use the filter on the destination hierarchy.
+        '''
+        
+        if not type(nodes)==list:
+            nodes=[nodes]  # cast to list for consistency
+        
+        #push args to object - means that any poseHandler.py file has access to them
+        self.filepath = filepath
+        self.useFilter = useFilter  # used in the getNodes call
+        nodesToLoad = self._matchNodes_to_file(nodes)
+        
+        if not self.matchedPairs:
+            raise StandardError('No Matching Nodes found in the PoseFile!')
+        else:
+            if self.prioritySnapOnly:
+                #we've already filtered the hierarchy, may as well just filter the results for speed
+                nodesToLoad=r9Core.prioritizeNodeList(nodesToLoad, self.settings.filterPriority, regex=True, prioritysOnly=True)
+                nodesToLoad.reverse()
+            
+            # nodes now matched, apply the data in the dataMap
+            self._applyData()
+
+
+
+class PoseData(DataMap):
+    '''
+    The PoseData is stored per node inside an internal dict as follows:
+    
+    >>> node = '|group|Rig|Body|TestCtr'
+    >>> poseDict['TestCtr'] 
+    >>> poseDict['TestCtr']['ID'] = 0   index in the Hierarchy used to build the data up 
+    >>> poseDict['TestCtr']['longName'] = '|group|Rig|Body|TestCtr' 
+    >>> poseDict['TestCtr']['attrs']['translateX'] = 0.5 
+    >>> poseDict['TestCtr']['attrs']['translateY'] = 1.0 
+    >>> poseDict['TestCtr']['attrs']['translateZ'] = 22 
+    >>> 
+    >>> #if we're storing as MetaData we also include:
+    >>> poseDict['TestCtr']['metaData']['metaAttr'] = CTRL_L_Thing    = the attr that wires this node to the MetaSubsystem
+    >>> poseDict['TestCtr']['metaData']['metaNodeID'] = L_Arm_System  = the metaNode this node is wired to via the above attr
+    
+    Matching of nodes against this dict is via either the nodeName, nodeIndex (ID) or
+    the metaData block.
+    
+    New functionality allows you to use the main calls to cache a pose and reload it
+    from this class instance, wraps things up nicely for you:
+    
+        >>> pose=r9Pose.PoseData()
+        >>> pose.metaPose=True
+        >>>
+        >>> #cache the pose (just don't pass in a filePath)
+        >>> pose.poseSave(cmds.ls(sl=True))
+        >>> #reload the cache you just stored
+        >>> pose.poseLoad(cmds.ls(sl=True))
+    
+    .. note::
+    
+        If the root node of the hierarchy passed into the poseSave() has a message attr 
+        'exportSkeletonRoot' or 'animSkeletonRoot' and that message is connected to a 
+        skeleton then the pose will also include an internal 'skeleton' pose, storing all 
+        child joints into a separate block in the poseFile that can be used by the 
+        PoseCompare class/function. 
+        
+        For metaData based rigs this calls a function on the metaRig class getSkeletonRoots()
+        which wraps the 'exportSkeletonRoot' attr, allowing you to overload this behaviour
+        in your own MetaRig subclasses.
+    '''
+    
+    def __init__(self, filterSettings=None, *args, **kws):
+        '''
+        I'm not passing any data in terms of nodes here, We'll deal with
+        those in the PoseSave and PoseLoad calls. Leaves this open for
+        expansion
+        '''
+        super(PoseData, self).__init__(*args,**kws)
+        
+        self.poseDict={}
+        self.infoDict={}
+        self.skeletonDict={}
+        self.posePointCloudNodes=[]
+        self.filepath=''
+        self.mayaUpAxis=r9Setup.mayaUpAxis()
+        self.thumbnailRes=[128,128]
+        self.poseCurrentCache={}  # cached dict storing the current state of the objects prior to applying the pose
+        
+        self.__metaPose=False
+        self.metaRig=None  # filled by the code as we process
+        self.matchMethod='base'  # method used to match nodes internally in the poseDict
+        self.relativePose=False
+        self.relativeRots='projected'
+        self.relativeTrans='projected'
+        self.useFilter=True
+        self.prioritySnapOnly=False
+        self.skipAttrs=[]  # attrs to completely ignore in any pose handling
+        
+        # make sure we have a settings object
+        if filterSettings:
+            if issubclass(type(filterSettings), r9Core.FilterNode_Settings):
+                self.settings=filterSettings
+                self.__metaPose=self.settings.metaRig
+            else:
+                raise StandardError('filterSettings param requires an r9Core.FilterNode_Settings object')
+        else:
+            self.settings=r9Core.FilterNode_Settings()
+            self.__metaPose=self.settings.metaRig
+    
+        self.settings.printSettings()
+    
+    def _collectNodeData(self, node, key):
+        '''
+        collect the attr data from the node and add it to the poseDict[key]
+        '''
+        self._collectNodeData_attrs(node, key)
+
+    def _buildBlock_skeletonData(self, rootJnt):
+        '''
+        :param rootNode: root of the skeleton to process
+        '''
+        self.skeletonDict={}
+        if not rootJnt:
+            log.info('skeleton rootJnt joint was not found')
+            return
+        
+        fn=r9Core.FilterNode(rootJnt)
+        fn.settings.nodeTypes='joint'
+        fn.settings.incRoots=False
+        skeleton=fn.ProcessFilter()
+
+        for jnt in skeleton:
+            key=r9Core.nodeNameStrip(jnt)
+            self.skeletonDict[key]={}
+            self.skeletonDict[key]['attrs']={}
+            for attr in ['translateX','translateY','translateZ', 'rotateX','rotateY','rotateZ']:
+                try:
+                    self.skeletonDict[key]['attrs'][attr]=cmds.getAttr('%s.%s' % (jnt,attr))
+                except:
+                    log.debug('%s : attr is invalid in this instance' % attr)
+
+    def _buildBlocks_to_run(self, nodes):
+        '''
+        What capture routines to run in order to build the poseDict data
+        '''
+        self.poseDict={}
+        self._buildBlock_info()
+        self._buildBlock_poseDict(nodes)
+        self._buildBlock_skeletonData(self.rootJnt)
+
+    def _cacheCurrentNodeStates(self):
+        '''
+        this is purely for the _applyPose with percent and optimization for the UI's
+        '''
+        log.info('updating the currentCache')
+        self.poseCurrentCache={}
+        for key, dest in self.matchedPairs:
+            log.debug('caching current node data : %s' % key)
+            self.poseCurrentCache[key]={}
+            if not 'attrs' in self.poseDict[key]:
+                continue
+            for attr, _ in self.poseDict[key]['attrs'].items():
+                try:
+                    self.poseCurrentCache[key][attr]=cmds.getAttr('%s.%s' % (dest, attr))
+                except:
+                    log.debug('Attr mismatch on destination : %s.%s' % (dest, attr))
+                
+    @r9General.Timer
+    def _applyData(self, percent=None):
+        '''
+        :param percent: percent of the pose to load
+        '''
+        mix_percent=False  # gets over float values of zero from failing
+        if percent or type(percent)==float:
+            mix_percent=True
+            if not self.poseCurrentCache:
+                self._cacheCurrentNodeStates()
+            
+        for key, dest in self.matchedPairs:
+            log.debug('Applying Key Block : %s' % key)
+            try:
+                if not 'attrs' in self.poseDict[key]:
+                    continue
+                for attr, val in self.poseDict[key]['attrs'].items():
+                    if attr in self.skipAttrs:
+                        log.debug('Skipping attr as requested : %s' % attr)
+                        continue
+                    try:
+                        val = eval(val)
+                    except:
+                        pass
+                    log.debug('node : %s : attr : %s : val %s' % (dest, attr, val))
+                    try:
+                        if not mix_percent:
+                            cmds.setAttr('%s.%s' % (dest, attr), val)
+                        else:
+                            current = self.poseCurrentCache[key][attr]
+                            blendVal = ((val - current) / 100) * percent
+                            # print 'loading at percent : %s (current=%s , stored=%s' % (percent,current,current+blendVal)
+                            cmds.setAttr('%s.%s' % (dest, attr), current + blendVal)
+                    except StandardError, err:
+                        log.debug(err)
+            except:
+                log.debug('Pose Object Key : %s : has no Attr block data' % key)
+                  
+
+    #Main Calls ----------------------------------------
+  
+    @r9General.Timer
+    def poseSave(self, nodes, filepath=None, useFilter=True, storeThumbnail=True):
+        '''
+        Entry point for the generic PoseSave.
+        
+        :param nodes: nodes to store the data against OR the rootNode if the 
+            filter is active.
+        :param filepath: posefile to save - if not given the pose is cached on this 
+            class instance.
+        :param useFilter: use the filterSettings or not.
+        :param storeThumbnail: generate and store a thu8mbnail from the screen to go alongside the pose
+        '''
+        #push args to object - means that any poseHandler.py file has access to them
+        self.filepath=filepath
+        self.useFilter=useFilter
+        if self.filepath:
+            log.debug('PosePath given : %s' % filepath)
+            
+        self.buildDataMap(nodes)
         
         if self.filepath:
             self._writePose(filepath)
@@ -592,7 +805,6 @@ class PoseData(object):
                 if sel:
                     cmds.select(sel)
         log.info('Pose Saved Successfully to : %s' % filepath)
-        
         
     @r9General.Timer
     def poseLoad(self, nodes, filepath=None, useFilter=True, relativePose=False, relativeRots='projected',
@@ -629,7 +841,7 @@ class PoseData(object):
         self.useFilter = useFilter  # used in the getNodes call
         self.maintainSpaces = maintainSpaces
         
-        nodesToLoad = self._poseLoad_buildcache(nodes)
+        nodesToLoad = self._matchNodes_to_file(nodes)
         
         if not self.matchedPairs:
             raise StandardError('No Matching Nodes found in the PoseFile!')
@@ -653,7 +865,7 @@ class PoseData(object):
                     elif 'parentSpaces' in self.settings.rigData:
                         parentSpaceCache=self.getMaintainedAttrs(nodesToLoad, self.settings.rigData['parentSpaces'])
     
-            self._applyPose(percent)
+            self._applyData(percent)
 
             if self.relativePose:
                 #snap the poseCloud to the new xform of the referenced node, snap the cloud
@@ -706,7 +918,7 @@ class PoseData(object):
                 self.PosePointCloud.delete()
                 cmds.select(reference)
 
-   
+
 class PosePointCloud(object):
     '''
     PosePointCloud is the technique inside the PoseSaver used to snap the pose into
