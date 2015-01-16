@@ -154,7 +154,7 @@ def getMClassDataFromNode(node):
             log.debug('getMClassFromNode was given an already instanciated MNode')
             return node.mClass
         else:
-            raise StandardError('getMClassFromNode failed')
+            raise StandardError('getMClassFromNode failed for node : %s' % node)
 
     
 # NodeType Management ---------------------------
@@ -265,12 +265,10 @@ def getMetaFromCache(mNode):
             UUID=cmds.getAttr('%s.UUID' % mNode)
         else:
             UUID=cmds.ls(mNode, uuid=True)[0]
-            print '2016 UUID ', UUID
         if UUID in RED9_META_NODECACHE.keys():
             try:
                 if RED9_META_NODECACHE[UUID].isValidMObject():
                     log.debug('CACHE : %s Returning mNode from UUID cache! = %s' % (mNode,UUID))
-                    #print 'UUID returned from cache : ', UUID
                     return RED9_META_NODECACHE[UUID]
                 else:
                     log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
@@ -1104,6 +1102,7 @@ class MetaClass(object):
             log.debug('CACHE : Aborting __init__ on pre-cached MetaClass Object')
             return
         
+        log.debug('Meta__init__ main args :: node=%s, name=%s, nodeType=%s' % (node, name, nodeType))
         #data that will not get pushed to the Maya node
         object.__setattr__(self, '_MObject', '')
         object.__setattr__(self, '_MObjectHandle', '')
@@ -3106,7 +3105,7 @@ class MetaHUDNode(MetaClass):
         
         self.hudGroupActive=False
         self.eventTriggers=cmds.headsUpDisplay(le=True)
-        self.size='small'
+        self.blocksize='small'
         self.headsUpOnly=True
         
         self.addAttr('monitorAttrCache', value='[]', attrType='string')  # cache the HUD names so this runs between sessions
@@ -3201,9 +3200,9 @@ class MetaHUDNode(MetaClass):
                     cmds.headsUpDisplay(metaHudItem,
                                         section=section,
                                         block=block,
-                                        blockSize=self.size,
+                                        blockSize=self.blocksize,
                                         label=attr,
-                                        labelFontSize=self.size,
+                                        labelFontSize=self.blocksize,
                                         allowOverlap=True,
                                         #command=partial(getattr,self,attr),
                                         command=partial(self.__compute__,attr),
@@ -3212,9 +3211,9 @@ class MetaHUDNode(MetaClass):
                     cmds.headsUpDisplay(metaHudItem,
                                         section=section,
                                         block=block,
-                                        blockSize=self.size,
+                                        blockSize=self.blocksize,
                                         label=attr,
-                                        labelFontSize=self.size,
+                                        labelFontSize=self.blocksize,
                                         allowOverlap=True,
                                         attachToRefresh=True,
                                         command=partial(self.__compute__,attr))
