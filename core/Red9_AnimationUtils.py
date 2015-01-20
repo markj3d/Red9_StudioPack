@@ -3764,6 +3764,19 @@ class MirrorHierarchy(object):
     >>> mirror.settings.printSettings()
     >>> mirror.mirrorData(mode='Anim')
     
+    >>># Useful snippets:
+    >>># offset all selected nodes mirrorID by 5
+    >>>mirror=r9Anim.MirrorHierarchy()
+    >>>mirror.incrementIDs(cmds.ls(sl=True), offset=5)
+    >>>
+    >>># set all the mirror axis on the selected
+    >>>for node in cmds.ls(sl=True):
+    >>>    mirror.setMirrorIDs(node,axis='translateX,rotateY,rotateZ')
+    >>>
+    >>># copy mirrorId's from one node to another
+    >>>for src, dest in zip(srcNodes, destNodes):
+    >>>    mirror.copyMirrorIDs(src,dest)
+    
     TODO: We need to do a UI for managing these marker attrs and the Index lists
     
     TODO: allow the mirror block to include an offset so that if you need to inverse AND offset 
@@ -3883,6 +3896,8 @@ class MirrorHierarchy(object):
     def copyMirrorIDs(self, src, dest):
         '''
         Copy mirrorIDs between nodes, note the nodes list passed in is zipped into pairs
+        This will copy all the mirrorData from src to dest, useful for copying data between 
+        systems when the MirrorMap fails due to naming.
         '''
         pairs=zip(src, dest)
         for src, dest in pairs:
