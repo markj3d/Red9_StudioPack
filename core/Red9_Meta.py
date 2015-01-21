@@ -2485,7 +2485,7 @@ class MetaRig(MetaClass):
 #        return parentSwitches
 
 
-    #Do we supply a few generic presets?
+    # Generic presets so we can be consistent, these are really only examples
     #---------------------------------------------------------------------------------
     
     def addWristCtrl(self,node,side,axis=None):
@@ -3105,7 +3105,7 @@ class MetaHUDNode(MetaClass):
         
         self.hudGroupActive=False
         self.eventTriggers=cmds.headsUpDisplay(le=True)
-        self.blocksize='small'
+        self._blocksize='small'
         self.headsUpOnly=True
         
         self.addAttr('monitorAttrCache', value='[]', attrType='string')  # cache the HUD names so this runs between sessions
@@ -3178,7 +3178,7 @@ class MetaHUDNode(MetaClass):
         '''
         #Attributes:
         #        - Section 1, block 0, represents the top second slot of the view.
-        #        - Set the blockSize to "medium", instead of the default "small"
+        #        - Set the _blocksize to "medium", instead of the default "small"
         #        - Assigned the HUD the label: "Position"
         #        - Defined the label font size to be large
         #        - Assigned the HUD a command to run on a SelectionChanged trigger
@@ -3200,9 +3200,9 @@ class MetaHUDNode(MetaClass):
                     cmds.headsUpDisplay(metaHudItem,
                                         section=section,
                                         block=block,
-                                        blockSize=self.blocksize,
+                                        blockSize=self._blocksize,
                                         label=attr,
-                                        labelFontSize=self.blocksize,
+                                        labelFontSize=self._blocksize,
                                         allowOverlap=True,
                                         #command=partial(getattr,self,attr),
                                         command=partial(self.__compute__,attr),
@@ -3211,9 +3211,9 @@ class MetaHUDNode(MetaClass):
                     cmds.headsUpDisplay(metaHudItem,
                                         section=section,
                                         block=block,
-                                        blockSize=self.blocksize,
+                                        blockSize=self._blocksize,
                                         label=attr,
-                                        labelFontSize=self.blocksize,
+                                        labelFontSize=self._blocksize,
                                         allowOverlap=True,
                                         attachToRefresh=True,
                                         command=partial(self.__compute__,attr))
