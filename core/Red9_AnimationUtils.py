@@ -2439,7 +2439,7 @@ class AnimationUI(object):
         but only filled by the main __uiCall call
         '''
         mPoseA=r9Pose.PoseData(self.filterSettings)
-        mPoseA.buildInternalPoseData(self.__uiCB_getPoseInputNodes())
+        mPoseA.buildDataMap(self.__uiCB_getPoseInputNodes())
         compare = r9Pose.PoseCompare(mPoseA, self.getPosePath(), compareDict=compareDict)
         
         if not compare.compare():
@@ -2463,8 +2463,8 @@ class AnimationUI(object):
         poseNode = r9Pose.PoseData(self.filterSettings)
         poseNode.filepath = self.getPosePath()
         poseNode.useFilter = cmds.checkBox('uicbPoseHierarchy', q=True, v=True)
-        poseNode.matchMethod=self.matchMethod 
-        poseNode._poseLoad_buildcache(self.__uiCB_getPoseInputNodes())
+        poseNode.matchMethod=self.matchMethod
+        poseNode._matchNodes_to_data(self.__uiCB_getPoseInputNodes())
         self._poseBlendUndoChunkOpen=False
         if objs:
             cmds.select(objs)
@@ -2474,7 +2474,7 @@ class AnimationUI(object):
                 cmds.undoInfo(openChunk=True)
                 self._poseBlendUndoChunkOpen=True
                 log.debug('Opening Undo Chunk for PoseBlender')
-            poseNode._applyPose(percent=cmds.floatSliderGrp('poseBlender', q=True, v=True))
+            poseNode._applyData(percent=cmds.floatSliderGrp('poseBlender', q=True, v=True))
         
         def closeChunk(*args):
             cmds.undoInfo(closeChunk=True)
