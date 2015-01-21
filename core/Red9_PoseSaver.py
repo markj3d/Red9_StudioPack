@@ -277,6 +277,9 @@ class DataMap(object):
         build the internal dataMap dict, useful as a separate func so it
         can be used in the PoseCompare class easily. This is the main internal call
         for managing the actual pose data for save
+        
+        ..note:
+            this replaces the original pose call self.buildInternalPoseData()
         '''
         self.metaRig=None
         self.rootJnt=None
@@ -323,12 +326,15 @@ class DataMap(object):
     
     # Data Mapping - Apply the dataMap ------------------------------------------------
 
-    def _matchNodes_to_file(self, nodes):
+    def _matchNodes_to_data(self, nodes):
         '''
         pre-loader function that processes all the nodes and data prior to
         actually calling the load... why? this is for the poseMixer for speed.
         This reads the file, matches the nodes to the internal file data and fills
         up the self.matchedPairs data [(src,dest),(src,dest)]
+        
+        ..note:
+            this replaced the original call self._poseLoad_buildcache()
         '''
         if not type(nodes)==list:
             nodes=[nodes]  # cast to list for consistency
@@ -413,7 +419,7 @@ class DataMap(object):
                         cmds.setKeyframe(chn, t=ktime, v=value, itt=inTan, ott=outTan)
                 except StandardError, err:
                     log.debug('failed to set animData for key : %s.%s' % (dest,attr))
-                
+                            
     def _applyData(self, *args, **kws):
         '''
         To Be Overloaded
@@ -580,7 +586,7 @@ class DataMap(object):
         #push args to object - means that any poseHandler.py file has access to them
         self.filepath = filepath
         self.useFilter = useFilter  # used in the getNodes call
-        nodesToLoad = self._matchNodes_to_file(nodes)
+        nodesToLoad = self._matchNodes_to_data(nodes)
         
         if not self.matchedPairs:
             raise StandardError('No Matching Nodes found in the PoseFile!')
@@ -841,7 +847,7 @@ class PoseData(DataMap):
         self.useFilter = useFilter  # used in the getNodes call
         self.maintainSpaces = maintainSpaces
         
-        nodesToLoad = self._matchNodes_to_file(nodes)
+        nodesToLoad = self._matchNodes_to_data(nodes)
         
         if not self.matchedPairs:
             raise StandardError('No Matching Nodes found in the PoseFile!')
