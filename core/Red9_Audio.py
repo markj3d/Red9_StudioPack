@@ -1019,7 +1019,7 @@ class AudioToolsWrap(object):
         cmds.floatField('AudioOffsetToo', value=10)
         cmds.setParent('..')
         cmds.separator(h=15, style='none')
-        cmds.frameLayout(label='Broadcast Wav support', cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label='Broadcast Wav support', cll=True, cl=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=5, style='none')
         cmds.text(label="NOTE: These will only run if the audio is\nin the Bwav format and has internal timecode data.")
