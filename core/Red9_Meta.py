@@ -916,37 +916,46 @@ class MClassNodeUI():
         Given a single selected mNode from the UI and a single selected MAYA node, run
         connectChild with the given promtString as the attr
         '''
+        prefix=''
+        indexes=cmds.textScrollList('slMetaNodeList',q=True,sii=True)
+        if len(indexes)==1:
+            mNode=MetaClass(self.mNodes[indexes[0]-1])
+            if hasattr(mNode,'CTRL_Prefix'):
+                prefix='%s_' % mNode.CTRL_Prefix
+        else:
+            raise StandardError('Connect Call only works with a single selected mNode from the UI')
+        
         nodes=cmds.ls(sl=True, l=True)
+        if mNode.mNode in nodes:
+            nodes.remove(mNode.mNode)  # so we can never connect to ourself!
+        
         if nodes:
-            indexes=cmds.textScrollList('slMetaNodeList',q=True,sii=True)
-            if len(indexes)==1:
-                mNode=MetaClass(self.mNodes[indexes[0]-1])
-                result = cmds.promptDialog(
-                                    title='Connect node to Meta',
-                                    message='Enter Connection Attr:',
-                                    button=['OK', 'Cancel'],
-                                    defaultButton='OK',
-                                    cancelButton='Cancel',
-                                    dismissString='Cancel')
-                if result == 'OK':
-                    attr=cmds.promptDialog(query=True, text=True)
-                    print 'connecting :', nodes[0], ' to:', mNode.mNode
-                    if mNode.hasAttr(attr):
-                        if getattr(mNode, attr):
-                            result = cmds.confirmDialog(
-                                title='Attr Check:',
-                                button=['Yes', 'Cancel'],
-                                message='Confirm Attr is already connected, force connect new node?',
-                                defaultButton='Cancel',
-                                bgc=(0.5,0.1,0.1),
+            currentName=r9Core.nodeNameStrip(nodes[0])
+            result = cmds.promptDialog(
+                                title='Connect node to Meta',
+                                message='Enter Connection Attr:',
+                                button=['OK', 'Cancel'],
+                                defaultButton='OK',
+                                text=prefix+currentName,
                                 cancelButton='Cancel',
                                 dismissString='Cancel')
-                            if result == 'Yes':
-                                mNode.connectChild(nodes[0],attr)
-                    else:
-                        mNode.connectChild(nodes[0],attr)
-            else:
-                raise StandardError('Connect Call only works with a single selected mNode from the UI')
+            if result == 'OK':
+                attr=cmds.promptDialog(query=True, text=True)
+                print 'connecting :', nodes[0], ' to:', mNode.mNode
+                if mNode.hasAttr(attr):
+                    if getattr(mNode, attr):
+                        result = cmds.confirmDialog(
+                            title='Attr Check:',
+                            button=['Yes', 'Cancel'],
+                            message='Confirm : Attr is already connected, force connect current selected node?',
+                            defaultButton='Cancel',
+                            bgc=(0.5,0.1,0.1),
+                            cancelButton='Cancel',
+                            dismissString='Cancel')
+                        if result == 'Yes':
+                            mNode.connectChild(nodes[0],attr)
+                else:
+                    mNode.connectChild(nodes[0],attr)
         else:
             raise StandardError('No node selected to connect to MetaNode')
         
