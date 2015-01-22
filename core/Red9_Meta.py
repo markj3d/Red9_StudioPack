@@ -2432,7 +2432,7 @@ class MetaRig(MetaClass):
         '''
         return self.getChildren(walk, mAttrs)
         
-    def getChildren(self, walk=False, mAttrs=None, cAttrs=None, nAttrs=[]):
+    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False):
         '''
         Massively important bit of code, this is used by most bits of code
         to find the child controllers linked to this metaRig instance.
@@ -2447,7 +2447,7 @@ class MetaRig(MetaClass):
             if self.getFacialSystem():
                 cAttrs.append('%s_*' % self.FacialCore.CTRL_Prefix)
 
-        return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs)
+        return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=asMeta)
         #return self.getRigCtrls(walk=walk, mAttrs=mAttrs)
        
     def getSkeletonRoots(self):
