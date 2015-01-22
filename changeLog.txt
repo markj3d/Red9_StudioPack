@@ -170,4 +170,8 @@ Mod - Red9_Meta - New Caching system which used unique UUID's on the nodes rathe
 New - Red9_Core - Added more OS wrapping and an 'open last crash file' item in the debugging menu
 New - Red9_Meta - Added new handling for grouping and marking key classes - "mClassGrp" which allows us to mark classes in a dynamic fashion.
 New - Red9_Meta - Added new mClassGrp flag to getMetaNodes to accomodate the above new attrs
-New - Red9_Anim - Added a new 'Direct Copy' mode to the mirrorUI which stops any axis being inversed when the data is mirrored. Ideal for FK chains like fingers where you just want to switch the data left to right
+New - Red9_Meta - getChildren now accepts a new flag, asMeta which will force the returned nodes to be instantiated on return
+New - Red9_Anim - Added a new 'No Inversing' mode to the mirrorUI which stops any axis being inversed when the data is mirrored. Ideal for FK chains like fingers where you just want to switch the data left to right
+New - Red9_Anim - Added a new 'incrementIDs' call in the mirror code that allows you to shift all the mirrorIndex id's of given nodes by a given offset.
+Mod - Red9_Pose - HUGE refactoring of the codebase for this to make it more generic, lots of code renaming and a new base 'DataMap' class
+
