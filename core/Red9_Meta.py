@@ -2353,7 +2353,9 @@ def deleteEntireMetaRigStructure(searchNode=None):
 
 class MetaRig(MetaClass):
     '''
-    Initial test for a MetaRig labelling system
+    Sub-class of Meta used as the back-bone of our internal rigging
+    systems. This is the core of how we hook all our tools to meta
+    in a seamless manner and bind some core functionality.
     '''
     def __init__(self,*args,**kws):
         '''
@@ -3348,11 +3350,13 @@ class MetaTimeCodeHUD(MetaHUDNode):
     timecode_samplerate : samplerate that the linear counter was generated against 
     
     SMPTE timecode is then reconstructed like so: 
+    
     >>> r9Audio.milliseconds_to_Timecode(ref + ((count / samplerate) * 1000)) 
     >>> 
     >>> tcHUD=cFacialMeta.MetaTimeCodeHUD() 
     >>> tcHUD.addMonitoredTimecodeNode(cmds.ls(sl=True)[0]) 
     >>> tcHUD.drawHUD() 
+    
     '''
     def __init__(self, *args, **kws):
         super(MetaTimeCodeHUD, self).__init__(*args, **kws)

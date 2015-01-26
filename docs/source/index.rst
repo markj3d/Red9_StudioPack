@@ -6,7 +6,10 @@
 Welcome to Red9's documentation!
 ================================
 
-Author : Mark Jackson
+Author : Mark Jackson 
+
+CEO : Red9 Consultancy Limited 
+http://red9consultancy.com 
 
 Red9 was born out of frustration for the lack of this kind of in-depth support
 that there is in the general Maya community. I wanted to create full production

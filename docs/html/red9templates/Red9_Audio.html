@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_Audio &mdash; Red9 v1.42 documentation</title>
+    <title>Red9_Audio &mdash; Red9 v1.44 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.42',
+        VERSION:     '1.44',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 v1.42 documentation" href="../index.html" />
+    <link rel="top" title="Red9 v1.44 documentation" href="../index.html" />
     <link rel="next" title="Red9_CoreUtils" href="Red9_Core.html" />
     <link rel="prev" title="Red9_AnimationUtils" href="Red9_AnimationUtils.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="Red9_AnimationUtils.html" title="Red9_AnimationUtils"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.42 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -119,6 +119,12 @@ a &#8216;compile&#8217; flag in the playblast command but it&#8217;s never worke
 <em class="property">static </em><tt class="descname">getTimecode_from_node</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.Timecode.getTimecode_from_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>wrapper method to get the timecode back from a given node
 :param node: node containing correctly formatted timecode data</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="Red9.core.Red9_Audio.Timecode.addTimecode_to_node">
+<em class="property">static </em><tt class="descname">addTimecode_to_node</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.Timecode.addTimecode_to_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper to add the timecode attrs to a node ready for propagating</p>
 </dd></dl>
 
 </dd></dl>
@@ -323,9 +329,21 @@ NOte this is the internal timecode plus the length of the files</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioHandler.setActive">
+<tt class="descname">setActive</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.setActive" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.offsetBy">
 <tt class="descname">offsetBy</tt><big>(</big><em>offset</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.offsetBy" title="Permalink to this definition">¶</a></dt>
 <dd><p>offset all audioNode by a given frame offset</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioHandler.offsetRipple">
+<tt class="descname">offsetRipple</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.offsetRipple" title="Permalink to this definition">¶</a></dt>
+<dd><p>offset all audioNodes so that they ripple in the
+order of self.audioNodes</p>
 </dd></dl>
 
 <dl class="method">
@@ -342,9 +360,21 @@ to offset by</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioHandler.lockTimeInputs">
+<tt class="descname">lockTimeInputs</tt><big>(</big><em>state=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.lockTimeInputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>lock the time attrs of thie audio nodes so they can&#8217;t be slipped or moved by accident</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.deleteSelected">
 <tt class="descname">deleteSelected</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.deleteSelected" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioHandler.formatNodes_to_Path">
+<tt class="descname">formatNodes_to_Path</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.formatNodes_to_Path" title="Permalink to this definition">¶</a></dt>
+<dd><p>rename the sound nodes to match their internal audioPath filename</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode">
@@ -580,6 +610,18 @@ In maya.standalone the audio isn&#8217;t loaded correctly and always is of lengt
 <tt class="descname">openAudioPath</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.openAudioPath" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioNode.formatAudioNode_to_Path">
+<tt class="descname">formatAudioNode_to_Path</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.formatAudioNode_to_Path" title="Permalink to this definition">¶</a></dt>
+<dd><p>rename the AudioNode so it ties to the wav name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioNode.lockTimeInputs">
+<tt class="descname">lockTimeInputs</tt><big>(</big><em>state=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.lockTimeInputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>lock the audio in time so it can&#8217;t be accidentally shifted</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioNode.isCompiled">
 <tt class="descname">isCompiled</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.isCompiled" title="Permalink to this definition">¶</a></dt>
@@ -701,11 +743,11 @@ More info: <a class="reference external" href="http://www.ffmpeg.org/ffprobe.htm
         <li class="right" >
           <a href="Red9_AnimationUtils.html" title="Red9_AnimationUtils"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.42 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Mark Jackson.
+        &copy; Copyright 2015, Mark Jackson.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
     </div>
   </body>

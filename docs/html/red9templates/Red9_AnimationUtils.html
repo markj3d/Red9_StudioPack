@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_AnimationUtils &mdash; Red9 v1.42 documentation</title>
+    <title>Red9_AnimationUtils &mdash; Red9 v1.44 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.42',
+        VERSION:     '1.44',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 v1.42 documentation" href="../index.html" />
+    <link rel="top" title="Red9 v1.44 documentation" href="../index.html" />
     <link rel="next" title="Red9_Audio" href="Red9_Audio.html" />
     <link rel="prev" title="Welcome to Red9’s documentation!" href="../index.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="../index.html" title="Welcome to Red9’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.42 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -394,6 +394,13 @@ TODO: hook up an order based by date in here as an option to tie into the UI</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_AnimationUtils.AnimationUI.addPopupMenus_PoseHandlers">
+<tt class="descname">addPopupMenus_PoseHandlers</tt><big>(</big><em>parentPopup</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimationUI.addPopupMenus_PoseHandlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>for a given list of folders containing poseHandler files add these as 
+default &#8216;make subfolder&#8217; types to the main poseUI popup menu</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.AnimationUI.addPopupMenusFromFolderConfig">
 <tt class="descname">addPopupMenusFromFolderConfig</tt><big>(</big><em>parentPopup</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimationUI.addPopupMenusFromFolderConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>if the poseFolder has a poseHandler.py file see if it has the &#8216;posePopupAdditions&#8217; func
@@ -447,7 +454,7 @@ filtered nodes, either in hierarchies or just selected pairs.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; List of Maya nodes to process. This combines the filterSettings
 object and the MatchedNodeInputs.processMatchedPairs() call,
 making it capable of powerful hierarchy filtering and node matching methods.</li>
@@ -461,16 +468,14 @@ then it will consider the current timeLine PlaybackRange, OR if you have a
 highlighted range of time selected(in red) it&#8217;ll use this instead.</li>
 <li><strong>attributes</strong> &#8211; Only copy the given attributes[]</li>
 <li><strong>matchMethod</strong> &#8211; arg passed to the match code, sets matchMethod used to match 2 node names</li>
+<li><strong>mergeLayers</strong> &#8211; this pre-processes animLayers so that we have a single, temporary merged
+animLayer to extract a compiled version of the animData from. This gets deleted afterwards.</li>
 </ul>
-</td>
-</tr>
-<tr class="field"><th class="field-name" colspan="2">Paam mergeLayers:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first last">this pre-processes animLayers so that we have a single, temporary merged
-animLayer to extract a compiled version of the animData from. This gets deleted afterwards.</p>
 </td>
 </tr>
 </tbody>
 </table>
+<p>TODO: this needs to support &#8216;skipAttrs&#8217; param liek the copyAttrs does - needed for the snapTransforms calls</p>
 </dd></dl>
 
 <dl class="method">
@@ -536,7 +541,9 @@ all channels that are keyed have their data taken across</li>
 all channel Values on all nodes will have their data taken across</li>
 <li><strong>iterations</strong> &#8211; Number of times to process the frame.</li>
 <li><strong>matchMethod</strong> &#8211; arg passed to the match code, sets matchMethod used to match 2 node names</li>
-<li><strong>prioritySnapOnly</strong> &#8211; if True ONLY snap the nodes in the filterPriority list = Super speed up!!</li>
+<li><strong>prioritySnapOnly</strong> &#8211; if True ONLY snap the nodes in the filterPriority list withing the filterSettings object = Super speed up!!</li>
+<li><strong>snapTranslates</strong> &#8211; only snap the translate data</li>
+<li><strong>snapRotates</strong> &#8211; only snap the rotate data</li>
 </ul>
 </td>
 </tr>
@@ -764,6 +771,18 @@ pack, using a filterSettings node thats passed into the __init__</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mirror</span><span class="o">.</span><span class="n">mirrorData</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;Anim&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>&gt;&gt;&gt;# Useful snippets:
+&gt;&gt;&gt;# offset all selected nodes mirrorID by 5
+&gt;&gt;&gt;mirror=r9Anim.MirrorHierarchy()
+&gt;&gt;&gt;mirror.incrementIDs(cmds.ls(sl=True), offset=5)
+&gt;&gt;&gt;
+&gt;&gt;&gt;# set all the mirror axis on the selected
+&gt;&gt;&gt;for node in cmds.ls(sl=True):
+&gt;&gt;&gt;    mirror.setMirrorIDs(node,axis=&#8217;translateX,rotateY,rotateZ&#8217;)
+&gt;&gt;&gt;
+&gt;&gt;&gt;# copy mirrorId&#8217;s from one node to another
+&gt;&gt;&gt;for src, dest in zip(srcNodes, destNodes):
+&gt;&gt;&gt;    mirror.copyMirrorIDs(src,dest)</p>
 <p>TODO: We need to do a UI for managing these marker attrs and the Index lists</p>
 <dl class="docutils">
 <dt>TODO: allow the mirror block to include an offset so that if you need to inverse AND offset </dt>
@@ -816,6 +835,20 @@ passed in blank when needed</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_AnimationUtils.MirrorHierarchy.copyMirrorIDs">
+<tt class="descname">copyMirrorIDs</tt><big>(</big><em>src</em>, <em>dest</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy.copyMirrorIDs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy mirrorIDs between nodes, note the nodes list passed in is zipped into pairs
+This will copy all the mirrorData from src to dest, useful for copying data between 
+systems when the MirrorMap fails due to naming.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_AnimationUtils.MirrorHierarchy.incrementIDs">
+<tt class="descname">incrementIDs</tt><big>(</big><em>nodes</em>, <em>offset</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy.incrementIDs" title="Permalink to this definition">¶</a></dt>
+<dd><p>offset the mirrorIndex on selected nodes by a given offset</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.MirrorHierarchy.getNodes">
 <tt class="descname">getNodes</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy.getNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of nodes to start processing</p>
@@ -832,6 +865,13 @@ passed in blank when needed</li>
 <tt class="descname">getMirrorIndex</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy.getMirrorIndex" title="Permalink to this definition">¶</a></dt>
 <dd><p>get the mirrorIndex, these slots are used to denote matching pairs
 such that Left and Right Controllers to switch will have the same index</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_AnimationUtils.MirrorHierarchy.getMirrorCompiledID">
+<tt class="descname">getMirrorCompiledID</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy.getMirrorCompiledID" title="Permalink to this definition">¶</a></dt>
+<dd><p>This return the mirror data in a compiled mannor for the poseSaver
+such that mirror data  for a node : Center, ID 10 == Center_10</p>
 </dd></dl>
 
 <dl class="method">
@@ -1075,11 +1115,11 @@ in the sameNamespace as the controllers.</li>
         <li class="right" >
           <a href="../index.html" title="Welcome to Red9’s documentation!"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.42 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Mark Jackson.
+        &copy; Copyright 2015, Mark Jackson.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
     </div>
   </body>

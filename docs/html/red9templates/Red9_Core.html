@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_CoreUtils &mdash; Red9 v1.42 documentation</title>
+    <title>Red9_CoreUtils &mdash; Red9 v1.44 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.42',
+        VERSION:     '1.44',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 v1.42 documentation" href="../index.html" />
+    <link rel="top" title="Red9 v1.44 documentation" href="../index.html" />
     <link rel="next" title="Red9_General" href="Red9_General.html" />
     <link rel="prev" title="Red9_Audio" href="Red9_Audio.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="Red9_Audio.html" title="Red9_Audio"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.42 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -66,7 +66,7 @@ time the tools process a hierarchy it&#8217;s these classes that deal with it.</
 <tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.nodeNameStrip" title="Red9.core.Red9_CoreUtils.nodeNameStrip"><tt class="xref py py-obj docutils literal"><span class="pre">nodeNameStrip</span></tt></a>(node)</td>
 <td>Simple method to strip any <a href="#id1"><span class="problematic" id="id2">|</span></a>Path and :Namespaces: from</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.prioritizeNodeList" title="Red9.core.Red9_CoreUtils.prioritizeNodeList"><tt class="xref py py-obj docutils literal"><span class="pre">prioritizeNodeList</span></tt></a>(nList,&nbsp;priorityList[,&nbsp;...])</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.prioritizeNodeList" title="Red9.core.Red9_CoreUtils.prioritizeNodeList"><tt class="xref py py-obj docutils literal"><span class="pre">prioritizeNodeList</span></tt></a>(inputlist,&nbsp;priorityList)</td>
 <td>Simple function to force the order of a given nList such that nodes</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.sortNumerically" title="Red9.core.Red9_CoreUtils.sortNumerically"><tt class="xref py py-obj docutils literal"><span class="pre">sortNumerically</span></tt></a>(data)</td>
@@ -94,7 +94,7 @@ time the tools process a hierarchy it&#8217;s these classes that deal with it.</
 <td>compare 2 floats with tolerance.</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.valueToMappedRange" title="Red9.core.Red9_CoreUtils.valueToMappedRange"><tt class="xref py py-obj docutils literal"><span class="pre">valueToMappedRange</span></tt></a>(value,&nbsp;currentMin,&nbsp;...)</td>
-<td>we have a min max range, lets say 0.5 - 15 and we want to map the</td>
+<td>Acts like the setRange node but code side</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.distanceBetween" title="Red9.core.Red9_CoreUtils.distanceBetween"><tt class="xref py py-obj docutils literal"><span class="pre">distanceBetween</span></tt></a>(nodeA,&nbsp;nodeB)</td>
 <td>simple calculation to return the distance between 2 objects</td>
@@ -134,7 +134,7 @@ a given object DagPath ie Ns:Rig|Ns:Leg|Ns:Foot == Foot</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.prioritizeNodeList">
-<tt class="descname">prioritizeNodeList</tt><big>(</big><em>nList</em>, <em>priorityList</em>, <em>regex=True</em>, <em>prioritysOnly=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.prioritizeNodeList" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">prioritizeNodeList</tt><big>(</big><em>inputlist</em>, <em>priorityList</em>, <em>regex=True</em>, <em>prioritysOnly=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.prioritizeNodeList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple function to force the order of a given nList such that nodes
 in the given priority list are moved to the front of the list.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -593,6 +593,24 @@ return and in what format if we have multiple blendShapes on the node?</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.getBlendTargetIndex">
+<tt class="descname">getBlendTargetIndex</tt><big>(</big><em>blendNode</em>, <em>targetName</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.getBlendTargetIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>given a blendshape node return the weight index for a given targetName</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>blendNode</strong> &#8211; blendShape node to inspect</li>
+<li><strong>targetName</strong> &#8211; target Alias Name of the channel we&#8217;re trying to find the index for</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.matchNodeLists">
 <tt class="descname">matchNodeLists</tt><big>(</big><em>nodeListA</em>, <em>nodeListB</em>, <em>matchMethod='stripPrefix'</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Matches 2 given NODE LISTS by node name via various methods.</p>
@@ -756,6 +774,9 @@ in the channelBox.</p>
 </tr>
 </tbody>
 </table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r9Core</span><span class="o">.</span><span class="n">LockChannels</span><span class="o">.</span><span class="n">processState</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;sx&quot;</span><span class="p">,</span> <span class="s">&quot;sy&quot;</span><span class="p">,</span> <span class="s">&quot;sz&quot;</span><span class="p">,</span> <span class="s">&quot;v&quot;</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;lockall&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -964,7 +985,8 @@ if ripple=False we only shift clips that starts in tghe bounds of the timerange<
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.valueToMappedRange">
 <tt class="descname">valueToMappedRange</tt><big>(</big><em>value</em>, <em>currentMin</em>, <em>currentMax</em>, <em>givenMin</em>, <em>givenMax</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.valueToMappedRange" title="Permalink to this definition">¶</a></dt>
-<dd><p>we have a min max range, lets say 0.5 - 15 and we want to map the
+<dd><p>Acts like the setRange node but code side
+we have a min max range, lets say 0.5 - 15 and we want to map the
 range to a new range say 0-1 and return where the value given is
 in that new range</p>
 </dd></dl>
@@ -1080,11 +1102,11 @@ apply that as an offset matrix to a given list of nodes.</p>
         <li class="right" >
           <a href="Red9_Audio.html" title="Red9_Audio"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.42 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Mark Jackson.
+        &copy; Copyright 2015, Mark Jackson.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
     </div>
   </body>

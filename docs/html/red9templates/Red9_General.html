@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_General &mdash; Red9 v1.42 documentation</title>
+    <title>Red9_General &mdash; Red9 v1.44 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.42',
+        VERSION:     '1.44',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 v1.42 documentation" href="../index.html" />
+    <link rel="top" title="Red9 v1.44 documentation" href="../index.html" />
     <link rel="next" title="Red9_Meta" href="Red9_Meta.html" />
     <link rel="prev" title="Red9_CoreUtils" href="Red9_Core.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="Red9_Core.html" title="Red9_CoreUtils"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.42 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -95,7 +95,7 @@ This includes most of the context managers and decorators.</p>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_General.os_OpenFileDirectory" title="Red9.core.Red9_General.os_OpenFileDirectory"><tt class="xref py py-obj docutils literal"><span class="pre">os_OpenFileDirectory</span></tt></a>(path)</td>
 <td>open the given folder in the default OS browser</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_General.os_OpenFile" title="Red9.core.Red9_General.os_OpenFile"><tt class="xref py py-obj docutils literal"><span class="pre">os_OpenFile</span></tt></a>(filePath)</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.os_OpenFile" title="Red9.core.Red9_General.os_OpenFile"><tt class="xref py py-obj docutils literal"><span class="pre">os_OpenFile</span></tt></a>(filePath,&nbsp;*args)</td>
 <td>open the given file in the default program for this OS</td>
 </tr>
 </tbody>
@@ -362,8 +362,65 @@ CURRENTLY NOT BEING CALLED - switched to pyperclip.py module</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_General.os_OpenFile">
-<tt class="descname">os_OpenFile</tt><big>(</big><em>filePath</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.os_OpenFile" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">os_OpenFile</tt><big>(</big><em>filePath</em>, <em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.os_OpenFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>open the given file in the default program for this OS</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.os_formatPath">
+<tt class="descname">os_formatPath</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.os_formatPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>take the given path and format it for Maya path</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.os_listFiles">
+<tt class="descname">os_listFiles</tt><big>(</big><em>folder</em>, <em>filters=</em><span class="optional">[</span><span class="optional">]</span>, <em>byDate=False</em>, <em>fullPath=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.os_listFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple os wrap to list a dir with filters for file type and sort byDate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>folder</strong> &#8211; folder to dir list</li>
+<li><strong>filters</strong> &#8211; list of file extensions to filter for</li>
+<li><strong>byData</strong> &#8211; sort the list by modified date, newest first!</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.os_openCrashFile">
+<tt class="descname">os_openCrashFile</tt><big>(</big><em>openDir=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.os_openCrashFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the default temp dir where Maya stores it&#8217;s crash files and logs</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.os_fileCompare">
+<tt class="descname">os_fileCompare</tt><big>(</big><em>file1</em>, <em>file2</em>, <em>openDiff=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.os_fileCompare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass in 2 files for diffComparision. If files are identical, ie there are no
+differences then the code returns 0</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file1</strong> &#8211; first file to compare with second file</li>
+<li><strong>file2</strong> &#8211; second file to compare against the first</li>
+<li><strong>openDiff</strong> &#8211; if a difference was found then boot Diffmerge UI, highlighting the diff</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a stub function that requires Diffmerge.exe, you can download from 
+<a class="reference external" href="https://sourcegear.com/diffmerge/">https://sourcegear.com/diffmerge/</a>.
+Once downloaded drop it here Red9/pakcages/diffMerge.exe</p>
+</div>
 </dd></dl>
 
 </div>
@@ -417,11 +474,11 @@ CURRENTLY NOT BEING CALLED - switched to pyperclip.py module</p>
         <li class="right" >
           <a href="Red9_Core.html" title="Red9_CoreUtils"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.42 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Mark Jackson.
+        &copy; Copyright 2015, Mark Jackson.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
     </div>
   </body>

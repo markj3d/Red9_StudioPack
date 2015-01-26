@@ -10,6 +10,10 @@ This is a big concept and I'll be expanding these docs accordingly when I get mo
 Vimeo Demos:
 ------------
 
+* Develop Conference 2014 - MetaData in a Production Pipeline Video1 <https://vimeo.com/100882408>
+* Develop Conference 2014 - MetaData in a Production Pipeline Video2 <https://vimeo.com/100883383>
+* Develop Conference 2014 - MetaData in a Production Pipeline Video3 <https://vimeo.com/102463373>
+
 * MetaData part1 <https://vimeo.com/61841345> 
 * MetaData part2 <https://vimeo.com/62546103> 
 * MetaData Part3 <https://vimeo.com/64258996> 
@@ -47,6 +51,7 @@ There are also some basic examples in the Red9 Package itself found under the ex
       MetaHIKCharacterNode
       MetaHIKControlSetNode
       MetaHUDNode
+      MetaTimeCodeHUD
     
 
 
