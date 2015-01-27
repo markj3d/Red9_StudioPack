@@ -59,15 +59,19 @@ class DataMap(object):
     
     def __init__(self, filterSettings=None, *args, **kws):
         '''
-        I'm not passing any data in terms of nodes here, We'll deal with
-        those in the PoseSave and PoseLoad calls. Leaves this open for
-        expansion
+        The idea of the DataMap is to make the node handling part of any system generic.
+        This allows us to use this baseClass to build up things like poseSavers and all
+        we have to worry about is the data extraction part, all the node handling
+        and file handling is already done by this class ;)
+        
+        Note that we're not passing any data in terms of nodes here, We'll deal with
+        those in the Save and Load calls.
         '''
         self.poseDict={}
         self.infoDict={}
         self.skeletonDict={}
         self.filepath=''
-        self.mayaUpAxis=r9Setup.mayaUpAxis()
+        self.mayaUpAxis = r9Setup.mayaUpAxis()
         self.thumbnailRes=[128,128]
         
         self.__metaPose=False
@@ -650,40 +654,17 @@ class PoseData(DataMap):
         those in the PoseSave and PoseLoad calls. Leaves this open for
         expansion
         '''
-        super(PoseData, self).__init__(*args,**kws)
+        super(PoseData, self).__init__(filterSettings=filterSettings, *args,**kws)
         
         self.poseDict={}
         self.infoDict={}
         self.skeletonDict={}
         self.posePointCloudNodes=[]
-        self.filepath=''
-        self.mayaUpAxis=r9Setup.mayaUpAxis()
-        self.thumbnailRes=[128,128]
         self.poseCurrentCache={}  # cached dict storing the current state of the objects prior to applying the pose
-        
-        self.__metaPose=False
-        self.metaRig=None  # filled by the code as we process
-        self.matchMethod='base'  # method used to match nodes internally in the poseDict
         self.relativePose=False
         self.relativeRots='projected'
         self.relativeTrans='projected'
-        self.useFilter=True
-        self.prioritySnapOnly=False
-        self.skipAttrs=[]  # attrs to completely ignore in any pose handling
-        
-        # make sure we have a settings object
-        if filterSettings:
-            if issubclass(type(filterSettings), r9Core.FilterNode_Settings):
-                self.settings=filterSettings
-                self.__metaPose=self.settings.metaRig
-            else:
-                raise StandardError('filterSettings param requires an r9Core.FilterNode_Settings object')
-        else:
-            self.settings=r9Core.FilterNode_Settings()
-            self.__metaPose=self.settings.metaRig
-    
-        self.settings.printSettings()
-    
+
     def _collectNodeData(self, node, key):
         '''
         collect the attr data from the node and add it to the poseDict[key]
@@ -846,6 +827,7 @@ class PoseData(DataMap):
         self.filepath = filepath
         self.useFilter = useFilter  # used in the getNodes call
         self.maintainSpaces = maintainSpaces
+        self.mayaUpAxis = r9Setup.mayaUpAxis()
         
         nodesToLoad = self._matchNodes_to_data(nodes)
         
