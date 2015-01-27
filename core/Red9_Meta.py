@@ -241,7 +241,7 @@ def registerMClassNodeCache(mNode):
                 UUID=mNode.setUUID()
             else:
                 UUID=cmds.ls(mNode.mNode, uuid=True)[0]
-            print 'UUID found from node : ', UUID
+            #print 'UUID found from node : ', UUID
             if RED9_META_NODECACHE or not UUID in RED9_META_NODECACHE.keys():
                 log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
                 RED9_META_NODECACHE[UUID]=mNode
