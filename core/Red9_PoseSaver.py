@@ -168,8 +168,21 @@ class DataMap(object):
         if self.metaRig and self.metaRig.hasAttr('poseSkippedAttrs'):
             return self.metaRig.poseSkippedAttrs
         return []
-                      
-                      
+    
+    def getMaintainedAttrs(self, nodesToLoad, parentSpaceAttrs):
+        '''
+        Attrs returned here will be cached prior to pose load, then restored in-tact afterwards
+        '''
+        parentSwitches=[]
+        if not type(parentSpaceAttrs)==list:
+            parentSpaceAttrs=[parentSpaceAttrs]
+        for child in nodesToLoad:
+            for attr in parentSpaceAttrs:
+                if cmds.attributeQuery(attr, exists=True, node=child):
+                    parentSwitches.append((child, attr, cmds.getAttr('%s.%s' % (child,attr))))
+                    log.debug('parentAttrCache : %s > %s' % (child,attr))
+        return parentSwitches
+                 
     # Data Collection - Build the dataMap ---------------------------------------------
              
     @r9General.Timer
