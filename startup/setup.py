@@ -475,20 +475,38 @@ def sourceMelFolderContents(path):
         mel.eval('source %s' % script)
 
 
+#=========================================================================================
+# PRO PACK ------------------------------------------------------------------------------
+#=========================================================================================
+
+PRO_PACK_STUBS=None
+
 def has_pro_pack():
     '''
     Red9 Pro_Pack is available
     '''
     if os.path.exists(os.path.join(red9ModulePath(),'pro_pack')):
         return True
-    
+
+class pro_pack_error(object):
+    '''
+    fake stub to raise Pro_Pack missing error on call
+    '''
+    def __init__(self):
+        pass  # raise StandardError('Red9 Pro-Pack not Installed!!!')
+    def __getattribute__(self, name):
+        if not hasattr(self, name):  # would this create a new attribute?
+            raise AttributeError("Red9 Pro Pack is not installed!")
+
 def has_internal_systems():
     '''
     Red9 Consultancy internal modules only
     '''
     if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(red9ModulePath())),'Red9_Internals')):
         return True
-       
+
+PRO_PACK_STUBS=pro_pack_error
+      
 #=========================================================================================
 # BOOT CALL ------------------------------------------------------------------------------
 #=========================================================================================
@@ -556,6 +574,5 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
         cmds.evalDeferred("import Red9.pro_pack", lp=True)  # Unresolved Import
     if has_internal_systems():
         cmds.evalDeferred("import Red9_Internals", lp=True)  # Unresolved Import
-
-    
+           
     
