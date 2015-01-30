@@ -294,15 +294,18 @@ def upgradeSystemsToUUID(*args):
     mNode UUID cache support id
     '''
     for node in getMetaNodes():
-        if node.hasAttr('mNodeUUID'):
-            delattr(node, 'mNodeUUID')
-        if not node.hasAttr('UUID'):
-            node.addAttr('UUID', value='')
-            uuid=node.setUUID()
-            log.info('Upgraded node : %s  to UUID : %s' % (r9Core.nodeNameStrip(node.mNode), uuid))
-        if not node.hasAttr('mClassGrp'):
-            node.addAttr('mClassGrp', value='MetaClass')
-            log.info('Upgraded node : %s  to mClassGrp' % r9Core.nodeNameStrip(node.mNode))
+        try:
+            if node.hasAttr('mNodeUUID'):
+                delattr(node, 'mNodeUUID')
+            if not node.hasAttr('UUID'):
+                node.addAttr('UUID', value='')
+                uuid=node.setUUID()
+                log.info('Upgraded node : %s  to UUID : %s' % (r9Core.nodeNameStrip(node.mNode), uuid))
+            if not node.hasAttr('mClassGrp'):
+                node.addAttr('mClassGrp', value='MetaClass')
+                log.info('Upgraded node : %s  to mClassGrp' % r9Core.nodeNameStrip(node.mNode))
+        except:
+            log.info('Failed to Upgrade mNode : %s' % node)
     resetCache()
             
             
@@ -762,6 +765,7 @@ class MClassNodeUI():
         cmds.menuItem(label='Class : All Registered', command=partial(self.fillScroll,'byName'))
         cmds.menuItem(divider=True)
         cmds.menuItem(label='Connect Node to System:', command=self.__uiCB_connectNode)
+        cmds.menuItem(label='Pro:Test or Pro_PackStubs', command=lambda x:r9Setup.PRO_PACK_STUBS().test_pro_stubs())
         cmds.button(label='Refresh', command=partial(self.fillScroll))
         cmds.separator(h=15,style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7,0,0), image1='Rocket9_buttonStrap2.bmp',
@@ -910,54 +914,69 @@ class MClassNodeUI():
                                         append=('{0:<%i}:{1:}' % width).format(meta, getMClassDataFromNode(meta)),
                                         sc=lambda *args:self.selectCmd(),
                                         dcc=lambda *x:self.doubleClick())
-                    
+ 
     def __uiCB_connectNode(self, *args):
         '''
         Given a single selected mNode from the UI and a single selected MAYA node, run
         connectChild with the given promtString as the attr
         '''
-        prefix=''
         indexes=cmds.textScrollList('slMetaNodeList',q=True,sii=True)
         if len(indexes)==1:
             mNode=MetaClass(self.mNodes[indexes[0]-1])
-            if hasattr(mNode,'CTRL_Prefix'):
-                prefix='%s_' % mNode.CTRL_Prefix
         else:
             raise StandardError('Connect Call only works with a single selected mNode from the UI')
         
-        nodes=cmds.ls(sl=True, l=True)
-        if mNode.mNode in nodes:
-            nodes.remove(mNode.mNode)  # so we can never connect to ourself!
-        
-        if nodes:
-            currentName=r9Core.nodeNameStrip(nodes[0])
-            result = cmds.promptDialog(
-                                title='Connect node to Meta',
-                                message='Enter Connection Attr:',
-                                button=['OK', 'Cancel'],
-                                defaultButton='OK',
-                                text=prefix+currentName,
-                                cancelButton='Cancel',
-                                dismissString='Cancel')
-            if result == 'OK':
-                attr=cmds.promptDialog(query=True, text=True)
-                print 'connecting :', nodes[0], ' to:', mNode.mNode
-                if mNode.hasAttr(attr):
-                    if getattr(mNode, attr):
-                        result = cmds.confirmDialog(
-                            title='Attr Check:',
-                            button=['Yes', 'Cancel'],
-                            message='Confirm : Attr is already connected, force connect current selected node?',
-                            defaultButton='Cancel',
-                            bgc=(0.5,0.1,0.1),
-                            cancelButton='Cancel',
-                            dismissString='Cancel')
-                        if result == 'Yes':
-                            mNode.connectChild(nodes[0],attr)
-                else:
-                    mNode.connectChild(nodes[0],attr)
-        else:
-            raise StandardError('No node selected to connect to MetaNode')
+        r9Setup.PRO_PACK_STUBS().MetaDataUI.uiCB_connectNode(mNode)
+                           
+#    def __uiCB_connectNode(self, *args):
+#        '''
+#        Given a single selected mNode from the UI and a single selected MAYA node, run
+#        connectChild with the given promtString as the attr
+#        '''
+#        prefix=''
+#        indexes=cmds.textScrollList('slMetaNodeList',q=True,sii=True)
+#        if len(indexes)==1:
+#            mNode=MetaClass(self.mNodes[indexes[0]-1])
+#            if hasattr(mNode,'CTRL_Prefix'):
+#                prefix='%s_' % mNode.CTRL_Prefix
+#        else:
+#            raise StandardError('Connect Call only works with a single selected mNode from the UI')
+#        
+#        r9Setup.PRO_PACK_STUBS().MetaDataUI.uiCB_connectNode(mNode)
+#        
+#        nodes=cmds.ls(sl=True, l=True)
+#        if mNode.mNode in nodes:
+#            nodes.remove(mNode.mNode)  # so we can never connect to ourself!
+#
+#        if nodes:
+#            currentName=r9Core.nodeNameStrip(nodes[0])
+#            result = cmds.promptDialog(
+#                                title='Connect node to Meta',
+#                                message='Enter Connection Attr:',
+#                                button=['OK', 'Cancel'],
+#                                defaultButton='OK',
+#                                text=prefix+currentName,
+#                                cancelButton='Cancel',
+#                                dismissString='Cancel')
+#            if result == 'OK':
+#                attr=cmds.promptDialog(query=True, text=True)
+#                print 'connecting :', nodes[0], ' to:', mNode.mNode
+#                if mNode.hasAttr(attr):
+#                    if getattr(mNode, attr):
+#                        result = cmds.confirmDialog(
+#                            title='Attr Check:',
+#                            button=['Yes', 'Cancel'],
+#                            message='Confirm : Attr is already connected, force connect current selected node?',
+#                            defaultButton='Cancel',
+#                            bgc=(0.5,0.1,0.1),
+#                            cancelButton='Cancel',
+#                            dismissString='Cancel')
+#                        if result == 'Yes':
+#                            mNode.connectChild(nodes[0],attr)
+#                else:
+#                    mNode.connectChild(nodes[0],attr)
+#        else:
+#            raise StandardError('No node selected to connect to MetaNode')
         
     def printRegisteredNodeTypes(self,*args):
         print '\nRED9_META_NODETYPE_REGISTERY:\n============================='
