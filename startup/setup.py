@@ -396,7 +396,17 @@ def red9_getVersion():
 def red9_getAuthor():
     return __author__
 
-  
+def get_pro_pack(*args):
+    import Red9.core.Red9_General as r9General  # lazy load
+    result=cmds.confirmDialog(title='Red9_StudioPack : build %f' % red9_getVersion(),
+                       message=("Red9_ProPack Not Installed!\r\r"+
+                                "Contact info@red9consultancy.com for more information"),
+                       button=['Red9Consultancy.com','Get_Pro','Close'],messageAlign='center')
+    if result == 'Get_Pro':
+        log.warning('Red9 ProPack systems not yet available - watch this space!')
+    if result =='Red9Consultancy.com':
+        r9General.os_OpenFile('http://red9consultancy.com/')
+
 # BOOT FUNCTS - Add and Build --------------------------------------------------------------
     
 def addScriptsPath(path):
@@ -490,14 +500,16 @@ def has_pro_pack():
 
 class pro_pack_error(object):
     '''
-    fake stub to raise Pro_Pack missing error on call
+    fake stub class to raise the Pro_Pack missing error generically
+    for all UI calls
     '''
     def __init__(self):
-        pass  # raise StandardError('Red9 Pro-Pack not Installed!!!')
+        pass
     def __getattribute__(self, name):
         if not hasattr(self, name):  # would this create a new attribute?
-            raise AttributeError("Red9 Pro Pack is not installed!")
-
+            get_pro_pack()
+            return
+                
 def has_internal_systems():
     '''
     Red9 Consultancy internal modules only
