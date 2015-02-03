@@ -98,6 +98,7 @@ import shutil
 import Red9.packages.configobj as configobj
 
 import logging
+from Red9.startup.setup import ProPack_Error
 logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -1728,11 +1729,11 @@ class AnimationUI(object):
         cmds.menuItem(label='Open Pose File', p=parent, command=partial(self.__uiPoseOpenFile))
         cmds.menuItem(label='Open Pose Directory', p=parent, command=partial(self.__uiPoseOpenDir))
         cmds.menuItem(divider=True, p=parent)
-        cmds.menuItem('red9PoseCompareSM', l='Debug: PoseCompare', sm=True, p=parent)
-        cmds.menuItem(label='Compare against - [skeletonData]', p='red9PoseCompareSM', command=partial(self.__uiCall, 'PoseCompareSkelDict'))
-        cmds.menuItem(label='Compare against - [poseData]', p='red9PoseCompareSM', command=partial(self.__uiCall, 'PoseComparePoseDict'))
+        cmds.menuItem('red9PoseCompareSM', l='Pro : PoseCompare', sm=True, p=parent)
+        cmds.menuItem(label='Pro : Compare against - [skeletonData]', p='red9PoseCompareSM', command=partial(self.__uiCall, 'PoseCompareSkelDict'))
+        cmds.menuItem(label='Pro : Compare against - [poseData]', p='red9PoseCompareSM', command=partial(self.__uiCall, 'PoseComparePoseDict'))
 
-        cmds.menuItem(label='Debug: Copy poseHandler.py to folder', en=enableState, p=parent, command=partial(self.__uiPoseAddPoseHandler))
+        cmds.menuItem(label='Copy poseHandler.py to folder', en=enableState, p=parent, command=partial(self.__uiPoseAddPoseHandler))
         cmds.menuItem(divider=True, p=parent)
         cmds.menuItem(label='Copy Pose >> Project Poses', en=enableState, p=parent, command=partial(self.__uiPoseCopyToProject))
         
@@ -2432,26 +2433,30 @@ class AnimationUI(object):
                                                       relativeRots=relativeRots,
                                                       relativeTrans=relativeTrans,
                                                       maintainSpaces=maintainSpaces)
-        
+    
     def __PoseCompare(self, compareDict='skeletonDict', *args):
         '''
         Internal UI call for Pose Compare func, note that filterSettings is bound
         but only filled by the main __uiCall call
         '''
-        mPoseA=r9Pose.PoseData(self.filterSettings)
-        mPoseA.buildDataMap(self.__uiCB_getPoseInputNodes())
-        compare = r9Pose.PoseCompare(mPoseA, self.getPosePath(), compareDict=compareDict)
-        
-        if not compare.compare():
-            info = 'Selected Pose is different to the rigs current pose\nsee script editor for debug details'
-        else:
-            info = 'Poses are the same'
-        cmds.confirmDialog(title='Pose Compare Results',
-                            button=['Close'],
-                            message=info,
-                            defaultButton='Close',
-                            cancelButton='Close',
-                            dismissString='Close')
+        r9Setup.PRO_PACK_STUBS().AnimationUI_stubs.uiCB_poseCompare(filterSettings=self.filterSettings,
+                                                                    nodes=self.__uiCB_getPoseInputNodes(),
+                                                                    posePath=self.getPosePath(),
+                                                                    compareDict='skeletonDict')
+#         mPoseA=r9Pose.PoseData(self.filterSettings)
+#         mPoseA.buildDataMap(self.__uiCB_getPoseInputNodes())
+#         compare = r9Pose.PoseCompare(mPoseA, self.getPosePath(), compareDict=compareDict)
+#
+#         if not compare.compare():
+#             info = 'Selected Pose is different to the rigs current pose\nsee script editor for debug details'
+#         else:
+#             info = 'Poses are the same'
+#         cmds.confirmDialog(title='Pose Compare Results',
+#                             button=['Close'],
+#                             message=info,
+#                             defaultButton='Close',
+#                             cancelButton='Close',
+#                             dismissString='Close')
     
     def __PoseBlend(self):
         '''
@@ -2645,12 +2650,12 @@ class AnimationUI(object):
             elif func =='SymmetryAnim':
                 self.__MirrorPoseAnim('symmetry', 'Anim')
                 
+        except r9Setup.ProPack_Error:
+            log.warning('ProPack not Available')
         except StandardError, error:
             traceback = sys.exc_info()[2]  # get the full traceback
             raise StandardError(StandardError(error), traceback)
-        # except StandardError, error:
-        #    raise StandardError(error)
-        
+
         # close chunk
         if mel.eval('getApplicationVersionAsFloat') < 2011:
             cmds.undoInfo(closeChunk=True)

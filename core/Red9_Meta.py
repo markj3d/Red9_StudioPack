@@ -616,7 +616,7 @@ def getConnectedMetaSystemRoot(node, **kws):
             runaways+=1
             mNode=parent
 
-def convertNodeToMetaData(nodes,mClass):
+def  convertNodeToMetaData(nodes,mClass):
     '''
     pass in a node and convert it to a MetaNode, assuming that the nodeType
     is valid in the metaNodeTypesRegistry
@@ -764,8 +764,9 @@ class MClassNodeUI():
         cmds.menuItem(divider=True)
         cmds.menuItem(label='Class : All Registered', command=partial(self.fillScroll,'byName'))
         cmds.menuItem(divider=True)
-        cmds.menuItem(label='Connect Node to System:', command=self.__uiCB_connectNode)
-        cmds.menuItem(label='Pro:Test or Pro_PackStubs', command=lambda x:r9Setup.PRO_PACK_STUBS().test_pro_stubs())
+        cmds.menuItem(label='Pro: Connect Node to System', command=self.__uiCB_connectNode)
+        cmds.menuItem(label='Pro: Disconnect Nodes from System', command=self.__uiCB_disconnectNode)
+        cmds.menuItem(label='Pro: Test Pro_PackStubs', command=lambda x:r9Setup.PRO_PACK_STUBS().test_pro_stubs())
         cmds.button(label='Refresh', command=partial(self.fillScroll))
         cmds.separator(h=15,style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7,0,0), image1='Rocket9_buttonStrap2.bmp',
@@ -927,7 +928,22 @@ class MClassNodeUI():
             raise StandardError('Connect Call only works with a single selected mNode from the UI')
         
         r9Setup.PRO_PACK_STUBS().MetaDataUI.uiCB_connectNode(mNode)
-                           
+   
+    def __uiCB_disconnectNode(self,*args):
+        '''
+        Given a single selected mNode from the UI and selected MAYA nodes, run
+        disconnectChild to remove them from the metaData system
+        '''
+        indexes=cmds.textScrollList('slMetaNodeList',q=True,sii=True)
+        if len(indexes)==1:
+            mNode=MetaClass(self.mNodes[indexes[0]-1])
+        else:
+            raise StandardError('Connect Call only works with a single selected mNode from the UI')
+        
+        r9Setup.PRO_PACK_STUBS().MetaDataUI.uiCB_disconnectNode(mNode)
+         
+         
+                                 
 #    def __uiCB_connectNode(self, *args):
 #        '''
 #        Given a single selected mNode from the UI and a single selected MAYA node, run
