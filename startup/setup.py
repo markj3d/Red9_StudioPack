@@ -498,18 +498,22 @@ def has_pro_pack():
     if os.path.exists(os.path.join(red9ModulePath(),'pro_pack')):
         return True
 
-class pro_pack_error(object):
+class ProPack_Error(Exception):
     '''
-    fake stub class to raise the Pro_Pack missing error generically
-    for all UI calls
+    custom exception so we can catch it
     '''
     def __init__(self):
-        pass
-    def __getattribute__(self, name):
-        if not hasattr(self, name):  # would this create a new attribute?
-            get_pro_pack()
-            return
-                
+        get_pro_pack()
+        
+class pro_pack_missing_stub(object):
+    '''
+    Exception to raised when the the Pro_Pack is missing 
+    and the stubs are called
+    '''
+    def __init__(self):
+        raise ProPack_Error()
+
+             
 def has_internal_systems():
     '''
     Red9 Consultancy internal modules only
@@ -517,7 +521,7 @@ def has_internal_systems():
     if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(red9ModulePath())),'Red9_Internals')):
         return True
 
-PRO_PACK_STUBS=pro_pack_error
+PRO_PACK_STUBS=pro_pack_missing_stub
       
 #=========================================================================================
 # BOOT CALL ------------------------------------------------------------------------------
