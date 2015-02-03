@@ -436,7 +436,7 @@ class AnimBinderUI(object):
     def _UI(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        cmds.window(self.win, title=self.win, menuBar=True, sizeable=False, widthHeight=(300,360))
+        cmds.window(self.win, title=self.win, menuBar=True, sizeable=False, widthHeight=(300,380))
         
         cmds.menu(label='Help')
         cmds.menuItem(label='Watch MasterClass Video', c=lambda x:self._contactDetails(opentype='vimeo'))
@@ -489,7 +489,7 @@ class AnimBinderUI(object):
                     ann="Select Top Group Node of the Bound Rig", \
                     c=lambda x:pm.select(GetBoundControls(cmds.ls(sl=True,l=True))))
         cmds.setParent('..')
-        cmds.rowColumnLayout(numberOfColumns=2,columnWidth=[(1,220),(2,74)])
+        cmds.rowColumnLayout(numberOfColumns=2,columnWidth=[(1,200),(2,74)], columnSpacing=[(2,5)])
         cmds.button(label="Bake Binder", al="center", \
                     ann="Select Top Group Node of the Bound Rig", \
                     c=lambda x:BakeBinderData(cmds.ls(sl=True,l=True), self.settings.BakeDebug))
@@ -497,10 +497,14 @@ class AnimBinderUI(object):
                       onc=lambda x:self.settings.__setattr__('BakeDebug', True), \
                       ofc=lambda x:self.settings.__setattr__('BakeDebug', False))
         cmds.setParent('..')
-        cmds.separator(h=15, style="none")
-        cmds.button(label="Link Skeleton Hierarchies", al="center", \
-                    ann="Select Root joints of the source and destination skeletons to be connected", \
-                    c=lambda x:BindSkeletons(cmds.ls(sl=True)[0], cmds.ls(sl=True)[1]))
+        cmds.separator(h=10, style="none")
+        cmds.button(label="Link Skeleton Hierarchies - Direct Connect", al="center", \
+                    ann="Select Root joints of the source and destination skeletons to be connected - connect via attrs", \
+                    c=lambda x:BindSkeletons(cmds.ls(sl=True)[0], cmds.ls(sl=True)[1], method='connect'))
+        cmds.button(label="Link Skeleton Hierarchies - Constraints", al="center", \
+                    ann="Select Root joints of the source and destination skeletons to be connected - connect via parentConstraints", \
+                    c=lambda x:BindSkeletons(cmds.ls(sl=True)[0], cmds.ls(sl=True)[1], method='constrain'))
+        cmds.separator(h=10, style="none")
         cmds.button(label="MakeStabilizer", al="center", \
                     ann="Select the nodes you want to extract the motion data from", \
                     c=lambda x:MakeStabilizedNode())
@@ -509,6 +513,7 @@ class AnimBinderUI(object):
         cmds.iconTextButton(style='iconOnly', bgc=(0.7,0,0), image1='Rocket9_buttonStrap2.bmp',
                                  c=lambda *args:(r9Setup.red9ContactInfo()),h=22,w=200)
         cmds.showWindow(self.win)
+        cmds.window(self.win,e=True,h=380)
         
     @classmethod
     def Show(cls):
