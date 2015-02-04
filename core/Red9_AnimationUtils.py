@@ -1733,7 +1733,7 @@ class AnimationUI(object):
         cmds.menuItem(label='Pro : Compare against - [skeletonData]', p='red9PoseCompareSM', command=partial(self.__uiCall, 'PoseCompareSkelDict'))
         cmds.menuItem(label='Pro : Compare against - [poseData]', p='red9PoseCompareSM', command=partial(self.__uiCall, 'PoseComparePoseDict'))
 
-        cmds.menuItem(label='Copy poseHandler.py to folder', en=enableState, p=parent, command=partial(self.__uiPoseAddPoseHandler))
+        cmds.menuItem(label='Pro : Copy poseHandler.py to folder', en=enableState, p=parent, command=partial(self.__uiPoseAddPoseHandler))
         cmds.menuItem(divider=True, p=parent)
         cmds.menuItem(label='Copy Pose >> Project Poses', en=enableState, p=parent, command=partial(self.__uiPoseCopyToProject))
         
@@ -2101,34 +2101,7 @@ class AnimationUI(object):
         '''
         Copy local pose to the Project Pose Folder
         '''
-        import shutil
-        if not os.path.exists(self.posePath):
-            raise StandardError('Project Pose Path is inValid or not yet set')
-        if os.path.exists(os.path.join(self.posePath, 'poseHandler.py')):
-            raise StandardError('This folder already contains a poseHandler.py file!!')
-        #default template poseHandler.py file
-        poseHandlerTemplate=os.path.join(r9Setup.red9ModulePath(), 'examples', 'poseHandler.py')
-        
-        result = cmds.confirmDialog(
-                    title='Add Template poseHanlder.py?',
-                    message='WARNING : Advanced Option:\
-                            \n===========================\
-                            \n\nThis will copy a template poseHandler.py file into\
-                            \nthe current folder.\
-                            \n\nThis allows you to by-pass the default Node handlers\
-                            \nand gives you full control over how the node handler deals\
-                            \nwith nodes for ALL POSES in this specific folder',
-                    button=['Proceed', 'Abort'],
-                    defaultButton='Abort',
-                    cancelButton='Abort',
-                    dismissString='Abort')
-        if result == 'Proceed':
-            log.info('Copying template poseHandler.py into folder')
-            try:
-                shutil.copy2(poseHandlerTemplate, self.posePath)
-            except:
-                raise StandardError('Unable to copy poseHandler.py to directory' % self.posePath)
-            
+        r9Setup.PRO_PACK_STUBS().AnimationUI_stubs.uiCB_poseAddPoseHandler(self.posePath)
         
         
     # ------------------------------------------------------------------------------
@@ -2443,20 +2416,6 @@ class AnimationUI(object):
                                                                     nodes=self.__uiCB_getPoseInputNodes(),
                                                                     posePath=self.getPosePath(),
                                                                     compareDict='skeletonDict')
-#         mPoseA=r9Pose.PoseData(self.filterSettings)
-#         mPoseA.buildDataMap(self.__uiCB_getPoseInputNodes())
-#         compare = r9Pose.PoseCompare(mPoseA, self.getPosePath(), compareDict=compareDict)
-#
-#         if not compare.compare():
-#             info = 'Selected Pose is different to the rigs current pose\nsee script editor for debug details'
-#         else:
-#             info = 'Poses are the same'
-#         cmds.confirmDialog(title='Pose Compare Results',
-#                             button=['Close'],
-#                             message=info,
-#                             defaultButton='Close',
-#                             cancelButton='Close',
-#                             dismissString='Close')
     
     def __PoseBlend(self):
         '''
