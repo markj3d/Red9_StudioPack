@@ -308,7 +308,6 @@ def upgradeSystemsToUUID(*args):
             log.info('Failed to Upgrade mNode : %s' % node)
     resetCache()
             
-            
 def printMetaCacheRegistry():
     '''
     print the current VALID Cache of instantiated MetaNodes 
@@ -317,7 +316,7 @@ def printMetaCacheRegistry():
     '''
     cleanCache()
     for k,v in RED9_META_NODECACHE.items():
-        print k,v
+        print '%s : %s : %s' % (k,r9Core.nodeNameStrip(v.mNode),v)
  
 def cleanCache():
     '''
@@ -332,6 +331,17 @@ def cleanCache():
         except:
             log.debug('CACHE : clean failure')
 
+def removeFromCache(mNodes):
+    for k, v in RED9_META_NODECACHE.items():
+        if not hasattr(mNodes, '__iter__'):
+            mNodes=[mNodes]
+        if v in mNodes:
+            try:
+                RED9_META_NODECACHE.pop(k)
+                log.debug('CACHE : %s being Removed from the cache >> %s' % (r9Core.nodeNameStrip(k),r9Core.nodeNameStrip(v.mNode)))
+            except:
+                log.debug('CACHE : Failed to remove %s from cache')
+    
 def resetCache(*args):
     global RED9_META_NODECACHE
     RED9_META_NODECACHE={}
@@ -347,11 +357,17 @@ def getMClassNodeCache():
     return RED9_META_NODECACHE
 
 def __preDuplicateCache(*args):
+    '''
+    PRE-DUPLICATE : on the duplicate call in Maya (bound to a callback) pre-store all current mNodes
+    '''
     global __RED9_META_NODESTORE__
     __RED9_META_NODESTORE__= getMetaNodes(dataType='dag')
     #print 'pre-callback : nodelist :', __RED9_META_NODESTORE__
     
 def __poseDuplicateCache(*args):
+    '''
+    POST-DUPLICATE : if we find the duplicate node in the cache re-generate it's UUID
+    '''
     global __RED9_META_NODESTORE__
     newNodes=[node for node in getMetaNodes(dataType='dag') if not node in __RED9_META_NODESTORE__]
     for node in newNodes:
@@ -1815,9 +1831,10 @@ class MetaClass(object):
         change the current mClass type of the node and re-initialize the object
         '''
         if newMClass in RED9_META_REGISTERY:
-            self.mClass=newMClass 
-            #we reset the cache so that the UUID's are all updated to account for the change in mClass
-            resetCache()
+            removeFromCache(self)
+            self.mClass=newMClass
+            #we reset the cache so that the UUID's are all updated to account for the change in mClass  
+            #resetCache()
             return MetaClass(self.mNode, **kws)
         else:
             raise StandardError('given class is not in the mClass Registry : %s' % newMClass)
