@@ -532,7 +532,7 @@ class AnimationUI(object):
         animwindow = cmds.window(self.win, title=self.label)
         
         cmds.menuBarLayout()
-        cmds.menu(l="VimeoHelp")
+        cmds.menu(l=r9Setup.LANGUAGE_MAP.vimeo_menu)
         cmds.menuItem(l=r9Setup.LANGUAGE_MAP.AnimationUI.vimeo_walkthrough,  # "Open Vimeo > WalkThrough v1.27",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/56431983')")
         cmds.menuItem(l=r9Setup.LANGUAGE_MAP.AnimationUI.vimeo_update,  # "Open Vimeo > Update v1.40",
@@ -573,21 +573,17 @@ class AnimationUI(object):
         cmds.frameLayout(label=r9Setup.LANGUAGE_MAP.AnimationUI.copy_attrs, cll=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.copy_attrs, bgc=self.buttonBgc,
-                    ann='CopyAttributes : Modes:\n------------------------------' + \
-                     '\nDefault > Selected Object Pairs (Obj2 to Obj1), (Obj3 to Obj4)' + \
-                     '\nHierarchy > Uses Selection Filters on Hierarchy Tab' + \
-                     '\nCopyToMany > Copy data from First selected to all Subsequent nodes' + \
-                     '\nNote: This also handles CharacterSets and SelectionSets if selected, processing all members',
+                    ann=r9Setup.LANGUAGE_MAP.AnimationUI.copy_attrs_ann,
                     command=partial(self.__uiCall, 'CopyAttrs'))
        
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)])
-        self.uicbCAttrHierarchy = cmds.checkBox('uicbCAttrHierarchy', l=r9Setup.LANGUAGE_MAP.AnimationUI.hierarchy, al='left', v=False,
-                                                ann='Copy Attributes Hierarchy : Filter Hierarchies for transforms & joints then Match NodeNames',
+        self.uicbCAttrHierarchy = cmds.checkBox('uicbCAttrHierarchy', l=r9Setup.LANGUAGE_MAP.hierarchy, al='left', v=False,
+                                                ann=r9Setup.LANGUAGE_MAP.AnimationUI.copy_attrs_hierarchy_ann,
                                                 cc=lambda x: self.__uiCache_addCheckbox('uicbCAttrHierarchy'))
         self.uicbCAttrToMany = cmds.checkBox('uicbCAttrToMany', l=r9Setup.LANGUAGE_MAP.AnimationUI.copy_to_many, al='left', v=False,
-                                                ann='Copy Matching Attributes from First selected to all Subsequently selected nodes')
-        self.uicbCAttrChnAttrs = cmds.checkBox(ann='Copy only those channels selected in the channelBox',
+                                                ann=r9Setup.LANGUAGE_MAP.AnimationUI.copy_attrs_to_many_ann)
+        self.uicbCAttrChnAttrs = cmds.checkBox(ann=r9Setup.LANGUAGE_MAP.AnimationUI.cbox_attrs_ann,
                                             l=r9Setup.LANGUAGE_MAP.AnimationUI.cbox_attrs, al='left', v=False)
         cmds.setParent(self.AnimLayout)
               
@@ -598,30 +594,26 @@ class AnimationUI(object):
         cmds.frameLayout(label=r9Setup.LANGUAGE_MAP.AnimationUI.copy_keys, cll=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.copy_keys, bgc=self.buttonBgc,
-                    ann='CopyKeys : Modes:\n-------------------------' + \
-                     '\nDefault > Selected Object Pairs (Obj2 to Obj1), (Obj3 to Obj4)' + \
-                     '\nHierarchy > Uses Selection Filters on Hierarchy Tab' + \
-                     '\nCopyToMany > Copy data from First selected to all Subsequent nodes' + \
-                     '\nNote: This also handles CharacterSets and SelectionSets if selected, processing all members',
+                    ann=r9Setup.LANGUAGE_MAP.AnimationUI.copy_keys_ann,
                     command=partial(self.__uiCall, 'CopyKeys'))
        
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)], rowSpacing=[(1,5)])
-        self.uicbCKeyHierarchy = cmds.checkBox('uicbCKeyHierarchy', l=r9Setup.LANGUAGE_MAP.AnimationUI.hierarchy, al='left', v=False,
-                                            ann='Copy Keys Hierarchy : Filter Hierarchies for transforms & joints then Match NodeNames',
+        self.uicbCKeyHierarchy = cmds.checkBox('uicbCKeyHierarchy', l=r9Setup.LANGUAGE_MAP.hierarchy, al='left', v=False,
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.copy_keys_hierarchy_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbCKeyHierarchy'))
         self.uicbCKeyToMany = cmds.checkBox('uicbCKeyToMany', l=r9Setup.LANGUAGE_MAP.AnimationUI.copy_to_many, al='left', v=False,
-                                            ann='Copy Animation from First selected to all Subsequently selected nodes')
-        self.uicbCKeyChnAttrs = cmds.checkBox(ann='Copy only those channels selected in the channelBox',
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.copy_keys_to_many_ann)
+        self.uicbCKeyChnAttrs = cmds.checkBox(ann=r9Setup.LANGUAGE_MAP.AnimationUI.cbox_attrs_ann,
                                             l=r9Setup.LANGUAGE_MAP.AnimationUI.cbox_attrs, al='left', v=False)
         self.uicbCKeyRange = cmds.checkBox('uicbCKeyRange', l=r9Setup.LANGUAGE_MAP.AnimationUI.timerange, al='left', v=False,
-                                            ann='ONLY Copy Keys over PlaybackTimeRange or Selected TimeRange (in Red on the timeline)',
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.copy_keys_timerange_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbCKeyRange'))
-        self.uicbCKeyAnimLay = cmds.checkBox('uicbCKeyAnimLay', l=r9Setup.LANGUAGE_MAP.AnimationUI.merge_layers, al='left', v=False,
-                                            ann='If AnimLayers are found pre-compile the anim and copy the resulting data',
+        self.uicbCKeyAnimLay = cmds.checkBox('uicbCKeyAnimLay', l=r9Setup.LANGUAGE_MAP.AnimationUI.copy_keys_merge_layers, al='left', v=False,
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.copy_keys_merge_layers_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbCKeyAnimLay'))
         cmds.optionMenu('om_PasteMethod',
-                        ann='Paste Method Used: Default = "replace", paste method used by the copy code internally',
+                        ann=r9Setup.LANGUAGE_MAP.AnimationUI.paste_method_ann,
                         cc=partial(self.__uiCB_setCopyKeyPasteMethod))
         for preset in ["insert",
                        "replace",
@@ -644,8 +636,7 @@ class AnimationUI(object):
         cmds.frameLayout(label=r9Setup.LANGUAGE_MAP.AnimationUI.snaptransforms, cll=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.snaptransforms, bgc=self.buttonBgc,
-                     ann='Snap Selected Object Pairs (Obj2 to Obj1), (Obj4 to Obj3) or Snap Filtered Hierarchies' + \
-                    '    Note: This also handles CharacterSets if selected, processing all members',
+                     ann=r9Setup.LANGUAGE_MAP.AnimationUI.snaptransforms_ann,
                      command=partial(self.__uiCall, 'Snap'))
         cmds.separator(h=5, style='none')
 
@@ -654,27 +645,27 @@ class AnimationUI(object):
                              columnSpacing=[(1, 8), (2, 8), (3, 8)], rowSpacing=[(1,2)])
 
         self.uicbSnapRange = cmds.checkBox('uicbSnapRange', l=r9Setup.LANGUAGE_MAP.AnimationUI.timerange, al='left', v=False,
-                                            ann='Snap Nodes over PlaybackTimeRange or Selected TimeRange (in Red on the timeline)',
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.snaptransforms_timerange_ann,
                                             cc=self.__uiCB_manageSnapTime)
         self.uicbSnapTrans = cmds.checkBox('uicbStanTrans', l=r9Setup.LANGUAGE_MAP.AnimationUI.trans, al='left', v=True,
-                                           ann='Track the Translation data',
+                                           ann=r9Setup.LANGUAGE_MAP.AnimationUI.trans_ann,
                                            cc=lambda x: self.__uiCache_addCheckbox('uicbStanTrans'))
         self.uicbSnapPreCopyKeys = cmds.checkBox('uicbSnapPreCopyKeys', l=r9Setup.LANGUAGE_MAP.AnimationUI.pre_copykeys, al='left',
-                                                 ann='Copy all animation data for all channels prior to running the Snap over Time',
+                                                 ann=r9Setup.LANGUAGE_MAP.AnimationUI.pre_copykeys_ann,
                                                  en=False, v=True)
         self.uiifgSnapStep = cmds.intFieldGrp('uiifgSnapStep', l=r9Setup.LANGUAGE_MAP.AnimationUI.frmstep, en=False, value1=1, cw2=(45, 30),
-                                           ann='Frames to advance the timeline after each Process Run')
+                                              ann=r9Setup.LANGUAGE_MAP.AnimationUI.frmstep_ann)
 
-        self.uicbSnapHierarchy = cmds.checkBox('uicbSnapHierarchy', l=r9Setup.LANGUAGE_MAP.AnimationUI.hierarchy, al='left', v=False,
-                                               ann='Filter Hierarchies with given args - then Snap Transforms for matched nodes',
+        self.uicbSnapHierarchy = cmds.checkBox('uicbSnapHierarchy', l=r9Setup.LANGUAGE_MAP.hierarchy, al='left', v=False,
+                                               ann=r9Setup.LANGUAGE_MAP.AnimationUI.snaptransforms_hierarchy_ann,
                                                cc=self.__uiCB_manageSnapHierachy)
         self.uicbStanRots = cmds.checkBox('uicbStanRots', l=r9Setup.LANGUAGE_MAP.AnimationUI.rots, al='left', v=True,
                                           ann='Track the Rotational data',
                                           cc=lambda x: self.__uiCache_addCheckbox('uicbStanRots'))
-        self.uicbSnapPreCopyAttrs = cmds.checkBox(ann='Copy all Values for all channels prior to running the Snap',
-                                            l=r9Setup.LANGUAGE_MAP.AnimationUI.pre_copyattrs, al='left', en=False, v=True)
+        self.uicbSnapPreCopyAttrs = cmds.checkBox(l=r9Setup.LANGUAGE_MAP.AnimationUI.pre_copyattrs, al='left', en=False, v=True,
+                                                  ann=r9Setup.LANGUAGE_MAP.AnimationUI.pre_copyattrs_ann)
         self.uiifSnapIterations = cmds.intFieldGrp('uiifSnapIterations', l=r9Setup.LANGUAGE_MAP.AnimationUI.iteration, en=False, value1=1, cw2=(45, 30),
-                                           ann='This is the number of iterations over each hierarchy node during processing, if you get issues during snap then increase this')
+                                           ann=r9Setup.LANGUAGE_MAP.AnimationUI.iteration_ann)
 
         cmds.setParent(self.AnimLayout)
 
@@ -688,27 +679,23 @@ class AnimationUI(object):
         #cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)])
         cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 100), (2, 55), (3, 55), (4, 100)], columnSpacing=[(1, 10), (3, 5)])
         self.uicbStabRange = cmds.checkBox('uicbStabRange', l=r9Setup.LANGUAGE_MAP.AnimationUI.timerange, al='left', v=False,
-                                            ann='Process over PlaybackTimeRange or Selected TimeRange (in Red on the timeline)',
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.snaptransforms_timerange_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbStabRange'))
         self.uicbStabTrans = cmds.checkBox('uicbStabTrans', l=r9Setup.LANGUAGE_MAP.AnimationUI.trans, al='left', v=True,
-                                           ann='Track the Translation data',
+                                           ann=r9Setup.LANGUAGE_MAP.AnimationUI.trans_ann,
                                            cc=lambda x: self.__uiCache_addCheckbox('uicbStabTrans'))
         self.uicbStabRots = cmds.checkBox('uicbStabRots', l=r9Setup.LANGUAGE_MAP.AnimationUI.rots, al='left', v=True,
-                                          ann='Track the Rotational data',
+                                          ann=r9Setup.LANGUAGE_MAP.AnimationUI.rots_ann,
                                           cc=lambda x: self.__uiCache_addCheckbox('uicbStabRots'))
         self.uiffgStabStep = cmds.floatFieldGrp('uiffgStabStep', l=r9Setup.LANGUAGE_MAP.AnimationUI.step, value1=1, cw2=(40, 50),
-                                              ann='Frames to advance the timeline between Processing - accepts negative values')
+                                              ann=r9Setup.LANGUAGE_MAP.AnimationUI.step_ann)
         cmds.setParent('..')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 160), (2, 160)], columnSpacing=[(2, 2)])
-        cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.process_back, bgc=self.buttonBgc,
-                     ann='Stabilize Mode : Select a SINGLE Object - this will stabilize it in place over time\
-                     \nTrack Object Mode : Select TWO Objects - first is source, second will track with offset\
-                     \nTrack Component Mode :  Select a Component (poly,vert,edge) then an Object - second will track the component with offset',
+        cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.track_process_back, bgc=self.buttonBgc,
+                     ann=r9Setup.LANGUAGE_MAP.AnimationUI.track_process_ann,
                      command=partial(self.__uiCall, 'StabilizeBack'))
-        cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.process_forward, bgc=self.buttonBgc,
-                     ann='Stabilize Mode : Select a SINGLE Object - this will stabilize it in place over time\
-                     \nTrack Object Mode : Select TWO Objects - first is source, second will track with offset\
-                     \nTrack Component Mode :  Select a Component (poly,vert,edge) then an Object - second will track the component with offset',
+        cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.track_process_forward, bgc=self.buttonBgc,
+                     ann=r9Setup.LANGUAGE_MAP.AnimationUI.track_process_ann,
                      command=partial(self.__uiCall, 'StabilizeFwd'))
         cmds.setParent(self.AnimLayout)
         
@@ -722,39 +709,39 @@ class AnimationUI(object):
         #cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 100), (2, 55), (3, 55), (4, 100)], columnSpacing=[(1, 10), (3, 5)])
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)], rowSpacing=[(1,5),(2,5)])
         self.uicbTimeOffsetHierarchy = cmds.checkBox('uicbTimeOffsetHierarchy',
-                                            l=r9Setup.LANGUAGE_MAP.AnimationUI.hierarchy, al='left', en=True, v=False,
-                                            ann='Offset Hierarchy',
+                                            l=r9Setup.LANGUAGE_MAP.hierarchy, al='left', en=True, v=False,
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.offset_hierarchy_ann,
                                             ofc=partial(self.__uiCB_manageTimeOffsetChecks, 'Off'),
                                             onc=partial(self.__uiCB_manageTimeOffsetChecks),
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetHierarchy'))
               
         self.uicbTimeOffsetScene = cmds.checkBox('uicbTimeOffsetScene',
-                                            l=r9Setup.LANGUAGE_MAP.AnimationUI.fullscene,
-                                            ann='ON:Scene Level Processing: OFF:SelectedNode Processing - Offsets Animation, Sound and Clip data as appropriate',
+                                            l=r9Setup.LANGUAGE_MAP.AnimationUI.offset_fullscene,
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.offset_fullscene_ann,
                                             al='left', v=False,
                                             ofc=partial(self.__uiCB_manageTimeOffsetChecks, 'Off'),
                                             onc=partial(self.__uiCB_manageTimeOffsetChecks, 'Full'),
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetScene'))
         
         self.uicbTimeOffsetPlayback = cmds.checkBox('uicbTimeOffsetTimelines', l=r9Setup.LANGUAGE_MAP.AnimationUI.offset_timelines,
-                                            ann='ON:Scene Level Processing: OFF:SelectedNode Processing - Offsets Animation, Sound and Clip data as appropriate',
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.offset_timelines_ann,
                                             al='left', v=False, en=False,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetTimelines'))
 
         self.uicbTimeOffsetRange = cmds.checkBox('uicbTimeOffsetRange',
                                             l=r9Setup.LANGUAGE_MAP.AnimationUI.timerange, al='left', en=True, v=False,
-                                            ann='Offset nodes by range : PlaybackTimeRange or Selected TimeRange (in Red on the timeline)',
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.offset_timerange_ann,
                                             ofc=partial(self.__uiCB_manageTimeOffsetChecks, 'Ripple'),
                                             onc=partial(self.__uiCB_manageTimeOffsetChecks, 'Ripple'),
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetRange'))
         self.uicbTimeOffsetFlocking = cmds.checkBox('uicbTimeOffsetFlocking',
-                                            l=r9Setup.LANGUAGE_MAP.AnimationUI.flocking, al='left', en=True, v=False,
-                                            ann='Offset Selected Nodes by incremental amounts')
-        self.uicbTimeOffsetRandom = cmds.checkBox('uicbTimeOffsetRandom', l=r9Setup.LANGUAGE_MAP.AnimationUI.randomizer,
-                                            ann='Randomize the offsets using the offset field as the max such that offsets are random(0,offset)',
+                                            l=r9Setup.LANGUAGE_MAP.AnimationUI.offset_flocking, al='left', en=True, v=False,
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.offset_flocking_ann)
+        self.uicbTimeOffsetRandom = cmds.checkBox('uicbTimeOffsetRandom', l=r9Setup.LANGUAGE_MAP.AnimationUI.offset_randomizer,
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.offset_randomizer_ann,
                                             al='left', v=False)
-        self.uicbTimeOffsetRipple = cmds.checkBox('uicbTimeOffsetRipple', l=r9Setup.LANGUAGE_MAP.AnimationUI.ripple_edits,
-                                            ann='Ripple the edits to the upper bounds, keys, clips, audio etc will get pushed',
+        self.uicbTimeOffsetRipple = cmds.checkBox('uicbTimeOffsetRipple', l=r9Setup.LANGUAGE_MAP.AnimationUI.offset_ripple,
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.offset_ripple_ann,
                                             al='left', v=False,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetRipple'))
         cmds.separator(style='none')
@@ -763,10 +750,9 @@ class AnimationUI(object):
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 250), (2, 60)], columnSpacing=[(2, 5)])
        
         cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.offset, bgc=self.buttonBgc,
-                     ann='If processing at Scene Level then this will offset all appropriate: AnimCurves,Sound and Clips\n\
-                     If processing on selected it will deal with each node type as it finds',
+                     ann=r9Setup.LANGUAGE_MAP.AnimationUI.offset_ann,
                      command=partial(self.__uiCall, 'TimeOffset'))
-        self.uiffgTimeOffset = cmds.floatFieldGrp('uiffgTimeOffset', value1=1, ann='Frames to offset the data by')
+        self.uiffgTimeOffset = cmds.floatFieldGrp('uiffgTimeOffset', value1=1, ann=r9Setup.LANGUAGE_MAP.AnimationUI.offset_frms_ann)
         cmds.setParent(self.AnimLayout)
         
         
@@ -779,25 +765,25 @@ class AnimationUI(object):
 
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)])
         self.uicbMirrorHierarchy = cmds.checkBox('uicbMirrorHierarchy',
-                                            l=r9Setup.LANGUAGE_MAP.AnimationUI.hierarchy, al='left', en=True, v=False,
-                                            ann='Mirror Hierarchy, or Mirror Selected nodes if they have the Mirror Marker data',
+                                            l=r9Setup.LANGUAGE_MAP.hierarchy, al='left', en=True, v=False,
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.mirror_hierarchy_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbMirrorHierarchy'))
               
         cmds.setParent('..')
         
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 160), (2, 160)], columnSpacing=[(2, 2)])
         cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.mirror_animation, bgc=self.buttonBgc,
-                     ann='Mirror the Animation - NOTE Layers and Trax are NOT supported yet',
+                     ann=r9Setup.LANGUAGE_MAP.AnimationUI.mirror_animation_ann,
                      command=partial(self.__uiCall, 'MirrorAnim'))
         cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.mirror_pose, bgc=self.buttonBgc,
-                     ann='Mirror the Current Pose',
+                     ann=r9Setup.LANGUAGE_MAP.AnimationUI.mirror_pose_ann,
                      command=partial(self.__uiCall, 'MirrorPose'))
  
         cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.symmetry_animation, bgc=self.buttonBgc,
-                     ann='Symmetry the Animation - NOTE Layers and Trax are NOT supported yet',
+                     ann=r9Setup.LANGUAGE_MAP.AnimationUI.symmetry_animation_ann,
                      command=partial(self.__uiCall, 'SymmetryAnim'))
         cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.symmetry_pose, bgc=self.buttonBgc,
-                     ann='Symmetry the Current Pose',
+                     ann=r9Setup.LANGUAGE_MAP.AnimationUI.symmetry_pose_ann,
                      command=partial(self.__uiCall, 'SymmetryPose'))
         cmds.setParent(self.AnimLayout)
         cmds.setParent(self.tabs)
@@ -812,12 +798,6 @@ class AnimationUI(object):
         self.FilterLayout = cmds.columnLayout(adjustableColumn=True)
         
         cmds.separator(h=15, style='none')
-#         cmds.text('Filter Settings : A Hierarchy search pattern\n'\
-#                   'used by all the Hierarchy checkboxes on the main tabs\n'\
-#                   'Particularly relevant for complex Animation Rigs\n'\
-#                   'as it allows you to pin-point required controllers\n\n'\
-#                   'Note that if these are all blank then hierarchy\n'\
-#                   'checkBoxes will process all children of the roots')
         cmds.text(r9Setup.LANGUAGE_MAP.AnimationUI.hierarchy_descriptor)
         cmds.separator(h=20, style='in')
                                           
@@ -826,15 +806,15 @@ class AnimationUI(object):
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 120), (2, 200)], columnSpacing=[2, 3])
         cmds.text(label=r9Setup.LANGUAGE_MAP.AnimationUI.metarig, align='right')
         self.uicbMetaRig = cmds.checkBox('uicbMetaRig',
-                                          ann='Switch to MetaRig Sub Systems',
+                                          ann=r9Setup.LANGUAGE_MAP.AnimationUI.metarig_ann,
                                           l='',
                                           v=True,
                                           cc=lambda x: self.__uiCB_managePoseRootMethod('uicbMetaRig'))
         cmds.setParent(self.uiclHierarchyFilters)
         
         self.uitfgSpecificNodeTypes = cmds.textFieldGrp('uitfgSpecificNodeTypes',
-                                            ann='RMB QuickSelector for Common Types : Search for "Specific NodeTypes" in the hierarchy, list separated by ","',
-                                            label=r9Setup.LANGUAGE_MAP.AnimationUI.specific_nodetypes, text="", cw2=(120, 200))
+                                            label=r9Setup.LANGUAGE_MAP.AnimationUI.specific_nodetypes, text="", cw2=(120, 200),
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.specific_nodetypes_ann)
         cmds.popupMenu()
         cmds.menuItem(label=r9Setup.LANGUAGE_MAP.AnimationUI.clear_all, command=partial(self.__uiCB_addToNodeTypes, 'clearAll'))
         cmds.menuItem(label=r9Setup.LANGUAGE_MAP.AnimationUI.nodetype_transform, command=partial(self.__uiCB_addToNodeTypes, 'transform'))
@@ -847,11 +827,11 @@ class AnimationUI(object):
         cmds.menuItem(label=r9Setup.LANGUAGE_MAP.AnimationUI.nodetype_hikeff, command=partial(self.__uiCB_addToNodeTypes, 'hikIKEffector'))
         cmds.menuItem(label=r9Setup.LANGUAGE_MAP.AnimationUI.nodetype_blendshape, command=partial(self.__uiCB_addToNodeTypes, 'blendShape'))
         self.uitfgSpecificAttrs = cmds.textFieldGrp('uitfgSpecificAttrs',
-                                            ann='Search for "Specific Attributes" on Nodes in the hierarchy, list separated by ","',
-                                            label=r9Setup.LANGUAGE_MAP.AnimationUI.search_attributes, text="", cw2=(120, 200))
+                                            label=r9Setup.LANGUAGE_MAP.AnimationUI.search_attributes, text="", cw2=(120, 200),
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.search_attributes_ann)
         self.uitfgSpecificPattern = cmds.textFieldGrp('uitfgSpecificPattern',
-                                            ann='Search for specific nodeName Patterns, list separated by "," - Note this is a Python.regularExpression - ^ clamps to the start, $ clamps to the end',
-                                            label=r9Setup.LANGUAGE_MAP.AnimationUI.search_name_pattern, text="", cw2=(120, 200))
+                                            label=r9Setup.LANGUAGE_MAP.AnimationUI.search_name_pattern, text="", cw2=(120, 200),
+                                            ann=r9Setup.LANGUAGE_MAP.AnimationUI.search_name_pattern_ann)
         cmds.separator(h=5, style='none')
         cmds.text('Internal Node Priorities:')
         self.uitslFilterPriority = cmds.textScrollList('uitslFilterPriority', numberOfRows=8, allowMultiSelection=False,
@@ -892,29 +872,24 @@ class AnimationUI(object):
                                             cc=self.__uiCache_storeUIElements)
         
         cmds.optionMenu('om_MatchMethod', label=r9Setup.LANGUAGE_MAP.AnimationUI.match_method, w=70,
-                        ann='Method used to match nodes in different hierarchies, default="stripPrefix"',
+                        ann=r9Setup.LANGUAGE_MAP.AnimationUI.match_method_ann,
                         cc=self.__uiCB_setMatchMethod)
         #for preset in ["base","stripPrefix","index"]:
-        cmds.menuItem(l=r9Setup.LANGUAGE_MAP.AnimationUI.match_base, ann='Exact shortName matching of nodes only, ignores namespaces : Fred:MainCtrl == Bert:MainCtrl')
-        cmds.menuItem(l=r9Setup.LANGUAGE_MAP.AnimationUI.match_stripprefix, ann='Allows one hierarchy to be prefixed when matching, ignores namespaces : Fred:New_MainCtrl == Bert:MainCtrl')
-        cmds.menuItem(l=r9Setup.LANGUAGE_MAP.AnimationUI.match_index, ann='No matching logic at all, just matched in the order the nodes were found in the hierarchies')
-        cmds.menuItem(l=r9Setup.LANGUAGE_MAP.AnimationUI.match_mirror, ann='Match nodes via their internal r9MirrorIndexes if found')
+        cmds.menuItem(l=r9Setup.LANGUAGE_MAP.AnimationUI.match_base, ann=r9Setup.LANGUAGE_MAP.AnimationUI.match_base_ann)
+        cmds.menuItem(l=r9Setup.LANGUAGE_MAP.AnimationUI.match_stripprefix, ann=r9Setup.LANGUAGE_MAP.AnimationUI.match_stripprefix_ann)
+        cmds.menuItem(l=r9Setup.LANGUAGE_MAP.AnimationUI.match_index, ann=r9Setup.LANGUAGE_MAP.AnimationUI.match_index_ann)
+        cmds.menuItem(l=r9Setup.LANGUAGE_MAP.AnimationUI.match_mirror, ann=r9Setup.LANGUAGE_MAP.AnimationUI.match_mirror_ann)
         
         cmds.optionMenu('om_MatchMethod', e=True, v='stripPrefix')
-            
-#         self.uicbMatchMethod = cmds.checkBox('uicbMatchMethod',
-#                                             ann='Match method allow prefix stripping?',
-#                                             l='MatchMethod = stripPrefixes',
-#                                             al='left', v=True,
-#                                             cc=lambda x: self.__uiCache_addCheckbox('uicbMatchMethod'))
+
         cmds.setParent(self.FilterLayout)
         cmds.separator(h=10, style='none')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 162), (2, 162)])
         cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.filter_test, bgc=self.buttonBgc,
-                     ann='Test the Hierarchy Filter on the selected root node',
+                     ann=r9Setup.LANGUAGE_MAP.AnimationUI.filter_test_ann,
                      command=partial(self.__uiCall, 'HierarchyTest'))
         cmds.button(label=r9Setup.LANGUAGE_MAP.AnimationUI.filter_store, bgc=self.buttonBgc,
-                     ann='Store this filterSetting Object',
+                     ann=r9Setup.LANGUAGE_MAP.AnimationUI.filter_store_ann,
                      command=partial(self.__uiPresetStore))
         cmds.setParent(self.FilterLayout)
         cmds.setParent(self.tabs)
@@ -1018,7 +993,7 @@ class AnimationUI(object):
         cmds.separator(h=10, style='in')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 80), (2, 250)])
         self.uicbPoseHierarchy = cmds.checkBox('uicbPoseHierarchy',
-                                            l=r9Setup.LANGUAGE_MAP.AnimationUI.hierarchy, al='left', en=True, v=False,
+                                            l=r9Setup.LANGUAGE_MAP.hierarchy, al='left', en=True, v=False,
                                             ann=r9Setup.LANGUAGE_MAP.AnimationUI.pose_hierarchy_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbPoseHierarchy'))
         self.uitfgPoseRootNode = cmds.textFieldButtonGrp('uitfgPoseRootNode',
@@ -4241,71 +4216,71 @@ class MirrorSetup(object):
             cmds.deleteUI(self.win, window=True)
         window = cmds.window(self.win, title="MirrorSetup", s=False, widthHeight=(280, 410))
         cmds.menuBarLayout()
-        cmds.menu(l="VimeoHelp")
-        cmds.menuItem(l="Open Vimeo Help File", \
+        cmds.menu(l=r9Setup.LANGUAGE_MAP.vimeo_menu)
+        cmds.menuItem(l=r9Setup.LANGUAGE_MAP.vimeo_help, \
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/57882801')")
         cmds.menuItem(divider=True)
-        cmds.menuItem(l="Contact Me", c=lambda *args: (r9Setup.red9ContactInfo()))
+        cmds.menuItem(l=r9Setup.LANGUAGE_MAP.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
         cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
         cmds.separator(h=15, style='none')
-        cmds.text(l='MirrorSide:')
+        cmds.text(l=r9Setup.LANGUAGE_MAP.Mirror_Setup.side)
         cmds.rowColumnLayout(nc=3, columnWidth=[(1, 90), (2, 90), (3, 90)])
         self.uircbMirrorSide = cmds.radioCollection('mirrorSide')
-        cmds.radioButton('Right', label='Right')
-        cmds.radioButton('Centre', label='Centre')
-        cmds.radioButton('Left', label='Left')
+        cmds.radioButton('Right', label=r9Setup.LANGUAGE_MAP.Mirror_Setup.right)
+        cmds.radioButton('Centre', label=r9Setup.LANGUAGE_MAP.Mirror_Setup.centre)
+        cmds.radioButton('Left', label=r9Setup.LANGUAGE_MAP.Mirror_Setup.left)
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 110), (2, 60)])
-        cmds.text(label='MirrorIndex:')
+        cmds.text(label=r9Setup.LANGUAGE_MAP.Mirror_Setup.index)
         cmds.intField('ifg_mirrorIndex', v=1, min=1, w=50)
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
-        cmds.text(l='MirrorAxis:')
+        cmds.text(l=r9Setup.LANGUAGE_MAP.Mirror_Setup.axis)
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 130), (2, 130)])
-        cmds.checkBox('default', l='Use Default Axis', v=True,
+        cmds.checkBox('default', l=r9Setup.LANGUAGE_MAP.Mirror_Setup.default_axis, v=True,
                       onc=lambda x: self.__uicb_setDefaults('default'),
                       ofc=lambda x: self.__uicb_setDefaults('custom'))
-        cmds.checkBox('setDirectCopy',l='No Inversing', v=False,
-                      ann='Set the marker so that data is copied over but NO inversing is done on the data, straight copy from left to right',
+        cmds.checkBox('setDirectCopy',l=r9Setup.LANGUAGE_MAP.Mirror_Setup.no_inverse, v=False,
+                      ann=r9Setup.LANGUAGE_MAP.Mirror_Setup.no_inverse_ann,
                       onc=lambda x:self.__uicb_setDefaults('direct'),  # cmds.checkBox('default',e=True, v=False),
                       ofc=lambda x:self.__uicb_setDefaults('default'))  # cmds.checkBox('default',e=True, v=True))
         cmds.setParent('..')
         cmds.separator(h=5, style='none')
-        cmds.rowColumnLayout(ann='attrs', numberOfColumns=3,
+        cmds.rowColumnLayout(ann=r9Setup.LANGUAGE_MAP.Mirror_Setup.attrs, numberOfColumns=3,
                                  columnWidth=[(1, 90), (2, 90), (3, 90)])
-        cmds.checkBox('translateX', l='Translate X', v=False)
-        cmds.checkBox('translateY', l='Translate Y', v=False)
-        cmds.checkBox('translateZ', l='Translate Z', v=False)
-        cmds.checkBox('rotateX', l='Rotate X', v=False)
-        cmds.checkBox('rotateY', l='Rotate Y', v=False)
-        cmds.checkBox('rotateZ', l='Rotate Z', v=False)
+        cmds.checkBox('translateX', l=r9Setup.LANGUAGE_MAP.Mirror_Setup.transX, v=False)
+        cmds.checkBox('translateY', l=r9Setup.LANGUAGE_MAP.Mirror_Setup.transY, v=False)
+        cmds.checkBox('translateZ', l=r9Setup.LANGUAGE_MAP.Mirror_Setup.transZ, v=False)
+        cmds.checkBox('rotateX', l=r9Setup.LANGUAGE_MAP.Mirror_Setup.rotX, v=False)
+        cmds.checkBox('rotateY', l=r9Setup.LANGUAGE_MAP.Mirror_Setup.rotY, v=False)
+        cmds.checkBox('rotateZ', l=r9Setup.LANGUAGE_MAP.Mirror_Setup.rotZ, v=False)
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
-        cmds.button(label='Refresh from Selected', bgc=r9Setup.red9ButtonBGC(1),
+        cmds.button(label=r9Setup.LANGUAGE_MAP.Mirror_Setup.refresh, bgc=r9Setup.red9ButtonBGC(1),
                      command=lambda *args: (self.__uicb_getMirrorIDsFromNode()))
         cmds.separator(h=15, style='none')
-        cmds.button(label='Add / Update Mirror Markers', bgc=r9Setup.red9ButtonBGC(1),
-                     ann='add mirrorMarkers - NOTE if multiple selected then the index will increment from the given value',
+        cmds.button(label=r9Setup.LANGUAGE_MAP.Mirror_Setup.add_update, bgc=r9Setup.red9ButtonBGC(1),
+                     ann=r9Setup.LANGUAGE_MAP.Mirror_Setup.add_update_ann,
                      command=lambda *args: (self.__setMirrorIDs()))
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)])
-        cmds.button(label='Print Mirror Debugs', bgc=r9Setup.red9ButtonBGC(1),
-                     ann='print out the hierarchies current setup in the scriptEditor',
+        cmds.button(label=r9Setup.LANGUAGE_MAP.Mirror_Setup.print_debugs, bgc=r9Setup.red9ButtonBGC(1),
+                     ann=r9Setup.LANGUAGE_MAP.Mirror_Setup.print_debugs_ann,
                      command=lambda *args: (self.__printDebugs()))
-        cmds.button(label='Delete from Selected', bgc=r9Setup.red9ButtonBGC(1),
+        cmds.button(label=r9Setup.LANGUAGE_MAP.Mirror_Setup.delete, bgc=r9Setup.red9ButtonBGC(1),
                      command=lambda *args: (self.__deleteMarkers()))
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)])
-        cmds.checkBox('mirrorSaveLoadHierarchy', l='hierarchy', v=False)
-        cmds.checkBox('mirrorClearCurrent', l='clear all Existing', v=True)
+        cmds.checkBox('mirrorSaveLoadHierarchy', l=r9Setup.LANGUAGE_MAP.hierarchy, v=False)
+        cmds.checkBox('mirrorClearCurrent', l=r9Setup.LANGUAGE_MAP.Mirror_Setup.clear, v=True)
         cmds.setParent('..')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)])
-        cmds.button(label='Save MirrorConfigs', bgc=r9Setup.red9ButtonBGC(1),
-                     ann='Save the current MirrorSetups',
+        cmds.button(label=r9Setup.LANGUAGE_MAP.Mirror_Setup.save_configs, bgc=r9Setup.red9ButtonBGC(1),
+                     ann=r9Setup.LANGUAGE_MAP.Mirror_Setup.save_configs_ann,
                      command=lambda *args: (self.__saveMirrorSetups()))
-        cmds.button(label='Load MirrorConfigs', bgc=r9Setup.red9ButtonBGC(1),
+        cmds.button(label=r9Setup.LANGUAGE_MAP.Mirror_Setup.load_configs, bgc=r9Setup.red9ButtonBGC(1),
                      command=lambda *args: (self.__loadMirrorSetups()))
         cmds.setParent('..')
         cmds.separator(h=15, style='none')

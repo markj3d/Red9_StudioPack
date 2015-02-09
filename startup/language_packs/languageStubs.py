@@ -2,57 +2,108 @@
 contactme = 'Contact Me'
 tools = 'Tools'
 reset = 'Reset to Default'
+hierarchy = 'Hierarchy'
+vimeo_menu = 'VimeoHelp'
+vimeo_help = "Open Vimeo Help File"
 
+    
 class AnimationUI(object):
     
-    vimeo_walkthrough = u'Open Vimeo > WalkThrough v1.27'
-    vimeo_update = u'Open Vimeo > Update v1.40'
-    vimeo_hierarchy_control = u'Open Vimeo > HierarchyControl'
-    vimeo_track_stab = u'Open Vimeo > Track or Stabilize'
-    vimeo_copykeys = u'Open Vimeo > CopyKeys & TimeOffsets'
-    vimeo_mirrorsetup = u'Open Vimeo > MirrorSetups'
-    vimeo_posesaver_advanced = u'Open Vimeo > PoseSaver - Advanced Topics'
-    vimeo_posesaver_blending = u'Open Vimeo > PoseSaver - Blending and maintain spaces'
+    vimeo_walkthrough = 'Open Vimeo > WalkThrough v1.27'
+    vimeo_update = 'Open Vimeo > Update v1.40'
+    vimeo_hierarchy_control = 'Open Vimeo > HierarchyControl'
+    vimeo_track_stab = 'Open Vimeo > Track or Stabilize'
+    vimeo_copykeys = 'Open Vimeo > CopyKeys & TimeOffsets'
+    vimeo_mirrorsetup = 'Open Vimeo > MirrorSetups'
+    vimeo_posesaver_advanced = 'Open Vimeo > PoseSaver - Advanced Topics'
+    vimeo_posesaver_blending = 'Open Vimeo > PoseSaver - Blending and maintain spaces'
     
+    # Tab1 AnimFunctions =================================================================
     
-    # Tab1 =================================================================
-    
-    hierarchy = 'Hierarchy'
-    timerange= 'TimeRange'
     cbox_attrs = 'ChBox Attrs'
     copy_to_many = 'CopyToMany'
+    timerange= 'TimeRange'
+    cbox_attrs_ann = 'Copy only those channels selected in the channelBox'
+    step = 'Step'
+    
+    copy_attrs_hierarchy_ann='Copy Attributes Hierarchy : Filter Hierarchies for transforms & joints then Match NodeNames'
     copy_attrs = 'Copy Attributes'
+    copy_attrs_ann = '''CopyAttributes : Modes: -------------------
+Default > Selected Object Pairs (Obj2 to Obj1), (Obj3 to Obj4)
+Hierarchy > Uses Selection Filters on Hierarchy Tab
+CopyToMany > Copy data from First selected to all Subsequent nodes
+Note: This also handles CharacterSets and SelectionSets if selected, processing all members'''
+    copy_attrs_to_many_ann = 'Copy Matching Attributes from First selected to all Subsequently selected nodes'
+    
+    copy_keys_hierarchy_ann = 'Copy Keys Hierarchy : Filter Hierarchies for transforms & joints then Match NodeNames'
     copy_keys = 'Copy Keys'
-    merge_layers= 'MergeLayers'
+    copy_keys_ann = '''CopyKeys : Modes: -------------------------
+Default > Selected Object Pairs (Obj2 to Obj1), (Obj3 to Obj4)
+Hierarchy > Uses Selection Filters on Hierarchy Tab
+CopyToMany > Copy data from First selected to all Subsequent nodes
+Note: This also handles CharacterSets and SelectionSets if selected, processing all members'''
+    copy_keys_to_many_ann = 'Copy Animation from First selected to all Subsequently selected nodes'
+    copy_keys_timerange_ann = 'ONLY Copy Keys over PlaybackTimeRange or Selected TimeRange (highlighted in Red on the timeline)'
+    copy_keys_merge_layers= 'MergeLayers'
+    copy_keys_merge_layers_ann = 'If AnimLayers are found pre-compile the anim and copy the resulting data'
+    paste_method_ann = 'Paste Method Used: Default = "replace", paste method used by the copy code internally'
     
     snaptransforms = 'Snap Transforms'
+    snaptransforms_ann = '''Snap Selected Object Pairs (Obj2 to Obj1), (Obj4 to Obj3) or Snap Filtered Hierarchies\nNote: This also handles CharacterSets if selected, processing all members'''
+    snaptransforms_timerange_ann = 'Process over PlaybackTimeRange or Selected TimeRange (in Red on the timeline)'
+    snaptransforms_hierarchy_ann = 'Filter Hierarchies with given args - then Snap Transforms for matched nodes'
     trans = 'Trans'
+    trans_ann = 'Track the Translation data'
     rots = 'Rots'
+    rots_ann = 'Track the Rotation data'
     frmstep = 'FrmStep'
+    frmstep_ann = 'Frames to advance the timeline after each Process Run'
     pre_copyattrs = 'PreCopyAttrs'
+    pre_copyattrs_ann = 'Copy all Values for all channels prior to running the Snap'
     pre_copykeys = 'PreCopyKeys'
+    pre_copykeys_ann = 'Copy all animation data for all channels prior to running the Snap over Time'
     iteration = 'Iteration'
+    iteration_ann = 'This is the number of iterations over each hierarchy node during processing, if you get issues during snap then increase this'
+    
     step = 'Step'
+    step_ann = 'Frames to advance the timeline between Processing - accepts negative values'
     tracknstabilize = 'Track or Stabilize'
+    track_process_back = '<< Process Back <<'
+    track_process_ann = '''Stabilize Mode : Select a SINGLE Object - this will stabilize it in place over time
+Track Object Mode : Select TWO Objects - first is source, second will track with offset
+Track Component Mode :  Select a Component (poly,vert,edge) then an Object - second will track the component with offset'''
+    track_process_forward = '>>  Process Fwd  >>'
     
-    process_back = '<< Process Back <<'
-    process_forward = '>>  Process Fwd  >>'
     timeoffset = 'TimeOffset'
-    fullscene = 'FullScene'
     offset = 'Offset'
+    offset_ann = 'If processing at Scene Level then this will offset all appropriate: AnimCurves,Sound and Clips. If processing on selected it will deal with each node type as it finds'
+    offset_hierarchy_ann = 'Offset Hierarchy'
+    offset_fullscene = 'FullScene'
+    offset_fullscene_ann = 'ON:Scene Level Processing: OFF:SelectedNode Processing - Offsets Animation, Sound and Clip data as appropriate'
     offset_timelines = 'OffsetTimelines'
-    flocking = 'Flocking'
-    randomizer = 'Randomizer'
-    ripple_edits = 'RippleEdits'
+    offset_timelines_ann = 'Offset the current playback timeranges'
+    offset_timerange_ann = 'Offset nodes by range : PlaybackTimeRange or Selected TimeRange (in Red on the timeline)'
+    offset_flocking = 'Flocking'
+    offset_flocking_ann = 'Offset Selected Nodes by incremental amounts'
+    offset_randomizer = 'Randomizer'
+    offset_randomizer_ann = 'Randomize the offsets using the offset field as the max such that offsets are random(0,offset)'
+    offset_ripple = 'RippleEdits'
+    offset_ripple_ann = 'Ripple the edits to the upper bounds, keys, clips, audio etc will get pushed'
+    offset_frms_ann = 'Frames to offset the data by'
     
+    mirror_hierarchy_ann = 'Mirror Hierarchy, or Mirror Selected nodes if they have the Mirror Marker data'
     mirror_controls = 'Mirror Controls'
     mirror_animation = 'Mirror Animation'
+    mirror_animation_ann = 'Mirror the Animation - NOTE Layers and Trax are NOT supported yet'
     mirror_pose = 'Mirror Pose'
+    mirror_pose_ann = 'Mirror the Current Pose'
     symmetry_animation = 'Symmetry Animation'
+    symmetry_animation_ann = 'Symmetry the Animation : L >> R - NOTE Layers and Trax are NOT supported yet'
     symmetry_pose = 'Symmetry Pose'
+    symmetry_pose_ann = 'Symmetry the Current Pose : L >> R'
     
     
-    # Tab2 =================================================================
+    # Tab2 Hierarchy =================================================================
     
     hierarchy_descriptor = '''Filter Settings : A Hierarchy search pattern
 used by all the Hierarchy checkboxes on the main tabs
@@ -62,7 +113,9 @@ Note that if these are all blank then hierarchy
 checkBoxes will process all children of the roots'''
                 
     metarig = 'MetaRig'
+    metarig_ann = 'Switch to MetaRig Sub Systems'
     specific_nodetypes = 'Specific NodeTypes'
+    specific_nodetypes_ann = 'RMB QuickSelector for Common Types : Search for "Specific NodeTypes" in the hierarchy, list separated by ","'
     
     clear_all = 'ClearAll'
     nodetype_transform = 'nodeType : Transform'
@@ -75,7 +128,9 @@ checkBoxes will process all children of the roots'''
     nodetype_hikeff = 'nodeType : hikIKEffector'
     nodetype_blendshape = 'nodeType : blendShape'
     search_attributes = 'Search Attributes'
+    search_attributes_ann = 'Search for "Specific Attributes" on Nodes in the hierarchy, list separated by ","'
     search_name_pattern = 'Search Name Pattern'
+    search_name_pattern_ann = 'Search for specific nodeName Patterns, list separated by "," - Note this is a Python.regularExpression - ^ clamps to the start, $ clamps to the end'
     
     priorities_clear = 'Clear Process Priorities'
     priorities_set = 'Set Priorities from Selected'
@@ -91,16 +146,23 @@ checkBoxes will process all children of the roots'''
     include_roots = 'Include Roots'
     
     match_method = 'MatchMethod'
+    match_method_ann = 'Method used to match nodes in different hierarchies, default="stripPrefix"'
     match_base = 'base'
+    match_base_ann ='Exact shortName matching of nodes only, ignores namespaces : Fred:MainCtrl == Bert:MainCtrl'
     match_stripprefix = 'stripPrefix'
+    match_stripprefix_ann = 'Allows one hierarchy to be prefixed when matching, ignores namespaces : Fred:New_MainCtrl == Bert:MainCtrl'
     match_index = 'index'
+    match_index_ann = 'No matching logic at all, just matched in the order the nodes were found in the hierarchies'
     match_mirror = 'mirrorIndex'
+    match_mirror_ann = 'Match nodes via their internal r9MirrorIndexes if found'
     
     filter_test = 'Test Filter'
+    filter_test_ann = 'Test the Hierarchy Filter on the selected root node'
     filter_store = 'Store New Filter'
+    filter_store_ann = 'Store this filterSetting Object'
         
     
-    #Tab 3 ==================================================================================
+    #Tab3 PoseSaver  ==================================================================================
     
     pose_path = 'PosePath'
     pose_local = 'Local Poses'
@@ -142,7 +204,7 @@ checkBoxes will process all children of the roots'''
     pose_pp_update_ann = 'Update the PPC to the RIGS current pose'
 
 
-    # POP RMB Popup =============================================================
+    # POSE RMB Popup =============================================================
 
     pose_rmb_blender = 'PoseBlender'
     pose_rmb_delete = 'Delete Pose'
@@ -164,6 +226,39 @@ checkBoxes will process all children of the roots'''
     pose_rmb_grid_small = 'Grid Size: Small'
     pose_rmb_grid_med = 'Grid Size: Medium'
     pose_rmb_grid_large = 'Grid Size: Large'
+    
+    
+class Mirror_Setup(object):
+    
+    side = 'MirrorSide:'
+    right = 'Right'
+    left = 'Left'
+    centre = 'Centre'
+    index = 'MirrorIndex:'
+    axis = 'MirrorAxis:'
+    default_axis = 'Use Default Axis'
+    no_inverse = 'No Inversing'
+    no_inverse_ann = 'Set the marker so that data is copied over but NO inversing is done on the data, straight copy from left to right'
+    attrs = 'attrs'
+    transX = 'Translate X'
+    transY = 'Translate Y'
+    transZ = 'Translate Z'
+    rotX = 'Rotate X'
+    rotY = 'Rotate X'
+    rotZ = 'Rotate X'
+    refresh = 'Refresh from Selected'
+    add_update = 'Add / Update Mirror Markers'
+    add_update_ann = 'add mirrorMarkers - NOTE if multiple selected then the index will increment from the given value'
+    print_debugs = 'Print Mirror Debugs'
+    print_debugs_ann = 'print out the hierarchies current setup in the scriptEditor'
+    delete = 'Delete from Selected'
+    clear = 'clear all Existing'
+    save_configs = 'Save MirrorConfigs'
+    save_configs_ann = 'Save the current MirrorSetups'
+    load_configs = 'Load MirrorConfigs'
+    
+    
+
     
     
     
