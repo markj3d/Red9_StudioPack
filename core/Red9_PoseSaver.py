@@ -1132,7 +1132,7 @@ class PoseCompare(object):
         for processing later if required
         '''
         self.fails = {}
-        logprint = 'PoseCompare returns : ========================================\n'
+        logprint = 'PoseCompare returns : %s ========================================\n' % self.compareDict
         currentDic = getattr(self.currentPose, self.compareDict)
         referenceDic = getattr(self.referencePose, self.compareDict)
         
@@ -1154,7 +1154,10 @@ class PoseCompare(object):
                 else:
                     log.debug('missingKeys in ignoreblock : node is missing from data but being skipped "%s"' % key)
                 continue
-            
+
+            if not 'attrs' in attrBlock:
+                log.debug('%s node has no attrs block in the pose' % key)
+                continue
             for attr, value in attrBlock['attrs'].items():
                 # attr missing completely from the key
                 if not attr in referenceAttrBlock['attrs']:
