@@ -521,7 +521,6 @@ def has_internal_systems():
     if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(red9ModulePath())),'Red9_Internals')):
         return True
 
-PRO_PACK_STUBS=pro_pack_missing_stub
       
 #=========================================================================================
 # BOOT CALL ------------------------------------------------------------------------------
@@ -592,3 +591,7 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
         cmds.evalDeferred("import Red9_Internals", lp=True)  # Unresolved Import
            
     
+    
+PRO_PACK_STUBS=pro_pack_missing_stub
+import language_packs.languageStubs
+LANGUAGE_MAP=language_packs.languageStubs
