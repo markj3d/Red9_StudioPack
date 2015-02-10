@@ -13,22 +13,27 @@ dependencies and menuItems.
 
 THIS SHOULD NOT REQUIRE ANY OF THE RED9.core modules
 '''
+from Red9.startup import language_packs
 
 
 __author__ = 'Mark Jackson'
 __buildVersionID__ = 1.5
 installedVersion= False
 
+
 import sys
 import os
+import imp
 import maya.cmds as cmds
 import maya.mel as mel
+from functools import partial
 
 import logging
 logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
+      
 '''
  Maya Version Mapping History:
  ====================================
@@ -57,6 +62,40 @@ log.setLevel(logging.INFO)
 ------------------------------------------------------------------------------------
 '''
 
+
+#=========================================================================================
+# LANGUAGE MAPPING -----------------------------------------------------------------------
+#=========================================================================================
+   
+global LANGUAGE_MAP
+
+import language_packs.language_english
+LANGUAGE_MAP = language_packs.language_english
+
+def get_language_maps():
+    languages=[]
+    language_path = os.path.join(os.path.dirname(__file__),'language_packs')
+    packs = os.listdir(language_path)
+    for p in packs:
+        if p.startswith('language_') and p.endswith('.py'):
+            languages.append(p.split('.py')[0])
+    return languages
+    
+def set_language(language='language_english', *args):
+    global LANGUAGE_MAP
+    language_path = os.path.join(os.path.dirname(__file__),'language_packs')
+    packs = get_language_maps()
+    if language in packs:
+        print 'importing language map : %s' % language
+        LANGUAGE_MAP = imp.load_source('language', os.path.join(language_path, language+'.py'))
+
+set_language()
+
+
+#=========================================================================================
+# General Maya data  ---------------------------------------------------------------------
+#=========================================================================================
+ 
 def mayaVersion():
     #need to manage this better and use the API version,
     #eg: 2013.5 returns 2013
@@ -255,6 +294,9 @@ def menuSetup(parent='MayaWindow'):
         cmds.menuItem('redNineReloadItem',l="systems: reload()", p='redNineDebuggerItem',
                       ann="Force a complete reload on the core of Red9",
                       echoCommand=True, c=reload_Red9)  # "Red9.core._reload()")
+        cmds.menuItem(divider=True,p='redNineDebuggerItem')
+        for language in get_language_maps():
+            cmds.menuItem(l="Language : %s" % language, c=partial(set_language,language),p='redNineDebuggerItem')
     except:
         raise StandardError('Unable to parent Red9 Menu to given parent %s' % parent)
 
@@ -591,10 +633,12 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
         cmds.evalDeferred("import Red9_Internals", lp=True)  # Unresolved Import
            
 def reload_Red9(*args):
+    global LANGUAGE_MAP
     reload(LANGUAGE_MAP)
     import Red9.core
     Red9.core._reload()
-    
+
+
 PRO_PACK_STUBS=pro_pack_missing_stub
-import language_packs.languageStubs
-LANGUAGE_MAP=language_packs.languageStubs
+
+

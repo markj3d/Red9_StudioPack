@@ -96,9 +96,9 @@ import re
 import shutil
 
 import Red9.packages.configobj as configobj
+from Red9.startup.setup import ProPack_Error
 
 import logging
-from Red9.startup.setup import ProPack_Error
 logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -106,8 +106,6 @@ log.setLevel(logging.INFO)
 # global var so that the animUI is exposed to anything as a global object
 global RED_ANIMATION_UI
 
-# Language map is used for all UI's as a text mapping for languages
-LANGUAGE_MAP = r9Setup.LANGUAGE_MAP
 
 '''
 Callback global so you can fire a command prior to the UI opening,
@@ -123,6 +121,8 @@ r9Anim.RED_ANIMATION_UI_OPENCALLBACK = myProjectCallback
 global RED_ANIMATION_UI_OPENCALLBACK
 RED_ANIMATION_UI_OPENCALLBACK=None
 
+# Language map is used for all UI's as a text mapping for languages
+LANGUAGE_MAP = r9Setup.LANGUAGE_MAP
 
 #===========================================================================
 # Generic Utility Functions
@@ -535,7 +535,7 @@ class AnimationUI(object):
         animwindow = cmds.window(self.win, title=self.label)
         
         cmds.menuBarLayout()
-        cmds.menu(l=LANGUAGE_MAP.vimeo_menu)
+        cmds.menu(l=LANGUAGE_MAP.Generic.vimeo_menu)
         cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.vimeo_walkthrough,  # "Open Vimeo > WalkThrough v1.27",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/56431983')")
         cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.vimeo_update,  # "Open Vimeo > Update v1.40",
@@ -553,9 +553,9 @@ class AnimationUI(object):
         cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.vimeo_posesaver_blending,  # "Open Vimeo > PoseSaver - Blending and maintain spaces",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/88391202')")
         cmds.menuItem(divider=True)
-        cmds.menuItem(l=LANGUAGE_MAP.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
-        cmds.menu(l=LANGUAGE_MAP.tools)
-        cmds.menuItem(l=LANGUAGE_MAP.reset,
+        cmds.menuItem(l=LANGUAGE_MAP.Generic.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
+        cmds.menu(l=LANGUAGE_MAP.Generic.tools)
+        cmds.menuItem(l=LANGUAGE_MAP.Generic.reset,
                       c=self.__uiCache_resetDefaults)
         self.MainLayout = cmds.scrollLayout('red9MainScroller', rc=self.__uiCB_resizeMainScroller)
         self.form = cmds.formLayout()
@@ -581,7 +581,7 @@ class AnimationUI(object):
        
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)])
-        self.uicbCAttrHierarchy = cmds.checkBox('uicbCAttrHierarchy', l=LANGUAGE_MAP.hierarchy, al='left', v=False,
+        self.uicbCAttrHierarchy = cmds.checkBox('uicbCAttrHierarchy', l=LANGUAGE_MAP.Generic.hierarchy, al='left', v=False,
                                                 ann=LANGUAGE_MAP.AnimationUI.copy_attrs_hierarchy_ann,
                                                 cc=lambda x: self.__uiCache_addCheckbox('uicbCAttrHierarchy'))
         self.uicbCAttrToMany = cmds.checkBox('uicbCAttrToMany', l=LANGUAGE_MAP.AnimationUI.copy_to_many, al='left', v=False,
@@ -602,7 +602,7 @@ class AnimationUI(object):
        
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)], rowSpacing=[(1,5)])
-        self.uicbCKeyHierarchy = cmds.checkBox('uicbCKeyHierarchy', l=LANGUAGE_MAP.hierarchy, al='left', v=False,
+        self.uicbCKeyHierarchy = cmds.checkBox('uicbCKeyHierarchy', l=LANGUAGE_MAP.Generic.hierarchy, al='left', v=False,
                                             ann=LANGUAGE_MAP.AnimationUI.copy_keys_hierarchy_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbCKeyHierarchy'))
         self.uicbCKeyToMany = cmds.checkBox('uicbCKeyToMany', l=LANGUAGE_MAP.AnimationUI.copy_to_many, al='left', v=False,
@@ -659,7 +659,7 @@ class AnimationUI(object):
         self.uiifgSnapStep = cmds.intFieldGrp('uiifgSnapStep', l=LANGUAGE_MAP.AnimationUI.frmstep, en=False, value1=1, cw2=(45, 30),
                                               ann=LANGUAGE_MAP.AnimationUI.frmstep_ann)
 
-        self.uicbSnapHierarchy = cmds.checkBox('uicbSnapHierarchy', l=LANGUAGE_MAP.hierarchy, al='left', v=False,
+        self.uicbSnapHierarchy = cmds.checkBox('uicbSnapHierarchy', l=LANGUAGE_MAP.Generic.hierarchy, al='left', v=False,
                                                ann=LANGUAGE_MAP.AnimationUI.snaptransforms_hierarchy_ann,
                                                cc=self.__uiCB_manageSnapHierachy)
         self.uicbStanRots = cmds.checkBox('uicbStanRots', l=LANGUAGE_MAP.AnimationUI.rots, al='left', v=True,
@@ -712,7 +712,7 @@ class AnimationUI(object):
         #cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 100), (2, 55), (3, 55), (4, 100)], columnSpacing=[(1, 10), (3, 5)])
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)], rowSpacing=[(1,5),(2,5)])
         self.uicbTimeOffsetHierarchy = cmds.checkBox('uicbTimeOffsetHierarchy',
-                                            l=LANGUAGE_MAP.hierarchy, al='left', en=True, v=False,
+                                            l=LANGUAGE_MAP.Generic.hierarchy, al='left', en=True, v=False,
                                             ann=LANGUAGE_MAP.AnimationUI.offset_hierarchy_ann,
                                             ofc=partial(self.__uiCB_manageTimeOffsetChecks, 'Off'),
                                             onc=partial(self.__uiCB_manageTimeOffsetChecks),
@@ -768,7 +768,7 @@ class AnimationUI(object):
 
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)])
         self.uicbMirrorHierarchy = cmds.checkBox('uicbMirrorHierarchy',
-                                            l=LANGUAGE_MAP.hierarchy, al='left', en=True, v=False,
+                                            l=LANGUAGE_MAP.Generic.hierarchy, al='left', en=True, v=False,
                                             ann=LANGUAGE_MAP.AnimationUI.mirror_hierarchy_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbMirrorHierarchy'))
               
@@ -819,7 +819,7 @@ class AnimationUI(object):
                                             label=LANGUAGE_MAP.AnimationUI.search_nodetypes, text="", cw2=(120, 200),
                                             ann=LANGUAGE_MAP.AnimationUI.search_nodetypes_ann)
         cmds.popupMenu()
-        cmds.menuItem(label=LANGUAGE_MAP.clear_all, command=partial(self.__uiCB_addToNodeTypes, 'clearAll'))
+        cmds.menuItem(label=LANGUAGE_MAP.Generic.clear_all, command=partial(self.__uiCB_addToNodeTypes, 'clearAll'))
         cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.nodetype_transform, command=partial(self.__uiCB_addToNodeTypes, 'transform'))
         cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.nodetype_nurbs_curves, command=partial(self.__uiCB_addToNodeTypes, 'nurbsCurve'))
         cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.nodetype_nurbs_surfaces, command=partial(self.__uiCB_addToNodeTypes, 'nurbsSurface'))
@@ -996,7 +996,7 @@ class AnimationUI(object):
         cmds.separator(h=10, style='in')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 80), (2, 250)])
         self.uicbPoseHierarchy = cmds.checkBox('uicbPoseHierarchy',
-                                            l=LANGUAGE_MAP.hierarchy, al='left', en=True, v=False,
+                                            l=LANGUAGE_MAP.Generic.hierarchy, al='left', en=True, v=False,
                                             ann=LANGUAGE_MAP.AnimationUI.pose_hierarchy_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbPoseHierarchy'))
         self.uitfgPoseRootNode = cmds.textFieldButtonGrp('uitfgPoseRootNode',
@@ -4219,19 +4219,19 @@ class MirrorSetup(object):
             cmds.deleteUI(self.win, window=True)
         window = cmds.window(self.win, title=LANGUAGE_MAP.Mirror_Setup.title, s=False, widthHeight=(280, 410))
         cmds.menuBarLayout()
-        cmds.menu(l=LANGUAGE_MAP.vimeo_menu)
-        cmds.menuItem(l=LANGUAGE_MAP.vimeo_help, \
+        cmds.menu(l=LANGUAGE_MAP.Generic.vimeo_menu)
+        cmds.menuItem(l=LANGUAGE_MAP.Generic.vimeo_help, \
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/57882801')")
         cmds.menuItem(divider=True)
-        cmds.menuItem(l=LANGUAGE_MAP.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
+        cmds.menuItem(l=LANGUAGE_MAP.Generic.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
         cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
         cmds.separator(h=15, style='none')
         cmds.text(l=LANGUAGE_MAP.Mirror_Setup.side)
         cmds.rowColumnLayout(nc=3, columnWidth=[(1, 90), (2, 90), (3, 90)])
         self.uircbMirrorSide = cmds.radioCollection('mirrorSide')
-        cmds.radioButton('Right', label=LANGUAGE_MAP.right)
-        cmds.radioButton('Centre', label=LANGUAGE_MAP.centre)
-        cmds.radioButton('Left', label=LANGUAGE_MAP.left)
+        cmds.radioButton('Right', label=LANGUAGE_MAP.Generic.right)
+        cmds.radioButton('Centre', label=LANGUAGE_MAP.Generic.centre)
+        cmds.radioButton('Left', label=LANGUAGE_MAP.Generic.left)
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 110), (2, 60)])
@@ -4251,14 +4251,14 @@ class MirrorSetup(object):
                       ofc=lambda x:self.__uicb_setDefaults('default'))  # cmds.checkBox('default',e=True, v=True))
         cmds.setParent('..')
         cmds.separator(h=5, style='none')
-        cmds.rowColumnLayout(ann=LANGUAGE_MAP.attrs, numberOfColumns=3,
+        cmds.rowColumnLayout(ann=LANGUAGE_MAP.Generic.attrs, numberOfColumns=3,
                                  columnWidth=[(1, 90), (2, 90), (3, 90)])
-        cmds.checkBox('translateX', l=LANGUAGE_MAP.transX, v=False)
-        cmds.checkBox('translateY', l=LANGUAGE_MAP.transY, v=False)
-        cmds.checkBox('translateZ', l=LANGUAGE_MAP.transZ, v=False)
-        cmds.checkBox('rotateX', l=LANGUAGE_MAP.rotX, v=False)
-        cmds.checkBox('rotateY', l=LANGUAGE_MAP.rotY, v=False)
-        cmds.checkBox('rotateZ', l=LANGUAGE_MAP.rotZ, v=False)
+        cmds.checkBox('translateX', l=LANGUAGE_MAP.Generic.transX, v=False)
+        cmds.checkBox('translateY', l=LANGUAGE_MAP.Generic.transY, v=False)
+        cmds.checkBox('translateZ', l=LANGUAGE_MAP.Generic.transZ, v=False)
+        cmds.checkBox('rotateX', l=LANGUAGE_MAP.Generic.rotX, v=False)
+        cmds.checkBox('rotateY', l=LANGUAGE_MAP.Generic.rotY, v=False)
+        cmds.checkBox('rotateZ', l=LANGUAGE_MAP.Generic.rotZ, v=False)
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
         cmds.button(label=LANGUAGE_MAP.Mirror_Setup.refresh, bgc=r9Setup.red9ButtonBGC(1),
@@ -4276,7 +4276,7 @@ class MirrorSetup(object):
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)])
-        cmds.checkBox('mirrorSaveLoadHierarchy', l=LANGUAGE_MAP.hierarchy, v=False)
+        cmds.checkBox('mirrorSaveLoadHierarchy', l=LANGUAGE_MAP.Generic.hierarchy, v=False)
         cmds.checkBox('mirrorClearCurrent', l=LANGUAGE_MAP.Mirror_Setup.clear, v=True)
         cmds.setParent('..')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)])
@@ -4527,11 +4527,11 @@ class CameraTracker():
             cmds.deleteUI(self.win, window=True)
         cmds.window(self.win, title=LANGUAGE_MAP.CameraTracker.title, widthHeight=(263, 180))
         cmds.menuBarLayout()
-        cmds.menu(l=LANGUAGE_MAP.vimeo_menu)
-        cmds.menuItem(l=LANGUAGE_MAP.vimeo_help, \
+        cmds.menu(l=LANGUAGE_MAP.Generic.vimeo_menu)
+        cmds.menuItem(l=LANGUAGE_MAP.Generic.vimeo_help, \
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/60960492')")
         cmds.menuItem(divider=True)
-        cmds.menuItem(l=LANGUAGE_MAP.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
+        cmds.menuItem(l=LANGUAGE_MAP.Generic.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=15, style='none')
         cmds.intFieldGrp('CameraFrameStep', numberOfFields=1,
@@ -4547,7 +4547,7 @@ class CameraTracker():
             cmds.button('cameraTrackTrack', label=LANGUAGE_MAP.CameraTracker.pan, command=partial(self.__runTracker))
         else:
             cmds.button('cameraTrackTrack', label=LANGUAGE_MAP.CameraTracker.track, command=partial(self.__runTracker))
-        cmds.button('cameraTrackAppy', label=LANGUAGE_MAP.apply, command=partial(self.__storePrefs))
+        cmds.button('cameraTrackAppy', label=LANGUAGE_MAP.Generic.apply, command=partial(self.__storePrefs))
         cmds.setParent('..')
         cmds.separator(h=15, style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
