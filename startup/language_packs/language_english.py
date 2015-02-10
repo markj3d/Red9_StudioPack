@@ -5,9 +5,72 @@ This is the main text language mapper for English, all other languages
 should inherit from these to make sure that none of the entries are 
 missed off!
 '''
+class MainMenus(object):
 
-class Generic(object):
+    animation_toolkit = "AnimationToolkit"
+    animation_toolkit_ann = 'Main Red9 Animation Toolkit - Note: CTRL+click opens this non-docked'
+    simple_snap = 'Simple Snap'
+    simple_snap_ann = 'Simple Snap transforms'
+    searchui = 'SearchUI'
+    searchui_ann = 'Main Red9 Search toolkit'
+    lockchannels = 'LockChannels'
+    lockchannels_ann = "Manage Channel States"
+    metanodeui = "MetaNodeUI"
+    metanodeui_ann="MetaNode Scene Searcher"
+    scene_reviewer = "Scene Reviewer"
+    scene_reviewer_ann = "Launch the Scene Review Reporter"
+    mouse_mocap = "MouseMoCap"
+    mouse_mocap_ann = "Record the Mouse Input to selected object"
+    randomize_keyframes = "Randomize Keyframes"
+    randomize_keyframes_ann = "Randomize selected Keys - also available in the GraphEditor>curve menu"
+    interactive_curve_filter = "Interactive Curve Filter"
+    interactive_curve_filter_ann = "Interactive Curve Filter - also available in the GraphEditor>curve menu"
+    mirror_setup = "MirrorSetup"
+    mirror_setup_ann="Temp UI to help setup the Mirror Markers on a rig"
+    camera_tracker = 'CameraTracker'
+    camera_tracker_pan = "CameraTracker > panning"
+    camera_tracker_pan_ann = "Panning Camera : CameraTrack the current view with the current camera"
+    tracker_tighness_ann = "setup the tracker step and tightness"
+    camera_tracker_track = "CameraTracker > tracking"
+    camera_tracker_track_ann = "Tracking Camera : CameraTrack the current view with the current camera"
+    animation_binder = "Animation Binder"
+    animation_binder_ann = "Siggraph Autodesk MasterClass 2011 - Toolset"
     
+    red9_homepage = "Red9_HomePage"
+    red9_homepage_ann = "Open Red9Consultancy HomePage"
+    red9_blog = "Red9_Blog"
+    red9_blog_ann = "Open Red9Blog"
+    red9_vimeo = "Red9_Vimeo Channel"
+    red9_vimeo_ann = "Open Red9Vimeo Channel"
+    red9_facebook = "Red9_Facebook"
+    red9_facebook_ann = "Open Red9Facebook page"
+    red9_api_docs = "Red9_API Docs"
+    red9_api_docs_ann = "Open Red9 API code reference page"
+    red9_details = "Red9_Details"
+    red9_debugger = 'Red9 Debugger'
+    reconnect_anim = "Reconnect Lost Anim"
+    reconnect_anim_ann = "Reconnect lost animation data via a chSet - see my blog post for more details"
+    open_last_crash = "Open last CrashFile"
+    open_last_crash_ann = "Open the last Maya crash file from your temp dir"
+    systems_debug = "systems: DEBUG"
+    systems_debug_ann = "Turn all the logging to Debug"
+    systems_info = "systems: INFO"
+    systems_info_ann = "Turn all the logging to Info only"
+    individual_debug = 'Individual DEBUG'
+    individual_debug_ann = "Turn the individual modules logging to Debug only"
+    individual_info = 'Individual INFO'
+    individual_info_ann = "Turn the individual modules logging to Info only"
+    debug = "Debug"
+    info = 'Info'
+    systems_reload = "systems: reload()"
+    systems_reload_ann = "Force a complete reload on the core of Red9"
+    language = "Language"
+    
+    
+class Generic(object):
+    '''
+    Used by many of the UI's, general non-specific text
+    '''
     contactme = 'Contact Me'
     tools = 'Tools'
     reset = 'Reset to Default'
@@ -57,10 +120,10 @@ class Generic(object):
 
 
 # ======================================================================================
-# CoreUtils Module
+# CoreUtils.py Module
 # ======================================================================================
 
-    
+
 class LockChannelsUI(object):
     title = 'LockChannels'
     user_defined = 'All User Defined Attrs'
@@ -107,7 +170,7 @@ class SearchNodeUI(object):
     
 
 # ======================================================================================
-# AnimationUtils Module
+# AnimationUtils.py Module
 # ======================================================================================
 
 class AnimationUI(SearchNodeUI):
