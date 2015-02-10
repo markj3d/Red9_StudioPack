@@ -254,7 +254,7 @@ def menuSetup(parent='MayaWindow'):
         cmds.menuItem(divider=True,p='redNineDebuggerItem')
         cmds.menuItem('redNineReloadItem',l="systems: reload()", p='redNineDebuggerItem',
                       ann="Force a complete reload on the core of Red9",
-                      echoCommand=True, c="Red9.core._reload()")
+                      echoCommand=True, c=reload_Red9)  # "Red9.core._reload()")
     except:
         raise StandardError('Unable to parent Red9 Menu to given parent %s' % parent)
 
@@ -316,7 +316,7 @@ def red9ContactInfo(*args):
     result=cmds.confirmDialog(title='Red9_StudioPack : build %f' % red9_getVersion(),
                        message=("Author: Mark Jackson\r\r"+
                                 "Technical Animation Director\r\r"+
-                                "Contact me at rednineinfo@gmail.com for more information\r\r"+
+                                "Contact me at info@red9Consultancy.com for more information\r\r"+
                                 "thanks for trying the toolset. If you have any\r"+
                                 "suggestions or bugs please let me know!"),
                        button=['Red9Consultancy.com','ChangeLog','Close'],messageAlign='center')
@@ -590,7 +590,10 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
     if has_internal_systems():
         cmds.evalDeferred("import Red9_Internals", lp=True)  # Unresolved Import
            
-    
+def reload_Red9(*args):
+    reload(LANGUAGE_MAP)
+    import Red9.core
+    Red9.core._reload()
     
 PRO_PACK_STUBS=pro_pack_missing_stub
 import language_packs.languageStubs

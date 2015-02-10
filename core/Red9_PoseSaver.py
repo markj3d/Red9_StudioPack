@@ -1053,13 +1053,13 @@ class PoseCompare(object):
     >>> mPoseB.metaPose=True
     >>> mPoseB.buildInternalPoseData(cmds.ls(sl=True))
     >>> 
-    >>>compare=r9Pose.PoseCompare(mPoseA,mPoseB)
-    >>>
+    >>> compare=r9Pose.PoseCompare(mPoseA,mPoseB)
+    >>> 
     >>> #.... or ....
     >>> compare=r9Pose.PoseCompare(mPoseA,'H:/Red9PoseTests/thisPose.pose')
     >>> #.... or ....
     >>> compare=r9Pose.PoseCompare('H:/Red9PoseTests/thisPose.pose','H:/Red9PoseTests/thatPose.pose')
-    >>>     
+    >>> 
     >>> compare.compare() #>> bool, True = same
     >>> compare.fails['failedAttrs']
     '''

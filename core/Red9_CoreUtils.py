@@ -34,7 +34,8 @@ logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
-
+# Language map is used for all UI's as a text mapping for languages
+LANGUAGE_MAP = r9Setup.LANGUAGE_MAP
 
 # Generic  Functions
 #---------------------------------------------------------------------------------
@@ -357,83 +358,83 @@ class FilterNode_UI(object):
         
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        window = cmds.window(self.win, title="Node Searcher", widthHeight=(400, 400))
+        window = cmds.window(self.win, title=LANGUAGE_MAP.SearchNodeUI.title, widthHeight=(400, 400))
         cmds.menuBarLayout()
-        cmds.menu(l="VimeoHelp")
-        cmds.menuItem(l="Open Vimeo Help File",\
+        cmds.menu(l=LANGUAGE_MAP.vimeo_menu)
+        cmds.menuItem(l=LANGUAGE_MAP.vimeo_help,\
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/56551684')")
         cmds.menuItem(divider=True)
-        cmds.menuItem(l="Contact Me", c=lambda *args: (r9Setup.red9ContactInfo()))
+        cmds.menuItem(l=LANGUAGE_MAP.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
         self.MainLayout=cmds.columnLayout(adjustableColumn=True)
-        cmds.frameLayout(label='Complex Node Search', cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP.SearchNodeUI.complex_node_search, cll=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=15, style='none')
         
         #====================
         # Intersector
         #====================
-        cmds.rowColumnLayout(ann='nodeTypeSelectors', numberOfColumns=3, columnWidth=[(1, 130), (2, 130), (3, 130)], columnSpacing=[(1, 10)])
-        cmds.checkBox(l='NurbsCurve', v=False,
+        cmds.rowColumnLayout(ann=LANGUAGE_MAP.SearchNodeUI.complex_node_search_ann, numberOfColumns=3, columnWidth=[(1, 130), (2, 130), (3, 130)], columnSpacing=[(1, 10)])
+        cmds.checkBox(l=LANGUAGE_MAP.nurbs_curve, v=False,
                         onc=lambda x: self.cbNodeTypes.append('nurbsCurve'),
                         ofc=lambda x: self.cbNodeTypes.remove('nurbsCurve'))
-        cmds.checkBox(l='Meshes', v=False,
+        cmds.checkBox(l=LANGUAGE_MAP.meshes, v=False,
                         onc=lambda x: self.cbNodeTypes.append('mesh'),
                         ofc=lambda x: self.cbNodeTypes.remove('mesh'))
-        cmds.checkBox(l='Joints', v=False,
+        cmds.checkBox(l=LANGUAGE_MAP.joints, v=False,
                         onc=lambda x: self.cbNodeTypes.append('joint'),
                         ofc=lambda x: self.cbNodeTypes.remove('joint'))
-        cmds.checkBox(l='Locators', v=False,
+        cmds.checkBox(l=LANGUAGE_MAP.locators, v=False,
                         onc=lambda x: self.cbNodeTypes.append('locator'),
                         ofc=lambda x: self.cbNodeTypes.remove('locator'))
-        cmds.checkBox(l='Cameras', v=False,
+        cmds.checkBox(l=LANGUAGE_MAP.cameras, v=False,
                         onc=lambda x: self.cbNodeTypes.append('camera'),
                         ofc=lambda x: self.cbNodeTypes.remove('camera'))
-        cmds.checkBox(l='Audio', v=False,
+        cmds.checkBox(l=LANGUAGE_MAP.audio, v=False,
                         onc=lambda x: self.cbNodeTypes.append('audio'),
                         ofc=lambda x: self.cbNodeTypes.remove('audio'))
-        cmds.checkBox(l='OrientConstraint', v=False,
+        cmds.checkBox(l=LANGUAGE_MAP.orient_constraint, v=False,
                         onc=lambda x: self.cbNodeTypes.append('orientConstraint'),
                         ofc=lambda x: self.cbNodeTypes.remove('orientConstraint'))
-        cmds.checkBox(l='PointConstraint', v=False,
+        cmds.checkBox(l=LANGUAGE_MAP.point_constraint, v=False,
                         onc=lambda x: self.cbNodeTypes.append('pointConstraint'),
                         ofc=lambda x: self.cbNodeTypes.remove('pointConstraint'))
-        cmds.checkBox(l='ParentConstraint', v=False,
+        cmds.checkBox(l=LANGUAGE_MAP.parent_constraint, v=False,
                         onc=lambda x: self.cbNodeTypes.append('parentConstraint'),
                         ofc=lambda x: self.cbNodeTypes.remove('parentConstraint'))
-        cmds.checkBox(l='IKHandles', v=False,
+        cmds.checkBox(l=LANGUAGE_MAP.ik_handles, v=False,
                         onc=lambda x: self.cbNodeTypes.append('ikHandle'),
                         ofc=lambda x: self.cbNodeTypes.remove('ikHandle'))
-        cmds.checkBox(l='Transforms', v=False,
+        cmds.checkBox(l=LANGUAGE_MAP.transforms, v=False,
                         onc=lambda x: self.cbNodeTypes.append('transform'),
                         ofc=lambda x: self.cbNodeTypes.remove('transform'))
         cmds.setParent('..')
 
         cmds.separator(h=20, st='in')
-        self.uiSpecificNodeTypes = cmds.textFieldGrp(ann='Specific NodeTypes to look for - separated by ,',
-                                            label='Specific NodeTypes', cw=[(1, 120)], text="")
-        self.uiSpecificAttrs = cmds.textFieldGrp(ann='Search for specific Attributes on nodes, list separated by ","',
-                                            label='Search Attributes', cw=[(1, 120)], text="")
-        self.uiSpecificPattern = cmds.textFieldGrp(label='Search Name Pattern', cw=[(1, 120)], text="",
-                                            ann='Search for specific nodeName Patterns, list separated by "," - Note this is a Python.regularExpression - ^ clamps to the start, $ clamps to the end')
+        self.uiSpecificNodeTypes = cmds.textFieldGrp(ann=LANGUAGE_MAP.SearchNodeUI.search_nodetypes_ann,
+                                            label=LANGUAGE_MAP.SearchNodeUI.search_nodetypes, cw=[(1, 120)], text="")
+        self.uiSpecificAttrs = cmds.textFieldGrp(ann=LANGUAGE_MAP.SearchNodeUI.search_attributes_ann,
+                                            label=LANGUAGE_MAP.SearchNodeUI.search_attributes, cw=[(1, 120)], text="")
+        self.uiSpecificPattern = cmds.textFieldGrp(label=LANGUAGE_MAP.SearchNodeUI.search_pattern, cw=[(1, 120)], text="",
+                                            ann=LANGUAGE_MAP.SearchNodeUI.search_pattern_ann)
         cmds.separator(h=20, st='in')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 130), (2, 230)], columnSpacing=[(1, 10)])
        
-        self.uiCbFromSelected = cmds.checkBox(ann='Process Selected Hierarchies or all Scene Nodes',
-                                            label='From Selected', al='left', v=True)
-        self.uiCbKwsTransOnly = cmds.checkBox(ann='Clamp the filter to only return the Transform Nodes, by-passes any shapes or nodeTypes with Transforms as parents',
-                        label='Return Transforms were applicable', al='left',
+        self.uiCbFromSelected = cmds.checkBox(ann=LANGUAGE_MAP.SearchNodeUI.from_selected_ann,
+                                            label=LANGUAGE_MAP.SearchNodeUI.from_selected, al='left', v=True)
+        self.uiCbKwsTransOnly = cmds.checkBox(ann=LANGUAGE_MAP.SearchNodeUI.return_transforms_ann,
+                        label=LANGUAGE_MAP.SearchNodeUI.return_transforms, al='left',
                         v=self._filterNode.settings.transformClamp)
         cmds.separator(h=5, style='none')
         cmds.separator(h=5, style='none')
-        self.uiCbKwsIncRoots = cmds.checkBox(ann='Include the originalRoots in the selection',
-                        label='Include Roots', al='left',
+        self.uiCbKwsIncRoots = cmds.checkBox(ann=LANGUAGE_MAP.SearchNodeUI.include_roots_ann,
+                        label=LANGUAGE_MAP.SearchNodeUI.include_roots, al='left',
                         v=self._filterNode.settings.incRoots)
         cmds.setParent('..')
         cmds.separator(h=10, style='none')
-        cmds.button(label='Intersection Search - All Above Fields', bgc=r9Setup.red9ButtonBGC(1),
+        cmds.button(label=LANGUAGE_MAP.SearchNodeUI.intersection_search, bgc=r9Setup.red9ButtonBGC(1),
                      command=lambda *args: (self.__uiCall('intersection')))
         cmds.separator(h=20, st='in')
-        cmds.button(label='Simple Hierarchy', bgc=r9Setup.red9ButtonBGC(2),
+        cmds.button(label=LANGUAGE_MAP.SearchNodeUI.simple_hierarchy, bgc=r9Setup.red9ButtonBGC(2),
                      command=lambda *args: (self.__uiCall('FullHierarchy')))
         cmds.setParent(self.MainLayout)
         cmds.separator(h=15, style='none')
@@ -1564,118 +1565,118 @@ class LockChannels(object):
         def _showUI(self):
             if cmds.window(self.win, exists=True):
                 cmds.deleteUI(self.win, window=True)
-            window = cmds.window(self.win, title="LockChannels", s=False, widthHeight=(260, 410))
+            window = cmds.window(self.win, title=LANGUAGE_MAP.LockChannelsUI.title, s=False, widthHeight=(260, 410))
             cmds.menuBarLayout()
-            cmds.menu(l="VimeoHelp")
-            cmds.menuItem(l="Open Vimeo Help File", \
+            cmds.menu(l=LANGUAGE_MAP.vimeo_menu)
+            cmds.menuItem(l=LANGUAGE_MAP.vimeo_help, \
                           c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/58664502')")
             cmds.menuItem(divider=True)
-            cmds.menuItem(l="Contact Me", c=lambda *args: (r9Setup.red9ContactInfo()))
+            cmds.menuItem(l=LANGUAGE_MAP.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
             cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
             cmds.separator(h=15, style='none')
-            cmds.rowColumnLayout(ann='attrs', numberOfColumns=4,
+            cmds.rowColumnLayout(ann=LANGUAGE_MAP.attrs, numberOfColumns=4,
                                  columnWidth=[(1, 50), (2, 50), (3, 50)])
            
-            cmds.checkBox('tx', l='Tx', v=False,
+            cmds.checkBox('tx', l=LANGUAGE_MAP.tx, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "tx"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "tx"))
-            cmds.checkBox('ty', l='Ty', v=False,
+            cmds.checkBox('ty', l=LANGUAGE_MAP.ty, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "ty"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "ty"))
-            cmds.checkBox('tz', l='Tz', v=False,
+            cmds.checkBox('tz', l=LANGUAGE_MAP.tz, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "tz"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "tz"))
-            cmds.checkBox('translates', l='Translates', v=False,
+            cmds.checkBox('translates', l=LANGUAGE_MAP.translates, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', ["tx", "ty", "tz"]),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', ["tx", "ty", "tz"]))
             
-            cmds.checkBox('rx', l='Rx', v=False,
+            cmds.checkBox('rx', l=LANGUAGE_MAP.rx, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "rx"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "rx"))
-            cmds.checkBox('ry', l='Ry', v=False,
+            cmds.checkBox('ry', l=LANGUAGE_MAP.ry, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "ry"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "ry"))
-            cmds.checkBox('rz', l='Rz', v=False,
+            cmds.checkBox('rz', l=LANGUAGE_MAP.rz, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "rz"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "rz"))
-            cmds.checkBox('rotates', l='Rotates', v=False,
+            cmds.checkBox('rotates', l=LANGUAGE_MAP.rotates, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', ["rx", "ry", "rz"]),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', ["rx", "ry", "rz"]))
            
-            cmds.checkBox('sx', l='Sx', v=False,
+            cmds.checkBox('sx', l=LANGUAGE_MAP.sx, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "sx"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "sx"))
-            cmds.checkBox('sy', l='Sy', v=False,
+            cmds.checkBox('sy', l=LANGUAGE_MAP.sy, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "sy"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "sy"))
-            cmds.checkBox('sz', l='Sz', v=False,
+            cmds.checkBox('sz', l=LANGUAGE_MAP.sz, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "sz"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "sz"))
-            cmds.checkBox('scales', l='Scales', v=False,
+            cmds.checkBox('scales', l=LANGUAGE_MAP.scales, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', ["sx", "sy", "sz"]),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', ["sx", "sy", "sz"]))
             
-            cmds.checkBox('v', l='Vis', v=False,
+            cmds.checkBox('v', l=LANGUAGE_MAP.vis, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "v"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "v"))
             
             cmds.setParent('..')
-            cmds.rowColumnLayout(ann='attrs', numberOfColumns=2,
+            cmds.rowColumnLayout(ann=LANGUAGE_MAP.attrs, numberOfColumns=2,
                                  columnWidth=[(1, 150)])
-            cmds.checkBox('userDefined', l='All User Defined Attrs', v=False,
-                          ann='These are non-standard attributes added to the nodes. These are considered per node',
+            cmds.checkBox('userDefined', l=LANGUAGE_MAP.LockChannelsUI.user_defined, v=False,
+                          ann=LANGUAGE_MAP.LockChannelsUI.user_defined_ann,
                           onc=lambda x: self.__setattr__('userDefined', True),
                           ofc=lambda x: self.__setattr__('userDefined', False))
-            cmds.checkBox('ALL', l='ALL Attrs', v=False,
+            cmds.checkBox('ALL', l=LANGUAGE_MAP.LockChannelsUI.all_attrs, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", \
                                                                             "userDefined", "translates", "rotates", "scales"]),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", \
                                                                              "userDefined", "translates", "rotates", "scales"]))
             cmds.setParent('..')
             cmds.separator(h=20, style='in')
-            cmds.checkBox('givenAttrs', l='Specific Attrs',
+            cmds.checkBox('givenAttrs', l=LANGUAGE_MAP.LockChannelsUI.specific_attrs,
                           onc=lambda x: cmds.textField('uitf_givenAttrs', e=True, en=True),
                           ofc=lambda x: cmds.textField('uitf_givenAttrs', e=True, en=False))
             cmds.textField('uitf_givenAttrs', text='', en=False,
-                           ann='list of specific attributes to lock, comma separated: note : RMB Menu')
+                           ann=LANGUAGE_MAP.LockChannelsUI.specific_attrs_ann)
             cmds.popupMenu()
-            cmds.menuItem(label='Clear', command=partial(self.__uiTextFieldPopup, 'clear'))
-            cmds.menuItem(label='Add ChnBox Selection', command=partial(self.__uiTextFieldPopup, 'add'))
+            cmds.menuItem(label=LANGUAGE_MAP.clear, command=partial(self.__uiTextFieldPopup, 'clear'))
+            cmds.menuItem(label=LANGUAGE_MAP.LockChannelsUI.add_chnbox_selection, command=partial(self.__uiTextFieldPopup, 'add'))
       
             cmds.separator(h=20, style='in')
-            cmds.checkBox('Hierarchy', l='Hierarchy', al='left', v=False, ann='Full Hierarchy',
+            cmds.checkBox('Hierarchy', l=LANGUAGE_MAP.hierarchy, al='left', v=False, ann=LANGUAGE_MAP.hierarchy_ann,
                           onc=lambda x: self.__setattr__('hierarchy', True),
                           ofc=lambda x: self.__setattr__('hierarchy', False))
-            cmds.rowColumnLayout(ann='attrs', numberOfColumns=2, columnWidth=[(1, 125), (2, 125)])
-            cmds.button(label='Lock', bgc=r9Setup.red9ButtonBGC(1),
+            cmds.rowColumnLayout(ann=LANGUAGE_MAP.attrs, numberOfColumns=2, columnWidth=[(1, 125), (2, 125)])
+            cmds.button(label=LANGUAGE_MAP.LockChannelsUI.lock, bgc=r9Setup.red9ButtonBGC(1),
                          command=lambda *args: (self.__uiCall('lock')))
-            cmds.button(label='unLock', bgc=r9Setup.red9ButtonBGC(2),
+            cmds.button(label=LANGUAGE_MAP.LockChannelsUI.unlock, bgc=r9Setup.red9ButtonBGC(2),
                          command=lambda *args: (self.__uiCall('unlock')))
-            cmds.button(label='Hide', bgc=r9Setup.red9ButtonBGC(1),
+            cmds.button(label=LANGUAGE_MAP.LockChannelsUI.hide, bgc=r9Setup.red9ButtonBGC(1),
                          command=lambda *args: (self.__uiCall('hide')))
-            cmds.button(label='unHide', bgc=r9Setup.red9ButtonBGC(2),
+            cmds.button(label=LANGUAGE_MAP.LockChannelsUI.unhide, bgc=r9Setup.red9ButtonBGC(2),
                          command=lambda *args: (self.__uiCall('unhide')))
             cmds.separator(h=20, style='in')
             cmds.separator(h=20, style='in')
-            self.__uibtStore = cmds.button(label='Store attrMap', bgc=r9Setup.red9ButtonBGC(1),
-                         ann='This saves the current "lock,keyable,hidden" status of all attributes in the channelBox to an attrMap file',
+            self.__uibtStore = cmds.button(label=LANGUAGE_MAP.LockChannelsUI.store_attrmap, bgc=r9Setup.red9ButtonBGC(1),
+                         ann=LANGUAGE_MAP.LockChannelsUI.store_attrmap_ann,
                          command=lambda *args: (self.__uichannelMapFile('save')))
-            self.__uibtLoad = cmds.button(label='Load from attrMap', bgc=r9Setup.red9ButtonBGC(1),
-                         ann='This restores the "lock,keyable,hidden" status of all attributes from the attrMap file',
+            self.__uibtLoad = cmds.button(label=LANGUAGE_MAP.LockChannelsUI.load_attrmap, bgc=r9Setup.red9ButtonBGC(1),
+                         ann=LANGUAGE_MAP.LockChannelsUI.load_attrmap_ann,
                          command=lambda *args: (self.__uichannelMapFile('load')))
             cmds.setParent('..')
             cmds.separator(h=10, style='none')
             
             
-            cmds.checkBox('serializeToNode', l='Serialized attrMap to node',
-                          ann='rather than saving the data to a file, serialize it to a given node so its stored internally in your systems',
+            cmds.checkBox('serializeToNode', l=LANGUAGE_MAP.LockChannelsUI.serialize_attrmap_to_node,
+                          ann=LANGUAGE_MAP.LockChannelsUI.serialize_attrmap_to_node_ann,
                           cc=lambda x: self.__uiAttrMapModeSwitch())
 
             cmds.textFieldButtonGrp('uitfbg_serializeNode',
-                                    bl='set',
+                                    bl=LANGUAGE_MAP.set,
                                     text='',
                                     en=False,
-                                    ann='Node for serializing the attrMap directly onto',
+                                    ann=LANGUAGE_MAP.LockChannelsUI.set_ann,
                                     bc=lambda *args: cmds.textFieldButtonGrp('uitfbg_serializeNode', e=True, text=cmds.ls(sl=True)[0]),
                                     cw=[(1, 220), (2, 60)])
             cmds.separator(h=15, style='none')
