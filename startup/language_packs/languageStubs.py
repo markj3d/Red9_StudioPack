@@ -2,12 +2,111 @@
 contactme = 'Contact Me'
 tools = 'Tools'
 reset = 'Reset to Default'
-hierarchy = 'Hierarchy'
 vimeo_menu = 'VimeoHelp'
 vimeo_help = "Open Vimeo Help File"
 
+
+# Generic
+hierarchy = 'Hierarchy'
+hierarchy_ann = 'Process Hierarchy'
+apply = 'Apply'
+set = 'set'
+clear_all = 'ClearAll'
+clear = 'Clear'
+attrs = 'attrs'
+transX = 'Translate X'
+transY = 'Translate Y'
+transZ = 'Translate Z'
+rotX = 'Rotate X'
+rotY = 'Rotate X'
+rotZ = 'Rotate X'
+tx = 'Tx'
+ty = 'Ty'
+tz = 'Tz'
+translates = 'Translates'
+rx = 'Rx'
+ry = 'Ry'
+rz = 'Rz'
+rotates = 'Rotates'
+sx = 'Sx'
+sy = 'Sy'
+sz = 'Sz'
+scales = 'Scales'
+vis = 'Vis'
+nurbs_curve = 'NurbsCurve'
+meshes = 'Meshes'
+joints = 'Joints'
+locators = 'Locators'
+cameras = 'Cameras'
+audio ='Audio'
+orient_constraint = 'OrientConstraint'
+point_constraint ='PointConstraint'
+parent_constraint = 'ParentConstraint'
+ik_handles = 'IKHandles'
+transforms = 'Transforms'
+right = 'Right'
+left = 'Left'
+centre = 'Centre'
+
+# ======================================================================================
+# CoreUtils Module
+# ======================================================================================
+
     
-class AnimationUI(object):
+class LockChannelsUI(object):
+    title = 'LockChannels'
+    user_defined = 'All User Defined Attrs'
+    user_defined_ann='These are non-standard attributes added to the nodes. These are considered per node'
+    all_attrs = 'ALL Attrs'
+    specific_attrs = 'Specific Attrs'
+    specific_attrs_ann = 'list of specific attributes to lock, comma separated: note : RMB Menu'
+    add_chnbox_selection = 'Add ChnBox Selection'
+    lock = 'Lock'
+    unlock = 'unLock'
+    hide = 'Hide'
+    unhide = 'unHide'
+    store_attrmap = 'Store attrMap'
+    store_attrmap_ann = 'This saves the current "lock,keyable,hidden" status of all attributes in the channelBox to an attrMap file'
+    load_attrmap = 'Load from attrMap'
+    load_attrmap_ann = 'This restores the "lock,keyable,hidden" status of all attributes from the attrMap file'
+    serialize_attrmap_to_node = 'Serialized attrMap to node'
+    serialize_attrmap_to_node_ann = 'rather than saving the data to a file, serialize it to a given node so its stored internally in your systems'
+    set_ann = 'Node for serializing the attrMap directly onto'
+
+class SearchNodeUI(object):
+    '''
+    Main node Search UI, this is inherited by the AnimUI as they share the same filter options
+    '''
+    title = "Node Searcher"
+    complex_node_search = 'Complex Node Search'
+    complex_node_search_ann = 'nodeTypeSelectors'
+    
+    search_nodetypes = 'Specific NodeTypes'
+    search_nodetypes_ann = 'Specific NodeTypes to look for - separated by ,'
+    search_attributes = 'Search Attributes'
+    search_attributes_ann = 'Search for specific Attributes on nodes, list separated by ","'
+    search_pattern = 'Search Name Pattern'
+    search_pattern_ann='Search for specific nodeName Patterns, list separated by "," - Note this is a Python.regularExpression - ^ clamps to the start, $ clamps to the end'
+    
+    from_selected = 'From Selected'
+    from_selected_ann = 'Process Selected Hierarchies or all Scene Nodes'
+    return_transforms = 'Return Transforms were applicable'
+    return_transforms_ann='Clamp the filter to only return the Transform Nodes, by-passes any shapes or nodeTypes with Transforms as parents'
+    include_roots = 'Include Roots'
+    include_roots_ann = 'Include the originalRoots in the selection'
+    intersection_search = 'Intersection Search - All Above Fields'
+    simple_hierarchy ='Simple Hierarchy'
+    
+
+# ======================================================================================
+# AnimationUtils Module
+# ======================================================================================
+
+class AnimationUI(SearchNodeUI):
+    title = 'Red9 AnimationTools'
+    tab_animlayout = 'Animation_Toolkit'
+    tab_poselayout = 'PoseManager'
+    tab_filterlayout = 'Hierarchy_Control'
     
     vimeo_walkthrough = 'Open Vimeo > WalkThrough v1.27'
     vimeo_update = 'Open Vimeo > Update v1.40'
@@ -114,10 +213,8 @@ checkBoxes will process all children of the roots'''
                 
     metarig = 'MetaRig'
     metarig_ann = 'Switch to MetaRig Sub Systems'
-    specific_nodetypes = 'Specific NodeTypes'
     specific_nodetypes_ann = 'RMB QuickSelector for Common Types : Search for "Specific NodeTypes" in the hierarchy, list separated by ","'
     
-    clear_all = 'ClearAll'
     nodetype_transform = 'nodeType : Transform'
     nodetype_nurbs_curves = 'nodeType : NurbsCurves'
     nodetype_nurbs_surfaces = 'nodeType : NurbsSurfaces'
@@ -127,11 +224,7 @@ checkBoxes will process all children of the roots'''
     nodetype_cameras = 'nodeType : Cameras'
     nodetype_hikeff = 'nodeType : hikIKEffector'
     nodetype_blendshape = 'nodeType : blendShape'
-    search_attributes = 'Search Attributes'
-    search_attributes_ann = 'Search for "Specific Attributes" on Nodes in the hierarchy, list separated by ","'
-    search_name_pattern = 'Search Name Pattern'
-    search_name_pattern_ann = 'Search for specific nodeName Patterns, list separated by "," - Note this is a Python.regularExpression - ^ clamps to the start, $ clamps to the end'
-    
+   
     priorities_clear = 'Clear Process Priorities'
     priorities_set = 'Set Priorities from Selected'
     priorities_append = 'Append Priorities from Selected'
@@ -143,7 +236,6 @@ checkBoxes will process all children of the roots'''
     presets_available = 'Available Presets:'
     presets_delete = 'DeletePreset'
     presets_opendir = 'OpenPresetDir'
-    include_roots = 'Include Roots'
     
     match_method = 'MatchMethod'
     match_method_ann = 'Method used to match nodes in different hierarchies, default="stripPrefix"'
@@ -227,25 +319,15 @@ checkBoxes will process all children of the roots'''
     pose_rmb_grid_med = 'Grid Size: Medium'
     pose_rmb_grid_large = 'Grid Size: Large'
     
-    
 class Mirror_Setup(object):
-    
+    title = "MirrorSetup"
     side = 'MirrorSide:'
-    right = 'Right'
-    left = 'Left'
-    centre = 'Centre'
     index = 'MirrorIndex:'
     axis = 'MirrorAxis:'
     default_axis = 'Use Default Axis'
     no_inverse = 'No Inversing'
     no_inverse_ann = 'Set the marker so that data is copied over but NO inversing is done on the data, straight copy from left to right'
-    attrs = 'attrs'
-    transX = 'Translate X'
-    transY = 'Translate Y'
-    transZ = 'Translate Z'
-    rotX = 'Rotate X'
-    rotY = 'Rotate X'
-    rotZ = 'Rotate X'
+
     refresh = 'Refresh from Selected'
     add_update = 'Add / Update Mirror Markers'
     add_update_ann = 'add mirrorMarkers - NOTE if multiple selected then the index will increment from the given value'
@@ -257,8 +339,11 @@ class Mirror_Setup(object):
     save_configs_ann = 'Save the current MirrorSetups'
     load_configs = 'Load MirrorConfigs'
     
-    
-
-    
-    
+class CameraTracker(object):
+    title = 'CameraTracker'
+    tracker_step = 'TrackerStep: '
+    frames = 'frames'
+    maintain_frame = 'MaintainCurrentFraming'
+    pan = 'Pan'
+    track = 'Track'
     
