@@ -733,7 +733,7 @@ class MClassNodeUI():
                       c=upgradeSystemsToUUID)
         cmds.scrollLayout('slMetaNodeScroll',rc=lambda *args:self.fitTextScrollFucker())
         cmds.columnLayout(adjustableColumn=True)
-        cmds.separator(h=15, style='none')
+        cmds.separator(h=5, style='none')
         
         #Build the class options to filter by
         cmds.rowColumnLayout('rc_useMetaFilterUI', numberOfColumns=3,
@@ -747,7 +747,17 @@ class MClassNodeUI():
         for preset in sorted(RED9_META_REGISTERY):
             cmds.menuItem(l=preset)
         cmds.setParent('..')
-        cmds.separator(h=15, style='in')
+        
+        cmds.separator(h=10, style='in')
+        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 400), (2, 50)])
+        try:
+            cmds.textFieldGrp('filterByName', l='filter by name : ', text='', tcc=self.filterResults, cw=((1,136),(2,250)))
+        except:
+            cmds.textFieldGrp('filterByName', l='filter by name : ', text='', cc=self.filterResults, cw=((1,136),(2,250)))
+        cmds.button('clear', c=self.clearFilter)
+        cmds.setParent('..')
+        
+        cmds.separator(h=10, style='in')
         cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 100), (2, 100), (3,100), (4,100)],
                              columnSpacing=[(1, 10), (2, 10), (3,10)])
         self.uircbMetaUIShowStatus = cmds.radioCollection('uircbMetaUIShowStatus')
@@ -808,8 +818,8 @@ class MClassNodeUI():
         '''
         bodge to resize tghe textScroll as the default Maya control is SHITE!
         '''
-        cmds.textScrollList('slMetaNodeList',e=True,h=int(cmds.scrollLayout('slMetaNodeScroll',q=True,h=True))-150)
-        cmds.textScrollList('slMetaNodeList',e=True,w=int(cmds.scrollLayout('slMetaNodeScroll',q=True,w=True))-10)
+        cmds.textScrollList('slMetaNodeList',e=True,h=int(cmds.scrollLayout('slMetaNodeScroll',q=True,h=True))-170)
+        cmds.textScrollList('slMetaNodeList',e=True,w=int(cmds.scrollLayout('slMetaNodeScroll',q=True,w=True))-20)
 
     def graphNetwork(self,*args):
         if r9Setup.mayaVersion()<2013:
@@ -872,11 +882,35 @@ class MClassNodeUI():
         else:
             log.warning('no child nodes found from given metaNode')
         #cmds.select(self.mNodes[cmds.textScrollList('slMetaNodeList',q=True,sii=True)[0]-1].getChildren(walk=True))
+    
+    def filterResults(self, *args):
+        '''
+        rebuild the list based on the filter typed in
+        '''
+        filter=cmds.textFieldGrp('filterByName', q=True, text=True)
+        cmds.textScrollList('slMetaNodeList', edit=True, ra=True)
+        if self.mNodes:
+            width=len(self.mNodes[0])
+            #figure out the width of the first cell
+            for meta in self.mNodes:
+                if len(meta)>width:
+                    width=len(meta)
+            width+=3
+            #fill the scroll list
+            for meta in self.mNodes:
+                if filter.upper() in meta.upper():
+                    cmds.textScrollList('slMetaNodeList', edit=True,
+                                        append=('{0:<%i}:{1:}' % width).format(meta, getMClassDataFromNode(meta)),
+                                        sc=lambda *args:self.selectCmd(),
+                                        dcc=lambda *x:self.doubleClick())
+    
+    def clearFilter(self, *args):
+        cmds.textFieldGrp('filterByName', e=True, text='')
         
     def fillScroll(self, sortBy=None, *args):  # , mClassToShow=None, *args):
         
         cmds.textScrollList('slMetaNodeList', edit=True, ra=True)
-        
+                          
         states=cmds.radioCollection(self.uircbMetaUIShowStatus, q=True, select=True)
         self.dataType='node'
         if states=='metaUISatusinValids' or states=='metaUISatusValids':
@@ -965,7 +999,7 @@ class MClassNodeUI():
         
         r9Setup.PRO_PACK_STUBS().MetaDataUI.uiCB_disconnectNode(mNode)
          
-         
+        
                                  
 #    def __uiCB_connectNode(self, *args):
 #        '''
