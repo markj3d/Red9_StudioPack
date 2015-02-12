@@ -67,6 +67,47 @@ class _MainMenus_(object):
     systems_reload_ann = "Force a complete reload on the core of Red9"
     language = "Language"
     
+    # additional menu stubs
+    open_in_explorer = "Red9: Open in Explorer"
+    open_in_explorer_ann = "Open the folder containing the current Maya Scene"
+    collapse_range = 'Red9: Collapse Range'
+    collapse_selected = 'Collapse : Selected Only'
+    collapse_selected_ann = 'Collapse the keys in the selected TimeRange (Red highlighted)'
+    collapse_full = 'Collapse : Full Scene'
+    collapse_full_ann = 'Collapse the keys in the selected TimeRange (Red highlighted)'
+    insert_padding = 'Red9: Insert Padding'
+    pad_selected = 'Pad : Selected Only'
+    pad_selected_ann = 'Insert time in the selected TimeRange (Red highlighted)'
+    pad_full_scene = 'Pad : Full Scene'
+    pad_full_scene_ann = 'Insert time in the selected TimeRange (Red highlighted)'
+    
+    # audio sub_menu
+    sound_red9_sound = "Red9_Sound"
+    sound_offset_manager = "Offset Manager"
+    sound_offset_manager_ann = "offset / nudge multiple audio nodes in one go"
+    sound_activate_selected_audio = "Activate Selected Audio"
+    sound_activate_selected_audio_ann = "set the current selected audio node to be active in the timeline"
+    sound_set_timeline_to_selected = "Set Timeline to Selected"
+    sound_set_timeline_to_selected_ann = "set the timeline to the extents of the selected, or all audio nodes"
+    sound_focus_on_selected = "Focus on Selected"
+    sound_focus_on_selected_ann = "Runs the setActive then the setTimelines in one go for speed"
+    sound_mute_selected = "Mute Selected"
+    sound_unmute_selected = "UnMute Selected"
+    sound_lock_selected = "Lock Selected"
+    sound_lock_selected_ann = "Locks the time inputs for the selected audio nodes, stopping them being accidentally dragged in time"
+    sound_unlock_selected = "UnLock Selected"
+    sound_unlock_selected_ann = "UnLock the time inputs for the selected audio nodes, allowing them to be moved in time"
+    sound_delete_selected = "Delete Selected Audio"
+    sound_delete_selected_ann = "Mainly for Maya2013 where the delete of audio nodes was broken!"
+    sound_combine_audio = "Combine Audio"
+    sound_combine_audio_ann = "Combine either selected, or ALL wavs into a single audio track - perfect for playblasting multiple audios"
+    sound_open_audio_path = "Open Audio Path"
+    sound_open_audio_path_ann = "show the path in an OS Explorer"
+    sound_format_soundnode_name = "Format SoundNode Names"
+    sound_format_soundnode_name_ann = "rename the sound nodes to their respective short file name for consistency"
+    sound_inspect_wav = "Inspect Wav Format"
+    sound_inspect_wav_ann = "open up the inspector and show internal details about wav formats"
+        
     
 class _Generic_(object):
     '''

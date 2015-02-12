@@ -94,7 +94,7 @@ set_language()
 
 
 #=========================================================================================
-# General Maya data  ---------------------------------------------------------------------
+# MAYA DATA  -----------------------------------------------------------------------------
 #=========================================================================================
  
 def mayaVersion():
@@ -142,8 +142,11 @@ def getCurrentFPS():
     return  fpsDict[cmds.currentUnit(q=True, fullName=True, time=True)]
 
   
-# Menu Builders ------------------------------------------------------------------------
-   
+
+#=========================================================================================
+# MENU SETUPS ----------------------------------------------------------------------------
+#=========================================================================================
+  
 def menuSetup(parent='MayaWindow'):
     
     #if exists remove all items, means we can update on the fly by restarting the Red9 pack
@@ -358,8 +361,8 @@ def addToMayaMenus():
                 mel.eval('buildFileMenu()')
             cmds.menuItem(divider=True,p=mainFileMenu)
             cmds.menuItem('redNineOpenFolderItem',
-                          l="Red9: Open in Explorer",
-                          ann="Open the folder containing the current Maya Scene",
+                          l=LANGUAGE_MAP._MainMenus_.open_in_explorer,
+                          ann=LANGUAGE_MAP._MainMenus_.open_in_explorer_ann,
                           p=mainFileMenu,
                           echoCommand=True,
                           c="import maya.cmds as cmds;import Red9.core.Red9_General as r9General;r9General.os_OpenFileDirectory(cmds.file(q=True,sn=True))")
@@ -370,20 +373,20 @@ def addToMayaMenus():
                 
             TimeSliderMenu='TimeSliderMenu'
             cmds.menuItem(divider=True, p=TimeSliderMenu)
-            cmds.menuItem(subMenu=True, label='Red9: Collapse Range', p=TimeSliderMenu)
-            cmds.menuItem('redNineTimeSliderCollapseItem', label='Collapse : Selected Only',
-                          ann='Collapse the keys in the selected TimeRange (Red highlighted)',
+            cmds.menuItem(subMenu=True, label=LANGUAGE_MAP._MainMenus_.collapse_range, p=TimeSliderMenu)
+            cmds.menuItem('redNineTimeSliderCollapseItem', label=LANGUAGE_MAP._MainMenus_.collapse_selected,
+                          ann=LANGUAGE_MAP._MainMenus_.collapse_selected_ann,
                           c='import Red9.core.Red9_CoreUtils as r9Core;r9Core.timeOffset_collapse(scene=False)')
-            cmds.menuItem(label='Collapse : Full Scene',
-                          ann='Collapse the keys in the selected TimeRange (Red highlighted)',
+            cmds.menuItem(label=LANGUAGE_MAP._MainMenus_.collapse_full,
+                          ann=LANGUAGE_MAP._MainMenus_.collapse_full_ann,
                           c='import Red9.core.Red9_CoreUtils as r9Core;r9Core.timeOffset_collapse(scene=True)')
 
-            cmds.menuItem(subMenu=True, label='Red9: Insert Padding', p=TimeSliderMenu)
-            cmds.menuItem(label='Pad : Selected Only',
-                          ann='Insert time in the selected TimeRange (Red highlighted)',
+            cmds.menuItem(subMenu=True, label=LANGUAGE_MAP._MainMenus_.insert_padding, p=TimeSliderMenu)
+            cmds.menuItem(label=LANGUAGE_MAP._MainMenus_.pad_selected,
+                          ann=LANGUAGE_MAP._MainMenus_.pad_selected_ann,
                           c='import Red9.core.Red9_CoreUtils as r9Core;r9Core.timeOffset_addPadding(scene=False)')
-            cmds.menuItem(label='Pad : Full Scene',
-                          ann='Insert time in the selected TimeRange (Red highlighted)',
+            cmds.menuItem(label=LANGUAGE_MAP._MainMenus_.pad_full_scene,
+                          ann=LANGUAGE_MAP._MainMenus_.pad_full_scene_ann,
                           c='import Red9.core.Red9_CoreUtils as r9Core;r9Core.timeOffset_addPadding(scene=True)')
         else:
             log.debug('Red9 Timeslider menus already built')
@@ -391,7 +394,62 @@ def addToMayaMenus():
         log.debug('gMainFileMenu not found >> catch for unitTesting')
 
 
-# General Pack Data --------------------------------------------------------------------
+def addAudioMenu(parent=None, rootMenu='redNineTraxRoot'):
+    '''
+    Red9 Sound Menu setup
+    '''
+    if not parent:
+        cmds.menu(rootMenu, l=LANGUAGE_MAP._MainMenus_.sound_red9_sound, tearOff=True, allowOptionBoxes=True)
+    else:
+        cmds.menu(rootMenu, l=LANGUAGE_MAP._MainMenus_.sound_red9_sound, tearOff=True, allowOptionBoxes=True, parent=parent)
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_offset_manager, p=rootMenu,
+                  ann=LANGUAGE_MAP._MainMenus_.sound_offset_manager_ann,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioToolsWrap().show()")
+    cmds.menuItem(d=True)
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_activate_selected_audio, p=rootMenu,
+                  ann=LANGUAGE_MAP._MainMenus_.sound_activate_selected_audio_ann,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().setActive()")
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_set_timeline_to_selected, p=rootMenu,
+                  ann=LANGUAGE_MAP._MainMenus_.sound_set_timeline_to_selected_ann,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().setTimelineToAudio()")
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_focus_on_selected, p=rootMenu,
+                  ann=LANGUAGE_MAP._MainMenus_.sound_focus_on_selected_ann,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().setTimelineToAudio();r9Audio.AudioHandler().setActive()")
+    cmds.menuItem(d=True)
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_mute_selected, p=rootMenu,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().muteSelected(True)")
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_unmute_selected, p=rootMenu,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().muteSelected(False)")
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_lock_selected, p=rootMenu,
+                  ann=LANGUAGE_MAP._MainMenus_.sound_lock_selected_ann,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().lockTimeInputs(True)")
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_unlock_selected, p=rootMenu,
+                  ann=LANGUAGE_MAP._MainMenus_.sound_unlock_selected_ann,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().lockTimeInputs(False)")
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_delete_selected, p=rootMenu,
+                  ann=LANGUAGE_MAP._MainMenus_.sound_delete_selected_ann,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().deleteSelected()")
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_format_soundnode_name, p=rootMenu,
+                  ann=LANGUAGE_MAP._MainMenus_.sound_format_soundnode_name_ann,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioHandler().formatNodes_to_Path()")
+    cmds.menuItem(d=True)
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_combine_audio, p=rootMenu,
+                  ann=LANGUAGE_MAP._MainMenus_.sound_combine_audio_ann,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.combineAudio()")
+    cmds.menuItem(d=True)
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_open_audio_path, p=rootMenu,
+                  ann=LANGUAGE_MAP._MainMenus_.sound_open_audio_path_ann,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioNode().openAudioPath()")
+    cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_inspect_wav, p=rootMenu,
+                  ann=LANGUAGE_MAP._MainMenus_.sound_inspect_wav_ann,
+                  c="import Red9.core.Red9_Audio as r9Audio;r9Audio.inspect_wav()")
+
+
+
+#=========================================================================================
+# GENERAL RED9 DATA ----------------------------------------------------------------------
+#=========================================================================================
+
 
 def red9ButtonBGC(colour):
     '''
@@ -498,8 +556,11 @@ def get_pro_pack(*args):
     if result =='Red9Consultancy.com':
         r9General.os_OpenFile('http://red9consultancy.com/')
 
-# BOOT FUNCTS - Add and Build --------------------------------------------------------------
-    
+
+#=========================================================================================
+# BOOT FUNCTIONS -------------------------------------------------------------------------
+#=========================================================================================
+
 def addScriptsPath(path):
     '''
     Add additional folders to the ScriptPath
