@@ -447,7 +447,7 @@ class AnimationUI(object):
         self.buttonBgc = r9Setup.red9ButtonBGC(1)
         self.win = 'Red9AnimToolsWin'
         self.dockCnt = 'Red9AnimToolsDoc'
-        self.label = LANGUAGE_MAP.AnimationUI.title
+        self.label = LANGUAGE_MAP._AnimationUI_.title
         self.internalConfigPath=False
         self.dock = dockUI
         
@@ -535,27 +535,27 @@ class AnimationUI(object):
         animwindow = cmds.window(self.win, title=self.label)
         
         cmds.menuBarLayout()
-        cmds.menu(l=LANGUAGE_MAP.Generic.vimeo_menu)
-        cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.vimeo_walkthrough,  # "Open Vimeo > WalkThrough v1.27",
+        cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.vimeo_walkthrough,  # "Open Vimeo > WalkThrough v1.27",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/56431983')")
-        cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.vimeo_update,  # "Open Vimeo > Update v1.40",
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.vimeo_update,  # "Open Vimeo > Update v1.40",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/78577760')")
-        cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.vimeo_hierarchy_control,  # "Open Vimeo > HierarchyControl",
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.vimeo_hierarchy_control,  # "Open Vimeo > HierarchyControl",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/56551684')")
-        cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.vimeo_track_stab,  # "Open Vimeo > Track or Stabilize",
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.vimeo_track_stab,  # "Open Vimeo > Track or Stabilize",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/33440361')")
-        cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.vimeo_copykeys,  # "Open Vimeo > CopyKeys & TimeOffsets",
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.vimeo_copykeys,  # "Open Vimeo > CopyKeys & TimeOffsets",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/81731510')")
-        cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.vimeo_mirrorsetup,  # "Open Vimeo > MirrorSetups",
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.vimeo_mirrorsetup,  # "Open Vimeo > MirrorSetups",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/57882801')")
-        cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.vimeo_posesaver_advanced,  # "Open Vimeo > PoseSaver - Advanced Topics",
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.vimeo_posesaver_advanced,  # "Open Vimeo > PoseSaver - Advanced Topics",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/66269033')")
-        cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.vimeo_posesaver_blending,  # "Open Vimeo > PoseSaver - Blending and maintain spaces",
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.vimeo_posesaver_blending,  # "Open Vimeo > PoseSaver - Blending and maintain spaces",
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/88391202')")
         cmds.menuItem(divider=True)
-        cmds.menuItem(l=LANGUAGE_MAP.Generic.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
-        cmds.menu(l=LANGUAGE_MAP.Generic.tools)
-        cmds.menuItem(l=LANGUAGE_MAP.Generic.reset,
+        cmds.menuItem(l=LANGUAGE_MAP._Generic_.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
+        cmds.menu(l=LANGUAGE_MAP._Generic_.tools)
+        cmds.menuItem(l=LANGUAGE_MAP._Generic_.reset,
                       c=self.__uiCache_resetDefaults)
         self.MainLayout = cmds.scrollLayout('red9MainScroller', rc=self.__uiCB_resizeMainScroller)
         self.form = cmds.formLayout()
@@ -573,50 +573,50 @@ class AnimationUI(object):
         #====================
         # CopyAttributes
         #====================
-        cmds.frameLayout(label=LANGUAGE_MAP.AnimationUI.copy_attrs, cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.copy_attrs, cll=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.copy_attrs, bgc=self.buttonBgc,
-                    ann=LANGUAGE_MAP.AnimationUI.copy_attrs_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.copy_attrs, bgc=self.buttonBgc,
+                    ann=LANGUAGE_MAP._AnimationUI_.copy_attrs_ann,
                     command=partial(self.__uiCall, 'CopyAttrs'))
        
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)])
-        self.uicbCAttrHierarchy = cmds.checkBox('uicbCAttrHierarchy', l=LANGUAGE_MAP.Generic.hierarchy, al='left', v=False,
-                                                ann=LANGUAGE_MAP.AnimationUI.copy_attrs_hierarchy_ann,
+        self.uicbCAttrHierarchy = cmds.checkBox('uicbCAttrHierarchy', l=LANGUAGE_MAP._Generic_.hierarchy, al='left', v=False,
+                                                ann=LANGUAGE_MAP._AnimationUI_.copy_attrs_hierarchy_ann,
                                                 cc=lambda x: self.__uiCache_addCheckbox('uicbCAttrHierarchy'))
-        self.uicbCAttrToMany = cmds.checkBox('uicbCAttrToMany', l=LANGUAGE_MAP.AnimationUI.copy_to_many, al='left', v=False,
-                                                ann=LANGUAGE_MAP.AnimationUI.copy_attrs_to_many_ann)
-        self.uicbCAttrChnAttrs = cmds.checkBox(ann=LANGUAGE_MAP.AnimationUI.cbox_attrs_ann,
-                                            l=LANGUAGE_MAP.AnimationUI.cbox_attrs, al='left', v=False)
+        self.uicbCAttrToMany = cmds.checkBox('uicbCAttrToMany', l=LANGUAGE_MAP._AnimationUI_.copy_to_many, al='left', v=False,
+                                                ann=LANGUAGE_MAP._AnimationUI_.copy_attrs_to_many_ann)
+        self.uicbCAttrChnAttrs = cmds.checkBox(ann=LANGUAGE_MAP._AnimationUI_.cbox_attrs_ann,
+                                            l=LANGUAGE_MAP._AnimationUI_.cbox_attrs, al='left', v=False)
         cmds.setParent(self.AnimLayout)
               
         #====================
         # CopyKeys
         #====================
         cmds.separator(h=10, st='in')
-        cmds.frameLayout(label=LANGUAGE_MAP.AnimationUI.copy_keys, cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.copy_keys, cll=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.copy_keys, bgc=self.buttonBgc,
-                    ann=LANGUAGE_MAP.AnimationUI.copy_keys_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.copy_keys, bgc=self.buttonBgc,
+                    ann=LANGUAGE_MAP._AnimationUI_.copy_keys_ann,
                     command=partial(self.__uiCall, 'CopyKeys'))
        
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)], rowSpacing=[(1,5)])
-        self.uicbCKeyHierarchy = cmds.checkBox('uicbCKeyHierarchy', l=LANGUAGE_MAP.Generic.hierarchy, al='left', v=False,
-                                            ann=LANGUAGE_MAP.AnimationUI.copy_keys_hierarchy_ann,
+        self.uicbCKeyHierarchy = cmds.checkBox('uicbCKeyHierarchy', l=LANGUAGE_MAP._Generic_.hierarchy, al='left', v=False,
+                                            ann=LANGUAGE_MAP._AnimationUI_.copy_keys_hierarchy_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbCKeyHierarchy'))
-        self.uicbCKeyToMany = cmds.checkBox('uicbCKeyToMany', l=LANGUAGE_MAP.AnimationUI.copy_to_many, al='left', v=False,
-                                            ann=LANGUAGE_MAP.AnimationUI.copy_keys_to_many_ann)
-        self.uicbCKeyChnAttrs = cmds.checkBox(ann=LANGUAGE_MAP.AnimationUI.cbox_attrs_ann,
-                                            l=LANGUAGE_MAP.AnimationUI.cbox_attrs, al='left', v=False)
-        self.uicbCKeyRange = cmds.checkBox('uicbCKeyRange', l=LANGUAGE_MAP.AnimationUI.timerange, al='left', v=False,
-                                            ann=LANGUAGE_MAP.AnimationUI.copy_keys_timerange_ann,
+        self.uicbCKeyToMany = cmds.checkBox('uicbCKeyToMany', l=LANGUAGE_MAP._AnimationUI_.copy_to_many, al='left', v=False,
+                                            ann=LANGUAGE_MAP._AnimationUI_.copy_keys_to_many_ann)
+        self.uicbCKeyChnAttrs = cmds.checkBox(ann=LANGUAGE_MAP._AnimationUI_.cbox_attrs_ann,
+                                            l=LANGUAGE_MAP._AnimationUI_.cbox_attrs, al='left', v=False)
+        self.uicbCKeyRange = cmds.checkBox('uicbCKeyRange', l=LANGUAGE_MAP._AnimationUI_.timerange, al='left', v=False,
+                                            ann=LANGUAGE_MAP._AnimationUI_.copy_keys_timerange_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbCKeyRange'))
-        self.uicbCKeyAnimLay = cmds.checkBox('uicbCKeyAnimLay', l=LANGUAGE_MAP.AnimationUI.copy_keys_merge_layers, al='left', v=False,
-                                            ann=LANGUAGE_MAP.AnimationUI.copy_keys_merge_layers_ann,
+        self.uicbCKeyAnimLay = cmds.checkBox('uicbCKeyAnimLay', l=LANGUAGE_MAP._AnimationUI_.copy_keys_merge_layers, al='left', v=False,
+                                            ann=LANGUAGE_MAP._AnimationUI_.copy_keys_merge_layers_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbCKeyAnimLay'))
         cmds.optionMenu('om_PasteMethod',
-                        ann=LANGUAGE_MAP.AnimationUI.paste_method_ann,
+                        ann=LANGUAGE_MAP._AnimationUI_.paste_method_ann,
                         cc=partial(self.__uiCB_setCopyKeyPasteMethod))
         for preset in ["insert",
                        "replace",
@@ -636,10 +636,10 @@ class AnimationUI(object):
         # SnapTransforms
         #====================
         cmds.separator(h=10, st='in')
-        cmds.frameLayout(label=LANGUAGE_MAP.AnimationUI.snaptransforms, cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.snaptransforms, cll=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.snaptransforms, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.snaptransforms_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.snaptransforms, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.snaptransforms_ann,
                      command=partial(self.__uiCall, 'Snap'))
         cmds.separator(h=5, style='none')
 
@@ -647,28 +647,28 @@ class AnimationUI(object):
         cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 75), (2, 50), (3, 90), (4, 85)],
                              columnSpacing=[(1, 8), (2, 8), (3, 8)], rowSpacing=[(1,2)])
 
-        self.uicbSnapRange = cmds.checkBox('uicbSnapRange', l=LANGUAGE_MAP.AnimationUI.timerange, al='left', v=False,
-                                            ann=LANGUAGE_MAP.AnimationUI.snaptransforms_timerange_ann,
+        self.uicbSnapRange = cmds.checkBox('uicbSnapRange', l=LANGUAGE_MAP._AnimationUI_.timerange, al='left', v=False,
+                                            ann=LANGUAGE_MAP._AnimationUI_.snaptransforms_timerange_ann,
                                             cc=self.__uiCB_manageSnapTime)
-        self.uicbSnapTrans = cmds.checkBox('uicbStanTrans', l=LANGUAGE_MAP.AnimationUI.trans, al='left', v=True,
-                                           ann=LANGUAGE_MAP.AnimationUI.trans_ann,
+        self.uicbSnapTrans = cmds.checkBox('uicbStanTrans', l=LANGUAGE_MAP._AnimationUI_.trans, al='left', v=True,
+                                           ann=LANGUAGE_MAP._AnimationUI_.trans_ann,
                                            cc=lambda x: self.__uiCache_addCheckbox('uicbStanTrans'))
-        self.uicbSnapPreCopyKeys = cmds.checkBox('uicbSnapPreCopyKeys', l=LANGUAGE_MAP.AnimationUI.pre_copykeys, al='left',
-                                                 ann=LANGUAGE_MAP.AnimationUI.pre_copykeys_ann,
+        self.uicbSnapPreCopyKeys = cmds.checkBox('uicbSnapPreCopyKeys', l=LANGUAGE_MAP._AnimationUI_.pre_copykeys, al='left',
+                                                 ann=LANGUAGE_MAP._AnimationUI_.pre_copykeys_ann,
                                                  en=False, v=True)
-        self.uiifgSnapStep = cmds.intFieldGrp('uiifgSnapStep', l=LANGUAGE_MAP.AnimationUI.frmstep, en=False, value1=1, cw2=(45, 30),
-                                              ann=LANGUAGE_MAP.AnimationUI.frmstep_ann)
+        self.uiifgSnapStep = cmds.intFieldGrp('uiifgSnapStep', l=LANGUAGE_MAP._AnimationUI_.frmstep, en=False, value1=1, cw2=(45, 30),
+                                              ann=LANGUAGE_MAP._AnimationUI_.frmstep_ann)
 
-        self.uicbSnapHierarchy = cmds.checkBox('uicbSnapHierarchy', l=LANGUAGE_MAP.Generic.hierarchy, al='left', v=False,
-                                               ann=LANGUAGE_MAP.AnimationUI.snaptransforms_hierarchy_ann,
+        self.uicbSnapHierarchy = cmds.checkBox('uicbSnapHierarchy', l=LANGUAGE_MAP._Generic_.hierarchy, al='left', v=False,
+                                               ann=LANGUAGE_MAP._AnimationUI_.snaptransforms_hierarchy_ann,
                                                cc=self.__uiCB_manageSnapHierachy)
-        self.uicbStanRots = cmds.checkBox('uicbStanRots', l=LANGUAGE_MAP.AnimationUI.rots, al='left', v=True,
+        self.uicbStanRots = cmds.checkBox('uicbStanRots', l=LANGUAGE_MAP._AnimationUI_.rots, al='left', v=True,
                                           ann='Track the Rotational data',
                                           cc=lambda x: self.__uiCache_addCheckbox('uicbStanRots'))
-        self.uicbSnapPreCopyAttrs = cmds.checkBox(l=LANGUAGE_MAP.AnimationUI.pre_copyattrs, al='left', en=False, v=True,
-                                                  ann=LANGUAGE_MAP.AnimationUI.pre_copyattrs_ann)
-        self.uiifSnapIterations = cmds.intFieldGrp('uiifSnapIterations', l=LANGUAGE_MAP.AnimationUI.iteration, en=False, value1=1, cw2=(45, 30),
-                                           ann=LANGUAGE_MAP.AnimationUI.iteration_ann)
+        self.uicbSnapPreCopyAttrs = cmds.checkBox(l=LANGUAGE_MAP._AnimationUI_.pre_copyattrs, al='left', en=False, v=True,
+                                                  ann=LANGUAGE_MAP._AnimationUI_.pre_copyattrs_ann)
+        self.uiifSnapIterations = cmds.intFieldGrp('uiifSnapIterations', l=LANGUAGE_MAP._AnimationUI_.iteration, en=False, value1=1, cw2=(45, 30),
+                                           ann=LANGUAGE_MAP._AnimationUI_.iteration_ann)
 
         cmds.setParent(self.AnimLayout)
 
@@ -677,28 +677,28 @@ class AnimationUI(object):
         # Stabilizer
         #====================
         cmds.separator(h=10, st='in')
-        cmds.frameLayout(label=LANGUAGE_MAP.AnimationUI.tracknstabilize, cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.tracknstabilize, cll=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         #cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)])
         cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 100), (2, 55), (3, 55), (4, 100)], columnSpacing=[(1, 10), (3, 5)])
-        self.uicbStabRange = cmds.checkBox('uicbStabRange', l=LANGUAGE_MAP.AnimationUI.timerange, al='left', v=False,
-                                            ann=LANGUAGE_MAP.AnimationUI.snaptransforms_timerange_ann,
+        self.uicbStabRange = cmds.checkBox('uicbStabRange', l=LANGUAGE_MAP._AnimationUI_.timerange, al='left', v=False,
+                                            ann=LANGUAGE_MAP._AnimationUI_.snaptransforms_timerange_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbStabRange'))
-        self.uicbStabTrans = cmds.checkBox('uicbStabTrans', l=LANGUAGE_MAP.AnimationUI.trans, al='left', v=True,
-                                           ann=LANGUAGE_MAP.AnimationUI.trans_ann,
+        self.uicbStabTrans = cmds.checkBox('uicbStabTrans', l=LANGUAGE_MAP._AnimationUI_.trans, al='left', v=True,
+                                           ann=LANGUAGE_MAP._AnimationUI_.trans_ann,
                                            cc=lambda x: self.__uiCache_addCheckbox('uicbStabTrans'))
-        self.uicbStabRots = cmds.checkBox('uicbStabRots', l=LANGUAGE_MAP.AnimationUI.rots, al='left', v=True,
-                                          ann=LANGUAGE_MAP.AnimationUI.rots_ann,
+        self.uicbStabRots = cmds.checkBox('uicbStabRots', l=LANGUAGE_MAP._AnimationUI_.rots, al='left', v=True,
+                                          ann=LANGUAGE_MAP._AnimationUI_.rots_ann,
                                           cc=lambda x: self.__uiCache_addCheckbox('uicbStabRots'))
-        self.uiffgStabStep = cmds.floatFieldGrp('uiffgStabStep', l=LANGUAGE_MAP.AnimationUI.step, value1=1, cw2=(40, 50),
-                                              ann=LANGUAGE_MAP.AnimationUI.step_ann)
+        self.uiffgStabStep = cmds.floatFieldGrp('uiffgStabStep', l=LANGUAGE_MAP._AnimationUI_.step, value1=1, cw2=(40, 50),
+                                              ann=LANGUAGE_MAP._AnimationUI_.step_ann)
         cmds.setParent('..')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 160), (2, 160)], columnSpacing=[(2, 2)])
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.track_process_back, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.track_process_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.track_process_back, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.track_process_ann,
                      command=partial(self.__uiCall, 'StabilizeBack'))
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.track_process_forward, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.track_process_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.track_process_forward, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.track_process_ann,
                      command=partial(self.__uiCall, 'StabilizeFwd'))
         cmds.setParent(self.AnimLayout)
         
@@ -707,44 +707,44 @@ class AnimationUI(object):
         # TimeOffset
         #====================
         cmds.separator(h=10, st='in')
-        cmds.frameLayout(label=LANGUAGE_MAP.AnimationUI.timeoffset, cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.timeoffset, cll=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         #cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 100), (2, 55), (3, 55), (4, 100)], columnSpacing=[(1, 10), (3, 5)])
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)], rowSpacing=[(1,5),(2,5)])
         self.uicbTimeOffsetHierarchy = cmds.checkBox('uicbTimeOffsetHierarchy',
-                                            l=LANGUAGE_MAP.Generic.hierarchy, al='left', en=True, v=False,
-                                            ann=LANGUAGE_MAP.AnimationUI.offset_hierarchy_ann,
+                                            l=LANGUAGE_MAP._Generic_.hierarchy, al='left', en=True, v=False,
+                                            ann=LANGUAGE_MAP._AnimationUI_.offset_hierarchy_ann,
                                             ofc=partial(self.__uiCB_manageTimeOffsetChecks, 'Off'),
                                             onc=partial(self.__uiCB_manageTimeOffsetChecks),
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetHierarchy'))
               
         self.uicbTimeOffsetScene = cmds.checkBox('uicbTimeOffsetScene',
-                                            l=LANGUAGE_MAP.AnimationUI.offset_fullscene,
-                                            ann=LANGUAGE_MAP.AnimationUI.offset_fullscene_ann,
+                                            l=LANGUAGE_MAP._AnimationUI_.offset_fullscene,
+                                            ann=LANGUAGE_MAP._AnimationUI_.offset_fullscene_ann,
                                             al='left', v=False,
                                             ofc=partial(self.__uiCB_manageTimeOffsetChecks, 'Off'),
                                             onc=partial(self.__uiCB_manageTimeOffsetChecks, 'Full'),
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetScene'))
         
-        self.uicbTimeOffsetPlayback = cmds.checkBox('uicbTimeOffsetTimelines', l=LANGUAGE_MAP.AnimationUI.offset_timelines,
-                                            ann=LANGUAGE_MAP.AnimationUI.offset_timelines_ann,
+        self.uicbTimeOffsetPlayback = cmds.checkBox('uicbTimeOffsetTimelines', l=LANGUAGE_MAP._AnimationUI_.offset_timelines,
+                                            ann=LANGUAGE_MAP._AnimationUI_.offset_timelines_ann,
                                             al='left', v=False, en=False,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetTimelines'))
 
         self.uicbTimeOffsetRange = cmds.checkBox('uicbTimeOffsetRange',
-                                            l=LANGUAGE_MAP.AnimationUI.timerange, al='left', en=True, v=False,
-                                            ann=LANGUAGE_MAP.AnimationUI.offset_timerange_ann,
+                                            l=LANGUAGE_MAP._AnimationUI_.timerange, al='left', en=True, v=False,
+                                            ann=LANGUAGE_MAP._AnimationUI_.offset_timerange_ann,
                                             ofc=partial(self.__uiCB_manageTimeOffsetChecks, 'Ripple'),
                                             onc=partial(self.__uiCB_manageTimeOffsetChecks, 'Ripple'),
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetRange'))
         self.uicbTimeOffsetFlocking = cmds.checkBox('uicbTimeOffsetFlocking',
-                                            l=LANGUAGE_MAP.AnimationUI.offset_flocking, al='left', en=True, v=False,
-                                            ann=LANGUAGE_MAP.AnimationUI.offset_flocking_ann)
-        self.uicbTimeOffsetRandom = cmds.checkBox('uicbTimeOffsetRandom', l=LANGUAGE_MAP.AnimationUI.offset_randomizer,
-                                            ann=LANGUAGE_MAP.AnimationUI.offset_randomizer_ann,
+                                            l=LANGUAGE_MAP._AnimationUI_.offset_flocking, al='left', en=True, v=False,
+                                            ann=LANGUAGE_MAP._AnimationUI_.offset_flocking_ann)
+        self.uicbTimeOffsetRandom = cmds.checkBox('uicbTimeOffsetRandom', l=LANGUAGE_MAP._AnimationUI_.offset_randomizer,
+                                            ann=LANGUAGE_MAP._AnimationUI_.offset_randomizer_ann,
                                             al='left', v=False)
-        self.uicbTimeOffsetRipple = cmds.checkBox('uicbTimeOffsetRipple', l=LANGUAGE_MAP.AnimationUI.offset_ripple,
-                                            ann=LANGUAGE_MAP.AnimationUI.offset_ripple_ann,
+        self.uicbTimeOffsetRipple = cmds.checkBox('uicbTimeOffsetRipple', l=LANGUAGE_MAP._AnimationUI_.offset_ripple,
+                                            ann=LANGUAGE_MAP._AnimationUI_.offset_ripple_ann,
                                             al='left', v=False,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbTimeOffsetRipple'))
         cmds.separator(style='none')
@@ -752,10 +752,10 @@ class AnimationUI(object):
         cmds.separator(h=2, style='none')
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 250), (2, 60)], columnSpacing=[(2, 5)])
        
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.offset, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.offset_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.offset, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.offset_ann,
                      command=partial(self.__uiCall, 'TimeOffset'))
-        self.uiffgTimeOffset = cmds.floatFieldGrp('uiffgTimeOffset', value1=1, ann=LANGUAGE_MAP.AnimationUI.offset_frms_ann)
+        self.uiffgTimeOffset = cmds.floatFieldGrp('uiffgTimeOffset', value1=1, ann=LANGUAGE_MAP._AnimationUI_.offset_frms_ann)
         cmds.setParent(self.AnimLayout)
         
         
@@ -763,30 +763,30 @@ class AnimationUI(object):
         # Mirror Controls
         #====================
         cmds.separator(h=10, st='in')
-        cmds.frameLayout(label=LANGUAGE_MAP.AnimationUI.mirror_controls, cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.mirror_controls, cll=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
 
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)])
         self.uicbMirrorHierarchy = cmds.checkBox('uicbMirrorHierarchy',
-                                            l=LANGUAGE_MAP.Generic.hierarchy, al='left', en=True, v=False,
-                                            ann=LANGUAGE_MAP.AnimationUI.mirror_hierarchy_ann,
+                                            l=LANGUAGE_MAP._Generic_.hierarchy, al='left', en=True, v=False,
+                                            ann=LANGUAGE_MAP._AnimationUI_.mirror_hierarchy_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbMirrorHierarchy'))
               
         cmds.setParent('..')
         
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 160), (2, 160)], columnSpacing=[(2, 2)])
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.mirror_animation, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.mirror_animation_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.mirror_animation, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.mirror_animation_ann,
                      command=partial(self.__uiCall, 'MirrorAnim'))
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.mirror_pose, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.mirror_pose_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.mirror_pose, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.mirror_pose_ann,
                      command=partial(self.__uiCall, 'MirrorPose'))
  
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.symmetry_animation, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.symmetry_animation_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.symmetry_animation, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.symmetry_animation_ann,
                      command=partial(self.__uiCall, 'SymmetryAnim'))
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.symmetry_pose, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.symmetry_pose_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.symmetry_pose, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.symmetry_pose_ann,
                      command=partial(self.__uiCall, 'SymmetryPose'))
         cmds.setParent(self.AnimLayout)
         cmds.setParent(self.tabs)
@@ -801,64 +801,64 @@ class AnimationUI(object):
         self.FilterLayout = cmds.columnLayout(adjustableColumn=True)
         
         cmds.separator(h=15, style='none')
-        cmds.text(LANGUAGE_MAP.AnimationUI.hierarchy_descriptor)
+        cmds.text(LANGUAGE_MAP._AnimationUI_.hierarchy_descriptor)
         cmds.separator(h=20, style='in')
                                           
         # This bit is bullshit! the checkBox align flag is now obsolete so the label is always on the left regardless :(
         self.uiclHierarchyFilters = cmds.columnLayout('uiclHierarchyFilters', adjustableColumn=True, enable=True)
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 120), (2, 200)], columnSpacing=[2, 3])
-        cmds.text(label=LANGUAGE_MAP.AnimationUI.metarig, align='right')
+        cmds.text(label=LANGUAGE_MAP._AnimationUI_.metarig, align='right')
         self.uicbMetaRig = cmds.checkBox('uicbMetaRig',
-                                          ann=LANGUAGE_MAP.AnimationUI.metarig_ann,
+                                          ann=LANGUAGE_MAP._AnimationUI_.metarig_ann,
                                           l='',
                                           v=True,
                                           cc=lambda x: self.__uiCB_managePoseRootMethod('uicbMetaRig'))
         cmds.setParent(self.uiclHierarchyFilters)
         
         self.uitfgSpecificNodeTypes = cmds.textFieldGrp('uitfgSpecificNodeTypes',
-                                            label=LANGUAGE_MAP.AnimationUI.search_nodetypes, text="", cw2=(120, 200),
-                                            ann=LANGUAGE_MAP.AnimationUI.search_nodetypes_ann)
+                                            label=LANGUAGE_MAP._AnimationUI_.search_nodetypes, text="", cw2=(120, 200),
+                                            ann=LANGUAGE_MAP._AnimationUI_.search_nodetypes_ann)
         cmds.popupMenu()
-        cmds.menuItem(label=LANGUAGE_MAP.Generic.clear_all, command=partial(self.__uiCB_addToNodeTypes, 'clearAll'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.nodetype_transform, command=partial(self.__uiCB_addToNodeTypes, 'transform'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.nodetype_nurbs_curves, command=partial(self.__uiCB_addToNodeTypes, 'nurbsCurve'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.nodetype_nurbs_surfaces, command=partial(self.__uiCB_addToNodeTypes, 'nurbsSurface'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.nodetype_joints, command=partial(self.__uiCB_addToNodeTypes, 'joint'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.nodetype_locators, command=partial(self.__uiCB_addToNodeTypes, 'locator'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.nodetype_meshes, command=partial(self.__uiCB_addToNodeTypes, 'mesh'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.nodetype_cameras, command=partial(self.__uiCB_addToNodeTypes, 'camera'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.nodetype_hikeff, command=partial(self.__uiCB_addToNodeTypes, 'hikIKEffector'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.nodetype_blendshape, command=partial(self.__uiCB_addToNodeTypes, 'blendShape'))
+        cmds.menuItem(label=LANGUAGE_MAP._Generic_.clear_all, command=partial(self.__uiCB_addToNodeTypes, 'clearAll'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.nodetype_transform, command=partial(self.__uiCB_addToNodeTypes, 'transform'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.nodetype_nurbs_curves, command=partial(self.__uiCB_addToNodeTypes, 'nurbsCurve'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.nodetype_nurbs_surfaces, command=partial(self.__uiCB_addToNodeTypes, 'nurbsSurface'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.nodetype_joints, command=partial(self.__uiCB_addToNodeTypes, 'joint'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.nodetype_locators, command=partial(self.__uiCB_addToNodeTypes, 'locator'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.nodetype_meshes, command=partial(self.__uiCB_addToNodeTypes, 'mesh'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.nodetype_cameras, command=partial(self.__uiCB_addToNodeTypes, 'camera'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.nodetype_hikeff, command=partial(self.__uiCB_addToNodeTypes, 'hikIKEffector'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.nodetype_blendshape, command=partial(self.__uiCB_addToNodeTypes, 'blendShape'))
         self.uitfgSpecificAttrs = cmds.textFieldGrp('uitfgSpecificAttrs',
-                                            label=LANGUAGE_MAP.AnimationUI.search_attributes, text="", cw2=(120, 200),
-                                            ann=LANGUAGE_MAP.AnimationUI.search_attributes_ann)
+                                            label=LANGUAGE_MAP._AnimationUI_.search_attributes, text="", cw2=(120, 200),
+                                            ann=LANGUAGE_MAP._AnimationUI_.search_attributes_ann)
         self.uitfgSpecificPattern = cmds.textFieldGrp('uitfgSpecificPattern',
-                                            label=LANGUAGE_MAP.AnimationUI.search_pattern, text="", cw2=(120, 200),
-                                            ann=LANGUAGE_MAP.AnimationUI.search_pattern_ann)
+                                            label=LANGUAGE_MAP._AnimationUI_.search_pattern, text="", cw2=(120, 200),
+                                            ann=LANGUAGE_MAP._AnimationUI_.search_pattern_ann)
         cmds.separator(h=5, style='none')
         cmds.text('Internal Node Priorities:')
         self.uitslFilterPriority = cmds.textScrollList('uitslFilterPriority', numberOfRows=8, allowMultiSelection=False,
                                                height=60, enable=True, append=self.filterSettings.filterPriority)
         cmds.popupMenu()
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.priorities_clear, command=lambda x: self.__uiSetPriorities('clear'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.priorities_set, command=lambda x: self.__uiSetPriorities('set'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.priorities_append, command=lambda x: self.__uiSetPriorities('append'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.priorities_remove, command=lambda x: self.__uiSetPriorities('remove'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.priorities_clear, command=lambda x: self.__uiSetPriorities('clear'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.priorities_set, command=lambda x: self.__uiSetPriorities('set'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.priorities_append, command=lambda x: self.__uiSetPriorities('append'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.priorities_remove, command=lambda x: self.__uiSetPriorities('remove'))
         cmds.menuItem(divider=True)
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.move_up, command=lambda x: self.__uiSetPriorities('moveUp'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.move_down, command=lambda x: self.__uiSetPriorities('moveDown'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.move_up, command=lambda x: self.__uiSetPriorities('moveUp'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.move_down, command=lambda x: self.__uiSetPriorities('moveDown'))
         self.uicbSnapPriorityOnly = cmds.checkBox('uicbSnapPriorityOnly', v=False,
-                                                label=LANGUAGE_MAP.AnimationUI.priorities_use_snap,
+                                                label=LANGUAGE_MAP._AnimationUI_.priorities_use_snap,
                                                 onc=self.__uiCB_setPriorityFlag,
                                                 cc=lambda x: self.__uiCache_addCheckbox('uicbSnapPriorityOnly'))
         cmds.separator(h=20, style='in')
-        cmds.text(LANGUAGE_MAP.AnimationUI.presets_available)
+        cmds.text(LANGUAGE_MAP._AnimationUI_.presets_available)
         self.uitslPresets = cmds.textScrollList(numberOfRows=8, allowMultiSelection=False,
                                                selectCommand=partial(self.__uiPresetSelection),
                                                height=110)
         cmds.popupMenu()
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.presets_delete, command=partial(self.__uiPresetDelete))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.presets_opendir, command=partial(self.__uiPresetOpenDir))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.presets_delete, command=partial(self.__uiPresetDelete))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.presets_opendir, command=partial(self.__uiPresetOpenDir))
         cmds.separator(h=10, style='none')
         cmds.setParent(self.FilterLayout)
         cmds.separator('filterInfoTop', style='in', vis=False)
@@ -870,29 +870,29 @@ class AnimationUI(object):
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 140), (2, 180)])
         self.uicbIncRoots = cmds.checkBox('uicbIncRoots',
                                             ann='include RootNodes in the Filter',
-                                            l=LANGUAGE_MAP.AnimationUI.include_roots,
+                                            l=LANGUAGE_MAP._AnimationUI_.include_roots,
                                             al='left', v=True,
                                             cc=self.__uiCache_storeUIElements)
         
-        cmds.optionMenu('om_MatchMethod', label=LANGUAGE_MAP.AnimationUI.match_method, w=70,
-                        ann=LANGUAGE_MAP.AnimationUI.match_method_ann,
+        cmds.optionMenu('om_MatchMethod', label=LANGUAGE_MAP._AnimationUI_.match_method, w=70,
+                        ann=LANGUAGE_MAP._AnimationUI_.match_method_ann,
                         cc=self.__uiCB_setMatchMethod)
         #for preset in ["base","stripPrefix","index"]:
-        cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.match_base, ann=LANGUAGE_MAP.AnimationUI.match_base_ann)
-        cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.match_stripprefix, ann=LANGUAGE_MAP.AnimationUI.match_stripprefix_ann)
-        cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.match_index, ann=LANGUAGE_MAP.AnimationUI.match_index_ann)
-        cmds.menuItem(l=LANGUAGE_MAP.AnimationUI.match_mirror, ann=LANGUAGE_MAP.AnimationUI.match_mirror_ann)
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.match_base, ann=LANGUAGE_MAP._AnimationUI_.match_base_ann)
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.match_stripprefix, ann=LANGUAGE_MAP._AnimationUI_.match_stripprefix_ann)
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.match_index, ann=LANGUAGE_MAP._AnimationUI_.match_index_ann)
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.match_mirror, ann=LANGUAGE_MAP._AnimationUI_.match_mirror_ann)
         
         cmds.optionMenu('om_MatchMethod', e=True, v='stripPrefix')
 
         cmds.setParent(self.FilterLayout)
         cmds.separator(h=10, style='none')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 162), (2, 162)])
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.filter_test, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.filter_test_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.filter_test, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.filter_test_ann,
                      command=partial(self.__uiCall, 'HierarchyTest'))
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.filter_store, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.filter_store_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.filter_store, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.filter_store_ann,
                      command=partial(self.__uiPresetStore))
         cmds.setParent(self.FilterLayout)
         cmds.setParent(self.tabs)
@@ -907,57 +907,57 @@ class AnimationUI(object):
         self.poseUILayout = cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=10, style='none')
         self.uitfgPosePath = cmds.textFieldButtonGrp('uitfgPosePath',
-                                            ann=LANGUAGE_MAP.AnimationUI.pose_path,
+                                            ann=LANGUAGE_MAP._AnimationUI_.pose_path,
                                             text="",
-                                            bl=LANGUAGE_MAP.AnimationUI.pose_path,
+                                            bl=LANGUAGE_MAP._AnimationUI_.pose_path,
                                             bc=lambda *x: self.__uiCB_setPosePath(fileDialog=True),
                                             cc=lambda *x: self.__uiCB_setPosePath(fileDialog=False),
                                             cw=[(1, 260), (2, 40)])
         
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 120), (2, 120)], columnSpacing=[(1, 10)])
         self.uircbPosePathMethod = cmds.radioCollection('posePathMode')
-        cmds.radioButton('localPoseMode', label=LANGUAGE_MAP.AnimationUI.pose_local,
-                                        ann=LANGUAGE_MAP.AnimationUI.pose_local_ann,
+        cmds.radioButton('localPoseMode', label=LANGUAGE_MAP._AnimationUI_.pose_local,
+                                        ann=LANGUAGE_MAP._AnimationUI_.pose_local_ann,
                                         onc=partial(self.__uiCB_switchPosePathMode, 'local'),
                                         ofc=partial(self.__uiCB_switchPosePathMode, 'project'))
-        cmds.radioButton('projectPoseMode', label=LANGUAGE_MAP.AnimationUI.pose_project,
-                                        ann=LANGUAGE_MAP.AnimationUI.pose_project_ann,
+        cmds.radioButton('projectPoseMode', label=LANGUAGE_MAP._AnimationUI_.pose_project,
+                                        ann=LANGUAGE_MAP._AnimationUI_.pose_project_ann,
                                         onc=partial(self.__uiCB_switchPosePathMode, 'project'),
                                         ofc=partial(self.__uiCB_switchPosePathMode, 'local'))
         cmds.setParent(self.poseUILayout)
         
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 260), (2, 60)])
         cmds.textFieldButtonGrp('uitfgPoseSubPath',
-                                            ann=LANGUAGE_MAP.AnimationUI.pose_subfolders_ann,
+                                            ann=LANGUAGE_MAP._AnimationUI_.pose_subfolders_ann,
                                             text="",
-                                            bl=LANGUAGE_MAP.AnimationUI.pose_subfolders,
+                                            bl=LANGUAGE_MAP._AnimationUI_.pose_subfolders,
                                             bc=self.__uiCB_switchSubFolders,
                                             ed=False,
                                             cw=[(1, 190), (2, 40)])
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.pose_clear,
-                     ann=LANGUAGE_MAP.AnimationUI.pose_clear_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.pose_clear,
+                     ann=LANGUAGE_MAP._AnimationUI_.pose_clear_ann,
                      command=partial(self.__uiCB_clearSubFolders))
         cmds.setParent(self.poseUILayout)
          
         cmds.separator(h=10, style='in')
         cmds.rowColumnLayout(nc=3, columnWidth=[(1, 260), (2, 22), (3, 22)], columnSpacing=[(2,20)])
         if r9Setup.mayaVersion() > 2012:  # tcc flag not supported in earlier versions
-            self.searchFilter = cmds.textFieldGrp('tfPoseSearchFilter', label=LANGUAGE_MAP.AnimationUI.search_filter, text='',
+            self.searchFilter = cmds.textFieldGrp('tfPoseSearchFilter', label=LANGUAGE_MAP._AnimationUI_.search_filter, text='',
                                                 cw=((1, 87), (2, 160)),
-                                                ann=LANGUAGE_MAP.AnimationUI.search_filter_ann,
+                                                ann=LANGUAGE_MAP._AnimationUI_.search_filter_ann,
                                                 tcc=lambda x: self.__uiCB_fillPoses(searchFilter=cmds.textFieldGrp('tfPoseSearchFilter', q=True, text=True)))
         else:
-            self.searchFilter = cmds.textFieldGrp('tfPoseSearchFilter', label=LANGUAGE_MAP.AnimationUI.search_filter, text='',
+            self.searchFilter = cmds.textFieldGrp('tfPoseSearchFilter', label=LANGUAGE_MAP._AnimationUI_.search_filter, text='',
                                                 cw=((1, 87), (2, 160)), fcc=True,
-                                                ann=LANGUAGE_MAP.AnimationUI.search_filter_ann,
+                                                ann=LANGUAGE_MAP._AnimationUI_.search_filter_ann,
                                                 cc=lambda x: self.__uiCB_fillPoses(searchFilter=cmds.textFieldGrp('tfPoseSearchFilter', q=True, text=True)))
         
         cmds.iconTextButton('sortByName', style='iconOnly', image1='sortByName.bmp',
-                            w=22, h=20, ann=LANGUAGE_MAP.AnimationUI.sortby_name,
+                            w=22, h=20, ann=LANGUAGE_MAP._AnimationUI_.sortby_name,
                             c=lambda * args: self.__uiCB_fillPoses(rebuildFileList=True, sortBy='name'))
               
         cmds.iconTextButton('sortByDate', style='iconOnly', image1='sortByDate.bmp',
-                            w=22, h=20, ann=LANGUAGE_MAP.AnimationUI.sortby_date,
+                            w=22, h=20, ann=LANGUAGE_MAP._AnimationUI_.sortby_date,
                             c=lambda * args:self.__uiCB_fillPoses(rebuildFileList=True, sortBy='date'))
               
         cmds.setParent('..')
@@ -986,23 +986,23 @@ class AnimationUI(object):
         
         cmds.setParent(self.poseUILayout)
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 162), (2, 162)])
-        cmds.button('loadPoseButton', label=LANGUAGE_MAP.AnimationUI.pose_load, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.pose_load_ann,
+        cmds.button('loadPoseButton', label=LANGUAGE_MAP._AnimationUI_.pose_load, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.pose_load_ann,
                      command=partial(self.__uiCall, 'PoseLoad'))
-        cmds.button('savePoseButton', label=LANGUAGE_MAP.AnimationUI.pose_save, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.pose_save_ann,
+        cmds.button('savePoseButton', label=LANGUAGE_MAP._AnimationUI_.pose_save, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.pose_save_ann,
                      command=partial(self.__uiCall, 'PoseSave'))
         cmds.setParent(self.poseUILayout)
         cmds.separator(h=10, style='in')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 80), (2, 250)])
         self.uicbPoseHierarchy = cmds.checkBox('uicbPoseHierarchy',
-                                            l=LANGUAGE_MAP.Generic.hierarchy, al='left', en=True, v=False,
-                                            ann=LANGUAGE_MAP.AnimationUI.pose_hierarchy_ann,
+                                            l=LANGUAGE_MAP._Generic_.hierarchy, al='left', en=True, v=False,
+                                            ann=LANGUAGE_MAP._AnimationUI_.pose_hierarchy_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbPoseHierarchy'))
         self.uitfgPoseRootNode = cmds.textFieldButtonGrp('uitfgPoseRootNode',
-                                            ann=LANGUAGE_MAP.AnimationUI.pose_set_root_ann,
+                                            ann=LANGUAGE_MAP._AnimationUI_.pose_set_root_ann,
                                             text="",
-                                            bl=LANGUAGE_MAP.AnimationUI.pose_set_root,
+                                            bl=LANGUAGE_MAP._AnimationUI_.pose_set_root,
                                             bc=self.__uiCB_setPoseRootNode,
                                             cw=[(1, 180), (2, 60)])
 
@@ -1010,24 +1010,24 @@ class AnimationUI(object):
         cmds.separator(h=10, style='in')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 120), (2, 160)])
         self.uicbPoseRelative = cmds.checkBox('uicbPoseRelative',
-                                            l=LANGUAGE_MAP.AnimationUI.pose_relative, al='left', en=True, v=False,
+                                            l=LANGUAGE_MAP._AnimationUI_.pose_relative, al='left', en=True, v=False,
                                             cc=self.__uiCB_enableRelativeSwitches)
         self.uicbPoseSpace = cmds.checkBox('uicbPoseSpace',
-                                            l=LANGUAGE_MAP.AnimationUI.pose_maintain_parents, al='left', en=True, v=False,
+                                            l=LANGUAGE_MAP._AnimationUI_.pose_maintain_parents, al='left', en=True, v=False,
                                             cc=lambda *x: self.__uiCache_addCheckbox('uicbPoseSpace'))
         cmds.setParent(self.poseUILayout)
         cmds.separator(h=5, style='none')
-        self.uiflPoseRelativeFrame = cmds.frameLayout('PoseRelativeFrame', label=LANGUAGE_MAP.AnimationUI.pose_rel_methods, cll=True, en=False)
+        self.uiflPoseRelativeFrame = cmds.frameLayout('PoseRelativeFrame', label=LANGUAGE_MAP._AnimationUI_.pose_rel_methods, cll=True, en=False)
         cmds.rowColumnLayout(nc=3, columnWidth=[(1, 120), (2, 80), (3, 80)])
         
         self.uircbPoseRotMethod = cmds.radioCollection('relativeRotate')
-        cmds.text(label=LANGUAGE_MAP.AnimationUI.pose_rel_rotmethod)
-        cmds.radioButton('rotProjected', label=LANGUAGE_MAP.AnimationUI.pose_rel_projected)
-        cmds.radioButton('rotAbsolute', label=LANGUAGE_MAP.AnimationUI.pose_rel_absolute)
+        cmds.text(label=LANGUAGE_MAP._AnimationUI_.pose_rel_rotmethod)
+        cmds.radioButton('rotProjected', label=LANGUAGE_MAP._AnimationUI_.pose_rel_projected)
+        cmds.radioButton('rotAbsolute', label=LANGUAGE_MAP._AnimationUI_.pose_rel_absolute)
         self.uircbPoseTranMethod = cmds.radioCollection('relativeTranslate')
-        cmds.text(label=LANGUAGE_MAP.AnimationUI.pose_rel_tranmethod)
-        cmds.radioButton('tranProjected', label=LANGUAGE_MAP.AnimationUI.pose_rel_projected)
-        cmds.radioButton('tranAbsolute', label=LANGUAGE_MAP.AnimationUI.pose_rel_absolute)
+        cmds.text(label=LANGUAGE_MAP._AnimationUI_.pose_rel_tranmethod)
+        cmds.radioButton('tranProjected', label=LANGUAGE_MAP._AnimationUI_.pose_rel_projected)
+        cmds.radioButton('tranAbsolute', label=LANGUAGE_MAP._AnimationUI_.pose_rel_absolute)
         cmds.setParent(self.poseUILayout)
         
         cmds.radioCollection(self.uircbPoseRotMethod, edit=True, select='rotProjected')
@@ -1035,25 +1035,25 @@ class AnimationUI(object):
         
         self.uiflPosePointFrame = cmds.frameLayout('PosePointCloud', label='Pose Point Cloud', cll=True, cl=True, en=True)
         cmds.rowColumnLayout(nc=4, columnWidth=[(1, 80), (2, 80), (3, 80), (4, 80)])
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.pose_pp_make, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.pose_pp_make_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.pose_pp_make, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.pose_pp_make_ann,
                      command=partial(self.__uiCall, 'PosePC_Make'))
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.pose_pp_delete, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.pose_pp_delete_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.pose_pp_delete, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.pose_pp_delete_ann,
                      command=partial(self.__uiCall, 'PosePC_Delete'))
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.pose_pp_snap, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.pose_pp_snap_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.pose_pp_snap, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.pose_pp_snap_ann,
                      command=partial(self.__uiCall, 'PosePC_Snap'))
-        cmds.button(label=LANGUAGE_MAP.AnimationUI.pose_pp_update, bgc=self.buttonBgc,
-                     ann=LANGUAGE_MAP.AnimationUI.pose_pp_update_ann,
+        cmds.button(label=LANGUAGE_MAP._AnimationUI_.pose_pp_update, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.pose_pp_update_ann,
                      command=partial(self.__uiCall, 'PosePC_Update'))
         cmds.setParent(self.poseUILayout)
         #====================
         #TabsEnd
         #====================
-        cmds.tabLayout(self.tabs, edit=True, tabLabel=((self.AnimLayout, LANGUAGE_MAP.AnimationUI.tab_animlayout),
-                                                       (self.poseUILayout, LANGUAGE_MAP.AnimationUI.tab_poselayout),
-                                                       (self.FilterLayout, LANGUAGE_MAP.AnimationUI.tab_filterlayout)))
+        cmds.tabLayout(self.tabs, edit=True, tabLabel=((self.AnimLayout, LANGUAGE_MAP._AnimationUI_.tab_animlayout),
+                                                       (self.poseUILayout, LANGUAGE_MAP._AnimationUI_.tab_poselayout),
+                                                       (self.FilterLayout, LANGUAGE_MAP._AnimationUI_.tab_filterlayout)))
         #====================
         # Header
         #====================
@@ -1689,41 +1689,41 @@ class AnimationUI(object):
             parent=self.posePopupText
             cmds.popupMenu(self.posePopupText, e=True, deleteAllItems=True)
         
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_blender, p=parent, command=partial(self.__uiCall, 'PoseBlender'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_blender, p=parent, command=partial(self.__uiCall, 'PoseBlender'))
         cmds.menuItem(divider=True, p=parent)
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_delete, en=enableState, p=parent, command=partial(self.__uiPoseDelete))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_rename, en=enableState, p=parent, command=partial(self.__uiPoseRename))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_selectinternal, p=parent, command=partial(self.__uiPoseSelectObjects))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_delete, en=enableState, p=parent, command=partial(self.__uiPoseDelete))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_rename, en=enableState, p=parent, command=partial(self.__uiPoseRename))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_selectinternal, p=parent, command=partial(self.__uiPoseSelectObjects))
         
         cmds.menuItem(divider=True, p=parent)
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_update_pose, en=enableState, p=parent, command=partial(self.__uiPoseUpdate, False))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_update_pose_thumb, en=enableState, p=parent, command=partial(self.__uiPoseUpdate, True))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_update_pose, en=enableState, p=parent, command=partial(self.__uiPoseUpdate, False))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_update_pose_thumb, en=enableState, p=parent, command=partial(self.__uiPoseUpdate, True))
         
         if self.poseGridMode=='thumb':
-            cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_update_thumb, p=parent, command=partial(self.__uiPoseUpdateThumb))
+            cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_update_thumb, p=parent, command=partial(self.__uiPoseUpdateThumb))
             
         cmds.menuItem(divider=True, p=parent)
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_add_subfolder, en=enableState, p=parent, command=partial(self.__uiPoseMakeSubFolder))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_refresh, en=True, p=parent, command=lambda x: self.__uiCB_fillPoses(rebuildFileList=True))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_openfile, p=parent, command=partial(self.__uiPoseOpenFile))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_opendir, p=parent, command=partial(self.__uiPoseOpenDir))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_add_subfolder, en=enableState, p=parent, command=partial(self.__uiPoseMakeSubFolder))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_refresh, en=True, p=parent, command=lambda x: self.__uiCB_fillPoses(rebuildFileList=True))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_openfile, p=parent, command=partial(self.__uiPoseOpenFile))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_opendir, p=parent, command=partial(self.__uiPoseOpenDir))
         cmds.menuItem(divider=True, p=parent)
-        cmds.menuItem('red9PoseCompareSM', l=LANGUAGE_MAP.AnimationUI.pose_rmb_compare, sm=True, p=parent)
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_compare_skel, p='red9PoseCompareSM', command=partial(self.__uiCall, 'PoseCompareSkelDict'))
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_compare_posedata, p='red9PoseCompareSM', command=partial(self.__uiCall, 'PoseComparePoseDict'))
+        cmds.menuItem('red9PoseCompareSM', l=LANGUAGE_MAP._AnimationUI_.pose_rmb_compare, sm=True, p=parent)
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_compare_skel, p='red9PoseCompareSM', command=partial(self.__uiCall, 'PoseCompareSkelDict'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_compare_posedata, p='red9PoseCompareSM', command=partial(self.__uiCall, 'PoseComparePoseDict'))
 
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_copyhandler, en=enableState, p=parent, command=partial(self.__uiPoseAddPoseHandler))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_copyhandler, en=enableState, p=parent, command=partial(self.__uiPoseAddPoseHandler))
         cmds.menuItem(divider=True, p=parent)
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_copypose, en=enableState, p=parent, command=partial(self.__uiPoseCopyToProject))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_copypose, en=enableState, p=parent, command=partial(self.__uiPoseCopyToProject))
         
         cmds.menuItem(divider=True, p=parent)
-        cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_switchmode, p=parent, command=self.__uiCB_switchPoseMode)
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_switchmode, p=parent, command=self.__uiCB_switchPoseMode)
 
         if self.poseGridMode=='thumb':
             cmds.menuItem(divider=True, p=parent)
-            cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_grid_small, p=parent, command=partial(self.__uiCB_setPoseGrid, 'small'))
-            cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_grid_med, p=parent, command=partial(self.__uiCB_setPoseGrid, 'medium'))
-            cmds.menuItem(label=LANGUAGE_MAP.AnimationUI.pose_rmb_grid_large, p=parent, command=partial(self.__uiCB_setPoseGrid, 'large'))
+            cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_grid_small, p=parent, command=partial(self.__uiCB_setPoseGrid, 'small'))
+            cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_grid_med, p=parent, command=partial(self.__uiCB_setPoseGrid, 'medium'))
+            cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_grid_large, p=parent, command=partial(self.__uiCB_setPoseGrid, 'large'))
             
         if self.posePath:
             cmds.menuItem(divider=True, p=parent)
@@ -2445,21 +2445,20 @@ class AnimationUI(object):
         Without either of these you'll just get a locator as the PPC root
         '''
         objs=cmds.ls(sl=True)
- 
         rootReference=objs[0]
-        mesh=None
+        meshes=[]
         mRef=r9Meta.MetaClass(self.__uiCB_getPoseInputNodes())
         if mRef.hasAttr('renderMeshes') and mRef.renderMeshes:
-            mesh=mRef.renderMeshes[0]
+            meshes=mRef.renderMeshes  # [0]
         elif len(objs)==2:
             if cmds.nodeType(cmds.listRelatives(objs[1])[0])=='mesh':
-                mesh=objs[1]
+                meshes=objs  # [1]
         if func=='make':
             if not objs:
                 raise StandardError('you need to select a reference object to use as pivot for the PPCloud')
             if cmds.ls('*posePointCloud', r=True):
                 raise StandardError('PosePointCloud already exists in scsne')
-            if not mesh:
+            if not meshes:
                 #turn on locator visibility
                 panel=cmds.getPanel(wf=True)
                 if 'modelPanel' in panel:
@@ -2468,7 +2467,7 @@ class AnimationUI(object):
                     cmds.modelEditor('modelPanel4', e=True, locators=True)
             self.ppc=r9Pose.PosePointCloud(self.__uiCB_getPoseInputNodes(),
                                            self.filterSettings,
-                                           mesh=mesh)
+                                           meshes=meshes)
             self.ppc.prioritySnapOnly=cmds.checkBox(self.uicbSnapPriorityOnly, q=True, v=True)
             self.ppc.buildOffsetCloud(rootReference)
         elif func=='delete':
@@ -3248,37 +3247,38 @@ class RandomizeKeys(object):
                  
             if cmds.window(self.win, exists=True):
                 cmds.deleteUI(self.win, window=True)
-            cmds.window(self.win, title="KeyRandomizer", s=True, widthHeight=(320, 280))
+            cmds.window(self.win, title=LANGUAGE_MAP._Randomizer_.title, s=True, widthHeight=(320, 280))
             cmds.menuBarLayout()
-            cmds.menu(l="VimeoHelp")
-            cmds.menuItem(l="Open Vimeo Help File",
-                          ann='simple demo showing the functionality of Simplify curve and Randomizer',
+            cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
+            cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help,
+                          ann=LANGUAGE_MAP._Randomizer_.vimeo_randomizer_ann,
                           c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/69270932')")
             #cmds.menuItem(divider=True)
-            cmds.menuItem(l="Contact Me", c=r9Setup.red9ContactInfo)
+            cmds.menuItem(l=LANGUAGE_MAP._Generic_.contactme, c=r9Setup.red9ContactInfo)
             cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
             cmds.separator(h=15, style='none')
             
-            cmds.floatFieldGrp('ffg_rand_damping', label='strength : value', v1=1, precision=2)
-            cmds.floatFieldGrp('ffg_rand_frmStep', label='frameStep', v1=1, en=False, precision=2)
+            cmds.floatFieldGrp('ffg_rand_damping', l=LANGUAGE_MAP._Randomizer_.strength_value, v1=1, precision=2)
+            cmds.floatFieldGrp('ffg_rand_frmStep', l=LANGUAGE_MAP._Randomizer_.frame_step, v1=1, en=False, precision=2)
             cmds.separator(h=20, style='in')
 
             cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 150), (2, 150)])
             cmds.checkBox('cb_rand_current',
-                          l='Current Keys Only', v=True,
-                          ann='ONLY randomize selected keys, if OFF the core will add keys to the curve at the frameStep incremenet',
+                          l=LANGUAGE_MAP._Randomizer_.current_keys_only, v=True,
+                          ann=LANGUAGE_MAP._Randomizer_.current_keys_only_ann,
                           cc=self.__uicb_currentKeysCallback)
             cmds.checkBox('cb_rand_percent',
-                          l='Pre-Normalize Curves', v=True,
-                          ann='Pre-Normalize: process based on value percentage range auto-calculated from curves',
+                          l=LANGUAGE_MAP._Randomizer_.pre_normalize, v=True,
+                          ann=LANGUAGE_MAP._Randomizer_.pre_normalize_ann,
                           cc=self.__uicb_percentageCallback)
             #cmds.checkBox('cb_rand_ignoreBounds',
             #              l='Ignore Start and End Keys', v=True,
             #              ann='Remove the first and last key from processing, maintaining any animation cycles')
             cmds.setParent('..')
             cmds.separator(h=15, style='in')
-            cmds.checkBox('interactiveRand', value=False, label="Interactive Mode",
-                          ann="Turn on the interactiveMode - ONLY supported in CurrentKeys mode",
+            cmds.checkBox('interactiveRand', value=False,
+                          l=LANGUAGE_MAP._Randomizer_.interactive_mode,
+                          ann=LANGUAGE_MAP._Randomizer_.interactive_mode_ann,
                           onc=lambda *x: self.__uicb_interactiveMode(True),
                           ofc=lambda *x: self.__uicb_interactiveMode(False))
             cmds.separator(h=10, style='none')
@@ -3293,17 +3293,17 @@ class RandomizeKeys(object):
                                     columnWidth=[(1, 40), (2, 100)],
                                     dc=self.interactiveWrapper)
             cmds.floatField('ffg_rand_intMax', v=1, precision=2, cc=self.__uicb_setRanges)
-            cmds.text(label='max')
+            cmds.text(label=LANGUAGE_MAP._Generic_.max)
             cmds.setParent('..')
 
             cmds.separator(h=15, style='none')
             
             cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)])
-            cmds.button(label='Apply', bgc=r9Setup.red9ButtonBGC(1),
+            cmds.button(label=LANGUAGE_MAP._Generic_.apply, bgc=r9Setup.red9ButtonBGC(1),
                          command=self.curveMenuFunc)
-            cmds.button(label='SavePref', bgc=r9Setup.red9ButtonBGC(1),
+            cmds.button(label=LANGUAGE_MAP._Randomizer_.save_pref, bgc=r9Setup.red9ButtonBGC(1),
                          command=self.__storePrefs)
-            cmds.button(label='ToggleBuffers', bgc=r9Setup.red9ButtonBGC(1),
+            cmds.button(label=LANGUAGE_MAP._Randomizer_.toggle_buffers, bgc=r9Setup.red9ButtonBGC(1),
                          command=self.__uicb_toggleGraphDisplay)
             cmds.setParent('..')
             
@@ -3485,7 +3485,7 @@ class RandomizeKeys(object):
 class FilterCurves(object):
     
     def __init__(self):
-        self.win='interactiveCurveFilter'
+        self.win=LANGUAGE_MAP._CurveFilters_.title
         self.contextManager=curveModifierContext
         self.dragActive=False
         self.undoFuncCache=['simplifyWrapper', 'snapAnimCurvesToFrms', 'resampleCurves']
@@ -3510,19 +3510,19 @@ class FilterCurves(object):
             cmds.deleteUI(self.win, window=True)
         cmds.window(self.win, title=self.win)
         cmds.menuBarLayout()
-        cmds.menu(l="VimeoHelp")
-        cmds.menuItem(l="Open Vimeo Help File",
-                          ann='simple demo showing the functionality of Simplify curve and Randomizer',
+        cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
+        cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help,
+                          ann=LANGUAGE_MAP._CurveFilters_.vimeo_randomize_ann,
                           c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/69270932')")
         cmds.menuItem(divider=True)
-        cmds.menuItem(l="Contact Me", c=r9Setup.red9ContactInfo)
+        cmds.menuItem(l=LANGUAGE_MAP._Generic_.contactme, c=r9Setup.red9ContactInfo)
         cmds.columnLayout(adjustableColumn=True)
         
-        cmds.text(label='Curve Resampler')
+        cmds.text(label=LANGUAGE_MAP._CurveFilters_.curve_resampler)
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(numberOfColumns=2, cw=((1, 350), (2, 40)))
         cmds.floatSliderGrp('fsg_resampleStep',
-                                label='Resample',
+                                label=LANGUAGE_MAP._CurveFilters_.resample,
                                 field=True,
                                 minValue=1,
                                 maxValue=10.0,
@@ -3537,11 +3537,11 @@ class FilterCurves(object):
         cmds.setParent('..')
         cmds.separator(h=25, style='in')
            
-        cmds.text(label='Curve Simplfier')
+        cmds.text(label=LANGUAGE_MAP._CurveFilters_.curve_simplifier)
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(numberOfColumns=2, cw=((1, 350), (2, 40)))
         cmds.floatSliderGrp('fsg_filtertimeValue',
-                                label='Time tolerance',
+                                label=LANGUAGE_MAP._CurveFilters_.time_tolerance,
                                 field=True,
                                 minValue=0.05,
                                 maxValue=10.0,
@@ -3554,7 +3554,7 @@ class FilterCurves(object):
                         cc=self.__uicb_setMaxRanges,
                         dc=self.__uicb_setMaxRanges)
         cmds.floatSliderGrp('fsg_filterfloatValue',
-                                label='Value tolerance',
+                                label=LANGUAGE_MAP._CurveFilters_.value_tolerance,
                                 field=True,
                                 minValue=0,
                                 maxValue=1.0,
@@ -3569,22 +3569,23 @@ class FilterCurves(object):
         cmds.setParent('..')
         cmds.separator(h=20, style='in')
         cmds.rowColumnLayout(numberOfColumns=3, cw=[(1, 100), (2, 120), (3, 120)], cs=((1, 20), (2, 30)))
-        cmds.checkBox('snapToFrames', value=self.snapToFrame, label="Snap to Frame",
-                      ann="on exit of the sliders snap the keys to whole frames",
+        cmds.checkBox('snapToFrames', value=self.snapToFrame,
+                      label=LANGUAGE_MAP._CurveFilters_.snap_to_frame,
+                      ann=LANGUAGE_MAP._CurveFilters_.snap_to_frame_ann,
                       cc=self.__uicb_setToFrame)
-        cmds.button(label='Delete Redundants',
-                    command='import maya.cmds as cmds;cmds.delete(sc=True)',
-                    ann='on selected nodes delete redundant animCurves - these are curves whos value never change, the curve will be deleted')
-        cmds.button(label='Single Process',
-                    command=self.simplifyWrapper,
-                    ann='Single process using the value sliders above')
+        cmds.button(label=LANGUAGE_MAP._CurveFilters_.delete_redundants,
+                    ann=LANGUAGE_MAP._CurveFilters_.delete_redundants_ann,
+                    command='import maya.cmds as cmds;cmds.delete(sc=True)')
+        cmds.button(label=LANGUAGE_MAP._CurveFilters_.single_process,
+                    ann=LANGUAGE_MAP._CurveFilters_.single_process_ann,
+                    command=self.simplifyWrapper)
         cmds.setParent('..')
         
         cmds.separator(h=20, style="in")
         cmds.rowColumnLayout(numberOfColumns=2, cw=((1, 200), (2, 200)))
-        cmds.button(label='Reset All', bgc=r9Setup.red9ButtonBGC(1),
+        cmds.button(label=LANGUAGE_MAP._CurveFilters_.reset_all, bgc=r9Setup.red9ButtonBGC(1),
                          command=self.__uicb_resetSliders)
-        cmds.button(label='ToggleBuffers', bgc=r9Setup.red9ButtonBGC(1),
+        cmds.button(label=LANGUAGE_MAP._CurveFilters_.toggle_buffers, bgc=r9Setup.red9ButtonBGC(1),
                          command=self.__uicb_toggleGraphDisplay)
         cmds.setParent('..')
       
@@ -4217,73 +4218,73 @@ class MirrorSetup(object):
                  
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        window = cmds.window(self.win, title=LANGUAGE_MAP.Mirror_Setup.title, s=False, widthHeight=(280, 410))
+        window = cmds.window(self.win, title=LANGUAGE_MAP._Mirror_Setup_.title, s=False, widthHeight=(280, 410))
         cmds.menuBarLayout()
-        cmds.menu(l=LANGUAGE_MAP.Generic.vimeo_menu)
-        cmds.menuItem(l=LANGUAGE_MAP.Generic.vimeo_help, \
+        cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
+        cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help, \
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/57882801')")
         cmds.menuItem(divider=True)
-        cmds.menuItem(l=LANGUAGE_MAP.Generic.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
+        cmds.menuItem(l=LANGUAGE_MAP._Generic_.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
         cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
         cmds.separator(h=15, style='none')
-        cmds.text(l=LANGUAGE_MAP.Mirror_Setup.side)
+        cmds.text(l=LANGUAGE_MAP._Mirror_Setup_.side)
         cmds.rowColumnLayout(nc=3, columnWidth=[(1, 90), (2, 90), (3, 90)])
         self.uircbMirrorSide = cmds.radioCollection('mirrorSide')
-        cmds.radioButton('Right', label=LANGUAGE_MAP.Generic.right)
-        cmds.radioButton('Centre', label=LANGUAGE_MAP.Generic.centre)
-        cmds.radioButton('Left', label=LANGUAGE_MAP.Generic.left)
+        cmds.radioButton('Right', label=LANGUAGE_MAP._Generic_.right)
+        cmds.radioButton('Centre', label=LANGUAGE_MAP._Generic_.centre)
+        cmds.radioButton('Left', label=LANGUAGE_MAP._Generic_.left)
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 110), (2, 60)])
-        cmds.text(label=LANGUAGE_MAP.Mirror_Setup.index)
+        cmds.text(label=LANGUAGE_MAP._Mirror_Setup_.index)
         cmds.intField('ifg_mirrorIndex', v=1, min=1, w=50)
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
-        cmds.text(l=LANGUAGE_MAP.Mirror_Setup.axis)
+        cmds.text(l=LANGUAGE_MAP._Mirror_Setup_.axis)
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 130), (2, 130)])
-        cmds.checkBox('default', l=LANGUAGE_MAP.Mirror_Setup.default_axis, v=True,
+        cmds.checkBox('default', l=LANGUAGE_MAP._Mirror_Setup_.default_axis, v=True,
                       onc=lambda x: self.__uicb_setDefaults('default'),
                       ofc=lambda x: self.__uicb_setDefaults('custom'))
-        cmds.checkBox('setDirectCopy',l=LANGUAGE_MAP.Mirror_Setup.no_inverse, v=False,
-                      ann=LANGUAGE_MAP.Mirror_Setup.no_inverse_ann,
+        cmds.checkBox('setDirectCopy',l=LANGUAGE_MAP._Mirror_Setup_.no_inverse, v=False,
+                      ann=LANGUAGE_MAP._Mirror_Setup_.no_inverse_ann,
                       onc=lambda x:self.__uicb_setDefaults('direct'),  # cmds.checkBox('default',e=True, v=False),
                       ofc=lambda x:self.__uicb_setDefaults('default'))  # cmds.checkBox('default',e=True, v=True))
         cmds.setParent('..')
         cmds.separator(h=5, style='none')
-        cmds.rowColumnLayout(ann=LANGUAGE_MAP.Generic.attrs, numberOfColumns=3,
+        cmds.rowColumnLayout(ann=LANGUAGE_MAP._Generic_.attrs, numberOfColumns=3,
                                  columnWidth=[(1, 90), (2, 90), (3, 90)])
-        cmds.checkBox('translateX', l=LANGUAGE_MAP.Generic.transX, v=False)
-        cmds.checkBox('translateY', l=LANGUAGE_MAP.Generic.transY, v=False)
-        cmds.checkBox('translateZ', l=LANGUAGE_MAP.Generic.transZ, v=False)
-        cmds.checkBox('rotateX', l=LANGUAGE_MAP.Generic.rotX, v=False)
-        cmds.checkBox('rotateY', l=LANGUAGE_MAP.Generic.rotY, v=False)
-        cmds.checkBox('rotateZ', l=LANGUAGE_MAP.Generic.rotZ, v=False)
+        cmds.checkBox('translateX', l=LANGUAGE_MAP._Generic_.transX, v=False)
+        cmds.checkBox('translateY', l=LANGUAGE_MAP._Generic_.transY, v=False)
+        cmds.checkBox('translateZ', l=LANGUAGE_MAP._Generic_.transZ, v=False)
+        cmds.checkBox('rotateX', l=LANGUAGE_MAP._Generic_.rotX, v=False)
+        cmds.checkBox('rotateY', l=LANGUAGE_MAP._Generic_.rotY, v=False)
+        cmds.checkBox('rotateZ', l=LANGUAGE_MAP._Generic_.rotZ, v=False)
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
-        cmds.button(label=LANGUAGE_MAP.Mirror_Setup.refresh, bgc=r9Setup.red9ButtonBGC(1),
+        cmds.button(label=LANGUAGE_MAP._Mirror_Setup_.refresh, bgc=r9Setup.red9ButtonBGC(1),
                      command=lambda *args: (self.__uicb_getMirrorIDsFromNode()))
         cmds.separator(h=15, style='none')
-        cmds.button(label=LANGUAGE_MAP.Mirror_Setup.add_update, bgc=r9Setup.red9ButtonBGC(1),
-                     ann=LANGUAGE_MAP.Mirror_Setup.add_update_ann,
+        cmds.button(label=LANGUAGE_MAP._Mirror_Setup_.add_update, bgc=r9Setup.red9ButtonBGC(1),
+                     ann=LANGUAGE_MAP._Mirror_Setup_.add_update_ann,
                      command=lambda *args: (self.__setMirrorIDs()))
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)])
-        cmds.button(label=LANGUAGE_MAP.Mirror_Setup.print_debugs, bgc=r9Setup.red9ButtonBGC(1),
-                     ann=LANGUAGE_MAP.Mirror_Setup.print_debugs_ann,
+        cmds.button(label=LANGUAGE_MAP._Mirror_Setup_.print_debugs, bgc=r9Setup.red9ButtonBGC(1),
+                     ann=LANGUAGE_MAP._Mirror_Setup_.print_debugs_ann,
                      command=lambda *args: (self.__printDebugs()))
-        cmds.button(label=LANGUAGE_MAP.Mirror_Setup.delete, bgc=r9Setup.red9ButtonBGC(1),
+        cmds.button(label=LANGUAGE_MAP._Mirror_Setup_.delete, bgc=r9Setup.red9ButtonBGC(1),
                      command=lambda *args: (self.__deleteMarkers()))
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)])
-        cmds.checkBox('mirrorSaveLoadHierarchy', l=LANGUAGE_MAP.Generic.hierarchy, v=False)
-        cmds.checkBox('mirrorClearCurrent', l=LANGUAGE_MAP.Mirror_Setup.clear, v=True)
+        cmds.checkBox('mirrorSaveLoadHierarchy', l=LANGUAGE_MAP._Generic_.hierarchy, v=False)
+        cmds.checkBox('mirrorClearCurrent', l=LANGUAGE_MAP._Mirror_Setup_.clear, v=True)
         cmds.setParent('..')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)])
-        cmds.button(label=LANGUAGE_MAP.Mirror_Setup.save_configs, bgc=r9Setup.red9ButtonBGC(1),
-                     ann=LANGUAGE_MAP.Mirror_Setup.save_configs_ann,
+        cmds.button(label=LANGUAGE_MAP._Mirror_Setup_.save_configs, bgc=r9Setup.red9ButtonBGC(1),
+                     ann=LANGUAGE_MAP._Mirror_Setup_.save_configs_ann,
                      command=lambda *args: (self.__saveMirrorSetups()))
-        cmds.button(label=LANGUAGE_MAP.Mirror_Setup.load_configs, bgc=r9Setup.red9ButtonBGC(1),
+        cmds.button(label=LANGUAGE_MAP._Mirror_Setup_.load_configs, bgc=r9Setup.red9ButtonBGC(1),
                      command=lambda *args: (self.__loadMirrorSetups()))
         cmds.setParent('..')
         cmds.separator(h=15, style='none')
@@ -4525,29 +4526,29 @@ class CameraTracker():
     def _showUI(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        cmds.window(self.win, title=LANGUAGE_MAP.CameraTracker.title, widthHeight=(263, 180))
+        cmds.window(self.win, title=LANGUAGE_MAP._CameraTracker_.title, widthHeight=(263, 180))
         cmds.menuBarLayout()
-        cmds.menu(l=LANGUAGE_MAP.Generic.vimeo_menu)
-        cmds.menuItem(l=LANGUAGE_MAP.Generic.vimeo_help, \
+        cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
+        cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help, \
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/60960492')")
         cmds.menuItem(divider=True)
-        cmds.menuItem(l=LANGUAGE_MAP.Generic.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
+        cmds.menuItem(l=LANGUAGE_MAP._Generic_.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=15, style='none')
         cmds.intFieldGrp('CameraFrameStep', numberOfFields=1,
-                         label=LANGUAGE_MAP.CameraTracker.tracker_step, value1=10,
-                         extraLabel=LANGUAGE_MAP.CameraTracker.frames,
+                         label=LANGUAGE_MAP._CameraTracker_.tracker_step, value1=10,
+                         extraLabel=LANGUAGE_MAP._CameraTracker_.frames,
                          cw=(1, 100),
                          cc=partial(self.__storePrefs))
         cmds.separator(h=15, style='none')
-        cmds.checkBox('CBMaintainCurrent', l=LANGUAGE_MAP.CameraTracker.maintain_frame, v=True, cc=partial(self.__storePrefs))
+        cmds.checkBox('CBMaintainCurrent', l=LANGUAGE_MAP._CameraTracker_.maintain_frame, v=True, cc=partial(self.__storePrefs))
         cmds.separator(h=15, style='none')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 130), (2, 130)])
         if self.fixed:
-            cmds.button('cameraTrackTrack', label=LANGUAGE_MAP.CameraTracker.pan, command=partial(self.__runTracker))
+            cmds.button('cameraTrackTrack', label=LANGUAGE_MAP._CameraTracker_.pan, command=partial(self.__runTracker))
         else:
-            cmds.button('cameraTrackTrack', label=LANGUAGE_MAP.CameraTracker.track, command=partial(self.__runTracker))
-        cmds.button('cameraTrackAppy', label=LANGUAGE_MAP.Generic.apply, command=partial(self.__storePrefs))
+            cmds.button('cameraTrackTrack', label=LANGUAGE_MAP._CameraTracker_.track, command=partial(self.__runTracker))
+        cmds.button('cameraTrackAppy', label=LANGUAGE_MAP._Generic_.apply, command=partial(self.__storePrefs))
         cmds.setParent('..')
         cmds.separator(h=15, style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',

@@ -42,11 +42,15 @@ import sys
 import os
 import uuid
 
+import Red9.startup.setup as r9Setup
 import Red9_General as r9General
 import Red9_CoreUtils as r9Core
-import Red9.startup.setup as r9Setup
 import Red9_AnimationUtils as r9Anim
+from Red9.startup.setup import LANGUAGE_MAP
+from Red9_Meta import LANGUAGE_MAP
 
+# Language map is used for all UI's as a text mapping for languages
+LANGUAGE_MAP = r9Setup.LANGUAGE_MAP
 
 '''
 #=============================================
@@ -684,48 +688,48 @@ class MClassNodeUI():
             cmds.deleteUI(self.win, window=True)
         window = cmds.window(self.win, title=self.win)
         cmds.menuBarLayout()
-        cmds.menu(l="VimeoHelp")
-        cmds.menuItem(l="Vimeo Help: Develop Conference MetaData-Part1",
-                      ann='Develop Conference 2014 - MetaData in a Production Pipeline Video1',
+        cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.vimeo_dev_part1,
+                      ann=LANGUAGE_MAP._MetaNodeUI_.vimeo_dev_part1_ann,
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/100882408')")
-        cmds.menuItem(l="Vimeo Help: Develop Conference MetaData-Part2",
-                      ann='Develop Conference 2014 - MetaData in a Production Pipeline Video2',
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.vimeo_dev_part2,
+                      ann=LANGUAGE_MAP._MetaNodeUI_.vimeo_dev_part2_ann,
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/100883383')")
-        cmds.menuItem(l="Vimeo Help: Develop Conference MetaData-Part3",
-                      ann='Develop Conference 2014 - MetaData in a Production Pipeline Video3',
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.vimeo_dev_part3,
+                      ann=LANGUAGE_MAP._MetaNodeUI_.vimeo_dev_part3_ann,
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/102463373')")
         cmds.menuItem(divider=True)
-        cmds.menuItem(l="Vimeo Help: MetaData-Part1",
-                      ann='Part1 goes through the main attribute handling inside Meta',
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.vimeo_meta_part1,
+                      ann=LANGUAGE_MAP._MetaNodeUI_.vimeo_meta_part1_ann,
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/61841345')")
-        cmds.menuItem(l="Vimeo Help: MetaData-Part2",
-                       ann='Part2 goes through the class structures and the basic factory aspect of Meta',
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.vimeo_meta_part2,
+                       ann=LANGUAGE_MAP._MetaNodeUI_.vimeo_meta_part2_ann,
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/62546103')")
-        cmds.menuItem(l="Vimeo Help: MetaData-Part3",
-                       ann='Part3 shows how to add metaRig to your systems, all the connectChild and addRigCtrl calls',
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.vimeo_meta_part3,
+                       ann=LANGUAGE_MAP._MetaNodeUI_.vimeo_meta_part3_ann,
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/64258996')")
-        cmds.menuItem(l="Vimeo Help: MetaData-Part4",
-                       ann='Part4 goes through subclassing Meta and using it in your own systems',
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.vimeo_meta_part4,
+                       ann=LANGUAGE_MAP._MetaNodeUI_.vimeo_meta_part4_ann,
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/72006183')")
         cmds.menuItem(divider=True)
         cmds.menuItem(divider=True)
-        cmds.menuItem(l="Contact Me",c=lambda *args:(r9Setup.red9ContactInfo()))
-        cmds.menu(l="Debug")
-        cmds.menuItem(l="Print :Registered NodeTypes",
-                      ann='Prints the currently registered nodeTypes from the Meta Registry',
+        cmds.menuItem(l=LANGUAGE_MAP._Generic_.contactme,c=lambda *args:(r9Setup.red9ContactInfo()))
+        cmds.menu(l=LANGUAGE_MAP._Generic_.debug)
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.print_registered_nodetypes,
+                      ann=LANGUAGE_MAP._MetaNodeUI_.print_registered_nodetypes_ann,
                       c=self.printRegisteredNodeTypes)
-        cmds.menuItem(l="Print :Registered MetaClasses",
-                      ann='Prints the currently registered MetaClasses from the Meta Registry',
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.print_registered_metaclasses,
+                      ann=LANGUAGE_MAP._MetaNodeUI_.print_registered_metaclasses_ann,
                       c=self.printRegisteredMetaClasses)
-        cmds.menuItem(l="Print :MetaCached Nodes",
-                      ann='Prints all currently cached nodes in the MetaCache',
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.print_metacached_node,
+                      ann=LANGUAGE_MAP._MetaNodeUI_.print_metacached_nodes_ann,
                       c=self.printMetaNodeCache)
         
-        cmds.menuItem(l="Clear Cache",
-                      ann='Prints all currently cached nodes in the MetaCache',
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.clear_cache,
+                      ann=LANGUAGE_MAP._MetaNodeUI_.clear_cache_ann,
                       c=resetCache)
-        cmds.menuItem(l="Upgrade mNodes to UUIDs",
-                      ann='Upgrades any current mNodes in the scene to the new UIID system for caching',
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.update_to_uuids,
+                      ann=LANGUAGE_MAP._MetaNodeUI_.update_to_uuids_ann,
                       c=upgradeSystemsToUUID)
         cmds.scrollLayout('slMetaNodeScroll',rc=lambda *args:self.fitTextScrollFucker())
         cmds.columnLayout(adjustableColumn=True)
@@ -735,10 +739,10 @@ class MClassNodeUI():
         cmds.rowColumnLayout('rc_useMetaFilterUI', numberOfColumns=3,
                              columnWidth=[(1, 120), (2, 120), (3,200)],
                              columnSpacing=[(1, 10), (2, 10), (3,20)])
-        cmds.checkBox('cb_filter_mTypes', label='mTypes filter : ', v=False, onc=partial(self.__uicb_setfilterMode,'mTypes'))
-        cmds.checkBox('cb_filter_mInstances', label='mInstances filter : ', v=False, onc=partial(self.__uicb_setfilterMode,'mInstance'))
+        cmds.checkBox('cb_filter_mTypes', label=LANGUAGE_MAP._MetaNodeUI_.mtypes_filter, v=False, onc=partial(self.__uicb_setfilterMode,'mTypes'))
+        cmds.checkBox('cb_filter_mInstances', label=LANGUAGE_MAP._MetaNodeUI_.minstances_filter, v=False, onc=partial(self.__uicb_setfilterMode,'mInstance'))
         cmds.optionMenu('om_MetaUI_Filter', ni=len(RED9_META_REGISTERY),
-                        ann='Registered MetaCalsses to use as filters',
+                        ann=LANGUAGE_MAP._MetaNodeUI_.registered_metaclasses_ann,
                         cc=partial(self.fillScroll))
         for preset in sorted(RED9_META_REGISTERY):
             cmds.menuItem(l=preset)
@@ -747,10 +751,10 @@ class MClassNodeUI():
         cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 100), (2, 100), (3,100), (4,100)],
                              columnSpacing=[(1, 10), (2, 10), (3,10)])
         self.uircbMetaUIShowStatus = cmds.radioCollection('uircbMetaUIShowStatus')
-        cmds.radioButton('metaUISatusAll', label='all', cc=partial(self.fillScroll))
-        cmds.radioButton('metaUISatusValids', label='valids', cc=partial(self.fillScroll))
-        cmds.radioButton('metaUISatusinValids', label='inValids', cc=partial(self.fillScroll))
-        cmds.radioButton('metaUISatusUnregistered', label='unRegistered', cc=partial(self.fillScroll))
+        cmds.radioButton('metaUISatusAll', label=LANGUAGE_MAP._MetaNodeUI_.all, cc=partial(self.fillScroll))
+        cmds.radioButton('metaUISatusValids', label=LANGUAGE_MAP._MetaNodeUI_.valids, cc=partial(self.fillScroll))
+        cmds.radioButton('metaUISatusinValids', label=LANGUAGE_MAP._MetaNodeUI_.invalids, cc=partial(self.fillScroll))
+        cmds.radioButton('metaUISatusUnregistered', label=LANGUAGE_MAP._MetaNodeUI_.unregistered, cc=partial(self.fillScroll))
         cmds.setParent('..')
         
         #You've passed in the filter types directly to the UI Class
@@ -758,9 +762,9 @@ class MClassNodeUI():
             #cmds.separator(h=15, style='none')
             cmds.rowColumnLayout('rc_useMetaFilterUI', e=True, en=False, vis=False)
             if self.mTypes:
-                cmds.text(label='UI launch with filter MetaNodes: mTypes : %s' % self.mTypes)
+                cmds.text(label='%s : %s' % (LANGUAGE_MAP._MetaNodeUI_.ui_launch_mtypes,self.mTypes))
             else:
-                cmds.text(label='UI launch with filter MetaNodes: mInstances : %s' % self.mInstances)
+                cmds.text(label='%s : %s' % (LANGUAGE_MAP._MetaNodeUI_.ui_launch_minstances,self.mInstances))
             cmds.separator(h=15, style='none')
             
         if not self.allowMulti:
@@ -768,22 +772,24 @@ class MClassNodeUI():
         else:
             cmds.textScrollList('slMetaNodeList',font="fixedWidthFont", allowMultiSelection=True)
         cmds.popupMenu('r9MetaNodeUI_Popup')
-        cmds.menuItem(label='Graph Selected Networks', command=partial(self.graphNetwork))
+        cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.graph_selected, command=partial(self.graphNetwork))
         cmds.menuItem(divider=True)
-        cmds.menuItem(label='Select Children', ann='NOTE doubleClick on the UI also runs the selectChildren call"',
+        cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.select_children,
+                      ann=LANGUAGE_MAP._MetaNodeUI_.select_children_ann,
                       command=partial(self.doubleClick))
-        cmds.menuItem(label='Delete Selected mNodes', ann='call self.delete() on the selected nModes',
+        cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.delete_selected,
+                      ann=LANGUAGE_MAP._MetaNodeUI_.delete_selected_ann,
                       command=partial(self.deleteCall))
         cmds.menuItem(divider=True)
-        cmds.menuItem(label='SortBy : ClassName', command=partial(self.fillScroll,'byClass'))
-        cmds.menuItem(label='SortBy : NodeName', command=partial(self.fillScroll,'byName'))
+        cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.sort_by_classname, command=partial(self.fillScroll,'byClass'))
+        cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.sort_by_nodename, command=partial(self.fillScroll,'byName'))
         cmds.menuItem(divider=True)
-        cmds.menuItem(label='Class : All Registered', command=partial(self.fillScroll,'byName'))
+        cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.class_all_registered, command=partial(self.fillScroll,'byName'))
         cmds.menuItem(divider=True)
-        cmds.menuItem(label='Pro: Connect Node to System', command=self.__uiCB_connectNode)
-        cmds.menuItem(label='Pro: Disconnect Nodes from System', command=self.__uiCB_disconnectNode)
-        cmds.menuItem(label='Pro: Test Pro_PackStubs', command=lambda x:r9Setup.PRO_PACK_STUBS().test_pro_stubs())
-        cmds.button(label='Refresh', command=partial(self.fillScroll))
+        cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.pro_connect_node, command=self.__uiCB_connectNode)
+        cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.pro_disconnect_node, command=self.__uiCB_disconnectNode)
+        cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.pro_test_pro_stubs, command=lambda x:r9Setup.PRO_PACK_STUBS().test_pro_stubs())
+        cmds.button(label=LANGUAGE_MAP._Generic_.refresh, command=partial(self.fillScroll))
         cmds.separator(h=15,style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7,0,0), image1='Rocket9_buttonStrap2.bmp',
                                  c=lambda *args:(r9Setup.red9ContactInfo()),h=22,w=200)
@@ -835,14 +841,15 @@ class MClassNodeUI():
     
     def deleteCall(self,*args):
         result = cmds.confirmDialog(
-                title='Confirm metaNode Delete',
-                button=['Yes', 'Cancel'],
-                message='Confirm deletion of metaNode\nare you absolutely\n\nSURE\n\nyou meant to do this?',
-                defaultButton='Cancel',
+                title=str(LANGUAGE_MAP._MetaNodeUI_.confirm_delete),
+                button=[str(LANGUAGE_MAP._Generic_.yes),
+                        str(LANGUAGE_MAP._Generic_.cancel)],
+                message=str(LANGUAGE_MAP._MetaNodeUI_.confirm_delete_message),
+                defaultButton=str(LANGUAGE_MAP._Generic_.cancel),
                 bgc=(0.5,0.1,0.1),
-                cancelButton='Cancel',
-                dismissString='Cancel')
-        if result == 'Yes':
+                cancelButton=str(LANGUAGE_MAP._Generic_.cancel),
+                dismissString=str(LANGUAGE_MAP._Generic_.cancel))
+        if result == str(LANGUAGE_MAP._Generic_.yes):
             try:
                 indexes=cmds.textScrollList('slMetaNodeList',q=True,sii=True)
                 if indexes:

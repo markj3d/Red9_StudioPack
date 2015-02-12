@@ -5,7 +5,8 @@ This is the main text language mapper for English, all other languages
 should inherit from these to make sure that none of the entries are 
 missed off!
 '''
-class MainMenus(object):
+
+class _MainMenus_(object):
 
     animation_toolkit = "AnimationToolkit"
     animation_toolkit_ann = 'Main Red9 Animation Toolkit - Note: CTRL+click opens this non-docked'
@@ -67,22 +68,25 @@ class MainMenus(object):
     language = "Language"
     
     
-class Generic(object):
+class _Generic_(object):
     '''
     Used by many of the UI's, general non-specific text
     '''
     contactme = 'Contact Me'
     tools = 'Tools'
     reset = 'Reset to Default'
+    refresh = 'Refresh'
     vimeo_menu = 'VimeoHelp'
     vimeo_help = "Open Vimeo Help File"
     
     hierarchy = 'Hierarchy'
     hierarchy_ann = 'Process Hierarchy'
     apply = 'Apply'
+    cancel = 'Cancel'
     set = 'set'
     clear_all = 'ClearAll'
     clear = 'Clear'
+    
     attrs = 'attrs'
     transX = 'Translate X'
     transY = 'Translate Y'
@@ -114,17 +118,24 @@ class Generic(object):
     parent_constraint = 'ParentConstraint'
     ik_handles = 'IKHandles'
     transforms = 'Transforms'
+    
     right = 'Right'
     left = 'Left'
     centre = 'Centre'
+    
+    debug = 'Debug'
+    yes = 'Yes'
+    no = 'No'
+    min = 'Min'
+    max = 'Max'
 
 
 # ======================================================================================
-# CoreUtils.py Module
+# CoreUtils.py Module ---
 # ======================================================================================
 
 
-class LockChannelsUI(object):
+class _LockChannelsUI_(object):
     title = 'LockChannels'
     user_defined = 'All User Defined Attrs'
     user_defined_ann='These are non-standard attributes added to the nodes. These are considered per node'
@@ -144,7 +155,7 @@ class LockChannelsUI(object):
     serialize_attrmap_to_node_ann = 'rather than saving the data to a file, serialize it to a given node so its stored internally in your systems'
     set_ann = 'Node for serializing the attrMap directly onto'
 
-class SearchNodeUI(object):
+class _SearchNodeUI_(object):
     '''
     Main node Search UI, this is inherited by the AnimUI as they share the same filter options
     '''
@@ -170,10 +181,10 @@ class SearchNodeUI(object):
     
 
 # ======================================================================================
-# AnimationUtils.py Module
+# AnimationUtils.py Module ---
 # ======================================================================================
 
-class AnimationUI(SearchNodeUI):
+class _AnimationUI_(_SearchNodeUI_):
     title = 'Red9 AnimationTools'
     tab_animlayout = 'Animation_Toolkit'
     tab_poselayout = 'PoseManager'
@@ -390,7 +401,8 @@ checkBoxes will process all children of the roots'''
     pose_rmb_grid_med = 'Grid Size: Medium'
     pose_rmb_grid_large = 'Grid Size: Large'
     
-class Mirror_Setup(object):
+class _Mirror_Setup_(object):
+    
     title = "MirrorSetup"
     side = 'MirrorSide:'
     index = 'MirrorIndex:'
@@ -410,11 +422,124 @@ class Mirror_Setup(object):
     save_configs_ann = 'Save the current MirrorSetups'
     load_configs = 'Load MirrorConfigs'
     
-class CameraTracker(object):
+class _CameraTracker_(object):
+    
     title = 'CameraTracker'
     tracker_step = 'TrackerStep: '
     frames = 'frames'
     maintain_frame = 'MaintainCurrentFraming'
     pan = 'Pan'
     track = 'Track'
+    
+class _CurveFilters_(object):
+    
+    title = 'interactiveCurveFilter'
+    vimeo_randomize_ann = 'simple demo showing the functionality of Simplify curve and Randomizer'
+    curve_resampler = 'Curve Resampler'
+    resample = 'Resample'
+    curve_simplifier = 'Curve Simplfier'
+    time_tolerance = 'Time tolerance'
+    value_tolerance = 'Value tolerance'
+    snap_to_frame = "Snap to Frame"
+    snap_to_frame_ann = "on exit of the sliders snap the keys to whole frames"
+    delete_redundants = 'Delete Redundants'
+    delete_redundants_ann = 'on selected nodes delete redundant animCurves - these are curves whos value never change, the curve will be deleted'
+    single_process = 'Single Process'
+    single_process_ann = 'Single process using the value sliders above'
+    reset_all = 'Reset All'
+    toggle_buffers = 'ToggleBuffers'
+
+class _Randomizer_(object):
+    
+    title = 'KeyRandomizer'
+    vimeo_randomizer_ann = 'simple demo showing the functionality of Simplify curve and Randomizer'
+    strength_value = 'strength : value'
+    frame_step = 'frameStep'
+    current_keys_only = 'Current Keys Only'
+    current_keys_only_ann = 'ONLY randomize selected keys, if OFF the core will add keys to the curve at the frameStep incremenet'
+    pre_normalize = 'Pre-Normalize Curves'
+    pre_normalize_ann = 'Pre-Normalize: process based on value percentage range auto-calculated from curves'
+    interactive_mode = "Interactive Mode"
+    interactive_mode_ann = "Turn on the interactiveMode - ONLY supported in CurrentKeys mode"
+    save_pref = 'SavePref'
+    toggle_buffers = 'ToggleBuffers'
+
+
+  
+# ======================================================================================
+# Meta.py Module ---
+# ======================================================================================
+
+
+class _MetaNodeUI_(object):
+    
+    vimeo_dev_part1 = "Vimeo Help: Develop Conference MetaData-Part1"
+    vimeo_dev_part1_ann ='Develop Conference 2014 - MetaData in a Production Pipeline Video1'
+    vimeo_dev_part2 ="Vimeo Help: Develop Conference MetaData-Part2"
+    vimeo_dev_part2_ann = 'Develop Conference 2014 - MetaData in a Production Pipeline Video2'
+    vimeo_dev_part3 = "Vimeo Help: Develop Conference MetaData-Part3"
+    vimeo_dev_part3_ann='Develop Conference 2014 - MetaData in a Production Pipeline Video3'
+    vimeo_meta_part1 = "Vimeo Help: MetaData-Part1"
+    vimeo_meta_part1_ann = 'Part1 goes through the main attribute handling inside Meta'
+    vimeo_meta_part2 = "Vimeo Help: MetaData-Part2"
+    vimeo_meta_part2_ann='Part2 goes through the class structures and the basic factory aspect of Meta'
+    vimeo_meta_part3 = "Vimeo Help: MetaData-Part3"
+    vimeo_meta_part3_ann = 'Part3 shows how to add metaRig to your systems, all the connectChild and addRigCtrl calls'
+    vimeo_meta_part4 = "Vimeo Help: MetaData-Part4"
+    vimeo_meta_part4_ann = 'Part4 goes through subclassing Meta and using it in your own systems'
+    
+    print_registered_nodetypes = "Print :Registered NodeTypes"
+    print_registered_nodetypes_ann = 'Prints the currently registered nodeTypes from the Meta Registry'
+    print_registered_metaclasses = "Print :Registered MetaClasses"
+    print_registered_metaclasses_ann = 'Prints the currently registered MetaClasses from the Meta Registry'
+    print_metacached_node = "Print :MetaCached Nodes"
+    print_metacached_nodes_ann = 'Prints all currently cached nodes in the MetaCache'
+    clear_cache = "Clear Cache"
+    clear_cache_ann = 'Clear all currently cached nodes from the registry'
+    update_to_uuids = "Upgrade mNodes to UUIDs"
+    update_to_uuids_ann = 'Upgrades any current mNodes in the scene to the new UIID system for caching'
+    
+    mtypes_filter = 'mTypes filter : '
+    minstances_filter = 'mInstances filter : '
+    registered_metaclasses_ann = 'Registered MetaCalsses to use as filters'
+    all = 'all'
+    valids = 'valids'
+    invalids = 'inValids'
+    unregistered = 'unRegistered'
+    
+    ui_launch_mtypes = 'UI launch with filter MetaNodes: mTypes'
+    ui_launch_minstances = 'UI launch with filter MetaNodes: mInstances'
+    
+    graph_selected = 'Graph Selected Networks'
+    select_children = 'Select Children'
+    select_children_ann = 'NOTE doubleClick on the UI also runs the selectChildren call"'
+    delete_selected = 'Delete Selected mNodes'
+    delete_selected_ann = 'call self.delete() on the selected nModes'
+    sort_by_classname = 'SortBy : ClassName'
+    sort_by_nodename = 'SortBy : NodeName'
+    class_all_registered = 'Class : All Registered'
+    pro_connect_node = 'Pro: Connect Node to System'
+    pro_disconnect_node = 'Pro: Disconnect Nodes from System'
+    pro_test_pro_stubs = 'Pro: Test Pro_PackStubs'
+    
+    # confirms and other messages
+    confirm_delete = 'Confirm metaNode Delete',
+    confirm_delete_message = 'Confirm deletion of metaNode\nare you absolutely\n\nSURE\n\nyou meant to do this?'
+    
+    
+# ======================================================================================
+# Tools.py Module ---
+# ======================================================================================
+
+class _SceneReviewerUI_(object):
+    
+    title = 'SceneReviewTracker'
+    author = 'Author'
+    date = 'Date'
+    scene_name = 'SceneName'
+    comment = 'Comment'
+    new_comment = 'New Comment'
+    history = 'History'
+    activate_live_review = 'Activate Live Review'
+    disable_live_review = 'Disable Live Review'
     

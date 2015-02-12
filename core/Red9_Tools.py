@@ -25,6 +25,9 @@ logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
+# Language map is used for all UI's as a text mapping for languages
+LANGUAGE_MAP = r9Setup.LANGUAGE_MAP
+
 
 class SceneReviewerUI(object):
     '''
@@ -32,7 +35,7 @@ class SceneReviewerUI(object):
     sceneReview data, held on the time node
     '''
     def __init__(self):
-        self.win = 'SceneReviewTracker'
+        self.win = LANGUAGE_MAP._SceneReviewerUI_.title
         self.SceneReviewer=SceneReviewer()  # main reporter object
         
     @classmethod
@@ -73,24 +76,24 @@ class SceneReviewerUI(object):
         window = cmds.window(self.win, title=self.win, s=True, widthHeight=(450,700))
         cmds.scrollLayout('reviewScrollLayout',rc=lambda *args:self.resizeTextScrollers())
         cmds.columnLayout(adjustableColumn=True,columnAttach=('both',5))
-        cmds.textFieldGrp('author',label='Author', ed=False, text=author)
-        cmds.textFieldGrp('date', label='Date', ed=False, text=date)
-        cmds.textFieldGrp('sceneName', label='SceneName', ed=False, text=sceneName)
+        cmds.textFieldGrp('author', l=LANGUAGE_MAP._SceneReviewerUI_.author, ed=False, text=author)
+        cmds.textFieldGrp('date', l=LANGUAGE_MAP._SceneReviewerUI_.date, ed=False, text=date)
+        cmds.textFieldGrp('sceneName', l=LANGUAGE_MAP._SceneReviewerUI_.scene_name, ed=False, text=sceneName)
         cmds.separator(h=15,style='none')
-        cmds.text(label='Comment')
+        cmds.text(l=LANGUAGE_MAP._SceneReviewerUI_.comment)
         cmds.scrollField('comment', text=reportData['comment'], ed=allowEdit, h=200, wordWrap=False,
                          kpc=partial(self.updateInternalDict),
                          cc=partial(self.updateInternalDict))
-        cmds.button(label='New Comment',bgc=r9Setup.red9ButtonBGC(1),c=partial(self.addNewComment))
+        cmds.button(l=LANGUAGE_MAP._SceneReviewerUI_.new_comment,bgc=r9Setup.red9ButtonBGC(1),c=partial(self.addNewComment))
         cmds.separator(h=15,style='none')
-        cmds.text(label='History')
+        cmds.text(l=LANGUAGE_MAP._SceneReviewerUI_.history)
         cmds.scrollField('history', editable=False, en=True, wordWrap=False, h=200,text=reportData['history'])
         cmds.separator(h=15,style='none')
         cmds.rowColumnLayout('SceneNodeActivatorRC',numberOfColumns=2,columnWidth=[(1,200),(2,200)])
-        cmds.button('setReviewActive', label='Activate Live Review',
+        cmds.button('setReviewActive', l=LANGUAGE_MAP._SceneReviewerUI_.activate_live_review,
                                         bgc=r9Setup.red9ButtonBGC(1),
                                         c=lambda x:self._setReviewStatus('active'))
-        cmds.button('setReviewInActive', label='Disable Live Review',
+        cmds.button('setReviewInActive', l=LANGUAGE_MAP._SceneReviewerUI_.disable_live_review,
                                         bgc=r9Setup.red9ButtonBGC(1),
                                         c=lambda x:self._setReviewStatus('inactive'))
         cmds.setParent('..')

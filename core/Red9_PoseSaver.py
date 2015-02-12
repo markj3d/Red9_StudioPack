@@ -926,18 +926,20 @@ class PosePointCloud(object):
     relative space. It's been added as a tool in it's own right as it's sometimes
     useful to be able to shift poses in global space.
     '''
-    def __init__(self, nodes, filterSettings=None, mesh=None):
+    def __init__(self, nodes, filterSettings=None, meshes=[]):
         '''
         :param rootReference: the object to be used as the PPT's pivot reference
         :param nodes: feed the nodes to process in as a list, if a filter is given
                       then these are the rootNodes for it
         :param filterSettings: pass in a filterSettings object to filter the given hierarchy
-        :param mesh: this is really for reference, rather than make a locator, pass in a reference geo
+        :param meshes: this is really for reference, rather than make a locator, pass in a reference geo
                      which is then shapeSwapped for the PPC root node giving great reference!
         '''
-        self.mesh = mesh
-        self.refMesh = 'posePointCloudGeoRef'
-        self.refMeshShape = 'posePointCloudGeoRefShape'
+        self.meshes = meshes
+        if self.meshes and not isinstance(self.meshes, list):
+            self.meshes=[meshes]
+
+        self.refMesh = 'posePointCloudGeoRef'  # name for the duplicate meshes used
         self.mayaUpAxis = r9Setup.mayaUpAxis()
         self.inputNodes = nodes  # inputNodes for processing
         self.posePointCloudNodes = []  # generated ppt nodes
@@ -983,8 +985,8 @@ class PosePointCloud(object):
             cmds.parent(pnt,self.posePointRoot)
             self.posePointCloudNodes.append((pnt,node))
         cmds.select(self.posePointRoot)
-        if self.mesh:
-            self.shapeSwapMesh()
+        if self.meshes:
+            self.shapeSwapMeshes()
         return self.posePointCloudNodes
         
     def _snapPosePntstoNodes(self):
@@ -1003,34 +1005,36 @@ class PosePointCloud(object):
             log.debug('snapping Ctrl : %s > %s : %s' % (r9Core.nodeNameStrip(node), pnt, node))
             r9Anim.AnimFunctions.snap([pnt,node])
             
-    def shapeSwapMesh(self):
+    def shapeSwapMeshes(self):
         '''
         Swap the mesh Geo so it's a shape under the PPC transform root
         TODO: Make sure that the duplicate message link bug is covered!!
         '''
-        cmds.duplicate(self.mesh,rc=True,n=self.refMesh)[0]
-        r9Core.LockChannels().processState(self.refMesh,['tx','ty','tz','rx','ry','rz','sx','sy','sz'],\
-                                           mode='fullkey',hierarchy=False)
-        try:
-            #turn on the overrides so the duplicate geo can be selected
-            cmds.setAttr("%s.overrideDisplayType" % self.refMeshShape, 0)
-            cmds.setAttr("%s.overrideEnabled" % self.refMeshShape, 1)
-            cmds.setAttr("%s.overrideLevelOfDetail" % self.refMeshShape, 0)
-        except:
-            log.debug('Couldnt set the draw overrides for the refGeo')
-        cmds.parent(self.refMesh,self.posePointRoot)
-        cmds.makeIdentity(self.refMesh,apply=True,t=True,r=True)
-        cmds.parent(self.refMeshShape,self.posePointRoot,r=True,s=True)
-        cmds.delete(self.refMesh)
+        for i,mesh in enumerate(self.meshes):
+            dupMesh = cmds.duplicate(mesh, rc=True, n=self.refMesh+str(i))[0]
+            dupShape = cmds.listRelatives(dupMesh, type='shape')[0]
+            r9Core.LockChannels().processState(dupMesh,['tx','ty','tz','rx','ry','rz','sx','sy','sz'],\
+                                               mode='fullkey',hierarchy=False)
+            try:
+                #turn on the overrides so the duplicate geo can be selected
+                cmds.setAttr("%s.overrideDisplayType" % dupShape, 0)
+                cmds.setAttr("%s.overrideEnabled" % dupShape, 1)
+                cmds.setAttr("%s.overrideLevelOfDetail" % dupShape, 0)
+            except:
+                log.debug('Couldnt set the draw overrides for the refGeo')
+            cmds.parent(dupMesh,self.posePointRoot)
+            cmds.makeIdentity(dupMesh,apply=True,t=True,r=True)
+            cmds.parent(dupShape,self.posePointRoot,r=True,s=True)
+            cmds.delete(dupMesh)
 
     def applyPosePointCloud(self):
         self._snapNodestoPosePnts()
         
     def updatePosePointCloud(self):
         self._snapPosePntstoNodes()
-        if self.mesh:
-            cmds.delete(self.refMeshShape)
-            self.shapeSwapMesh()
+        if self.meshes:
+            cmds.delete(cmds.listRelatives(self.posePointRoot, type='mesh'))
+            self.shapeSwapMeshes()
             cmds.refresh()
         
     def delete(self):
