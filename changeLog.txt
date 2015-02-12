@@ -174,4 +174,6 @@ New - Red9_Meta - getChildren now accepts a new flag, asMeta which will force th
 New - Red9_Anim - Added a new 'No Inversing' mode to the mirrorUI which stops any axis being inversed when the data is mirrored. Ideal for FK chains like fingers where you just want to switch the data left to right
 New - Red9_Anim - Added a new 'incrementIDs' call in the mirror code that allows you to shift all the mirrorIndex id's of given nodes by a given offset.
 Mod - Red9_Pose - HUGE refactoring of the codebase for this to make it more generic, lots of code renaming and a new base 'DataMap' class
+New - Red9_Meta - Added the ability to "filter by node name" in the MetaNodeUI for speed on large scenes
+New - Red_Setup - Added Language Pack support and converted all text in all UI's to point to a single language mapper file. Chinese Language coming up! 
 

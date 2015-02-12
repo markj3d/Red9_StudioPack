@@ -751,10 +751,10 @@ class MClassNodeUI():
         cmds.separator(h=10, style='in')
         cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 400), (2, 50)])
         try:
-            cmds.textFieldGrp('filterByName', l='filter by name : ', text='', tcc=self.filterResults, cw=((1,136),(2,250)))
+            cmds.textFieldGrp('filterByName', l=LANGUAGE_MAP._MetaNodeUI_.filter_by_name, text='', tcc=self.filterResults, cw=((1,136),(2,250)))
         except:
-            cmds.textFieldGrp('filterByName', l='filter by name : ', text='', cc=self.filterResults, cw=((1,136),(2,250)))
-        cmds.button('clear', c=self.clearFilter)
+            cmds.textFieldGrp('filterByName', l=LANGUAGE_MAP._MetaNodeUI_.filter_by_name, text='', cc=self.filterResults, cw=((1,136),(2,250)))
+        cmds.button(LANGUAGE_MAP._Generic_.clear, c=self.clearFilter)
         cmds.setParent('..')
         
         cmds.separator(h=10, style='in')
@@ -885,7 +885,8 @@ class MClassNodeUI():
     
     def filterResults(self, *args):
         '''
-        rebuild the list based on the filter typed in
+        rebuild the list based on the filter typed in, Note that results are 
+        converted to upper before the match so it's case IN-sensitive
         '''
         filter=cmds.textFieldGrp('filterByName', q=True, text=True)
         cmds.textScrollList('slMetaNodeList', edit=True, ra=True)
