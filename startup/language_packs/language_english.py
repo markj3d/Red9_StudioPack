@@ -562,7 +562,9 @@ class _MetaNodeUI_(object):
     pro_connect_node = 'Pro: Connect Node to System'
     pro_disconnect_node = 'Pro: Disconnect Nodes from System'
     pro_test_pro_stubs = 'Pro: Test Pro_PackStubs'
-    filter_by_name = 'filter by node name : '
+    filter_by_name = 'filter by name : '
+    shortname = 'shortname'
+    stripnamespace = 'strip_Nspace'
 
     # confirms and other messages
     confirm_delete = 'Confirm metaNode Delete',
