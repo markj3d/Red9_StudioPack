@@ -360,12 +360,19 @@ def addToMayaMenus():
             if not cmds.menu(mainFileMenu, q=True, ni=True):
                 mel.eval('buildFileMenu()')
             cmds.menuItem(divider=True,p=mainFileMenu)
+            cmds.menuItem('redNineCopyPathItem',
+                          l=LANGUAGE_MAP._MainMenus_.copy_to_clipboard,
+                          ann=LANGUAGE_MAP._MainMenus_.copy_to_clipboard_ann,
+                          p=mainFileMenu,
+                          echoCommand=True,
+                          c="import maya.cmds as cmds;import Red9.core.Red9_General as r9General;r9General.Clipboard.setText(cmds.file(q=True,sn=True))")
             cmds.menuItem('redNineOpenFolderItem',
                           l=LANGUAGE_MAP._MainMenus_.open_in_explorer,
                           ann=LANGUAGE_MAP._MainMenus_.open_in_explorer_ann,
                           p=mainFileMenu,
                           echoCommand=True,
                           c="import maya.cmds as cmds;import Red9.core.Red9_General as r9General;r9General.os_OpenFileDirectory(cmds.file(q=True,sn=True))")
+
         # timeSlider additions
         if not cmds.menuItem('redNineTimeSliderCollapseItem',q=True,ex=True):
             if mayaVersion >= 2011:

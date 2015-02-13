@@ -70,6 +70,8 @@ class _MainMenus_(object):
     # additional menu stubs
     open_in_explorer = "Red9: Open in Explorer"
     open_in_explorer_ann = "Open the folder containing the current Maya Scene"
+    copy_to_clipboard = 'Red9: Copy to Clipboard'
+    copy_to_clipboard_ann = 'Copy the current Maya filepath to the OS:Clipboard'
     collapse_range = 'Red9: Collapse Range'
     collapse_selected = 'Collapse : Selected Only'
     collapse_selected_ann = 'Collapse the keys in the selected TimeRange (Red highlighted)'

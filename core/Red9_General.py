@@ -656,7 +656,10 @@ class Clipboard:
         Set clipbard text
         '''
         import ctypes
-        
+        if not value:
+            raise IOError('No text passed to the clipboard')
+        if isinstance(value, unicode):
+            value=str(value)
         if not isinstance(value, str):
             raise TypeError('value should be of str type')
 
@@ -682,6 +685,7 @@ class Clipboard:
             user32.EmptyClipboard()
             user32.SetClipboardData(CF_TEXT, hGlobalMem)
             user32.CloseClipboard()
+            log.info('Data set to clipboard : %s' % value)
             return True
 
 

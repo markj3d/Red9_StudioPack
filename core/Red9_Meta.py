@@ -741,8 +741,8 @@ class MClassNodeUI(object):
         cmds.rowColumnLayout('rc_useMetaFilterUI', numberOfColumns=3,
                              columnWidth=[(1, 120), (2, 120), (3,200)],
                              columnSpacing=[(1, 10), (2, 10), (3,20)])
-        cmds.checkBox('cb_filter_mTypes', label=LANGUAGE_MAP._MetaNodeUI_.mtypes_filter, v=False, onc=partial(self.__uicb_setfilterMode,'mTypes'))
-        cmds.checkBox('cb_filter_mInstances', label=LANGUAGE_MAP._MetaNodeUI_.minstances_filter, v=False, onc=partial(self.__uicb_setfilterMode,'mInstance'))
+        cmds.checkBox('cb_filter_mTypes', label=LANGUAGE_MAP._MetaNodeUI_.mtypes_filter, v=False, cc=partial(self.__uicb_setfilterMode,'mTypes'))
+        cmds.checkBox('cb_filter_mInstances', label=LANGUAGE_MAP._MetaNodeUI_.minstances_filter, v=False, cc=partial(self.__uicb_setfilterMode,'mInstance'))
         cmds.optionMenu('om_MetaUI_Filter', ni=len(RED9_META_REGISTERY),
                         ann=LANGUAGE_MAP._MetaNodeUI_.registered_metaclasses_ann,
                         cc=partial(self.fillScroll))
@@ -894,6 +894,7 @@ class MClassNodeUI(object):
         consistant way to fill the text data displayed
         '''
         baseNames=[]
+        cmds.textScrollList('slMetaNodeList', edit=True, ra=True)
         width=len(self.mNodes[0])
         #figure out the width of the first cell
         for meta in self.mNodes:
@@ -919,12 +920,11 @@ class MClassNodeUI(object):
         rebuild the list based on the filter typed in, Note that results are 
         converted to upper before the match so it's case IN-sensitive
         '''
-        self.mNodes=[]
         self.shortname=False
         self.stripNamespaces=False
         filterby=cmds.textFieldGrp('filterByName', q=True, text=True)
         if filterby:
-            cmds.textScrollList('slMetaNodeList', edit=True, ra=True)
+            self.mNodes=[]
             if self.cachedforFilter:
                 #fill the scroll list
                 for meta in self.cachedforFilter:
@@ -938,11 +938,9 @@ class MClassNodeUI(object):
     
     def __clearFilter(self, *args):
         cmds.textFieldGrp('filterByName', e=True, text='')
+        self.fillScroll()
         
     def fillScroll(self, sortBy=None, *args):  # , mClassToShow=None, *args):
-        
-        cmds.textScrollList('slMetaNodeList', edit=True, ra=True)
-                          
         states=cmds.radioCollection(self.uircbMetaUIShowStatus, q=True, select=True)
         self.dataType='node'
         if states=='metaUISatusinValids' or states=='metaUISatusValids':
