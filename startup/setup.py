@@ -68,7 +68,7 @@ log.setLevel(logging.INFO)
 # LANGUAGE MAPPING -----------------------------------------------------------------------
 #=========================================================================================
    
-global LANGUAGE_MAP
+#global LANGUAGE_MAP
 
 import language_packs.language_english
 LANGUAGE_MAP = language_packs.language_english
@@ -750,8 +750,8 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
         cmds.evalDeferred("import Red9_Internals", lp=True)  # Unresolved Import
            
 def reload_Red9(*args):
-    global LANGUAGE_MAP
-    reload(LANGUAGE_MAP)
+    #global LANGUAGE_MAP
+    #reload(LANGUAGE_MAP)
     import Red9.core
     Red9.core._reload()
 
