@@ -1022,7 +1022,7 @@ class AudioToolsWrap(object):
                     ann="Ripple offset the selected audio nodes so they're timed one after another",
                     command=self.offsetRipple)
         cmds.separator(h=15, style='none')
-        cmds.frameLayout(label='Broadcast Wav support', cll=True, cl=True, borderStyle='etchedOut')
+        cmds.frameLayout(label='Broadcast Wav support', cll=True, cl=False, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=5, style='none')
         cmds.text(label="NOTE: These will only run if the audio is\nin the Bwav format and has internal timecode data.")
@@ -1053,7 +1053,7 @@ class AudioToolsWrap(object):
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                              c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
         cmds.showWindow(self.win)
-        cmds.window(self.win, e=True, widthHeight=(290, 320))
+        cmds.window(self.win, e=True, widthHeight=(290, 350))
 
     def __uicb_cacheAudioNodes(self,*args):
         self.audioHandler=AudioHandler()
