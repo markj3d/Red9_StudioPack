@@ -3129,7 +3129,7 @@ def monitorHUDremoveCBAttrs():
                     pass
         metaHUD.refreshHud()
         
-def hardKillMetaHUD():
+def hardKillMetaHUD(*args):
     '''
     If the MetaNodes are left behind in a scene and you can't remove them
     then this is a hard coded kill to remove the hud element. This situation 
@@ -3442,6 +3442,8 @@ class MetaTimeCodeHUD(MetaHUDNode):
 
         for node in nodes:
             node=MetaClass(node)
+            if not node.hasAttr(self.tc_ref):
+                continue
             if node.nameSpace():
                 monitoredAttr='%s_%s_%s' % (r9Core.nodeNameStrip(node.nameSpace()[0]),
                                         r9Core.nodeNameStrip(node.mNode),

@@ -389,7 +389,7 @@ class AudioHandler(object):
         for node in self.audioNodes:
             node.offsetTime(offset)
             
-    def offsetRipple(self):
+    def offsetRipple(self, *args):
         '''
         offset all audioNodes so that they ripple in the
         order of self.audioNodes
@@ -998,7 +998,7 @@ class AudioToolsWrap(object):
     def _showUI(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        cmds.window(self.win, title=self.win, widthHeight=(400, 180))
+        cmds.window(self.win, title=self.win, widthHeight=(400, 220))
         cmds.columnLayout('uicl_audioMain',adjustableColumn=True)
         cmds.separator(h=15, style='none')
         cmds.separator(h=15, style='in')
@@ -1018,6 +1018,9 @@ class AudioToolsWrap(object):
                     command=self.offsetSelectedTo)
         cmds.floatField('AudioOffsetToo', value=10)
         cmds.setParent('..')
+        cmds.button(label='Ripple selected',
+                    ann="Ripple offset the selected audio nodes so they're timed one after another",
+                    command=self.offsetRipple)
         cmds.separator(h=15, style='none')
         cmds.frameLayout(label='Broadcast Wav support', cll=True, cl=True, borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
@@ -1037,12 +1040,20 @@ class AudioToolsWrap(object):
         cmds.button(label='Sync Bwavs Relative to Selected',
                     ann="Sync audio nodes via their internal timecodes such that they're relative to that of the given reference",
                     command=self.sync_bwavsRelativeToo)
+        cmds.separator(h=10, style='in')
+        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 140),(2,140)])
+        cmds.button(label='Timecode HUD : ON',
+                    ann="Live monitor internal Timecode - From a selected node with Timecode Attrs",
+                    command=self.timecodeHud)
+        cmds.button(label='Timecode HUD : Kill',
+                    ann="Kill all HUD's",
+                    command=r9Meta.hardKillMetaHUD)
         cmds.setParent('uicl_audioMain')
         cmds.separator(h=10, style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                              c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
         cmds.showWindow(self.win)
-        cmds.window(self.win, e=True, widthHeight=(290, 300))
+        cmds.window(self.win, e=True, widthHeight=(290, 320))
 
     def __uicb_cacheAudioNodes(self,*args):
         self.audioHandler=AudioHandler()
@@ -1059,6 +1070,10 @@ class AudioToolsWrap(object):
         offset=cmds.floatField('AudioOffsetToo', q=True,v=True)
         self.audioHandler.offsetTo(float(offset))
     
+    def offsetRipple(self,*args):
+        self.audioHandler=AudioHandler()
+        self.audioHandler.offsetRipple()
+        
     def __uicb_setReferenceBwavNode(self, *args):
         '''
         set the internal reference offset used to offset the audionode. 
@@ -1105,7 +1120,15 @@ class AudioToolsWrap(object):
     def sync_bwavs(self, *args):
         self.audioHandler=AudioHandler()
         self.audioHandler.bwav_sync_to_Timecode()
-            
+        
+    def timecodeHud(self,*args):
+        nodes=cmds.ls(sl=True)
+        if nodes:
+            tcHUD=r9Meta.MetaTimeCodeHUD()
+            for node in nodes:
+                tcHUD.addMonitoredTimecodeNode(node)
+            tcHUD.drawHUD()
+              
 def __ffprobeGet():
     '''
     I don not ship ffprobe as it's lgpl license and fairly large, however
