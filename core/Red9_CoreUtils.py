@@ -176,7 +176,33 @@ def validateString(strText):
         raise ValueError('String contains illegal characters "%s" <in> "%s"' % (','.join(illegal), strText))
     else:
         return strText
+
+def filterListByString(input_list, filter_string, matchcase=False):
+    '''
+    Generic way to filter a list by a given string input. This is so that all
+    the filtering used in the UI's is consistent. Used by the poseSaver, facialUI,
+    MetaUI and many others.
     
+    :param iniput_list: list of strings to be filtered
+    :param filter_string: string to use in the filter, supports comma separated search strings
+    :param matchcase: whether to match or ignore case sensitivity
+    '''
+    filter_string=[f for f in filter_string.replace(' ','').split(',') if f]
+    filteredList=[]
+    if filter_string:
+        for item in input_list:
+            for srch in filter_string:
+                if not matchcase:
+                    if srch.upper() in item.upper():
+                        if not item in filteredList:
+                            filteredList.append(item)
+                else:
+                    if srch.upper() in item.upper():
+                        if not item in filteredList:
+                            filteredList.append(item)
+        return filteredList
+    else:
+        return input_list
     
 #Filter Node Setups ----------------------------------------------------------------------
 

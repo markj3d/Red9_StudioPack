@@ -1634,7 +1634,7 @@ class AnimationUI(object):
             if searchFilter:
                 cmds.scrollLayout('uiglPoseScroll', edit=True, sp='up')
                 
-            for pose in self.buildFilteredPoseList(searchFilter):
+            for pose in r9Core.filterListByString(self.poses, searchFilter, matchcase=False):  # self.buildFilteredPoseList(searchFilter):
                 cmds.textScrollList(self.uitslPoses, edit=True,
                                         append=pose,
                                         sc=partial(self.setPoseSelected))
@@ -1651,7 +1651,7 @@ class AnimationUI(object):
                 [cmds.deleteUI(button) for button in cmds.gridLayout(self.uiglPoses, q=True, ca=True)]
             except StandardError, error:
                 print error
-            for pose in self.buildFilteredPoseList(searchFilter):
+            for pose in r9Core.filterListByString(self.poses, searchFilter, matchcase=False):  # self.buildFilteredPoseList(searchFilter):
                 try:
                     #:NOTE we prefix the buttons to get over the issue of non-numeric
                     #first characters which are stripped my Maya!

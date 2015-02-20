@@ -927,9 +927,8 @@ class MClassNodeUI(object):
             self.mNodes=[]
             if self.cachedforFilter:
                 #fill the scroll list
-                for meta in self.cachedforFilter:
-                    if filterby.upper() in meta.upper():
-                        self.mNodes.append(meta)
+                self.mNodes = r9Core.filterListByString(self.cachedforFilter, filterby, matchcase=False)
+
         if cmds.checkBox('cb_shortname', q=True, v=True):
             self.shortname=True
         if cmds.checkBox('cb_stripNS', q=True, v=True):
