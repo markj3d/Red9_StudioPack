@@ -424,6 +424,12 @@ class SceneRestoreContext(object):
         self.dataStore['timeUnit'] = cmds.currentUnit(q=True, fullName=True, time=True)
         self.dataStore['sceneUnits'] = cmds.currentUnit(q=True, fullName=True, linear=True)
         self.dataStore['upAxis'] = cmds.upAxis(q=True, axis=True)
+
+        #viewport colors
+        self.dataStore['displayGradient'] = cmds.displayPref(q=True, displayGradient=True)
+
+        #objects colors
+        self.dataStore['curvecolor'] = cmds.displayColor("curve", q=True, dormant=True)
         
         #panel management
         self.dataStore['panelStore'] = {}
@@ -469,6 +475,13 @@ class SceneRestoreContext(object):
         cmds.upAxis(axis=self.dataStore['upAxis'])
         
         log.info('Restored PlayBack / Timeline setup')
+
+        #viewport colors
+        cmds.displayPref(displayGradient=self.dataStore['displayGradient'])
+        cmds.displayRGBColor(resetToSaved=True)
+
+        #objects colors
+        cmds.displayColor("curve", self.dataStore['curvecolor'], dormant=True)
         
         #panel management
         for panel, data in self.dataStore['panelStore'].items():
