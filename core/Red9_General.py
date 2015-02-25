@@ -244,7 +244,39 @@ class undoContext(object):
     """
     Simple Context Manager for chunking the undoState
     """
+    def __init__(self, initialUndo=False, undoFuncCache=[], undoDepth=1):
+        '''
+        If initialUndo is True then the context manager will manage what to do on entry with
+        the undoStack. The idea is that if True the code will look at the last functions in the
+        undoQueue and if any of those mantch those in the undoFuncCache, it'll undo them to the
+        depth given. 
+        WHY?????? This is specifically designed for things like floatFliders where you've
+        set a function to act on the 'dc' flag, (drag command) by passing that func through this
+        each drag will only go into the stack once, enabling you to drag as much as you want
+        and return to the initial state, pre ALL drags, in one chunk. 
+        
+        :param initialUndo: on first process whether undo on entry to the context manager
+        :param undoFuncCache: only if initialUndo = True : functions to catch in the undo stack
+        :param undoDepth: only if initialUndo = True : depth of the undo stack to go to
+        
+        .. note ::
+            When adding funcs to this you CAN'T call the 'dc' command on any slider with a lambda func,
+            it has to call a specific func to catch in the undoStack. See Red9_AnimationUtils.FilterCurves
+            code for a live example of this setup.
+        '''
+        self.initialUndo = initialUndo
+        self.undoFuncCache = undoFuncCache
+        self.undoDepth = undoDepth
+    
+    def undoCall(self):
+        for _ in range(1, self.undoDepth + 1):
+            #log.depth('undoDepth : %s' %  i)
+            if [func for func in self.undoFuncCache if func in cmds.undoInfo(q=True, undoName=True)]:
+                cmds.undo()
+                      
     def __enter__(self):
+        if self.initialUndo:
+            self.undoCall()
         cmds.undoInfo(openChunk=True)
 
     def __exit__(self, exc_type, exc_value, traceback):
