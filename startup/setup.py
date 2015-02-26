@@ -96,14 +96,24 @@ set_language()
 #=========================================================================================
 # MAYA DATA  -----------------------------------------------------------------------------
 #=========================================================================================
+
+MAYA_INTERNAL_DATA = {}  # cached Maya internal vars for speed
  
 def mayaVersion():
     #need to manage this better and use the API version,
     #eg: 2013.5 returns 2013
-    return mel.eval('getApplicationVersionAsFloat')
+    if 'version' in MAYA_INTERNAL_DATA and MAYA_INTERNAL_DATA['version']:
+        return MAYA_INTERNAL_DATA['version']
+    else:
+        MAYA_INTERNAL_DATA['version'] = mel.eval('getApplicationVersionAsFloat')
+        return MAYA_INTERNAL_DATA['version']
 
 def mayaVersionRelease():
-    return cmds.about(api=True)
+    if 'api' in MAYA_INTERNAL_DATA and MAYA_INTERNAL_DATA['api']:
+        return MAYA_INTERNAL_DATA['api']
+    else:
+        MAYA_INTERNAL_DATA['api'] = cmds.about(api=True)
+        return MAYA_INTERNAL_DATA['api']
 
 def mayaVersionQT():
     try:
