@@ -34,6 +34,7 @@ class Test_MetaRegistryCalls():
     
     def teardown(self):
         cmds.file(new=True,f=True)
+        r9Meta.registerMClassNodeMapping()  # reset the nodeTypes registry
         
     def test_registerMClassNodeMapping(self):
         '''
@@ -94,7 +95,10 @@ class Test_MetaCache():
         a=r9Meta.MetaRig(name='rig')
         UUID = a.UUID
         assert UUID in r9Meta.RED9_META_NODECACHE
-        cmds.duplicate(a.mNode)
+        
+        #test the duplicate handler
+        dup=cmds.duplicate(a.mNode)
+        assert not dup == a.mNode
         nodes=r9Meta.getMetaNodes()
         assert len(nodes)==2
         assert len(r9Meta.RED9_META_NODECACHE.keys()) == 2
@@ -117,6 +121,15 @@ class Test_MetaClass():
         assert self.MClass.mNode=='MetaClass_Test'
         assert cmds.nodeType(self.MClass.mNode)=='network'
     
+    def test_unregisteredNodeType(self):
+        #new handler will bail if you try and create with an unRegistered nodeType
+        try:
+            r9Meta.MetaClass(name='new', nodeType='transform')
+            print 'Failed - generated new node with unregistered nodeType!'
+            assert False
+        except:
+            assert True
+            
     def test_functionCalls(self):
         
         #select
