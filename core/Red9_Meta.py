@@ -162,7 +162,7 @@ def getMClassDataFromNode(node):
 # NodeType Management ---------------------------
   
  
-def registerMClassNodeMapping(nodeTypes=None):
+def registerMClassNodeMapping(nodeTypes=[]):
     '''
     Hook to allow you to extend the type of nodes included in all the
     getMeta searches. Allows you to expand into using nodes of any type
@@ -187,8 +187,8 @@ def registerMClassNodeMapping(nodeTypes=None):
     if nodeTypes:
         if not type(nodeTypes)==list:
             nodeTypes=[nodeTypes]
-        baseTypes.extend(nodeTypes)
-
+        [baseTypes.append(n) for n in nodeTypes if not n in baseTypes]
+        #baseTypes.extend(nodeTypes)
     try:
         MayaRegisteredNodes=cmds.allNodeTypes()
         
@@ -371,6 +371,11 @@ def __poseDuplicateCache(*args):
     POST-DUPLICATE : if we find the duplicate node in the cache re-generate it's UUID
     '''
     global __RED9_META_NODESTORE__
+    
+    #no metaNode in the cache so pull out fast
+    if not __RED9_META_NODESTORE__:
+        return
+
     newNodes=[node for node in getMetaNodes(dataType='dag') if not node in __RED9_META_NODESTORE__]
     for node in newNodes:
         #note we set this via cmds so that the node isn't instantiated until the UUID is modified
@@ -517,6 +522,8 @@ def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType=
         nodes = cmds.ls(type=getMClassNodeTypes(), l=True)
     else:
         nodes = cmds.ls(type=nTypes, l=True)
+    if not nodes:
+        return mNodes
     #if mTypes and not type(mTypes)==list:mTypes=[mTypes]
     for node in nodes:
     #for node in cmds.ls(type=getMClassNodeTypes(), l=True):
@@ -941,6 +948,7 @@ class MClassNodeUI(object):
         
     def fillScroll(self, sortBy=None, *args):  # , mClassToShow=None, *args):
         states=cmds.radioCollection(self.uircbMetaUIShowStatus, q=True, select=True)
+        cmds.textScrollList('slMetaNodeList', edit=True, ra=True)
         self.dataType='node'
         if states=='metaUISatusinValids' or states=='metaUISatusValids':
             self.dataType='mClass'
@@ -1186,6 +1194,9 @@ class MetaClass(object):
             if not name:
                 name=self.__class__.__name__
             #no MayaNode passed in so make a fresh network node (default)
+            if not nodeType=='network' and not nodeType in RED9_META_NODETYPE_REGISTERY:
+                log.debug('nodeType : "%s" : is NOT yet registered in the "RED9_META_NODETYPE_REGISTERY", please use r9Meta.registerMClassNodeCache(nodeTypes=[%s]) to do so before making this node' % (nodeType,nodeType))
+                return
             node=cmds.createNode(nodeType,name=name)
             self.mNode=node
             self.addAttr('mClass', value=str(self.__class__.__name__))  # ! MAIN ATTR !: used to know what class to instantiate.
@@ -3508,12 +3519,16 @@ def metaData_sceneCleanups(*args):
     
 
 #Setup the callbacks to clear the cache when required
-RED9_META_CALLBACKS['Open'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeOpen, metaData_sceneCleanups)
-RED9_META_CALLBACKS['New'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeNew, metaData_sceneCleanups)
+if not 'Open' in RED9_META_CALLBACKS:
+    RED9_META_CALLBACKS['Open'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeOpen, metaData_sceneCleanups)
+if not 'New' in RED9_META_CALLBACKS:
+    RED9_META_CALLBACKS['New'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeNew, metaData_sceneCleanups)
 
 if r9Setup.mayaVersion()<=2015:
     #dulplicate cache callbacks so the UUIDs are managed correctly
-    RED9_META_CALLBACKS['DuplicatePre'] = OpenMaya.MModelMessage.addBeforeDuplicateCallback(__preDuplicateCache)
-    RED9_META_CALLBACKS['DuplicatePost'] = OpenMaya.MModelMessage.addAfterDuplicateCallback(__poseDuplicateCache)
+    if not 'DuplicatePre' in RED9_META_CALLBACKS:
+        RED9_META_CALLBACKS['DuplicatePre'] = OpenMaya.MModelMessage.addBeforeDuplicateCallback(__preDuplicateCache)
+    if not 'DuplicatePost' in RED9_META_CALLBACKS:
+        RED9_META_CALLBACKS['DuplicatePost'] = OpenMaya.MModelMessage.addAfterDuplicateCallback(__poseDuplicateCache)
 
 
