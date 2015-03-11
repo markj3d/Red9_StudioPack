@@ -77,6 +77,11 @@ RED9_META_NODECACHE = {}
 
 global RED9_META_CALLBACKS
 RED9_META_CALLBACKS = {}
+RED9_META_CALLBACKS['Open'] = []
+RED9_META_CALLBACKS['New'] = []
+RED9_META_CALLBACKS['DuplicatePre'] = []
+RED9_META_CALLBACKS['DuplicatePost'] = []
+        
 
 global __RED9_META_NODESTORE__
 __RED9_META_NODESTORE__ = []
@@ -519,23 +524,21 @@ def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType=
     '''
     mNodes=[]
     if not nTypes:
+        #nodes = cmds.ls('*.mClass', r=True, l=True, o=True)
         nodes = cmds.ls(type=getMClassNodeTypes(), l=True)
     else:
+        #nodes = cmds.ls('*.mClass', r=True, l=True, o=True)
         nodes = cmds.ls(type=nTypes, l=True)
     if not nodes:
         return mNodes
-    #if mTypes and not type(mTypes)==list:mTypes=[mTypes]
     for node in nodes:
-    #for node in cmds.ls(type=getMClassNodeTypes(), l=True):
         mNode=False
         if not mInstances:
             if isMetaNode(node, mTypes=mTypes):
                 mNode=True
-                #mNodes.append(node)
         else:
             if isMetaNodeInherited(node,mInstances):
                 mNode=True
-                #mNodes.append(node)
         if mNode:
             if mClassGrps:
                 if isMetaNodeClassGrp(node, mClassGrps):
@@ -3519,16 +3522,16 @@ def metaData_sceneCleanups(*args):
     
 
 #Setup the callbacks to clear the cache when required
-if not 'Open' in RED9_META_CALLBACKS:
-    RED9_META_CALLBACKS['Open'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeOpen, metaData_sceneCleanups)
-if not 'New' in RED9_META_CALLBACKS:
-    RED9_META_CALLBACKS['New'] = OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeNew, metaData_sceneCleanups)
+if not RED9_META_CALLBACKS['Open']:
+    RED9_META_CALLBACKS['Open'].append(OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeOpen, metaData_sceneCleanups))
+if not RED9_META_CALLBACKS['New']:
+    RED9_META_CALLBACKS['New'].append(OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeNew, metaData_sceneCleanups))
 
 if r9Setup.mayaVersion()<=2015:
     #dulplicate cache callbacks so the UUIDs are managed correctly
-    if not 'DuplicatePre' in RED9_META_CALLBACKS:
-        RED9_META_CALLBACKS['DuplicatePre'] = OpenMaya.MModelMessage.addBeforeDuplicateCallback(__preDuplicateCache)
-    if not 'DuplicatePost' in RED9_META_CALLBACKS:
-        RED9_META_CALLBACKS['DuplicatePost'] = OpenMaya.MModelMessage.addAfterDuplicateCallback(__poseDuplicateCache)
+    if not RED9_META_CALLBACKS['DuplicatePre']:
+        RED9_META_CALLBACKS['DuplicatePre'].append(OpenMaya.MModelMessage.addBeforeDuplicateCallback(__preDuplicateCache))
+    if not RED9_META_CALLBACKS['DuplicatePost']:
+        RED9_META_CALLBACKS['DuplicatePost'].append(OpenMaya.MModelMessage.addAfterDuplicateCallback(__poseDuplicateCache))
 
 
