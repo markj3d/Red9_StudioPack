@@ -926,7 +926,7 @@ class PosePointCloud(object):
     relative space. It's been added as a tool in it's own right as it's sometimes
     useful to be able to shift poses in global space.
     '''
-    def __init__(self, nodes, filterSettings=None, meshes=[]):
+    def __init__(self, nodes, filterSettings=None, meshes=[], time=(), *args, **kws):
         '''
         :param rootReference: the object to be used as the PPT's pivot reference
         :param nodes: feed the nodes to process in as a list, if a filter is given
@@ -947,12 +947,18 @@ class PosePointCloud(object):
         self.settings = None
         self.prioritySnapOnly=False  # ONLY make ppt points for the filterPriority nodes
         
+        self.rootReference = None  # root node used as the pivot for the cloud
+        self.time = time  # if true this modifies the snap and apply code to be timeEnabled, generating key data on the cloud
+        self.isVisible=True
+        
         if filterSettings:
             if not issubclass(type(filterSettings), r9Core.FilterNode_Settings):
                 raise StandardError('filterSettings param requires an r9Core.FilterNode_Settings object')
             elif filterSettings.filterIsActive():
                 self.settings=filterSettings
-    
+        else:
+            self.settings=r9Core.FilterNode_Settings()
+
     def buildOffsetCloud(self, rootReference=None, raw=False):
         '''
         Build a point cloud up for each node in nodes
@@ -961,13 +967,15 @@ class PosePointCloud(object):
         :param raw: build the cloud but DON'T snap the nodes into place - an optimisation for the PoseLoad sequence
         '''
         self.posePointRoot=cmds.ls(cmds.spaceLocator(name='posePointCloud'),l=True)[0]
+        cmds.setAttr('%s.visibility' % self.posePointRoot, self.isVisible)
         
         ppcShape=cmds.listRelatives(self.posePointRoot,type='shape')[0]
         cmds.setAttr("%s.localScaleZ" % ppcShape, 30)
         cmds.setAttr("%s.localScaleX" % ppcShape, 30)
         cmds.setAttr("%s.localScaleY" % ppcShape, 30)
-        
-        if self.settings:
+        if rootReference:
+            self.rootReference=rootReference
+        if self.settings.filterIsActive():
             if self.prioritySnapOnly:
                 self.settings.searchPattern=self.settings.filterPriority
             self.inputNodes=r9Core.FilterNode(self.inputNodes, self.settings).ProcessFilter()
@@ -976,8 +984,8 @@ class PosePointCloud(object):
         
         if self.mayaUpAxis=='y':
             cmds.setAttr('%s.rotateOrder' % self.posePointRoot, 2)
-        if rootReference:  # and not mesh:
-            r9Anim.AnimFunctions.snap([rootReference,self.posePointRoot])
+        if self.rootReference:  # and not mesh:
+            r9Anim.AnimFunctions.snap([self.rootReference,self.posePointRoot])
         for node in self.inputNodes:
             pnt=cmds.spaceLocator(name='pp_%s' % r9Core.nodeNameStrip(node))[0]
             if not raw:
@@ -985,10 +993,12 @@ class PosePointCloud(object):
             cmds.parent(pnt,self.posePointRoot)
             self.posePointCloudNodes.append((pnt,node))
         cmds.select(self.posePointRoot)
-        if self.meshes:
-            self.shapeSwapMeshes()
-        return self.posePointCloudNodes
         
+        # generate the mesh references if required
+        if self.meshes and self.isVisible:
+            self.generateVisualReference()
+        return self.posePointCloudNodes
+
     def _snapPosePntstoNodes(self):
         '''
         snap each pntCloud point to their respective Maya nodes
@@ -996,7 +1006,7 @@ class PosePointCloud(object):
         for pnt,node in self.posePointCloudNodes:
             log.debug('snapping PPT : %s' % pnt)
             r9Anim.AnimFunctions.snap([node,pnt])
-            
+
     def _snapNodestoPosePnts(self):
         '''
         snap each MAYA node to it's respective pntCloud point
@@ -1004,14 +1014,18 @@ class PosePointCloud(object):
         for pnt, node in self.posePointCloudNodes:
             log.debug('snapping Ctrl : %s > %s : %s' % (r9Core.nodeNameStrip(node), pnt, node))
             r9Anim.AnimFunctions.snap([pnt,node])
-            
+
+    def generateVisualReference(self):
+        self.shapeSwapMeshes()
+
     def shapeSwapMeshes(self):
         '''
         Swap the mesh Geo so it's a shape under the PPC transform root
         TODO: Make sure that the duplicate message link bug is covered!!
         '''
+        currentCount = len(cmds.listRelatives(self.posePointRoot, type='shape'))
         for i,mesh in enumerate(self.meshes):
-            dupMesh = cmds.duplicate(mesh, rc=True, n=self.refMesh+str(i))[0]
+            dupMesh = cmds.duplicate(mesh, rc=True, n=self.refMesh+str(i + currentCount))[0]
             dupShape = cmds.listRelatives(dupMesh, type='shape')[0]
             r9Core.LockChannels().processState(dupMesh,['tx','ty','tz','rx','ry','rz','sx','sy','sz'],\
                                                mode='fullkey',hierarchy=False)
@@ -1029,17 +1043,17 @@ class PosePointCloud(object):
 
     def applyPosePointCloud(self):
         self._snapNodestoPosePnts()
-        
+
     def updatePosePointCloud(self):
         self._snapPosePntstoNodes()
         if self.meshes:
-            cmds.delete(cmds.listRelatives(self.posePointRoot, type='mesh'))
-            self.shapeSwapMeshes()
+            cmds.delete(cmds.listRelatives(self.posePointRoot, type=['mesh','nurbsCurve']))
+            self.generateVisualReference()
             cmds.refresh()
-        
+
     def delete(self):
         cmds.delete(self.posePointRoot)
-        
+
 
 class PoseCompare(object):
     '''
