@@ -2280,7 +2280,7 @@ class TimeOffset(object):
             log.debug('MetaData Offset ============================')
             for mNode in mNodes:
                 if 'timeOffset' in dir(mNode) and callable(getattr(mNode, 'timeOffset')):
-                    mNode.timeOffset(offset)
+                    mNode.timeOffset(offset, timerange=timerange, ripple=ripple)
             log.info('%i : MetaData were offset' % len(mNodes))
  
 
