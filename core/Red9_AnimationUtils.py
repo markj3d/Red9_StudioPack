@@ -318,7 +318,7 @@ def timeLineRangeProcess(start, end, step, incEnds=True):
         endFrm = start
     rng=[time for time in range(int(startFrm), int(endFrm), int(step))]
     if incEnds:
-        rng.append(end)
+        rng.append(endFrm)
     return rng
  
 def animCurveDrawStyle(style='simple', forceBuffer=True,
@@ -2911,7 +2911,7 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
                     #maybe do a channel attr pass to get non-keyed data over too?
                     if preCopyKeys:
                         self.copyKeys(nodes=nodeList, time=time, filterSettings=filterSettings, **kws)
-                     
+                    
                     progressBar = r9General.ProgressBarContext(time[1]-time[0])
                     progressBar.setStep(step)
                     count=0
