@@ -1018,7 +1018,7 @@ class PosePointCloud(object):
     def generateVisualReference(self):
         self.shapeSwapMeshes()
 
-    def shapeSwapMeshes(self):
+    def shapeSwapMeshes(self, selectable=True):
         '''
         Swap the mesh Geo so it's a shape under the PPC transform root
         TODO: Make sure that the duplicate message link bug is covered!!
@@ -1030,10 +1030,14 @@ class PosePointCloud(object):
             r9Core.LockChannels().processState(dupMesh,['tx','ty','tz','rx','ry','rz','sx','sy','sz'],\
                                                mode='fullkey',hierarchy=False)
             try:
-                #turn on the overrides so the duplicate geo can be selected
-                cmds.setAttr("%s.overrideDisplayType" % dupShape, 0)
-                cmds.setAttr("%s.overrideEnabled" % dupShape, 1)
-                cmds.setAttr("%s.overrideLevelOfDetail" % dupShape, 0)
+                if selectable:
+                    #turn on the overrides so the duplicate geo can be selected
+                    cmds.setAttr("%s.overrideDisplayType" % dupShape, 0)
+                    cmds.setAttr("%s.overrideEnabled" % dupShape, 1)
+                    cmds.setAttr("%s.overrideLevelOfDetail" % dupShape, 0)
+                else:
+                    cmds.setAttr("%s.overrideDisplayType" % dupShape, 2)
+                    cmds.setAttr("%s.overrideEnabled" % dupShape, 1)
             except:
                 log.debug('Couldnt set the draw overrides for the refGeo')
             cmds.parent(dupMesh,self.posePointRoot)
