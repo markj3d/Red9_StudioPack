@@ -198,7 +198,7 @@ def filterListByString(input_list, filter_string, matchcase=False):
             if not matchcase:
                 data=item.upper()
             if regexFilter.search(data):
-                print data,item,filterPattern
+                #print data,item,filterPattern
                 filteredList.append(item)
         return filteredList
     else:
