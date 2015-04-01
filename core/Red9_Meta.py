@@ -2908,6 +2908,16 @@ class MetaRig(MetaClass):
     def loadAnimation(self, filepath):
         pass
 
+    def getAnimationRange(self, nodes=None, setTimeline=False):
+        '''
+        return the extend of the animation range for this rig and / or the given controllers
+        :param nodes: if given only retunr the extent of the animation data from the given nodes
+        :param setTimeLine: if True set the playback timeranges also, default=False
+        '''
+        if not nodes:
+            nodes=self.getChildren(walk=True)
+        return r9Anim.animRangeFromNodes(nodes,setTimeline=setTimeline)
+    
     
 class MetaRigSubSystem(MetaRig):
     '''

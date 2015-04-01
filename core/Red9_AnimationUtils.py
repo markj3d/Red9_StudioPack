@@ -216,6 +216,26 @@ def getAnimLayersFromGivenNodes(nodes):
         nodes=[nodes]
     return cmds.animLayer(nodes, q=True, affectedLayers=True)
 
+def animRangeFromNodes(nodes, setTimeline=True):
+    '''
+    return the extend of the animation range for the given objects
+    :param nodes: nodes to examine for animation data
+    :param setTimeLine: whether we should set the playback timeline to the extent of the found anim data
+    '''
+    minBounds=None
+    maxBounds=None
+    for anim in r9Core.FilterNode.lsAnimCurves(nodes, safe=True):
+        count=cmds.keyframe(anim, q=True, kc=True)
+        min=cmds.keyframe(anim, q=True, index=[(0,0)], tc=True)
+        max=cmds.keyframe(anim, q=True, index=[(count-1,count-1)], tc=True)
+        if not minBounds or min[0]<minBounds:
+            minBounds=min[0]
+        if not maxBounds or max[0]>maxBounds:
+            maxBounds=max[0]
+    if setTimeline:
+        cmds.playbackOptions(min=minBounds,max=maxBounds)
+    return minBounds,maxBounds
+
 def animLayersConfirmCheck(nodes=None, deleteMerged=True):
     '''
     return all animLayers associated with the given nodes
@@ -320,7 +340,8 @@ def timeLineRangeProcess(start, end, step, incEnds=True):
     if incEnds:
         rng.append(endFrm)
     return rng
- 
+
+     
 def animCurveDrawStyle(style='simple', forceBuffer=True,
                    showBufferCurves=False, displayTangents=False, displayActiveKeyTangents=True, *args):
     '''
