@@ -177,6 +177,11 @@ def menuSetup(parent='MayaWindow'):
     else:
         raise StandardError('given parent for Red9 Menu is invalid %s' % parent)
     try:
+        cmds.menuItem('redNineProRootItem',
+                      l='PRO : PACK', sm=True, p='redNineMenuItemRoot')
+
+        cmds.menuItem(divider=True,p='redNineMenuItemRoot')
+        
         #Add the main Menu items
         cmds.menuItem('redNineAnimItem',
                       l=LANGUAGE_MAP._MainMenus_.animation_toolkit,
@@ -756,6 +761,10 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
     
     if has_pro_pack():
         cmds.evalDeferred("import Red9.pro_pack", lp=True)  # Unresolved Import
+    else:
+        cmds.menuItem('redNineGetProItem', l='PRO : Get Pro Pack',
+                      p='redNineProRootItem',
+                      c=get_pro_pack)
     if has_internal_systems():
         cmds.evalDeferred("import Red9_Internals", lp=True)  # Unresolved Import
            
