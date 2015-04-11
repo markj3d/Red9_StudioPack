@@ -1789,7 +1789,10 @@ class MetaClass(object):
     
     # Utity Functions
     #-------------------------------------------------------------------------------------
-                  
+         
+    def shortName(self):
+        return self.mNode.split('|')[-1].split(':')[-1]
+                 
     def select(self, *args, **kws):
         '''
         args and kws are now passed through into the Maya select call
@@ -1859,22 +1862,39 @@ class MetaClass(object):
         else:
             raise StandardError('given class is not in the mClass Registry : %s' % newMClass)
 
+
+    # Reference / Namespace Management Block
+    #---------------------------------------------------------------------------------
+    
     def isReferenced(self):
         '''
         is node.mNode referenced?
         '''
         return cmds.referenceQuery(self.mNode,inr=True)
     
+    def referenceNode(self):
+        '''
+        if referenced return the referenceNode itself
+        '''
+        if self.isReferenced():
+            return cmds.referenceQuery(self.mNode, rfn=True)
+    
+    def referencePath(self, wcn=False):
+        '''
+        if referenced return the referenced filepath
+        '''
+        if self.isReferenced():
+            return cmds.referenceQuery(cmds.referenceQuery(self.mNode, rfn=True), filename=True, wcn=wcn)
+        
     def nameSpace(self):
         '''
         If the namespace is nested this will return a list where
         [-1] is the direct namespace of the node
         '''
+        if self.isReferenced():
+            return cmds.referenceQuery(self.mNode, ns=True).replace(':','')
         return self.mNode.split(':')[:-1]
-    
-    def shortName(self):
-        return self.mNode.split('|')[-1].split(':')[-1]
-    
+
     
     # Connection Management Block
     #---------------------------------------------------------------------------------
