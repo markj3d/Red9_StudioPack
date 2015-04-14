@@ -144,6 +144,13 @@ def mayaUpAxis(setAxis=None):
 def mayaIsBatch():
     return cmds.about(batch=True)
 
+def osBuild():
+    build = cmds.about(os=True)
+    if build == 'win64':
+        return 64
+    elif build == 'win32':
+        return 32
+
 def getCurrentFPS():
     '''
     returns the current frames per second as a number, rather than a useless string
