@@ -1320,8 +1320,8 @@ class FilterNode(object):
                   
             return self.intersectionData
 
-
-def getBlendTargetsFromMesh(node, asList=True, returnAll=False, levels=1):
+    
+def getBlendTargetsFromMesh(node, asList=True, returnAll=False, levels=4):  # levels=1)
     '''
     quick func to return the blendshape targets found from a give mesh's connected blendshape's
     
