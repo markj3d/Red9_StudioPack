@@ -241,18 +241,26 @@ def registerMClassNodeCache(mNode):
     '''
     global RED9_META_NODECACHE
     version=r9Setup.mayaVersion()
-    #UUID=None
+
     if mNode.hasAttr('UUID') or version>=2015:
         try:
             if version<=2015:
-                UUID=mNode.setUUID()
+                UUID=mNode.UUID
+                if not UUID:
+                    log.debug('CACHE : generating fresh UUID')
+                    UUID=mNode.setUUID()
+                elif UUID in RED9_META_NODECACHE.keys():
+                    log.debug('CACHE : UUID is already registered in cache')
+                    if not mNode.mNode == RED9_META_NODECACHE[UUID]:
+                        log.debug('CACHE : %s : UUID is registered to a different node : modifying UUID: %s' % (UUID, mNode.mNode))
+                        UUID=mNode.setUUID()
             else:
                 UUID=cmds.ls(mNode.mNode, uuid=True)[0]
-            #print 'UUID found from node : ', UUID
             if RED9_META_NODECACHE or not UUID in RED9_META_NODECACHE.keys():
                 log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
                 RED9_META_NODECACHE[UUID]=mNode
-        except:
+        except StandardError, err:
+            #print err
             log.debug('CACHE : Failed to set UUID for mNode : %s' % mNode.mNode)
     else:
         log.debug('CACHE : UUID attr not bound to this node, must be an older system')
@@ -275,6 +283,9 @@ def getMetaFromCache(mNode):
         if UUID in RED9_META_NODECACHE.keys():
             try:
                 if RED9_META_NODECACHE[UUID].isValidMObject():
+                    if not RED9_META_NODECACHE[UUID]._MObject == getMObject(mNode):
+                        log.debug('CACHE : %s : UUID is already registered but to a different node : %s' % (UUID,mNode))
+                        return
                     log.debug('CACHE : %s Returning mNode from UUID cache! = %s' % (mNode,UUID))
                     return RED9_META_NODECACHE[UUID]
                 else:
@@ -311,6 +322,9 @@ def upgradeSystemsToUUID(*args):
             if not node.hasAttr('mClassGrp'):
                 node.addAttr('mClassGrp', value='MetaClass')
                 log.info('Upgraded node : %s  to mClassGrp' % r9Core.nodeNameStrip(node.mNode))
+            if not node.hasAttr('mSystemRoot'):
+                node.addAttr('mSystemRoot', value=False)
+                log.info('Upgraded node : %s  to mSystemRoot' % r9Core.nodeNameStrip(node.mNode))
         except:
             log.info('Failed to Upgrade mNode : %s' % node)
     resetCache()
@@ -365,7 +379,7 @@ def getMClassNodeCache():
 
 def __preDuplicateCache(*args):
     '''
-    PRE-DUPLICATE : on the duplicate call in Maya (bound to a callback) pre-store all current mNodes
+    DEPRICATED : PRE-DUPLICATE : on the duplicate call in Maya (bound to a callback) pre-store all current mNodes
     '''
     global __RED9_META_NODESTORE__
     __RED9_META_NODESTORE__= getMetaNodes(dataType='dag')
@@ -373,7 +387,7 @@ def __preDuplicateCache(*args):
     
 def __poseDuplicateCache(*args):
     '''
-    POST-DUPLICATE : if we find the duplicate node in the cache re-generate it's UUID
+    DEPRICATED : POST-DUPLICATE : if we find the duplicate node in the cache re-generate it's UUID
     '''
     global __RED9_META_NODESTORE__
     
@@ -387,7 +401,17 @@ def __poseDuplicateCache(*args):
         if cmds.attributeQuery('UUID', node=node, exists=True):
             cmds.setAttr('%s.UUID' % node, generateUUID(), type='string')
     #print 'post-callback : nodelist :', newNodes
-    
+
+def getMObject(node):
+    '''
+    base wrapper to get the MObject from node
+    '''
+    mobj=OpenMaya.MObject()
+    selList=OpenMaya.MSelectionList()
+    selList.add(node)
+    selList.getDependNode(0,mobj)
+    return mobj
+                    
 # ====================================================================================
     
     
@@ -506,7 +530,8 @@ def isMetaNodeClassGrp(node, mClassGrps=[]):
         print node,'testing: '
         if cmds.getAttr('%s.mClassGrp' % node) == grp:
             return True
-       
+
+            
 @r9General.Timer
 def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType='mClass', nTypes=None, **kws):
     '''
@@ -524,10 +549,8 @@ def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType=
     '''
     mNodes=[]
     if not nTypes:
-        #nodes = cmds.ls('*.mClass', r=True, l=True, o=True)
         nodes = cmds.ls(type=getMClassNodeTypes(), l=True)
     else:
-        #nodes = cmds.ls('*.mClass', r=True, l=True, o=True)
         nodes = cmds.ls(type=nTypes, l=True)
     if not nodes:
         return mNodes
@@ -637,6 +660,8 @@ def getConnectedMetaSystemRoot(node, **kws):
         runaways=0
         while mNode and not runaways==100:
             log.debug('walking network : %s' % mNode.mNode)
+            if mNode.hasAttr('mSystemRoot') and mNode.mSystemRoot:
+                return mNode
             parent=mNode.getParentMetaNode()
             if not parent:
                 log.debug('node is top of tree : %s' % mNode)
@@ -1206,7 +1231,8 @@ class MetaClass(object):
             self.addAttr('mNodeID', value=name)                         # ! MAIN NODE ID !: used by pose systems to ID the node.
             self.addAttr('mClassGrp', value='MetaClass', l=True)        # ! CLASS GRP  : this is used mainly by MetaRig and other complex
                                                                         #                systems to denote a classes intended system base
-                                                                        
+            self.addAttr('mSystemRoot', value=False, l=True)            # ! SYSTEM ROOT : indicates that this node is the root of a system and
+                                                                        #                therefore halts the 'getConnectedMetaSystemRoot' call
             if r9Setup.mayaVersion()<=2015:
                 #print '__init__ setting uuid'
                 self.addAttr('UUID', value='')          # ! Cache UUID attr which the Cache itself is in control of
@@ -1279,6 +1305,17 @@ class MetaClass(object):
         except:
             log.info('_MObjectHandle not yet setup')
      
+    def isSystemRoot(self):
+        '''
+        used by the getConnectedMetaSystemRoot call to identify if this
+        node is a top system node. Having his as an attr allows us to designate
+        certain subsystems as root nodes in their own right. Ie, Facial controlBoard
+        '''
+        if self.hasAttr('mSystemRoot'):
+            return self.mSystemRoot
+        elif self.getParentMetaNode():
+            return False
+        
     #Cast the mNode attr to the actual MObject so it's no longer limited by string dagpaths
     #yes I know Pymel does this for us but I don't want the overhead!
     def __get_mNode(self):
@@ -2460,6 +2497,7 @@ class MetaRig(MetaClass):
             return
         
         self.mClassGrp = 'MetaRig'          # get the Grp code marking this as a SystemBase
+        self.mSystemRoot = True             # set this node to be a system root
         self.CTRL_Prefix='CTRL'             # prefix for all connected CTRL_ links added
         self.rigGlobalCtrlAttr='CTRL_Main'  # attribute linked to the top globalCtrl in the rig
         self.lockState = True               # lock the node to avoid accidental removal
@@ -3557,11 +3595,11 @@ if not RED9_META_CALLBACKS['Open']:
 if not RED9_META_CALLBACKS['New']:
     RED9_META_CALLBACKS['New'].append(OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeNew, metaData_sceneCleanups))
 
-if r9Setup.mayaVersion()<=2015:
-    #dulplicate cache callbacks so the UUIDs are managed correctly
-    if not RED9_META_CALLBACKS['DuplicatePre']:
-        RED9_META_CALLBACKS['DuplicatePre'].append(OpenMaya.MModelMessage.addBeforeDuplicateCallback(__preDuplicateCache))
-    if not RED9_META_CALLBACKS['DuplicatePost']:
-        RED9_META_CALLBACKS['DuplicatePost'].append(OpenMaya.MModelMessage.addAfterDuplicateCallback(__poseDuplicateCache))
+# if r9Setup.mayaVersion()<=2015:
+#     #dulplicate cache callbacks so the UUIDs are managed correctly
+#     if not RED9_META_CALLBACKS['DuplicatePre']:
+#         RED9_META_CALLBACKS['DuplicatePre'].append(OpenMaya.MModelMessage.addBeforeDuplicateCallback(__preDuplicateCache))
+#     if not RED9_META_CALLBACKS['DuplicatePost']:
+#         RED9_META_CALLBACKS['DuplicatePost'].append(OpenMaya.MModelMessage.addAfterDuplicateCallback(__poseDuplicateCache))
 
 
