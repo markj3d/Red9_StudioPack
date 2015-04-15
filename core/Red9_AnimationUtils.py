@@ -3464,7 +3464,10 @@ class RandomizeKeys(object):
                     # figure the upper and lower value bounds
                     randomRange = self.__calcualteRangeValue(cmds.keyframe(curve, q=True, vc=True, t=time))
                     log.debug('Percent data : randomRange=%f>%f, percentage=%f' % (randomRange[0], randomRange[1], damp))
-                connection = cmds.listConnections(curve, source=False, d=True, p=True)[0]
+                    
+                connection=[con for con in cmds.listConnections(curve, source=False, d=True, p=True)
+                            if not cmds.nodeType(con)=='hyperLayout'][0]
+                            
                 for t in timeLineRangeProcess(time[0], time[1], step, incEnds=True):
                     value = self.noiseFunc(cmds.getAttr(connection, t=t), randomRange, damp)
                     cmds.setKeyframe(connection, v=value, t=t)
