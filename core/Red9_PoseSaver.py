@@ -959,7 +959,7 @@ class PosePointCloud(object):
         else:
             self.settings=r9Core.FilterNode_Settings()
 
-    def buildOffsetCloud(self, rootReference=None, raw=False):
+    def buildOffsetCloud(self, rootReference=None, raw=False, projectedRots=False, projectedTrans=False):
         '''
         Build a point cloud up for each node in nodes
         :param nodes: list of objects to be in the cloud
@@ -968,7 +968,7 @@ class PosePointCloud(object):
         '''
         self.posePointRoot=cmds.ls(cmds.spaceLocator(name='posePointCloud'),l=True)[0]
         cmds.setAttr('%s.visibility' % self.posePointRoot, self.isVisible)
-        
+       
         ppcShape=cmds.listRelatives(self.posePointRoot,type='shape')[0]
         cmds.setAttr("%s.localScaleZ" % ppcShape, 30)
         cmds.setAttr("%s.localScaleX" % ppcShape, 30)
@@ -986,6 +986,14 @@ class PosePointCloud(object):
             cmds.setAttr('%s.rotateOrder' % self.posePointRoot, 2)
         if self.rootReference:  # and not mesh:
             r9Anim.AnimFunctions.snap([self.rootReference,self.posePointRoot])
+            
+            #reset the PPTCloudRoot to projected ground plane
+            if projectedRots:
+                cmds.setAttr('%s.rx' % self.posePointRoot, 0)
+                cmds.setAttr('%s.rz' % self.posePointRoot, 0)
+            if projectedTrans:
+                cmds.setAttr('%s.ty' % self.posePointRoot, 0)
+                
         for node in self.inputNodes:
             pnt=cmds.spaceLocator(name='pp_%s' % r9Core.nodeNameStrip(node))[0]
             if not raw:
