@@ -479,9 +479,12 @@ class SceneRestoreContext(object):
         #TODO : store the camera field of view etc also
         self.dataStore['cameraTransforms']={}
         for cam in ['persp', 'top', 'side', 'front']:
-            self.dataStore['cameraTransforms'][cam] = [cmds.getAttr('%s.translate' % cam),
+            try:
+                self.dataStore['cameraTransforms'][cam] = [cmds.getAttr('%s.translate' % cam),
                                                      cmds.getAttr('%s.rotate' % cam),
                                                      cmds.getAttr('%s.scale' % cam)]
+            except:
+                log.debug("Camera doesn't exists : %s" % cam)
             
         #sound management
         self.dataStore['activeSound'] = cmds.timeControl(self.gPlayBackSlider, q=True, s=1)
