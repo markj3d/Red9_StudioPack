@@ -527,9 +527,12 @@ def isMetaNodeClassGrp(node, mClassGrps=[]):
     if issubclass(type(node), MetaClass):
         node=node.mNode
     for grp in mClassGrps:
-        print node,'testing: '
-        if cmds.getAttr('%s.mClassGrp' % node) == grp:
-            return True
+        log.debug('mGroup testing: %s' % node)
+        try:
+            if cmds.getAttr('%s.mClassGrp' % node) == grp:
+                return True
+        except:
+            log.debug('mNode has no MClassGrp attr, must be a legacy system and needs updating!! %s' % node)
 
             
 @r9General.Timer
@@ -1925,14 +1928,33 @@ class MetaClass(object):
         
     def nameSpace(self):
         '''
-        If the namespace is nested this will return a list where
-        [-1] is the direct namespace of the node
+        This flag has been modified to return just the direct namespace
+        of the node, not all nested namespaces if found. Now returns a string
         '''
         if self.isReferenced():
             return cmds.referenceQuery(self.mNode, ns=True).replace(':','')
-        return self.mNode.split(':')[:-1]
+        ns=self.mNode.split(':')
+        if ns:
+            return ns[:-1][0]
+        return ''
 
-    
+    def nameSpaceFull(self, asList=False):
+        '''
+        the namespace call has been modified to only return the single 
+        direct namespace of a node, not the nested. This new func will
+        return the namespace in it's entirity either as a list or a 
+        catenated string
+        :param asList: either return the namespaces in a list or as a catenated string (default)
+        '''
+        ns=self.mNode.split(':')
+        if ns:
+            if asList:
+                return ns[:-1]
+            else:
+                return ':'.join(ns[:-1])
+                    
+        
+        
     # Connection Management Block
     #---------------------------------------------------------------------------------
     
