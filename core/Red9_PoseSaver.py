@@ -935,6 +935,7 @@ class PosePointCloud(object):
         :param meshes: this is really for reference, rather than make a locator, pass in a reference geo
                      which is then shapeSwapped for the PPC root node giving great reference!
         '''
+           
         self.meshes = meshes
         if self.meshes and not isinstance(self.meshes, list):
             self.meshes=[meshes]
@@ -959,6 +960,12 @@ class PosePointCloud(object):
         else:
             self.settings=r9Core.FilterNode_Settings()
 
+    def __connectToMeta(self):
+        self.ppcMeta = r9Meta.MetaClass(name='PPC_Root')
+        self.ppcMeta.mClassGrp='PPCROOT'
+        self.ppcMeta.connectChild(self.posePointRoot, 'ppc_root')
+        self.ppcMeta.addAttr('ppc_cloudNodes', self.posePointCloudNodes)
+         
     def buildOffsetCloud(self, rootReference=None, raw=False, projectedRots=False, projectedTrans=False):
         '''
         Build a point cloud up for each node in nodes
@@ -966,6 +973,9 @@ class PosePointCloud(object):
         :param rootReference: the node used for the initial pivot location
         :param raw: build the cloud but DON'T snap the nodes into place - an optimisation for the PoseLoad sequence
         '''
+        
+        self.deleteCurrentInstances()
+
         self.posePointRoot=cmds.ls(cmds.spaceLocator(name='posePointCloud'),l=True)[0]
         cmds.setAttr('%s.visibility' % self.posePointRoot, self.isVisible)
        
@@ -1005,6 +1015,8 @@ class PosePointCloud(object):
         # generate the mesh references if required
         if self.meshes and self.isVisible:
             self.generateVisualReference()
+            
+        self.__connectToMeta()
         return self.posePointCloudNodes
 
     def _snapPosePntstoNodes(self):
@@ -1024,6 +1036,10 @@ class PosePointCloud(object):
             r9Anim.AnimFunctions.snap([pnt,node])
 
     def generateVisualReference(self):
+        '''
+        Generic call that's used to overload the visual handling 
+        of the PPC is other instances such as the AnimationPPC
+        '''
         self.shapeSwapMeshes()
 
     def shapeSwapMeshes(self, selectable=True):
@@ -1064,9 +1080,23 @@ class PosePointCloud(object):
             cmds.refresh()
 
     def delete(self):
+        self.ppcMeta.delete()
         cmds.delete(self.posePointRoot)
 
-
+    def deleteCurrentInstances(self):
+        '''
+        delete any current instances of PPC clouds
+        '''
+        PPCNodes=r9Meta.getMetaNodes(mClassGrps=['PPCROOT'])
+        if PPCNodes:
+            log.info('Deleting current PPC nodes in the scene')
+            for ppc in PPCNodes:
+                cmds.delete(ppc.ppc_root)
+                try:
+                    ppc.delete()
+                except:
+                    pass  # metaNode should be cleared by default when it's only connection is deleted
+                
 class PoseCompare(object):
     '''
     This is aimed at comparing a rigs current pose with a given one, be that a
