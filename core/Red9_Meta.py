@@ -2188,6 +2188,7 @@ class MetaClass(object):
         sPlug=None
         dPlug=None
         sPlugMeta=None
+        returnData=[]
         searchConnection='%s.' % self.mNode.split('|')[-1]
         if attr:
             searchConnection='%s.%s' % (self.mNode.split('|')[-1],attr)
@@ -2205,6 +2206,7 @@ class MetaClass(object):
             if searchConnection in dPlug:
                 log.debug('Disconnecting %s >> %s as %s found in dPlug' % (dPlug,sPlug,searchConnection))
                 cmds.disconnectAttr(dPlug,sPlug)
+                returnData.append((dPlug,sPlug))
 
         if deleteSourcePlug:  # child node
             try:
@@ -2242,7 +2244,8 @@ class MetaClass(object):
             except StandardError,error:
                 log.warning('Failed to Remove Node Connection Attr')
                 log.debug(error)
-
+                
+        return returnData
 
     # Get Nodes Management Block
     #---------------------------------------------------------------------------------
