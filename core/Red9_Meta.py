@@ -1934,7 +1934,7 @@ class MetaClass(object):
         if self.isReferenced():
             return cmds.referenceQuery(self.mNode, ns=True).replace(':','')
         ns=self.mNode.split(':')
-        if ns:
+        if len(ns)>1:
             return ns[:-1][0]
         return ''
 
@@ -1947,11 +1947,16 @@ class MetaClass(object):
         :param asList: either return the namespaces in a list or as a catenated string (default)
         '''
         ns=self.mNode.split(':')
-        if ns:
+        if len(ns)>1:
             if asList:
                 return ns[:-1]
             else:
                 return ':'.join(ns[:-1])
+        else:
+            if asList:
+                return []
+            else:
+                return ''
                     
         
         
