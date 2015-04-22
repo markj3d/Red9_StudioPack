@@ -527,9 +527,12 @@ def isMetaNodeClassGrp(node, mClassGrps=[]):
     if issubclass(type(node), MetaClass):
         node=node.mNode
     for grp in mClassGrps:
-        print node,'testing: '
-        if cmds.getAttr('%s.mClassGrp' % node) == grp:
-            return True
+        log.debug('mGroup testing: %s' % node)
+        try:
+            if cmds.getAttr('%s.mClassGrp' % node) == grp:
+                return True
+        except:
+            log.debug('mNode has no MClassGrp attr, must be a legacy system and needs updating!! %s' % node)
 
             
 @r9General.Timer
@@ -1925,14 +1928,38 @@ class MetaClass(object):
         
     def nameSpace(self):
         '''
-        If the namespace is nested this will return a list where
-        [-1] is the direct namespace of the node
+        This flag has been modified to return just the direct namespace
+        of the node, not all nested namespaces if found. Now returns a string
         '''
         if self.isReferenced():
             return cmds.referenceQuery(self.mNode, ns=True).replace(':','')
-        return self.mNode.split(':')[:-1]
+        ns=self.mNode.split(':')
+        if len(ns)>1:
+            return ns[:-1][0]
+        return ''
 
-    
+    def nameSpaceFull(self, asList=False):
+        '''
+        the namespace call has been modified to only return the single 
+        direct namespace of a node, not the nested. This new func will
+        return the namespace in it's entirity either as a list or a 
+        catenated string
+        :param asList: either return the namespaces in a list or as a catenated string (default)
+        '''
+        ns=self.mNode.split(':')
+        if len(ns)>1:
+            if asList:
+                return ns[:-1]
+            else:
+                return ':'.join(ns[:-1])
+        else:
+            if asList:
+                return []
+            else:
+                return ''
+                    
+        
+        
     # Connection Management Block
     #---------------------------------------------------------------------------------
     
@@ -2166,6 +2193,7 @@ class MetaClass(object):
         sPlug=None
         dPlug=None
         sPlugMeta=None
+        returnData=[]
         searchConnection='%s.' % self.mNode.split('|')[-1]
         if attr:
             searchConnection='%s.%s' % (self.mNode.split('|')[-1],attr)
@@ -2183,6 +2211,7 @@ class MetaClass(object):
             if searchConnection in dPlug:
                 log.debug('Disconnecting %s >> %s as %s found in dPlug' % (dPlug,sPlug,searchConnection))
                 cmds.disconnectAttr(dPlug,sPlug)
+                returnData.append((dPlug,sPlug))
 
         if deleteSourcePlug:  # child node
             try:
@@ -2220,7 +2249,8 @@ class MetaClass(object):
             except StandardError,error:
                 log.warning('Failed to Remove Node Connection Attr')
                 log.debug(error)
-
+                
+        return returnData
 
     # Get Nodes Management Block
     #---------------------------------------------------------------------------------

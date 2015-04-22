@@ -2470,15 +2470,15 @@ class AnimationUI(object):
         meshes=[]
         mRef=r9Meta.MetaClass(self.__uiCB_getPoseInputNodes())
         if mRef.hasAttr('renderMeshes') and mRef.renderMeshes:
-            meshes=mRef.renderMeshes  # [0]
+            meshes=mRef.renderMeshes
         elif len(objs)==2:
             if cmds.nodeType(cmds.listRelatives(objs[1])[0])=='mesh':
                 meshes=objs  # [1]
         if func=='make':
             if not objs:
                 raise StandardError('you need to select a reference object to use as pivot for the PPCloud')
-            if cmds.ls('*posePointCloud', r=True):
-                raise StandardError('PosePointCloud already exists in scsne')
+            #if cmds.ls('*posePointCloud', r=True):
+            #    raise StandardError('PosePointCloud already exists in scsne')
             if not meshes:
                 #turn on locator visibility
                 panel=cmds.getPanel(wf=True)
