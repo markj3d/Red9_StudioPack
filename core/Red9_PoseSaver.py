@@ -942,15 +942,15 @@ class PosePointCloud(object):
 
         self.refMesh = 'posePointCloudGeoRef'  # name for the duplicate meshes used
         self.mayaUpAxis = r9Setup.mayaUpAxis()
-        self.inputNodes = nodes  # inputNodes for processing
-        self.posePointCloudNodes = []  # generated ppt nodes
-        self.posePointRoot = None
+        self.inputNodes = nodes         # inputNodes for processing
+        self.posePointCloudNodes = []   # generated ppc nodes
+        self.posePointRoot = None       # generated rootnode of the ppc
         self.settings = None
-        self.prioritySnapOnly=False  # ONLY make ppt points for the filterPriority nodes
+        self.prioritySnapOnly=False     # ONLY make ppc points for the filterPriority nodes
         
-        self.rootReference = None  # root node used as the pivot for the cloud
-        self.time = time  # if true this modifies the snap and apply code to be timeEnabled, generating key data on the cloud
-        self.isVisible=True
+        self.rootReference = None   # root node used as the main pivot for the cloud
+        #self.time = time           # if true this modifies the snap and apply code to be timeEnabled, generating key data on the cloud
+        self.isVisible = True       # Do we build the visual reference setup or not?
         
         if filterSettings:
             if not issubclass(type(filterSettings), r9Core.FilterNode_Settings):
@@ -1019,6 +1019,18 @@ class PosePointCloud(object):
         self.__connectToMeta()
         return self.posePointCloudNodes
 
+    def getPPCNodes(self):
+        '''
+        return a list of the PPC nodes
+        '''
+        return [ppc for ppc,_ in self.posePointCloudNodes]
+    
+    def getTargetNodes(self):
+        '''
+        return a list of the target controllers
+        '''
+        return [target for _, target in self.posePointCloudNodes]
+    
     def _snapPosePntstoNodes(self):
         '''
         snap each pntCloud point to their respective Maya nodes

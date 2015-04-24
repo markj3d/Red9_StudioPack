@@ -2348,7 +2348,7 @@ class MetaClass(object):
             return mNodes[0]
 
     @r9General.Timer
-    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False):
+    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False):
         '''
         This finds all UserDefined attrs of type message and returns all connected nodes
         This is now being run in the MetaUI on doubleClick. This is a generic call, implemented
@@ -2361,6 +2361,7 @@ class MetaClass(object):
         :param cAttrs: only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)
         :param nAttrs: search returned MayaNodes for given set of attrs and only return matched nodes
         :param asMeta: return instantiated mNodes regardless of type
+        :param asMap: return the data as a map such that {mNode.plugAttr:[nodes], mNode.plugAttr:[nodes]}
         
         .. note:: 
             mAttrs is only searching attrs on the mNodes themselves, not the children
@@ -2368,6 +2369,7 @@ class MetaClass(object):
         '''
         childMetaNodes=[self]
         children=[]
+        attrMapData={}
         if walk:
             childMetaNodes.extend([node for node in self.getChildMetaNodes(walk=True, mAttrs=mAttrs)])
         for node in childMetaNodes:
@@ -2380,19 +2382,28 @@ class MetaClass(object):
                         if msgLinked:
                             if not nAttrs:
                                 msgLinked = cmds.ls(msgLinked, l=True)  # cast to longNames!
-                                children.extend(msgLinked)
+                                if not asMap:
+                                    children.extend(msgLinked)
+                                else:
+                                    attrMapData['%s.%s' % (node.mNode,attr)]=msgLinked
                             else:
                                 for linkedNode in msgLinked:
                                     for attr in nAttrs:
                                         if cmds.attributeQuery(attr, exists=True, node=linkedNode):
                                             linkedNode = cmds.ls(linkedNode, l=True)  # cast to longNames!
-                                            children.extend(linkedNode)
+                                            #children.extend(linkedNode)
+                                            if not asMap:
+                                                children.extend(linkedNode)
+                                            else:
+                                                attrMapData['%s.%s' % (node.mNode,attr)]=linkedNode
                                             break
                                             break
             else:
                 log.debug('no matching attrs : %s found on node %s' % (cAttrs,node))
-        if self._forceAsMeta or asMeta:
+        if self._forceAsMeta or asMeta and not asMap:
             return [MetaClass(node) for node in children]
+        if asMap:
+            return attrMapData
         return children
     
     @staticmethod
@@ -2526,14 +2537,14 @@ class MetaRig(MetaClass):
             log.debug('CACHE : Aborting __init__ on pre-cached %s Object' % self.__class__)
             return
         
-        self.mClassGrp = 'MetaRig'          # get the Grp code marking this as a SystemBase
-        self.mSystemRoot = True             # set this node to be a system root
-        self.CTRL_Prefix='CTRL'             # prefix for all connected CTRL_ links added
-        self.rigGlobalCtrlAttr='CTRL_Main'  # attribute linked to the top globalCtrl in the rig
-        self.lockState = True               # lock the node to avoid accidental removal
-        self.parentSwitchAttr=['parent']    # attr used for parentSwitching
-        self.MirrorClass = None             # capital as this binds to the MirrorClass directly
-        #self.poseSkippedAttrs = []         # attributes which are to be IGNORED by the posesaver
+        self.mClassGrp = 'MetaRig'      # get the Grp code marking this as a SystemBase
+        self.mSystemRoot = True         # set this node to be a system root if True
+        self.CTRL_Prefix = 'CTRL'       # prefix for all connected CTRL_ links added
+        self.rigGlobalCtrlAttr = 'CTRL_Main'  # attribute linked to the top globalCtrl in the rig
+        self.lockState = True           # lock the node to avoid accidental removal
+        self.parentSwitchAttr = ['parent']  # attr used for parentSwitching
+        self.MirrorClass = None         # capital as this binds to the MirrorClass directly
+        # self.poseSkippedAttrs = []    # attributes which are to be IGNORED by the posesaver
         
     def __bindData__(self):
         self.addAttr('version',1.0)  # ensure these are added by default
@@ -2603,7 +2614,7 @@ class MetaRig(MetaClass):
         '''
         return self.getChildren(walk, mAttrs)
         
-    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False):
+    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False):
         '''
         Massively important bit of code, this is used by most bits of code
         to find the child controllers linked to this metaRig instance.
@@ -2618,7 +2629,7 @@ class MetaRig(MetaClass):
             if self.getFacialSystem():
                 cAttrs.append('%s_*' % self.FacialCore.CTRL_Prefix)
 
-        return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=asMeta)
+        return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=asMeta, asMap=asMap)
         #return self.getRigCtrls(walk=walk, mAttrs=mAttrs)
        
     def getSkeletonRoots(self):
@@ -2910,6 +2921,37 @@ class MetaRig(MetaClass):
                                dismissString='Close')
         return compare
     
+    def nodeVisibility(self, state, skip=[]):
+        '''
+        simple wrapper to hide all ctrls in the rig via their shapeNodes
+        lodVisibility so it doesn't interfer with any display layers etc
+        
+        :param state: bool to pass to the lodVisibility attr
+        :param skip: [] child attrs on the mNode to skip during the process allowing certain controllers not to be effected
+        
+        '''
+        ctrlMap=self.getChildren(walk=True, asMap=True)
+        for plug, ctrl in ctrlMap.items():
+            #print plug
+            if not plug.split('.')[-1] in skip:
+                shapes=cmds.listRelatives(ctrl,type='shape',f=True)
+                for shape in shapes:
+                    cmds.setAttr('%s.lodVisibility' % shape, state)
+            else:
+                print plug, skip
+    
+    def hideNodes(self):
+        '''
+        wrap over the nodeVisibility to set False
+        '''
+        self.nodeVisibility(state=0,skip=['%s_Main' % self.CTRL_Prefix])
+        
+    def unHideNodes(self):
+        '''
+        wrap over the nodeVisibility to set True
+        '''
+        self.nodeVisibility(state=1,skip=['%s_Main' % self.CTRL_Prefix])
+        
     @nodeLockManager
     def saveAttrMap(self, *args):
         '''
@@ -2999,6 +3041,7 @@ class MetaRig(MetaClass):
     def getAnimationRange(self, nodes=None, setTimeline=False):
         '''
         return the extend of the animation range for this rig and / or the given controllers
+        
         :param nodes: if given only retunr the extent of the animation data from the given nodes
         :param setTimeLine: if True set the playback timeranges also, default=False
         '''
@@ -3015,7 +3058,8 @@ class MetaRigSubSystem(MetaRig):
     def __init__(self,*args,**kws):
         super(MetaRigSubSystem, self).__init__(*args,**kws)
         self.mClassGrp = 'MetaClass'    # set the Grp removing the MetaRig systemBase Grp code
-
+        self.mSystemRoot=False
+        
     def __bindData__(self):
         self.addAttr('systemType', attrType='string')
         self.addAttr('mirrorSide',enumName='Centre:Left:Right',attrType='enum')
