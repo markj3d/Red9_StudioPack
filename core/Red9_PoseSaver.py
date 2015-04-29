@@ -1030,6 +1030,13 @@ class PosePointCloud(object):
         return a list of the target controllers
         '''
         return [target for _, target in self.posePointCloudNodes]
+
+    @staticmethod
+    def getCurrentInstances():
+        '''
+        get any current PPC nodes in the scene
+        '''
+        return r9Meta.getMetaNodes(mClassGrps=['PPCROOT'])
     
     def _snapPosePntstoNodes(self):
         '''
@@ -1092,14 +1099,17 @@ class PosePointCloud(object):
             cmds.refresh()
 
     def delete(self):
+        root=self.posePointRoot
+        if not root:
+            root=self.ppc.ppc_root[0]
         self.ppcMeta.delete()
-        cmds.delete(self.posePointRoot)
-
+        cmds.delete(root)
+        
     def deleteCurrentInstances(self):
         '''
         delete any current instances of PPC clouds
         '''
-        PPCNodes=r9Meta.getMetaNodes(mClassGrps=['PPCROOT'])
+        PPCNodes=self.getCurrentInstances()
         if PPCNodes:
             log.info('Deleting current PPC nodes in the scene')
             for ppc in PPCNodes:
