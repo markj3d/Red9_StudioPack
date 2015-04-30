@@ -24,6 +24,8 @@ import inspect
 import sys
 import tempfile
 import subprocess
+import json
+import itertools
 
 #Only valid Red9 import
 import Red9.startup.setup as r9Setup
@@ -850,6 +852,72 @@ def os_fileCompare(file1, file2, openDiff=False):
     else:
         log.warning('Diffmerge commandline was not found, compare aborted')
     
+
+
+def writeJson(filepath=None, content=None):
+    '''
+    write json file to disk
+
+    :param filepath: file pat to drive where to write the file
+    :param content: file content
+    :return: None
+    '''
+
+    if filepath:
+        path = os.path.dirname(filepath)
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    name = open(filepath, "w")
+    name.write(json.dumps(content, sort_keys=True, indent=4))
+    name.close()
+
+
+def readJson(filepath=None):
+    '''
+    file pat to drive where to read the file
+
+    :param filepath:
+    :return:
+    '''
+    if os.path.exists(filepath):
+        name = open(filepath, 'r')
+        try:
+            return json.load(name)
+        except ValueError:
+            pass
+
+class abcIndex(object):
+    '''
+    Alphabetic iterator
+    '''
+    def __init__(self, lower=True):
+        if lower:
+            self.__abc = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+                          'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+        else:
+            self.__abc = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                          'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+        self.__iter = 0
+        self.__iterator = None
+        self.__Iterate()
+
+    def __Iterate(self):
+        self.__iter += 1
+        self.__iterator = itertools.permutations(self.__abc, self.__iter)
+
+    def next(self):
+        '''
+        Return and Alphabetic index
+        '''
+        try:
+            temp = ''.join([x for x in self.__iterator.next()])
+        except StopIteration:
+            self.__Iterate()
+            temp = ''.join([x for x in self.__iterator.next()])
+        return '%s' % temp
     
     
     
