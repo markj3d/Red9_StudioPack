@@ -2099,7 +2099,7 @@ class AnimationUI(object):
                      
     def __uiPoseAddPoseHandler(self, *args):
         '''
-        Copy local pose to the Project Pose Folder
+        PRO_PACK : Copy local pose to the Project Pose Folder
         '''
         r9Setup.PRO_PACK_STUBS().AnimationUI_stubs.uiCB_poseAddPoseHandler(self.posePath)
         
@@ -2409,7 +2409,7 @@ class AnimationUI(object):
     
     def __PoseCompare(self, compareDict='skeletonDict', *args):
         '''
-        Internal UI call for Pose Compare func, note that filterSettings is bound
+        PRO_PACK : Internal UI call for Pose Compare func, note that filterSettings is bound
         but only filled by the main __uiCall call
         '''
         r9Setup.PRO_PACK_STUBS().AnimationUI_stubs.uiCB_poseCompare(filterSettings=self.filterSettings,
