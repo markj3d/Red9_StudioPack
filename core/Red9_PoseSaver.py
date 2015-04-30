@@ -70,7 +70,9 @@ class DataMap(object):
         self.poseDict={}
         self.infoDict={}
         self.skeletonDict={}
+        self.file_ext = ''
         self.filepath=''
+        self.__filepath = ''
         self.mayaUpAxis = r9Setup.mayaUpAxis()
         self.thumbnailRes=[128,128]
         
@@ -88,21 +90,31 @@ class DataMap(object):
                 self.__metaPose=self.settings.metaRig
             else:
                 raise StandardError('filterSettings param requires an r9Core.FilterNode_Settings object')
+            self.settings.printSettings()
         else:
             self.settings=r9Core.FilterNode_Settings()
             self.__metaPose=self.settings.metaRig
-        self.settings.printSettings()
     
-    #Property so we sync the settings metaRig bool to the class metaPose bool
-    def __get_metaPose(self):
+    @property
+    def metaPose(self):
         return self.__metaPose
     
-    def __set_metaPose(self, val):
+    @metaPose.setter
+    def metaPose(self, val):
         self.__metaPose=val
         self.settings.metaRig=val
-          
-    metaPose = property(__get_metaPose, __set_metaPose)
     
+    @property
+    def filepath(self):
+        return self.__filepath
+    
+    @filepath.setter
+    def filepath(self, path):
+        if self.file_ext:
+            self.__filepath='%s%s' % (os.path.splitext(path)[0], self.file_ext)
+        else:
+            self.__filepath=path
+        
     def setMetaRig(self,node):
         log.info('setting internal metaRig from given node : %s' % node)
         if r9Meta.isMetaNodeInherited(node,'MetaRig'):
@@ -185,32 +197,6 @@ class DataMap(object):
                  
     # Data Collection - Build the dataMap ---------------------------------------------
              
-    @r9General.Timer
-    def _collectNodeData_keyframes(self, node, key):
-        '''
-        Capture and build keyframe data from this node and fill the
-        data to the datamap[key]
-        '''
-        attrs = r9Anim.getChannelBoxAttrs(node=node, asDict=True, incLocked=False)
-        if not attrs['keyable']:
-            return
-        else:
-            if not 'keydata' in self.poseDict[key]:
-                self.poseDict[key]['keydata'] = {}
-        for attr in attrs['keyable']:
-            #print 'node : ', node, 'attr : ', attr
-            channel = '%s.%s' % (node, attr)
-            keyList = cmds.keyframe(channel, q=True, vc=True, tc=True, t=())
-            tangents = cmds.keyTangent(channel, q=True, t=(), itt=True, ott=True)
-            if keyList:
-                self.poseDict[key]['keydata'][attr] = ''
-                for keyframe, value, t1, t2 in zip(keyList[0::2], keyList[1::2], tangents[0::2], tangents[1::2]):
-                    self.poseDict[key]['keydata'][attr] += '(%.02f,%f,"%s","%s"),' % (keyframe, value, t1, t2)
-                # save key & tangent data
-                #for keyframe, value in zip(keyList[0::2], keyList[1::2]):
-                #    tangentData = cmds.keyTangent(channel, q=True, t=(keyframe, keyframe), itt=True, ott=True)
-                #    self.poseDict[key]['attrs'][attr] += '(%.02f,%f,"%s","%s"),' % (keyframe, value, tangentData[0], tangentData[1])
-   
     def _collectNodeData_attrs(self, node, key):
         '''
         Capture and build attribute data from this node and fill the
@@ -416,27 +402,7 @@ class DataMap(object):
                         log.debug(err)
             except:
                 log.debug('Pose Object Key : %s : has no Attr block data' % key)
-                
-    @r9General.Timer
-    def _applyData_keyframes(self, offset=0.0, *args, **kws):
-        '''
-        Load Example for keyframe data : 
-        use self.matchedPairs for the process list of pre-matched 
-        tuples of (poseDict[key], node in scene)
-        '''
-        for key, dest in self.matchedPairs:
-            log.debug('Applying Key Block : %s' % key)
-            if not 'keydata' in self.poseDict[key]:
-                continue
-            for attr, keydata in self.poseDict[key]['keydata'].items():
-                try:
-                    chn='%s.%s' % (dest, attr)
-                    #log.debug('node : %s : attr : %s : keydata : %s' % (dest, attr, str(keydata)))
-                    for ktime, value, inTan, outTan in eval(keydata):
-                        cmds.setKeyframe(chn, t=ktime, v=value, itt=inTan, ott=outTan)
-                except StandardError, err:
-                    log.debug('failed to set animData for key : %s.%s' % (dest,attr))
-                            
+                                            
     def _applyData(self, *args, **kws):
         '''
         To Be Overloaded
@@ -669,6 +635,7 @@ class PoseData(DataMap):
         '''
         super(PoseData, self).__init__(filterSettings=filterSettings, *args,**kws)
         
+        self.file_ext = '.pose'
         self.poseDict={}
         self.infoDict={}
         self.skeletonDict={}
@@ -791,20 +758,20 @@ class PoseData(DataMap):
         self.filepath=filepath
         self.useFilter=useFilter
         if self.filepath:
-            log.debug('PosePath given : %s' % filepath)
+            log.debug('PosePath given : %s' % self.filepath)
             
         self.buildDataMap(nodes)
         
         if self.filepath:
-            self._writePose(filepath)
+            self._writePose(self.filepath)
             
             if storeThumbnail:
                 sel=cmds.ls(sl=True,l=True)
                 cmds.select(cl=True)
-                r9General.thumbNailScreen(filepath,self.thumbnailRes[0],self.thumbnailRes[1])
+                r9General.thumbNailScreen(self.filepath,self.thumbnailRes[0],self.thumbnailRes[1])
                 if sel:
                     cmds.select(sel)
-        log.info('Pose Saved Successfully to : %s' % filepath)
+        log.info('Pose Saved Successfully to : %s' % self.filepath)
         
     @r9General.Timer
     def poseLoad(self, nodes, filepath=None, useFilter=True, relativePose=False, relativeRots='projected',
