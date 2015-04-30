@@ -110,7 +110,7 @@ class DataMap(object):
     
     @filepath.setter
     def filepath(self, path):
-        if self.file_ext:
+        if path and self.file_ext:
             self.__filepath='%s%s' % (os.path.splitext(path)[0], self.file_ext)
         else:
             self.__filepath=path
