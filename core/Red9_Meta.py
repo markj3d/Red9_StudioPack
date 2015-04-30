@@ -1031,7 +1031,7 @@ class MClassNodeUI(object):
  
     def __uiCB_connectNode(self, *args):
         '''
-        Given a single selected mNode from the UI and a single selected MAYA node, run
+        PRO PACK : Given a single selected mNode from the UI and a single selected MAYA node, run
         connectChild with the given promtString as the attr
         '''
         indexes=cmds.textScrollList('slMetaNodeList',q=True,sii=True)
@@ -1044,7 +1044,7 @@ class MClassNodeUI(object):
    
     def __uiCB_disconnectNode(self,*args):
         '''
-        Given a single selected mNode from the UI and selected MAYA nodes, run
+        PRO PACK : Given a single selected mNode from the UI and selected MAYA nodes, run
         disconnectChild to remove them from the metaData system
         '''
         indexes=cmds.textScrollList('slMetaNodeList',q=True,sii=True)
@@ -2990,53 +2990,29 @@ class MetaRig(MetaClass):
         '''
         self.poseCacheLoad(nodes=nodes, attr='zeroPose')
     
-    def saveAnimation(self, filepath, output='config'):
+    def saveAnimation(self, filepath, incRoots=True):
         '''
-        DEV TESTS ONLY TO NOT USE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        test for an animSaver idea, follows the pose formatting, maybe we'll wrap all
-        of this inside the poseHandler, that way all the logic for psoes is maintained and
-        we just overload the actual data block that currnelty just gets the static attr
-        DEV TESTS ONLY TO NOT USE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        PRO_PACK : Binding of the animMap format for storing animation data out to file
         '''
-        animData = {}
-        for ctrl in self.getChildren():
-            mapping = self.getNodeConnectionMetaDataMap(ctrl)
-            attrs = r9Anim.getChannelBoxAttrs(node=ctrl, asDict=True, incLocked=False)
-            shortName = r9Core.nodeNameStrip(ctrl)
-            if not attrs['keyable']:
-                continue
-            for attr in attrs['keyable']:
-                channel = '%s.%s' % (ctrl, attr)
-                keyList = cmds.keyframe(channel, q=True, vc=True, tc=True, t=())
-                if keyList:
-                    if not shortName in animData:
-                        animData[shortName] = {}
-                        animData[shortName]['longName'] = ctrl
-                        animData[shortName]['metaData'] = mapping
-                        animData[shortName]['attrs'] = {}
-                    animData[shortName]['attrs'][attr] = ''
-                    
-                    # save key & tangent data
-                    for key, value in zip(keyList[0::2], keyList[1::2]):
-                        tangentData = cmds.keyTangent(channel, q=True, t=(key, key), itt=True, ott=True)
-                        animData[shortName]['attrs'][attr] += '(%.02f,%f,"%s","%s"),' % (key, value, tangentData[0], tangentData[1])
-                        # animData[ctrl][attr].append(('%.02f' % key, value, tangentData[0], tangentData[1]))
-        if animData:
-            print animData
-            if output=='json':
-                animFile = open(filepath, 'w+')
-                json.dump(animData, animFile, indent=0)
-                animFile.close()
-            elif output=='config':
-                import Red9.packages.configobj as configobj
-                ConfigObj = configobj.ConfigObj(indent_type='\t')
-                ConfigObj['poseData']=animData
-                ConfigObj.filename = filepath
-                ConfigObj.write()
-            return animData
+        if r9Setup.has_pro_pack():
+            from Red9.pro_pack.core.animation import AnimMap
+            self.animMap=AnimMap()
+            self.animMap.metaPose=True
+            self.animMap.settings.incRoots=incRoots
+            self.animMap.saveData(self.mNode,filepath,storeThumbnail=False)
             
-    def loadAnimation(self, filepath):
-        pass
+    def loadAnimation(self, filepath, offset=0, incRoots=True):
+        '''
+        PRO_PACK : Binding of the animMap format for loading animation data from
+        an r9Anim file
+        '''
+        if r9Setup.has_pro_pack():
+            from Red9.pro_pack.core.animation import AnimMap
+            self.animMap=AnimMap()
+            self.animMap.metaPose=True
+            self.animMap.settings.incRoots=incRoots
+            self.animMap.offset=20
+            self.animMap.loadData(self.mNode,filepath)
 
     def getAnimationRange(self, nodes=None, setTimeline=False):
         '''
