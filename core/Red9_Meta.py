@@ -79,8 +79,8 @@ global RED9_META_CALLBACKS
 RED9_META_CALLBACKS = {}
 RED9_META_CALLBACKS['Open'] = []
 RED9_META_CALLBACKS['New'] = []
-RED9_META_CALLBACKS['DuplicatePre'] = []
-RED9_META_CALLBACKS['DuplicatePost'] = []
+#RED9_META_CALLBACKS['DuplicatePre'] = []
+#RED9_META_CALLBACKS['DuplicatePost'] = []
         
 
 global __RED9_META_NODESTORE__
@@ -152,7 +152,13 @@ def getMClassDataFromNode(node):
     '''
     try:
         if cmds.attributeQuery('mClass', exists=True, node=node):
-            return cmds.getAttr('%s.%s' % (node,'mClass'))
+            mClass=cmds.getAttr('%s.%s' % (node,'mClass'))
+            if mClass in RED9_META_REGISTERY:
+                return mClass
+            elif cmds.attributeQuery('mClassGrp', exists=True, node=node):
+                mClass=cmds.getAttr('%s.%s' % (node,'mClassGrp'))
+                if mClass in RED9_META_REGISTERY:
+                    return mClass
         elif 'Meta%s' % cmds.nodeType(node) in RED9_META_REGISTERY.keys():
             return 'Meta%s' % cmds.nodeType(node)
     except:
