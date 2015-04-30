@@ -678,21 +678,32 @@ def has_pro_pack():
     '''
     if os.path.exists(os.path.join(red9ModulePath(),'pro_pack')):
         return True
+    else:
+        return False
 
-class ProPack_Error(Exception):
+class ProPack_UIError(Exception):
     '''
-    custom exception so we can catch it
+    custom exception so we can catch it, this launched the 
+    get ProPack UI
     '''
-    def __init__(self):
+    def __init__(self, *args):
         get_pro_pack()
         
+class ProPack_Error(Exception):
+    '''
+    custom exception so we can catch it. This is an in-function 
+    error
+    '''
+    def __init__(self, *args):
+        super(ProPack_Error, self).__init__('ProPack missing from setup!')
+           
 class pro_pack_missing_stub(object):
     '''
     Exception to raised when the the Pro_Pack is missing 
     and the stubs are called
     '''
     def __init__(self):
-        raise ProPack_Error()
+        raise ProPack_UIError()
 
              
 def has_internal_systems():
