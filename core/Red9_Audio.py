@@ -38,7 +38,7 @@ try:
     from ..packages.pydub.pydub import audio_segment
 except:
     log.debug('unable to import pydub libs')
-    
+
     
 ## Timecode conversion utilities   -----------------------------------------------------
 
@@ -295,9 +295,9 @@ def inspect_wav():
         cmds.separator(h=15, style='in')
         cmds.text(l=bWavData, align='left')
     cmds.showWindow(win)
-   
-    
-    
+     
+      
+
 ## Audio Handlers  -----------------------------------------------------
     
 class AudioHandler(object):
@@ -558,6 +558,7 @@ class AudioNode(object):
         self.__path=''
         self.__audioNode=None
         self.isLoaded=False  # if true we're only working on an audioPath, NOT an active Maya soundNode
+        self.pro_bwav=None
         
         if not filepath:
             if audioNode:
@@ -577,6 +578,11 @@ class AudioNode(object):
                 self.isLoaded=False
             self.path=filepath
     
+        # bind ProPack bwav support
+        if r9Setup.has_pro_pack():
+            import Red9.pro_pack.core.audio as pro_audio
+            self.pro_bwav = pro_audio.BWav_Handler(self.path)
+            
     def __repr__(self):
         if self.isLoaded:
             if self.audioNode:
@@ -607,6 +613,10 @@ class AudioNode(object):
     @path.setter
     def path(self,path):
         self.__path=path
+        if self.pro_bwav:
+            print 'setting new path', self.pro_bwav.path
+            self.pro_bwav.path=path
+            print self.pro_bwav.path
     
     @property
     def audioNode(self):
@@ -696,169 +706,69 @@ class AudioNode(object):
         if self.isLoaded:
             cmds.setAttr('%s.offset' % self.audioNode, milliseconds_to_frame(val, framerate=None))
     
-    # BWAV support ##=============================================
+    # PRO_PACK : BWAV support ##============================================
 
     def isBwav(self):
         '''
-        validate if the given source wav is a BWav or not
+        PRO PACK : validate if the given source Wav is a BWav or not
         '''
-#        test = False
-        binarymap = self.__get_chunkdata()
-        if "bext" in binarymap:
-            return True
-#         fileIn = open(self.path, 'rb')
-#         bufHeader = fileIn.read(512)
-#         print bufHeader
-#         # Verify that the correct identifiers are present
-#         if (bufHeader[0:4] != "RIFF") or (bufHeader[12:16] != "fmt "):
-#             #print("Input file not a standard WAV file")
-#             if (bufHeader[12:16] == "bext"):
-#                 test = True
-#         fileIn.close()
-#        return test
-    
-    def __readnumber(self, f):
-        s = 0
-        c = f.read(4)
-        for i in range(4):
-            s += ord(c[i]) * 256 ** i
-        return s
-
-    def __readchunk(self, f, data, level=0):
-        '''
-        inspect the binary chunk structure
-        '''
-        pos = f.tell()
-        name = f.read(4)
-        leng = self.__readnumber(f)
-        totleng = leng + 8
-        print "   "*level, name, "len-8 =%8d" % leng, "   start of chunk =", pos, "bytes"
-        data[name]=(pos, leng)
-        if name in ("RIFF", "list"):
-            print "   "*level, f.read(4), "recursive sublist"
-            sublen = leng - 4
-            while sublen > 0:
-                sublen -= self.__readchunk(f, data, level + 1)
-            if sublen != 0:
-                print "ERROR:", sublen
+        if self.pro_bwav:
+            return self.pro_bwav.isBwav()
         else:
-            f.seek(leng, 1)  # relative skip
-        return totleng
-
-    def __get_chunkdata(self, filedata=None):
-        '''
-        read the internal binary chunks of the wav file and return
-        a dict of the binary map
-        '''
-        data={}  # pass by reference
-        fopen=False
-        if not filedata:
-            filedata=open(self.path, "r")
-            fopen=True
-        self.__readchunk(filedata, data)
-        if fopen:
-            #print 'file closed'
-            filedata.close()
-        return data
-        
+            raise r9Setup.ProPack_Error()
+    
     def bwav_getHeader(self):
         '''
-        retrieve the BWav header info and push it into an internal dic
-        that you can inspect self.bwav_HeaderData. This is designed to be cached
-        against this instance of the audioNode object.
-        Note that this code uses a binary seek to first find the starting chunk 
-        in the binary file where the 'bext' data is written.
-        
-        .. note::
-        
-            We could, if we could ensure it was available, use ffprobe.exe (part of the ffmpeg project)
-            This would also cover most media file formats including Mov, avi etc 
-            There is coverage for this in this module getMediaFileMetaData() does just that
+        PRO PACK : get the internal BWav header data from the wav if found
         '''
-        with open(self.path, 'r') as filedata:
-            binarymap = self.__get_chunkdata(filedata)
-            if not "bext" in binarymap:
-                log.info('Audio file is not a formatted BWAV')
-                return
-
-            self.bwav_HeaderData = {'ChunkSize' : 0,
-                        'Format' : '',
-                        'Subchunk1Size' : 0,
-                        'AudioFormat' : 0,
-                        'BitsPerSample' : 0,
-                        'Description' : '',
-                        'Originator' : '',
-                        'OriginatorReference' : '',
-                        'OriginationDate' : '',
-                        'OriginationTime' : '',
-                        'TimeReference' : 0,
-                        'TimeReferenceHigh' : 0,
-                        'BextVersion' : 0
-                }
-
-            chunkPos = int(binarymap['bext'][0]) + 8  # starting position in the binary to start reading the 'bext' data from
-            filedata.seek(0)
-            bufHeader = filedata.read(chunkPos+360)
-            #print 'buffdata:', filedata.tell(), bufHeader
-
-            # Parse fields
-            self.bwav_HeaderData['ChunkSize'] = struct.unpack('<L', bufHeader[4:8])[0]
-            self.bwav_HeaderData['Format'] = bufHeader[8:12]
-            self.bwav_HeaderData['InternalFormat'] = bufHeader[12:16]
-            self.bwav_HeaderData['Subchunk1Size'] = struct.unpack('<L', bufHeader[16:20])[0]
-            
-            # bwav chunk data
-            self.bwav_HeaderData['Description']=struct.unpack('<256s', bufHeader[chunkPos:chunkPos+256])[0].replace('\x00','')
-            self.bwav_HeaderData['Originator']=struct.unpack('<32s', bufHeader[chunkPos+256:chunkPos+288])[0].replace('\x00','')
-            self.bwav_HeaderData['OriginatorReference']=struct.unpack('<32s', bufHeader[chunkPos+288:chunkPos+320])[0].replace('\x00','')
-            self.bwav_HeaderData['OriginationDate']=struct.unpack('<10s', bufHeader[chunkPos+320:chunkPos+330])[0].replace('\x00','')
-            self.bwav_HeaderData['OriginationTime']=struct.unpack('<8s', bufHeader[chunkPos+330:chunkPos+338])[0].replace('\x00','')
-            self.bwav_HeaderData['TimeReference'] = struct.unpack('<L', bufHeader[chunkPos+338:chunkPos+342])[0]
-            self.bwav_HeaderData['TimeReferenceHigh'] = struct.unpack('<L', bufHeader[chunkPos+342:chunkPos+346])[0]
-            self.bwav_HeaderData['BextVersion'] = struct.unpack('<L', bufHeader[chunkPos+346:chunkPos+350])[0]
-
-        #print self.bwav_HeaderData
-        return self.bwav_HeaderData
+        if self.pro_bwav:
+            self.bwav_HeaderData = self.pro_bwav.bwav_getHeader()
+            return self.bwav_HeaderData
+        else:
+            raise r9Setup.ProPack_Error()
         
     def bwav_timecodeMS(self):
         '''
-        read the internal timecode reference form the bwav and convert that number into milliseconds
+        PRO PACK : read the internal timecode reference from the bwav and convert that number into milliseconds
         '''
-        if not self.isBwav():
-            raise StandardError('audioNode is not in BWav format')
-        if not hasattr(self, 'bwav_HeaderData'):
-            self.bwav_getHeader()
-        return float(self.bwav_HeaderData['TimeReference']) / float(self.sampleRate) * 1000.0
+        if self.pro_bwav:
+            return self.pro_bwav.bwav_timecodeMS()
+        else:
+            raise r9Setup.ProPack_Error()
     
-    def bwav_timecodeReference(self):  # frameRate=29.97):
+    def bwav_timecodeReference(self):
         '''
-        internal timeReference in the bwav
+        PRO PACK : if is BWaw return the internal timeReference
         '''
-        if not hasattr(self, 'bwav_HeaderData'):
-            self.bwav_getHeader()
-        return float(self.bwav_HeaderData['TimeReference'])
-    
+        if self.pro_bwav:
+            return self.pro_bwav.bwav_timecodeReference()
+        else:
+            raise r9Setup.ProPack_Error()
+
     def bwav_timecodeFormatted(self, smpte=True, framerate=None):
         '''
-        convert milliseconds into timecode
+        PRO PACK : if is Bwav return the internal timecode & convert from milliseconds into timecode
 
         :param smpte: format the timecode HH:MM:SS:FF where FF is frames, else milliseconds
         :param framerate: when using smpte this is the framerate used in the FF block
         '''
-        return milliseconds_to_Timecode(self.bwav_timecodeMS(), smpte=smpte, framerate=framerate)
+        if self.pro_bwav:
+            return self.pro_bwav.bwav_timecodeFormatted(smpte=smpte, framerate=framerate)
+        else:
+            raise r9Setup.ProPack_Error()
 
     def bwav_sync_to_Timecode(self, offset=0):
         '''
-        given that self is a Bwav and has timecode reference, sync it's position
+        PRO PACK : given that self is a Bwav and has timecode reference, sync it's position
         in the Maya timeline to match
         
         :param offset: offset to apply to the internal timecode of the given wav's
         '''
-        if self.isLoaded and self.isBwav():
-            #print milliseconds_to_Timecode(self.bwav_timecodeMS(), smpte=True, framerate=None)
-            #print milliseconds_to_frame(self.bwav_timecodeMS(), framerate=None)
-            self.startFrame=milliseconds_to_frame(self.bwav_timecodeMS()) + offset
-      
+        if self.isLoaded and self.pro_bwav and self.pro_bwav.isBwav():
+            self.startFrame = milliseconds_to_frame(self.pro_bwav.bwav_timecodeMS()) + offset
+        else:
+            raise r9Setup.ProPack_Error()
+
 
     # Bwav end =========================================================
     
@@ -1022,8 +932,8 @@ class AudioToolsWrap(object):
                     ann="Ripple offset the selected audio nodes so they're timed one after another",
                     command=self.offsetRipple)
         cmds.separator(h=15, style='none')
-        cmds.frameLayout(label='Broadcast Wav support', cll=True, cl=False, borderStyle='etchedOut')
-        cmds.columnLayout(adjustableColumn=True)
+        cmds.frameLayout(label='PRO : Broadcast Wav support', cll=True, cl=False, borderStyle='etchedOut')
+        cmds.columnLayout(adjustableColumn=True, en=r9Setup.has_pro_pack())
         cmds.separator(h=5, style='none')
         cmds.text(label="NOTE: These will only run if the audio is\nin the Bwav format and has internal timecode data.")
         cmds.separator(h=10, style='none')
