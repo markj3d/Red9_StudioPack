@@ -40,7 +40,7 @@ except:
     log.debug('unable to import pydub libs')
 
     
-## Timecode conversion utilities   -----------------------------------------------------
+# Timecode conversion utilities  -----------------------------------------------------
 
 class Timecode(object):
 
@@ -298,7 +298,7 @@ def inspect_wav():
      
       
 
-## Audio Handlers  -----------------------------------------------------
+# Audio Handlers  -----------------------------------------------------
     
 class AudioHandler(object):
     '''
@@ -614,9 +614,9 @@ class AudioNode(object):
     def path(self,path):
         self.__path=path
         if self.pro_bwav:
-            print 'setting new path', self.pro_bwav.path
+            #print 'setting new path', self.pro_bwav.path
             self.pro_bwav.path=path
-            print self.pro_bwav.path
+            log.debug('Setting BWAV internal path : %s' % self.pro_bwav)
     
     @property
     def audioNode(self):

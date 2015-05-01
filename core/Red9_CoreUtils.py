@@ -37,8 +37,8 @@ log.setLevel(logging.INFO)
 # Language map is used for all UI's as a text mapping for languages
 LANGUAGE_MAP = r9Setup.LANGUAGE_MAP
 
-# Generic  Functions
-#---------------------------------------------------------------------------------
+
+# Generic Functions --------------------------------------------------------------
 
 def nodeNameStrip(node):
     '''
@@ -82,7 +82,7 @@ def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False)
     #     for i,n in enumerate(stripped)]
     return reordered
 
-     
+
 def sortNumerically(data):
     """
     Sort the given data in the way that humans expect.
@@ -177,6 +177,7 @@ def validateString(strText):
     else:
         return strText
 
+
 def filterListByString(input_list, filter_string, matchcase=False):
     '''
     Generic way to filter a list by a given string input. This is so that all
@@ -204,7 +205,8 @@ def filterListByString(input_list, filter_string, matchcase=False):
     else:
         return input_list
     
-#Filter Node Setups ----------------------------------------------------------------------
+    
+# Filter Node Setups -------------------------------------------------------------
 
 class FilterNode_Settings(object):
     '''
@@ -302,42 +304,7 @@ class FilterNode_Settings(object):
         self.infoBlock=""
         if rigData:
             self.rigData={}
-        
-#    def write(self,filepath):
-#        '''
-#        write the filterSettings attribute out to a ConfigFile
-#        @param filepath: file path to write the configFile out to
-#        '''
-#        config = ConfigParser.RawConfigParser()
-#        config.optionxform=str #prevent options being converted to lowerCase
-#        config.add_section('filterNode_settings')
-#        for key, val in self.__dict__.items():
-#            config.set('filterNode_settings', key, val)
-#
-#        # Writing our configuration file to 'example.cfg'
-#        with open(filepath, 'wb') as configfile:
-#            config.write(configfile)
-
-#    def read(self,filepath):
-#        '''
-#        Read a given ConfigFile and fill this object instance with the data
-#        @param filepath: file path to write the configFile out to
-#        '''
-#        config = ConfigParser.RawConfigParser()
-#        config.optionxform=str #prevent options being converted to lowerCase
-#        config.read(filepath)
-#
-#        self.resetFilters()
-#
-#        settings=dict(config.items("filterNode_settings"))
-#        for key,val in settings.items():
-#            #because config is built from string data
-#            #we need to deal with specific types here
-#            try:
-#                self.__dict__[key]=decodeString(val)
-#            except:
-#                pass
-                  
+                          
     def write(self, filepath):
         '''
         write the filterSettings attribute out to a ConfigFile
@@ -364,8 +331,7 @@ class FilterNode_Settings(object):
                 pass
 
   
-# UI CALLS :
-#---------------------------------------------------------------------------------
+# UI CALLS -----------------------------------------------------------------------
     
 class FilterNode_UI(object):
 
@@ -1231,6 +1197,14 @@ class FilterNode(object):
     # Main Search Call which uses the Settings Object
     #---------------------------------------------------------------------------------
     
+    
+    def processFilter(self):
+        '''
+        replace the 'P' in the function call but not depricating it just yet
+        as too much code both internally and externally relies on this method
+        '''
+        return self.ProcessFilter()
+        
     #@r9General.Timer
     def ProcessFilter(self):
             '''
@@ -1373,7 +1347,7 @@ def getBlendTargetIndex(blendNode, targetName):
         return 0
     
 
-#Node Matching -------------------------------------------------------------------------
+# Node Matching ----------------------------------------------------------------------
             
 def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
     '''
@@ -1569,7 +1543,6 @@ class MatchedNodeInputs(object):
 
 
 class LockChannels(object):
-    
     '''
     Simple UI to manage the lock and key status of nodes
     '''
@@ -2284,7 +2257,7 @@ class TimeOffset(object):
             log.info('%i : MetaData were offset' % len(mNodes))
  
 
-#Math functions ----------------------------------------------------------------------
+# Math functions ----------------------------------------------------------------------
 
 def floatIsEqual(a, b, tolerance=0.01, allowGimbal=True):
     '''
