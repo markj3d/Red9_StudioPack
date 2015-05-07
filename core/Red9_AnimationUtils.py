@@ -106,20 +106,26 @@ log.setLevel(logging.INFO)
 # global var so that the animUI is exposed to anything as a global object
 global RED_ANIMATION_UI
 
+global RED_ANIMATION_UI_OPENCALLBACK
+RED_ANIMATION_UI_OPENCALLBACK=None
 
 '''
-Callback global so you can fire a command prior to the UI opening,
+Callback globals so you can fire a command prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
-and to setup some additional paths
+and to setup some additional paths.
 
-def myProjectCallback()
+def myProjectCallback(cls)
     cls.poseHandlerPaths=['MyProjects/resources/poseHandlers']
     cls.posePathProject ='My_projects/global/project/pose/lib'
     
 r9Anim.RED_ANIMATION_UI_OPENCALLBACK = myProjectCallback
+
+NOTE:: the function call bound to the callback is passed the current instance of the animUI class 
+as an arg so you can modify as you need. Also when the PoseUI popup menu is built, IF the internal path
+cls.poseHandlerPaths is valid then we bind into that popup all valid poseHandler.py files
+found the given path. This allow you to add custom handler types and expose them through the UI directly.
 '''
-global RED_ANIMATION_UI_OPENCALLBACK
-RED_ANIMATION_UI_OPENCALLBACK=None
+
 
 # Language map is used for all UI's as a text mapping for languages
 LANGUAGE_MAP = r9Setup.LANGUAGE_MAP
