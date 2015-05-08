@@ -546,6 +546,6 @@ global proc buildClipEditorMenu(string $editor, string $parent,
 	
 	//ADD HACKS ===============================================================
 	source red9MayaHacks;
-	red9HackTraxMenu $editor;
+	red9HackTraxMenu;
 	//HACK END ================================================================
 }

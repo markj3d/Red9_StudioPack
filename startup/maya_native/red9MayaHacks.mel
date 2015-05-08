@@ -92,8 +92,8 @@ global proc red9HackScriptEditorPopup(string $parent)
 }
 
 
-global proc red9HackTraxMenu(string $parent)
+global proc red9HackTraxMenu()
 {
 	//hack Red9_Sound to the Trax Editor menuBar
-	python("import Red9.startup.setup as r9Setup;r9Setup.addAudioMenu()");
+	python("import Red9.startup.setup as r9Setup;r9Setup.addAudioMenu(parent=None, rootMenu='redNineTraxRoot')");
 }

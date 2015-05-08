@@ -171,13 +171,18 @@ def menuSetup(parent='MayaWindow'):
         cmds.deleteUI('redNineMenuItemRoot')
         log.info("Rebuilding Existing RedNine Menu")
         
+    # parent is an existing window with an existing menuBar?
     if cmds.window(parent, exists=True):
         if not cmds.window(parent, q=True, menuBar=True):
-            #parent=cmds.window(parent, edit=True, menuBar=True)
             raise StandardError('given parent for Red9 Menu has no menuBarlayout %s' % parent)
         else:
             cmds.menu('redNineMenuItemRoot', l="RedNine", p=parent, tearOff=True, allowOptionBoxes=True)
             log.info('new Red9 Menu added to current window : %s' % parent)
+    # parent is a menuBar?
+    elif cmds.menuBarLayout(parent, exists=True):
+        cmds.menu('redNineMenuItemRoot', l='RedNine', p=parent, tearOff=True, allowOptionBoxes=True)
+        log.info('New Red9 Sound Menu added to current windows menuBar : %s' % parent)
+    # parent is an existing menu?
     elif cmds.menu(parent, exists=True):
         cmds.menuItem('redNineMenuItemRoot', l='RedNine', sm=True, p=parent)
         log.info('new Red9 subMenu added to current Menu : %s' % parent)
@@ -427,10 +432,36 @@ def addAudioMenu(parent=None, rootMenu='redNineTraxRoot'):
     '''
     Red9 Sound Menu setup
     '''
+    print 'AudioMenu: given parent : ',parent
     if not parent:
         cmds.menu(rootMenu, l=LANGUAGE_MAP._MainMenus_.sound_red9_sound, tearOff=True, allowOptionBoxes=True)
+        print 'New r9Sound Menu added - no specific parent given so adding to whatever menu is currently being built!'
     else:
-        cmds.menu(rootMenu, l=LANGUAGE_MAP._MainMenus_.sound_red9_sound, tearOff=True, allowOptionBoxes=True, parent=parent)
+        # parent is a window containing a menuBar?
+        if cmds.window(parent, exists=True):
+            if not cmds.window(parent, q=True, menuBar=True):
+                raise StandardError('given parent for Red9 Sound Menu has no menuBarlayout %s' % parent)
+            else:
+                cmds.menu(rootMenu, l=LANGUAGE_MAP._MainMenus_.sound_red9_sound, p=parent, tearOff=True, allowOptionBoxes=True)
+                log.info('New Red9 Sound Menu added to current windows menuBar : %s' % parent)
+        # parent is a menuBar?
+        elif cmds.menuBarLayout(parent, exists=True):
+            cmds.menu(rootMenu, l=LANGUAGE_MAP._MainMenus_.sound_red9_sound, p=parent, tearOff=True, allowOptionBoxes=True)
+            log.info('New Red9 Sound Menu added to current windows menuBar : %s' % parent)
+        # parent is a menu already?
+        elif cmds.menu(parent, exists=True):
+            cmds.menuItem(rootMenu, l=LANGUAGE_MAP._MainMenus_.sound_red9_sound, sm=True, p=parent, allowOptionBoxes=True)
+            log.info('New Red9 Sound subMenu added to current Menu : %s' % parent)
+        else:
+            raise StandardError('given parent for Red9 Sound Menu is invalid %s' % parent)
+    
+#    if not parent:
+#        print 'new r9Sound Menu added'
+#        cmds.menu(rootMenu, l=LANGUAGE_MAP._MainMenus_.sound_red9_sound, tearOff=True, allowOptionBoxes=True)
+#    else:
+#        print 'new r9Sound Menu added to parent menu', parent
+#        cmds.menu(rootMenu, l=LANGUAGE_MAP._MainMenus_.sound_red9_sound, tearOff=True, allowOptionBoxes=True, parent=parent)
+        
     cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_offset_manager, p=rootMenu,
                   ann=LANGUAGE_MAP._MainMenus_.sound_offset_manager_ann,
                   c="import Red9.core.Red9_Audio as r9Audio;r9Audio.AudioToolsWrap().show()")
