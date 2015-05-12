@@ -50,14 +50,14 @@ import Red9_AnimationUtils as r9Anim
 # Language map is used for all UI's as a text mapping for languages
 LANGUAGE_MAP = r9Setup.LANGUAGE_MAP
 
-'''
-#=============================================
-NOTE: we can't import anything else here that imports this
-Module as it screw the Class Registry and we get Cyclic imports
-hence the r9Anim is LazyLoaded where needed
-import Red9_AnimationUtils as r9Anim
-#=============================================
-'''
+
+# =============================================
+# NOTE: we can't import anything else here that imports this
+# Module as it screw the Class Registry and we get Cyclic imports
+# hence the r9Anim is LazyLoaded where needed
+# import Red9_AnimationUtils as r9Anim
+# =============================================
+
 
 import logging
 logging.basicConfig()
