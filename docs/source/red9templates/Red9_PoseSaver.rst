@@ -16,6 +16,7 @@ or even poseFileA==poseFileB
 
    .. autosummary::
    
+      DataMap
       PoseData
       PosePointCloud
       PoseCompare
