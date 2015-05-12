@@ -531,15 +531,17 @@ class DataMap(object):
         :param useFilter: use the filterSettings or not.
         '''
         #push args to object - means that any poseHandler.py file has access to them
-        self.filepath=filepath
+        if filepath:
+            self.filepath=filepath
+            
         self.useFilter=useFilter
         if self.filepath:
-            log.debug('PosePath given : %s' % filepath)
+            log.debug('PosePath given : %s' % self.filepath)
             
         self.buildDataMap(nodes)
         
         if self.filepath:
-            self._writePose(filepath)
+            self._writePose(self.filepath)
             
             if storeThumbnail:
                 sel=cmds.ls(sl=True,l=True)
@@ -547,7 +549,7 @@ class DataMap(object):
                 r9General.thumbNailScreen(filepath,self.thumbnailRes[0],self.thumbnailRes[1])
                 if sel:
                     cmds.select(sel)
-        log.info('Data Saved Successfully to : %s' % filepath)
+        log.info('Data Saved Successfully to : %s' % self.filepath)
         
         
     @r9General.Timer
@@ -567,7 +569,9 @@ class DataMap(object):
             nodes=[nodes]  # cast to list for consistency
         
         #push args to object - means that any poseHandler.py file has access to them
-        self.filepath = filepath
+        if filepath:
+            self.filepath = filepath
+            
         self.useFilter = useFilter  # used in the getNodes call
         nodesToLoad = self._matchNodes_to_data(nodes)
         
@@ -755,7 +759,9 @@ class PoseData(DataMap):
         :param storeThumbnail: generate and store a thu8mbnail from the screen to go alongside the pose
         '''
         #push args to object - means that any poseHandler.py file has access to them
-        self.filepath=filepath
+        if filepath:
+            self.filepath=filepath
+            
         self.useFilter=useFilter
         if self.filepath:
             log.debug('PosePath given : %s' % self.filepath)
@@ -804,7 +810,10 @@ class PoseData(DataMap):
         self.relativeRots = relativeRots
         self.relativeTrans = relativeTrans
         self.PosePointCloud = None
-        self.filepath = filepath
+        
+        if filepath:
+            self.filepath=filepath
+            
         self.useFilter = useFilter  # used in the getNodes call
         self.maintainSpaces = maintainSpaces
         self.mayaUpAxis = r9Setup.mayaUpAxis()

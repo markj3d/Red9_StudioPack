@@ -3003,9 +3003,12 @@ class MetaRig(MetaClass):
         if r9Setup.has_pro_pack():
             from Red9.pro_pack.core.animation import AnimMap
             self.animMap=AnimMap()
+            self.animMap.filepath=filepath
             self.animMap.metaPose=True
             self.animMap.settings.incRoots=incRoots
-            self.animMap.saveData(self.mNode,filepath,storeThumbnail=False)
+            self.animMap.saveData(self.mNode,storeThumbnail=False)
+            
+            print self.animMap.filepath
             
     def loadAnimation(self, filepath, offset=0, incRoots=True):
         '''
@@ -3015,10 +3018,11 @@ class MetaRig(MetaClass):
         if r9Setup.has_pro_pack():
             from Red9.pro_pack.core.animation import AnimMap
             self.animMap=AnimMap()
+            self.animMap.filepath=filepath
             self.animMap.metaPose=True
             self.animMap.settings.incRoots=incRoots
-            self.animMap.offset=20
-            self.animMap.loadData(self.mNode,filepath)
+            self.animMap.offset=offset
+            self.animMap.loadData(self.mNode)
 
     def getAnimationRange(self, nodes=None, setTimeline=False):
         '''
