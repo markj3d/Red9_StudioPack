@@ -222,9 +222,9 @@ class DataMap(object):
     def _collectNodeData(self, node, key):
         '''
         To Be Overloaded : what data to push into the main dataMap 
-        for each node found collected
+        for each node found collected. This is the lowest level collect call
+        for each node in the array.
         '''
-        self._collectNodeData_keyframes(node,key)
         self._collectNodeData_attrs(node, key)
     
     def _buildBlock_info(self):
@@ -247,7 +247,7 @@ class DataMap(object):
     def _buildBlock_poseDict(self, nodes):
         '''
         Build the internal poseDict up from the given nodes. This is the
-        core of the Pose System
+        core of the Pose System and the main dataMap used to store and retrieve data
         '''
         getMirrorID=r9Anim.MirrorHierarchy().getMirrorCompiledID
         if self.metaPose:
@@ -261,7 +261,7 @@ class DataMap(object):
             
             mirrorID=getMirrorID(node)
             if mirrorID:
-                self.poseDict[key]['mirrorID']=mirrorID
+                self.poseDict[key]['mirrorID']=mirrorID  # add the mirrorIndex
             if self.metaPose:
                 self.poseDict[key]['metaData']=getMetaDict(node)  # metaSystem the node is wired too
 
@@ -269,7 +269,9 @@ class DataMap(object):
 
     def _buildBlocks_to_run(self, nodes):
         '''
-        To Be Overloaded : What capture routines to run in order to build the DataMap
+        To Be Overloaded : What capture routines to run in order to build the DataMap up.
+        Note that the self._buildBlock_poseDict(nodes) calls the self._collectNodeData per node
+        as a way of gathering what info to be stored against each node.
         '''
         self.poseDict={}
         self._buildBlock_info()
@@ -407,7 +409,7 @@ class DataMap(object):
         '''
         To Be Overloaded
         '''
-        self._applyData_keyframes()
+        self._applyData_attrs()
                   
     # Process the data -------------------------------------------------
                                               
@@ -522,7 +524,7 @@ class DataMap(object):
     @r9General.Timer
     def saveData(self, nodes, filepath=None, useFilter=True, storeThumbnail=True):
         '''
-        Entry point for the generic PoseSave.
+        Generic entry point for the Data Save.
         
         :param nodes: nodes to store the data against OR the rootNode if the 
             filter is active.
@@ -555,11 +557,11 @@ class DataMap(object):
     @r9General.Timer
     def loadData(self, nodes, filepath=None, useFilter=True, *args, **kws):
         '''
-        Entry point for the generic DataLoad.
+        Generic entry point for the Data Load.
         
         :param nodes:  if given load the data to only these. If given and filter=True 
             this is the rootNode for the filter.
-        :param filepath: posefile to load - if not given the pose is loaded from a 
+        :param filepath: file to load - if not given the pose is loaded from a 
             cached instance on this class.
         :param useFilter: If the pose has an active Filter_Settings block and this 
             is True then use the filter on the destination hierarchy.
@@ -774,7 +776,7 @@ class PoseData(DataMap):
             if storeThumbnail:
                 sel=cmds.ls(sl=True,l=True)
                 cmds.select(cl=True)
-                r9General.thumbNailScreen(self.filepath,self.thumbnailRes[0],self.thumbnailRes[1])
+                r9General.thumbNailScreen(self.filepath, self.thumbnailRes[0], self.thumbnailRes[1])
                 if sel:
                     cmds.select(sel)
         log.info('Pose Saved Successfully to : %s' % self.filepath)
