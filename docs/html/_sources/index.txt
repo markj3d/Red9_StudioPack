@@ -8,7 +8,7 @@ Welcome to Red9's documentation!
 
 Author : Mark Jackson 
 
-CEO : Red9 Consultancy Limited 
+Red9 Consultancy Limited 
 http://red9consultancy.com 
 
 Red9 was born out of frustration for the lack of this kind of in-depth support
