@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_Meta &mdash; Red9 v1.44 documentation</title>
+    <title>Red9_Meta &mdash; Red9 v2.0 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.44',
+        VERSION:     '2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 v1.44 documentation" href="../index.html" />
+    <link rel="top" title="Red9 v2.0 documentation" href="../index.html" />
     <link rel="next" title="Red9_PoseSaver" href="Red9_PoseSaver.html" />
     <link rel="prev" title="Red9_General" href="Red9_General.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="Red9_General.html" title="Red9_General"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -122,7 +122,7 @@ what each function is expected to return</p>
 <td>Base Class for Meta support. This manages all the attribute and class</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Meta.MetaRig" title="Red9.core.Red9_Meta.MetaRig"><tt class="xref py py-obj docutils literal"><span class="pre">MetaRig</span></tt></a>(*args,&nbsp;**kws)</td>
-<td>Initial test for a MetaRig labelling system</td>
+<td>Sub-class of Meta used as the back-bone of our internal rigging</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Meta.MetaRigSubSystem" title="Red9.core.Red9_Meta.MetaRigSubSystem"><tt class="xref py py-obj docutils literal"><span class="pre">MetaRigSubSystem</span></tt></a>(*args,&nbsp;**kws)</td>
 <td>SubClass of the MRig, designed to organize Rig sub-systems (ie L_ArmSystem, L_LegSystem..)</td>
@@ -202,7 +202,7 @@ flexibility over mClass attr rather than pure hard coding as it was previously</
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.registerMClassNodeMapping">
-<tt class="descname">registerMClassNodeMapping</tt><big>(</big><em>nodeTypes=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.registerMClassNodeMapping" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">registerMClassNodeMapping</tt><big>(</big><em>nodeTypes=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.registerMClassNodeMapping" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hook to allow you to extend the type of nodes included in all the
 getMeta searches. Allows you to expand into using nodes of any type
 as metaNodes</p>
@@ -308,6 +308,11 @@ all still valid by testing the MObjectHandles.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_Meta.removeFromCache">
+<tt class="descname">removeFromCache</tt><big>(</big><em>mNodes</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.removeFromCache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_Meta.resetCache">
 <tt class="descname">resetCache</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.resetCache" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -321,6 +326,12 @@ all still valid by testing the MObjectHandles.</p>
 <dt id="Red9.core.Red9_Meta.getMClassNodeCache">
 <tt class="descname">getMClassNodeCache</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.getMClassNodeCache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic getWrapper for all nodeTypes registered in the Meta_NodeType global</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_Meta.getMObject">
+<tt class="descname">getMObject</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.getMObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>base wrapper to get the MObject from node</p>
 </dd></dl>
 
 <dl class="function">
@@ -448,7 +459,8 @@ is valid in the metaNodeTypesRegistry</p>
 <dl class="class">
 <dt id="Red9.core.Red9_Meta.MClassNodeUI">
 <em class="property">class </em><tt class="descname">MClassNodeUI</tt><big>(</big><em>mTypes=None</em>, <em>mInstances=None</em>, <em>mClassGrp=None</em>, <em>closeOnSelect=False</em>, <em>funcOnSelection=None</em>, <em>sortBy='byClass'</em>, <em>allowMulti=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MClassNodeUI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simple UI to display all MetaNodes in the scene</p>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Simple UI to display all MetaNodes in the scene</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -588,6 +600,14 @@ if this test fails, ie the scene has been reloaded, then use the dagPath to refi
 and refil the mNode property back in.... maybe??</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaClass.isSystemRoot">
+<tt class="descname">isSystemRoot</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.isSystemRoot" title="Permalink to this definition">¶</a></dt>
+<dd><p>used by the getConnectedMetaSystemRoot call to identify if this
+node is a top system node. Having his as an attr allows us to designate
+certain subsystems as root nodes in their own right. Ie, Facial controlBoard</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="Red9.core.Red9_Meta.MetaClass.mNode">
 <tt class="descname">mNode</tt><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.mNode" title="Permalink to this definition">¶</a></dt>
@@ -697,6 +717,11 @@ TODO: expand the Type support here</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaClass.shortName">
+<tt class="descname">shortName</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.shortName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.select">
 <tt class="descname">select</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.select" title="Permalink to this definition">¶</a></dt>
 <dd><p>args and kws are now passed through into the Maya select call</p>
@@ -743,16 +768,33 @@ will also delete all other connected networks...BIG DEAL. AD are looking into th
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.core.Red9_Meta.MetaClass.nameSpace">
-<tt class="descname">nameSpace</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.nameSpace" title="Permalink to this definition">¶</a></dt>
-<dd><p>If the namespace is nested this will return a list where
-[-1] is the direct namespace of the node</p>
+<dt id="Red9.core.Red9_Meta.MetaClass.referenceNode">
+<tt class="descname">referenceNode</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.referenceNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>if referenced return the referenceNode itself</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.core.Red9_Meta.MetaClass.shortName">
-<tt class="descname">shortName</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.shortName" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.core.Red9_Meta.MetaClass.referencePath">
+<tt class="descname">referencePath</tt><big>(</big><em>wcn=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.referencePath" title="Permalink to this definition">¶</a></dt>
+<dd><p>if referenced return the referenced filepath</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaClass.nameSpace">
+<tt class="descname">nameSpace</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.nameSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>This flag has been modified to return just the direct namespace
+of the node, not all nested namespaces if found. Now returns a string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaClass.nameSpaceFull">
+<tt class="descname">nameSpaceFull</tt><big>(</big><em>asList=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.nameSpaceFull" title="Permalink to this definition">¶</a></dt>
+<dd><p>the namespace call has been modified to only return the single 
+direct namespace of a node, not the nested. This new func will
+return the namespace in it&#8217;s entirity either as a list or a 
+catenated string
+:param asList: either return the namespaces in a list or as a catenated string (default)</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.isChildNode">
@@ -984,6 +1026,7 @@ in generic meta functions.</p>
 <li><strong>cAttrs</strong> &#8211; only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)</li>
 <li><strong>nAttrs</strong> &#8211; search returned MayaNodes for given set of attrs and only return matched nodes</li>
 <li><strong>asMeta</strong> &#8211; return instantiated mNodes regardless of type</li>
+<li><strong>asMap</strong> &#8211; return the data as a map such that {mNode.plugAttr:[nodes], mNode.plugAttr:[nodes]}</li>
 </ul>
 </td>
 </tr>
@@ -1078,7 +1121,9 @@ MetaRig, all connections and all nodes. Use CAREFULLY!</p>
 <dt id="Red9.core.Red9_Meta.MetaRig">
 <em class="property">class </em><tt class="descname">MetaRig</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><tt class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></tt></a></p>
-<p>Initial test for a MetaRig labelling system</p>
+<p>Sub-class of Meta used as the back-bone of our internal rigging
+systems. This is the core of how we hook all our tools to meta
+in a seamless manner and bind some core functionality.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1141,7 +1186,7 @@ by 180 to get left and right working you can still do so.</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.getChildren">
-<tt class="descname">getChildren</tt><big>(</big><em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=</em><span class="optional">[</span><span class="optional">]</span>, <em>nAttrs=</em><span class="optional">[</span><span class="optional">]</span>, <em>asMeta=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getChildren" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">getChildren</tt><big>(</big><em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=</em><span class="optional">[</span><span class="optional">]</span>, <em>nAttrs=</em><span class="optional">[</span><span class="optional">]</span>, <em>asMeta=False</em>, <em>asMap=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getChildren" title="Permalink to this definition">¶</a></dt>
 <dd><p>Massively important bit of code, this is used by most bits of code
 to find the child controllers linked to this metaRig instance.</p>
 <div class="admonition note">
@@ -1406,6 +1451,37 @@ a given poseFile. This checks against the &#8216;skeletonDict&#8217;</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRig.nodeVisibility">
+<tt class="descname">nodeVisibility</tt><big>(</big><em>state</em>, <em>skip=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.nodeVisibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple wrapper to hide all ctrls in the rig via their shapeNodes
+lodVisibility so it doesn&#8217;t interfer with any display layers etc</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; bool to pass to the lodVisibility attr</li>
+<li><strong>skip</strong> &#8211; [] child attrs on the mNode to skip during the process allowing certain controllers not to be effected</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRig.hideNodes">
+<tt class="descname">hideNodes</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.hideNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrap over the nodeVisibility to set False</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRig.unHideNodes">
+<tt class="descname">unHideNodes</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.unHideNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrap over the nodeVisibility to set True</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.saveAttrMap">
 <tt class="descname">saveAttrMap</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.saveAttrMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>store AttrMap to the metaRig, saving the chBox state of ALL attrs for ALL nodes in the hierarchy</p>
@@ -1442,18 +1518,34 @@ a given poseFile. This checks against the &#8216;skeletonDict&#8217;</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.saveAnimation">
-<tt class="descname">saveAnimation</tt><big>(</big><em>filepath</em>, <em>output='config'</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.saveAnimation" title="Permalink to this definition">¶</a></dt>
-<dd><p>DEV TESTS ONLY TO NOT USE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-test for an animSaver idea, follows the pose formatting, maybe we&#8217;ll wrap all
-of this inside the poseHandler, that way all the logic for psoes is maintained and
-we just overload the actual data block that currnelty just gets the static attr
-DEV TESTS ONLY TO NOT USE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
+<tt class="descname">saveAnimation</tt><big>(</big><em>filepath</em>, <em>incRoots=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.saveAnimation" title="Permalink to this definition">¶</a></dt>
+<dd><p>PRO_PACK : Binding of the animMap format for storing animation data out to file</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.loadAnimation">
-<tt class="descname">loadAnimation</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descname">loadAnimation</tt><big>(</big><em>filepath</em>, <em>offset=0</em>, <em>incRoots=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation" title="Permalink to this definition">¶</a></dt>
+<dd><p>PRO_PACK : Binding of the animMap format for loading animation data from
+an r9Anim file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRig.getAnimationRange">
+<tt class="descname">getAnimationRange</tt><big>(</big><em>nodes=None</em>, <em>setTimeline=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getAnimationRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the extend of the animation range for this rig and / or the given controllers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; if given only retunr the extent of the animation data from the given nodes</li>
+<li><strong>setTimeLine</strong> &#8211; if True set the playback timeranges also, default=False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
@@ -1585,7 +1677,7 @@ if HUD node already exists this will simply add more attrs to it</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.hardKillMetaHUD">
-<tt class="descname">hardKillMetaHUD</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.hardKillMetaHUD" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">hardKillMetaHUD</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Meta.hardKillMetaHUD" title="Permalink to this definition">¶</a></dt>
 <dd><p>If the MetaNodes are left behind in a scene and you can&#8217;t remove them
 then this is a hard coded kill to remove the hud element. This situation 
 happens if you&#8217;d deleted the MetaHUDNode but left the draw on, meaning
@@ -1847,7 +1939,7 @@ any registered HUD is killed off</p>
         <li class="right" >
           <a href="Red9_General.html" title="Red9_General"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

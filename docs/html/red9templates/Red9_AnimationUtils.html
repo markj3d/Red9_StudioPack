@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_AnimationUtils &mdash; Red9 v1.44 documentation</title>
+    <title>Red9_AnimationUtils &mdash; Red9 v2.0 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.44',
+        VERSION:     '2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 v1.44 documentation" href="../index.html" />
+    <link rel="top" title="Red9 v2.0 documentation" href="../index.html" />
     <link rel="next" title="Red9_Audio" href="Red9_Audio.html" />
     <link rel="prev" title="Welcome to Red9’s documentation!" href="../index.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="../index.html" title="Welcome to Red9’s documentation!"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -179,6 +179,24 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 </tr>
 </tbody>
 </table>
+<dl class="data">
+<dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACK">
+<tt class="descname">RED_ANIMATION_UI_OPENCALLBACK</tt><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback globals so you can fire a command prior to the UI opening,
+we use this internally to fire an asset sync call on our project pose library
+and to setup some additional paths.</p>
+<dl class="docutils">
+<dt>def myProjectCallback(cls)</dt>
+<dd>cls.poseHandlerPaths=[&#8216;MyProjects/resources/poseHandlers&#8217;]
+cls.posePathProject =&#8217;My_projects/global/project/pose/lib&#8217;</dd>
+</dl>
+<p>r9Anim.RED_ANIMATION_UI_OPENCALLBACK = myProjectCallback</p>
+<p>NOTE:: the function call bound to the callback is passed the current instance of the animUI class
+as an arg so you can modify as you need. Also when the PoseUI popup menu is built, IF the internal path
+cls.poseHandlerPaths is valid then we bind into that popup all valid poseHandler.py files
+found the given path. This allow you to add custom handler types and expose them through the UI directly.</p>
+</dd></dl>
+
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.checkRunTimeCmds">
 <tt class="descname">checkRunTimeCmds</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.checkRunTimeCmds" title="Permalink to this definition">¶</a></dt>
@@ -245,6 +263,14 @@ ie: pointConstraint.target.targetWeight</p>
 <dt id="Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes">
 <tt class="descname">getAnimLayersFromGivenNodes</tt><big>(</big><em>nodes</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>return all animLayers associated with the given nodes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_AnimationUtils.animRangeFromNodes">
+<tt class="descname">animRangeFromNodes</tt><big>(</big><em>nodes</em>, <em>setTimeline=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.animRangeFromNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the extend of the animation range for the given objects
+:param nodes: nodes to examine for animation data
+:param setTimeLine: whether we should set the playback timeline to the extent of the found anim data</p>
 </dd></dl>
 
 <dl class="function">
@@ -1115,7 +1141,7 @@ in the sameNamespace as the controllers.</li>
         <li class="right" >
           <a href="../index.html" title="Welcome to Red9’s documentation!"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

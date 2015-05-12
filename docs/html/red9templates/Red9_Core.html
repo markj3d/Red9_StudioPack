@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_CoreUtils &mdash; Red9 v1.44 documentation</title>
+    <title>Red9_CoreUtils &mdash; Red9 v2.0 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.44',
+        VERSION:     '2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 v1.44 documentation" href="../index.html" />
+    <link rel="top" title="Red9 v2.0 documentation" href="../index.html" />
     <link rel="next" title="Red9_General" href="Red9_General.html" />
     <link rel="prev" title="Red9_Audio" href="Red9_Audio.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="Red9_Audio.html" title="Red9_Audio"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -189,6 +189,27 @@ it back to it&#8217;s original state so we pass it through this</p>
 <dt id="Red9.core.Red9_CoreUtils.validateString">
 <tt class="descname">validateString</tt><big>(</big><em>strText</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.validateString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to validate that a string has no illegal characters</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.filterListByString">
+<tt class="descname">filterListByString</tt><big>(</big><em>input_list</em>, <em>filter_string</em>, <em>matchcase=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.filterListByString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic way to filter a list by a given string input. This is so that all
+the filtering used in the UI&#8217;s is consistent. Used by the poseSaver, facialUI,
+MetaUI and many others.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>iniput_list</strong> &#8211; list of strings to be filtered</li>
+<li><strong>filter_string</strong> &#8211; string to use in the filter, supports comma separated search strings</li>
+<li><strong>matchcase</strong> &#8211; whether to match or ignore case sensitivity</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -542,6 +563,13 @@ this is the CTRL_Main controller which should be Top World Space</blockquote>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_CoreUtils.FilterNode.processFilter">
+<tt class="descname">processFilter</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode.processFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>replace the &#8216;P&#8217; in the function call but not depricating it just yet
+as too much code both internally and externally relies on this method</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_CoreUtils.FilterNode.ProcessFilter">
 <tt class="descname">ProcessFilter</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode.ProcessFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uses intersection to allow you to process multiple search flags for
@@ -571,7 +599,7 @@ Uses the FilterNode_Settings object for all args such that:</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh">
-<tt class="descname">getBlendTargetsFromMesh</tt><big>(</big><em>node</em>, <em>asList=True</em>, <em>returnAll=False</em>, <em>levels=1</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">getBlendTargetsFromMesh</tt><big>(</big><em>node</em>, <em>asList=True</em>, <em>returnAll=False</em>, <em>levels=4</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh" title="Permalink to this definition">¶</a></dt>
 <dd><p>quick func to return the blendshape targets found from a give mesh&#8217;s connected blendshape&#8217;s</p>
 <p>TODO: missing index&#8217;s used to be an issue if you&#8217;d deleted a target Maya would leave the 
 index free resulting in blank targets, doesn&#8217;t seem to do that now?? Also what do we 
@@ -1102,7 +1130,7 @@ apply that as an offset matrix to a given list of nodes.</p>
         <li class="right" >
           <a href="Red9_Audio.html" title="Red9_Audio"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

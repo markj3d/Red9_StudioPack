@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_General &mdash; Red9 v1.44 documentation</title>
+    <title>Red9_General &mdash; Red9 v2.0 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.44',
+        VERSION:     '2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 v1.44 documentation" href="../index.html" />
+    <link rel="top" title="Red9 v2.0 documentation" href="../index.html" />
     <link rel="next" title="Red9_Meta" href="Red9_Meta.html" />
     <link rel="prev" title="Red9_CoreUtils" href="Red9_Core.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="Red9_Core.html" title="Red9_CoreUtils"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -110,7 +110,7 @@ This includes most of the context managers and decorators.</p>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_General.AnimationContext" title="Red9.core.Red9_General.AnimationContext"><tt class="xref py py-obj docutils literal"><span class="pre">AnimationContext</span></tt></a>()</td>
 <td>Simple Context Manager for restoring Animation settings</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_General.undoContext" title="Red9.core.Red9_General.undoContext"><tt class="xref py py-obj docutils literal"><span class="pre">undoContext</span></tt></a></td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_General.undoContext" title="Red9.core.Red9_General.undoContext"><tt class="xref py py-obj docutils literal"><span class="pre">undoContext</span></tt></a>([initialUndo,&nbsp;undoFuncCache,&nbsp;...])</td>
 <td>Simple Context Manager for chunking the undoState</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_General.ProgressBarContext" title="Red9.core.Red9_General.ProgressBarContext"><tt class="xref py py-obj docutils literal"><span class="pre">ProgressBarContext</span></tt></a>([maxValue,&nbsp;interruptable])</td>
@@ -198,9 +198,41 @@ visualize the data using &#8216;runsnakerun&#8217; to view the profiles and debu
 
 <dl class="class">
 <dt id="Red9.core.Red9_General.undoContext">
-<em class="property">class </em><tt class="descname">undoContext</tt><a class="headerlink" href="#Red9.core.Red9_General.undoContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">undoContext</tt><big>(</big><em>initialUndo=False</em>, <em>undoFuncCache=</em><span class="optional">[</span><span class="optional">]</span>, <em>undoDepth=1</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.undoContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Simple Context Manager for chunking the undoState</p>
+<p>If initialUndo is True then the context manager will manage what to do on entry with
+the undoStack. The idea is that if True the code will look at the last functions in the
+undoQueue and if any of those mantch those in the undoFuncCache, it&#8217;ll undo them to the
+depth given. 
+WHY?????? This is specifically designed for things like floatFliders where you&#8217;ve
+set a function to act on the &#8216;dc&#8217; flag, (drag command) by passing that func through this
+each drag will only go into the stack once, enabling you to drag as much as you want
+and return to the initial state, pre ALL drags, in one chunk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>initialUndo</strong> &#8211; on first process whether undo on entry to the context manager</li>
+<li><strong>undoFuncCache</strong> &#8211; only if initialUndo = True : functions to catch in the undo stack</li>
+<li><strong>undoDepth</strong> &#8211; only if initialUndo = True : depth of the undo stack to go to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When adding funcs to this you CAN&#8217;T call the &#8216;dc&#8217; command on any slider with a lambda func,
+it has to call a specific func to catch in the undoStack. See Red9_AnimationUtils.FilterCurves
+code for a live example of this setup.</p>
+</div>
+<dl class="method">
+<dt id="Red9.core.Red9_General.undoContext.undoCall">
+<tt class="descname">undoCall</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.undoContext.undoCall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -423,6 +455,60 @@ Once downloaded drop it here Red9/pakcages/diffMerge.exe</p>
 </div>
 </dd></dl>
 
+<dl class="function">
+<dt id="Red9.core.Red9_General.writeJson">
+<tt class="descname">writeJson</tt><big>(</big><em>filepath=None</em>, <em>content=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.writeJson" title="Permalink to this definition">¶</a></dt>
+<dd><p>write json file to disk</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filepath</strong> &#8211; file pat to drive where to write the file</li>
+<li><strong>content</strong> &#8211; file content</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.readJson">
+<tt class="descname">readJson</tt><big>(</big><em>filepath=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.readJson" title="Permalink to this definition">¶</a></dt>
+<dd><p>file pat to drive where to read the file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filepath</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.core.Red9_General.abcIndex">
+<em class="property">class </em><tt class="descname">abcIndex</tt><big>(</big><em>lower=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.abcIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Alphabetic iterator</p>
+<dl class="method">
+<dt id="Red9.core.Red9_General.abcIndex.next">
+<tt class="descname">next</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_General.abcIndex.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return and Alphabetic index</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -474,7 +560,7 @@ Once downloaded drop it here Red9/pakcages/diffMerge.exe</p>
         <li class="right" >
           <a href="Red9_Core.html" title="Red9_CoreUtils"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -6,13 +6,13 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Red9_Audio &mdash; Red9 v1.44 documentation</title>
+    <title>Red9_Audio &mdash; Red9 v2.0 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.44',
+        VERSION:     '2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -21,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 v1.44 documentation" href="../index.html" />
+    <link rel="top" title="Red9 v2.0 documentation" href="../index.html" />
     <link rel="next" title="Red9_CoreUtils" href="Red9_Core.html" />
     <link rel="prev" title="Red9_AnimationUtils" href="Red9_AnimationUtils.html" /> 
   </head>
@@ -41,7 +41,7 @@
         <li class="right" >
           <a href="Red9_AnimationUtils.html" title="Red9_AnimationUtils"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -341,7 +341,7 @@ NOte this is the internal timecode plus the length of the files</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.offsetRipple">
-<tt class="descname">offsetRipple</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.offsetRipple" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">offsetRipple</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.offsetRipple" title="Permalink to this definition">¶</a></dt>
 <dd><p>offset all audioNodes so that they ripple in the
 order of self.audioNodes</p>
 </dd></dl>
@@ -486,41 +486,31 @@ NOT the Maya audioNode length as it&#8217;s invalid under batch mode!</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.isBwav">
 <tt class="descname">isBwav</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.isBwav" title="Permalink to this definition">¶</a></dt>
-<dd><p>validate if the given source wav is a BWav or not</p>
+<dd><p>PRO PACK : validate if the given source Wav is a BWav or not</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_getHeader">
 <tt class="descname">bwav_getHeader</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_getHeader" title="Permalink to this definition">¶</a></dt>
-<dd><p>retrieve the BWav header info and push it into an internal dic
-that you can inspect self.bwav_HeaderData. This is designed to be cached
-against this instance of the audioNode object.
-Note that this code uses a binary seek to first find the starting chunk 
-in the binary file where the &#8216;bext&#8217; data is written.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">We could, if we could ensure it was available, use ffprobe.exe (part of the ffmpeg project)
-This would also cover most media file formats including Mov, avi etc 
-There is coverage for this in this module getMediaFileMetaData() does just that</p>
-</div>
+<dd><p>PRO PACK : get the internal BWav header data from the wav if found</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_timecodeMS">
 <tt class="descname">bwav_timecodeMS</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_timecodeMS" title="Permalink to this definition">¶</a></dt>
-<dd><p>read the internal timecode reference form the bwav and convert that number into milliseconds</p>
+<dd><p>PRO PACK : read the internal timecode reference from the bwav and convert that number into milliseconds</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_timecodeReference">
 <tt class="descname">bwav_timecodeReference</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_timecodeReference" title="Permalink to this definition">¶</a></dt>
-<dd><p>internal timeReference in the bwav</p>
+<dd><p>PRO PACK : if is BWaw return the internal timeReference</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_timecodeFormatted">
 <tt class="descname">bwav_timecodeFormatted</tt><big>(</big><em>smpte=True</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_timecodeFormatted" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert milliseconds into timecode</p>
+<dd><p>PRO PACK : if is Bwav return the internal timecode &amp; convert from milliseconds into timecode</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -538,7 +528,7 @@ There is coverage for this in this module getMediaFileMetaData() does just that<
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_sync_to_Timecode">
 <tt class="descname">bwav_sync_to_Timecode</tt><big>(</big><em>offset=0</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
-<dd><p>given that self is a Bwav and has timecode reference, sync it&#8217;s position
+<dd><p>PRO PACK : given that self is a Bwav and has timecode reference, sync it&#8217;s position
 in the Maya timeline to match</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -663,6 +653,11 @@ track was compiled from</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioToolsWrap.offsetRipple">
+<tt class="descname">offsetRipple</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.offsetRipple" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavsRelativeToo">
 <tt class="descname">sync_bwavsRelativeToo</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavsRelativeToo" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -670,6 +665,11 @@ track was compiled from</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavs">
 <tt class="descname">sync_bwavs</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioToolsWrap.timecodeHud">
+<tt class="descname">timecodeHud</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.timecodeHud" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -743,7 +743,7 @@ More info: <a class="reference external" href="http://www.ffmpeg.org/ffprobe.htm
         <li class="right" >
           <a href="Red9_AnimationUtils.html" title="Red9_AnimationUtils"
              >previous</a> |</li>
-        <li><a href="../index.html">Red9 v1.44 documentation</a> &raquo;</li> 
+        <li><a href="../index.html">Red9 v2.0 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
