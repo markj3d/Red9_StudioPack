@@ -18,7 +18,7 @@ THIS SHOULD NOT REQUIRE ANY OF THE RED9.core modules
 
 
 __author__ = 'Mark Jackson'
-__buildVersionID__ = 1.5
+__buildVersionID__ = 2.0
 installedVersion= False
 
 
