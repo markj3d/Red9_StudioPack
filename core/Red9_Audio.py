@@ -19,6 +19,7 @@ from functools import partial
 import os
 import struct
 import math
+import re
 
 import Red9_General as r9General
 import Red9.startup.setup as r9Setup
@@ -44,12 +45,13 @@ except:
 
 class Timecode(object):
 
-    count = 'timecode_count'  # linear key-per-frame data used to keep track of timecode during animation
-    samplerate = 'timecode_samplerate'  # fps used to generate the linear count curve
-    ref = 'timecode_ref'  # milliseconds start point used as the initial reference
+    def __init__(self):
+        self.count = 'timecode_count'  # linear key-per-frame data used to keep track of timecode during animation
+        self.samplerate = 'timecode_samplerate'  # fps used to generate the linear count curve
+        self.ref = 'timecode_ref'  # milliseconds start point used as the initial reference
+        self.timecodedata = ''  # this gets set by the UI below
     
-    @staticmethod
-    def getTimecode_from_node(node):
+    def getTimecode_from_node(self, node):
         '''
         wrapper method to get the timecode back from a given node
         :param node: node containing correctly formatted timecode data
@@ -57,21 +59,67 @@ class Timecode(object):
         .. note:
                 the node passed in has to have the correctly formatted timecode data to compute
         '''
-        node = r9Meta.MetaClass(node)
-        if node.hasAttr(Timecode.ref):
-            ms = (getattr(node, Timecode.ref) + ((float(getattr(node, Timecode.count)) / getattr(node,Timecode.samplerate)) * 1000))
+        node = r9Meta.MetaClass(self, node)
+        if node.hasAttr(self.ref):
+            ms = (getattr(node, self.ref) + ((float(getattr(node, self.count)) / getattr(node,self.samplerate)) * 1000))
             return milliseconds_to_Timecode(ms)
         
-    @staticmethod
-    def addTimecode_to_node(node):
+    def addTimecode_to_node(self, node):
         '''
         wrapper to add the timecode attrs to a node ready for propagating
         '''
         node = r9Meta.MetaClass(node)
-        node.addAttr(Timecode.count, attrType='float')
-        node.addAttr(Timecode.samplerate, attrType='float')
-        node.addAttr(Timecode.ref, attrType='int')
+        node.addAttr(self.count, attrType='float')
+        node.addAttr(self.samplerate, attrType='float')
+        node.addAttr(self.ref, attrType='int')
 
+    def enterTimecodeUI(self, buttonlabel='set', buttonfunc=None):
+        '''
+        generic UI to enter timecode
+        
+        :param buttonlabel' = label to add to the button
+        :param buttonfunc' = function to bind to the button on exit
+        '''
+        self.win='Timecode_UI'
+        if cmds.window(self.win, exists=True):
+            cmds.deleteUI(self.win, window=True)
+        cmds.window(self.win, title=self.win)
+        cmds.columnLayout(adjustableColumn=True)
+        cmds.text(label='Timecode Reference')
+        cmds.separator(h=10, style='in')
+        cmds.rowColumnLayout(nc=8)
+        cmds.text(label='  smpte :  ')
+        cmds.textField('tchrs', tx='00', w=40, cc=lambda x:self.__uicb_checkfield('tchrs'))
+        cmds.text(label=' : ')
+        cmds.textField('tcmins', tx='00', w=40, cc=lambda x:self.__uicb_checkfield('tcmins'))
+        cmds.text(label=' : ')
+        cmds.textField('tcsecs', tx='00', w=40, cc=lambda x:self.__uicb_checkfield('tcsecs'))
+        cmds.text(label=' : ')
+        cmds.textField('tcfrms', tx='00', w=40, cc=lambda x:self.__uicb_checkfield('tcfrms'))
+        cmds.setParent('..')
+        cmds.button(label=buttonlabel, command=lambda x:self.__uicb_gatherTimecode(buttonfunc))
+        cmds.showWindow(self.win)
+
+    def __uicb_checkfield(self, field, *args):
+        '''
+        make sure we only allow numeric entries
+        '''
+        data=cmds.textField(field, q=True, tx=True)
+        rc=re.compile(r"[A-Za-z_]\w*")
+        if len(data)>2 or rc.search(data):
+            raise IOError('timecode entries must contain only numbers in the format 00:00:00:00')
+
+    def __uicb_gatherTimecode(self, buttonfunc, *args):
+        self.timecodedata= '%s:%s:%s:%s' % (cmds.textField('tchrs', q=True, tx=True),
+                                cmds.textField('tcmins', q=True, tx=True),
+                                cmds.textField('tcsecs', q=True, tx=True),
+                                cmds.textField('tcfrms', q=True, tx=True))
+        if cmds.window(self.win, exists=True):
+            cmds.deleteUI(self.win, window=True)
+        buttonfunc(self.timecodedata)
+        return self.timecodedata
+        
+        
 
 def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=None):
         '''
@@ -940,12 +988,16 @@ class AudioToolsWrap(object):
         cmds.button(label='Sync Bwavs to Internal Timecode',
                     ann='Sync audio nodes to their originally recorded internal timecode reference',
                     command=self.sync_bwavs)
-        cmds.separator(h=10, style='in')
-        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 100)], columnSpacing=[(2,20)])
-        cmds.button(label='Set Timecode Ref',
+        cmds.separator(h=15, style='in')
+        cmds.text('bwavRefTC', label='No Timecode Reference Set')
+        cmds.separator(h=5, style='none')
+        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 140),(2, 140)])
+        cmds.button(label='Timecode Ref from Node',
                     ann="Set the audio node to use as the reference timecode so all other become relative to this offset",
                     command=self.__uicb_setReferenceBwavNode)
-        cmds.text('bwavRefTC', label='No Reference Set')
+        cmds.button(label='Manual Timecode Ref',
+                    ann="Manually add the timecode reference",
+                    command=self.__uicb_setReferenceBwavTCfromUI)
         cmds.setParent('..')
         cmds.button(label='Sync Bwavs Relative to Selected',
                     ann="Sync audio nodes via their internal timecodes such that they're relative to that of the given reference",
@@ -963,7 +1015,7 @@ class AudioToolsWrap(object):
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                              c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
         cmds.showWindow(self.win)
-        cmds.window(self.win, e=True, widthHeight=(290, 350))
+        cmds.window(self.win, e=True, widthHeight=(290, 380))
 
     def __uicb_cacheAudioNodes(self,*args):
         self.audioHandler=AudioHandler()
@@ -989,12 +1041,12 @@ class AudioToolsWrap(object):
         set the internal reference offset used to offset the audionode. 
         
         .. note:
-                If you pass this a bwav then it caches that bwav for use as the offset. If you 
-                pass it a node, and that node has the timecode attrs, then it caches the offset itself.
+                If you pass this a bwav then it caches that bwav for use as the offset. 
+                If you pass it a node, and that node has the timecode attrs, then it caches the offset itself.
         '''
         selected=cmds.ls(sl=True, type='audio')
-        self.__bwav_reference=None
-        self.__cached_tc_offset=None
+        self.__bwav_reference = None
+        self.__cached_tc_offset = None
         if selected:
             if not len(selected)==1:
                 log.warning("Please only select 1 piece of Audio to use for reference")
@@ -1009,7 +1061,7 @@ class AudioToolsWrap(object):
         else:
             selected = cmds.ls(sl=True)
             if len(selected)==1:
-                relativeTC = Timecode.getTimecode_from_node(cmds.ls(sl=True)[0])
+                relativeTC = Timecode().getTimecode_from_node(cmds.ls(sl=True)[0])
                 actualframe = cmds.currentTime(q=True)
                 self.__cached_tc_offset = actualframe - timecode_to_frame(relativeTC)
                 cmds.text('bwavRefTC', edit=True,
@@ -1017,6 +1069,15 @@ class AudioToolsWrap(object):
             else:
                 log.warning("No reference audio track selected for reference")
             return
+
+    def __uicb_setTCfromUI(self, tc):
+        actualframe = cmds.currentTime(q=True)
+        self.__cached_tc_offset = actualframe - timecode_to_frame(tc)
+        cmds.text('bwavRefTC', edit=True,
+                          label='frame %s == %s' % (cmds.currentTime(q=True), tc))
+        
+    def __uicb_setReferenceBwavTCfromUI(self, *args):
+        Timecode().enterTimecodeUI(buttonfunc=self.__uicb_setTCfromUI)
        
     def sync_bwavsRelativeToo(self, *args):
         self.audioHandler=AudioHandler()
