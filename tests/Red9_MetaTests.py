@@ -659,8 +659,7 @@ class Test_MetaClass():
         node.fltTest*=2
         assert node.fltTest == 3.0
 
-        
-        
+
     def test_attributeHandling_MessageAttr(self):
         '''
         test the messageLink handling in the __setattr__ block and addAttr
@@ -752,7 +751,25 @@ class Test_MetaClass():
         assert mLambert.color==(1.0, 0.0, 0.5)
         assert cmds.getAttr('lambert1.color')==[(1.0, 0.0, 0.5)]
 
+    def test_referenceHandler(self):
+        #TODO: Fill Test
+        #referenceNode
+        #referencePath
+        #nameSpace
+        #nameSpaceFull
+        #nameSpaceFull(asList=True)
+        pass
+    
+    def test_isSystemRoot(self):
+        #TODO: Fill Test
+        pass
 
+    def test_renameChildLinks(self):
+        #TODO: Fill Test
+        pass
+    
+    
+    
 class Test_Generic_SearchCalls():
     '''
     Basic Generic search calls at scene level
@@ -812,7 +829,6 @@ class Test_Generic_SearchCalls():
         nodes=r9Meta.getMetaNodes(dataType=None, mTypes=[r9Meta.MetaRig])
         assert nodes==['MetaRig_Test']
         
-        
     def test_getMetaNodes_mInstances(self):
         #mInstances tests
         nodes=r9Meta.getMetaNodes(dataType=None, mInstances=['MetaRig'])
@@ -841,6 +857,9 @@ class Test_Generic_SearchCalls():
     def test_getMetaNodes_mAttrs(self):
         assert r9Meta.getMetaNodes(mAttrs='version=1')[0].mNodeID=='MetaRig_Test'
                    
+    def test_getMetaNodes_mGrps(self):
+        #TODO: Fill Test
+        pass
                
 class Test_MetaRig():
     
@@ -1029,13 +1048,22 @@ class Test_MetaRig():
     def test_getNodeConnectionMetaDataMap(self):
         assert self.mRig.getNodeConnectionMetaDataMap('|World_Ctrl|L_Foot_grp|L_Foot_Ctrl') == {'metaAttr': u'CTRL_L_Foot', 'metaNodeID': u'L_LegSystem'}
     
+    def test_getNodeConnectionMetaDataMap_mTypes(self):
+        #TODO: Fill Test
+        #assert self.mRig.getNodeConnectionMetaDataMap(mTypes=??)
+        pass
+                        
     def test_getNodeConnections(self):
         assert self.mRig.L_Leg_System.getNodeConnections('|World_Ctrl|L_Foot_grp|L_Foot_Ctrl') == ['CTRL_L_Foot']
         
     def test_getChildren_mAttrs(self):
         #TODO: Fill Test
         pass
-          
+    
+    def test_getChildren_asMap(self):
+        #TODO: Fill Test
+        pass
+    
     def test_getConnectedMetaNodes(self):
         #TODO: Fill Test
         pass
@@ -1052,7 +1080,45 @@ class Test_MetaRig():
         #TODO: Fill Test
         pass
     
-           
+    def test_getSkeletonRoots(self):
+        #TODO: Fill Test
+        pass
+    
+    def test_addSupportNode(self):
+        #TODO: Fill Test
+        pass
+    
+    def test_set_ctrlColour(self):
+        #TODO: Fill Test
+        pass
+    
+    def test_mirrorDataHandling(self):
+        #TODO: Fill Test
+        #loadMirrorDataMap
+        #getMirrorData
+        #getMirror_opposites
+        #getMirror_ctrlSets
+        #mirror
+        pass
+    
+    def test_poseCache(self):
+        #poseCacheStore
+        #poseCacheLoad
+        #poseCompare
+        pass
+    
+    def test_nodeVisibility(self):
+        #nodeVisibility
+        #hideNodes
+        #unHideNodes
+        pass
+        
+    def test_attrMap(self):
+        #loadAttrMap
+        #saveAttrMap
+        pass
+    
+    
 class Test_MetaNetworks():
     '''
     Test the network walking and get commands on a larger network
