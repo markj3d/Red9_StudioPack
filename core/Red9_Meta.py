@@ -653,30 +653,53 @@ def getConnectedMetaNodes(nodes, source=True, destination=True, mTypes=[], mInst
     else:
         return list(set(mNodes))
         
-def getConnectedMetaSystemRoot(node, **kws):
+def getConnectedMetaSystemRoot(node, mTypes=[], ignoreTypes=[], **kws):
     '''
     From a given node see if it's part of a MetaData system, if so
     walk up the parent tree till you get to top meta node and return the class.
+    
+    :param ignoreTypes: if the given mClass node types are found to be systemRoots ignore them
+        why, lets say we have a system with several mNodes that are technically the head of the 
+        system and you need to skip a given type.
+    :param mTypes: like the rest of Meta, if you give it a specific mType to find as root it will do 
+        just that if that node is a root node in the system.
+        
+    .. note::
+        this walks upstream only from the given node, so if you effectively have multiple root nodes
+        in the system but wired to different parts of the network, and when walking upstream from the given
+        you only get to one of ththose because of the network wiring, then that is correct.
     '''
     mNodes=getConnectedMetaNodes(node,**kws)
     if not mNodes:
         return
     else:
         mNode=mNodes[0]
-    if type(mNode)==MetaRig:
+    if not mTypes and type(mNode)==MetaRig:
         return mNode
     else:
         runaways=0
-        while mNode and not runaways==100:
-            log.debug('walking network : %s' % mNode.mNode)
-            if mNode.hasAttr('mSystemRoot') and mNode.mSystemRoot:
-                return mNode
-            parent=mNode.getParentMetaNode()
-            if not parent:
-                log.debug('node is top of tree : %s' % mNode)
-                return mNode
+        parents=mNodes
+        while parents and not runaways==100:
+            for mNode in parents:
+                log.debug('walking network : %s' % mNode.mNode)
+                if mNode.hasAttr('mSystemRoot') and mNode.mSystemRoot:
+                    return mNode
+                parent=getConnectedMetaNodes(mNode.mNode,source=True,destination=False)
+                #parent=mNode.getParentMetaNode()
+                if not parent:
+                    if ignoreTypes and isMetaNode(mNode, mTypes=ignoreTypes):
+                        log.debug('node is top of tree but being ignored by the args : %s' % mNode)
+                        continue
+                    elif mTypes and isMetaNode(mNode, mTypes=mTypes):
+                        log.debug('node is top of tree and of the correct mType match: %s' % mNode)
+                        return mNode
+                    if not mTypes:
+                        log.debug('node is top of tree : %s' % mNode)
+                        return mNode
+
             runaways+=1
-            mNode=parent
+            parents=getConnectedMetaNodes(mNode.mNode,source=True,destination=False)
+
 
 def  convertNodeToMetaData(nodes,mClass):
     '''
@@ -3567,10 +3590,10 @@ class MetaTimeCodeHUD(MetaHUDNode):
         
         import Red9.core.Red9_Audio as r9Audio
         self.func=r9Audio.milliseconds_to_Timecode
-        
-        self.tc_count = r9Audio.Timecode.count
-        self.tc_samplerate = r9Audio.Timecode.samplerate
-        self.tc_ref = r9Audio.Timecode.ref
+        tc=r9Audio.Timecode()
+        self.tc_count = tc.count
+        self.tc_samplerate = tc.samplerate
+        self.tc_ref = tc.ref
         self.attrCache={}
         
 
