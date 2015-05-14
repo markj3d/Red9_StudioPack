@@ -59,7 +59,7 @@ class Timecode(object):
         .. note:
                 the node passed in has to have the correctly formatted timecode data to compute
         '''
-        node = r9Meta.MetaClass(self, node)
+        node = r9Meta.MetaClass(node)
         if node.hasAttr(self.ref):
             ms = (getattr(node, self.ref) + ((float(getattr(node, self.count)) / getattr(node,self.samplerate)) * 1000))
             return milliseconds_to_Timecode(ms)
@@ -1044,24 +1044,24 @@ class AudioToolsWrap(object):
                 If you pass this a bwav then it caches that bwav for use as the offset. 
                 If you pass it a node, and that node has the timecode attrs, then it caches the offset itself.
         '''
-        selected=cmds.ls(sl=True, type='audio')
+        selectedAudio=cmds.ls(sl=True, type='audio')
         self.__bwav_reference = None
         self.__cached_tc_offset = None
-        if selected:
-            if not len(selected)==1:
+        if selectedAudio:
+            if not len(selectedAudio)==1:
                 log.warning("Please only select 1 piece of Audio to use for reference")
                 return
-            reference=AudioNode(selected[0])
+            reference=AudioNode(selectedAudio[0])
             if reference.isBwav():
-                self.__bwav_reference=selected[0]
+                self.__bwav_reference=selectedAudio[0]
                 cmds.text('bwavRefTC', edit=True,
                           label='frame %s == %s' % (reference.startFrame,reference.bwav_timecodeFormatted()))
             else:
                 raise IOError("selected Audio node is NOT a Bwav so can't be used as reference")
         else:
-            selected = cmds.ls(sl=True)
-            if len(selected)==1:
-                relativeTC = Timecode().getTimecode_from_node(cmds.ls(sl=True)[0])
+            selectedNode = cmds.ls(sl=True)
+            if len(selectedNode)==1:
+                relativeTC = Timecode().getTimecode_from_node(selectedNode[0])
                 actualframe = cmds.currentTime(q=True)
                 self.__cached_tc_offset = actualframe - timecode_to_frame(relativeTC)
                 cmds.text('bwavRefTC', edit=True,
