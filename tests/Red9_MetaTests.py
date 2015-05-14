@@ -1125,7 +1125,28 @@ class Test_MetaNetworks():
         
         assert self.mRig.C_Spine_System.L_Arm_System.getParentMetaNode().mNodeID=='C_Spine_System'
         assert self.mRig.C_Spine_System.L_Arm_System.L_Arm_Support.getParentMetaNode().mNodeID=='L_Arm_System'
+    
+    def test_getConnectedMetaSystemRoot_args(self):
+        #add in a few additional systemRoots and check the filter args
+        assert r9Meta.getConnectedMetaSystemRoot('L_Fingers_System').mNode=='MetaRig'
+        r_legSys=r9Meta.getConnectedMetaNodes('MetaRig')[0]
+        l_legSys=r9Meta.getConnectedMetaNodes('MetaRig')[2]
         
+        #add 2 new mNodes that are effectively now BOTH additional parents to the system
+        newparent1=r9Meta.MetaClass(name='exportNode')
+        newparent2=r9Meta.MetaFacialRig(name='facial')
+        r_legSys.connectParent(newparent1,attr='ExportRoot')
+        l_legSys.connectParent(newparent2,attr='Facial')
+        
+        assert r9Meta.getConnectedMetaSystemRoot('L_Leg_System').mClass=='MetaRig'
+        assert r9Meta.getConnectedMetaSystemRoot('L_Leg_System', mTypes=['MetaFacialRig']).mClass=='MetaFacialRig'
+        
+        assert r9Meta.getConnectedMetaSystemRoot('R_Fingers_System').mClass=='MetaRig'
+        assert not r9Meta.getConnectedMetaSystemRoot('R_Fingers_System', ignoreTypes='MetaRig')
+        
+        assert r9Meta.getConnectedMetaSystemRoot('R_Toes_System').mClass=='MetaClass'
+        assert r9Meta.getConnectedMetaSystemRoot('R_Toes_System', ignoreTypes=['MetaClass']).mClass=='MetaRig'
+                
     def test_getChildMetaNodes_mAttrs(self):
         #TODO: this code needs fixing and then testing!!!!!!
         #self.mRig.getChildMetaNodes(walk=True,mAttrs='ddddddddddddd')
