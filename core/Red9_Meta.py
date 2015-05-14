@@ -1255,8 +1255,9 @@ class MetaClass(object):
                 name=self.__class__.__name__
             #no MayaNode passed in so make a fresh network node (default)
             if not nodeType=='network' and not nodeType in RED9_META_NODETYPE_REGISTERY:
-                log.debug('nodeType : "%s" : is NOT yet registered in the "RED9_META_NODETYPE_REGISTERY", please use r9Meta.registerMClassNodeCache(nodeTypes=[%s]) to do so before making this node' % (nodeType,nodeType))
-                return
+                raise IOError('nodeType : "%s" : is NOT yet registered in the "RED9_META_NODETYPE_REGISTERY", please use r9Meta.registerMClassNodeCache(nodeTypes=[%s]) to do so before making this node' % (nodeType,nodeType))
+                #raise IOError()
+                #return
             node=cmds.createNode(nodeType,name=name)
             self.mNode=node
             self.addAttr('mClass', value=str(self.__class__.__name__))  # ! MAIN ATTR !: used to know what class to instantiate.
