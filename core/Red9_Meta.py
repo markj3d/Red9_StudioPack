@@ -653,7 +653,7 @@ def getConnectedMetaNodes(nodes, source=True, destination=True, mTypes=[], mInst
     else:
         return list(set(mNodes))
         
-def getConnectedMetaSystemRoot(node, mTypes=[], ignoreTypes=[], **kws):
+def getConnectedMetaSystemRoot(node, mTypes=[], ignoreTypes=[], mSystemRoot=True, **kws):
     '''
     From a given node see if it's part of a MetaData system, if so
     walk up the parent tree till you get to top meta node and return the class.
@@ -663,6 +663,7 @@ def getConnectedMetaSystemRoot(node, mTypes=[], ignoreTypes=[], **kws):
         system and you need to skip a given type.
     :param mTypes: like the rest of Meta, if you give it a specific mType to find as root it will do 
         just that if that node is a root node in the system.
+    :param mSystemRoot: whether to respect the mSystemRoot abort bool on the nodes, default=True
         
     .. note::
         this walks upstream only from the given node, so if you effectively have multiple root nodes
@@ -681,11 +682,12 @@ def getConnectedMetaSystemRoot(node, mTypes=[], ignoreTypes=[], **kws):
         parents=mNodes
         while parents and not runaways==100:
             for mNode in parents:
-                log.debug('walking network : %s' % mNode.mNode)
-                if mNode.hasAttr('mSystemRoot') and mNode.mSystemRoot:
+                log.debug('Walking network : %s' % mNode.mNode)
+                
+                if mSystemRoot and mNode.hasAttr('mSystemRoot') and mNode.mSystemRoot:
                     return mNode
+                
                 parent=getConnectedMetaNodes(mNode.mNode,source=True,destination=False)
-                #parent=mNode.getParentMetaNode()
                 if not parent:
                     if ignoreTypes and isMetaNode(mNode, mTypes=ignoreTypes):
                         log.debug('node is top of tree but being ignored by the args : %s' % mNode)
@@ -696,7 +698,10 @@ def getConnectedMetaSystemRoot(node, mTypes=[], ignoreTypes=[], **kws):
                     if not mTypes:
                         log.debug('node is top of tree : %s' % mNode)
                         return mNode
-
+                else:
+                    if mTypes and isMetaNode(mNode, mTypes=mTypes):
+                        log.debug('node is not top of the tree but matches the required mType filter: %s' % mNode)
+                        return mNode
             runaways+=1
             parents=getConnectedMetaNodes(mNode.mNode,source=True,destination=False)
 
