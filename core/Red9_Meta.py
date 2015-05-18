@@ -312,7 +312,7 @@ def getMetaFromCache(mNode):
             except:
                 log.debug('CACHE : inspection failure')
         
-def upgradeSystemsToUUID(*args):
+def upgrade_toLatestBindings(*args):
     '''
     take a current scene and upgrade all the mNodes to include the new
     mNode UUID cache support id
@@ -804,7 +804,7 @@ class MClassNodeUI(object):
                       c=resetCache)
         cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.update_to_uuids,
                       ann=LANGUAGE_MAP._MetaNodeUI_.update_to_uuids_ann,
-                      c=upgradeSystemsToUUID)
+                      c=upgrade_toLatestBindings)
         cmds.scrollLayout('slMetaNodeScroll',rc=lambda *args:self.fitTextScrollFucker())
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=5, style='none')
