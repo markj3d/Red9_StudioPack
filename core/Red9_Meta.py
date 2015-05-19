@@ -314,20 +314,25 @@ def getMetaFromCache(mNode):
         
 def upgrade_toLatestBindings(*args):
     '''
-    take a current scene and upgrade all the mNodes to include the new
-    mNode UUID cache support id
+    take a current scene and upgrade all the mNodes to include any new
+    binding attrs that the base class may have been upgraded to use.
     '''
     for node in getMetaNodes():
         try:
+            # mNodeUUID attrs used for the Cache system
             if node.hasAttr('mNodeUUID'):
                 delattr(node, 'mNodeUUID')
             if not node.hasAttr('UUID'):
                 node.addAttr('UUID', value='')
                 uuid=node.setUUID()
                 log.info('Upgraded node : %s  to UUID : %s' % (r9Core.nodeNameStrip(node.mNode), uuid))
+                
+            # mClassGrp attr used to ID systems and search with
             if not node.hasAttr('mClassGrp'):
                 node.addAttr('mClassGrp', value='MetaClass')
                 log.info('Upgraded node : %s  to mClassGrp' % r9Core.nodeNameStrip(node.mNode))
+                
+            # mSystemRoot - added to mark a node as a root in a system even if it's not physically a root
             if not node.hasAttr('mSystemRoot'):
                 node.addAttr('mSystemRoot', value=False)
                 log.info('Upgraded node : %s  to mSystemRoot' % r9Core.nodeNameStrip(node.mNode))
