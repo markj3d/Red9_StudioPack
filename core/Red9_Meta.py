@@ -537,6 +537,8 @@ def isMetaNodeClassGrp(node, mClassGrps=[]):
         return False
     if issubclass(type(node), MetaClass):
         node=node.mNode
+    if not hasattr(mClassGrps,'__iter__'):
+        mClassGrps=[mClassGrps]
     for grp in mClassGrps:
         log.debug('mGroup testing: %s' % node)
         try:
@@ -578,6 +580,8 @@ def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType=
                 mNode=True
         if mNode:
             if mClassGrps:
+                if not hasattr(mClassGrps,'__iter__'):
+                    mClassGrps=[mClassGrps]
                 if isMetaNodeClassGrp(node, mClassGrps):
                     mNodes.append(node)
             else:
