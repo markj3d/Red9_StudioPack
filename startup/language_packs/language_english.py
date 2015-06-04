@@ -72,11 +72,15 @@ class _MainMenus_(object):
     open_in_explorer_ann = "Open the folder containing the current Maya Scene"
     copy_to_clipboard = 'Red9: Copy to Clipboard'
     copy_to_clipboard_ann = 'Copy the current Maya filepath to the OS:Clipboard'
-    collapse_range = 'Red9: Collapse Range'
+    
+    #collapse_range = 'Red9: Collapse Range'
+    collapse_time = 'Red9: Collapse Time'
+    collapse_time_ann = 'Collapse Time, cutting keys from a given range and rippling remaining keys. Also deals with clips, audio and supported MetaData'
     collapse_selected = 'Collapse : Selected Only'
     collapse_selected_ann = 'Collapse the keys in the selected TimeRange (Red highlighted)'
     collapse_full = 'Collapse : Full Scene'
     collapse_full_ann = 'Collapse the keys in the selected TimeRange (Red highlighted)'
+    
     insert_padding = 'Red9: Insert Padding'
     pad_selected = 'Pad : Selected Only'
     pad_selected_ann = 'Insert time in the selected TimeRange (Red highlighted)'

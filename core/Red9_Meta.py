@@ -329,12 +329,12 @@ def upgrade_toLatestBindings(*args):
                 
             # mClassGrp attr used to ID systems and search with
             if not node.hasAttr('mClassGrp'):
-                node.addAttr('mClassGrp', value='MetaClass')
+                node.addAttr('mClassGrp', value='MetaClass', hidden=True)
                 log.info('Upgraded node : %s  to mClassGrp' % r9Core.nodeNameStrip(node.mNode))
                 
             # mSystemRoot - added to mark a node as a root in a system even if it's not physically a root
             if not node.hasAttr('mSystemRoot'):
-                node.addAttr('mSystemRoot', value=False)
+                node.addAttr('mSystemRoot', value=False, hidden=True)
                 log.info('Upgraded node : %s  to mSystemRoot' % r9Core.nodeNameStrip(node.mNode))
         except:
             log.info('Failed to Upgrade mNode : %s' % node)
@@ -1280,9 +1280,9 @@ class MetaClass(object):
             self.mNode=node
             self.addAttr('mClass', value=str(self.__class__.__name__))  # ! MAIN ATTR !: used to know what class to instantiate.
             self.addAttr('mNodeID', value=name)                         # ! MAIN NODE ID !: used by pose systems to ID the node.
-            self.addAttr('mClassGrp', value='MetaClass', l=True)        # ! CLASS GRP  : this is used mainly by MetaRig and other complex
+            self.addAttr('mClassGrp', value='MetaClass', hidden=True)   # ! CLASS GRP  : this is used mainly by MetaRig and other complex
                                                                         #                systems to denote a classes intended system base
-            self.addAttr('mSystemRoot', value=False, l=True)            # ! SYSTEM ROOT : indicates that this node is the root of a system and
+            self.addAttr('mSystemRoot', value=False, hidden=True)       # ! SYSTEM ROOT : indicates that this node is the root of a system and
                                                                         #                therefore halts the 'getConnectedMetaSystemRoot' call
             if r9Setup.mayaVersion()<=2015:
                 #print '__init__ setting uuid'
@@ -1795,17 +1795,20 @@ class MetaClass(object):
             # if attr exists do we force the value here?? NOOOO as I'm using this only
             # to ensure that when we initialize certain classes base attrs exist with certain properties.
             log.debug('"%s" :  Attr already exists on the Node' % attr)
-
-            # allow some of the standard edit flags to be run even if the attr exists
-            if kws:
-                if addkwsToEdit:
-                    cmds.addAttr('%s.%s' % (self.mNode, attr), e=True, **addkwsToEdit)
-                    log.debug('addAttr Edit flags run : %s = %s' % (attr, addkwsToEdit))
-                if setKwsToEdit:
-                    cmds.setAttr('%s.%s' % (self.mNode, attr), **setKwsToEdit)
-                    log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
+            try:
+                # allow some of the standard edit flags to be run even if the attr exists
+                if kws:
+                    if addkwsToEdit:
+                        cmds.addAttr('%s.%s' % (self.mNode, attr), e=True, **addkwsToEdit)
+                        log.debug('addAttr Edit flags run : %s = %s' % (attr, addkwsToEdit))
+                    if setKwsToEdit:
+                        cmds.setAttr('%s.%s' % (self.mNode, attr), **setKwsToEdit)
+                        log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
+            except:
+                if self.isReferenced():
+                    log.debug('Trying to modify and attr on a reference node')
             return
-        
+            
         #ATTR IS NEW, CREATE IT
         #----------------------
         else:
@@ -2568,7 +2571,21 @@ def deleteEntireMetaRigStructure(searchNode=None):
                 cmds.deleteAttr('%s.mirrorAxis' % child)
         metaChild.delete()
 
-
+def wireControlsToNewMetaRig(nodes, name=None, mRig=None):
+    '''
+    fast way to wire nodes to a blank MetaRig to gain some of the support
+    features of the codebase without having to manually build a structured network
+    
+    :param nodes: nodes to wire as controllers to the MetaRig
+    :param name: name of the MetaRig node
+    :param mRig: optional mRig instance to add the controls too
+    '''
+    if not mRig:
+        mRig=MetaRig(name=name)
+    for node in nodes:
+        mRig.addRigCtrl(node, r9Core.nodeNameStrip(node))
+    return mRig
+    
 class MetaRig(MetaClass):
     '''
     Sub-class of Meta used as the back-bone of our internal rigging
@@ -2584,9 +2601,12 @@ class MetaRig(MetaClass):
         if self.cached:
             log.debug('CACHE : Aborting __init__ on pre-cached %s Object' % self.__class__)
             return
-        
+        # note these are attrs on the mNode itself so we need to be careful when setting 
+        # them to locked if this node is referenced.
         self.mClassGrp = 'MetaRig'      # get the Grp code marking this as a SystemBase
         self.mSystemRoot = True         # set this node to be a system root if True
+        
+        # general management vars
         self.CTRL_Prefix = 'CTRL'       # prefix for all connected CTRL_ links added
         self.rigGlobalCtrlAttr = 'CTRL_Main'  # attribute linked to the top globalCtrl in the rig
         self.lockState = True           # lock the node to avoid accidental removal

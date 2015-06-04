@@ -407,13 +407,13 @@ def addToMayaMenus():
                 
             TimeSliderMenu='TimeSliderMenu'
             cmds.menuItem(divider=True, p=TimeSliderMenu)
-            cmds.menuItem(subMenu=True, label=LANGUAGE_MAP._MainMenus_.collapse_range, p=TimeSliderMenu)
-            cmds.menuItem('redNineTimeSliderCollapseItem', label=LANGUAGE_MAP._MainMenus_.collapse_selected,
-                          ann=LANGUAGE_MAP._MainMenus_.collapse_selected_ann,
-                          c='import Red9.core.Red9_CoreUtils as r9Core;r9Core.timeOffset_collapse(scene=False)')
-            cmds.menuItem(label=LANGUAGE_MAP._MainMenus_.collapse_full,
-                          ann=LANGUAGE_MAP._MainMenus_.collapse_full_ann,
-                          c='import Red9.core.Red9_CoreUtils as r9Core;r9Core.timeOffset_collapse(scene=True)')
+            #cmds.menuItem(subMenu=True, label=LANGUAGE_MAP._MainMenus_.collapse_range, p=TimeSliderMenu)
+            cmds.menuItem('redNineTimeSliderCollapseItem', label=LANGUAGE_MAP._MainMenus_.collapse_time,
+                          ann=LANGUAGE_MAP._MainMenus_.collapse_time_ann,
+                          c='import Red9.core.Red9_CoreUtils as r9Core;r9Core.timeOffset_collapseUI()')
+#            cmds.menuItem(label=LANGUAGE_MAP._MainMenus_.collapse_full,
+#                          ann=LANGUAGE_MAP._MainMenus_.collapse_full_ann,
+#                          c='import Red9.core.Red9_CoreUtils as r9Core;r9Core.timeOffset_collapse(scene=True)')
 
             cmds.menuItem(subMenu=True, label=LANGUAGE_MAP._MainMenus_.insert_padding, p=TimeSliderMenu)
             cmds.menuItem(label=LANGUAGE_MAP._MainMenus_.pad_selected,
