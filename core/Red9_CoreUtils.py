@@ -1981,27 +1981,63 @@ def timeOffset_addPadding(pad=None, padfrom=None, scene=False):
     else:
         TimeOffset.fullScene(pad, timerange=(padfrom, 1000000))
     # TimeOffset.animCurves(pad, nodes=nodes, time=(padfrom, 1000000))
-   
-def timeOffset_collapse(scene=False):
+    
+def timeOffset_collapse(scene=False, timerange=None):
     '''
-    simple wrap of the timeoffset that given a selected range in the timeline will
-    collapse the keys within that range and shift forward keys back to close the gap
-    :param scene: whether to process the entire scene or selected nodes
+    Light wrap over the TimeOffset call to manage collapsing time
     '''
+    if not timerange:
+        timerange = r9Anim.timeLineRangeGet(always=True)
     nodes = None
-    timeRange = r9Anim.timeLineRangeGet(always=False)
-    if not timeRange:
+    if not timerange:
         raise StandardError('No timeRange selected to Compress')
-    offset = -(timeRange[1] - timeRange[0])
+    offset = -(timerange[1] - timerange[0])
     if not scene:
         nodes = cmds.ls(sl=True, l=True)
-        TimeOffset.fromSelected(offset, nodes=nodes, timerange=(timeRange[1], 10000000))
+        TimeOffset.fromSelected(offset, nodes=nodes, timerange=(timerange[1], 10000000))
     else:
-        TimeOffset.fullScene(offset, timerange=(timeRange[1], 10000000))
-    # TimeOffset.animCurves(-(timeRange[1]-timeRange[0]), nodes=nodes, time=(timeRange[1], 10000000))
+        TimeOffset.fullScene(offset, timerange=(timerange[1], 10000000))
+    cmds.currentTime(timerange[0], e=True)
     
-    cmds.currentTime(timeRange[0], e=True)
-   
+def timeOffset_collapseUI():
+    '''
+    collapse time confirmation UI
+    '''
+    def __uicb_run(scene,*args):
+        timeOffset_collapse(scene=scene,
+                            timerange=(float(cmds.textField('start',q=True,tx=True)),
+                                       float(cmds.textField('end',q=True,tx=True))))
+        
+    timeRange = r9Anim.timeLineRangeGet(always=True)
+    
+    win='CollapseTime_UI'
+    if cmds.window(win, exists=True):
+        cmds.deleteUI(win, window=True)
+    cmds.window(win, title=win)
+    cmds.columnLayout(adjustableColumn=True)
+    cmds.text(label=LANGUAGE_MAP._MainMenus_.collapse_time)
+    cmds.separator(h=10, style='in')
+    cmds.rowColumnLayout(nc=4, cw=((1,60),(2,80),(3,60),(4,80)))
+    cmds.text(label='Start Frm: ')
+    cmds.textField('start', tx=timeRange[0], w=40)
+    cmds.text(label='End Frm: ')
+    cmds.textField('end', tx=timeRange[1], w=40)
+    cmds.setParent('..')
+    cmds.separator(h=10, style='none')
+    cmds.rowColumnLayout(nc=2, cw=((1,150),(2,150)))
+    cmds.button(label=LANGUAGE_MAP._MainMenus_.collapse_full,
+                ann=LANGUAGE_MAP._MainMenus_.collapse_full_ann,
+                command=partial(__uicb_run,True),bgc=r9Setup.red9ButtonBGC('green'))
+    cmds.button(label=LANGUAGE_MAP._MainMenus_.collapse_selected,
+                ann=LANGUAGE_MAP._MainMenus_.collapse_selected_ann,
+                command=partial(__uicb_run,False),bgc=r9Setup.red9ButtonBGC('green'))
+    cmds.setParent('..')
+    cmds.separator(h=15, style='none')
+    cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
+                                 c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+    
+    cmds.showWindow(win)
+    
    
 class TimeOffset(object):
     '''
