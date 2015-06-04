@@ -597,6 +597,10 @@ def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType=
     else:
         return mNodes
 
+
+def getMetaRigs():
+    return getMetaNodes(mTypes=MetaRig)
+    
 def getUnregisteredMetaNodes():
     '''
     Inspect all nodes for the mClass attrs, then see if those nodes and mClass
