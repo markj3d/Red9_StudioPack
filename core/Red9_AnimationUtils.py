@@ -629,6 +629,8 @@ class AnimationUI(object):
        
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)], rowSpacing=[(1,5)])
+        #cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 75), (2, 80), (3, 80), (3, 80)], columnSpacing=[(1, 10), (2, 10)], rowSpacing=[(1,5)])
+       
         self.uicbCKeyHierarchy = cmds.checkBox('uicbCKeyHierarchy', l=LANGUAGE_MAP._Generic_.hierarchy, al='left', v=False,
                                             ann=LANGUAGE_MAP._AnimationUI_.copy_keys_hierarchy_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbCKeyHierarchy'))
@@ -642,6 +644,11 @@ class AnimationUI(object):
         self.uicbCKeyAnimLay = cmds.checkBox('uicbCKeyAnimLay', l=LANGUAGE_MAP._AnimationUI_.copy_keys_merge_layers, al='left', v=False,
                                             ann=LANGUAGE_MAP._AnimationUI_.copy_keys_merge_layers_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox('uicbCKeyAnimLay'))
+        
+        cmds.setParent('..')
+        cmds.separator(h=10, style='in')
+        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10)], rowSpacing=[(1,5)])
+        cmds.text(label='Paste Options : ')
         cmds.optionMenu('om_PasteMethod',
                         ann=LANGUAGE_MAP._AnimationUI_.paste_method_ann,
                         cc=partial(self.__uiCB_setCopyKeyPasteMethod))
@@ -656,6 +663,8 @@ class AnimationUI(object):
                        "fitMerge"]:
             cmds.menuItem(l=preset)
         cmds.optionMenu('om_PasteMethod', e=True, v='replace')
+        self.uiffgCKeyStep = cmds.floatFieldGrp('uiffgCKeyStep', l=LANGUAGE_MAP._AnimationUI_.offset, value1=0, cw2=(40, 50))  # ,
+        #                                      ann=LANGUAGE_MAP._AnimationUI_.offset_ann)
         cmds.setParent(self.AnimLayout)
 
 
@@ -2252,6 +2261,7 @@ class AnimationUI(object):
         self.kws['toMany'] = cmds.checkBox(self.uicbCKeyToMany, q=True, v=True)
         self.kws['pasteKey']=cmds.optionMenu('om_PasteMethod', q=True, v=True)
         self.kws['mergeLayers']=cmds.checkBox('uicbCKeyAnimLay', q=True, v=True)
+        self.kws['timeOffset']=cmds.floatFieldGrp('uiffgCKeyStep', q=True,v1=True)
         if cmds.checkBox(self.uicbCKeyRange, q=True, v=True):
             self.kws['time'] = timeLineRangeGet()
         if cmds.checkBox(self.uicbCKeyChnAttrs, q=True, v=True):
@@ -2684,7 +2694,7 @@ class AnimFunctions(object):
                
     @r9General.Timer
     def copyKeys(self, nodes=None, time=(), pasteKey='replace', attributes=None,
-                 filterSettings=None, toMany=False, matchMethod=None, mergeLayers=False, **kws):
+                 filterSettings=None, toMany=False, matchMethod=None, mergeLayers=False, timeOffset=0, **kws):
         '''
         Copy Keys is a Hi-Level wrapper function to copy animation data between
         filtered nodes, either in hierarchies or just selected pairs.
@@ -2705,7 +2715,7 @@ class AnimFunctions(object):
         :param mergeLayers: this pre-processes animLayers so that we have a single, temporary merged
             animLayer to extract a compiled version of the animData from. This gets deleted afterwards.
         
-        TODO: this needs to support 'skipAttrs' param liek the copyAttrs does - needed for the snapTransforms calls
+        TODO: this needs to support 'skipAttrs' param like the copyAttrs does - needed for the snapTransforms calls
         '''
         if not matchMethod:
             matchMethod=self.matchMethod
@@ -2720,31 +2730,7 @@ class AnimFunctions(object):
         
         srcNodes=[src for src, _ in nodeList]
         
-        # FUCKING ANIM LAYERS ARE SATAN'S TESTICLES!!
-        # with very poor wrapper code in mel only!
-        #-------------------------------------------------
-#         animLayers=getAnimLayersFromGivenNodes(srcNodes)
-#         if animLayers:
-#             if mergeLayers:
-#                 try:
-#                     layerCache={}
-#                     for layer in animLayers:
-#                         layerCache[layer]={'mute':cmds.animLayer(layer, q=True, mute=True),
-#                                            'locked':cmds.animLayer(layer, q=True, lock=True)}
-#                     mergeAnimLayers(srcNodes, deleteBaked=False)
-# 
-#                     #return the original mute and lock states and select the new
-#                     #MergedLayer ready for the rest of the copy code to deal with
-#                     for layer,cache in layerCache.items():
-#                         for layer,cache in layerCache.items():
-#                             cmds.animLayer(layer, edit=True, mute=cache['mute'])
-#                             cmds.animLayer(layer, edit=True, mute=cache['locked'])
-#                     mel.eval("source buildSetAnimLayerMenu")
-#                     mel.eval('selectLayer("Merged_Layer")')
-#                 except:
-#                     log.debug('CopyKeys internal : AnimLayer Merge Failed')
-#             else:
-#                 log.warning('SrcNodes have animLayers, results may be eratic unless Baked!')
+        # Manage AnimLayers - note to Autodesk, this should be internal to the cmds!
         with AnimationLayerContext(srcNodes, mergeLayers=mergeLayers, restoreOnExit=True):
             if nodeList:
                 with r9General.HIKContext([d for _, d in nodeList]):
@@ -2754,18 +2740,14 @@ class AnimFunctions(object):
                                 #copy only specific attributes
                                 for attr in attributes:
                                     if cmds.copyKey(src, attribute=attr, hierarchy=False, time=time):
-                                        cmds.pasteKey(dest, attribute=attr, option=pasteKey)
+                                        cmds.pasteKey(dest, attribute=attr, option=pasteKey, timeOffset=timeOffset)
                             else:
                                 if cmds.copyKey(src, hierarchy=False, time=time):
-                                    cmds.pasteKey(dest, option=pasteKey)
+                                    cmds.pasteKey(dest, option=pasteKey, timeOffset=timeOffset)
                         except:
                             log.debug('Failed to copyKeys between : %s >> %s' % (src, dest))
             else:
                 raise StandardError('Nothing found by the Hierarchy Code to process')
-        
-#         if mergeLayers:
-#             if animLayers and cmds.animLayer('Merged_Layer', query=True, exists=True):
-#                 cmds.delete('Merged_Layer')
         return True
     
     
