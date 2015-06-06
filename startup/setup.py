@@ -190,7 +190,7 @@ def menuSetup(parent='MayaWindow'):
         raise StandardError('given parent for Red9 Menu is invalid %s' % parent)
     try:
         cmds.menuItem('redNineProRootItem',
-                      l='PRO : PACK', sm=True, p='redNineMenuItemRoot', i='red9.jpg')
+                      l='PRO : PACK', sm=True, p='redNineMenuItemRoot', tearOff=True,i='red9.jpg')
 
         cmds.menuItem(divider=True,p='redNineMenuItemRoot')
         
