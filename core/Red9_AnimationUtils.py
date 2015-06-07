@@ -494,7 +494,7 @@ class AnimationUI(object):
         self.poseRootMode = 'RootNode'  # or MetaRig
         self.poses = None
         self.poseButtonBGC = [0.27, 0.3, 0.3]
-        self.poseButtonHighLight = [0.7, 0.95, 0.75]
+        self.poseButtonHighLight = r9Setup.red9ButtonBGC('green')  # [0.7, 0.95, 0.75]
         
         self.poseHandlerPaths=[]  # ['J:/Games/hf2/Tools/CryMayaCore/core/crycore/resources/poseHandlers']
         
