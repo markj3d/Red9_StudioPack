@@ -377,7 +377,7 @@ class Test_FilterNode():
                                             '|World_Root|Spine_Ctrl|R_Wrist_Ctrl|R_Pole_AttrMarked_Ctrl']
     
 
-class test_baseFunctions():
+class Test_baseFunctions():
     def test_nodeNameStrip(self):
         assert r9Core.nodeNameStrip('|root|of|systems|ctrl') == 'ctrl'
         assert r9Core.nodeNameStrip('|AA:root|AA:of|AA:systems|AA:ctrl') == 'ctrl'
@@ -433,7 +433,25 @@ class test_baseFunctions():
         assert isinstance(r9Core.decodeString('5.0'), float)
         assert isinstance(r9Core.decodeString('5'), int)
 
-
+    def test_filterListByString(self):
+        testlist=['big','fat','round','fluffy','redbigfat','flufgrub']
+        assert r9Core.filterListByString(testlist, 'Ff', matchcase=False) == ['fluffy']
+        assert r9Core.filterListByString(testlist, 'Ff', matchcase=True) == []
+        assert r9Core.filterListByString(testlist, 'big,ff', matchcase=False) == ['big', 'fluffy', 'redbigfat']
+        assert r9Core.filterListByString(testlist, 'Big,ff', matchcase=True) == ['fluffy']
+        
+    def test_floatIsEqual(self):
+        assert not r9Core.floatIsEqual(1, 0.5, tolerance=0.5, allowGimbal=True)
+        assert  r9Core.floatIsEqual(1, 0.51, tolerance=0.5, allowGimbal=True)
+        assert r9Core.floatIsEqual(0.1, 0.091, tolerance=0.01, allowGimbal=True)
+        
+        assert r9Core.floatIsEqual(1, 181, tolerance=0.01, allowGimbal=True)
+        assert r9Core.floatIsEqual(1, 91, tolerance=0.01, allowGimbal=True)
+        assert not r9Core.floatIsEqual(1, 91, tolerance=0.01, allowGimbal=False)
+        assert not r9Core.floatIsEqual(1, -89, tolerance=0.01, allowGimbal=False)
+        assert r9Core.floatIsEqual(0.05, 90, tolerance=1, allowGimbal=True)
+                
+        
 class Test_LockNodes(object):
     def setup(self):
         cmds.file(new=True,f=True)

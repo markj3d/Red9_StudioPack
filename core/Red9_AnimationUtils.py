@@ -663,8 +663,7 @@ class AnimationUI(object):
                        "fitMerge"]:
             cmds.menuItem(l=preset)
         cmds.optionMenu('om_PasteMethod', e=True, v='replace')
-        self.uiffgCKeyStep = cmds.floatFieldGrp('uiffgCKeyStep', l=LANGUAGE_MAP._AnimationUI_.offset, value1=0, cw2=(40, 50))  # ,
-        #                                      ann=LANGUAGE_MAP._AnimationUI_.offset_ann)
+        self.uiffgCKeyStep = cmds.floatFieldGrp('uiffgCKeyStep', l=LANGUAGE_MAP._AnimationUI_.offset, value1=0, cw2=(40, 50))
         cmds.setParent(self.AnimLayout)
 
 

@@ -188,12 +188,14 @@ def filterListByString(input_list, filter_string, matchcase=False):
     :param filter_string: string to use in the filter, supports comma separated search strings
     :param matchcase: whether to match or ignore case sensitivity
     '''
+    
     if not matchcase:
         filter_string=filter_string.upper()
     filterBy=[f for f in filter_string.replace(' ','').split(',') if f]
     filteredList=[]
     if filter_string:
         for item in input_list:
+            data=item
             filterPattern='|'.join(n for n in filterBy)
             regexFilter=re.compile('('+filterPattern+')')  # convert into a regularExpression
             if not matchcase:
