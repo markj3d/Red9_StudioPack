@@ -549,7 +549,7 @@ def isMetaNodeClassGrp(node, mClassGrps=[]):
 
             
 @r9General.Timer
-def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType='mClass', nTypes=None, **kws):
+def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType='mClass', nTypes=None, mSystemRoot=False, **kws):
     '''
     Get all mClass nodes in scene and return as mClass objects if possible
     :param mTypes: only return meta nodes of a given type
@@ -598,8 +598,14 @@ def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType=
         return mNodes
 
 
-def getMetaRigs():
-    return getMetaNodes(mTypes=MetaRig)
+def getMetaRigs(mInstances='MetaRig', mClassGrps=['MetaRig']):
+    '''
+    Wrapper over the get call to fire back specifically MetaRigs.
+    We use mInstances rather than mTypes directly for MetaRig to 
+    cope with people subclassing, then we clamp the search to the Root MetaRig
+    using the mClassGrps variable
+    '''
+    return getMetaNodes(mInstances=mInstances, mClassGrps=mClassGrps)
     
 def getUnregisteredMetaNodes():
     '''
