@@ -150,7 +150,7 @@ New - Red9_Anim - New handling of timeoffset to allow for 'ripple' mode which wi
 Fix - Red9_Anim - MirrorSetup wasn't loading axis data correctly when set to none
 Fix - Red9Setup - MAYA 2015 support put back in for building some of the Red9 sub-menu's that I'd missed off, thought I'd already put the 2015 handlers in, obviously not !!!!!!! sorry!!!!
 Fix - Red9_Anim - Managed the UndoStack for the poseBlender UI so all drag goes to a single undoChunk.
-Fix - Red9_Anim - MirrorMap Load now has dialog set so that it doesn't prompt to over-write
+Fix - Red9_Anim - MirrorMap Load now has dialogue set so that it doesn't prompt to over-write
 
 Mod - Red9_Anim - Pose search now allows sort by name or date, sort by name has proper numeric handling
 Mod - Red9_Anim - mods to the way the AnimUI passes and manages the matchMethod flag. PoseLoad now respects the flag, also added matchMethod as an optionMenu and included 'index' method. Index matches hierarchies purely on their hierarchy order like Maya natively does - no filtering or matching carried out.
@@ -161,19 +161,30 @@ Mod - Red9_Meta - big upgrades to the MetaNodeUI to allow for more powerful filt
 
 v1.5:
 -----
+
+There are MANY more updates and big fixes in this release, too many to document fully. For the full history please visit the main GitHub repository
+
+New - Red9PROPACK - Full support added to integrate the ProPack systems and boot management. 
 Fix - Red9_Anim - 'use Priority as snaplist' if the priority list was empty then the snap call matched no objects and stopped running. There's now a catch on the checkbox to warn you that the priority list has to have entries before the flag can be set on
 Bug - Red9_Audio - if you gave the setTimeRange 2 bits of Audio both starting at frame 0 then only the first audio was taken into account.
-Mod - Red9_Audio - Add lock / unlock so that you can lock audio nodes in time so they can't be accidentally shifted
+Mod - Red9_Audio - Add Lock / Unlock /Mute / UnMute so that you can lock audio nodes in time so they can't be accidentally shifted and mute them
 New - Red9_Anim -  Lots of people been after this, the SnapTransforms call now supports flags to isolate 'rots' and 'trans'
 New - Red9_Anim - Added matchMethod = 'mirrorIndex for all the systems, allows data to be transfered via the MirrorMarkers so totally flexible, supported in everything including the poseSaver
 Mod - Red9_Meta - New Caching system which used unique UUID's on the nodes rather that the dag path. Far safer and more flexible for the future
 New - Red9_Core - Added more OS wrapping and an 'open last crash file' item in the debugging menu
 New - Red9_Meta - Added new handling for grouping and marking key classes - "mClassGrp" which allows us to mark classes in a dynamic fashion.
-New - Red9_Meta - Added new mClassGrp flag to getMetaNodes to accomodate the above new attrs
+New - Red9_Meta - Added new mClassGrp flag to getMetaNodes to accommodate the above new attrs
 New - Red9_Meta - getChildren now accepts a new flag, asMeta which will force the returned nodes to be instantiated on return
+New - Red9_Meta - getChildren now accepts a new flag, asMap that will return all connections as a map for faster processing.
 New - Red9_Anim - Added a new 'No Inversing' mode to the mirrorUI which stops any axis being inversed when the data is mirrored. Ideal for FK chains like fingers where you just want to switch the data left to right
 New - Red9_Anim - Added a new 'incrementIDs' call in the mirror code that allows you to shift all the mirrorIndex id's of given nodes by a given offset.
 Mod - Red9_Pose - HUGE refactoring of the codebase for this to make it more generic, lots of code renaming and a new base 'DataMap' class
 New - Red9_Meta - Added the ability to "filter by node name" in the MetaNodeUI for speed on large scenes
+New - Red9_Meta - Added new flags to getConnectedMetaSystemRoot call - mSystemRoot which allows us to abort the walk upstream if a node has this attr set to True. Also added ingnoreTypes flag
+New - Red9_Meta - MetaRig class has the new mSystemsRoot flag set to True and the mClassGrp set to 'MetaRig' by default. Both of these help to clamp the searches more accurately when walking systems
 New - Red_Setup - Added Language Pack support and converted all text in all UI's to point to a single language mapper file. Chinese Language coming up! 
+New - Red9_Audio - Added OffsetRipple functionality.
+New - Red9_Audio - Added FormatSoundNode call in the UI which allows you to automatically sync the name of the sound node to the wav name
+New - Red9_Anim - Added PasteOptions in the UI and now pass in an offset so you can copy animations with a time offset in one go.
+Mod - Red9_Pose - PointCloud class now caches data and connects directly to a MetaNode so that there is only ever one instance and you can rebuild the class from a file and the cached data on the metaNode
 
