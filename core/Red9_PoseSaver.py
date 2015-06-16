@@ -904,7 +904,7 @@ class PosePointCloud(object):
     relative space. It's been added as a tool in it's own right as it's sometimes
     useful to be able to shift poses in global space.
     '''
-    def __init__(self, nodes, filterSettings=None, meshes=[], time=(), *args, **kws):
+    def __init__(self, nodes, filterSettings=None, meshes=[], *args, **kws):
         '''
         :param rootReference: the object to be used as the PPT's pivot reference
         :param nodes: feed the nodes to process in as a list, if a filter is given
@@ -927,8 +927,9 @@ class PosePointCloud(object):
         self.prioritySnapOnly=False     # ONLY make ppc points for the filterPriority nodes
         
         self.rootReference = None   # root node used as the main pivot for the cloud
-        #self.time = time           # if true this modifies the snap and apply code to be timeEnabled, generating key data on the cloud
         self.isVisible = True       # Do we build the visual reference setup or not?
+        
+        self.ppcMeta=None  # MetaNode to cache the data
         
         if filterSettings:
             if not issubclass(type(filterSettings), r9Core.FilterNode_Settings):
@@ -938,12 +939,68 @@ class PosePointCloud(object):
         else:
             self.settings=r9Core.FilterNode_Settings()
 
-    def __connectToMeta(self):
+    def __connectdataToMeta__(self):
+        '''
+        on build push the data to a metaNode so it's cached in the scene incase we need to 
+        reconstruct anything at a later date. This is used extensivly in the AnimReDirect calls
+        '''
         self.ppcMeta = r9Meta.MetaClass(name='PPC_Root')
         self.ppcMeta.mClassGrp='PPCROOT'
-        self.ppcMeta.connectChild(self.posePointRoot, 'ppc_root')
-        self.ppcMeta.addAttr('ppc_cloudNodes', self.posePointCloudNodes)
+        self.ppcMeta.connectChild(self.posePointRoot, 'posePointRoot')
+        self.ppcMeta.addAttr('posePointCloudNodes', self.posePointCloudNodes)
          
+    def syncdatafromCurrentInstance(self):
+        '''
+        pull existing data back from the metaNode
+        '''
+        self.ppcMeta=self.getCurrentInstances()
+        if self.ppcMeta:
+            self.ppcMeta=self.ppcMeta[0]
+            self.posePointCloudNodes=self.ppcMeta.posePointCloudNodes
+            self.posePointRoot=self.ppcMeta.posePointRoot[0]
+              
+    def getPPCNodes(self):
+        '''
+        return a list of the PPC nodes
+        '''
+        return [ppc for ppc,_ in self.posePointCloudNodes]
+
+    def getTargetNodes(self):
+        '''
+        return a list of the target controllers
+        '''
+        return [target for _, target in self.posePointCloudNodes]
+            
+    @staticmethod
+    def getCurrentInstances():
+        '''
+        get any current PPC nodes in the scene
+        '''
+        return r9Meta.getMetaNodes(mClassGrps=['PPCROOT'])
+           
+    def snapPosePntstoNodes(self):
+        '''
+        snap each pntCloud point to their respective Maya nodes
+        '''
+        for pnt,node in self.posePointCloudNodes:
+            log.debug('snapping PPT : %s' % pnt)
+            r9Anim.AnimFunctions.snap([node,pnt])
+
+    def snapNodestoPosePnts(self):
+        '''
+        snap each MAYA node to it's respective pntCloud point
+        '''
+        for pnt, node in self.posePointCloudNodes:
+            log.debug('snapping Ctrl : %s > %s : %s' % (r9Core.nodeNameStrip(node), pnt, node))
+            r9Anim.AnimFunctions.snap([pnt,node])
+
+    def generateVisualReference(self):
+        '''
+        Generic call that's used to overload the visual handling 
+        of the PPC is other instances such as the AnimationPPC
+        '''
+        self.shapeSwapMeshes()
+
     def buildOffsetCloud(self, rootReference=None, raw=False, projectedRots=False, projectedTrans=False):
         '''
         Build a point cloud up for each node in nodes
@@ -994,51 +1051,9 @@ class PosePointCloud(object):
         if self.meshes and self.isVisible:
             self.generateVisualReference()
             
-        self.__connectToMeta()
+        self.__connectdataToMeta__()
         return self.posePointCloudNodes
-
-    def getPPCNodes(self):
-        '''
-        return a list of the PPC nodes
-        '''
-        return [ppc for ppc,_ in self.posePointCloudNodes]
     
-    def getTargetNodes(self):
-        '''
-        return a list of the target controllers
-        '''
-        return [target for _, target in self.posePointCloudNodes]
-
-    @staticmethod
-    def getCurrentInstances():
-        '''
-        get any current PPC nodes in the scene
-        '''
-        return r9Meta.getMetaNodes(mClassGrps=['PPCROOT'])
-    
-    def _snapPosePntstoNodes(self):
-        '''
-        snap each pntCloud point to their respective Maya nodes
-        '''
-        for pnt,node in self.posePointCloudNodes:
-            log.debug('snapping PPT : %s' % pnt)
-            r9Anim.AnimFunctions.snap([node,pnt])
-
-    def _snapNodestoPosePnts(self):
-        '''
-        snap each MAYA node to it's respective pntCloud point
-        '''
-        for pnt, node in self.posePointCloudNodes:
-            log.debug('snapping Ctrl : %s > %s : %s' % (r9Core.nodeNameStrip(node), pnt, node))
-            r9Anim.AnimFunctions.snap([pnt,node])
-
-    def generateVisualReference(self):
-        '''
-        Generic call that's used to overload the visual handling 
-        of the PPC is other instances such as the AnimationPPC
-        '''
-        self.shapeSwapMeshes()
-
     def shapeSwapMeshes(self, selectable=True):
         '''
         Swap the mesh Geo so it's a shape under the PPC transform root
@@ -1067,10 +1082,10 @@ class PosePointCloud(object):
             cmds.delete(dupMesh)
 
     def applyPosePointCloud(self):
-        self._snapNodestoPosePnts()
+        self.snapNodestoPosePnts()
 
     def updatePosePointCloud(self):
-        self._snapPosePntstoNodes()
+        self.snapPosePntstoNodes()
         if self.meshes:
             cmds.delete(cmds.listRelatives(self.posePointRoot, type=['mesh','nurbsCurve']))
             self.generateVisualReference()
@@ -1079,7 +1094,7 @@ class PosePointCloud(object):
     def delete(self):
         root=self.posePointRoot
         if not root:
-            root=self.ppc.ppc_root[0]
+            root=self.ppcMeta.posePointRoot[0]
         self.ppcMeta.delete()
         cmds.delete(root)
         
@@ -1091,7 +1106,7 @@ class PosePointCloud(object):
         if PPCNodes:
             log.info('Deleting current PPC nodes in the scene')
             for ppc in PPCNodes:
-                cmds.delete(ppc.ppc_root)
+                cmds.delete(ppc.posePointRoot)
                 try:
                     ppc.delete()
                 except:
