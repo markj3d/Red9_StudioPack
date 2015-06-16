@@ -603,9 +603,13 @@ def getMetaRigs(mInstances='MetaRig', mClassGrps=['MetaRig']):
     Wrapper over the get call to fire back specifically MetaRigs.
     We use mInstances rather than mTypes directly for MetaRig to 
     cope with people subclassing, then we clamp the search to the Root MetaRig
-    using the mClassGrps variable
+    using the mClassGrps variable. This probably will expand as it's tested
     '''
-    return getMetaNodes(mInstances=mInstances, mClassGrps=mClassGrps)
+    mRigs=getMetaNodes(mInstances=mInstances, mClassGrps=mClassGrps)
+    if mRigs:
+        return mRigs
+    else:
+        return getMetaNodes(mTypes=mInstances)
     
 def getUnregisteredMetaNodes():
     '''
