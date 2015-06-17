@@ -73,7 +73,7 @@ class _MainMenus_(object):
     copy_to_clipboard = 'Red9: Copy to Clipboard'
     copy_to_clipboard_ann = 'Copy the current Maya filepath to the OS:Clipboard'
     
-    #collapse_range = 'Red9: Collapse Range'
+    #TimeSlider menu additions
     collapse_time = 'Red9: Collapse Time'
     collapse_time_ann = 'Collapse Time, cutting keys from a given range and rippling remaining keys. Also deals with clips, audio and supported MetaData'
     collapse_selected = 'Collapse : Selected Only'
@@ -86,6 +86,12 @@ class _MainMenus_(object):
     pad_selected_ann = 'Insert time in the selected TimeRange (Red highlighted)'
     pad_full_scene = 'Pad : Full Scene'
     pad_full_scene_ann = 'Insert time in the selected TimeRange (Red highlighted)'
+    
+    range_submenu = 'Red9: Range'
+    selectkeys_timerange = 'Keys : Select from Range'
+    selectkeys_timerange_ann = 'Select all keys from the selected Objects within the given TimeRange or selected TimeRange(Red highlighted)'
+    setrangetoo = 'Range Set to: Animated'
+    setrangetoo_ann ='Set the timerange to the extent of all animation found on the selected objects'
     
     # audio sub_menu
     sound_red9_sound = "Red9_Sound"
