@@ -222,26 +222,7 @@ def getAnimLayersFromGivenNodes(nodes):
         nodes=[nodes]
     return cmds.animLayer(nodes, q=True, affectedLayers=True)
 
-def animRangeFromNodes(nodes, setTimeline=True):
-    '''
-    return the extend of the animation range for the given objects
-    :param nodes: nodes to examine for animation data
-    :param setTimeLine: whether we should set the playback timeline to the extent of the found anim data
-    '''
-    minBounds=None
-    maxBounds=None
-    for anim in r9Core.FilterNode.lsAnimCurves(nodes, safe=True):
-        count=cmds.keyframe(anim, q=True, kc=True)
-        min=cmds.keyframe(anim, q=True, index=[(0,0)], tc=True)
-        max=cmds.keyframe(anim, q=True, index=[(count-1,count-1)], tc=True)
-        if not minBounds or min[0]<minBounds:
-            minBounds=min[0]
-        if not maxBounds or max[0]>maxBounds:
-            maxBounds=max[0]
-    if setTimeline:
-        cmds.playbackOptions(min=minBounds,max=maxBounds)
-    return minBounds,maxBounds
-
+     
 def animLayersConfirmCheck(nodes=None, deleteMerged=True):
     '''
     return all animLayers associated with the given nodes
@@ -312,6 +293,89 @@ def mergeAnimLayers(nodes, deleteBaked=True):
             cmds.optionVar(intValue=('animLayerMergeDeleteLayers',deleteMerged))
     return 'Merged_Layer'
 
+def pointOnPolyCmd(nodes):
+    '''
+    This is a BUG FIX for Maya's command wrapping of the pointOnPolyCon
+    which doesn't support namespaces. This deals with that limitation
+    '''
+    import maya.app.general.pointOnPolyConstraint
+    cmds.select(nodes)
+    sourceName = nodes[0].split('|')[-1]
+    
+    cmdstring = "string $constraint[]=`pointOnPolyConstraint -weight 1`;"
+    assembled = maya.app.general.pointOnPolyConstraint.assembleCmd()
+    
+    if ':' in sourceName:
+        nameSpace = sourceName.replace(sourceName.split(':')[-1], '')
+        assembled = assembled.replace(nameSpace, '')
+    print(cmdstring + assembled)
+    con=mel.eval(cmdstring)
+    mel.eval(assembled)
+    return con
+    
+def eulerSelected():
+    '''
+    cheap trick! for selected objects run a Euler Filter and then delete Static curves
+    '''
+    cmds.filterCurve(cmds.ls(sl=True, l=True))
+    cmds.delete(cmds.ls(sl=True, l=True), sc=True)
+
+       
+def animCurveDrawStyle(style='simple', forceBuffer=True,
+                   showBufferCurves=False, displayTangents=False, displayActiveKeyTangents=True, *args):
+    '''
+    Toggle the state of the graphEditor curve display, used in the Filter and Randomizer to
+    simplify the display and the curve whilst processing. This allows you to also pass in
+    the state directly, used by the UI close event to return the editor to the last cached state
+    '''
+    print 'toggleCalled', style, showBufferCurves, displayTangents, displayActiveKeyTangents
+
+    if style == 'simple':
+        print 'toggle On'
+        if forceBuffer:
+            mel.eval('doBuffer snapshot;')
+        mel.eval('animCurveEditor -edit -showBufferCurves 1 -displayTangents false -displayActiveKeyTangents false graphEditor1GraphEd;')
+    elif style == 'full':
+        print 'toggleOff'
+        cmd='animCurveEditor -edit'
+        if showBufferCurves:
+            cmd+=' -showBufferCurves 1'
+        else:
+            cmd+=' -showBufferCurves 0'
+        if displayTangents:
+            cmd+=' -displayTangents true'
+        else:
+            cmd+=' -displayTangents false'
+        if displayActiveKeyTangents:
+            cmd+= ' -displayActiveKeyTangents true'
+        else:
+            cmd+= ' -displayActiveKeyTangents false'
+        mel.eval('%s graphEditor1GraphEd;' % cmd)
+
+
+    
+# TimeRange / AnimRange Functions -------------------------------------------------
+
+def animRangeFromNodes(nodes, setTimeline=True):
+    '''
+    return the extend of the animation range for the given objects
+    :param nodes: nodes to examine for animation data
+    :param setTimeLine: whether we should set the playback timeline to the extent of the found anim data
+    '''
+    minBounds=None
+    maxBounds=None
+    for anim in r9Core.FilterNode.lsAnimCurves(nodes, safe=True):
+        count=cmds.keyframe(anim, q=True, kc=True)
+        min=cmds.keyframe(anim, q=True, index=[(0,0)], tc=True)
+        max=cmds.keyframe(anim, q=True, index=[(count-1,count-1)], tc=True)
+        if not minBounds or min[0]<minBounds:
+            minBounds=min[0]
+        if not maxBounds or max[0]>maxBounds:
+            maxBounds=max[0]
+    if setTimeline:
+        cmds.playbackOptions(min=minBounds,max=maxBounds)
+    return minBounds,maxBounds
+
 def timeLineRangeGet(always=True):
     '''
     Return the current PlaybackTimeline OR if a range is selected in the
@@ -347,38 +411,34 @@ def timeLineRangeProcess(start, end, step, incEnds=True):
         rng.append(endFrm)
     return rng
 
+def selectKeysByRange(nodes=None, animLen=False):
+    '''
+    select the keys from the selected or given nodes within the
+    current timeRange or selectedTimerange
+    '''
+    if not nodes:
+        nodes=cmds.ls(sl=True,type='transform')
+    if not animLen:
+        cmds.selectKey(nodes,time=timeLineRangeGet())
+    else:
+        cmds.selectKey(nodes,time=animRangeFromNodes(nodes, setTimeline=False))
+    
+def setTimeRangeToo(nodes=None, setall=True):
+    '''
+    set the playback timerange to be the animation range of the selected nodes.
+    AnimRange is determined to be the extent of all found animation for a given node
+    '''
+    if not nodes:
+        nodes=cmds.ls(sl=True,type='transform')
+    time=animRangeFromNodes(nodes)
+    cmds.currentTime(time[0])
+    cmds.playbackOptions(min=time[0])
+    cmds.playbackOptions(max=time[1])
+    if setall:
+        cmds.playbackOptions(ast=time[0])
+        cmds.playbackOptions(aet=time[1])
+
      
-def animCurveDrawStyle(style='simple', forceBuffer=True,
-                   showBufferCurves=False, displayTangents=False, displayActiveKeyTangents=True, *args):
-    '''
-    Toggle the state of the graphEditor curve display, used in the Filter and Randomizer to
-    simplify the display and the curve whilst processing. This allows you to also pass in
-    the state directly, used by the UI close event to return the editor to the last cached state
-    '''
-    print 'toggleCalled', style, showBufferCurves, displayTangents, displayActiveKeyTangents
-
-    if style == 'simple':
-        print 'toggle On'
-        if forceBuffer:
-            mel.eval('doBuffer snapshot;')
-        mel.eval('animCurveEditor -edit -showBufferCurves 1 -displayTangents false -displayActiveKeyTangents false graphEditor1GraphEd;')
-    elif style == 'full':
-        print 'toggleOff'
-        cmd='animCurveEditor -edit'
-        if showBufferCurves:
-            cmd+=' -showBufferCurves 1'
-        else:
-            cmd+=' -showBufferCurves 0'
-        if displayTangents:
-            cmd+=' -displayTangents true'
-        else:
-            cmd+=' -displayTangents false'
-        if displayActiveKeyTangents:
-            cmd+= ' -displayActiveKeyTangents true'
-        else:
-            cmd+= ' -displayActiveKeyTangents false'
-        mel.eval('%s graphEditor1GraphEd;' % cmd)
-
 
 #def timeLineRangeSet(time):
 #    '''
@@ -389,33 +449,7 @@ def animCurveDrawStyle(style='simple', forceBuffer=True,
 #    time=cmds.timeControl(PlayBackSlider ,e=True, rangeArray=True, v=time)
 
 
-def pointOnPolyCmd(nodes):
-    '''
-    This is a BUG FIX for Maya's command wrapping of the pointOnPolyCon
-    which doesn't support namespaces. This deals with that limitation
-    '''
-    import maya.app.general.pointOnPolyConstraint
-    cmds.select(nodes)
-    sourceName = nodes[0].split('|')[-1]
-    
-    cmdstring = "string $constraint[]=`pointOnPolyConstraint -weight 1`;"
-    assembled = maya.app.general.pointOnPolyConstraint.assembleCmd()
-    
-    if ':' in sourceName:
-        nameSpace = sourceName.replace(sourceName.split(':')[-1], '')
-        assembled = assembled.replace(nameSpace, '')
-    print(cmdstring + assembled)
-    con=mel.eval(cmdstring)
-    mel.eval(assembled)
-    return con
-    
-def eulerSelected():
-    '''
-    cheap trick! for selected objects run a Euler Filter and then delete Static curves
-    '''
-    cmds.filterCurve(cmds.ls(sl=True, l=True))
-    cmds.delete(cmds.ls(sl=True, l=True), sc=True)
-
+# MAIN CALLS -----------------------------------------------------------------
 
 class AnimationLayerContext(object):
     """
