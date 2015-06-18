@@ -860,7 +860,7 @@ class PoseData(DataMap):
                         cmds.setAttr('%s.rx' % self.PosePointCloud.posePointRoot,0)
                         cmds.setAttr('%s.ry' % self.PosePointCloud.posePointRoot,0)
                     
-                self.PosePointCloud._snapPosePntstoNodes()
+                self.PosePointCloud.snapPosePntstoNodes()
                 
                 if not self.relativeTrans=='projected':
                     cmds.setAttr('%s.translate' % self.PosePointCloud.posePointRoot,
@@ -893,7 +893,7 @@ class PoseData(DataMap):
                         log.debug('Resetting parentSwitches : %s.%s = %f' % (r9Core.nodeNameStrip(child),attr,value))
                         cmds.setAttr('%s.%s' % (child,attr), value)
                             
-                self.PosePointCloud._snapNodestoPosePnts()
+                self.PosePointCloud.snapNodestoPosePnts()
                 self.PosePointCloud.delete()
                 cmds.select(reference)
 
