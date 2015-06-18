@@ -117,6 +117,9 @@ class Test_BwavHandler(object):
         assert self.audioNode.bwav_timecodeFormatted(smpte=False)=='01:26:04:172'
         assert self.audioNode.bwav_timecodeReference()==227739993
         assert self.audioNode.bwav_timecodeMS()==5164172.1768707484
+        
+        #need to get the bWav header to bind it to the var
+        self.audioNode.bwav_getHeader()
         assert self.audioNode.bwav_HeaderData=={'AudioFormat': 0,
                                                  'BextVersion': 0,
                                                  'BitsPerSample': 0,
