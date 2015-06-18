@@ -431,12 +431,15 @@ def setTimeRangeToo(nodes=None, setall=True):
     if not nodes:
         nodes=cmds.ls(sl=True,type='transform')
     time=animRangeFromNodes(nodes)
-    cmds.currentTime(time[0])
-    cmds.playbackOptions(min=time[0])
-    cmds.playbackOptions(max=time[1])
-    if setall:
-        cmds.playbackOptions(ast=time[0])
-        cmds.playbackOptions(aet=time[1])
+    if time:
+        cmds.currentTime(time[0])
+        cmds.playbackOptions(min=time[0])
+        cmds.playbackOptions(max=time[1])
+        if setall:
+            cmds.playbackOptions(ast=time[0])
+            cmds.playbackOptions(aet=time[1])
+    else:
+        raise StandardError('given nodes have no found animation data')
 
      
 
