@@ -715,10 +715,15 @@ PRO_PACK_STUBS=None
 
 def has_pro_pack():
     '''
-    Red9 Pro_Pack is available
+    Red9 Pro_Pack is available and activated as user
     '''
     if os.path.exists(os.path.join(red9ModulePath(),'pro_pack')):
-        return True
+        import Red9.pro_pack.r9pro as r9pro
+        status=r9pro.checkr9user()
+        if status and not issubclass(type(status),str):
+            return True
+        else:
+            return False
     else:
         return False
 

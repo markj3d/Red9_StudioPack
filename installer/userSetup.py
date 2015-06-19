@@ -12,7 +12,7 @@
 #NOT to the Red9 folder itself
 
 import sys
-sys.path.append('O:\Animation\Red9_Release')
+sys.path.append('C:/Red9_Core/')
 
 #then to launch
 import Red9
