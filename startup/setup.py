@@ -616,15 +616,21 @@ def red9_getAuthor():
     return __author__
 
 def get_pro_pack(*args):
-    import Red9.core.Red9_General as r9General  # lazy load
-    result=cmds.confirmDialog(title='Red9_StudioPack : build %f' % red9_getVersion(),
-                       message=("Red9_ProPack Not Installed!\r\r"+
-                                "Contact info@red9consultancy.com for more information"),
-                       button=['Red9Consultancy.com','Get_Pro','Close'],messageAlign='center')
-    if result == 'Get_Pro':
-        log.warning('Red9 ProPack systems not yet available - watch this space!')
-    if result =='Red9Consultancy.com':
-        r9General.os_OpenFile('http://red9consultancy.com/')
+        
+    import Red9.pro_pack.r9pro as r9pro
+    r9pro.r9import('r9wtools')
+    import r9wtools
+    r9wtools.MailRegistration().show()
+                        
+#     import Red9.core.Red9_General as r9General  # lazy load
+#     result=cmds.confirmDialog(title='Red9_StudioPack : build %f' % red9_getVersion(),
+#                        message=("Red9_ProPack Not Installed!\r\r"+
+#                                 "Contact info@red9consultancy.com for more information"),
+#                        button=['Red9Consultancy.com','Get_Pro','Close'],messageAlign='center')
+#     if result == 'Get_Pro':
+#         log.warning('Red9 ProPack systems not yet available - watch this space!')
+#     if result =='Red9Consultancy.com':
+#         r9General.os_OpenFile('http://red9consultancy.com/')
 
 
 #=========================================================================================
@@ -823,12 +829,14 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
 
     log.info('Red9 StudioPack Complete!')
     
-    if has_pro_pack():
-        cmds.evalDeferred("import Red9.pro_pack", lp=True)  # Unresolved Import
-    else:
-        cmds.menuItem('redNineGetProItem', l='PRO : Get Pro Pack',
-                      p='redNineProRootItem', i='red9.jpg',
-                      c=get_pro_pack)
+    cmds.evalDeferred("import Red9.pro_pack", lp=True)  # Unresolved Import
+#     if has_pro_pack():
+#         #in new builds we don not need to do this ;)
+#         cmds.evalDeferred("import Red9.pro_pack", lp=True)  # Unresolved Import
+#     else:
+#         cmds.menuItem('redNineGetProItem', l='PRO : Get Pro Pack',
+#                       p='redNineProRootItem', i='red9.jpg',
+#                       c=get_pro_pack)
     if has_internal_systems():
         cmds.evalDeferred("import Red9_Internals", lp=True)  # Unresolved Import
            
