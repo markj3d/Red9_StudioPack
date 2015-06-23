@@ -3963,7 +3963,8 @@ class MirrorHierarchy(object):
             if not axis:
                 return []
             else:
-                return axis.split(',')
+                #make sure we remove any trailing ',' also so we don't end up with empty entries
+                return axis.rstrip(',').split(',')
         else:
             return self.defaultMirrorAxis
         
