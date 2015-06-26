@@ -999,7 +999,8 @@ class PosePointCloud(object):
         Generic call that's used to overload the visual handling 
         of the PPC is other instances such as the AnimationPPC
         '''
-        self.shapeSwapMeshes()
+        if self.meshes and self.isVisible:
+            self.shapeSwapMeshes()
 
     def buildOffsetCloud(self, rootReference=None, raw=False, projectedRots=False, projectedTrans=False):
         '''
@@ -1048,8 +1049,7 @@ class PosePointCloud(object):
         cmds.select(self.posePointRoot)
         
         # generate the mesh references if required
-        if self.meshes and self.isVisible:
-            self.generateVisualReference()
+        self.generateVisualReference()
             
         self.__connectdataToMeta__()
         return self.posePointCloudNodes
