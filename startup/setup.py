@@ -836,7 +836,8 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
 
     log.info('Red9 StudioPack Complete!')
     
-    cmds.evalDeferred("import Red9.pro_pack", lp=True)  # Unresolved Import
+    if has_pro_pack():
+        cmds.evalDeferred("import Red9.pro_pack", lp=True)  # Unresolved Import
 #     if has_pro_pack():
 #         #in new builds we don not need to do this ;)
 #         cmds.evalDeferred("import Red9.pro_pack", lp=True)  # Unresolved Import
