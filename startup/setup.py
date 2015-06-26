@@ -616,21 +616,23 @@ def red9_getAuthor():
     return __author__
 
 def get_pro_pack(*args):
-        
-    import Red9.pro_pack.r9pro as r9pro
-    r9pro.r9import('r9wtools')
-    import r9wtools
-    r9wtools.MailRegistration().show()
-                        
-#     import Red9.core.Red9_General as r9General  # lazy load
-#     result=cmds.confirmDialog(title='Red9_StudioPack : build %f' % red9_getVersion(),
-#                        message=("Red9_ProPack Not Installed!\r\r"+
-#                                 "Contact info@red9consultancy.com for more information"),
-#                        button=['Red9Consultancy.com','Get_Pro','Close'],messageAlign='center')
-#     if result == 'Get_Pro':
-#         log.warning('Red9 ProPack systems not yet available - watch this space!')
-#     if result =='Red9Consultancy.com':
-#         r9General.os_OpenFile('http://red9consultancy.com/')
+    try:
+        #new pro_pack build calls
+        import Red9.pro_pack.r9pro as r9pro
+        r9pro.r9import('r9wtools')
+        import r9wtools
+        r9wtools.MailRegistration().show()
+    except:
+        #legacy
+        import Red9.core.Red9_General as r9General  # lazy load
+        result=cmds.confirmDialog(title='Red9_StudioPack : build %f' % red9_getVersion(),
+                            message=("Red9_ProPack Not Installed!\r\r"+
+                                     "Contact info@red9consultancy.com for more information"),
+                            button=['Red9Consultancy.com','Get_Pro','Close'],messageAlign='center')
+        if result == 'Get_Pro':
+            log.warning('Red9 ProPack systems not yet available - watch this space!')
+        if result =='Red9Consultancy.com':
+            r9General.os_OpenFile('http://red9consultancy.com/')
 
 
 #=========================================================================================
@@ -724,12 +726,17 @@ def has_pro_pack():
     Red9 Pro_Pack is available and activated as user
     '''
     if os.path.exists(os.path.join(red9ModulePath(),'pro_pack')):
-        import Red9.pro_pack.r9pro as r9pro
-        status=r9pro.checkr9user()
-        if status and not issubclass(type(status),str):
+        try:
+            #new pro_pack call
+            import Red9.pro_pack.r9pro as r9pro
+            status=r9pro.checkr9user()
+            if status and not issubclass(type(status),str):
+                return True
+            else:
+                return False
+        except:
+            #we have the pro-pack folder so assume we're running legacy build (Dambusters support)
             return True
-        else:
-            return False
     else:
         return False
 
