@@ -102,7 +102,7 @@ class Test_MetaRig():
         assert compareData.status
 
 
-class Test_PoseData():
+class Test_PoseDataMeta():
      
     def setup(self):
         cmds.file(os.path.join(r9Setup.red9ModulePath(),'tests','testFiles','MetaRig_anim_jump.mb'),open=True,f=True)
@@ -114,9 +114,6 @@ class Test_PoseData():
         filterNode.read(red9MetaRigConfig)
         self.poseData=r9Pose.PoseData(filterNode)
         
-    def teardown(self):
-        pass
-
     def test_metaRigHandlers(self):
         '''
         main metaRig handlers in the pose setups
@@ -191,4 +188,129 @@ class Test_PoseData():
     
     def test_buildInternalPoseData_nonMetaSkeleton(self):
         pass
+
+
+class Test_PoseData_loaders():
+    '''
+    same set of tests as the meta but going through the nodeType filters and 
+    matchMethods stripPrefix/mirrorIndex/index etc
+    '''
+    def setup(self):
+        cmds.file(os.path.join(r9Setup.red9ModulePath(),'tests','testFiles','MetaRig_anim_jump.mb'),open=True,f=True)
+        self.rootNode='|World_Ctrl'
+        self.poseFolder = getPoseFolder()
+        
+        #make our PoseData object with the unitTest config loaded
+        filterNode=r9Core.FilterNode_Settings()
+        filterNode.nodeTypes='nurbsCurve'
+        filterNode.incRoots=False
+        filterNode.filterPriority = ['COG__Ctrl','Hips_Ctrl','Chest_Ctrl','R_Wrist_Ctrl','L_Wrist_Ctrl','L_Foot_Ctrl','R_Foot_Ctrl','L_Knee_Ctrl','R_Knee_Ctrl']
+        self.poseData=r9Pose.PoseData(filterNode)
+                
+    def test_poseLoad_stripPrefix(self):
+        self.poseData.matchMethod='stripPrefix'
+        cmds.currentTime(0)
+        filepath=os.path.join(self.poseFolder,'jump_f218.pose')
+        self.poseData.poseLoad(self.rootNode, filepath=filepath, useFilter=True)
+        assert r9Pose.PoseCompare(self.poseData,filepath).compare()
+        
+#    def test_poseLoad_index(self):
+#        self.poseData.matchMethod='index'
+#        cmds.currentTime(0)
+#        filepath=os.path.join(self.poseFolder,'jump_f218.pose')
+#        self.poseData.poseLoad(self.rootNode, filepath=filepath, useFilter=True)
+#        assert r9Pose.PoseCompare(self.poseData,filepath).compare()
+#        
+    def test_poseLoad_mirrorIndex(self):
+        self.poseData.matchMethod='mirrorIndex'
+        cmds.currentTime(0)
+        filepath=os.path.join(self.poseFolder,'jump_f218.pose')
+        self.poseData.poseLoad(self.rootNode, filepath=filepath, useFilter=True)
+        assert r9Pose.PoseCompare(self.poseData,filepath).compare()
+        
+    def test_poseLoad_relativeProjected_stripPrefix(self):
+        '''
+        load the pose with relative and check against the store 'projected' posefile
+        '''
+        # stripPrefix Match -------------------------------------------------
+        self.poseData.matchMethod='stripPrefix'
+        cmds.currentTime(0)
+        requiredPose=os.path.join(self.poseFolder,'jump_f218_projected.pose')
+        
+        filepath=os.path.join(self.poseFolder,'jump_f218.pose')
+        cmds.select('L_Foot_Ctrl')
+        self.poseData.poseLoad(self.rootNode, filepath=filepath, useFilter=True,
+                               relativePose=True,
+                               relativeRots='projected',
+                               relativeTrans='projected')
+        print '\n\n\n##########   MAYA UP AXIS : ###################', r9Setup.mayaUpAxis()
+        
+        #the pose is no longer in the same space due to the relative code, 
+        #we need up update the internal pose before comparing
+        self.poseData.buildDataMap(self.rootNode)
+        assert r9Pose.PoseCompare(self.poseData, requiredPose).compare()
+        
+    def test_poseLoad_relativeProjected_mirrorIndex(self):
+        '''
+        load the pose with relative and check against the store 'projected' posefile
+        '''
+        # mirrorIndex Match -------------------------------------------------
+        self.poseData.matchMethod='mirrorIndex'
+        cmds.currentTime(0)
+        requiredPose=os.path.join(self.poseFolder,'jump_f218_projected.pose')
+        
+        filepath=os.path.join(self.poseFolder,'jump_f218.pose')
+        cmds.select('L_Foot_Ctrl')
+        self.poseData.poseLoad(self.rootNode, filepath=filepath, useFilter=True,
+                               relativePose=True,
+                               relativeRots='projected',
+                               relativeTrans='projected')
+        print '\n\n\n##########   MAYA UP AXIS : ###################', r9Setup.mayaUpAxis()
+        
+        #the pose is no longer in the same space due to the relative code,
+        #we need up update the internal pose before comparing
+        self.poseData.buildDataMap(self.rootNode)
+        assert r9Pose.PoseCompare(self.poseData, requiredPose).compare()
+        
+        
+    def test_poseLoad_relativeAbsolute_stripPrefix(self):
+        '''
+        load the pose with relative and check against the store 'absolute' posefile
+        '''
+        # stripPrefix Match -------------------------------------------------
+        self.poseData.matchMethod='stripPrefix'
+        cmds.currentTime(29)
+        filepath=os.path.join(self.poseFolder,'jump_f9.pose')
+        cmds.select('R_Foot_Ctrl')
+        self.poseData.poseLoad(self.rootNode, filepath=filepath, useFilter=True,
+                               relativePose=True,
+                               relativeRots='projected',
+                               relativeTrans='absolute')
+        
+        #the pose is no longer in the same space due to the relative code, 
+        #we need up update the internal pose before comparing
+        self.poseData.buildDataMap(self.rootNode)
+        assert not r9Pose.PoseCompare(self.poseData, filepath, compareDict='poseDict').compare()
+        assert r9Pose.PoseCompare(self.poseData, os.path.join(self.poseFolder,'jump_f9_absolute29.pose'), compareDict='poseDict').compare()
+    
+    def test_poseLoad_relativeAbsolute_mirrorIndex(self):
+        '''
+        load the pose with relative and check against the store 'absolute' posefile
+        '''
+        # mirrorIndex Match -------------------------------------------------
+        self.poseData.matchMethod='mirrorIndex'
+        cmds.currentTime(29)
+        filepath=os.path.join(self.poseFolder,'jump_f9.pose')
+        cmds.select('R_Foot_Ctrl')
+        self.poseData.poseLoad(self.rootNode, filepath=filepath, useFilter=True,
+                               relativePose=True,
+                               relativeRots='projected',
+                               relativeTrans='absolute')
+        
+        #the pose is no longer in the same space due to the relative code, 
+        #we need up update the internal pose before comparing
+        self.poseData.buildDataMap(self.rootNode)
+        assert not r9Pose.PoseCompare(self.poseData, filepath, compareDict='poseDict').compare()
+        assert r9Pose.PoseCompare(self.poseData, os.path.join(self.poseFolder,'jump_f9_absolute29.pose'), compareDict='poseDict').compare()
+         
     

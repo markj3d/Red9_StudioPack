@@ -1,17 +1,21 @@
 [filterNode_settings]
+	hierarchy = False
+	filterPriority = COG__Ctrl, Hips_Ctrl, Chest_Ctrl, R_Wrist_Ctrl, L_Wrist_Ctrl, L_Foot_Ctrl, R_Foot_Ctrl, L_Knee_Ctrl, R_Knee_Ctrl
+	incRoots = True
+	searchPattern = ,
+	metaClass = ,
+	nodeTypes = ,
 	metaRig = True
 	searchAttrs = ,
-	hierarchy = False
-	metaClass = ,
-	searchPattern = ,
-	filterPriority = ,
+	infoBlock = ""
 	transformClamp = True
-	nodeTypes = ,
-	incRoots = True
+	[[rigData]]
+		snapPriority = False
 [poseData]
 	[[R_Foot_Ctrl]]
-		ID = 7
-		longName = |META:World_Ctrl|META:R_Foot_grp|META:R_Foot_Ctrl
+		mirrorID = Right_4
+		ID = 18
+		longName = |World_Ctrl|R_Foot_grp|R_Foot_Ctrl
 		[[[metaData]]]
 			metaNodeID = R_LegSystem
 			metaAttr = CTRL_R_Foot
@@ -23,8 +27,9 @@
 			rotateY = -68.375338555
 			rotateZ = -6.13988490149
 	[[R_Knee_Ctrl]]
-		ID = 8
-		longName = |META:World_Ctrl|META:R_Knee_Ctrl
+		mirrorID = Right_5
+		ID = 16
+		longName = |World_Ctrl|R_Knee_Ctrl
 		[[[metaData]]]
 			metaNodeID = R_LegSystem
 			metaAttr = CTRL_R_Knee
@@ -36,8 +41,9 @@
 			rotateY = 0.0
 			rotateZ = 0.0
 	[[Character1_RightHandIndex1]]
-		ID = 16
-		longName = |META:Character1_Pelvis|META:Character1_Spine|META:Character1_Spine2|META:Character1_RightShoulder|META:Character1_RightArm|META:Character1_RightForeArm|META:Character1_RightHand|META:Character1_RightHandIndex1
+		mirrorID = None_None
+		ID = 7
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandIndex1
 		[[[metaData]]]
 			metaNodeID = R_Fingers_System
 			metaAttr = CTRL_IndexRoot
@@ -47,21 +53,24 @@
 			rotateZ = 0.0
 			radius = 1.0
 			visibility = True
-	[[Character1_RightHandMiddle1]]
+	[[L_Knee_Ctrl]]
+		mirrorID = Left_5
 		ID = 17
-		longName = |META:Character1_Pelvis|META:Character1_Spine|META:Character1_Spine2|META:Character1_RightShoulder|META:Character1_RightArm|META:Character1_RightForeArm|META:Character1_RightHand|META:Character1_RightHandMiddle1
+		longName = |World_Ctrl|L_Knee_Ctrl
 		[[[metaData]]]
-			metaNodeID = R_Fingers_System
-			metaAttr = CTRL_MiddleRoot
+			metaNodeID = L_LegSystem
+			metaAttr = CTRL_L_Knee
 		[[[attrs]]]
+			translateX = -82.5935944776
+			translateY = 2.31346668114
+			translateZ = -385.916660807
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
-			radius = 1.0
-			visibility = True
 	[[Character1_RightHandRing1]]
-		ID = 18
-		longName = |META:Character1_Pelvis|META:Character1_Spine|META:Character1_Spine2|META:Character1_RightShoulder|META:Character1_RightArm|META:Character1_RightForeArm|META:Character1_RightHand|META:Character1_RightHandRing1
+		mirrorID = None_None
+		ID = 9
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandRing1
 		[[[metaData]]]
 			metaNodeID = R_Fingers_System
 			metaAttr = CTRL_RingRoot
@@ -72,8 +81,9 @@
 			radius = 1.0
 			visibility = True
 	[[L_Foot_Ctrl]]
-		ID = 9
-		longName = |META:World_Ctrl|META:L_Foot_grp|META:L_Foot_Ctrl
+		mirrorID = Left_4
+		ID = 19
+		longName = |World_Ctrl|L_Foot_grp|L_Foot_Ctrl
 		[[[metaData]]]
 			metaNodeID = L_LegSystem
 			metaAttr = CTRL_L_Foot
@@ -85,8 +95,9 @@
 			rotateY = 76.9323043002
 			rotateZ = 94.4959785989
 	[[Character1_RightHandThumb1]]
-		ID = 15
-		longName = |META:Character1_Pelvis|META:Character1_Spine|META:Character1_Spine2|META:Character1_RightShoulder|META:Character1_RightArm|META:Character1_RightForeArm|META:Character1_RightHand|META:Character1_RightHandThumb1
+		mirrorID = None_None
+		ID = 6
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandThumb1
 		[[[metaData]]]
 			metaNodeID = R_Fingers_System
 			metaAttr = CTRL_ThumbRoot
@@ -97,8 +108,9 @@
 			radius = 1.0
 			visibility = True
 	[[Character1_LeftHandThumb1]]
-		ID = 20
-		longName = |META:Character1_Pelvis|META:Character1_Spine|META:Character1_Spine2|META:Character1_LeftShoulder|META:Character1_LeftArm|META:Character1_LeftForeArm|META:Character1_LeftHand|META:Character1_LeftHandThumb1
+		mirrorID = None_None
+		ID = 11
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandThumb1
 		[[[metaData]]]
 			metaNodeID = L_Fingers_System
 			metaAttr = CTRL_ThumbRoot
@@ -109,8 +121,9 @@
 			radius = 1.0
 			visibility = True
 	[[Head_Ctrl]]
-		ID = 14
-		longName = |META:World_Ctrl|META:COG__Ctrl|META:Chest_Ctrl|META:Head_grp|META:Head_Ctrl
+		mirrorID = Centre_5
+		ID = 5
+		longName = |World_Ctrl|COG__Ctrl|Chest_Ctrl|Head_grp|Head_Ctrl
 		[[[metaData]]]
 			metaNodeID = SpineSystem
 			metaAttr = CTRL_Head
@@ -122,8 +135,9 @@
 			rotateY = 3.40774184938
 			rotateZ = -11.2166495071
 	[[COG__Ctrl]]
-		ID = 11
-		longName = |META:World_Ctrl|META:COG__Ctrl
+		mirrorID = Centre_2
+		ID = 24
+		longName = |World_Ctrl|COG__Ctrl
 		[[[metaData]]]
 			metaNodeID = SpineSystem
 			metaAttr = CTRL_Root
@@ -135,8 +149,9 @@
 			rotateY = -56.8398853917
 			rotateZ = 0.213496272558
 	[[Character1_LeftHandRing1]]
-		ID = 23
-		longName = |META:Character1_Pelvis|META:Character1_Spine|META:Character1_Spine2|META:Character1_LeftShoulder|META:Character1_LeftArm|META:Character1_LeftForeArm|META:Character1_LeftHand|META:Character1_LeftHandRing1
+		mirrorID = None_None
+		ID = 14
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandRing1
 		[[[metaData]]]
 			metaNodeID = L_Fingers_System
 			metaAttr = CTRL_RingRoot
@@ -147,8 +162,9 @@
 			radius = 1.0
 			visibility = True
 	[[L_Clav_Ctrl]]
-		ID = 6
-		longName = |META:World_Ctrl|META:COG__Ctrl|META:Chest_Ctrl|META:L_Clav_Ctrl
+		mirrorID = Left_3
+		ID = 2
+		longName = |World_Ctrl|COG__Ctrl|Chest_Ctrl|L_Clav_Ctrl
 		[[[metaData]]]
 			metaNodeID = L_ArmSystem
 			metaAttr = CTRL_L_Clav
@@ -157,8 +173,9 @@
 			rotateY = -0.932097858841
 			rotateZ = -8.22256640575
 	[[L_Wrist_Ctrl]]
-		ID = 4
-		longName = |META:World_Ctrl|META:L_Wrist_Ctrl
+		mirrorID = Left_1
+		ID = 20
+		longName = |World_Ctrl|L_Wrist_Ctrl
 		[[[metaData]]]
 			metaNodeID = L_ArmSystem
 			metaAttr = CTRL_L_Wrist
@@ -170,8 +187,9 @@
 			rotateY = -83.3425184582
 			rotateZ = -65.7701930972
 	[[Character1_LeftHandMiddle1]]
-		ID = 22
-		longName = |META:Character1_Pelvis|META:Character1_Spine|META:Character1_Spine2|META:Character1_LeftShoulder|META:Character1_LeftArm|META:Character1_LeftForeArm|META:Character1_LeftHand|META:Character1_LeftHandMiddle1
+		mirrorID = None_None
+		ID = 13
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandMiddle1
 		[[[metaData]]]
 			metaNodeID = L_Fingers_System
 			metaAttr = CTRL_MiddleRoot
@@ -182,8 +200,9 @@
 			radius = 1.0
 			visibility = True
 	[[Hips_Ctrl]]
-		ID = 12
-		longName = |META:World_Ctrl|META:COG__Ctrl|META:Hips_Ctrl
+		mirrorID = Centre_3
+		ID = 23
+		longName = |World_Ctrl|COG__Ctrl|Hips_Ctrl
 		[[[metaData]]]
 			metaNodeID = SpineSystem
 			metaAttr = CTRL_Hips
@@ -195,8 +214,9 @@
 			rotateY = 2.29169812592
 			rotateZ = 6.38828861932
 	[[R_Wrist_Ctrl]]
-		ID = 1
-		longName = |META:World_Ctrl|META:R_Wrist_Ctrl
+		mirrorID = Right_1
+		ID = 21
+		longName = |World_Ctrl|R_Wrist_Ctrl
 		[[[metaData]]]
 			metaNodeID = R_ArmSystem
 			metaAttr = CTRL_R_Wrist
@@ -208,8 +228,9 @@
 			rotateY = 45.8819308416
 			rotateZ = 53.4494837103
 	[[Character1_RightHandPinky1]]
-		ID = 19
-		longName = |META:Character1_Pelvis|META:Character1_Spine|META:Character1_Spine2|META:Character1_RightShoulder|META:Character1_RightArm|META:Character1_RightForeArm|META:Character1_RightHand|META:Character1_RightHandPinky1
+		mirrorID = None_None
+		ID = 10
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandPinky1
 		[[[metaData]]]
 			metaNodeID = R_Fingers_System
 			metaAttr = CTRL_PinkyRoot
@@ -220,8 +241,9 @@
 			radius = 1.0
 			visibility = True
 	[[Chest_Ctrl]]
-		ID = 13
-		longName = |META:World_Ctrl|META:COG__Ctrl|META:Chest_Ctrl
+		mirrorID = Centre_4
+		ID = 22
+		longName = |World_Ctrl|COG__Ctrl|Chest_Ctrl
 		[[[metaData]]]
 			metaNodeID = SpineSystem
 			metaAttr = CTRL_Chest
@@ -233,8 +255,9 @@
 			rotateY = 3.08850684437
 			rotateZ = -1.43807478416
 	[[Character1_LeftHandIndex1]]
-		ID = 21
-		longName = |META:Character1_Pelvis|META:Character1_Spine|META:Character1_Spine2|META:Character1_LeftShoulder|META:Character1_LeftArm|META:Character1_LeftForeArm|META:Character1_LeftHand|META:Character1_LeftHandIndex1
+		mirrorID = None_None
+		ID = 12
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandIndex1
 		[[[metaData]]]
 			metaNodeID = L_Fingers_System
 			metaAttr = CTRL_IndexRoot
@@ -245,8 +268,9 @@
 			radius = 1.0
 			visibility = True
 	[[World_Ctrl]]
+		mirrorID = Centre_1
 		ID = 0
-		longName = |META:World_Ctrl
+		longName = |World_Ctrl
 		[[[metaData]]]
 			metaNodeID = RED_Rig
 			metaAttr = CTRL_Main
@@ -259,8 +283,9 @@
 			rotateY = 0.0
 			rotateZ = 0.0
 	[[L_Elbow_Ctrl]]
-		ID = 5
-		longName = |META:World_Ctrl|META:COG__Ctrl|META:L_Elbow_Ctrl
+		mirrorID = Left_2
+		ID = 1
+		longName = |World_Ctrl|COG__Ctrl|L_Elbow_Ctrl
 		[[[metaData]]]
 			metaNodeID = L_ArmSystem
 			metaAttr = CTRL_L_Elbow
@@ -271,22 +296,23 @@
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
-	[[L_Knee_Ctrl]]
-		ID = 10
-		longName = |META:World_Ctrl|META:L_Knee_Ctrl
+	[[Character1_RightHandMiddle1]]
+		mirrorID = None_None
+		ID = 8
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandMiddle1
 		[[[metaData]]]
-			metaNodeID = L_LegSystem
-			metaAttr = CTRL_L_Knee
+			metaNodeID = R_Fingers_System
+			metaAttr = CTRL_MiddleRoot
 		[[[attrs]]]
-			translateX = -82.5935944776
-			translateY = 2.31346668114
-			translateZ = -385.916660807
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+			radius = 1.0
+			visibility = True
 	[[R_Clav_Ctrl]]
-		ID = 3
-		longName = |META:World_Ctrl|META:COG__Ctrl|META:Chest_Ctrl|META:R_Clav_Ctrl
+		mirrorID = Right_3
+		ID = 4
+		longName = |World_Ctrl|COG__Ctrl|Chest_Ctrl|R_Clav_Ctrl
 		[[[metaData]]]
 			metaNodeID = R_ArmSystem
 			metaAttr = CTRL_R_Clav
@@ -295,8 +321,9 @@
 			rotateY = 13.2123342771
 			rotateZ = -3.52463272731
 	[[R_Elbow_Ctrl]]
-		ID = 2
-		longName = |META:World_Ctrl|META:COG__Ctrl|META:R_Elbow_Ctrl
+		mirrorID = Right_2
+		ID = 3
+		longName = |World_Ctrl|COG__Ctrl|R_Elbow_Ctrl
 		[[[metaData]]]
 			metaNodeID = R_ArmSystem
 			metaAttr = CTRL_R_Elbow
@@ -308,8 +335,9 @@
 			rotateY = 0.0
 			rotateZ = 0.0
 	[[Character1_LeftHandPinky1]]
-		ID = 24
-		longName = |META:Character1_Pelvis|META:Character1_Spine|META:Character1_Spine2|META:Character1_LeftShoulder|META:Character1_LeftArm|META:Character1_LeftForeArm|META:Character1_LeftHand|META:Character1_LeftHandPinky1
+		mirrorID = None_None
+		ID = 15
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandPinky1
 		[[[metaData]]]
 			metaNodeID = L_Fingers_System
 			metaAttr = CTRL_PinkyRoot
@@ -322,10 +350,12 @@
 [info]
 	metaRigNodeID = RED_Rig
 	metaPose = True
-	author = dellbert
-	skeletonRootJnt = |META:Character1_Pelvis
-	metaRigNode = META:RED_Rig
-	date = Mon May 13 21:18:38 2013
+	author = mark.jackson
+	skeletonRootJnt = |Character1_Pelvis
+	metaRigNode = RED_Rig
+	version = 1.0
+	date = Fri Jun 26 17:52:20 2015
+	rigType = None
 [skeletonDict]
 	[[Character1_RightHandIndex4]]
 		[[[attrs]]]
@@ -396,9 +426,9 @@
 			translateX = 9.5367454378e-07
 			translateY = -40.7009698632
 			translateZ = -5.42101086243e-20
-			rotateX = -30.4328698661
-			rotateY = 12.9328931953
-			rotateZ = 2.4739910419
+			rotateX = -30.432869866
+			rotateY = 12.9328931955
+			rotateZ = 2.47399104199
 	[[Character1_RightHandThumb1]]
 		[[[attrs]]]
 			translateX = -4.56041188916
@@ -445,16 +475,16 @@
 			translateY = 0.000137329134304
 			translateZ = 0.0
 			rotateX = 178.775440238
-			rotateY = 20.3561226241
+			rotateY = 20.356122625
 			rotateZ = -62.1035753618
 	[[Character1_RightForeArm]]
 		[[[attrs]]]
 			translateX = -27.3056057228
 			translateY = -5.68434188608e-14
 			translateZ = 0.0
-			rotateX = -2.57972520535e-17
-			rotateY = 49.5500690228
-			rotateZ = -6.48281294169e-12
+			rotateX = -2.57972520505e-17
+			rotateY = 49.5500690222
+			rotateZ = -6.48281294168e-12
 	[[Character1_RightHandThumb3]]
 		[[[attrs]]]
 			translateX = -2.54309060632
@@ -485,8 +515,8 @@
 			translateY = 0.0
 			translateZ = 0.0
 			rotateX = -171.503794554
-			rotateY = -14.1260501322
-			rotateZ = 6.50982349086
+			rotateY = -14.1260501315
+			rotateZ = 6.50982349078
 	[[Character1_RightToeBase]]
 		[[[attrs]]]
 			translateX = -0.00108528163082
@@ -508,39 +538,39 @@
 			translateX = 27.3054741157
 			translateY = 0.0
 			translateZ = 0.0
-			rotateX = 2.89431788806e-16
-			rotateY = 83.4443802251
-			rotateZ = -1.28889489936e-15
+			rotateX = 2.89431788807e-16
+			rotateY = 83.4443802253
+			rotateZ = -1.28889489937e-15
 	[[Character1_LeftFoot]]
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = -40.7009698632
 			translateZ = 0.0
-			rotateX = 7.6222028428
-			rotateY = 2.76425085848
-			rotateZ = -5.26213543265
+			rotateX = 7.62220284308
+			rotateY = 2.76425085844
+			rotateZ = -5.26213543279
 	[[Character1_RightArm]]
 		[[[attrs]]]
 			translateX = -10.7072784203
 			translateY = 0.00042724619567
 			translateZ = 0.0
-			rotateX = 47.6363769725
-			rotateY = 26.4866011696
-			rotateZ = 87.8723097703
+			rotateX = 47.6363769728
+			rotateY = 26.4866011699
+			rotateZ = 87.8723097706
 	[[Character1_RightLeg]]
 		[[[attrs]]]
 			translateX = -2.86102363134e-06
 			translateY = -44.8786499211
 			translateZ = 0.000439024111154
-			rotateX = 70.6259155531
-			rotateY = 1.44719731147e-06
-			rotateZ = -5.92734646296e-06
+			rotateX = 70.6259155529
+			rotateY = 1.44719731146e-06
+			rotateZ = -5.9273483157e-06
 	[[Character1_Spine]]
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = 7.00000166893
 			translateZ = 0.0
-			rotateX = 24.0299454893
+			rotateX = 24.0299454894
 			rotateY = 4.42454431616
 			rotateZ = -10.4892243953
 	[[Character1_LeftHandMiddle4]]
@@ -588,9 +618,9 @@
 			translateX = 8.9100029254
 			translateY = -6.27000576735
 			translateZ = 0.0
-			rotateX = -14.104261801
-			rotateY = 23.772766114
-			rotateZ = 16.9983657
+			rotateX = -14.1042618013
+			rotateY = 23.7727661138
+			rotateZ = 16.9983656999
 	[[Character1_RightHandPinky3]]
 		[[[attrs]]]
 			translateX = -1.97450047076
@@ -653,24 +683,24 @@
 			translateY = 25.333334287
 			translateZ = 2.22044604925e-16
 			rotateX = 17.8677341101
-			rotateY = -0.559454022786
+			rotateY = -0.559454022784
 			rotateZ = 3.55771941739
 	[[Character1_Neck]]
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = 12.6666747729
 			translateZ = 0.0
-			rotateX = 9.00720334862
-			rotateY = 2.14839849712
-			rotateZ = -4.3018662053
+			rotateX = 9.00720334859
+			rotateY = 2.14839849713
+			rotateZ = -4.30186620528
 	[[Character1_Head]]
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = 14.0
 			translateZ = 0.0
-			rotateX = 2.95240581035
-			rotateY = 0.181083829433
-			rotateZ = -7.01805925338
+			rotateX = 2.95240581034
+			rotateY = 0.181083829432
+			rotateZ = -7.01805925336
 	[[Character1_RightHandPinky4]]
 		[[[attrs]]]
 			translateX = -1.66661039735
@@ -692,9 +722,9 @@
 			translateX = -26.6969935172
 			translateY = 0.0
 			translateZ = 0.0
-			rotateX = -1.65059017141
-			rotateY = -2.85711501836
-			rotateZ = 12.2424103236
+			rotateX = -1.65059017151
+			rotateY = -2.85711501811
+			rotateZ = 12.2424103235
 	[[Character1_LeftHandPinky4]]
 		[[[attrs]]]
 			translateX = 1.66661111512
@@ -780,9 +810,9 @@
 			translateX = -8.9100029254
 			translateY = -6.27000576735
 			translateZ = 0.0
-			rotateX = 8.58539817263
-			rotateY = -5.2293157348
-			rotateZ = -32.1694225687
+			rotateX = 8.58539817292
+			rotateY = -5.22931573482
+			rotateZ = -32.169422569
 	[[Character1_LeftHandPinky3]]
 		[[[attrs]]]
 			translateX = 1.97450303423
