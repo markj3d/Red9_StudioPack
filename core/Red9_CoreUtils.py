@@ -191,7 +191,7 @@ def filterListByString(input_list, filter_string, matchcase=False):
     
     if not matchcase:
         filter_string=filter_string.upper()
-    filterBy=[f for f in filter_string.replace(' ','').split(',') if f]
+    filterBy=[f for f in filter_string.replace(' ','').rstrip(',').split(',') if f]
     filteredList=[]
     if filter_string:
         for item in input_list:
