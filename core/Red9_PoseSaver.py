@@ -114,7 +114,21 @@ class DataMap(object):
             self.__filepath='%s%s' % (os.path.splitext(path)[0], self.file_ext)
         else:
             self.__filepath=path
-        
+    
+    def _pre_load(self):
+        '''
+        called directly before the loadData call so you have access
+        to manage the undoQueue etc if subclassing
+        '''
+        pass
+    
+    def _post_load(self):
+        '''
+        called directly after the loadData call so you have access
+        to manage the undoQueue etc if subclassing
+        '''
+        pass
+           
     def setMetaRig(self,node):
         log.info('setting internal metaRig from given node : %s' % node)
         if r9Meta.isMetaNodeInherited(node,'MetaRig'):
@@ -567,27 +581,32 @@ class DataMap(object):
             is True then use the filter on the destination hierarchy.
         '''
         
-        if not type(nodes)==list:
-            nodes=[nodes]  # cast to list for consistency
-        
-        #push args to object - means that any poseHandler.py file has access to them
-        if filepath:
-            self.filepath = filepath
+        self._pre_load()
+        try:
+            if not type(nodes)==list:
+                nodes=[nodes]  # cast to list for consistency
             
-        self.useFilter = useFilter  # used in the getNodes call
-        nodesToLoad = self._matchNodes_to_data(nodes)
-        
-        if not self.matchedPairs:
-            raise StandardError('No Matching Nodes found in the PoseFile!')
-        else:
-            if self.prioritySnapOnly:
-                #we've already filtered the hierarchy, may as well just filter the results for speed
-                nodesToLoad=r9Core.prioritizeNodeList(nodesToLoad, self.settings.filterPriority, regex=True, prioritysOnly=True)
-                nodesToLoad.reverse()
+            #push args to object - means that any poseHandler.py file has access to them
+            if filepath:
+                self.filepath = filepath
+                
+            self.useFilter = useFilter  # used in the getNodes call
+            nodesToLoad = self._matchNodes_to_data(nodes)
             
-            # nodes now matched, apply the data in the dataMap
-            self._applyData()
-
+            if not self.matchedPairs:
+                raise StandardError('No Matching Nodes found in the PoseFile!')
+            else:
+                if self.prioritySnapOnly:
+                    #we've already filtered the hierarchy, may as well just filter the results for speed
+                    nodesToLoad=r9Core.prioritizeNodeList(nodesToLoad, self.settings.filterPriority, regex=True, prioritysOnly=True)
+                    nodesToLoad.reverse()
+                
+                # nodes now matched, apply the data in the dataMap
+                self._applyData()
+        except:
+            log.info('pose Load failed!!!')
+        finally:
+            self._post_load()
 
 
 class PoseData(DataMap):
