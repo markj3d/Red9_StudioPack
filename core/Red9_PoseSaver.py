@@ -54,14 +54,14 @@ def getFolderPoseHandler(posePath):
 
 class DataMap(object):
     '''
-    New base class for handling data
+    New base class for handling data storage and reloading with intelligence
     '''
     
     def __init__(self, filterSettings=None, *args, **kws):
         '''
         The idea of the DataMap is to make the node handling part of any system generic.
         This allows us to use this baseClass to build up things like poseSavers and all
-        we have to worry about is the data extraction part, all the node handling
+        we have to worry about is the data save / extraction part, all the node handling
         and file handling is already done by this class ;)
         
         Note that we're not passing any data in terms of nodes here, We'll deal with
@@ -70,8 +70,8 @@ class DataMap(object):
         self.poseDict={}
         self.infoDict={}
         self.skeletonDict={}
-        self.file_ext = ''
-        self.filepath=''
+        self.file_ext = ''  # extension the file will be saved as
+        self.filepath=''    # path to load / save
         self.__filepath = ''
         self.mayaUpAxis = r9Setup.mayaUpAxis()
         self.thumbnailRes=[128,128]
@@ -80,7 +80,7 @@ class DataMap(object):
         self.metaRig=None  # filled by the code as we process
         self.matchMethod='base'  # method used to match nodes internally in the poseDict
         self.useFilter=True
-        self.prioritySnapOnly=False
+        self.prioritySnapOnly=False  # mainly used by any load relative calls, determines whether to use the internal filters priority list
         self.skipAttrs=[]  # attrs to completely ignore in any pose handling
         
         # make sure we have a settings object
@@ -264,7 +264,9 @@ class DataMap(object):
                 self.poseDict[key]['mirrorID']=mirrorID  # add the mirrorIndex
             if self.metaPose:
                 self.poseDict[key]['metaData']=getMetaDict(node)  # metaSystem the node is wired too
-
+            
+            # the above blocks are the generic info used to map the data on load
+            # this call is the specific collection of data for this node required by this map type
             self._collectNodeData(node, key)
 
     def _buildBlocks_to_run(self, nodes):
@@ -800,6 +802,7 @@ class PoseData(DataMap):
         :param maintainSpaces: this preserves any parentSwitching mismatches between 
             the stored pose and the current rig settings, current spaces are maintained. 
             This only checks those nodes in the snapList and only runs under relative mode.
+        :param percent: percentage of the pose to apply, used by the poseBlender in the UIs
         '''
         
         if relativePose and not cmds.ls(sl=True):
