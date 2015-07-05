@@ -2622,8 +2622,8 @@ class MetaRig(MetaClass):
         self.lockState = True           # lock the node to avoid accidental removal
         self.parentSwitchAttr = ['parent']  # attr used for parentSwitching
         self.MirrorClass = None         # capital as this binds to the MirrorClass directly
-        # self.poseSkippedAttrs = []    # attributes which are to be IGNORED by the posesaver
-        
+        # self.poseSkippedAttrs = []    # attributes which are to be IGNORED by the posesaver, set by you for your needs!
+
     def __bindData__(self):
         self.addAttr('version',1.0)  # ensure these are added by default
         self.addAttr('rigType', '')  # ensure these are added by default
