@@ -2480,7 +2480,7 @@ class AnimationUI(object):
         poseNode.filepath = self.getPosePath()
         poseNode.useFilter = cmds.checkBox('uicbPoseHierarchy', q=True, v=True)
         poseNode.matchMethod=self.matchMethod
-        poseNode._matchNodes_to_data(self.__uiCB_getPoseInputNodes())
+        poseNode.processPoseFile(self.__uiCB_getPoseInputNodes())
         self._poseBlendUndoChunkOpen=False
         if objs:
             cmds.select(objs)
