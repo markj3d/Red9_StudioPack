@@ -106,11 +106,11 @@ log.setLevel(logging.INFO)
 # global var so that the animUI is exposed to anything as a global object
 global RED_ANIMATION_UI
 
-global RED_ANIMATION_UI_OPENCALLBACK
-RED_ANIMATION_UI_OPENCALLBACK=None
+global RED_ANIMATION_UI_OPENCALLBACKS
+RED_ANIMATION_UI_OPENCALLBACKS=[]
 
 '''
-Callback globals so you can fire a command prior to the UI opening,
+Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.
 
@@ -118,12 +118,13 @@ def myProjectCallback(cls)
     cls.poseHandlerPaths=['MyProjects/resources/poseHandlers']
     cls.posePathProject ='My_projects/global/project/pose/lib'
     
-r9Anim.RED_ANIMATION_UI_OPENCALLBACK = myProjectCallback
+r9Anim.RED_ANIMATION_UI_OPENCALLBACKS.append(myProjectCallback)
 
-NOTE:: the function call bound to the callback is passed the current instance of the animUI class 
-as an arg so you can modify as you need. Also when the PoseUI popup menu is built, IF the internal path
-cls.poseHandlerPaths is valid then we bind into that popup all valid poseHandler.py files
-found the given path. This allow you to add custom handler types and expose them through the UI directly.
+NOTE:: the function calls bound to the callback are passed the current instance of the animUI class 
+as an arg so you can modify as you need. Also when the PoseUI RMB popup menu is built, IF paths in the list
+cls.poseHandlerPaths are valid, then we bind into that popup all valid poseHandler.py files
+found the given path. This allow you to add custom handler types and expose them through the UI directly,
+they will show up in the RMB popup as such: Fingers_poseHandler.py will show as 'Add Subfolder : FINGERS'
 '''
 
 
@@ -531,9 +532,10 @@ class AnimationUI(object):
         self.poseRootMode = 'RootNode'  # or MetaRig
         self.poses = None
         self.poseButtonBGC = [0.27, 0.3, 0.3]
-        self.poseButtonHighLight = r9Setup.red9ButtonBGC('green')  # [0.7, 0.95, 0.75]
+        self.poseButtonHighLight = r9Setup.red9ButtonBGC('green')
         
-        self.poseHandlerPaths=[]  # ['J:/Games/hf2/Tools/CryMayaCore/core/crycore/resources/poseHandlers']
+        # Default Red9 poseHandlers now bound here if found, used to extend Clients handling of data
+        self.poseHandlerPaths=[os.path.join(self.presetDir,'poseHandlers')]
         
         # Internal config file setup for the UI state
         if self.internalConfigPath:
@@ -547,7 +549,7 @@ class AnimationUI(object):
     @classmethod
     def show(cls):
         global RED_ANIMATION_UI
-        global RED_ANIMATION_UI_OPENCALLBACK
+        global RED_ANIMATION_UI_OPENCALLBACKS
         animUI=cls()
 
         if 'ui_docked' in animUI.ANIM_UI_OPTVARS['AnimationUI']:
@@ -555,20 +557,22 @@ class AnimationUI(object):
 
         if r9General.getModifier() == 'Ctrl':
             if not animUI.dock:
-                print 'switching True'
+                print 'Switching dockState : True'
                 animUI.dock = True
             else:
-                print 'switching false'
+                print 'Switching dockState : False'
                 animUI.dock = False
             #animUI.dock = False
    
         RED_ANIMATION_UI=animUI
-        if callable(RED_ANIMATION_UI_OPENCALLBACK):
-            try:
-                log.debug('calling RED_ANIMATION_UI_OPENCALLBACK')
-                RED_ANIMATION_UI_OPENCALLBACK(animUI)
-            except:
-                log.warning('RED_ANIMATION_UI_OPENCALLBACK failed')
+        if RED_ANIMATION_UI_OPENCALLBACKS:
+            for func in RED_ANIMATION_UI_OPENCALLBACKS:
+                if callable(func):
+                    try:
+                        log.debug('calling RED_ANIMATION_UI_OPENCALLBACKS')
+                        func(animUI)
+                    except:
+                        log.warning('RED_ANIMATION_UI_OPENCALLBACKS failed')
                 
         animUI._showUI()
         animUI.ANIM_UI_OPTVARS['AnimationUI']['ui_docked'] = animUI.dock
@@ -1301,13 +1305,7 @@ class AnimationUI(object):
         '''
         Fill the Preset TextField with files in the presets Dirs
         '''
-        self.presets = os.listdir(self.presetDir)
-        try:
-            [self.presets.remove(hidden) for hidden in ['__red9config__', '.svn', '__config__'] \
-                                            if hidden in self.presets]
-        except:
-            pass
-        self.presets.sort()
+        self.presets = r9Setup.red9Presets_get()
         cmds.textScrollList(self.uitslPresets, edit=True, ra=True)
         cmds.textScrollList(self.uitslPresets, edit=True, append=self.presets)
         
@@ -1811,13 +1809,14 @@ class AnimationUI(object):
         '''
         if self.poseHandlerPaths:
             for path in self.poseHandlerPaths:
+                log.debug('Inspecting PoseHandlerPath : %s' % path)
                 if os.path.exists(path):
                     poseHandlers=os.listdir(path)
                     if poseHandlers:
                         for handler in poseHandlers:
                             if handler.endswith('_poseHandler.py'):
                                 handlerPath=os.path.join(path,handler)
-                                log.debug('poseHandler file being copied into new folder : %s' % handlerPath)
+                                log.debug('poseHandler file being bound to RMB popup : %s' % handlerPath)
                                 cmds.menuItem(label='Add Subfolder : %s' % handler.replace('_poseHandler.py', '').upper(),
                                               en=True, p=parentPopup,
                                               command=partial(self.__uiPoseMakeSubFolder, handlerPath))
