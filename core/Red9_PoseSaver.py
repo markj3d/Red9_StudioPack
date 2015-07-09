@@ -44,6 +44,10 @@ def getFolderPoseHandler(posePath):
     if so return the filename. PoseHandlers are a way of extending or
     over-loading the standard behaviour of the poseSaver, see Vimeo for
     a more detailed explanation.
+    
+    TODO: have this also accept a pointer to a handler file rather than a direct
+    poseHnadler.py file in each folder. This means we could point a folder to a generic handler 
+    inside our presets folder rather than having the code logic in each folder.
     '''
     poseHandler=None
     poseHandlers=[py for py in os.listdir(posePath) if py.endswith('poseHandler.py')]
