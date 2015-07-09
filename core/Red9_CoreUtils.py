@@ -186,6 +186,7 @@ def filterListByString(input_list, filter_string, matchcase=False):
     
     :param iniput_list: list of strings to be filtered
     :param filter_string: string to use in the filter, supports comma separated search strings
+        eg : 'brows,smile,funnel'
     :param matchcase: whether to match or ignore case sensitivity
     '''
     
@@ -193,19 +194,17 @@ def filterListByString(input_list, filter_string, matchcase=False):
         filter_string=filter_string.upper()
     filterBy=[f for f in filter_string.replace(' ','').rstrip(',').split(',') if f]
     filteredList=[]
-    if filter_string:
-        for item in input_list:
-            data=item
-            filterPattern='|'.join(n for n in filterBy)
-            regexFilter=re.compile('('+filterPattern+')')  # convert into a regularExpression
-            if not matchcase:
-                data=item.upper()
-            if regexFilter.search(data):
-                #print data,item,filterPattern
+    for item in input_list:
+        data=item
+        filterPattern='|'.join(n for n in filterBy)
+        regexFilter=re.compile('('+filterPattern+')')  # convert into a regularExpression
+        if not matchcase:
+            data=item.upper()
+        if regexFilter.search(data):
+            #print data,item,filterPattern
+            if not item in filteredList:
                 filteredList.append(item)
-        return filteredList
-    else:
-        return input_list
+    return filteredList
     
     
 # Filter Node Setups -------------------------------------------------------------
