@@ -751,6 +751,20 @@ class Test_MetaClass():
         assert mLambert.color==(1.0, 0.0, 0.5)
         assert cmds.getAttr('lambert1.color')==[(1.0, 0.0, 0.5)]
 
+    def test_convertMClassType(self):
+        '''
+        test the class convert call, designed to mutate a given
+        metaClass to another and re-instantiate it
+        '''
+        # MClass Mutation
+        assert type(self.MClass)==r9Meta.MetaClass
+        converted=self.MClass.convertMClassType('MetaRig')
+        assert type(converted)==r9Meta.MetaRig
+        assert converted.mClass=='MetaRig'
+        mNodes=r9Meta.getMetaNodes()
+        assert len(mNodes)==1
+        
+
     def test_referenceHandler(self):
         #TODO: Fill Test
         #referenceNode
