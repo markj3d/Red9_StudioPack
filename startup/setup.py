@@ -564,8 +564,23 @@ def red9ContactInfo(*args):
         r9General.os_OpenFile('http://red9consultancy.com/')
         
 def red9Presets():
+    '''
+    get the default presets dir for all filterSettings.cfg files
+    '''
     return os.path.join(red9ModulePath(), 'presets')
-    
+
+def red9Presets_get():
+    '''
+    generic extraction of all cfg presets from the default location above
+    '''
+    try:
+        configs=[p for p in os.listdir(red9Presets()) if p.endswith('.cfg')]
+        configs.sort()
+        return configs
+    except:
+        log.debug('failed to retrieve the presets')
+    return []
+  
 def red9ModulePath():
     '''
     Returns the Main path to the Red9 root module folder
