@@ -737,6 +737,7 @@ def  convertNodeToMetaData(nodes,mClass):
     if not type(nodes)==list:
         nodes=[nodes]
     for node in nodes:
+        log.debug('converting node %s >> to %s mNode' % (r9Core.nodeNameStrip(node),mClass))
         mNode=MetaClass(node)
         mNode.addAttr('mClass', value=mTypesToRegistryKey(mClass)[0])
         mNode.addAttr('mNodeID', value=node.split('|')[-1].split(':')[-1])
@@ -1931,13 +1932,15 @@ class MetaClass(object):
     def delete(self):
         '''
         delete the mNode and this class instance
-        WORKAROUND: Looks like there's a bug in the Network node in that deletion of a node
-        will also delete all other connected networks...BIG DEAL. AD are looking into this for us
+        
+        Note that if you delete a 'network' node then by default
+        Maya will delete connected child nodes unless they're wired. 
+        To prevent this set the self.lockState=True in your classes __init__
         '''
         global RED9_META_NODECACHE
         
         if cmds.lockNode(self.mNode, q=True):
-            cmds.lockNode(self.mNode,lock=False)
+            cmds.lockNode(self.mNode, lock=False)
         #clear the node from the cache
         if RED9_META_NODECACHE:
             if self.hasAttr('UUID'):
@@ -1953,12 +1956,21 @@ class MetaClass(object):
     def convertMClassType(self, newMClass, **kws):
         '''
         change the current mClass type of the node and re-initialize the object
+        
+        ..note ::
+        
+            If you're converting a StandardWrapped Maya node to a fully fledged mNode then you also
+            need to ensure that that NODETYPE is registered to meta or else it won't get picked up
+            when you run any of the gets.
         '''
+        newMClass=mTypesToRegistryKey(newMClass)[0]
         if newMClass in RED9_META_REGISTERY:
-            removeFromCache(self)
-            self.mClass=newMClass
-            #we reset the cache so that the UUID's are all updated to account for the change in mClass  
-            #resetCache()
+            if not self.hasAttr('mClass'):
+                log.debug('Converting StandardWrapped MayaNode to a fully fledged mClass instance')
+                convertNodeToMetaData(self.mNode,newMClass)
+            else:
+                removeFromCache(self)
+                self.mClass=newMClass
             return MetaClass(self.mNode, **kws)
         else:
             raise StandardError('given class is not in the mClass Registry : %s' % newMClass)
@@ -2005,6 +2017,7 @@ class MetaClass(object):
         direct namespace of a node, not the nested. This new func will
         return the namespace in it's entirity either as a list or a 
         catenated string
+        
         :param asList: either return the namespaces in a list or as a catenated string (default)
         '''
         ns=self.mNode.split(':')
