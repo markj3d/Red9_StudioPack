@@ -423,6 +423,14 @@ class Test_baseFunctions():
         priority=['ac','vv']
         assert r9Core.prioritizeNodeList(inputList, priority, prioritysOnly=True)==['|zz|xx|cc|ac','vv']
         
+        inputList=['AA','SS','FF','GGG','|shoulders|Head','CTRL_M_Head','CTRL_M_HeadPlate','CTRL_Mid_MiddleSpine','CTRL_Mid_MiddleSpine_01','CTRL_Mid_MiddleSpine_02','Mid_Middle','ccc','vvvv']
+        priority=['Head','CTRL_Mid_MiddleSpine']
+        assert r9Core.prioritizeNodeList(inputList, priority, prioritysOnly=True)== ['|shoulders|Head', 'CTRL_M_Head', 'CTRL_M_HeadPlate', 'CTRL_Mid_MiddleSpine', 'CTRL_Mid_MiddleSpine_01', 'CTRL_Mid_MiddleSpine_02']
+        
+        #inputList=['|dd|aa','vv','gg','ee','dd:yy','|ss|ab','|zz|xx|cc|ac']
+        #priority=['ac','vv']
+        #assert r9Core.prioritizeNodeList(inputList, priority, prioritysOnly=True)==['|zz|xx|cc|ac','vv']
+        
     def test_decodeString(self):
         assert isinstance(r9Core.decodeString('{"ssss":30}'), dict)
         assert isinstance(r9Core.decodeString('["ssss",30]'), list)

@@ -47,35 +47,39 @@ def nodeNameStrip(node):
     '''
     return node.split('|')[-1].split(':')[-1]
 
-
+@r9General.Timer
 def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False):
     '''
     Simple function to force the order of a given nList such that nodes
     in the given priority list are moved to the front of the list.
     
-    :param nList: main input list
+    :param inputlist: main input list
     :param priorityList: list which is used to prioritize/order the main nList
+    :param regex: Switches from regex search to simple exact node name
+    :param prioritysOnly: return just the priorityList matches or the entire list sorted
     '''
-    stripped = [nodeNameStrip(node) for node in inputlist]  # stripped back to nodeName
+    #stripped = [nodeNameStrip(node) for node in inputlist]  # stripped back to nodeName
     nList=list(inputlist)  # take a copy so we don't mutate the input list
     reordered = []
     
     if regex:
-        for pNode in priorityList:
-            for index, node in enumerate(stripped):
+        # this will match all partial matches within the inputList
+        for node in inputlist:
+            stripped=nodeNameStrip(node)
+            for pNode in priorityList:
                 if re.search(pNode, node):
-                    reordered.append(nList[index])
-                    nList.pop(index)
-                    stripped.remove(node)
+                    reordered.append(node)
+                    nList.remove(node)
     else:
+        # this is setup to match exact only
+        stripped = [nodeNameStrip(node) for node in inputlist]  # stripped back to nodeName
         for pNode in priorityList:
             if pNode in stripped:
                 index = stripped.index(pNode)
                 reordered.append(nList[index])
                 nList.pop(index)
                 stripped.pop(index)
-    print nList
-    print reordered
+
     if not prioritysOnly:
         reordered.extend(nList)
     # [log.debug('Prioritized Index: %i = %s  <: ORIGINALLY :>  %s' % (i,nodeNameStrip(reordered[i]),n))\

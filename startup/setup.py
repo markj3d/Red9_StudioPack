@@ -39,8 +39,8 @@ log.setLevel(logging.INFO)
  Maya Version Mapping History:
  ====================================
 
- Release         -version    -api     python    -qt       prefs      release    info
- -----------------------------------------------------------------------------------
+ Release         -version    -api     python    -qt       prefs      release    extra info
+ -----------------------------------------------------------------------------------------
  
   2008          .  2008  .  ??????  .  2.5.1     na    .  2008    . 2007-09-01
   2009          .  2009  .  ??????  .  2.5.1     na    .  2009    . 2008-10-01
@@ -60,7 +60,9 @@ log.setLevel(logging.INFO)
 
   2014          .  2014  .  201400  .  2.6.4    4.8.2  .  2014    . 2013-04-10
   2015          .  2015  .  201500  .  2.7      4.8.5  .  2015    . 2014-04-15
-------------------------------------------------------------------------------------
+  2016          .  2016  .  201600  .  2.7      4.8.5  .  2016    . 2015-04-15
+  
+------------------------------------------------------------------------------------------
 '''
 
 
@@ -98,7 +100,16 @@ set_language()
 #=========================================================================================
 
 MAYA_INTERNAL_DATA = {}  # cached Maya internal vars for speed
- 
+
+def mayaFullSpecs():
+    print 'Maya version : ', mayaVersion()
+    print 'Maya API version: ', mayaVersionRelease()
+    print 'QT build: ', mayaVersionQT()
+    print 'Prefs folder: ',mayaPrefs()
+    print 'OS build: ', osBuild()
+    
+    print MAYA_INTERNAL_DATA
+     
 def mayaVersion():
     #need to manage this better and use the API version,
     #eg: 2013.5 returns 2013
@@ -117,7 +128,11 @@ def mayaVersionRelease():
 
 def mayaVersionQT():
     try:
-        return cmds.about(qt=True)
+        if 'qt' in MAYA_INTERNAL_DATA and MAYA_INTERNAL_DATA['qt']:
+            return MAYA_INTERNAL_DATA['qt']
+        else:
+            MAYA_INTERNAL_DATA['qt'] = cmds.about(qt=True)
+            return MAYA_INTERNAL_DATA['qt']
     except:
         pass
     
@@ -125,7 +140,11 @@ def mayaPrefs():
     '''
     Root of Maya prefs folder
     '''
-    return os.path.dirname(cmds.about(env=True))
+    if 'prefs' in MAYA_INTERNAL_DATA and MAYA_INTERNAL_DATA['prefs']:
+        return MAYA_INTERNAL_DATA['prefs']
+    else:
+        MAYA_INTERNAL_DATA['prefs'] = os.path.dirname(cmds.about(env=True))
+        return MAYA_INTERNAL_DATA['prefs']
 
 def mayaUpAxis(setAxis=None):
     import maya.OpenMaya as OpenMaya
