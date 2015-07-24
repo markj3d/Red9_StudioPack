@@ -144,7 +144,7 @@ class Test_MetaClass():
         assert cmds.ls(sl=True)[0]=='FooBar'
         
         #convert
-        new=self.MClass.convertMClassType('MetaRig')
+        new=r9Meta.convertMClassType(self.MClass,'MetaRig')
         assert isinstance(new,r9Meta.MetaRig)
         assert self.MClass.mClass=='MetaRig'
         
@@ -758,7 +758,7 @@ class Test_MetaClass():
         '''
         # MClass Mutation
         assert type(self.MClass)==r9Meta.MetaClass
-        converted=self.MClass.convertMClassType('MetaRig')
+        converted=r9Meta.convertMClassType(self.MClass,'MetaRig')
         assert type(converted)==r9Meta.MetaRig
         assert converted.mClass=='MetaRig'
         mNodes=r9Meta.getMetaNodes()
