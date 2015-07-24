@@ -187,4 +187,4 @@ New - Red9_Audio - Added OffsetRipple functionality.
 New - Red9_Audio - Added FormatSoundNode call in the UI which allows you to automatically sync the name of the sound node to the wav name
 New - Red9_Anim - Added PasteOptions in the UI and now pass in an offset so you can copy animations with a time offset in one go.
 Mod - Red9_Pose - PointCloud class now caches data and connects directly to a MetaNode so that there is only ever one instance and you can rebuild the class from a file and the cached data on the metaNode
-
+Mod - Red9_Meta - convertMClassType call is no longer in the MetaClass base but a function in it's own right, seemed wrong to mutate a class within itself
