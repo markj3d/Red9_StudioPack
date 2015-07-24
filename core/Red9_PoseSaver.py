@@ -391,6 +391,9 @@ class DataMap(object):
         '''
         Write the Pose ConfigObj to file
         '''
+        if not os.access(filepath,os.W_OK):
+            raise IOError('File is Read-Only - write aborted : %s' % filepath)
+        
         ConfigObj = configobj.ConfigObj(indent_type='\t')
         ConfigObj['filterNode_settings']=self.settings.__dict__
         ConfigObj['poseData']=self.poseDict
