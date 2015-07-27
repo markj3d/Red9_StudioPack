@@ -387,12 +387,13 @@ class DataMap(object):
                   
     # Process the data -------------------------------------------------
                                               
-    def _writePose(self, filepath):
+    def _writePose(self, filepath, force=False):
         '''
         Write the Pose ConfigObj to file
         '''
-        if not os.access(filepath,os.W_OK):
-            raise IOError('File is Read-Only - write aborted : %s' % filepath)
+        if not force:
+            if os.path.exists(filepath) and not os.access(filepath,os.W_OK):
+                raise IOError('File is Read-Only - write aborted : %s' % filepath)
         
         ConfigObj = configobj.ConfigObj(indent_type='\t')
         ConfigObj['filterNode_settings']=self.settings.__dict__
@@ -552,7 +553,7 @@ class DataMap(object):
     #Main Calls ----------------------------------------
   
     @r9General.Timer
-    def saveData(self, nodes, filepath=None, useFilter=True, storeThumbnail=True):
+    def saveData(self, nodes, filepath=None, useFilter=True, storeThumbnail=True, force=False):
         '''
         Generic entry point for the Data Save.
         
@@ -573,7 +574,7 @@ class DataMap(object):
         self.buildDataMap(nodes)
         
         if self.filepath:
-            self._writePose(self.filepath)
+            self._writePose(self.filepath, force=force)
             
             if storeThumbnail:
                 sel=cmds.ls(sl=True,l=True)

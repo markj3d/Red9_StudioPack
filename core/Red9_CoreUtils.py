@@ -64,10 +64,9 @@ def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False)
     
     if regex:
         # this will match all partial matches within the inputList
-        for node in inputlist:
-            stripped=nodeNameStrip(node)
-            for pNode in priorityList:
-                if re.search(pNode, node):
+        for pNode in priorityList:
+            for node in inputlist:
+                if re.search(pNode, nodeNameStrip(node)):
                     reordered.append(node)
                     nList.remove(node)
     else:
@@ -82,8 +81,9 @@ def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False)
 
     if not prioritysOnly:
         reordered.extend(nList)
-    # [log.debug('Prioritized Index: %i = %s  <: ORIGINALLY :>  %s' % (i,nodeNameStrip(reordered[i]),n))\
-    #     for i,n in enumerate(stripped)]
+        
+    #[log.debug('Prioritized Index: %i = %s  <: ORIGINALLY :>  %s' % (i,nodeNameStrip(reordered[i]),n)) for i,n in enumerate(stripped)]
+    
     return reordered
 
 
