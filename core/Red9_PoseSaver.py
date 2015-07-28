@@ -943,7 +943,6 @@ class PosePointCloud(object):
     '''
     def __init__(self, nodes, filterSettings=None, meshes=[], *args, **kws):
         '''
-        :param rootReference: the object to be used as the PPT's pivot reference
         :param nodes: feed the nodes to process in as a list, if a filter is given
                       then these are the rootNodes for it
         :param filterSettings: pass in a filterSettings object to filter the given hierarchy
@@ -1056,8 +1055,10 @@ class PosePointCloud(object):
         cmds.setAttr("%s.localScaleZ" % ppcShape, 30)
         cmds.setAttr("%s.localScaleX" % ppcShape, 30)
         cmds.setAttr("%s.localScaleY" % ppcShape, 30)
+        
         if rootReference:
             self.rootReference=rootReference
+            
         if self.settings.filterIsActive():
             if self.prioritySnapOnly:
                 self.settings.searchPattern=self.settings.filterPriority

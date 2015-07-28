@@ -2610,20 +2610,6 @@ def deleteEntireMetaRigStructure(searchNode=None):
                 cmds.deleteAttr('%s.mirrorAxis' % child)
         metaChild.delete()
 
-def wireControlsToNewMetaRig(nodes, name=None, mRig=None):
-    '''
-    fast way to wire nodes to a blank MetaRig to gain some of the support
-    features of the codebase without having to manually build a structured network
-    
-    :param nodes: nodes to wire as controllers to the MetaRig
-    :param name: name of the MetaRig node
-    :param mRig: optional mRig instance to add the controls too
-    '''
-    if not mRig:
-        mRig=MetaRig(name=name)
-    for node in nodes:
-        mRig.addRigCtrl(node, r9Core.nodeNameStrip(node))
-    return mRig
     
 class MetaRig(MetaClass):
     '''
