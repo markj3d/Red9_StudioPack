@@ -11,7 +11,7 @@ MarkJ blog: http://markj3d.blogspot.co.uk
 This is the heart of the Red9 StudioPack's boot sequence, managing folder structures,
 dependencies and menuItems.
 
-THIS SHOULD NOT REQUIRE ANY OF THE RED9.core modules
+#########  THIS SHOULD NOT REQUIRE ANY OF THE RED9.core modules  ##########
 '''
 
 #from Red9.startup import language_packs
@@ -798,13 +798,33 @@ class pro_pack_missing_stub(object):
     def __init__(self):
         raise ProPack_UIError()
 
-             
+#=========================================================================================
+# RED9 PRODUCTION MODULES ----------------------------------------------------------------
+#=========================================================================================
+
+            
 def has_internal_systems():
     '''
     Red9 Consultancy internal modules only
     '''
     if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(red9ModulePath())),'Red9_Internals')):
         return True
+
+
+#=========================================================================================
+# CLIENT MODULES -------------------------------------------------------------------------
+#=========================================================================================
+
+def has_client_modules():
+    '''
+    Red9 Client Modules is the distribution of bespoke code to clients
+    that tightly integrates into our ProPack core
+    '''
+    if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(red9ModulePath())),'Red9_ClientCore')):
+        return True
+
+def boot_client_project(project):
+    pass
 
 
 #=========================================================================================
@@ -870,17 +890,21 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
 
     log.info('Red9 StudioPack Complete!')
     
+    # Rearrangement of the Boot core systems to better structure the boot sequence
+    
+    # Boot main Red9.core
+    cmds.evalDeferred("import Red9.core", lp=True)
+
+    # Boot the Pro_Pack
     if has_pro_pack():
         cmds.evalDeferred("import Red9.pro_pack", lp=True)  # Unresolved Import
-#     if has_pro_pack():
-#         #in new builds we don not need to do this ;)
-#         cmds.evalDeferred("import Red9.pro_pack", lp=True)  # Unresolved Import
-#     else:
-#         cmds.menuItem('redNineGetProItem', l='PRO : Get Pro Pack',
-#                       p='redNineProRootItem', i='red9.jpg',
-#                       c=get_pro_pack)
+    # Boot the Red9_Internal systems
     if has_internal_systems():
         cmds.evalDeferred("import Red9_Internals", lp=True)  # Unresolved Import
+    # Boot Client Codebases
+    if has_client_modules():
+        cmds.evalDeferred("import Red9_ClientCore", lp=True)  # Unresolved Import
+           
            
 def reload_Red9(*args):
     #global LANGUAGE_MAP
