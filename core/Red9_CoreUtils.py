@@ -57,6 +57,17 @@ def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False)
     :param priorityList: list which is used to prioritize/order the main nList
     :param regex: Switches from regex search to simple exact node name
     :param prioritysOnly: return just the priorityList matches or the entire list sorted
+    
+    #Known issue, if Regex=True and you have 2 similar str's in the priority list then there's 
+    a chance that matching may be erractic... 
+    
+    priorityList=['upperLip','l_upperLip']
+    nodes=['|my|dag|path|jaw',|my|dag|path|l_upperLip','|my|dag|path|upperLip','|my|dag|path|lowerLip']
+    returns: ['|my|dag|path|l_upperLip','|my|dag|path|upperLip',|my|dag|path|jaw,'|my|dag|path|lowerLip]
+    
+    as in regex 'l_upperLip'=='upperLip' as well as 'upperLip'=='upperLip' 
+    
+    really in regex you'd need to be more specific:  priorityList=['^upperLip','l_upperLip']
     '''
     #stripped = [nodeNameStrip(node) for node in inputlist]  # stripped back to nodeName
     nList=list(inputlist)  # take a copy so we don't mutate the input list
@@ -64,11 +75,17 @@ def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False)
     
     if regex:
         # this will match all partial matches within the inputList
+        #print 'pList : ',priorityList
         for pNode in priorityList:
             for node in inputlist:
                 if re.search(pNode, nodeNameStrip(node)):
+                    #print 'matched : ', nodeNameStrip(node), pNode, node
                     reordered.append(node)
-                    nList.remove(node)
+                    try:
+                        nList.remove(node)
+                    except:
+                        log.debug('node not in list or already removed: %s>> priority str : %s' % (nodeNameStrip(node), node))
+
     else:
         # this is setup to match exact only
         stripped = [nodeNameStrip(node) for node in inputlist]  # stripped back to nodeName
