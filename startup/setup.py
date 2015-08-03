@@ -755,11 +755,15 @@ def sourceMelFolderContents(path):
 
 PRO_PACK_STUBS=None
 
+
+def pro_pack_path():
+    return os.path.join(red9ModulePath(),'pro_pack')
+
 def has_pro_pack():
     '''
     Red9 Pro_Pack is available and activated as user
     '''
-    if os.path.exists(os.path.join(red9ModulePath(),'pro_pack')):
+    if os.path.exists(pro_pack_path()):
         try:
             #new pro_pack call
             import Red9.pro_pack.r9pro as r9pro
@@ -797,34 +801,62 @@ class pro_pack_missing_stub(object):
     '''
     def __init__(self):
         raise ProPack_UIError()
+    
+
 
 #=========================================================================================
 # RED9 PRODUCTION MODULES ----------------------------------------------------------------
 #=========================================================================================
-
             
 def has_internal_systems():
     '''
     Red9 Consultancy internal modules only
     '''
-    if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(red9ModulePath())),'Red9_Internals')):
+    if os.path.exists(internal_module_path()):
         return True
+
+def internal_module_path():
+    return os.path.join(os.path.dirname(os.path.dirname(red9ModulePath())),'Red9_Internals')
 
 
 #=========================================================================================
 # CLIENT MODULES -------------------------------------------------------------------------
 #=========================================================================================
 
+def client_core_path():
+    return os.path.join(os.path.dirname(os.path.dirname(red9ModulePath())),'Red9_ClientCore')
+
 def has_client_modules():
     '''
     Red9 Client Modules is the distribution of bespoke code to clients
     that tightly integrates into our ProPack core
     '''
-    if os.path.exists(os.path.join(os.path.dirname(os.path.dirname(red9ModulePath())),'Red9_ClientCore')):
+    if os.path.exists(client_core_path()):
         return True
 
-def boot_client_project(project):
-    pass
+def get_client_modules():
+    '''
+    get all client modules ready for the boot sequence
+    
+    #TODO: link this up with a management setup so we can determine
+    which client to boot if we have multiple client repositories in the system.
+    '''
+    clients=[]
+    if has_client_modules():
+        for f in os.listdir(client_core_path()):
+            if os.path.isdir(os.path.join(client_core_path(), f)):
+                if not f.startswith('.'):
+                    clients.append(f)
+    return clients
+                
+def boot_client_projects():
+    '''
+    Boot all Client modules found in the Red9_ClientCore dir
+    '''
+    for client in get_client_modules():
+        log.info('Booting Client Module : %s' % client)
+        cmds.evalDeferred("import Red9_ClientCore.%s" % client, lp=True)  # Unresolved Import
+        
 
 
 #=========================================================================================
@@ -903,7 +935,8 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
         cmds.evalDeferred("import Red9_Internals", lp=True)  # Unresolved Import
     # Boot Client Codebases
     if has_client_modules():
-        cmds.evalDeferred("import Red9_ClientCore", lp=True)  # Unresolved Import
+        boot_client_projects()
+        #cmds.evalDeferred("import Red9_ClientCore", lp=True)  # Unresolved Import
            
            
 def reload_Red9(*args):
