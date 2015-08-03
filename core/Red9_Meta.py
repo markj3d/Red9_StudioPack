@@ -302,6 +302,9 @@ def getMetaFromCache(mNode):
         if mNode in RED9_META_NODECACHE.keys():
             try:
                 if RED9_META_NODECACHE[mNode].isValidMObject():
+                    if not RED9_META_NODECACHE[mNode]._MObject == getMObject(mNode):
+                        log.debug('CACHE : %s : ID is already registered but MObjects are different, node may have been renamed' % mNode)
+                        return
                     #print 'namebased returned from cache ', mNode
                     log.debug('CACHE : %s Returning mNode from nameBased cache!' % mNode)
                     return RED9_META_NODECACHE[mNode]
@@ -1352,6 +1355,8 @@ class MetaClass(object):
                 registerMClassNodeCache(self)
             else:
                 log.debug('Standard Maya Node being metaManaged')
+                #do we register NON MClass standard wrapped Maya Nodes to the registery??
+                #registerMClassNodeCache(self)
                 
         self.lockState=False
         
