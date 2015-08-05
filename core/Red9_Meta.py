@@ -3190,6 +3190,20 @@ class MetaFacialRig(MetaRig):
         '''
         pass
 
+class MetaFacialUI(MetaRig):
+    '''
+    SubClass of the MetaRig, designed to manage facial board style controls
+    for a facial system.
+    '''
+    def __init__(self,*args,**kws):
+        super(MetaFacialUI, self).__init__(*args,**kws)
+        self.mClassGrp = 'MetaFacialRig'
+        
+    def __bindData__(self):
+        '''
+        over-load and blank so that the MetaRig bindData doesn't get inherited
+        '''
+        pass
 
 class MetaFacialRigSupport(MetaClass):
     '''
