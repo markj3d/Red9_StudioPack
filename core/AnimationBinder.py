@@ -25,8 +25,13 @@
     
     Thanks for trying the workflows, all comments more than welcomed
 
+    PLEASE NOTE: this code is in the process of being re-built for the 
+    Red9 ProPack where we intend to bind HIK to the remapping by default
+    
+    
 ########################################################################
 '''
+
 
 
 #import maya.cmds as cmds
@@ -43,6 +48,9 @@ log.setLevel(logging.INFO)
 #log.setLevel(logging.DEBUG)
 ########################################################################
 
+
+BAKE_MARKER='BoundCtr'
+BNDNODE_MARKER='BindNode'
 
 class BindSettings(object):
     
@@ -187,11 +195,13 @@ class BindNodeBase(object):
     def AddBindMarkers(Ctr, BndNode=None):
         #message link this to the controller for the BakeCode to find
         if Ctr:
-            if not Ctr.hasAttr('BoundCtr'):
-                Ctr.addAttr('BoundCtr', attributeType='message', multi=True, im=False)
+            print 'Ctrl'
+            if not Ctr.hasAttr(BAKE_MARKER):
+                print 'addAttr'
+                Ctr.addAttr(BAKE_MARKER, attributeType='message', multi=True, im=False)
         if BndNode:
-            if not BndNode.hasAttr('BindNode'):
-                BndNode.addAttr('BindNode', attributeType='message', multi=True, im=False)
+            if not BndNode.hasAttr(BNDNODE_MARKER):
+                BndNode.addAttr(BNDNODE_MARKER, attributeType='message', multi=True, im=False)
         if Ctr and BndNode:
             Ctr.BoundCtr>>BndNode.BindNode
         
@@ -482,6 +492,14 @@ class AnimBinderUI(object):
                     c=lambda x:BindNodeAim(pm.selected()[0], pm.selected()[1], pm.selected()[2], settings=self.settings).AddBinderNode())
         cmds.separator(h=15, style="none")
         cmds.rowColumnLayout(numberOfColumns=2,columnWidth=[(1,147),(2,147)])
+        
+        cmds.button(label="Add BakeMarker", al="center", \
+                    ann="Add the BoundCtrl / Bake Marker to the selected nodes", \
+                    c=lambda x:addBindMarkers(cmds.ls(sl=True,l=True)))
+        cmds.button(label="remove BakeMarker", al="center", \
+                    ann="Remove the BoundCtrl / Bake Marker from the selected nodes", \
+                    c=lambda x:removeBindMarker(cmds.ls(sl=True,l=True)))
+        
         cmds.button(label="Select BindNodes", al="center", \
                     ann="Select Top Group Node of the Source Binder", \
                     c=lambda x:pm.select(GetBindNodes(cmds.ls(sl=True,l=True))))
@@ -513,12 +531,12 @@ class AnimBinderUI(object):
         cmds.iconTextButton(style='iconOnly', bgc=(0.7,0,0), image1='Rocket9_buttonStrap2.bmp',
                                  c=lambda *args:(r9Setup.red9ContactInfo()),h=22,w=200)
         cmds.showWindow(self.win)
-        cmds.window(self.win,e=True,h=380)
+        cmds.window(self.win,e=True,h=400)
         
     @classmethod
     def Show(cls):
         cls()._UI()
-
+        
 
 def GetBindNodes(rootNode=None):
     '''
@@ -528,7 +546,7 @@ def GetBindNodes(rootNode=None):
     if not rootNode:
         raise StandardError('Please Select a node to search from:')
     return [node for node in cmds.listRelatives(rootNode, ad=True, f=True) \
-            if cmds.attributeQuery('BindNode', exists=True, node=node)]
+            if cmds.attributeQuery(BNDNODE_MARKER, exists=True, node=node)]
 
 def GetBoundControls(rootNode=None):
     '''
@@ -538,7 +556,7 @@ def GetBoundControls(rootNode=None):
     if not rootNode:
         raise StandardError('Please Select a node to search from:')
     return [node for node in cmds.listRelatives(rootNode, ad=True, f=True)\
-             if cmds.attributeQuery('BoundCtr', exists=True, node=node)]
+             if cmds.attributeQuery(BAKE_MARKER, exists=True, node=node)]
 
 def BakeBinderData(rootNode=None, debugView=False, ignoreInFilter=[]):
     '''
@@ -553,11 +571,11 @@ def BakeBinderData(rootNode=None, debugView=False, ignoreInFilter=[]):
     if not BoundCtrls:
         BndNodes = GetBindNodes()
         for node in BndNodes:
-            cons=cmds.listConnections('%s.BindNode' % node)
+            cons=cmds.listConnections('%s.%s' % (node,BNDNODE_MARKER))
             if cons:
                 BoundCtrls.append(cmds.ls(cons[0],l=True)[0])
             else:
-                log.info('Nothing connected to %s.BindNode' % node)
+                log.info('Nothing connected to %s.%s' % (node,BNDNODE_MARKER))
             
     if BoundCtrls:
         try:
@@ -576,7 +594,7 @@ def BakeBinderData(rootNode=None, debugView=False, ignoreInFilter=[]):
             for node in BoundCtrls:
                 #Remove the BindMarker from the baked node
                 try:
-                    cmds.deleteAttr('%s.BoundCtr' % node)
+                    cmds.deleteAttr('%s.%s' % (node,BAKE_MARKER))
                 except StandardError,error:
                     log.info(error)
             if ignoreInFilter:
@@ -674,3 +692,25 @@ def MakeStabilizedNode(nodeName=None, centered=True):
     pm.curve(curve, a=True, ws=True, p=(pm.xform(AimAt, q=True, ws=True, t=True)))
     
     return curve
+
+
+def addBindMarkers(ctrls=None, *args):
+    '''
+    add the bind markers to nodes, these dictate what gets baked
+    '''
+    if not ctrls:
+        ctrls=cmds.ls(sl=True,l=True)
+    for ctr in ctrls:
+        print pm.PyNode(ctr)
+        BindNodeBase.AddBindMarkers(pm.PyNode(ctr))
+        
+def removeBindMarker(ctrls=None, *args):
+    '''
+    remove the bind markers from nodes, these dictate what gets baked
+    '''
+    if not ctrls:
+        ctrls=cmds.ls(sl=True,l=True)
+    for ctr in ctrls:
+        cmds.deleteAttr('%s.%s' % (ctr, BAKE_MARKER))
+    
+        
