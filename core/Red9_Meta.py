@@ -3172,8 +3172,16 @@ class MetaRigSupport(MetaClass):
                 for key, value in boundData.iteritems():
                     log.debug('Adding boundData to node : %s:%s' %(key,value))
                     MetaClass(node).addAttr(key, value=value)
-                    
-                    
+ 
+ 
+# --- Facial BaseClasses  --- -------------------
+
+'''
+Facial Base classes used and expanded upon by the Red9 Pro and client systems.
+These are here so that we have consistant, open base classes that we can use as 
+a marker for the toolsets.
+'''
+                
 class MetaFacialRig(MetaRig):
     '''
     SubClass of the MetaRig, designed to be manage Facial systems in the MetaData
@@ -3230,6 +3238,8 @@ class MetaFacialRigSupport(MetaClass):
                     log.debug('Adding boundData to node : %s:%s' %(key,value))
                     MetaClass(node).addAttr(key, value=value)
 
+
+# --- HIK BaseClasses  --- -------------------
 
 class MetaHIKCharacterNode(MetaRig):
     '''
