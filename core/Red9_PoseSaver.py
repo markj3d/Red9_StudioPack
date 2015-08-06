@@ -994,7 +994,20 @@ class PosePointCloud(object):
             self.ppcMeta=self.ppcMeta[0]
             self.posePointCloudNodes=self.ppcMeta.posePointCloudNodes
             self.posePointRoot=self.ppcMeta.posePointRoot[0]
-              
+    
+    def getInputNodes(self):
+        '''
+        handler to build up the list of nodes to generate the cloud against.
+        This uses the filterSettings and the inputNodes variables to process the 
+        hierarchy and is designed for overloading in the animCloud code.
+        '''
+        if self.settings.filterIsActive():
+            if self.prioritySnapOnly:
+                self.settings.searchPattern=self.settings.filterPriority
+            self.inputNodes=r9Core.FilterNode(self.inputNodes, self.settings).ProcessFilter()
+        if self.inputNodes:
+            self.inputNodes.reverse()  # for the snapping operations
+                      
     def getPPCNodes(self):
         '''
         return a list of the PPC nodes
@@ -1037,7 +1050,7 @@ class PosePointCloud(object):
         '''
         if self.meshes and self.isVisible:
             self.shapeSwapMeshes()
-
+            
     def buildOffsetCloud(self, rootReference=None, raw=False, projectedRots=False, projectedTrans=False):
         '''
         Build a point cloud up for each node in nodes
@@ -1059,13 +1072,14 @@ class PosePointCloud(object):
         if rootReference:
             self.rootReference=rootReference
             
-        if self.settings.filterIsActive():
-            if self.prioritySnapOnly:
-                self.settings.searchPattern=self.settings.filterPriority
-            self.inputNodes=r9Core.FilterNode(self.inputNodes, self.settings).ProcessFilter()
-        if self.inputNodes:
-            self.inputNodes.reverse()  # for the snapping operations
-        
+#        if self.settings.filterIsActive():
+#            if self.prioritySnapOnly:
+#                self.settings.searchPattern=self.settings.filterPriority
+#            self.inputNodes=r9Core.FilterNode(self.inputNodes, self.settings).ProcessFilter()
+#        if self.inputNodes:
+#            self.inputNodes.reverse()  # for the snapping operations
+        self.getInputNodes()
+
         if self.mayaUpAxis=='y':
             cmds.setAttr('%s.rotateOrder' % self.posePointRoot, 2)
         if self.rootReference:  # and not mesh:
