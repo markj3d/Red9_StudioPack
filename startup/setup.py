@@ -210,7 +210,14 @@ def menuSetup(parent='MayaWindow'):
     try:
         cmds.menuItem('redNineProRootItem',
                       l='PRO : PACK', sm=True, p='redNineMenuItemRoot', tearOff=True,i='red9.jpg')
-
+        
+        # Holder Menus for Client code
+        if get_client_modules():
+            cmds.menuItem(divider=True,p='redNineMenuItemRoot')
+            for client in get_client_modules():
+                cmds.menuItem('redNineClient%sItem' % client,
+                              l='CLIENT : %s' % client, sm=True, p='redNineMenuItemRoot', tearOff=True, i='red9.jpg')
+        
         cmds.menuItem(divider=True,p='redNineMenuItemRoot')
         
         #Add the main Menu items
