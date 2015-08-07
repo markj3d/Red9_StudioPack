@@ -101,6 +101,14 @@ class Test_FilterSettings():
         assert self.filter.metaRig==True
         assert self.filter.transformClamp==True
         
+        self.filter.resetFilters()
+        assert not self.filter.filterIsActive()
+        assert not self.filter.metaRig
+        #read by only giving the short config name, no path
+        self.filter.read('Red9_DevRig.cfg')
+        assert self.filter.filterIsActive()
+        assert self.filter.metaRig
+
         
 class Test_FilterNode():
      
