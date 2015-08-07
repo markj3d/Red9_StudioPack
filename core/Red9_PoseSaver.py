@@ -999,12 +999,21 @@ class PosePointCloud(object):
         '''
         handler to build up the list of nodes to generate the cloud against.
         This uses the filterSettings and the inputNodes variables to process the 
-        hierarchy and is designed for overloading in the animCloud code.
+        hierarchy and is designed for overloading if required.
         '''
         if self.settings.filterIsActive():
             if self.prioritySnapOnly:
                 self.settings.searchPattern=self.settings.filterPriority
             self.inputNodes=r9Core.FilterNode(self.inputNodes, self.settings).ProcessFilter()
+            
+        # auto logic for MetaRig - go find the renderMeshes wired to the systems
+        if self.settings.metaRig:
+            if not self.meshes:
+                mRig=r9Meta.getConnectedMetaSystemRoot(self.inputNodes)
+            else:
+                mRig=r9Meta.getMetaRigs()[0]
+            self.meshes=mRig.renderMeshes
+        
         if self.inputNodes:
             self.inputNodes.reverse()  # for the snapping operations
                       
@@ -1071,13 +1080,8 @@ class PosePointCloud(object):
         
         if rootReference:
             self.rootReference=rootReference
-            
-#        if self.settings.filterIsActive():
-#            if self.prioritySnapOnly:
-#                self.settings.searchPattern=self.settings.filterPriority
-#            self.inputNodes=r9Core.FilterNode(self.inputNodes, self.settings).ProcessFilter()
-#        if self.inputNodes:
-#            self.inputNodes.reverse()  # for the snapping operations
+        
+        #run the filterCode based on the settings object
         self.getInputNodes()
 
         if self.mayaUpAxis=='y':
