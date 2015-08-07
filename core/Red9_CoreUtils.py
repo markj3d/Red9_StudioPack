@@ -20,6 +20,7 @@ from functools import partial
 import re
 import random
 import math
+import os
 
 import Red9.packages.configobj as configobj
 import Red9.startup.setup as r9Setup
@@ -312,6 +313,7 @@ class FilterNode_Settings(object):
     def resetFilters(self, rigData=True):
         '''
         reset the MAIN filter args only
+        
         :param rigData: this is a cached attr and not fully handled 
         by the UI hence the option NOT to reset, used by the UI presetFill calls
         '''
@@ -330,6 +332,7 @@ class FilterNode_Settings(object):
     def write(self, filepath):
         '''
         write the filterSettings attribute out to a ConfigFile
+        
         :param filepath: file path to write the configFile out to
         '''
         ConfigObj = configobj.ConfigObj(indent_type='\t')
@@ -341,9 +344,20 @@ class FilterNode_Settings(object):
     def read(self, filepath):
         '''
         Read a given ConfigFile and fill this object instance with the data
+        
         :param filepath: file path to write the configFile out to
+        
+        ::note ..
+            If filepath doesn't exists or you pass in just the short name of the config you 
+            want to load then we try and find a matching config in the default presets dir in Red9
         '''
         self.resetFilters()
+        
+        # have we passed in just the short name of an existing preset in the default dir?
+        if not os.path.exists(filepath):
+            if os.path.exists(os.path.join(r9Setup.red9Presets(),filepath)):
+                filepath=os.path.join(r9Setup.red9Presets(),filepath)
+                
         for key, val in configobj.ConfigObj(filepath)['filterNode_settings'].items():
             #because config is built from string data
             #we need to deal with specific types here
