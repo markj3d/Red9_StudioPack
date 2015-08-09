@@ -55,25 +55,14 @@
 '''
 
 
-#Initialize the RED9_META_REGISTRY which is used by the MetaClass baseclass to
-#know what subclasses there are, and what to consider in it's __new__ statement
-#for initialization. If you're using the MetaClass as a base for your own modules
-#you'll probably need to run the Red9.core.Red9_Meta.registerMClassInheritanceMapping()
-#to update this dictionary
-#global RED9_META_REGISTERY
-#RED9_META_REGISTERY=[]
-
 import maya.cmds as cmds
 import startup.setup as setup
 
 def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindow'):
   
     #Run the main setups. If you DON'T want the Red9Menu set 'Menu=False'
-    #cmds.evalDeferred("Red9.setup.start(Menu=%s)" % Menu)
     cmds.evalDeferred("import Red9;Red9.setup.start(Menu=%s,MayaUIHooks=%s,MayaOverloads=%s,parentMenu='%s')" % (Menu,MayaUIHooks,MayaOverloads,parentMenu))
-    #Import the core, not this is on LowPriority to make sure it
+    #Import the core, note this is on LowPriority to make sure it
     #happens after the main setups have finished above
-    cmds.evalDeferred("import Red9.core", lp=True)
-
-
+#     cmds.evalDeferred("import Red9.core", lp=True)
 

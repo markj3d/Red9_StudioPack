@@ -20,6 +20,7 @@ from functools import partial
 import re
 import random
 import math
+import os
 
 import Red9.packages.configobj as configobj
 import Red9.startup.setup as r9Setup
@@ -57,6 +58,17 @@ def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False)
     :param priorityList: list which is used to prioritize/order the main nList
     :param regex: Switches from regex search to simple exact node name
     :param prioritysOnly: return just the priorityList matches or the entire list sorted
+    
+    #Known issue, if Regex=True and you have 2 similar str's in the priority list then there's 
+    a chance that matching may be erractic... 
+    
+    priorityList=['upperLip','l_upperLip']
+    nodes=['|my|dag|path|jaw',|my|dag|path|l_upperLip','|my|dag|path|upperLip','|my|dag|path|lowerLip']
+    returns: ['|my|dag|path|l_upperLip','|my|dag|path|upperLip',|my|dag|path|jaw,'|my|dag|path|lowerLip]
+    
+    as in regex 'l_upperLip'=='upperLip' as well as 'upperLip'=='upperLip' 
+    
+    really in regex you'd need to be more specific:  priorityList=['^upperLip','l_upperLip']
     '''
     #stripped = [nodeNameStrip(node) for node in inputlist]  # stripped back to nodeName
     nList=list(inputlist)  # take a copy so we don't mutate the input list
@@ -64,12 +76,17 @@ def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False)
     
     if regex:
         # this will match all partial matches within the inputList
-        for node in inputlist:
-            stripped=nodeNameStrip(node)
-            for pNode in priorityList:
-                if re.search(pNode, node):
+        #print 'pList : ',priorityList
+        for pNode in priorityList:
+            for node in inputlist:
+                if re.search(pNode, nodeNameStrip(node)):
+                    #print 'matched : ', nodeNameStrip(node), pNode, node
                     reordered.append(node)
-                    nList.remove(node)
+                    try:
+                        nList.remove(node)
+                    except:
+                        log.debug('node not in list or already removed: %s>> priority str : %s' % (nodeNameStrip(node), node))
+
     else:
         # this is setup to match exact only
         stripped = [nodeNameStrip(node) for node in inputlist]  # stripped back to nodeName
@@ -82,8 +99,9 @@ def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False)
 
     if not prioritysOnly:
         reordered.extend(nList)
-    # [log.debug('Prioritized Index: %i = %s  <: ORIGINALLY :>  %s' % (i,nodeNameStrip(reordered[i]),n))\
-    #     for i,n in enumerate(stripped)]
+        
+    #[log.debug('Prioritized Index: %i = %s  <: ORIGINALLY :>  %s' % (i,nodeNameStrip(reordered[i]),n)) for i,n in enumerate(stripped)]
+    
     return reordered
 
 
@@ -295,6 +313,7 @@ class FilterNode_Settings(object):
     def resetFilters(self, rigData=True):
         '''
         reset the MAIN filter args only
+        
         :param rigData: this is a cached attr and not fully handled 
         by the UI hence the option NOT to reset, used by the UI presetFill calls
         '''
@@ -313,6 +332,7 @@ class FilterNode_Settings(object):
     def write(self, filepath):
         '''
         write the filterSettings attribute out to a ConfigFile
+        
         :param filepath: file path to write the configFile out to
         '''
         ConfigObj = configobj.ConfigObj(indent_type='\t')
@@ -324,9 +344,20 @@ class FilterNode_Settings(object):
     def read(self, filepath):
         '''
         Read a given ConfigFile and fill this object instance with the data
+        
         :param filepath: file path to write the configFile out to
+        
+        ::note ..
+            If filepath doesn't exists or you pass in just the short name of the config you 
+            want to load then we try and find a matching config in the default presets dir in Red9
         '''
         self.resetFilters()
+        
+        # have we passed in just the short name of an existing preset in the default dir?
+        if not os.path.exists(filepath):
+            if os.path.exists(os.path.join(r9Setup.red9Presets(),filepath)):
+                filepath=os.path.join(r9Setup.red9Presets(),filepath)
+                
         for key, val in configobj.ConfigObj(filepath)['filterNode_settings'].items():
             #because config is built from string data
             #we need to deal with specific types here
