@@ -951,6 +951,10 @@ def reload_Red9(*args):
     #reload(LANGUAGE_MAP)
     import Red9.core
     Red9.core._reload()
+    
+    if has_pro_pack():
+        import Red9.pro_pack.core
+        Red9.pro_pack.core._reload()
 
 
 PRO_PACK_STUBS=pro_pack_missing_stub
