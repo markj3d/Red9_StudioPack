@@ -21,7 +21,7 @@ maya.standalone.initialize(name='python')
 
 import maya.cmds as cmds
 import os
-
+import time
 import Red9.core.Red9_Meta as r9Meta
 
 import Red9.startup.setup as r9Setup
@@ -184,6 +184,24 @@ class Test_MetaClass():
         cmds.delete(newMeta.mNode)
         assert not self.MClass.isValid()
         
+    def test_mNodeID(self):
+        assert self.MClass.mNodeID=='MetaClass_Test'
+        assert cmds.attributeQuery('mNodeID', node=self.MClass.mNode, exists=True)
+        assert self.MClass.hasAttr('mNodeID')
+        
+        #lets test standard wrapped handling
+        cube1=cmds.ls(cmds.polyCube()[0],l=True)[0]
+        cube2=cmds.ls(cmds.polyCube()[0],l=True)[0]
+        cube3=cmds.ls(cmds.polyCube()[0],l=True)[0]
+        cubeMeta=r9Meta.MetaClass(cube1)
+        assert cubeMeta.mNodeID=='pCube1'
+        #nest the dag path
+        cmds.parent(cube1, cube2)
+        cmds.parent(cube2, cube3)
+        assert cubeMeta.mNode=='|pCube3|pCube2|pCube1'
+        cubeMeta=r9Meta.MetaClass('|pCube3|pCube2')
+        assert cubeMeta.mNodeID=='pCube2'
+    
     def test_MObject_Handling(self):
         #mNode is now handled via an MObject
         assert self.MClass.mNode=='MetaClass_Test'
@@ -1153,7 +1171,51 @@ class Test_MetaRig():
         #saveAttrMap
         pass
     
-    
+class Test_SpeedTesting():
+    '''
+    These are all set to fail so that we get the capture output that we can bracktrack
+    '''
+    def setup(self):
+        cmds.file(new=True,f=True)
+        
+    def test_standardNodes(self):
+        cubes=[]
+        for i in range(1,10000):
+            cubes.append(cmds.polyCube(name='a%s' % i)[0])
+            
+        now = time.clock()
+        c = [r9Meta.MetaClass(p, autofill=False) for p in cubes]
+        print 'SPEED: Standard Wrapped Nodes : autofill=False: %s' % str(time.clock() - now)
+        print 'Timer should be around 4.26 secs on work PC'
+
+        r9Meta.resetCache()
+        
+        now = time.clock()
+        c = [r9Meta.MetaClass(p, autofill='all') for p in cubes]
+        print 'SPEED: Standard Wrapped Nodes : autofill=all : %s' % str(time.clock() - now)
+        print 'Timer should be around 14.6 secs on work PC'
+        assert False
+        
+    def test_MetaNodes(self):
+        nodes=[]
+        for i in range(1,10000):
+            nodes.append(r9Meta.MetaClass(name='a%s' % i))
+        r9Meta.resetCache()
+        now = time.clock()
+        c = [r9Meta.MetaClass(p, autofill=False) for p in nodes]
+        print 'SPEED: Meta Nodes : autofill=all : %s' % str(time.clock() - now)
+        print 'Timer should be around 8.5 secs on work PC'
+        
+        now = time.clock()
+        c = [r9Meta.MetaClass(p, autofill=False) for p in nodes]
+        print 'SPEED: Meta Nodes from Cache :  %s' % str(time.clock() - now)
+        print 'Timer should be around 8.5 secs on work PC'
+        assert False
+        
+ 
+
+        
+               
 class Test_MetaNetworks():
     '''
     Test the network walking and get commands on a larger network
