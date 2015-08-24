@@ -161,14 +161,20 @@ def getMClassDataFromNode(node):
         mClass=cmds.getAttr('%s.%s' % (node,'mClass'))
         if mClass in RED9_META_REGISTERY:
             return mClass
-    except:
-        try:
+        else:
             mClass=cmds.getAttr('%s.%s' % (node,'mClassGrp'))
             if mClass in RED9_META_REGISTERY:
                 return mClass
-        except:
-            if 'Meta%s' % cmds.nodeType(node) in RED9_META_REGISTERY.keys():
-                return 'Meta%s' % cmds.nodeType(node)
+    except:
+        #no mclass attr ??
+#         try:
+#             mClass=cmds.getAttr('%s.%s' % (node,'mClassGrp'))
+#             if mClass in RED9_META_REGISTERY:
+#                 return mClass
+#         except:
+
+        if 'Meta%s' % cmds.nodeType(node) in RED9_META_REGISTERY.keys():
+            return 'Meta%s' % cmds.nodeType(node)
 
         
 #def getMClassDataFromNode(node):
@@ -271,7 +277,7 @@ def registerMClassNodeCache(mNode):
     global RED9_META_NODECACHE
     version=r9Setup.mayaVersion()
 
-    if mNode.hasAttr('UUID') or version>=2015:
+    if mNode.hasAttr('UUID') or version>2015:
         try:
             if version<=2015:
                 UUID=mNode.UUID
@@ -1669,7 +1675,7 @@ class MetaClass(object):
         object.__setattr__(self, attr, value)
         
         if attr not in self.UNMANAGED and not attr=='UNMANAGED':
-            if cmds.attributeQuery(attr, exists=True, node=self.mNode):
+            if self.hasAttr(attr):  # cmds.attributeQuery(attr, exists=True, node=self.mNode):
                 locked=False
                 if self.attrIsLocked(attr) and force:
                     self.attrSetLocked(attr,False)
@@ -1826,7 +1832,7 @@ class MetaClass(object):
         try:
             log.debug('attribute delete  : %s , %s' % (self,attr))
             object.__delattr__(self, attr)
-            if cmds.attributeQuery(attr, exists=True, node=self.mNode):
+            if self.hasAttr(attr):  # cmds.attributeQuery(attr, exists=True, node=self.mNode):
                 cmds.setAttr('%s.%s' % (self.mNode,attr), l=False)
                 cmds.deleteAttr('%s.%s' % (self.mNode, attr))
                 
@@ -1838,7 +1844,8 @@ class MetaClass(object):
         simple wrapper check for attrs on the mNode itself.
         Note this is not run in some of the core internal calls in this baseClass
         '''
-        return cmds.attributeQuery(attr, exists=True, node=self.mNode)
+        return OpenMaya.MFnDependencyNode(self.mNodeMObject).hasAttribute(attr)
+        #return cmds.attributeQuery(attr, exists=True, node=self.mNode)
     
     def attrIsLocked(self,attr):
         '''
@@ -1925,7 +1932,7 @@ class MetaClass(object):
                      
         #ATTR EXSISTS - EDIT CURRENT
         #---------------------------
-        if cmds.attributeQuery(attr, exists=True, node=self.mNode):
+        if self.hasAttr(attr):  # cmds.attributeQuery(attr, exists=True, node=self.mNode):
             # if attr exists do we force the value here?? NOOOO as I'm using this only
             # to ensure that when we initialize certain classes base attrs exist with certain properties.
             log.debug('"%s" :  Attr already exists on the Node' % attr)
