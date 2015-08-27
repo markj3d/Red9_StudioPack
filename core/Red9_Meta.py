@@ -148,15 +148,20 @@ def mTypesToRegistryKey(mTypes):
             keys.append(cls)
     return keys
 
-def getMClassDataFromNode(node):
+def getMClassDataFromNode(node, checkInstance=True):
     '''
     from the node get the class to instantiate, this gives us a level of
     flexibility over mClass attr rather than pure hard coding as it was previously
+    
+    :param node: node to retrieve the mClass binding from
+    :param checkInstance: bool, specify whether to test the given node as a per existing instance
+            this check is purely for speed internally so we don't check the same thing over and over again
     '''
-    #node is ALREADY MetaClass instance?
-    if issubclass(type(node), MetaClass):
-        log.debug('getMClassFromNode was given an already instantiated MNode')
-        return node.mClass
+    if checkInstance:
+        #node is ALREADY MetaClass instance?
+        if issubclass(type(node), MetaClass):
+            log.debug('getMClassFromNode was given an already instantiated MNode')
+            return node.mClass
     try:
         mClass=cmds.getAttr('%s.%s' % (node,'mClass'))
         if mClass in RED9_META_REGISTERY:
@@ -166,13 +171,8 @@ def getMClassDataFromNode(node):
             if mClass in RED9_META_REGISTERY:
                 return mClass
     except:
-        #no mclass attr ??
-#         try:
-#             mClass=cmds.getAttr('%s.%s' % (node,'mClassGrp'))
-#             if mClass in RED9_META_REGISTERY:
-#                 return mClass
-#         except:
-
+        #Node has no mClass attr BUT in certain circumstances we can register
+        #default node Types to Meta (HIK for example) so we need to check
         if 'Meta%s' % cmds.nodeType(node) in RED9_META_REGISTERY.keys():
             return 'Meta%s' % cmds.nodeType(node)
 
@@ -576,12 +576,15 @@ def attributeDataType(val):
         return 'complex'
         
 #@pymelHandler
-def isMetaNode(node, mTypes=[]):
+def isMetaNode(node, mTypes=[], checkInstance=True, returnMClass=False):
     '''
     Simple bool, Maya Node is or isn't an mNode
 
     :param node: Maya node to test
     :param mTypes: only match given MetaClass's - str or class accepted
+    :param checkInstance: bool, used only internally for optimisation
+    :param returnMClass: if True return the str(mClass) that this node is bound too
+    
     .. note:: 
     
         this does not instantiate the mClass to query it like the
@@ -591,19 +594,24 @@ def isMetaNode(node, mTypes=[]):
     if not node:
         return False
     
-    if issubclass(type(node), MetaClass):
-        node=node.mNode
-        mClassInstance=True
+    if checkInstance:
+        if issubclass(type(node), MetaClass):
+            node=node.mNode
+            mClassInstance=True
         
-    mClass=getMClassDataFromNode(node)
+    mClass=getMClassDataFromNode(node, checkInstance=checkInstance)
     if mClass:
         if mClass in RED9_META_REGISTERY:
             if mTypes:
                 if mClass in mTypesToRegistryKey(mTypes):
+                    if returnMClass:
+                        return mClass
                     return True
                 else:
                     return False
             else:
+                if returnMClass:
+                    return mClass
                 return True
         else:
             log.debug('isMetaNode>>InValid MetaClass attr : %s' % mClass)
@@ -611,6 +619,8 @@ def isMetaNode(node, mTypes=[]):
     else:
         if mClassInstance:
             log.debug('isMetaNode = True : node is a Wrapped StandardMaya Node MClass instance')
+            if returnMClass:
+                return mClassInstance.mClass
             return True
         else:
             return False
@@ -1296,6 +1306,7 @@ class MClassNodeUI(object):
 class MetaClass(object):
     
     cached = None
+    UNMANAGED=['mNode', 'mNodeID', '_MObject', '_MObjectHandle', '_lockState', 'lockState', '_forceAsMeta']
         
     def __new__(cls, *args, **kws):
         '''
@@ -1311,25 +1322,19 @@ class MetaClass(object):
             mNode=args[0]
 
             if mNode:
-                MetaClass.cached = getMetaFromCache(mNode)  # Do Not run __new__ if the node is in the Cache
+                cacheInstance = getMetaFromCache(mNode)  # Do Not run __new__ if the node is in the Cache
                 log.debug('### MetaClass.cached being set in the __new__ ###')
-                if MetaClass.cached:
-                    return MetaClass.cached
-#            try:
-#                if isMetaNode(mNode):
-#                    mClass=getMClassDataFromNode(mNode)
-#            except:
-#                if issubclass(type(mNode), MetaClass):
-#                    log.debug('NodePassed is already an instanciated MetaNode!!')
-#                    MetaClass.cached=True
-#                    return mNode
+                if cacheInstance:
+                    MetaClass.cached=True
+                    return cacheInstance
 
             if issubclass(type(mNode), MetaClass):
                 log.debug('NodePassed is already an instanciated MetaNode!!')
                 MetaClass.cached=True
                 return mNode
-            if isMetaNode(mNode):
-                mClass=getMClassDataFromNode(mNode)
+            
+            mClass=isMetaNode(mNode, checkInstance=False, returnMClass=True)
+                #mClass=getMClassDataFromNode(mNode, checkInstance=False)
 
         if mClass:
             log.debug("mClass derived from MayaNode Attr : %s" % mClass)
@@ -1378,18 +1383,18 @@ class MetaClass(object):
         object.__setattr__(self, '_MObject', '')
         object.__setattr__(self, '_MObjectHandle', '')
         object.__setattr__(self, '_MDagPath', '')
-        object.__setattr__(self, 'UNMANAGED', ['mNode',
-                                               'mNodeID',
-                                               '_MObject',
-                                               '_MObjectHandle',
-                                               '_lockState',
-                                               'lockState',
-                                               '_forceAsMeta'])  # note - UNMANAGED bypasses the Maya node in setattr calls
-        
+#        object.__setattr__(self, 'UNMANAGED', ['mNode',
+#                                               'mNodeID',
+#                                               '_MObject',
+#                                               '_MObjectHandle',
+#                                               '_lockState',
+#                                               'lockState',
+#                                               '_forceAsMeta'])  # note - UNMANAGED bypasses the Maya node in setattr calls
+
         object.__setattr__(self, '_lockState', False)    # by default all mNode's are unlocked, manage this in any subclass if needed
         object.__setattr__(self, '_forceAsMeta', False)  # force all getAttr calls to return mClass objects even for starndard Maya nodes
         
-        create_time=False
+        #create_time=False
         wrapped_node=False
         
         if not node:
@@ -1400,7 +1405,7 @@ class MetaClass(object):
                 raise IOError('nodeType : "%s" : is NOT yet registered in the "RED9_META_NODETYPE_REGISTERY", please use r9Meta.registerMClassNodeCache(nodeTypes=[%s]) to do so before making this node' % (nodeType,nodeType))
 
             node=cmds.createNode(nodeType,name=name)
-            create_time=True
+            #create_time=True
             self.mNode=node
             # ! MAIN ATTR !: used to know what class to instantiate.
             self.addAttr('mClass', value=str(self.__class__.__name__), attrType='string')
@@ -1637,7 +1642,6 @@ class MetaClass(object):
         '''
         if level=='messageOnly':
             attrs=self.listAttrsOfType(Type='message')
-            #attrs=[attr for attr in cmds.listAttr(self.mNode) if cmds.getAttr('%s.%s' % (self.mNode,attr),type=True)=='message']
         else:
             #attrs=self.listAttrs()
             attrs=cmds.listAttr(self.mNode)
@@ -1648,7 +1652,7 @@ class MetaClass(object):
                 #of reading the attr data as thats done on demand.
                 object.__setattr__(self, attr, None)
             except:
-                pass
+                log.debug('unable to bind attr : %s to initial python object' % attr)
     
     def setUUID(self):
         '''
@@ -1699,9 +1703,12 @@ class MetaClass(object):
         '''
         Overload the base setattr to manage the MayaNode itself
         '''
+#        if attr in MetaClass.UNMANAGED or attr=='UNMANAGED':
         object.__setattr__(self, attr, value)
         
-        if attr not in self.UNMANAGED and not attr=='UNMANAGED':
+        if attr not in MetaClass.UNMANAGED and not attr=='UNMANAGED':
+        #if attr not in self.UNMANAGED and not attr=='UNMANAGED':
+        #else:
             if self.hasAttr(attr):  # cmds.attributeQuery(attr, exists=True, node=self.mNode):
                 locked=False
                 if self.attrIsLocked(attr) and force:
@@ -1791,6 +1798,10 @@ class MetaClass(object):
             log.debug("callable attr, bypassing tests : %s" % attr)
             return attr
         try:
+            #private class attr only
+            if attr in MetaClass.UNMANAGED:
+                return object.__getattribute__(self, attr)
+            
             #stops recursion, do not getAttr on mNode here
             mNode=object.__getattribute__(self, "mNode")
             
