@@ -277,32 +277,59 @@ def registerMClassNodeCache(mNode):
     global RED9_META_NODECACHE
     version=r9Setup.mayaVersion()
 
-    if mNode.hasAttr('UUID') or version>2015:
+    if version>=2016:
+        UUID=cmds.ls(mNode.mNode, uuid=True)[0]
+    elif mNode.hasAttr('UUID'):
         try:
-            if version<=2015:
-                UUID=mNode.UUID
-                if not UUID:
-                    log.debug('CACHE : generating fresh UUID')
+            UUID=mNode.UUID
+            if not UUID:
+                log.debug('CACHE : generating fresh UUID')
+                UUID=mNode.setUUID()
+            elif UUID in RED9_META_NODECACHE.keys():
+                log.debug('CACHE : UUID is already registered in cache')
+                if not mNode.mNode == RED9_META_NODECACHE[UUID]:
+                    log.debug('CACHE : %s : UUID is registered to a different node : modifying UUID: %s' % (UUID, mNode.mNode))
                     UUID=mNode.setUUID()
-                elif UUID in RED9_META_NODECACHE.keys():
-                    log.debug('CACHE : UUID is already registered in cache')
-                    if not mNode.mNode == RED9_META_NODECACHE[UUID]:
-                        log.debug('CACHE : %s : UUID is registered to a different node : modifying UUID: %s' % (UUID, mNode.mNode))
-                        UUID=mNode.setUUID()
-            else:
-                UUID=cmds.ls(mNode.mNode, uuid=True)[0]
-            if RED9_META_NODECACHE or not UUID in RED9_META_NODECACHE.keys():
-                log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
-                RED9_META_NODECACHE[UUID]=mNode
         except StandardError, err:
-            #print err
             log.debug('CACHE : Failed to set UUID for mNode : %s' % mNode.mNode)
     else:
         log.debug('CACHE : UUID attr not bound to this node, must be an older system')
         if RED9_META_NODECACHE or not mNode.mNode in RED9_META_NODECACHE.keys():
             log.debug('CACHE : Adding to MetaNode Cache : %s' % mNode.mNode)
             RED9_META_NODECACHE[mNode.mNode]=mNode
+            return
+    
+    if RED9_META_NODECACHE or not UUID in RED9_META_NODECACHE.keys():
+        log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
+        RED9_META_NODECACHE[UUID]=mNode
+        
+#    if mNode.hasAttr('UUID') or version>=2016:
+#        try:
+#            if version<2016:
+#                UUID=mNode.UUID
+#                if not UUID:
+#                    log.debug('CACHE : generating fresh UUID')
+#                    UUID=mNode.setUUID()
+#                elif UUID in RED9_META_NODECACHE.keys():
+#                    log.debug('CACHE : UUID is already registered in cache')
+#                    if not mNode.mNode == RED9_META_NODECACHE[UUID]:
+#                        log.debug('CACHE : %s : UUID is registered to a different node : modifying UUID: %s' % (UUID, mNode.mNode))
+#                        UUID=mNode.setUUID()
+#            else:
+#                UUID=cmds.ls(mNode.mNode, uuid=True)[0]
+#            if RED9_META_NODECACHE or not UUID in RED9_META_NODECACHE.keys():
+#                log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
+#                RED9_META_NODECACHE[UUID]=mNode
+#        except StandardError, err:
+#            #print err
+#            log.debug('CACHE : Failed to set UUID for mNode : %s' % mNode.mNode)
+#    else:
+#        log.debug('CACHE : UUID attr not bound to this node, must be an older system')
+#        if RED9_META_NODECACHE or not mNode.mNode in RED9_META_NODECACHE.keys():
+#            log.debug('CACHE : Adding to MetaNode Cache : %s' % mNode.mNode)
+#            RED9_META_NODECACHE[mNode.mNode]=mNode
             
+
 def getMetaFromCache(mNode):
     '''
     Pull the given mNode from the RED9_META_NODECACHE if it's
@@ -311,9 +338,9 @@ def getMetaFromCache(mNode):
     :param mNode: str(name) of node from DAG
     '''
     try:
-        try:  # r9Setup.mayaVersion()<=2015:
-            UUID=cmds.getAttr('%s.UUID' % mNode)
-        except:  # else:
+        if r9Setup.mayaVersion()<2016:
+            UUID=cmds.getAttr('%s.UUID' % mNode)  # if this fails we bail to the mNode name block
+        else:
             UUID=cmds.ls(mNode, uuid=True)[0]
         if UUID in RED9_META_NODECACHE.keys():
             try:
@@ -1384,9 +1411,9 @@ class MetaClass(object):
             self.addAttr('mClassGrp', value='MetaClass', attrType='string', hidden=True)
             # ! SYSTEM ROOT : indicates that this node is the root of a system and
             # therefore halts the 'getConnectedMetaSystemRoot' call
-            self.addAttr('mSystemRoot', value=False, attrType='string', hidden=True)
+            self.addAttr('mSystemRoot', value=False, attrType='bool', hidden=True)
             
-            if r9Setup.mayaVersion()<=2015:
+            if r9Setup.mayaVersion()<2016:
                 self.addAttr('UUID', value='')      # ! Cache UUID attr which the Cache itself is in control of
                 
             log.debug('New Meta Node %s Created' % name)
