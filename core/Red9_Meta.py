@@ -1882,8 +1882,10 @@ class MetaClass(object):
         simple wrapper check for attrs on the mNode itself.
         Note this is not run in some of the core internal calls in this baseClass
         '''
+        if r9Setup.mayaVersion()<2012:
+            #The api call fails in 2011, I need to dig into this
+            return cmds.attributeQuery(attr, exists=True, node=self.mNode)
         return OpenMaya.MFnDependencyNode(self.mNodeMObject).hasAttribute(attr)
-        #return cmds.attributeQuery(attr, exists=True, node=self.mNode)
     
     def attrIsLocked(self,attr):
         '''
