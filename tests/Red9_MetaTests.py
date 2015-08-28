@@ -20,6 +20,7 @@ import maya.standalone
 maya.standalone.initialize(name='python')
 
 import maya.cmds as cmds
+import pymel.core as pm
 import os
 import time
 import Red9.core.Red9_Meta as r9Meta
@@ -1182,34 +1183,47 @@ class Test_SpeedTesting():
         cubes=[]
         for i in range(1,10000):
             cubes.append(cmds.polyCube(name='a%s' % i)[0])
-            
+        
+
+
         now = time.clock()
         c = [r9Meta.MetaClass(p, autofill=False) for p in cubes]
         print 'SPEED: Standard Wrapped Nodes : autofill=False: %s' % str(time.clock() - now)
         print 'Timer should be around 4.26 secs on work PC'
-
+        print 'Timer should be around 3.28 secs on the Beast'
+        
+        # verify against pymel, I know we're still a lot slower
+        now = time.clock()
+        c = pm.ls(cubes)
+        print 'Timer Pymel Reference : ', time.clock() - now
+        print '\n'
         r9Meta.resetCache()
         
         now = time.clock()
         c = [r9Meta.MetaClass(p, autofill='all') for p in cubes]
         print 'SPEED: Standard Wrapped Nodes : autofill=all : %s' % str(time.clock() - now)
         print 'Timer should be around 14.6 secs on work PC'
+        print 'Timer should be around 10.48 secs on the Beast'
+
         assert False
         
     def test_MetaNodes(self):
         nodes=[]
         for i in range(1,10000):
-            nodes.append(r9Meta.MetaClass(name='a%s' % i))
+            nodes.append(r9Meta.MetaClass(name='a%s' % i).mNode)
         r9Meta.resetCache()
         now = time.clock()
         c = [r9Meta.MetaClass(p, autofill=False) for p in nodes]
         print 'SPEED: Meta Nodes : autofill=all : %s' % str(time.clock() - now)
         print 'Timer should be around 8.5 secs on work PC'
+        print 'Timer should be around 6.14 secs on the Beast'
+        print '\n'
         
         now = time.clock()
         c = [r9Meta.MetaClass(p, autofill=False) for p in nodes]
         print 'SPEED: Meta Nodes from Cache :  %s' % str(time.clock() - now)
         print 'Timer should be around 8.5 secs on work PC'
+        print 'Timer should be around 6.15 secs on the Beast'
         assert False
         
  
