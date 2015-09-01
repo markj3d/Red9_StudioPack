@@ -426,7 +426,7 @@ def removeFromCache(mNodes):
     for k, v in RED9_META_NODECACHE.items():
         if not hasattr(mNodes, '__iter__'):
             mNodes=[mNodes]
-        if v in mNodes:
+        if v and v in mNodes:
             try:
                 RED9_META_NODECACHE.pop(k)
                 log.debug('CACHE : %s being Removed from the cache >> %s' % (r9Core.nodeNameStrip(k),r9Core.nodeNameStrip(v.mNode)))
@@ -885,8 +885,10 @@ def convertMClassType(cls, newMClass, **kws):
             else:
                 cls.mClass=newMClass
             return MetaClass(cls.mNode, **kws)
-        except:
-            raise StandardError('Failed to convert self to new mClassType : %s' % newMClass)
+        except StandardError, err:
+            log.debug('Failed to convert self to new mClassType : %s' % newMClass)
+            traceback = sys.exc_info()[2]  # get the full traceback
+            raise StandardError(StandardError(err), traceback)
     else:
         raise StandardError('given class is not in the mClass Registry : %s' % newMClass)
 
@@ -1574,7 +1576,7 @@ class MetaClass(object):
         This was slow and un-needed.
         '''
         if not self.hasAttr('mNodeID'):
-            cmds.addAttr(self.mNode,longName='mNodeID', dt='string')
+            cmds.addAttr(self.mNode, longName='mNodeID', dt='string')
         cmds.setAttr('%s.%s' % (self.mNode,'mNodeID'), e=True, l=False)
         cmds.setAttr('%s.%s' % (self.mNode,'mNodeID'), value, type='string')
         cmds.setAttr('%s.%s' % (self.mNode,'mNodeID'), e=True, l=True)    # lock it
@@ -3251,6 +3253,29 @@ class MetaRig(MetaClass):
             nodes=self.getChildren(walk=True)
         return r9Anim.animRangeFromNodes(nodes,setTimeline=setTimeline)
     
+    def hasKeys(self, nodes=[]):
+        '''
+        return True if any of the rig's controllers have existing
+        animation curve/key data
+        '''
+        if not nodes:
+            nodes=self.getChildren()
+        return r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True) or False
+
+    def cutKeys(self, nodes=[], reset=True):
+        '''
+        cut all animation keys from the rig and reset
+        
+        :param nodes: if passed in only cutKeys on given nodes
+        :param reset: if true reset the rig after key removal
+        '''
+        if not nodes:
+            nodes=self.getChildren()
+        cmds.cutKey(r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True))
+        if reset:
+            self.loadZeroPose(nodes)
+        
+        
     
 class MetaRigSubSystem(MetaRig):
     '''

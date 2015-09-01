@@ -126,6 +126,16 @@ class Test_MetaCache():
         assert not n2.mNode=='renamedCube1'
         r9Meta.registerMClassNodeCache(n2)
         assert r9Meta.RED9_META_NODECACHE['|cube1']==n2
+        
+    def test_joshs_bastard_error(self):
+        '''
+        make mnode
+        delete node manually (YOU SHOULD NOT DO THIS!!!) 
+        call anything from the cache ---- boom
+        '''
+        pass
+        
+        
        
 
 class Test_MetaClass():
@@ -1190,7 +1200,7 @@ class Test_SpeedTesting():
         c = [r9Meta.MetaClass(p, autofill=False) for p in cubes]
         print 'SPEED: Standard Wrapped Nodes : autofill=False: %s' % str(time.clock() - now)
         print 'Timer should be around 4.26 secs on work PC'
-        print 'Timer should be around 3.28 secs on the Beast'
+        print 'Timer should be around 2.28 secs on the Beast'  #3.28
         
         # verify against pymel, I know we're still a lot slower
         now = time.clock()
@@ -1203,7 +1213,7 @@ class Test_SpeedTesting():
         c = [r9Meta.MetaClass(p, autofill='all') for p in cubes]
         print 'SPEED: Standard Wrapped Nodes : autofill=all : %s' % str(time.clock() - now)
         print 'Timer should be around 14.6 secs on work PC'
-        print 'Timer should be around 10.48 secs on the Beast'
+        print 'Timer should be around 9.04 secs on the Beast'  #10.48
 
         assert False
         
@@ -1213,17 +1223,25 @@ class Test_SpeedTesting():
             nodes.append(r9Meta.MetaClass(name='a%s' % i).mNode)
         r9Meta.resetCache()
         now = time.clock()
-        c = [r9Meta.MetaClass(p, autofill=False) for p in nodes]
+        c = [r9Meta.MetaClass(p, autofill='all') for p in nodes]
         print 'SPEED: Meta Nodes : autofill=all : %s' % str(time.clock() - now)
         print 'Timer should be around 8.5 secs on work PC'
-        print 'Timer should be around 6.14 secs on the Beast'
+        print 'Timer should be around 11.93 secs on the Beast'
         print '\n'
         
         now = time.clock()
-        c = [r9Meta.MetaClass(p, autofill=False) for p in nodes]
+        c = [r9Meta.MetaClass(p, autofill='all') for p in nodes]
         print 'SPEED: Meta Nodes from Cache :  %s' % str(time.clock() - now)
         print 'Timer should be around 8.5 secs on work PC'
-        print 'Timer should be around 6.15 secs on the Beast'
+        print 'Timer should be around 3.25 secs on the Beast'
+        print '\n'
+        
+        r9Meta.resetCache()
+        
+        c = [r9Meta.MetaClass(p, autofill=False) for p in nodes]
+        print 'SPEED: Meta Nodes : autofill=False : %s' % str(time.clock() - now)
+        print 'Timer should be around 8.5 secs on work PC'
+        print 'Timer should be around 10.82 secs on the Beast'
         assert False
         
  
