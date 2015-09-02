@@ -338,13 +338,23 @@ def inspect_wav():
         raise StandardError('Please select the soundNode you want to inspect - no Sound nodes selected')
     audio = AudioNode(audioNodes)
     data = audio.bwav_getHeader()
+    formatData='{:<15}: {:}\n'.format('SoundNode',audio.audioNode)
+    formatData+='{:<15}: {:}\n\n'.format('Filepath',audio.path)
+    formatData+='{:<15}: {:}\n'.format('Sample_Width',audio.sample_width)
+    formatData+='{:<15}: {:}\n'.format('BitRate',audio.sample_bits)
+    formatData+='{:<15}: {:}\n'.format('SampleRate',audio.sampleRate)
+    formatData+='{:<15}: {:}\n'.format('Channels',audio.channels)
+    formatData+='{:<15}: {:}\n'.format('dBFS',audio.dBFS)
+    formatData+='{:<15}: {:}\n'.format('Max dBFS',audio.max_dBFS)
     
-    formatData='SoundNode : %s\n' % audio.audioNode
-    formatData+='Sample_Width : %s\n' % audio.sample_width
-    formatData+='BitsPerSample : %s\n' % audio.sample_bits
-    formatData+='SampleRate : %s\n' % audio.sampleRate
-    formatData+='Channels : %s\n' % audio.channels
-    formatData+='Filepath : %s\n\n' % audio.path
+#    formatData='SoundNode : %s\n' % audio.audioNode
+#    formatData+='Filepath : %s\n\n' % audio.path
+#    formatData+='Sample_Width : %s\n' % audio.sample_width
+#    formatData+='BitRate : %s\n' % audio.sample_bits
+#    formatData+='SampleRate : %s\n' % audio.sampleRate
+#    formatData+='Channels : %s\n' % audio.channels
+#    formatData+='dBFS : %s\n' % audio.dBFS
+#    formatData+='max dBFS : %s\n\n' % audio.max_dBFS
     bWavData=''
     if data:
         bWavData+='TimecodeFormatted : %s\n' % audio.bwav_timecodeFormatted()
@@ -358,7 +368,7 @@ def inspect_wav():
     cmds.text(l='Inspect Internal Sound file data:', font='boldLabelFont')
     cmds.text(l='Note that if the wav is in Bwav format you also get additional metaData')
     cmds.separator(h=15, style='in')
-    cmds.text(l=formatData,align='left')
+    cmds.text(l=formatData,align='left',font="fixedWidthFont")
     if data:
         cmds.separator(h=10, style='in')
         cmds.text(l='Broadcast Wav metaData', font='boldLabelFont')
@@ -701,7 +711,12 @@ class AudioNode(object):
         if node and cmds.objExists(node):
             self.isLoaded=True
             self.__audioNode=node
-            
+    
+    # ---------------------------------------------------------------------------------
+    # pyDub inspect calls ---
+    # ---------------------------------------------------------------------------------
+    # https://github.com/jiaaro/pydub/blob/master/API.markdown
+    
     @property
     def sampleRate(self):
         '''
@@ -711,19 +726,48 @@ class AudioNode(object):
 
     @property
     def sample_width(self):
+        '''
+        bytes per sample, is converted by the sample_bits into bitrate
+        '''
         return audio_segment.AudioSegment.from_wav(self.path).sample_width
     
     @property
     def sample_bits(self):
+        '''
+        bit rate taken from the bytes per sample : 4,8,16,24 bit
+        '''
         data={'1':8, '2':16, '3':24, '4':32}
         return data[str(audio_segment.AudioSegment.from_wav(self.path).sample_width)]
     
     @property
     def channels(self):
+        '''
+        number of channels 1=mone, 2=stereo
+        '''
         return audio_segment.AudioSegment.from_wav(self.path).channels
+
+    @property
+    def dBFS(self):
+        '''
+        loudness of the AudioSegment in dBFS (db relative to the maximum possible loudness)
+        '''
+        return audio_segment.AudioSegment.from_wav(self.path).dBFS
+    
+    @property
+    def max_dBFS(self):
+        '''
+        The highest amplitude of any sample in the AudioSegment,
+        in dBFS (relative to the highest possible amplitude value).
+        '''
+        return audio_segment.AudioSegment.from_wav(self.path).max_dBFS
+    
+    # pyDub end ---
     
     @property
     def startFrame(self):
+        '''
+        Maya start frame of the sound node
+        '''
         if self.isLoaded:
             return cmds.getAttr('%s.offset' % self.audioNode)
         return 0
@@ -746,13 +790,16 @@ class AudioNode(object):
          
     @endFrame.setter
     def endFrame(self, val):
+        '''
+        Maya end frame of the sound node
+        '''
         if self.isLoaded:
             cmds.setAttr('%s.offset' % self.audioNode, val)
            
     @property
     def startTime(self):
         '''
-        this is in milliseconds
+        Maya start time of the sound node in milliseconds
         '''
         if self.isLoaded:
             return (self.startFrame / r9General.getCurrentFPS()) * 1000
@@ -760,28 +807,24 @@ class AudioNode(object):
     
     @startTime.setter
     def startTime(self, val):
-        '''
-        this is in milliseconds
-        '''
         if self.isLoaded:
             cmds.setAttr('%s.offset' % self.audioNode, milliseconds_to_frame(val, framerate=None))
 
     @property
     def endTime(self):
         '''
-        this is in milliseconds
+        Maya end time of the sound node in milliseconds
         '''
         return (self.endFrame / r9General.getCurrentFPS()) * 1000
     
     @endTime.setter
     def endTime(self, val):
-        '''
-        this is in milliseconds
-        '''
         if self.isLoaded:
             cmds.setAttr('%s.offset' % self.audioNode, milliseconds_to_frame(val, framerate=None))
     
-    # PRO_PACK : BWAV support ##============================================
+    # ---------------------------------------------------------------------------------
+    # PRO_PACK : BWAV support ---
+    # ---------------------------------------------------------------------------------
 
     def isBwav(self):
         '''
@@ -844,16 +887,24 @@ class AudioNode(object):
         else:
             raise r9Setup.ProPack_Error()
 
-
-    # Bwav end =========================================================
+    # ---------------------------------------------------------------------------------
+    # General utils ---
+    # ---------------------------------------------------------------------------------
     
     def isValid(self):
+        '''
+        If the audionode is loaded in maya then valid is if that node we're pointing to exists
+        If the audionode is NOT loaded and we just have a pth check if that path exists
+        '''
         if self.isLoaded:
             return (self.audioNode and cmds.objExists(self.audioNode)) or False
         else:
             return os.path.exists(self.path)
     
     def delete(self):
+        '''
+        Maya delete the sound node
+        '''
         if self.isLoaded:
             cmds.delete(self.audioNode)
             
@@ -913,10 +964,16 @@ class AudioNode(object):
             return (duration) * r9General.getCurrentFPS()
                     
     def setTimeline(self):
+        '''
+        Set the Maya timeline to the duration oft he sound
+        '''
         if self.isLoaded:
             cmds.playbackOptions(min=int(self.startFrame), max=int(self.endFrame))
 
     def mute(self, state=True):
+        '''
+        Maya node, mute the sound
+        '''
         if self.isLoaded:
             cmds.setAttr('%s.mute' % self.audioNode, state)
 

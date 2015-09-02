@@ -1,14 +1,22 @@
 import sys
+import math
+import array
 from .utils import (
     db_to_float,
     ratio_to_db,
     register_pydub_effect,
     make_chunks,
+    audioop,
+    get_array_type,
+    get_min_max_value
 )
-from .exceptions import TooManyMissingFrames
+from .silence import split_on_silence
+from .exceptions import TooManyMissingFrames, InvalidDuration
 
 if sys.version_info >= (3, 0):
     xrange = range
+
+
 
 @register_pydub_effect
 def normalize(seg, headroom=0.1):
@@ -16,6 +24,11 @@ def normalize(seg, headroom=0.1):
     headroom is how close to the maximum volume to boost the signal up to (specified in dB)
     """
     peak_sample_val = seg.max
+    
+    # if the max is 0, this audio segment is silent, and can't be normalized
+    if peak_sample_val == 0:
+        return seg
+    
     target_peak = seg.max_possible_amplitude * db_to_float(-headroom)
 
     needed_boost = ratio_to_db(target_peak / peak_sample_val)
@@ -66,41 +79,24 @@ def speedup(seg, playback_speed=1.5, chunk_size=150, crossfade=25):
     out += last_chunk
     return out
     
+
 @register_pydub_effect
-def strip_silence(seg, silence_len=1000, silence_thresh=-20):
-    silence_thresh = seg.rms * db_to_float(silence_thresh)
-    
-    # find silence and add start and end indicies to the to_cut list
-    to_cut = []
-    silence_start = None
-    for i, sample in enumerate(seg):
-        if sample.rms < silence_thresh:
-            if silence_start is None:
-                silence_start = i
-            continue
-            
-        if silence_start is None:
-            continue
-            
-        if i - silence_start > silence_len:
-            to_cut.append([silence_start, i-1])
-        
-        silence_start = None
-            
-    # print(to_cut)
-    
-    keep_silence = 100
-    
-    to_cut.reverse()
-    for cstart, cend in to_cut:
-        if len(seg[cend:]) < keep_silence:
-            seg = seg[:cstart + keep_silence]
-        elif len(seg[:cstart]) < keep_silence:
-            seg = seg[cend-keep_silence:]
-        else:
-            #print(cstart, "-", cend)
-            seg = seg[:cstart+keep_silence].append(seg[cend-keep_silence:], crossfade=keep_silence*2)
+def strip_silence(seg, silence_len=1000, silence_thresh=-16, padding=100):
+    if padding > silence_len:
+        raise InvalidDuration("padding cannot be longer than silence_len")
+
+    chunks = split_on_silence(seg, silence_len, silence_thresh, padding)
+    crossfade = padding / 2
+
+    if not len(chunks):
+        return seg[0:0]
+
+    seg = chunks[0]
+    for chunk in chunks[1:]:
+        seg.append(chunk, crossfade=crossfade)
+
     return seg
+
 
 @register_pydub_effect
 def compress_dynamic_range(seg, threshold=-20.0, ratio=4.0, attack=5.0, release=50.0):
@@ -131,7 +127,6 @@ def compress_dynamic_range(seg, threshold=-20.0, ratio=4.0, attack=5.0, release=
 
         http://en.wikipedia.org/wiki/Dynamic_range_compression
     """
-    import audioop
 
     thresh_rms = seg.max_possible_amplitude * db_to_float(threshold)
     
@@ -176,3 +171,140 @@ def compress_dynamic_range(seg, threshold=-20.0, ratio=4.0, attack=5.0, release=
         output.append(frame)
     
     return seg._spawn(data=b''.join(output))
+
+
+# Invert the phase of the signal.
+
+@register_pydub_effect
+def invert_phase(seg):
+    inverted = audioop.mul(seg._data, seg.sample_width, -1.0)  
+    return seg._spawn(data=inverted)
+
+
+# High and low pass filters based on implementation found on Stack Overflow:
+#   http://stackoverflow.com/questions/13882038/implementing-simple-high-and-low-pass-filters-in-c
+
+@register_pydub_effect
+def low_pass_filter(seg, cutoff):
+    """
+        cutoff - Frequency (in Hz) where higher frequency signal will begin to
+            be reduced by 6dB per octave (doubling in frequency) above this point
+    """
+    RC = 1.0 / (cutoff * 2 * math.pi)
+    dt = 1.0 / seg.frame_rate
+
+    alpha = dt / (RC + dt)
+
+    array_type = get_array_type(seg.sample_width * 8)
+    
+    original = array.array(array_type, seg._data)
+    filteredArray = array.array(array_type, original)
+    
+    frame_count = int(seg.frame_count())
+
+    last_val = [0] * seg.channels
+    for i in range(seg.channels):
+        last_val[i] = filteredArray[i] = original[i]
+
+    for i in range(1, frame_count):
+        for j in range(seg.channels):
+            offset = (i * seg.channels) + j
+            last_val[j] = last_val[j] + (alpha * (original[offset] - last_val[j]))
+            filteredArray[offset] = int(last_val[j])
+    
+    return seg._spawn(data=filteredArray.tostring())
+
+
+@register_pydub_effect
+def high_pass_filter(seg, cutoff):
+    """
+        cutoff - Frequency (in Hz) where lower frequency signal will begin to
+            be reduced by 6dB per octave (doubling in frequency) below this point
+    """
+    RC = 1.0 / (cutoff * 2 * math.pi)
+    dt = 1.0 / seg.frame_rate
+
+    alpha = RC / (RC + dt)
+
+    array_type = get_array_type(seg.sample_width * 8)
+    minval, maxval = get_min_max_value(seg.sample_width * 8)
+    
+    original = array.array(array_type, seg._data)
+    filteredArray = array.array(array_type, original)
+    
+    frame_count = int(seg.frame_count())
+
+    last_val = [0] * seg.channels
+    for i in range(seg.channels):
+        last_val[i] = filteredArray[i] = original[i]
+
+    for i in range(1, frame_count):
+        for j in range(seg.channels):
+            offset = (i * seg.channels) + j
+            offset_minus_1 = ((i-1) * seg.channels) + j
+
+            last_val[j] = alpha * (last_val[j] + original[offset] - original[offset_minus_1])
+            filteredArray[offset] = int(min(max(last_val[j], minval), maxval))
+    
+    return seg._spawn(data=filteredArray.tostring())
+
+
+@register_pydub_effect
+def pan(seg, pan_amount):
+    """
+    pan_amount should be between -1.0 (100% left) and +1.0 (100% right)
+    
+    When pan_amount == 0.0 the left/right balance is not changed.
+    
+    Panning does not alter the *perceived* loundness, but since loudness
+    is decreasing on one side, the other side needs to get louder to
+    compensate. When panned hard left, the left channel will be 3dB louder.
+    """
+    if not -1.0 <= pan_amount <= 1.0:
+        raise ValueError("pan_amount should be between -1.0 (100% left) and +1.0 (100% right)")
+    
+    max_boost_db = ratio_to_db(2.0)
+    boost_db = abs(pan_amount) * max_boost_db
+    
+    boost_factor = db_to_float(boost_db)
+    reduce_factor = db_to_float(max_boost_db) - boost_factor
+    
+    reduce_db = ratio_to_db(reduce_factor)
+    
+    # Cut boost in half (max boost== 3dB) - in reality 2 speakers
+    #   do not sum to a full 6 dB.
+    boost_db = boost_db / 2.0
+    
+    if pan_amount < 0:
+        return seg.apply_gain_stereo(boost_db, reduce_db)
+    else:
+        return seg.apply_gain_stereo(reduce_db, boost_db)
+    
+    
+@register_pydub_effect
+def apply_gain_stereo(seg, left_gain=0.0, right_gain=0.0):
+    """
+    left_gain - amount of gain to apply to the left channel (in dB)
+    right_gain - amount of gain to apply to the right channel (in dB)
+    
+    note: mono audio segments will be converted to stereo
+    """
+    if seg.channels == 1:
+        left = right = seg
+    elif seg.channels == 2:
+        left, right = seg.split_to_mono()
+    
+    l_mult_factor = db_to_float(left_gain)
+    r_mult_factor = db_to_float(right_gain)
+    
+    left_data = audioop.mul(left._data, left.sample_width, l_mult_factor)
+    left_data = audioop.tostereo(left_data, left.sample_width, 1, 0)
+    
+    right_data = audioop.mul(right._data, right.sample_width, r_mult_factor)
+    right_data = audioop.tostereo(right_data, right.sample_width, 0, 1)
+    
+    output = audioop.add(left_data, right_data, seg.sample_width)
+    
+    return seg._spawn(data=output,
+                overrides={'channels': 2,
+                           'frame_width': 2 * seg.sample_width})

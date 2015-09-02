@@ -14,3 +14,10 @@ class InvalidTag(Exception):
 
 class InvalidID3TagVersion(Exception):
     pass
+
+
+class CouldntDecodeError(Exception):
+    pass
+    
+class CouldntEncodeError(Exception):
+    pass

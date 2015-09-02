@@ -6,9 +6,49 @@ import re
 from subprocess import Popen, PIPE
 import sys
 from tempfile import TemporaryFile
+from warnings import warn
+
+try:
+    import audioop
+except ImportError:
+    import pyaudioop as audioop
+
 
 if sys.version_info >= (3, 0):
     basestring = str
+
+
+
+FRAME_WIDTHS = {
+    8: 1,
+    16: 2,
+    32: 4,
+}
+ARRAY_TYPES = {
+    8:  "b",
+    16: "h",
+    32: "i",
+}
+ARRAY_RANGES = {
+    8: (-0x80, 0x7f),
+    16: (-0x8000, 0x7fff),
+    32: (-0x80000000, 0x7fffffff),
+}
+
+
+def get_frame_width(bit_depth):
+    return FRAME_WIDTHS[bit_depth]
+
+
+def get_array_type(bit_depth, signed=True):
+    t = ARRAY_TYPES[bit_depth]
+    if not signed:
+        t = t.upper()
+    return t
+
+
+def get_min_max_value(bit_depth):
+    return ARRAY_RANGES[bit_depth]
 
 
 def _fd_or_path_or_tempfile(fd, mode='w+b', tempfile=True):
@@ -21,16 +61,19 @@ def _fd_or_path_or_tempfile(fd, mode='w+b', tempfile=True):
     return fd
 
 
-def db_to_float(db):
+def db_to_float(db, using_amplitude=True):
     """
     Converts the input db to a float, which represents the equivalent
     ratio in power.
     """
     db = float(db)
-    return 10 ** (db / 10)
+    if using_amplitude:
+        return 10 ** (db / 20)
+    else: # using power
+        return 10 ** (db / 10)
 
 
-def ratio_to_db(ratio, val2=None):
+def ratio_to_db(ratio, val2=None, using_amplitude=True):
     """
     Converts the input float to db, which represents the equivalent
     to the ratio in power represented by the multiplier passed in.
@@ -40,26 +83,33 @@ def ratio_to_db(ratio, val2=None):
     # accept 2 values and use the ratio of val1 to val2
     if val2 is not None:
         ratio = ratio / val2
+    
+    # special case for multiply-by-zero (convert to silence)
+    if ratio == 0:
+        return -float('inf')
 
-    return 10 * log(ratio, 10)
-
+    if using_amplitude:
+        return 20 * log(ratio, 10)
+    else: # using power
+        return 10 * log(ratio, 10)
+    
 
 def register_pydub_effect(fn, name=None):
     """
     decorator for adding pydub effects to the AudioSegment objects.
-    
+
     example use:
-    
+
         @register_pydub_effect
         def normalize(audio_segment):
             ...
-    
+
     or you can specify a name:
-        
+
         @register_pydub_effect("normalize")
         def normalize_audio_segment(audio_segment):
             ...
-    
+
     """
     if isinstance(fn, basestring):
         name = fn
@@ -77,7 +127,7 @@ def make_chunks(audio_segment, chunk_length):
     """
     Breaks an AudioSegment into chunks that are <chunk_length> milliseconds
     long.
-    
+
     if chunk_length is 50 then you'll get a list of 50 millisecond long audio
     segments back (except the last one, which can be shorter)
     """
@@ -90,6 +140,10 @@ def which(program):
     """
     Mimics behavior of UNIX which command.
     """
+    #Add .exe program extension for windows support
+    if os.name == "nt" and not program.endswith(".exe"):
+        program += ".exe"
+
     envdir_list = os.environ["PATH"].split(os.pathsep)
 
     for envdir in envdir_list:
@@ -108,6 +162,7 @@ def get_encoder_name():
         return "ffmpeg"
     else:
         # should raise exception
+        warn("Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work", RuntimeWarning)
         return "ffmpeg"
 
 def get_player_name():
@@ -120,6 +175,7 @@ def get_player_name():
         return "ffplay"
     else:
         # should raise exception
+        warn("Couldn't find ffplay or avplay - defaulting to ffplay, but may not work", RuntimeWarning)
         return "ffplay"
 
 
@@ -133,6 +189,7 @@ def get_prober_name():
         return "ffprobe"
     else:
         # should raise exception
+        warn("Couldn't find ffprobe or avprobe - defaulting to ffprobe, but may not work", RuntimeWarning)
         return "ffprobe"
 
 
@@ -142,11 +199,14 @@ def mediainfo(filepath):
 
     from .audio_segment import AudioSegment
 
-    command = "{0} -v quiet -show_format -show_streams {1}".format(
+    command = [
         get_prober_name(),
+        "-v", "quiet",
+        "-show_format",
+        "-show_streams",
         filepath
-    )
-    output = Popen(command.split(), stdout=PIPE).communicate()[0].decode("utf-8")
+    ]
+    output = Popen(command, stdout=PIPE).communicate()[0].decode("utf-8")
 
     rgx = re.compile(r"(?:(?P<inner_dict>.*?):)?(?P<key>.*?)\=(?P<value>.*?)$")
     info = {}
