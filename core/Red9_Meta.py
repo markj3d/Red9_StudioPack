@@ -95,7 +95,9 @@ global RED9_META_REGISTERY
 ====================================================================================
 '''
 
-# --- Class Registery --- --------------------------
+# ----------------------------------------------------------------------------
+# --- FactoryClass registry --- --------------------------
+# ----------------------------------------------------------------------------
 
 def registerMClassInheritanceMapping():
     global RED9_META_REGISTERY
@@ -202,8 +204,9 @@ def getMClassDataFromNode(node, checkInstance=True):
 #            raise StandardError('getMClassFromNode failed for node : %s' % node)
     
     
-
-# --- NodeType --- ---------------------------
+# ----------------------------------------------------------------------------
+# --- NodeType registry --- ---------------------------
+# ----------------------------------------------------------------------------
   
 def registerMClassNodeMapping(nodeTypes=[]):
     '''
@@ -258,8 +261,10 @@ def getMClassNodeTypes():
 def resetMClassNodeTypes():
     registerMClassNodeMapping(nodeTypes=None)
   
-    
-# --- NodeCache --- ---------------------------
+
+# ----------------------------------------------------------------------------    
+# --- NodeCache management --- ---------------------------
+# ----------------------------------------------------------------------------
 
 def generateUUID():
     '''
@@ -482,8 +487,10 @@ def getMObject(node):
     selList.getDependNode(0,mobj)
     return mobj
    
-   
+
+# ----------------------------------------------------------------------------
 # --- Decorators --- ------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 def nodeLockManager(func):
     '''
@@ -543,9 +550,11 @@ def pymelHandler(func):
             return res
     return wrapper
 
-                 
+
+# ----------------------------------------------------------------------------                 
 # --- MetaData Utilities --- -------------------
-    
+# ----------------------------------------------------------------------------
+
 def attributeDataType(val):
     '''
     Validate the attribute type for all the cmds handling
@@ -1302,8 +1311,9 @@ class MClassNodeUI(object):
 
 
 
-
-# Main Meta Class ==========================================================
+# ----------------------------------------------------------------------------
+# --- Main Meta Class --- ------
+# ----------------------------------------------------------------------------
 
 class MetaClass(object):
     
@@ -3323,7 +3333,9 @@ class MetaRigSupport(MetaClass):
                     MetaClass(node).addAttr(key, value=value)
  
  
+# ----------------------------------------------------------------------------
 # --- Facial BaseClasses  --- -------------------
+# ----------------------------------------------------------------------------
 
 '''
 Facial Base classes used and expanded upon by the Red9 Pro and client systems.
@@ -3347,6 +3359,7 @@ class MetaFacialRig(MetaRig):
         '''
         pass
 
+# Moved into ProPack
 # class MetaFacialUI(MetaRig):
 #     '''
 #     SubClass of the MetaRig, designed to manage facial board style controls
@@ -3357,7 +3370,7 @@ class MetaFacialRig(MetaRig):
 #     def __init__(self,*args,**kws):
 #         super(MetaFacialUI, self).__init__(*args,**kws)
 #         self.mClassGrp = 'MetaFacialRig'
-#         
+#
 #     def __bindData__(self):
 #         '''
 #         over-load and blank so that the MetaRig bindData doesn't get inherited
@@ -3390,7 +3403,9 @@ class MetaFacialRigSupport(MetaClass):
                     MetaClass(node).addAttr(key, value=value)
 
 
+# ----------------------------------------------------------------------------
 # --- HIK BaseClasses  --- -------------------
+# ----------------------------------------------------------------------------
 
 class MetaHIKCharacterNode(MetaRig):
     '''
