@@ -828,8 +828,11 @@ def os_fileCompare(file1, file2, openDiff=False):
         https://sourcegear.com/diffmerge/.
         Once downloaded drop it here Red9/pakcages/diffMerge.exe
     '''
-    diffmerge=os.path.join(r9Setup.red9ModulePath(),'packages','diffMerge.exe')
     outputDir=tempfile.gettempdir()
+    
+    diffmerge=os.path.join(r9Setup.red9ModulePath(),'packages','diffMerge.exe')
+    if not os.path.exists(diffmerge):
+        diffmerge=os.path.join(r9Setup.red9ModulePath(),'packages','DiffMerge','sgdm.exe')
     if os.path.exists(diffmerge):
         process=subprocess.Popen([diffmerge, '-d', os.path.join(outputDir, 'diffmergeOutput.diff'), file1, file2],
                                  stdout=subprocess.PIPE,
