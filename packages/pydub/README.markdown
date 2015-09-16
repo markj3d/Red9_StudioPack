@@ -1,5 +1,13 @@
-# Pydub [![Build Status](https://secure.travis-ci.org/jiaaro/pydub.png?branch=master)](http://travis-ci.org/jiaaro/pydub)
-Pydub let's you do stuff to audio in a way that isn't stupid.
+# Pydub [![Build Status](https://travis-ci.org/jiaaro/pydub.svg?branch=master)](https://travis-ci.org/jiaaro/pydub)
+Pydub lets you do stuff to audio in a way that isn't stupid.
+
+**Stuff you might be looking for**:
+ - [Installing Pydub](https://github.com/jiaaro/pydub#installation)
+ - [API Documentation](https://github.com/jiaaro/pydub/blob/master/API.markdown)
+ - [Dependencies](https://github.com/jiaaro/pydub#dependencies)
+ - [Setting up ffmpeg](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up)
+ - [Questions/Bugs](https://github.com/jiaaro/pydub#bugs--questions)
+ 
 
 ##  Quickstart
 
@@ -34,9 +42,9 @@ Slice audio:
 # pydub does things in milliseconds
 ten_seconds = 10 * 1000
 
-first_10_seconds = song[:10000]
+first_10_seconds = song[:ten_seconds]
 
-last_5_seconds = song[5000:]
+last_5_seconds = song[-5000:]
 ```
 
 Make the beginning louder and the end quieter
@@ -102,13 +110,17 @@ Save the results with tags (metadata)
 awesome.export("mashup.mp3", format="mp3", tags={'artist': 'Various artists', 'album': 'Best of 2011', 'comments': 'This album is awesome!'})
 ```
 
-You can pass an optional bitrate argument to export using any syntax ffmpeg supports.
+You can pass an optional bitrate argument to export using any syntax ffmpeg 
+supports.
 
 ```python
 awesome.export("mashup.mp3", format="mp3", bitrate="192k")
 ```
 
-Any further arguments supported by ffmpeg can be passed as a list in a 'parameters' argument, with switch first, argument second. Note that no validation takes place on these parameters, and you may be limited by what your particular build of ffmpeg supports.
+Any further arguments supported by ffmpeg can be passed as a list in a 
+'parameters' argument, with switch first, argument second. Note that no 
+validation takes place on these parameters, and you may be limited by what 
+your particular build of ffmpeg/avlib supports.
 
 ```python
 # Use preset mp3 quality 0 (equivalent to lame V0)
@@ -118,31 +130,90 @@ awesome.export("mashup.mp3", format="mp3", parameters=["-q:a", "0"])
 awesome.export("mashup.mp3", format="mp3", parameters=["-ac", "2", "-vol", "150"])
 ```
 
+## Debugging
+
+Most issues people run into are related to converting between formats using
+ffmpeg/avlib. Pydub provides a logger that outputs the subprocess calls to 
+help you track down issues:
+
+```python
+>>> import logging
+
+>>> l = logging.getLogger("pydub.converter")
+>>> l.setLevel(logging.DEBUG)
+>>> l.addHandler(logging.StreamHandler())
+
+>>> AudioSegment.from_file("./test/data/test1.mp3")
+subprocess.call(['ffmpeg', '-y', '-i', '/var/folders/71/42k8g72x4pq09tfp920d033r0000gn/T/tmpeZTgMy', '-vn', '-f', 'wav', '/var/folders/71/42k8g72x4pq09tfp920d033r0000gn/T/tmpK5aLcZ'])
+<pydub.audio_segment.AudioSegment object at 0x101b43e10>
+```
+
+Don't worry about the temporary files used in the conversion. They're cleaned up 
+automatically.
+
 ## Bugs & Questions
 
-You can file bugs in our [github issues tracker](https://github.com/jiaaro/pydub/issues), and ask any technical questions on [Stack Overflow using the pydub tag](http://stackoverflow.com/questions/ask?tags=pydub). We keep an eye on both.
+You can file bugs in our [github issues tracker](https://github.com/jiaaro/pydub/issues), 
+and ask any technical questions on 
+[Stack Overflow using the pydub tag](http://stackoverflow.com/questions/ask?tags=pydub). 
+We keep an eye on both.
 
 ## Installation
 
-Copy the pydub directory into your python path. Zip [here](https://github.com/jiaaro/pydub/zipball/master)
-
--OR-
+Installing pydub is easy, but don't forget to install ffmpeg/avlib (the next section in this doc)
 
     pip install pydub
+
+Or install the latest dev version from github (or replace `@master` with a [release version like `@v0.12.0`](https://github.com/jiaaro/pydub/releases))…
+
+    pip install git+https://github.com/jiaaro/pydub.git@master
 
 -OR-
 
     git clone https://github.com/jiaaro/pydub.git
 
+-OR-
+
+Copy the pydub directory into your python path. Zip 
+[here](https://github.com/jiaaro/pydub/zipball/master)
+
 ## Dependencies
 
-Requires ffmpeg or avconv for encoding and decoding all non-wav files (which work natively)
+You can open and save WAV files with pure python. For opening and saving non-wav 
+files – like mp3 – you'll need [ffmpeg](http://www.ffmpeg.org/) or 
+[libav](http://libav.org/).
 
- - ffmpeg (http://www.ffmpeg.org/)
+## Getting ffmpeg set up
 
- -OR-
+You may use **libav or ffmpeg**.
 
- - avconv (http://libav.org/)
+Mac (using [homebrew](http://brew.sh)):
+
+```bash
+# libav
+brew install libav --with-libvorbis --with-sdl --with-theora
+
+####    OR    #####
+
+# ffmpeg
+brew install ffmpeg --with-libvorbis --with-ffplay --with-theora
+```
+
+Linux (using aptitude):
+
+```bash
+# libav
+apt-get install libav-tools libavcodec-extra-53
+
+####    OR    #####
+
+# ffmpeg
+apt-get install ffmpeg libavcodec-extra-53
+```
+
+Windows:
+
+Sorry, I don't know how to set up windows. libav [appears to provide binarys](https://libav.org/download.html) you can install on windows.
 
 ## Important Notes
 
@@ -203,7 +274,7 @@ playlist = beginning_of_song
 for song in playlist_songs:
 
     # We don't want an abrupt stop at the end, so let's do a 10 second crossfades
-    playlist.append(song, crossfade=(10 * 1000))
+    playlist = playlist.append(song, crossfade=(10 * 1000))
 
 # let's fade out the end of the last song
 playlist = playlist.fade_out(30)
@@ -216,44 +287,6 @@ out_f = open("%s_minute_playlist.mp3" % playlist_length, 'wb')
 
 playlist.export(out_f, format='mp3')
 ```
-
-### Yet another Example?
-
-Let's say you have a weekly podcast and you want to do the processing automatically.
-
-For this example we're going to:
-
-  - Strip out the silence
-  - Add on the bumpers (intro/outro theme music)
-
-```python
-from pydub import AudioSegment
-from pydub.utils import db_to_float
-
-# Let's load up the audio we need...
-podcast = AudioSegment.from_mp3("podcast.mp3")
-intro = AudioSegment.from_wav("intro.wav")
-outro = AudioSegment.from_wav("outro.wav")
-
-# Let's consider anything that is 30 decibels quieter than
-# the average volume of the podcast to be silence
-average_loudness = podcast.rms
-silence_threshold = average_loudness * db_to_float(-30)
-
-# filter out the silence
-podcast_parts = (ms for ms in podcast if ms.rms > silence_threshold)
-
-# combine all the chunks back together
-podcast = reduce(lambda a, b: a + b, podcast_parts)
-
-# add on the bumpers
-podcast = intro + podcast + outro
-
-# save the result
-podcast.export("podcast_processed.mp3", format="mp3")
-```
-
-Not bad!
 
 ## License ([MIT License](http://opensource.org/licenses/mit-license.php))
 
