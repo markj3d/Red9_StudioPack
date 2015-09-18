@@ -1534,8 +1534,7 @@ class MetaClass(object):
         if mobjHandle:
             try:
                 if not mobjHandle.isValid():
-                    log.info('MObject is no longer valid - %s - object may have been deleted or the scene reloaded?'\
-                              % object.__getattribute__(self,'mNodeID'))
+                    log.info('MObject is no longer valid - object may have been deleted or the scene reloaded?')
                     return
                 #if we have an object thats a dagNode, ensure we return FULL Path
                 mobj=object.__getattribute__(self, "_MObject")
@@ -1567,7 +1566,7 @@ class MetaClass(object):
                 
             except StandardError, error:
                 raise StandardError(error)
-            
+                
     @property
     def mNodeID(self):
         if not self.hasAttr('mNodeID'):
@@ -1807,16 +1806,16 @@ class MetaClass(object):
         '''
 
         if callable(attr):
-            log.debug("callable attr, bypassing tests : %s" % attr)
+            log.info("callable attr, bypassing tests : %s" % attr)
             return attr
         try:
             #private class attr only
-            if attr in MetaClass.UNMANAGED:
-                return object.__getattribute__(self, attr)
+#            if attr in MetaClass.UNMANAGED:
+#                return object.__getattribute__(self, attr)
             
             #stops recursion, do not getAttr on mNode here
             mNode=object.__getattribute__(self, "mNode")
-            
+
             if not mNode or not cmds.objExists(mNode):
                 attrVal=object.__getattribute__(self, attr)
                 return attrVal
@@ -1897,7 +1896,9 @@ class MetaClass(object):
         if r9Setup.mayaVersion()<2012:
             #The api call fails in 2011, I need to dig into this
             return cmds.attributeQuery(attr, exists=True, node=self.mNode)
-        return OpenMaya.MFnDependencyNode(self.mNodeMObject).hasAttribute(attr)
+        if self.isValidMObject():
+            return OpenMaya.MFnDependencyNode(self.mNodeMObject).hasAttribute(attr)
+        return cmds.attributeQuery(attr, exists=True, node=self.mNode)
     
     def attrIsLocked(self,attr):
         '''
