@@ -36,7 +36,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 try:
-    from ..packages.pydub.pydub import audio_segment
+    from Red9.packages.pydub.pydub import audio_segment
 except:
     log.debug('unable to import pydub libs')
 
@@ -665,7 +665,12 @@ class AudioNode(object):
     
         # bind ProPack bwav support
         if r9Setup.has_pro_pack():
-            import Red9.pro_pack.core.audio as pro_audio
+            #import Red9.pro_pack.core.audio as pro_audio
+            
+            import Red9.pro_pack.r9pro as r9pro
+            r9pro.r9import('r9paudio')    # add to python libs
+            import r9paudio as pro_audio  # unresolved import
+            
             self.pro_bwav = pro_audio.BWav_Handler(self.path)
             
     def __repr__(self):
