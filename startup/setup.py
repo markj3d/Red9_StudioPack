@@ -709,12 +709,13 @@ def addPluginPath():
     else:
         log.info('Red9 Plug-in Path already setup')
               
-def addIconsPath():
+def addIconsPath(path=None):
     '''
     Make sure the icons path has been added. If run as a module
     this will have already been added
     '''
-    path=os.path.join(red9ModulePath(),'icons')
+    if not path:
+        path=os.path.join(red9ModulePath(),'icons')
     iconsPath=os.environ.get('XBMLANGPATH')
     
     if not path in iconsPath:
