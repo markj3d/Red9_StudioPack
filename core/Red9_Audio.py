@@ -665,9 +665,12 @@ class AudioNode(object):
     
         # bind ProPack bwav support
         if r9Setup.has_pro_pack():
-            import Red9.pro_pack.r9pro as r9pro
-            r9pro.r9import('r9paudio')
-            import r9paudio
+            try:
+                import Red9.pro_pack.core.audio as r9paudio
+            except:
+                import Red9.pro_pack.r9pro as r9pro
+                r9pro.r9import('r9paudio')
+                import r9paudio
             #import Red9.pro_pack.core.audio as pro_audio
             self.pro_bwav = r9paudio.BWav_Handler(self.path)
             
