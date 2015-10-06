@@ -353,6 +353,7 @@ class ProgressBarContext(object):
             cmds.progressBar(self._gMainProgressBar,
                               edit=True,
                               beginProgress=True,
+                              step=1,
                               isInterruptable=self._interruptable,
                               maxValue=self._maxValue)
     
