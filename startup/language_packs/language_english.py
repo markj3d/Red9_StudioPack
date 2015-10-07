@@ -573,7 +573,8 @@ class _MetaNodeUI_(object):
     class_all_registered = 'Class : All Registered'
     pro_connect_node = 'Pro: Connect Node to System'
     pro_disconnect_node = 'Pro: Disconnect Nodes from System'
-    pro_test_pro_stubs = 'Pro: Test Pro_PackStubs'
+    pro_addchild_metanode = 'Pro: Add Child MetaNode System'
+
     filter_by_name = 'filter by name : '
     shortname = 'shortname'
     stripnamespace = 'strip_Nspace'
