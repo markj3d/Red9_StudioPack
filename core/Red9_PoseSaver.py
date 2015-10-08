@@ -1016,6 +1016,7 @@ class PosePointCloud(object):
         
         if self.inputNodes:
             self.inputNodes.reverse()  # for the snapping operations
+        return self.inputNodes
                       
     def getPPCNodes(self):
         '''
