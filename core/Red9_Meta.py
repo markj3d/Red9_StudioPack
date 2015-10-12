@@ -1080,7 +1080,12 @@ class MClassNodeUI(object):
         cmds.menuItem(divider=True)
         cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.pro_connect_node, command=self.__uiCB_connectNode)
         cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.pro_disconnect_node, command=self.__uiCB_disconnectNode)
-        cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.pro_test_pro_stubs, command=lambda x:r9Setup.PRO_PACK_STUBS().test_pro_stubs())
+        
+        cmds.menuItem(divider=True)
+        cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.pro_addchild_metanode, sm=True)
+        for name,_ in sorted(getMClassMetaRegistry().items()):
+            cmds.menuItem(label=name, command=partial(self.__uiCB_connectChildMetaNode,name))
+        
         cmds.button(label=LANGUAGE_MAP._Generic_.refresh, command=partial(self.fillScroll))
         cmds.separator(h=15,style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7,0,0), image1='Rocket9_buttonStrap2.bmp',
@@ -1292,6 +1297,20 @@ class MClassNodeUI(object):
             raise StandardError('Connect Call only works with a single selected mNode from the UI')
         
         r9Setup.PRO_PACK_STUBS().MetaDataUI.uiCB_disconnectNode(mNode)
+        
+    def __uiCB_connectChildMetaNode(self, mClass, *args):
+        '''
+        PRO PACK : Given a single selected mNode from the UI and selected MAYA nodes, run
+        disconnectChild to remove them from the metaData system
+        '''
+        indexes=cmds.textScrollList('slMetaNodeList',q=True,sii=True)
+        if len(indexes)==1:
+            mNode=MetaClass(self.mNodes[indexes[0]-1])
+        else:
+            raise StandardError('Connect Call only works with a single selected mNode from the UI')
+        r9Setup.PRO_PACK_STUBS().MetaDataUI.uiCB_addChildMetaNode(mNode,mClass)
+        self.fillScroll()
+        print 'adding childMetaNode of mClass type : %s to %s' % (mClass, mNode.mNode)
         
     def printRegisteredNodeTypes(self,*args):
         print '\nRED9_META_NODETYPE_REGISTERY:\n============================='

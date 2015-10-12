@@ -11,9 +11,9 @@ example of what's expected and what the systems can do on simple data
 '''
 
 
-import pymel.core as pm
-#import maya.standalone
-#maya.standalone.initialize(name='python')
+#import pymel.core as pm
+import maya.standalone
+maya.standalone.initialize(name='python')
 
 import maya.cmds as cmds
 import os
@@ -220,7 +220,7 @@ class Test_PoseData_loaders():
 #        filepath=os.path.join(self.poseFolder,'jump_f218.pose')
 #        self.poseData.poseLoad(self.rootNode, filepath=filepath, useFilter=True)
 #        assert r9Pose.PoseCompare(self.poseData,filepath).compare()
-#        
+#
     def test_poseLoad_mirrorIndex(self):
         self.poseData.matchMethod='mirrorIndex'
         cmds.currentTime(0)
@@ -247,7 +247,8 @@ class Test_PoseData_loaders():
         
         #the pose is no longer in the same space due to the relative code, 
         #we need up update the internal pose before comparing
-        self.poseData.buildDataMap(self.rootNode)
+        nodes=self.poseData.buildDataMap(self.rootNode)
+        self.poseData.buildBlocks_fill(nodes)
         assert r9Pose.PoseCompare(self.poseData, requiredPose).compare()
         
     def test_poseLoad_relativeProjected_mirrorIndex(self):
@@ -269,7 +270,8 @@ class Test_PoseData_loaders():
         
         #the pose is no longer in the same space due to the relative code,
         #we need up update the internal pose before comparing
-        self.poseData.buildDataMap(self.rootNode)
+        nodes=self.poseData.buildDataMap(self.rootNode)
+        self.poseData.buildBlocks_fill(nodes)
         assert r9Pose.PoseCompare(self.poseData, requiredPose).compare()
         
         
@@ -289,7 +291,8 @@ class Test_PoseData_loaders():
         
         #the pose is no longer in the same space due to the relative code, 
         #we need up update the internal pose before comparing
-        self.poseData.buildDataMap(self.rootNode)
+        nodes=self.poseData.buildDataMap(self.rootNode)
+        self.poseData.buildBlocks_fill(nodes)
         assert not r9Pose.PoseCompare(self.poseData, filepath, compareDict='poseDict').compare()
         assert r9Pose.PoseCompare(self.poseData, os.path.join(self.poseFolder,'jump_f9_absolute29.pose'), compareDict='poseDict').compare()
     
@@ -309,7 +312,8 @@ class Test_PoseData_loaders():
         
         #the pose is no longer in the same space due to the relative code, 
         #we need up update the internal pose before comparing
-        self.poseData.buildDataMap(self.rootNode)
+        nodes=self.poseData.buildDataMap(self.rootNode)
+        self.poseData.buildBlocks_fill(nodes)
         assert not r9Pose.PoseCompare(self.poseData, filepath, compareDict='poseDict').compare()
         assert r9Pose.PoseCompare(self.poseData, os.path.join(self.poseFolder,'jump_f9_absolute29.pose'), compareDict='poseDict').compare()
          
