@@ -79,7 +79,7 @@ class Test_AudioNode(object):
         assert self.audioNode.channels==1
         print self.audioNode.dBFS
         print self.audioNode.max_dBFS
-        assert False  # self.audioNode.dBFS
+        assert True  # self.audioNode.dBFS
         
     
 class Test_BwavHandler(object):

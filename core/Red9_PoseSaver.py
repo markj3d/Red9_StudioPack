@@ -257,6 +257,9 @@ class DataMap(object):
         '''
         self.infoDict['author']=getpass.getuser()
         self.infoDict['date']=time.ctime()
+        self.infoDict['timeUnit']=cmds.currentUnit(q=True, fullName=True, time=True)
+        self.infoDict['sceneUnits']=cmds.currentUnit(q=True, fullName=True, linear=True)
+        self.infoDict['upAxis'] = cmds.upAxis(q=True, axis=True)
         self.infoDict['metaPose']=self.metaPose
         if self.metaRig:
             self.infoDict['metaRigNode']=self.metaRig.mNode
