@@ -1402,7 +1402,7 @@ class MetaClass(object):
                 fills the node with just message linked attrs (designed for MetaClass work 
                 with HIK characterNode)
                 
-        .. note::  
+        .. note::
             mNode is now a wrap on the MObject so will always be in sync even if the node is renamed/parented
         '''
         if node and MetaClass.cached:
@@ -1423,9 +1423,7 @@ class MetaClass(object):
 #                                               '_forceAsMeta'])  # note - UNMANAGED bypasses the Maya node in setattr calls
 
         object.__setattr__(self, '_lockState', False)    # by default all mNode's are unlocked, manage this in any subclass if needed
-        object.__setattr__(self, '_forceAsMeta', False)  # force all getAttr calls to return mClass objects even for starndard Maya nodes
-        
-        #create_time=False
+        object.__setattr__(self, '_forceAsMeta', False)  # force all getAttr calls to return mClass objects even for starndard Maya nodes       
         wrapped_node=False
         
         if not node:
@@ -1436,7 +1434,7 @@ class MetaClass(object):
                 raise IOError('nodeType : "%s" : is NOT yet registered in the "RED9_META_NODETYPE_REGISTERY", please use r9Meta.registerMClassNodeCache(nodeTypes=[%s]) to do so before making this node' % (nodeType,nodeType))
 
             node=cmds.createNode(nodeType,name=name)
-            #create_time=True
+
             self.mNode=node
             # ! MAIN ATTR !: used to know what class to instantiate.
             self.addAttr('mClass', value=str(self.__class__.__name__), attrType='string')
@@ -1469,20 +1467,20 @@ class MetaClass(object):
                 #do we register NON MClass standard wrapped Maya Nodes to the registery??
                 #registerMClassNodeCache(self)
         
-        if not wrapped_node:
-            self.lockState=False  # why set this on instantiation?
-        
+        #if not wrapped_node:
+        self.lockState=False  # why set this on instantiation?
+    
+#        if self._lockState:
+#            self.lockState=False
+                
         #bind any default attrs up - note this should be overloaded where required
         self.__bindData__(*args, **kws)
         
 #        #we now only manage the lockstate of the node at create time. Note this is
 #        #after the __bindData__ so that any overloading in your subclasses runs on the
-#        #node in it's original unloacked state, then we lock it
-#        if create_time:
-#            if self._lockState:
-#                self.lockState=True
-#            else:
-#                self.lockState=False
+#        #node in it's original unlocked state, then we lock it
+#        if self._lockState:
+#            self.lockState=True
                 
         #This is useful! so we have a node with a lot of attrs, or just a simple node
         #this block if activated will auto-fill the object.__dict__ with all the available
@@ -1851,7 +1849,7 @@ class MetaClass(object):
 
                     #Standard Maya Attr handling
                     #===========================
-                    attrVal=cmds.getAttr('%s.%s' % (mNode,attr))
+                    attrVal=cmds.getAttr('%s.%s' % (mNode,attr), silent=True)
                     if attrType=='string':
                         #for string data we pass it via the JSON decoder such that
                         #complex data can be managed and returned correctly
