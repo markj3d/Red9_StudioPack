@@ -1402,7 +1402,7 @@ class MetaClass(object):
                 fills the node with just message linked attrs (designed for MetaClass work 
                 with HIK characterNode)
                 
-        .. note::  
+        .. note::
             mNode is now a wrap on the MObject so will always be in sync even if the node is renamed/parented
         '''
         if node and MetaClass.cached:
@@ -1423,9 +1423,7 @@ class MetaClass(object):
 #                                               '_forceAsMeta'])  # note - UNMANAGED bypasses the Maya node in setattr calls
 
         object.__setattr__(self, '_lockState', False)    # by default all mNode's are unlocked, manage this in any subclass if needed
-        object.__setattr__(self, '_forceAsMeta', False)  # force all getAttr calls to return mClass objects even for starndard Maya nodes
-        
-        #create_time=False
+        object.__setattr__(self, '_forceAsMeta', False)  # force all getAttr calls to return mClass objects even for starndard Maya nodes       
         wrapped_node=False
         
         if not node:
@@ -1436,7 +1434,7 @@ class MetaClass(object):
                 raise IOError('nodeType : "%s" : is NOT yet registered in the "RED9_META_NODETYPE_REGISTERY", please use r9Meta.registerMClassNodeCache(nodeTypes=[%s]) to do so before making this node' % (nodeType,nodeType))
 
             node=cmds.createNode(nodeType,name=name)
-            #create_time=True
+
             self.mNode=node
             # ! MAIN ATTR !: used to know what class to instantiate.
             self.addAttr('mClass', value=str(self.__class__.__name__), attrType='string')
@@ -1469,20 +1467,20 @@ class MetaClass(object):
                 #do we register NON MClass standard wrapped Maya Nodes to the registery??
                 #registerMClassNodeCache(self)
         
-        if not wrapped_node:
-            self.lockState=False  # why set this on instantiation?
-        
+        #if not wrapped_node:
+        self.lockState=False  # why set this on instantiation?
+    
+#        if self._lockState:
+#            self.lockState=False
+                
         #bind any default attrs up - note this should be overloaded where required
         self.__bindData__(*args, **kws)
         
 #        #we now only manage the lockstate of the node at create time. Note this is
 #        #after the __bindData__ so that any overloading in your subclasses runs on the
-#        #node in it's original unloacked state, then we lock it
-#        if create_time:
-#            if self._lockState:
-#                self.lockState=True
-#            else:
-#                self.lockState=False
+#        #node in it's original unlocked state, then we lock it
+#        if self._lockState:
+#            self.lockState=True
                 
         #This is useful! so we have a node with a lot of attrs, or just a simple node
         #this block if activated will auto-fill the object.__dict__ with all the available
@@ -1851,7 +1849,7 @@ class MetaClass(object):
 
                     #Standard Maya Attr handling
                     #===========================
-                    attrVal=cmds.getAttr('%s.%s' % (mNode,attr))
+                    attrVal=cmds.getAttr('%s.%s' % (mNode,attr), silent=True)
                     if attrType=='string':
                         #for string data we pass it via the JSON decoder such that
                         #complex data can be managed and returned correctly
@@ -2793,7 +2791,6 @@ class MetaRig(MetaClass):
         
         # general management vars
         self.CTRL_Prefix = 'CTRL'       # prefix for all connected CTRL_ links added
-        self.rigGlobalCtrlAttr = 'CTRL_Main'  # attribute linked to the top globalCtrl in the rig
         self.lockState = True           # now set in __bindData__ using the semi-private var self._lockState
         self.parentSwitchAttr = ['parent']  # attr used for parentSwitching
         self.MirrorClass = None         # capital as this binds to the MirrorClass directly
@@ -2806,6 +2803,16 @@ class MetaRig(MetaClass):
         self.addAttr('renderMeshes', attrType='message')
         self.addAttr('exportSkeletonRoot', attrType='messageSimple')
         self.addAttr('scaleSystem', attrType='messageSimple')
+        #self.addAttr('timecode_node', attrType='messageSimple')
+    
+    @property
+    def ctrl_main(self):
+        '''
+        why wrap, because when we subclass, IF we've modified the CRTL_Prefix then we
+        can't rely on the default CTRL_Main[0] wire, so we wrap it with the current 
+        instances self.CTRL_Prefix
+        '''
+        return getattr(self,'%s_Main' % self.CTRL_Prefix)[0]
     
     @property
     def characterSet(self):
@@ -3182,11 +3189,9 @@ class MetaRig(MetaClass):
         
         :param state: bool to pass to the lodVisibility attr
         :param skip: [] child attrs on the mNode to skip during the process allowing certain controllers not to be effected
-        
         '''
         ctrlMap=self.getChildren(walk=True, asMap=True)
         for plug, ctrl in ctrlMap.items():
-            #print plug
             if not plug.split('.')[-1] in skip:
                 shapes=cmds.listRelatives(ctrl,type='shape',f=True)
                 for shape in shapes:
@@ -3305,7 +3310,20 @@ class MetaRig(MetaClass):
         if reset:
             self.loadZeroPose(nodes)
         
-        
+    def getTimecode(self, atFrame=None):
+        '''
+        PRO PACK: get the timecode object back from the rig
+        '''
+        if r9Setup.has_pro_pack():
+            try:
+                import Red9.pro_pack.core.audio as r9paudio  # dev mode only ;)
+            except:
+                from Red9.pro_pack import r9pro
+                r9pro.r9import('r9paudio')
+                import r9paudio
+            tc=r9paudio.Timecode()
+            tc.getTimecode_from_node(self.ctrl_main)
+            return tc
     
 class MetaRigSubSystem(MetaRig):
     '''
@@ -3866,10 +3884,15 @@ class MetaTimeCodeHUD(MetaHUDNode):
         if self.cached:
             log.debug('CACHE : Aborting __init__ on pre-cached %s Object' % self.__class__)
             return
+
+        if r9Setup.has_pro_pack():
+            import Red9.core.Red9_Audio as r9Audio
+            r9paudio=r9Audio.bind_pro_audio()
+            self.func=r9paudio.milliseconds_to_Timecode
+        else:
+            raise r9Setup.ProPack_Error('Timecode HUD requires ProPack')
         
-        import Red9.core.Red9_Audio as r9Audio
-        self.func=r9Audio.milliseconds_to_Timecode
-        tc=r9Audio.Timecode()
+        tc=r9paudio.Timecode()
         self.tc_count = tc.count
         self.tc_samplerate = tc.samplerate
         self.tc_ref = tc.ref

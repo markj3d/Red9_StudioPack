@@ -1120,67 +1120,67 @@ class Test_MetaRig():
     def test_getNodeConnections(self):
         assert self.mRig.L_Leg_System.getNodeConnections('|World_Ctrl|L_Foot_grp|L_Foot_Ctrl') == ['CTRL_L_Foot']
         
-    def test_getChildren_mAttrs(self):
-        #TODO: Fill Test
-        pass
-    
-    def test_getChildren_asMap(self):
-        #TODO: Fill Test
-        pass
-    
-    def test_getConnectedMetaNodes(self):
-        #TODO: Fill Test
-        pass
-
-    def test_getConnectedMetaNodes_mTypes(self):
-        #TODO: Fill Test
-        pass
-    
-    def test_getConnectedMetaNodes_mInstances(self):
-        #TODO: Fill Test
-        pass
-    
-    def test_getConnectedMetaNodes_mAttrs(self):
-        #TODO: Fill Test
-        pass
-    
-    def test_getSkeletonRoots(self):
-        #TODO: Fill Test
-        pass
-    
-    def test_addSupportNode(self):
-        #TODO: Fill Test
-        pass
-    
-    def test_set_ctrlColour(self):
-        #TODO: Fill Test
-        pass
-    
-    def test_mirrorDataHandling(self):
-        #TODO: Fill Test
-        #loadMirrorDataMap
-        #getMirrorData
-        #getMirror_opposites
-        #getMirror_ctrlSets
-        #mirror
-        pass
-    
-    def test_poseCache(self):
-        #poseCacheStore
-        #poseCacheLoad
-        #poseCompare
-        pass
-    
-    def test_nodeVisibility(self):
-        #nodeVisibility
-        #hideNodes
-        #unHideNodes
-        pass
-        
-    def test_attrMap(self):
-        #loadAttrMap
-        #saveAttrMap
-        pass
+#    def test_getChildren_mAttrs(self):
+#        #TODO: Fill Test
+#        pass
+#    
+#    def test_getChildren_asMap(self):
+#        #TODO: Fill Test
+#        pass
+#    
+#    def test_getConnectedMetaNodes(self):
+#        #TODO: Fill Test
+#        pass
+#
+#    def test_getConnectedMetaNodes_mTypes(self):
+#        #TODO: Fill Test
+#        pass
+#    
+#    def test_getConnectedMetaNodes_mInstances(self):
+#        #TODO: Fill Test
+#        pass
+#    
+#    def test_getConnectedMetaNodes_mAttrs(self):
+#        #TODO: Fill Test
+#        pass
+#    
+#    def test_getSkeletonRoots(self):
+#        #TODO: Fill Test
+#        pass
+#    
+#    def test_addSupportNode(self):
+#        #TODO: Fill Test
+#        pass
+#    
+#    def test_set_ctrlColour(self):
+#        #TODO: Fill Test
+#        pass
+#    
+#    def test_mirrorDataHandling(self):
+#        #TODO: Fill Test
+#        #loadMirrorDataMap
+#        #getMirrorData
+#        #getMirror_opposites
+#        #getMirror_ctrlSets
+#        #mirror
+#        pass
+#    
+#    def test_poseCache(self):
+#        #poseCacheStore
+#        #poseCacheLoad
+#        #poseCompare
+#        pass
+#    
+#    def test_nodeVisibility(self):
+#        #nodeVisibility
+#        #hideNodes
+#        #unHideNodes
+#        pass
+#        
+#    def test_attrMap(self):
+#        #loadAttrMap
+#        #saveAttrMap
+#        pass
     
 class Test_SpeedTesting():
     '''

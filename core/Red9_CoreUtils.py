@@ -1222,10 +1222,9 @@ class FilterNode(object):
             log.debug('processing found MetaSystsem Nodes : %s' % ','.join([x.mNode for x in metaNodes]))
             for meta in metaNodes:
                 ctrls=meta.getChildren(walk=walk)
-                if ctrls and not incMain and meta.hasAttr(meta.rigGlobalCtrlAttr):
-                    ctrl_main=meta.__getattribute__(meta.rigGlobalCtrlAttr)[0]
-                    if ctrl_main in ctrls:
-                        ctrls.remove(ctrl_main)
+                if ctrls and not incMain:
+                    if meta.ctrl_main in ctrls:
+                        ctrls.remove(meta.ctrl_main)
                 rigCtrls.extend(ctrls)
         return rigCtrls
             

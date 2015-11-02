@@ -39,236 +39,50 @@ try:
     from ..packages.pydub.pydub import audio_segment
 except:
     log.debug('unable to import pydub libs')
+     
+   
+     
 
-    
-# Timecode conversion utilities  -----------------------------------------------------
 
-class Timecode(object):
-
-    def __init__(self):
-        self.count = 'timecode_count'  # linear key-per-frame data used to keep track of timecode during animation
-        self.samplerate = 'timecode_samplerate'  # fps used to generate the linear count curve
-        self.ref = 'timecode_ref'  # milliseconds start point used as the initial reference
-        self.timecodedata = ''  # this gets set by the UI below
-    
-    def getTimecode_from_node(self, node):
-        '''
-        wrapper method to get the timecode back from a given node
-        :param node: node containing correctly formatted timecode data
-        
-        .. note:
-                the node passed in has to have the correctly formatted timecode data to compute
-        '''
-        node = r9Meta.MetaClass(node)
-        if node.hasAttr(self.ref):
-            ms = (getattr(node, self.ref) + ((float(getattr(node, self.count)) / getattr(node,self.samplerate)) * 1000))
-            return milliseconds_to_Timecode(ms)
-    
-    @staticmethod
-    def getTimecode_from_maya():
-        '''
-        get the internal timecode binding from Maya's production mapping
-        
-        .. note::
-        
-            Maya has a function for modifying the default mapping through the setTimecode
-            ui which binds a given frame to a given timecode. This code compensates for that binding
-        '''
-        # maya binding data
-        h=cmds.timeCode(q=True, productionStartHour=True)
-        m=cmds.timeCode(q=True, productionStartMinute=True)
-        s=cmds.timeCode(q=True, productionStartSecond=True)
-        f=cmds.timeCode(q=True, productionStartFrame=True)
-        t=cmds.timeCode(q=True, mayaStartFrame=True)
-        #calculate the actual displayed timecode
-        dif= cmds.currentTime(q=True) - t
-        tcf=timecode_to_frame('%s:%s:%s:%s' % (h,m,s,int(f)))
-        #convert back to timecode
-        return frame_to_timecode(tcf+dif)
-                
-    def addTimecode_to_node(self, node):
-        '''
-        wrapper to add the timecode attrs to a node ready for propagating
-        '''
-        node = r9Meta.MetaClass(node)
-        node.addAttr(self.count, attrType='float')
-        node.addAttr(self.samplerate, attrType='float')
-        node.addAttr(self.ref, attrType='int')
-
-    def enterTimecodeUI(self, buttonlabel='set', buttonfunc=None):
-        '''
-        generic UI to enter timecode
-        
-        :param buttonlabel' = label to add to the button
-        :param buttonfunc' = function to bind to the button on exit
-        '''
-        self.win='Timecode_UI'
-        if cmds.window(self.win, exists=True):
-            cmds.deleteUI(self.win, window=True)
-        cmds.window(self.win, title=self.win)
-        cmds.columnLayout(adjustableColumn=True)
-        cmds.text(label='Timecode Reference')
-        cmds.separator(h=10, style='in')
-        cmds.rowColumnLayout(nc=8)
-        cmds.text(label='  smpte :  ')
-        cmds.textField('tchrs', tx='00', w=40, cc=lambda x:self.__uicb_checkfield('tchrs'))
-        cmds.text(label=' : ')
-        cmds.textField('tcmins', tx='00', w=40, cc=lambda x:self.__uicb_checkfield('tcmins'))
-        cmds.text(label=' : ')
-        cmds.textField('tcsecs', tx='00', w=40, cc=lambda x:self.__uicb_checkfield('tcsecs'))
-        cmds.text(label=' : ')
-        cmds.textField('tcfrms', tx='00', w=40, cc=lambda x:self.__uicb_checkfield('tcfrms'))
-        cmds.setParent('..')
-        cmds.button(label=buttonlabel, command=lambda x:self.__uicb_gatherTimecode(buttonfunc))
-        cmds.showWindow(self.win)
-
-    def __uicb_checkfield(self, field, *args):
-        '''
-        make sure we only allow numeric entries
-        '''
-        data=cmds.textField(field, q=True, tx=True)
-        rc=re.compile(r"[A-Za-z_]\w*")
-        if len(data)>2 or rc.search(data):
-            raise IOError('timecode entries must contain only numbers in the format 00:00:00:00')
-
-    def __uicb_gatherTimecode(self, buttonfunc, *args):
-        self.timecodedata= '%s:%s:%s:%s' % (cmds.textField('tchrs', q=True, tx=True),
-                                cmds.textField('tcmins', q=True, tx=True),
-                                cmds.textField('tcsecs', q=True, tx=True),
-                                cmds.textField('tcfrms', q=True, tx=True))
-        if cmds.window(self.win, exists=True):
-            cmds.deleteUI(self.win, window=True)
-        buttonfunc(self.timecodedata)
-        return self.timecodedata
-        
-        
-
-def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=None):
-        '''
-        convert milliseconds into correctly formatted timecode
-        
-        :param milliseconds: time in milliseconds
-        :param smpte: format the timecode HH:MM:SS:FF where FF is frames
-        :param framerate: when using smpte this is the framerate used in the FF block
-            default (None) uses the current scenes framerate
-        
-        .. note::
-            * If smpte = False : the format will be HH:MM:SS:MSS = hours, minutes, seconds, milliseconds
-            * If smpte = True  : the format will be HH:MM:SS:FF  = hours, minutes, seconds, frames
-        '''
-        def __zeropad(value):
-            if value<10:
-                return '0%s' % value
-            else:
-                return value
-
-        if not framerate:
-            framerate=r9General.getCurrentFPS()
-            
-        if milliseconds > 3600000:
-            hours = int(math.floor(milliseconds / 3600000))
-            milliseconds -= (hours * 3600000)
-        else:
-            hours = 0
-        if milliseconds > 60000:
-            minutes = int(math.floor(milliseconds / 60000))
-            milliseconds -= (minutes * 60000)
-        else:
-            minutes = 0
-        if milliseconds > 1000:
-            seconds = int(math.floor(milliseconds / 1000))
-            milliseconds -= (seconds * 1000)
-        else:
-            seconds = 0
-        frame = int(math.floor(milliseconds))
-        if smpte:
-            frame = int(math.ceil((float(frame)/1000) * float(framerate)))
-            
-        return "{0}:{1}:{2}:{3}".format(__zeropad(hours),
-                                        __zeropad(minutes),
-                                        __zeropad(seconds),
-                                        __zeropad(frame))
+#------------------------------------------------------------------------------------------------
+# ProPack management and legacy wraps for the timecode converts
+#------------------------------------------------------------------------------------------------
   
-
+def bind_pro_audio():
+    '''
+    This is a wrap to import the pro_audio extensions. We have to
+    lazy load this to avoid cyclic issues in the boot and wrapping it
+    like this makes it easy to consume in the classes
+    '''
+    if r9Setup.has_pro_pack():
+        try:
+            import Red9.pro_pack.core.audio as r9paudio  # dev mode only ;)
+        except:
+            from Red9.pro_pack import r9pro
+            r9pro.r9import('r9paudio')
+            import r9paudio
+        return r9paudio
+    
+def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=None):
+    return bind_pro_audio().milliseconds_to_Timecode(milliseconds, smpte=smpte, framerate=framerate)
+    
 def milliseconds_to_frame(milliseconds, framerate=None):
-    '''
-    convert milliseconds into frames
-        
-    :param milliseconds: time in milliseconds
-    :param framerate: when using smpte this is the framerate used in the FF block
-        default (None) uses the current scenes framerate
-    '''
-    if not framerate:
-        framerate=r9General.getCurrentFPS()
-    return  (float(milliseconds) / 1000) * framerate
+    return bind_pro_audio().milliseconds_to_frame(milliseconds, framerate=framerate)
     
-             
 def timecode_to_milliseconds(timecode, smpte=True, framerate=None):
-    '''
-    from a properly formatted timecode return it in milliseconds
-    r9Audio.timecode_to_milliseconds('09:00:00:00')
-    
-    :param timecode: '09:00:00:20' as a string
-    :param smpte: calculate the milliseconds based on HH:MM:SS:FF (frames as last block)
-    :param framerate: only used if smpte=True, the framerate to use in the conversion, 
-        default (None) uses the current scenes framerate
-    '''
-    if not framerate:
-        framerate=r9General.getCurrentFPS()
-            
-    data = timecode.split(':')
-    if not len(data) ==4:
-        raise IOError('timecode should be in the format "09:00:00:00"')
-    if smpte and int(data[3])>framerate:
-        raise IOError('timecode is badly formatted, frameblock is greater than given framerate')
-    actual = int(data[0]) * 3600000
-    actual += int(data[1]) * 60000
-    actual += int(data[2]) * 1000
-    if smpte:
-        actual += (int(data[3]) * 1000) / float(framerate)
-    else:
-        actual += int(data[3])
-    return actual
-
+    return bind_pro_audio().timecode_to_milliseconds(timecode, smpte=smpte, framerate=framerate)
+      
 def timecode_to_frame(timecode, smpte=True, framerate=None):
-    '''
-    from a properly formatted timecode return it in frames
-    r9Audio.timecode_to_milliseconds('09:00:00:00')
-    
-    :param timecode: '09:00:00:20' as a string
-    :param smpte: calculate the milliseconds based on HH:MM:SS:FF (frames as last block)
-    :param framerate: only used if smpte=True, the framerate to use in the conversion, 
-        default (None) uses the current scenes framerate
-    ''' 
-    ms=timecode_to_milliseconds(timecode, smpte=smpte, framerate=framerate)
-    return milliseconds_to_frame(ms, framerate)
-    
+    return bind_pro_audio().timecode_to_frame(timecode, smpte=smpte, framerate=framerate)
+
 def frame_to_timecode(frame, smpte=True, framerate=None):
-    '''
-    from a given frame return that time as timecode
-    relative to the given framerate
-    
-    :param frame: current frame in Maya
-    :param smpte: calculate the milliseconds based on HH:MM:SS:FF (frames as last block)
-    :param framerate: the framerate to use in the conversion, 
-        default (None) uses the current scenes framerate
-    '''
-    ms=frame_to_milliseconds(frame, framerate)
-    return milliseconds_to_Timecode(ms, smpte=smpte, framerate=framerate)
-    
+    return bind_pro_audio().frame_to_timecode(frame, smpte=smpte, framerate=framerate)
+
 def frame_to_milliseconds(frame, framerate=None):
-    '''
-    from a given frame return that time in milliseconds 
-    relative to the given framerate
-    
-    :param frame: current frame in Maya
-    :param framerate: only used if smpte=True, the framerate to use in the conversion, 
-        default (None) uses the current scenes framerate
-    '''
-    if not framerate:
-        framerate=r9General.getCurrentFPS()
-    return (frame / float(framerate)) * 1000
-    
+    return bind_pro_audio().frame_to_milliseconds(frame, framerate=framerate)
+
+# ProPack End ----
+
 
 
 def combineAudio():
@@ -347,14 +161,6 @@ def inspect_wav():
     formatData+='{:<15}: {:}\n'.format('dBFS',audio.dBFS)
     formatData+='{:<15}: {:}\n'.format('Max dBFS',audio.max_dBFS)
     
-#    formatData='SoundNode : %s\n' % audio.audioNode
-#    formatData+='Filepath : %s\n\n' % audio.path
-#    formatData+='Sample_Width : %s\n' % audio.sample_width
-#    formatData+='BitRate : %s\n' % audio.sample_bits
-#    formatData+='SampleRate : %s\n' % audio.sampleRate
-#    formatData+='Channels : %s\n' % audio.channels
-#    formatData+='dBFS : %s\n' % audio.dBFS
-#    formatData+='max dBFS : %s\n\n' % audio.max_dBFS
     bWavData=''
     if data:
         bWavData+='TimecodeFormatted : %s\n' % audio.bwav_timecodeFormatted()
@@ -397,7 +203,10 @@ class AudioHandler(object):
                 self.audioNodes = cmds.ls(sl=True,type='audio')
             else:
                 self.audioNodes = cmds.ls(type='audio')
-
+                
+        # bind ProPack Timecode node
+        self.pro_audio=bind_pro_audio()
+                
     @property
     def audioNodes(self):
         if not self._audioNodes:
@@ -440,7 +249,7 @@ class AudioHandler(object):
         for a in self.audioNodes:
             if a.isBwav():
                 tcStart = a.bwav_timecodeMS()
-                tcEnd = tcStart + frame_to_milliseconds(a.getLengthFromWav())
+                tcEnd = tcStart + self.pro_audio.frame_to_milliseconds(a.getLengthFromWav())
                 if not minV:
                     minV=tcStart
                     maxV=tcEnd
@@ -450,7 +259,7 @@ class AudioHandler(object):
         if ms:
             return (minV,maxV)
         else:
-            return (milliseconds_to_Timecode(minV), milliseconds_to_Timecode(maxV))
+            return (self.pro_audio.milliseconds_to_Timecode(minV), self.pro_audio.milliseconds_to_Timecode(maxV))
          
     def setTimelineToAudio(self, audioNodes=None):
         '''
@@ -545,7 +354,7 @@ class AudioHandler(object):
             if not relativeNode.isBwav():
                 raise StandardError('Given Reference audio node is NOT  a Bwav!!')
             
-            relativeTC = milliseconds_to_frame(relativeNode.bwav_timecodeMS())
+            relativeTC = self.pro_audio.milliseconds_to_frame(relativeNode.bwav_timecodeMS())
             actualframe = relativeNode.startFrame
             diff = actualframe - relativeTC
             
@@ -665,14 +474,8 @@ class AudioNode(object):
     
         # bind ProPack bwav support
         if r9Setup.has_pro_pack():
-            try:
-                import Red9.pro_pack.core.audio as r9paudio
-            except:
-                import Red9.pro_pack.r9pro as r9pro
-                r9pro.r9import('r9paudio')
-                import r9paudio
-            #import Red9.pro_pack.core.audio as pro_audio
-            self.pro_bwav = r9paudio.BWav_Handler(self.path)
+            self.pro_audio=bind_pro_audio()
+            self.pro_bwav = self.pro_audio.BWav_Handler(self.path)
             
     def __repr__(self):
         if self.isLoaded:
@@ -805,7 +608,7 @@ class AudioNode(object):
     @property
     def startTime(self):
         '''
-        Maya start time of the sound node in milliseconds
+        PRO_PACK: Maya start time of the sound node in milliseconds
         '''
         if self.isLoaded:
             return (self.startFrame / r9General.getCurrentFPS()) * 1000
@@ -814,19 +617,19 @@ class AudioNode(object):
     @startTime.setter
     def startTime(self, val):
         if self.isLoaded:
-            cmds.setAttr('%s.offset' % self.audioNode, milliseconds_to_frame(val, framerate=None))
+            cmds.setAttr('%s.offset' % self.audioNode, self.pro_audio.milliseconds_to_frame(val, framerate=None))
 
     @property
     def endTime(self):
         '''
-        Maya end time of the sound node in milliseconds
+        PRO_PACK: Maya end time of the sound node in milliseconds
         '''
         return (self.endFrame / r9General.getCurrentFPS()) * 1000
     
     @endTime.setter
     def endTime(self, val):
         if self.isLoaded:
-            cmds.setAttr('%s.offset' % self.audioNode, milliseconds_to_frame(val, framerate=None))
+            cmds.setAttr('%s.offset' % self.audioNode, self.pro_audio.milliseconds_to_frame(val, framerate=None))
     
     # ---------------------------------------------------------------------------------
     # PRO_PACK : BWAV support ---
@@ -889,7 +692,7 @@ class AudioNode(object):
         :param offset: offset to apply to the internal timecode of the given wav's
         '''
         if self.isLoaded and self.pro_bwav and self.pro_bwav.isBwav():
-            self.startFrame = milliseconds_to_frame(self.pro_bwav.bwav_timecodeMS()) + offset
+            self.startFrame = self.pro_audio.milliseconds_to_frame(self.pro_bwav.bwav_timecodeMS()) + offset
         else:
             raise r9Setup.ProPack_Error()
 
@@ -1039,6 +842,10 @@ class AudioToolsWrap(object):
         self.win = 'AudioOffsetManager'
         self.__bwav_reference=None
         
+        # bind ProPack Timecode node
+        if r9Setup.has_pro_pack():
+            self.pro_audio=bind_pro_audio()
+
     @classmethod
     def show(cls):
         cls()._showUI()
@@ -1135,9 +942,9 @@ class AudioToolsWrap(object):
         else:
             selectedNode = cmds.ls(sl=True)
             if len(selectedNode)==1:
-                relativeTC = Timecode().getTimecode_from_node(selectedNode[0])
+                relativeTC = self.pro_audio.Timecode().getTimecode_from_node(selectedNode[0])
                 actualframe = cmds.currentTime(q=True)
-                self.__cached_tc_offset = actualframe - timecode_to_frame(relativeTC)
+                self.__cached_tc_offset = actualframe - self.pro_audio.timecode_to_frame(relativeTC)
                 cmds.text('bwavRefTC', edit=True,
                           label='frame %s == %s' % (cmds.currentTime(q=True), relativeTC))
             else:
@@ -1146,12 +953,12 @@ class AudioToolsWrap(object):
 
     def __uicb_setTCfromUI(self, tc):
         actualframe = cmds.currentTime(q=True)
-        self.__cached_tc_offset = actualframe - timecode_to_frame(tc)
+        self.__cached_tc_offset = actualframe - self.pro_audio.timecode_to_frame(tc)
         cmds.text('bwavRefTC', edit=True,
                           label='frame %s == %s' % (cmds.currentTime(q=True), tc))
         
     def __uicb_setReferenceBwavTCfromUI(self, *args):
-        Timecode().enterTimecodeUI(buttonfunc=self.__uicb_setTCfromUI)
+        self.pro_audio.Timecode().enterTimecodeUI(buttonfunc=self.__uicb_setTCfromUI)
                
     def offsetSelectedBy(self,direction,*args):
         self.audioHandler=AudioHandler()
@@ -1195,3 +1002,5 @@ class AudioToolsWrap(object):
             for node in nodes:
                 tcHUD.addMonitoredTimecodeNode(node)
             tcHUD.drawHUD()
+
+
