@@ -549,12 +549,15 @@ def red9ButtonBGC(colour):
     Generic setting for the main button colours in the UI's
     '''
     if colour==1 or colour=='green':
-        #return [0.6, 0.9, 0.65]
         return [0.6, 1, 0.6]
     elif colour==2 or colour=='grey':
         return [0.5, 0.5, 0.5]
     elif colour==3 or colour=='red':
         return [1,0.3,0.3]
+    elif colour==4 or colour=='white':
+        return (0.75,0.8,0.8)
+    elif colour==5 or colour=='dark':
+        return (0.15,0.25,0.25)
    
 def red9ContactInfo(*args):
     import Red9.core.Red9_General as r9General  # lazy load
