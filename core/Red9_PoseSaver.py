@@ -1091,14 +1091,15 @@ class PosePointCloud(object):
         
         self.deleteCurrentInstances()
 
-        self.posePointRoot=cmds.ls(cmds.spaceLocator(name='posePointCloud'),l=True)[0]
+        self.posePointRoot=cmds.ls(cmds.spaceLocator(name='posePointCloud'),sl=True,l=True)[0]
+        print self.posePointRoot
         cmds.setAttr('%s.visibility' % self.posePointRoot, self.isVisible)
-       
-        ppcShape=cmds.listRelatives(self.posePointRoot,type='shape')[0]
+
+        ppcShape=cmds.listRelatives(self.posePointRoot,type='shape',f=True)[0]
         cmds.setAttr("%s.localScaleZ" % ppcShape, 30)
         cmds.setAttr("%s.localScaleX" % ppcShape, 30)
         cmds.setAttr("%s.localScaleY" % ppcShape, 30)
-        
+
         if rootReference:
             self.rootReference=rootReference
         
