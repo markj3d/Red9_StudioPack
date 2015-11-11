@@ -81,7 +81,7 @@ def frame_to_timecode(frame, smpte=True, framerate=None):
 def frame_to_milliseconds(frame, framerate=None):
     return bind_pro_audio().frame_to_milliseconds(frame, framerate=framerate)
 
-# ProPack End ----
+# ProPack Bind End ----
 
 
 
