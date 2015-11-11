@@ -3168,7 +3168,7 @@ class MetaRig(MetaClass):
         '''
         import Red9.core.Red9_PoseSaver as r9Pose  # lazy loaded
         self.poseCacheStore()
-        compare=r9Pose.PoseCompare(self.poseCache,poseFile, compareDict=compareDict, filterMap=filterMap, ignoreBlocks=ignoreBlocks)
+        compare=r9Pose.PoseCompare(self.poseCache, poseFile, compareDict=compareDict, filterMap=filterMap, ignoreBlocks=ignoreBlocks)
         if not compare.compare():
             info='Selected Pose is different to the rigs current pose\nsee script editor for debug details'
         else:
@@ -3249,34 +3249,6 @@ class MetaRig(MetaClass):
         '''
         self.poseCacheLoad(nodes=nodes, attr='zeroPose')
     
-    def saveAnimation(self, filepath, incRoots=True):
-        '''
-        PRO_PACK : Binding of the animMap format for storing animation data out to file
-        '''
-        if r9Setup.has_pro_pack():
-            from Red9.pro_pack.core.animation import AnimMap
-            self.animMap=AnimMap()
-            self.animMap.filepath=filepath
-            self.animMap.metaPose=True
-            self.animMap.settings.incRoots=incRoots
-            self.animMap.saveData(self.mNode,storeThumbnail=False)
-            
-            print self.animMap.filepath
-            
-    def loadAnimation(self, filepath, offset=0, incRoots=True):
-        '''
-        PRO_PACK : Binding of the animMap format for loading animation data from
-        an r9Anim file
-        '''
-        if r9Setup.has_pro_pack():
-            from Red9.pro_pack.core.animation import AnimMap
-            self.animMap=AnimMap()
-            self.animMap.filepath=filepath
-            self.animMap.metaPose=True
-            self.animMap.settings.incRoots=incRoots
-            self.animMap.offset=offset
-            self.animMap.loadData(self.mNode)
-
     def getAnimationRange(self, nodes=None, setTimeline=False):
         '''
         return the extend of the animation range for this rig and / or the given controllers
@@ -3309,7 +3281,35 @@ class MetaRig(MetaClass):
         cmds.cutKey(r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True))
         if reset:
             self.loadZeroPose(nodes)
-        
+
+    def saveAnimation(self, filepath, incRoots=True):
+        '''
+        PRO_PACK : Binding of the animMap format for storing animation data out to file
+        '''
+        if r9Setup.has_pro_pack():
+            from Red9.pro_pack.core.animation import AnimMap
+            self.animMap=AnimMap()
+            self.animMap.filepath=filepath
+            self.animMap.metaPose=True
+            self.animMap.settings.incRoots=incRoots
+            self.animMap.saveData(self.mNode,storeThumbnail=False)
+            
+            print self.animMap.filepath
+            
+    def loadAnimation(self, filepath, offset=0, incRoots=True):
+        '''
+        PRO_PACK : Binding of the animMap format for loading animation data from
+        an r9Anim file
+        '''
+        if r9Setup.has_pro_pack():
+            from Red9.pro_pack.core.animation import AnimMap
+            self.animMap=AnimMap()
+            self.animMap.filepath=filepath
+            self.animMap.metaPose=True
+            self.animMap.settings.incRoots=incRoots
+            self.animMap.offset=offset
+            self.animMap.loadData(self.mNode)
+                   
     def getTimecode(self, atFrame=None):
         '''
         PRO PACK: get the timecode object back from the rig
@@ -3324,6 +3324,7 @@ class MetaRig(MetaClass):
             tc=r9paudio.Timecode()
             tc.getTimecode_from_node(self.ctrl_main)
             return tc
+    
     
 class MetaRigSubSystem(MetaRig):
     '''

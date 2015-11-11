@@ -115,8 +115,11 @@ class Test_MirrorSetups(object):
         
         
         
-        
-        
+
+#for t in range(1,25):
+#    cmds.currentTime(t, e=True, u=False)
+#    cmds.SnapTransforms(s='pCube1',d='pCube2',timeEnabled=True)
+#    cmds.setKeyframe('pCube2')
 
 
                                 
