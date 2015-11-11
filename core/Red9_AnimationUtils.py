@@ -2358,7 +2358,7 @@ class AnimationUI(object):
         self.kws['iterations'] = cmds.intFieldGrp('uiifSnapIterations', q=True, v=True)[0]
         self.kws['step'] = cmds.intFieldGrp('uiifgSnapStep', q=True, v=True)[0]
         self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
-        self.kws['mergeLayers'] = True
+        self.kws['mergeLayers'] = cmds.checkBox('uicbCKeyAnimLay', q=True, v=True)
         self.kws['snapTranslates'] = cmds.checkBox('uicbStanTrans', q=True, v=True)
         self.kws['snapRotates'] = cmds.checkBox('uicbStanRots', q=True, v=True)
 
@@ -2792,8 +2792,9 @@ class AnimFunctions(object):
         '''
         if not matchMethod:
             matchMethod=self.matchMethod
-        log.debug('CopyKey params : nodes=%s : time=%s : pasteKey=%s : attributes=%s : filterSettings=%s : matchMethod=%s'\
-                   % (nodes, time, pasteKey, attributes, filterSettings, matchMethod))
+        log.debug('CopyKey params : \n \
+\tnodes=%s \t\n:time=%s \t\n: pasteKey=%s \t\n: attributes=%s \t\n: filterSettings=%s \t\n: matchMethod=%s \t\n: mergeLayers=%s \t\n: timeOffset=%s' \
+                   % (nodes, time, pasteKey, attributes, filterSettings, matchMethod, mergeLayers, timeOffset))
                 
         #Build up the node pairs to process
         nodeList = r9Core.processMatchedNodes(nodes,
