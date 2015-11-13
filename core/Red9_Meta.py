@@ -3470,6 +3470,94 @@ class MetaHIKCharacterNode(MetaRig):
         controlNode=cmds.listConnections(self.mNode,type='HIKControlSetNode')
         if controlNode:
             return controlNode[0]
+
+    def delete(self):
+        '''
+        delete hik node and dependency nodes
+        :return:
+        '''
+        # nodes connected to OutputCharacterDefinition
+        OutputCharacterDefinition = cmds.listConnections('%s.OutputCharacterDefinition' % self.mNode)
+
+        if OutputCharacterDefinition:
+            cmds.delete(OutputCharacterDefinition)
+
+        propertyState = cmds.listConnections('%s.propertyState' % self.mNode)
+
+        if propertyState:
+            cmds.delete(propertyState)
+
+        if cmds.objExists(self.mNode):
+            cmds.lockNode(self.mNode, lock=False)
+            cmds.delete(self.mNode)
+
+        self.openui()
+
+    @staticmethod
+    def openui():
+        '''
+        Open hik UI
+        '''
+        if not r9Setup.mayaIsBatch():
+            mel.eval('HIKCharacterControlsTool')
+            mel.eval('hikSelectDefinitionTab')
+
+    def lock(self):
+        '''
+        lock hik characterisation
+        :return: True if lock False if not lock
+        '''
+        if self.InputCharacterizationLock:
+            self.unLock()
+
+        if self.checkcharacterization():
+            mel.eval('hikCharacterLock("%s", 1, 1 )' % self.mNode)
+            self.openui()
+            return True
+
+        self.openui()
+        return False
+
+    def unLock(self):
+        '''
+        unlock hik characterisation
+        '''
+        self.setascurrentcharacter()
+        self.InputCharacterizationLock = False
+        self.openui()
+
+    @staticmethod
+    def getCurrentCharacter():
+        '''
+        get current hik character
+        :return: current hik charactre name
+        '''
+        return mel.eval('hikGetCurrentCharacter')
+
+    def setascurrentcharacter(self):
+        '''
+        set current mNode as hikcurrentcharacter
+        '''
+        mel.eval('hikSetCurrentCharacter %s' % self.mNode)
+        self.openui()
+
+    def checkcharacterization(self):
+        '''
+        check that hikNode characterisation is valid
+        :return: True if valid False if invalid
+        '''
+        self.setascurrentcharacter()
+        self.openui()
+
+        status = cmds.characterizationToolUICmd(query=True, curcharstatus=True)
+
+        if status == 0:
+            log.info('checkCharacterization for %s  : PASSED' % self.mNode)
+            return True
+        else:
+            log.info('checkCharacterization for %s  : FAILED' % self.mNode)
+            return False
+        
     
 class MetaHIKControlSetNode(MetaRig):
     '''
