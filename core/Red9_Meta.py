@@ -3278,7 +3278,8 @@ class MetaRig(MetaClass):
         '''
         if not nodes:
             nodes=self.getChildren()
-        cmds.cutKey(r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True))
+        if self.hasKeys(nodes):
+            cmds.cutKey(r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True))
         if reset:
             self.loadZeroPose(nodes)
 
