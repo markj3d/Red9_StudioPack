@@ -2875,7 +2875,7 @@ class MetaRig(MetaClass):
         '''
         return self.getChildren(walk, mAttrs)
         
-    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False):
+    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False, incFacial=False):
         '''
         Massively important bit of code, this is used by most bits of code
         to find the child controllers linked to this metaRig instance.
@@ -2887,8 +2887,10 @@ class MetaRig(MetaClass):
         '''
         if not cAttrs:
             cAttrs=['RigCtrls', '%s_*' % self.CTRL_Prefix]
-            if self.getFacialSystem():
-                cAttrs.append('%s_*' % self.FacialCore.CTRL_Prefix)
+            if incFacial:
+                facialSystem=self.getFacialSystem()
+                if facialSystem:
+                    cAttrs.append('%s_*' % facialSystem.CTRL_Prefix)
 
         return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=asMeta, asMap=asMap)
         #return self.getRigCtrls(walk=walk, mAttrs=mAttrs)
@@ -2907,10 +2909,12 @@ class MetaRig(MetaClass):
     
     def getFacialSystem(self):
         '''
-        if we have a FacialCore node return it
+        if we have a FacialCore node return it. This allows you to modify how 
+        you wire up your facial system to metaData but gives us a consistent hook
         '''
         if self.hasAttr('FacialCore'):
-            if isMetaNode(self.FacialCore):
+            fcore=self.FacialCore
+            if fcore and isMetaNode(fcore):
                 return self.FacialCore
 
 #    def getParentSwitchData(self):
@@ -2931,7 +2935,7 @@ class MetaRig(MetaClass):
     # Generic presets so we can be consistent, these are really only examples
     #---------------------------------------------------------------------------------
     
-    def addWristCtrl(self,node,side,axis=None):
+    def addWristCtrl(fcoreself,node,side,axis=None):
         self.addRigCtrl(node,'%s_Wrist' % side[0],
                         mirrorData={'side':side, 'slot':1,'axis':axis})
     def addElbowCtrl(self,node,side,axis=None):
