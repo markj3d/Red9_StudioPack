@@ -2935,7 +2935,7 @@ class MetaRig(MetaClass):
     # Generic presets so we can be consistent, these are really only examples
     #---------------------------------------------------------------------------------
     
-    def addWristCtrl(fcoreself,node,side,axis=None):
+    def addWristCtrl(self,node,side,axis=None):
         self.addRigCtrl(node,'%s_Wrist' % side[0],
                         mirrorData={'side':side, 'slot':1,'axis':axis})
     def addElbowCtrl(self,node,side,axis=None):
