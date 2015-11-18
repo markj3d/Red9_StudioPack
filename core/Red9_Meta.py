@@ -3461,6 +3461,15 @@ class MetaHIKCharacterNode(MetaRig):
         kws.setdefault('autofill','messageOnly')
         super(MetaHIKCharacterNode, self).__init__(*args,**kws)
 
+    def __bindData__(self):
+        '''
+        overload as we don't want the default MRig attrs bound to this nodeType
+        '''
+        pass
+    
+    def __repr__(self):
+        return "%s(mClass: 'MetaHIKCharacterNode', node: '%s')" % (self.__class__, self.mNode.split('|')[-1])
+         
     def __getMessageAttr__(self, attr):
         '''
         overloaded so that the main message wires return as single nodes
@@ -3575,6 +3584,9 @@ class MetaHIKControlSetNode(MetaRig):
         super(MetaHIKControlSetNode, self).__init__(*args,**kws)
         self.CTRL_Main = self.Reference
         
+    def __repr__(self):
+        return "%s(mClass: 'MetaHIKControlSetNode', node: '%s')" % (self.__class__, self.mNode.split('|')[-1])
+     
     def __getMessageAttr__(self, attr):
         '''
         overloaded so that the main message wires return as single nodes
