@@ -3042,7 +3042,11 @@ class MetaRig(MetaClass):
                 for shape in shapes:
                     cmds.setAttr('%s.overrideEnabled' % shape, 1)
                     cmds.setAttr('%s.overrideColor' % shape, colourIndex)
-                                  
+
+
+    # Mirror Management
+    #---------------------------------------------------------------------------------
+                                     
     def getMirrorData(self):
         '''
         Bind the MirrorObject to this instance of MetaRig.
@@ -3088,7 +3092,7 @@ class MetaRig(MetaClass):
                 oppositeNodes.append(node)
         return oppositeNodes
     
-    def getMirror_ctrlSets(self, set='Centre'):
+    def getMirror_ctrlSets(self, set='Centre', forceRefresh=False):
         '''
         from  the metaNode grab all controllers and return sets of nodes
         based on their mirror side data
@@ -3099,12 +3103,26 @@ class MetaRig(MetaClass):
 #             ctrls.extend(node.getChildren())
 #         return ctrls
         ctrls=[]
-        if not self.MirrorClass:
+        if not self.MirrorClass or forceRefresh:
             self.MirrorClass = self.getMirrorData()
         for _, value in self.MirrorClass.mirrorDict[set].items():
             ctrls.append(value['node'])
         return ctrls
-                
+    
+    def getMirror_lastIndexes(self, side, forceRefresh=False):
+        '''
+        get the last mirror index for a given side
+        '''
+        if not self.MirrorClass or forceRefresh:
+            self.MirrorClass = self.getMirrorData()
+        return max([int(m) for m in self.MirrorClass.mirrorDict[side].keys()])
+
+    def getMirror_nextSlot(self, side, forceRefresh=False):
+        '''
+        return the next available slot in the mirrorIndex list for a given side
+        '''
+        return self.getMirror_lastIndexes(side, forceRefresh) + 1
+
     def mirror(self, nodes=None, mode='Anim'):
         '''
         direct mapper call to the Mirror functions
@@ -3112,6 +3130,10 @@ class MetaRig(MetaClass):
         if not self.MirrorClass:
             self.MirrorClass = self.getMirrorData()
         self.MirrorClass.mirrorData(nodes, mode)
+    
+    
+    # Utilities
+    #---------------------------------------------------------------------------------
     
     @nodeLockManager
     def poseCacheStore(self, attr=None, filepath=None, *args, **kws):
