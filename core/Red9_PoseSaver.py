@@ -1227,7 +1227,7 @@ class PoseCompare(object):
         :param linearTolerance: the tolerance used to check all other float attrs
         :param compareDict: the internal main dict in the pose file to compare the data with
         :param filterMap: if given this is used as a high level filter, only matching nodes get compared
-            others get skipped. Good for passing in a mater core skeleton to test whilst ignoring extra nodes
+            others get skipped. Good for passing in a master core skeleton to test whilst ignoring extra nodes
         :param ignoreBlocks: allows the given failure blocks to be ignored. We mainly use this for ['missingKeys']
         
         .. note::

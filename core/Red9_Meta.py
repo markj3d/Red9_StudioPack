@@ -1423,7 +1423,7 @@ class MetaClass(object):
 #                                               '_forceAsMeta'])  # note - UNMANAGED bypasses the Maya node in setattr calls
 
         object.__setattr__(self, '_lockState', False)    # by default all mNode's are unlocked, manage this in any subclass if needed
-        object.__setattr__(self, '_forceAsMeta', False)  # force all getAttr calls to return mClass objects even for starndard Maya nodes       
+        object.__setattr__(self, '_forceAsMeta', False)  # force all getAttr calls to return mClass objects even for starndard Maya nodes
         wrapped_node=False
         
         if not node:
@@ -1431,7 +1431,7 @@ class MetaClass(object):
                 name=self.__class__.__name__
             #no MayaNode passed in so make a fresh network node (default)
             if not nodeType=='network' and not nodeType in RED9_META_NODETYPE_REGISTERY:
-                raise IOError('nodeType : "%s" : is NOT yet registered in the "RED9_META_NODETYPE_REGISTERY", please use r9Meta.registerMClassNodeCache(nodeTypes=[%s]) to do so before making this node' % (nodeType,nodeType))
+                raise IOError('nodeType : "%s" : is NOT yet registered in the "RED9_META_NODETYPE_REGISTERY", please use r9Meta.registerMClassNodeMapping(nodeTypes=["%s"]) to do so before making this node' % (nodeType,nodeType))
 
             node=cmds.createNode(nodeType,name=name)
 
@@ -3063,18 +3063,34 @@ class MetaRig(MetaClass):
     def loadMirrorDataMap(self, mirrorMap):
         '''
         load a mirror setup onto this rig from a stored mirrorMap file
+        
+        :param mirrorMap: mirror file to load
         '''
         if not self.MirrorClass:
             self.MirrorClass = self.getMirrorData()
         if not os.path.exists(mirrorMap):
             raise IOError('Given MirrorMap file not found : %s' % mirrorMap)
         r9Anim.MirrorHierarchy(self.getChildren()).loadMirrorSetups(mirrorMap)
-    
+        
+    def saveMirrorDataMap(self, filepath):
+        '''
+        save the current mirror setup for this rig to file
+        
+        :param filepath: filepath to store the mirrorMap too
+        '''
+        if not self.MirrorClass:
+            self.MirrorClass = self.getMirrorData()
+
+        r9Anim.MirrorHierarchy(self.getChildren()).saveMirrorSetups(filepath)
+          
     def getMirror_opposites(self, nodes, forceRefresh=False):
         '''
         from the given nodes return a map of the opposite pairs of controllers
         so if you pass in a right controller of mirrorIndex 4 you get back the
         left[4] mirror node and visa versa. Centre controllers pass straight through
+        
+        :param nodes: nodes to get the opposites from
+        :param forceRefresh: forces the mirrorDic (which is cached) to be updated
         '''
         if not self.MirrorClass or forceRefresh:
             self.MirrorClass = self.getMirrorData()
@@ -3096,6 +3112,9 @@ class MetaRig(MetaClass):
         '''
         from  the metaNode grab all controllers and return sets of nodes
         based on their mirror side data
+        
+        :param set: which set/side to get, valid = 'Left' ,'Right', 'Center'
+        :param forceRefresh: forces the mirrorDic (which is cached) to be updated
         '''
 #         submNodes=mRig.getChildMetaNodes(mAttrs=['mirrorSide=2'], walk=True)
 #         ctrls=[]
@@ -3112,6 +3131,9 @@ class MetaRig(MetaClass):
     def getMirror_lastIndexes(self, side, forceRefresh=False):
         '''
         get the last mirror index for a given side
+        
+        :param side: side to check, valid = 'Left' ,'Right', 'Center'
+        :param forceRefresh: forces the mirrorDic (which is cached) to be updated
         '''
         if not self.MirrorClass or forceRefresh:
             self.MirrorClass = self.getMirrorData()
@@ -3120,12 +3142,18 @@ class MetaRig(MetaClass):
     def getMirror_nextSlot(self, side, forceRefresh=False):
         '''
         return the next available slot in the mirrorIndex list for a given side
+        
+        :param side: side to check, valid = 'Left' ,'Right', 'Center'
+        :param forceRefresh: forces the mirrorDic (which is cached) to be updated
         '''
         return self.getMirror_lastIndexes(side, forceRefresh) + 1
 
     def mirror(self, nodes=None, mode='Anim'):
         '''
         direct mapper call to the Mirror functions
+        
+        :param nodes: nodes to mirror, if None then we process the entire rig
+        :param mode: either 'Anim' or 'Pose'
         '''
         if not self.MirrorClass:
             self.MirrorClass = self.getMirrorData()
@@ -3189,6 +3217,8 @@ class MetaRig(MetaClass):
         :param poseFile: given .pose file with valid skeletonDict block
         :param supressWarning: if False raise the confirmDialogue
         :param compareDict: what block in the poseFile to compare the data against
+        :param filterMap: if given this is used as a high level filter, only matching nodes get compared
+            others get skipped. Good for passing in a master core skeleton to test whilst ignoring extra nodes
         :param ignoreBlocks: used to stop certain blocks in the compare from causing a fail eg : ['missingKeys']
         :return: returns a 'PoseCompare' class object with all the compare data in it
         '''
@@ -3210,8 +3240,8 @@ class MetaRig(MetaClass):
     
     def nodeVisibility(self, state, skip=[]):
         '''
-        simple wrapper to hide all ctrls in the rig via their shapeNodes
-        lodVisibility so it doesn't interfer with any display layers etc
+        simple wrapper to hide all ctrls in the rig via their shapeNodes.lodVisibility 
+        so it doesn't interfer with any display layers etc
         
         :param state: bool to pass to the lodVisibility attr
         :param skip: [] child attrs on the mNode to skip during the process allowing certain controllers not to be effected
@@ -3227,13 +3257,15 @@ class MetaRig(MetaClass):
     
     def hideNodes(self):
         '''
-        wrap over the nodeVisibility to set False
+        wrap over the nodeVisibility to set False for all Controllers
+        with the exceptiojn of the Main_Ctrl
         '''
         self.nodeVisibility(state=0,skip=['%s_Main' % self.CTRL_Prefix])
         
     def unHideNodes(self):
         '''
-        wrap over the nodeVisibility to set True
+        wrap over the nodeVisibility to set True for all Controllers
+        with the exceptiojn of the Main_Ctrl
         '''
         self.nodeVisibility(state=1,skip=['%s_Main' % self.CTRL_Prefix])
         
@@ -3279,7 +3311,7 @@ class MetaRig(MetaClass):
         '''
         return the extend of the animation range for this rig and / or the given controllers
         
-        :param nodes: if given only retunr the extent of the animation data from the given nodes
+        :param nodes: if given only return the extent of the animation data from the given nodes
         :param setTimeLine: if True set the playback timeranges also, default=False
         '''
         if not nodes:
@@ -3290,6 +3322,8 @@ class MetaRig(MetaClass):
         '''
         return True if any of the rig's controllers have existing
         animation curve/key data
+        
+        :param nodes: nodes to check, if None process the entire rig
         '''
         if not nodes:
             nodes=self.getChildren()
@@ -3309,6 +3343,10 @@ class MetaRig(MetaClass):
         if reset:
             self.loadZeroPose(nodes)
 
+
+    # PRO PACK Supported Only
+    # -------------------------------------------------------------------------------
+    
     def saveAnimation(self, filepath, incRoots=True):
         '''
         PRO_PACK : Binding of the animMap format for storing animation data out to file
