@@ -698,15 +698,15 @@ def addScriptsPath(path):
     else:
         log.debug('Given Script Path is invalid : %s' % path)
           
-def addPluginPath():
+def addPluginPath(path=None):
     '''
     Make sure the plugin path has been added. If run as a module
     this will have already been added
     '''
-    path=os.path.join(red9ModulePath(),'plug-ins')
+    if not path:
+        path=os.path.join(red9ModulePath(),'plug-ins')
     plugPaths=os.environ.get('MAYA_PLUG_IN_PATH')
-    
-    if not path in plugPaths:
+    if os.path.exists(path) and not path in plugPaths:
         log.info('Adding Red9 Plug-ins to Plugin Paths : %s' % path)
         os.environ['MAYA_PLUG_IN_PATH']+='%s%s' % (os.pathsep,path)
     else:
@@ -721,7 +721,7 @@ def addIconsPath(path=None):
         path=os.path.join(red9ModulePath(),'icons')
     iconsPath=os.environ.get('XBMLANGPATH')
     
-    if not path in iconsPath:
+    if os.path.exists(path) and not path in iconsPath:
         log.info('Adding Red9 Icons To XBM Paths : %s' % path)
         os.environ['XBMLANGPATH']+='%s%s' % (os.pathsep,path)
     else:
