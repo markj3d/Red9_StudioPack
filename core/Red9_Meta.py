@@ -3007,7 +3007,7 @@ class MetaRig(MetaClass):
                     log.debug('Adding boundData to node : %s:%s' %(key,value))
                     MetaClass(node).addAttr(key, value=value)
                         
-    def addMetaSubSystem(self, systemType, side, attr=None, nodeName=None, mClass='MetaRigSubSystem'):
+    def addMetaSubSystem(self, systemType, side, attr=None, nodeName=None, mClass='MetaRigSubSystem', buildflags={}):
         '''
         Basic design of a MetaRig is that you have sub-systems hanging off an mRig
         node, managing all controllers and data for a particular system, such as an
@@ -3030,6 +3030,8 @@ class MetaRig(MetaClass):
         #set the attrs on the newly created subSystem MetaNode
         subSystem.systemType=systemType
         subSystem.mirrorSide=side
+        if buildflags:
+            subSystem.buildFlags=buildflags
         return subSystem
     
     def set_ctrlColour(self, colourIndex=4):
@@ -3404,6 +3406,7 @@ class MetaRigSubSystem(MetaRig):
     def __bindData__(self):
         self.addAttr('systemType', attrType='string')
         self.addAttr('mirrorSide',enumName='Centre:Left:Right',attrType='enum')
+        self.addAttr('buildFlags', attrType='string', value={})
  
  
 class MetaRigSupport(MetaClass):
