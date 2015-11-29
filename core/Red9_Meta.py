@@ -3404,14 +3404,14 @@ class MetaRig(MetaClass):
                 from Red9.pro_pack import r9pro
                 r9pro.r9import('r9paudio')
                 import r9paudio
-            return r9paudio.Timecode()
+            return r9paudio.Timecode(self.ctrl_main)
 
     def timecode_get(self, atFrame=None):
         '''
         PRO PACK: get the timecode object back from the rig
         '''
         if r9Setup.has_pro_pack():
-            return self.Timecode.getTimecode_from_node(self.ctrl_main, time=atFrame)
+            return self.Timecode.getTimecode_from_node(time=atFrame)
 
     def timecode_addAttrs(self, tc='', propagate=False):
         '''
@@ -3419,15 +3419,15 @@ class MetaRig(MetaClass):
         systems bound to it
         '''
         if r9Setup.has_pro_pack():
-            return self.Timecode.addTimecode_to_node(self.ctrl_main, tc=tc, propagate=propagate)
+            return self.Timecode.addTimecode_to_node(tc=tc, propagate=propagate)
          
-    def timecode_hasAttrs(self):
+    def timecode_hasTimeCode(self):
         '''
         PRO PACK: simple return to check if the system has the Pro Timecode
         systems bound to it
         '''
         if r9Setup.has_pro_pack():
-            return self.Timecode.hasTimeCode(self.ctrl_main) or False
+            return self.Timecode.hasTimeCode() or False
         
     def timecode_remove(self):
         '''
@@ -3435,7 +3435,7 @@ class MetaRig(MetaClass):
         systems bound to it
         '''
         if r9Setup.has_pro_pack():
-            return self.Timecode.removedTimecode_from_node(self.ctrl_main) or False
+            return self.Timecode.removedTimecode_from_node() or False
         
         
 class MetaRigSubSystem(MetaRig):
