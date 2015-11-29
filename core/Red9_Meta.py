@@ -1942,6 +1942,17 @@ class MetaClass(object):
         cmds.renameAttr('%s.%s' % (self.mNode, currentAttr), newName)
         
     @nodeLockManager
+    def delAttr(self, attr):
+        '''
+        delete a given attr
+        '''
+        if self.hasAttr(attr):
+            try:
+                cmds.deleteAttr(self.mNode, attr)
+            except:
+                raise StandardError('Failed to delete given attrs : %s' % attr)
+        
+    @nodeLockManager
     def addAttr(self, attr, value=None, attrType=None, hidden=False, **kws):
         '''
         Wrapped version of Maya addAttr that manages the basic type flags for you
@@ -3348,7 +3359,11 @@ class MetaRig(MetaClass):
 
     # PRO PACK Supported Only
     # -------------------------------------------------------------------------------
-    
+    '''
+    All these commands are bound purely for those running the Red9 ProPack and are examples of
+    the extensions being added. We bind them here to make it more transparent for you guys
+    running Meta, save us sub-classing MetaRig for Pro and exposes some of the codebase wrapping
+    '''
     def saveAnimation(self, filepath, incRoots=True):
         '''
         PRO_PACK : Binding of the animMap format for storing animation data out to file
@@ -3376,10 +3391,11 @@ class MetaRig(MetaClass):
             self.animMap.settings.incRoots=incRoots
             self.animMap.offset=offset
             self.animMap.loadData(self.mNode)
-                   
-    def getTimecode(self, atFrame=None):
+    
+    @property
+    def Timecode(self):
         '''
-        PRO PACK: get the timecode object back from the rig
+        PRO_PACK : bind the Pro Timecode class to the node
         '''
         if r9Setup.has_pro_pack():
             try:
@@ -3388,11 +3404,40 @@ class MetaRig(MetaClass):
                 from Red9.pro_pack import r9pro
                 r9pro.r9import('r9paudio')
                 import r9paudio
-            tc=r9paudio.Timecode()
-            tc.getTimecode_from_node(self.ctrl_main)
-            return tc
-    
-    
+            return r9paudio.Timecode()
+
+    def timecode_get(self, atFrame=None):
+        '''
+        PRO PACK: get the timecode object back from the rig
+        '''
+        if r9Setup.has_pro_pack():
+            return self.Timecode.getTimecode_from_node(self.ctrl_main, time=atFrame)
+
+    def timecode_addAttrs(self, tc='', propagate=False):
+        '''
+        PRO PACK: simple return to check if the system has the Pro Timecode
+        systems bound to it
+        '''
+        if r9Setup.has_pro_pack():
+            return self.Timecode.addTimecode_to_node(self.ctrl_main, tc=tc, propagate=propagate)
+         
+    def timecode_hasAttrs(self):
+        '''
+        PRO PACK: simple return to check if the system has the Pro Timecode
+        systems bound to it
+        '''
+        if r9Setup.has_pro_pack():
+            return self.Timecode.hasTimeCode(self.ctrl_main) or False
+        
+    def timecode_remove(self):
+        '''
+        PRO PACK: simple return to check if the system has the Pro Timecode
+        systems bound to it
+        '''
+        if r9Setup.has_pro_pack():
+            return self.Timecode.removedTimecode_from_node(self.ctrl_main) or False
+        
+        
 class MetaRigSubSystem(MetaRig):
     '''
     SubClass of the MRig, designed to organize Rig sub-systems (ie L_ArmSystem, L_LegSystem..)
@@ -3406,7 +3451,7 @@ class MetaRigSubSystem(MetaRig):
     def __bindData__(self):
         self.addAttr('systemType', attrType='string')
         self.addAttr('mirrorSide',enumName='Centre:Left:Right',attrType='enum')
-        self.addAttr('buildFlags', attrType='string', value={})
+        self.addAttr('buildFlags', attrType='string', value={}, hidden=True)
  
  
 class MetaRigSupport(MetaClass):
