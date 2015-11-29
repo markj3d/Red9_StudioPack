@@ -297,7 +297,7 @@ class BindNodeTwin(BindNodeBase):
     *arg settings : a BindSettings object
     '''
     
-    def __init__(self, source, destination, settings):
+    def __init__(self, source, destination, settings=None):
         super(BindNodeTwin, self).__init__(source, destination, settings)
 
     def MakeBindBase(self, Name):
