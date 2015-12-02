@@ -3068,9 +3068,12 @@ class MetaRig(MetaClass):
             you must run this binding function before using any of
             the inbuilt mirror functions
         '''
-        self.MirrorClass = r9Anim.MirrorHierarchy(nodes=self.getRigCtrls(walk=True))
-        self.MirrorClass.getMirrorSets()
-        log.debug('Filling the MirrorClass attr on demand')
+        self.MirrorClass = r9Anim.MirrorHierarchy(nodes=self.getChildren(walk=True))
+        try:
+            self.MirrorClass.getMirrorSets()
+            log.debug('Filling the MirrorClass attr on demand')
+        except:
+            log.warning('No Mirror Markers found on the rig')
         return self.MirrorClass
     
     def loadMirrorDataMap(self, mirrorMap):
