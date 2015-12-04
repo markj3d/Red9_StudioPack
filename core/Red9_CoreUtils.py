@@ -275,15 +275,15 @@ class FilterNode_Settings(object):
             activeFilters.append('searchAttrs=%s' % self.searchAttrs)
         if self.searchPattern:
             activeFilters.append('searchPattern=%s' % self.searchPattern)
-        if self.hierarchy:
-            activeFilters.append('hierarchy=%s' % self.hierarchy)
+        #if self.hierarchy:
+        activeFilters.append('hierarchy=%s' % self.hierarchy)
         if self.filterPriority:
             activeFilters.append('filterPriority=%s' % self.filterPriority)
-        if self.incRoots:
-            activeFilters.append('incRoots=%s' % self.incRoots)
-        if self.transformClamp:
-            activeFilters.append('transformClamp=%s' % self.transformClamp)
-        return '%s(ActiveFilters: %s)' % (self.__class__.__name__, (',').join(activeFilters))
+        #if self.incRoots:
+        activeFilters.append('incRoots=%s' % self.incRoots)
+        #if self.transformClamp:
+        activeFilters.append('transformClamp=%s' % self.transformClamp)
+        return '%s(ActiveFilters: %s)' % (self.__class__.__name__, (', ').join(activeFilters))
     
     def filterIsActive(self):
         if self.nodeTypes or self.searchAttrs or self.searchPattern or self.hierarchy or self.metaRig:
@@ -1514,7 +1514,7 @@ class MatchedNodeInputs(object):
         | settings.hierarchy: bool - process all children from the roots
         | settings.incRoots: bool - include the original root nodes in the filter
         
-    :return: list of matched pairs [(a1,b2),[(a2,b2)]   
+    :return: list of matched pairs [(a1,b2),[(a2,b2)]  
             
     .. note:: 
         with all the search and hierarchy keywords OFF the code performs
