@@ -1948,7 +1948,7 @@ class MetaClass(object):
         '''
         if self.hasAttr(attr):
             try:
-                cmds.deleteAttr(self.mNode, attr)
+                cmds.deleteAttr(n=self.mNode, at=attr)
             except:
                 raise StandardError('Failed to delete given attrs : %s' % attr)
         
