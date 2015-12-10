@@ -2632,6 +2632,7 @@ class AnimationUI(object):
         #issue : up to v2011 Maya puts each action into the UndoQueue separately
         #when called by lambda or partial - Fix is to open an UndoChunk to catch
         #everything in one block
+        objs=cmds.ls(sl=True, l=True)
         self.kws = {}
 
         #If below 2011 then we need to store the undo in a chunk
@@ -2694,7 +2695,8 @@ class AnimationUI(object):
         except StandardError, error:
             traceback = sys.exc_info()[2]  # get the full traceback
             raise StandardError(StandardError(error), traceback)
-
+        if objs:
+            cmds.select(objs)
         # close chunk
         if mel.eval('getApplicationVersionAsFloat') < 2011:
             cmds.undoInfo(closeChunk=True)

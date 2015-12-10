@@ -859,7 +859,8 @@ class PoseData(DataMap):
         :param percent: percentage of the pose to apply, used by the poseBlender in the UIs
         '''
         
-        if relativePose and not cmds.ls(sl=True):
+        objs=cmds.ls(sl=True, l=True)
+        if relativePose and not objs:
             raise StandardError('Nothing selected to align Relative Pose too')
         if not type(nodes)==list:
             nodes=[nodes]  # cast to list for consistency
@@ -889,7 +890,7 @@ class PoseData(DataMap):
                     self.nodesToLoad.reverse()
                     
                 #setup the PosePointCloud -------------------------------------------------
-                reference=cmds.ls(sl=True,l=True)[0]
+                reference=objs[0]
                 self.PosePointCloud=PosePointCloud(self.nodesToLoad)
                 self.PosePointCloud.buildOffsetCloud(reference, raw=True)
                 resetCache=[cmds.getAttr('%s.translate' % self.PosePointCloud.posePointRoot),
@@ -953,6 +954,8 @@ class PoseData(DataMap):
                 self.PosePointCloud.snapNodestoPosePnts()
                 self.PosePointCloud.delete()
                 cmds.select(reference)
+            else:
+                cmds.select(objs)
 
 
 class PosePointCloud(object):
