@@ -2000,7 +2000,6 @@ class AnimationUI(object):
         self.__uiCache_addCheckbox('uicbPoseRelative')
         state = cmds.checkBox(self.uicbPoseRelative, q=True, v=True)
         cmds.checkBox('uicbPoseSpace', e=True, en=False)
-        #if cmds.checkBox('uicbMetaRig',q=True,v=True):
         cmds.checkBox('uicbPoseSpace', e=True, en=state)
         cmds.frameLayout(self.uiflPoseRelativeFrame, e=True, en=state)
      
@@ -2204,7 +2203,6 @@ class AnimationUI(object):
         try:
             log.debug('Loading UI Elements from the config file')
             def __uiCache_LoadCheckboxes():
-                #if self.ANIM_UI_OPTVARS['AnimationUI'].has_key('checkboxes'):
                 if 'checkboxes' in self.ANIM_UI_OPTVARS['AnimationUI'] and \
                             self.ANIM_UI_OPTVARS['AnimationUI']['checkboxes']:
                     for cb, status in self.ANIM_UI_OPTVARS['AnimationUI']['checkboxes'].items():
@@ -2397,8 +2395,6 @@ class AnimationUI(object):
         else:
             self.kws['flocking']= cmds.checkBox(self.uicbTimeOffsetFlocking, q=True, v=True)
             self.kws['randomize'] = cmds.checkBox(self.uicbTimeOffsetRandom, q=True, v=True)
-
-            #self.kws['option'] = "insert" #, "segmentOver"
             if cmds.checkBox(self.uicbTimeOffsetHierarchy, q=True, v=True):
                 r9Core.TimeOffset.fromSelected(offset, filterSettings=self.filterSettings, **self.kws)
             else:
@@ -2554,12 +2550,10 @@ class AnimationUI(object):
             meshes=mRef.renderMeshes
         elif len(objs)==2:
             if cmds.nodeType(cmds.listRelatives(objs[1])[0])=='mesh':
-                meshes=objs  # [1]
+                meshes=objs
         if func=='make':
             if not objs:
                 raise StandardError('you need to select a reference object to use as pivot for the PPCloud')
-            #if cmds.ls('*posePointCloud', r=True):
-            #    raise StandardError('PosePointCloud already exists in scsne')
             if not meshes:
                 #turn on locator visibility
                 panel=cmds.getPanel(wf=True)
@@ -2575,7 +2569,6 @@ class AnimationUI(object):
         elif func=='delete':
             self.ppc.delete()
         elif func=='snap':
-            #self.ppc.applyPosePointCloud()
             self.ppc.applyPosePointCloud()
         elif func=='update':
             self.ppc.updatePosePointCloud()
@@ -2642,10 +2635,7 @@ class AnimationUI(object):
         # Main Hierarchy Filters =============
         self.__uiPresetFillFilter()  # fill the filterSettings Object
         self.matchMethod = cmds.optionMenu('om_MatchMethod', q=True, v=True)
-#         if cmds.checkBox('uicbMatchMethod', q=True, v=True):
-#             self.matchMethod='stripPrefix'
-#         else:
-#             self.matchMethod='base'
+
         #self.filterSettings.transformClamp = True
          
         try:
@@ -2743,7 +2733,7 @@ class AnimFunctions(object):
     >>> animFunc.settings.searchPattern=['ctrl']
     >>> animFunc.copyKeys([srcRootNode, destRootNode])
     >>>
-    >>> #old functionality
+    >>> # old functionality
     >>> settings=r9Core.FilterSettings()
     >>> settings.nodeTypes=['nurbsCurve']
     >>> settings.searchPattern=['ctrl']
@@ -2920,7 +2910,7 @@ class AnimFunctions(object):
                                               filterSettings,
                                               toMany,
                                               matchMethod=matchMethod).MatchedPairs
-        
+                                              
         if nodeList:
             with r9General.HIKContext([d for _, d in nodeList]):
                 for src, dest in nodeList:
