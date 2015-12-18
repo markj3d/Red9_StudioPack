@@ -1233,15 +1233,15 @@ class FilterNode(object):
     #---------------------------------------------------------------------------------
     
     
-    def processFilter(self):
+    def ProcessFilter(self):
         '''
         replace the 'P' in the function call but not depricating it just yet
         as too much code both internally and externally relies on this method
         '''
-        return self.ProcessFilter()
+        return self.processFilter()
         
     #@r9General.Timer
-    def ProcessFilter(self):
+    def processFilter(self):
             '''
             Uses intersection to allow you to process multiple search flags for
             more accurate filtering.
