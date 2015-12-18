@@ -3180,7 +3180,7 @@ class MetaRig(MetaClass):
     #---------------------------------------------------------------------------------
     
     @nodeLockManager
-    def poseCacheStore(self, attr=None, filepath=None, *args, **kws):
+    def poseCacheStore(self, attr=None, filepath=None, incRoots=True, *args, **kws):
         '''
         intended as a cached pose for this mRig, if an attr is given then
         the cached pose is stored internally on the node so it can be loaded
@@ -3189,10 +3189,12 @@ class MetaRig(MetaClass):
         
         :param attr: optional - attr to store the cached pose to
         :param filepath: optional - path to store the pose too
+        :param incRoots: passed directly to the filterSettings object in the pose, do we process self.ctrl_main?
         '''
         import Red9.core.Red9_PoseSaver as r9Pose  # lazy loaded
         self.poseCache=r9Pose.PoseData()
         self.poseCache.metaPose=True
+        self.poseCache.settings.incRoots=incRoots
         self.poseCache.poseSave(self.mNode, filepath=filepath, useFilter=True, *args, **kws)  # no path so cache against this pose instance
         if attr:
             if not self.hasAttr(attr):
@@ -3201,7 +3203,7 @@ class MetaRig(MetaClass):
                 setattr(self, attr, self.poseCache.poseDict)
             self.attrSetLocked(attr,True)
         
-    def poseCacheLoad(self, nodes=None, attr=None, filepath=None, *args, **kws):
+    def poseCacheLoad(self, nodes=None, attr=None, filepath=None, incRoots=True, *args, **kws):
         '''
         load a cached pose back to this mRig. If attr is given then its assumed
         that that attr is a cached poseDict on the mNode. If not given then it
@@ -3210,6 +3212,7 @@ class MetaRig(MetaClass):
         :param nodes: if given load only the cached pose to the given nodes
         :param attr: optional - attr in which a pose has been stored internally on the mRig
         :param filepath: optional - posefile to load back
+        :param incRoots: passed directly to the filterSettings object in the pose, do we process self.ctrl_main?
         
         :TODO: add relative flags so that they can pass through this call
         '''
@@ -3217,6 +3220,7 @@ class MetaRig(MetaClass):
         if attr or filepath:
             self.poseCache=r9Pose.PoseData()
             self.poseCache.metaPose=True
+            self.poseCache.settings.incRoots=incRoots
             if attr:
                 self.poseCache.poseDict=getattr(self,attr)
         if self.poseCache:

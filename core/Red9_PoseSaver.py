@@ -104,6 +104,14 @@ class DataMap(object):
     
     @property
     def metaPose(self):
+        '''
+        this flag adds in the additional MetaData block for all the matching code and info extraction.
+        True if self.metaRig is filled, self.settings.metaRig=True or self.metaPose=True
+        '''
+        if self.metaRig:
+            return True
+        if self.settings.metaRig:
+            return True
         return self.__metaPose
     
     @metaPose.setter
@@ -955,7 +963,8 @@ class PoseData(DataMap):
                 self.PosePointCloud.delete()
                 cmds.select(reference)
             else:
-                cmds.select(objs)
+                if objs:
+                    cmds.select(objs)
 
 
 class PosePointCloud(object):
