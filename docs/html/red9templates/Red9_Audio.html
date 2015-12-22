@@ -67,22 +67,22 @@ a &#8216;compile&#8217; flag in the playblast command but it&#8217;s never worke
 </colgroup>
 <tbody valign="top">
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.milliseconds_to_Timecode" title="Red9.core.Red9_Audio.milliseconds_to_Timecode"><tt class="xref py py-obj docutils literal"><span class="pre">milliseconds_to_Timecode</span></tt></a>(milliseconds[,&nbsp;...])</td>
-<td>convert milliseconds into correctly formatted timecode</td>
+<td></td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.milliseconds_to_frame" title="Red9.core.Red9_Audio.milliseconds_to_frame"><tt class="xref py py-obj docutils literal"><span class="pre">milliseconds_to_frame</span></tt></a>(milliseconds[,&nbsp;framerate])</td>
-<td>convert milliseconds into frames</td>
+<td></td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.timecode_to_milliseconds" title="Red9.core.Red9_Audio.timecode_to_milliseconds"><tt class="xref py py-obj docutils literal"><span class="pre">timecode_to_milliseconds</span></tt></a>(timecode[,&nbsp;smpte,&nbsp;...])</td>
-<td>from a properly formatted timecode return it in milliseconds</td>
+<td></td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.timecode_to_frame" title="Red9.core.Red9_Audio.timecode_to_frame"><tt class="xref py py-obj docutils literal"><span class="pre">timecode_to_frame</span></tt></a>(timecode[,&nbsp;smpte,&nbsp;framerate])</td>
-<td>from a properly formatted timecode return it in frames</td>
+<td></td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.frame_to_timecode" title="Red9.core.Red9_Audio.frame_to_timecode"><tt class="xref py py-obj docutils literal"><span class="pre">frame_to_timecode</span></tt></a>(frame[,&nbsp;smpte,&nbsp;framerate])</td>
-<td>from a given frame return that time as timecode</td>
+<td></td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.frame_to_milliseconds" title="Red9.core.Red9_Audio.frame_to_milliseconds"><tt class="xref py py-obj docutils literal"><span class="pre">frame_to_milliseconds</span></tt></a>(frame[,&nbsp;framerate])</td>
-<td>from a given frame return that time in milliseconds</td>
+<td></td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.combineAudio" title="Red9.core.Red9_Audio.combineAudio"><tt class="xref py py-obj docutils literal"><span class="pre">combineAudio</span></tt></a>()</td>
 <td>this is a logic wrapper over the main compile call in the AudioHandler</td>
@@ -90,8 +90,8 @@ a &#8216;compile&#8217; flag in the playblast command but it&#8217;s never worke
 <tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.inspect_wav" title="Red9.core.Red9_Audio.inspect_wav"><tt class="xref py py-obj docutils literal"><span class="pre">inspect_wav</span></tt></a>()</td>
 <td>Simple UI to show internal Wav file properties. Supports full Broadcast Wav inspection</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_Audio.getMediaFileMetaData" title="Red9.core.Red9_Audio.getMediaFileMetaData"><tt class="xref py py-obj docutils literal"><span class="pre">getMediaFileMetaData</span></tt></a>(filepath[,&nbsp;ffprobePath])</td>
-<td>This function is capable of returning most metaData from mediaFiles, the return</td>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">getMediaFileMetaData</span></tt></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -110,153 +110,43 @@ a &#8216;compile&#8217; flag in the playblast command but it&#8217;s never worke
 </tr>
 </tbody>
 </table>
-<dl class="class">
-<dt id="Red9.core.Red9_Audio.Timecode">
-<em class="property">class </em><tt class="descname">Timecode</tt><a class="headerlink" href="#Red9.core.Red9_Audio.Timecode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<dl class="staticmethod">
-<dt id="Red9.core.Red9_Audio.Timecode.getTimecode_from_node">
-<em class="property">static </em><tt class="descname">getTimecode_from_node</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.Timecode.getTimecode_from_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>wrapper method to get the timecode back from a given node
-:param node: node containing correctly formatted timecode data</p>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="Red9.core.Red9_Audio.Timecode.addTimecode_to_node">
-<em class="property">static </em><tt class="descname">addTimecode_to_node</tt><big>(</big><em>node</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.Timecode.addTimecode_to_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>wrapper to add the timecode attrs to a node ready for propagating</p>
-</dd></dl>
-
+<dl class="function">
+<dt id="Red9.core.Red9_Audio.bind_pro_audio">
+<tt class="descname">bind_pro_audio</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.bind_pro_audio" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a wrap to import the pro_audio extensions. We have to
+lazy load this to avoid cyclic issues in the boot and wrapping it
+like this makes it easy to consume in the classes</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Audio.milliseconds_to_Timecode">
 <tt class="descname">milliseconds_to_Timecode</tt><big>(</big><em>milliseconds</em>, <em>smpte=True</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.milliseconds_to_Timecode" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert milliseconds into correctly formatted timecode</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>milliseconds</strong> &#8211; time in milliseconds</li>
-<li><strong>smpte</strong> &#8211; format the timecode HH:MM:SS:FF where FF is frames</li>
-<li><strong>framerate</strong> &#8211; when using smpte this is the framerate used in the FF block
-default (None) uses the current scenes framerate</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>If smpte = False : the format will be HH:MM:SS:MSS = hours, minutes, seconds, milliseconds</li>
-<li>If smpte = True  : the format will be HH:MM:SS:FF  = hours, minutes, seconds, frames</li>
-</ul>
-</div>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Audio.milliseconds_to_frame">
 <tt class="descname">milliseconds_to_frame</tt><big>(</big><em>milliseconds</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.milliseconds_to_frame" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert milliseconds into frames</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>milliseconds</strong> &#8211; time in milliseconds</li>
-<li><strong>framerate</strong> &#8211; when using smpte this is the framerate used in the FF block
-default (None) uses the current scenes framerate</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Audio.timecode_to_milliseconds">
 <tt class="descname">timecode_to_milliseconds</tt><big>(</big><em>timecode</em>, <em>smpte=True</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.timecode_to_milliseconds" title="Permalink to this definition">¶</a></dt>
-<dd><p>from a properly formatted timecode return it in milliseconds
-r9Audio.timecode_to_milliseconds(&#8216;09:00:00:00&#8217;)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>timecode</strong> &#8211; &#8216;09:00:00:20&#8217; as a string</li>
-<li><strong>smpte</strong> &#8211; calculate the milliseconds based on HH:MM:SS:FF (frames as last block)</li>
-<li><strong>framerate</strong> &#8211; only used if smpte=True, the framerate to use in the conversion, 
-default (None) uses the current scenes framerate</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Audio.timecode_to_frame">
 <tt class="descname">timecode_to_frame</tt><big>(</big><em>timecode</em>, <em>smpte=True</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.timecode_to_frame" title="Permalink to this definition">¶</a></dt>
-<dd><p>from a properly formatted timecode return it in frames
-r9Audio.timecode_to_milliseconds(&#8216;09:00:00:00&#8217;)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>timecode</strong> &#8211; &#8216;09:00:00:20&#8217; as a string</li>
-<li><strong>smpte</strong> &#8211; calculate the milliseconds based on HH:MM:SS:FF (frames as last block)</li>
-<li><strong>framerate</strong> &#8211; only used if smpte=True, the framerate to use in the conversion, 
-default (None) uses the current scenes framerate</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Audio.frame_to_timecode">
 <tt class="descname">frame_to_timecode</tt><big>(</big><em>frame</em>, <em>smpte=True</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.frame_to_timecode" title="Permalink to this definition">¶</a></dt>
-<dd><p>from a given frame return that time as timecode
-relative to the given framerate</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>frame</strong> &#8211; current frame in Maya</li>
-<li><strong>smpte</strong> &#8211; calculate the milliseconds based on HH:MM:SS:FF (frames as last block)</li>
-<li><strong>framerate</strong> &#8211; the framerate to use in the conversion, 
-default (None) uses the current scenes framerate</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Audio.frame_to_milliseconds">
 <tt class="descname">frame_to_milliseconds</tt><big>(</big><em>frame</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.frame_to_milliseconds" title="Permalink to this definition">¶</a></dt>
-<dd><p>from a given frame return that time in milliseconds 
-relative to the given framerate</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>frame</strong> &#8211; current frame in Maya</li>
-<li><strong>framerate</strong> &#8211; only used if smpte=True, the framerate to use in the conversion, 
-default (None) uses the current scenes framerate</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Audio.combineAudio">
@@ -288,6 +178,10 @@ audio path</p>
 <em class="property">class </em><tt class="descname">AudioHandler</tt><big>(</big><em>audio=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>process on multiple audio nodes within the Maya scene, ie, already loaded</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">all BWav and Timecode support is in the Red9 ProPack</p>
+</div>
 <dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioHandler.audioNodes">
 <tt class="descname">audioNodes</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.audioNodes" title="Permalink to this definition">¶</a></dt>
@@ -307,8 +201,8 @@ audio path</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.getOverallBwavTimecodeRange">
 <tt class="descname">getOverallBwavTimecodeRange</tt><big>(</big><em>ms=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.getOverallBwavTimecodeRange" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the overall internal BWAV timecode range for the given nodes
-NOte this is the internal timecode plus the length of the files</p>
+<dd><p>PRO_PACK : return the overall internal BWAV timecode range for the given 
+nodes. Note this is the internal timecode plus the length of the files</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -379,8 +273,8 @@ to offset by</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode">
 <tt class="descname">bwav_sync_to_Timecode</tt><big>(</big><em>relativeToo=None</em>, <em>offset=0</em>, <em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
-<dd><p>process either selected or all audio nodes and IF they are found to be
-BWav&#8217;s with valid timecode references, sync them in Maya such
+<dd><p>PRO_PACK : process either selected or all audio nodes and IF they are found 
+to be BWav&#8217;s with valid timecode references, sync them in Maya such
 that their offset = Bwav&#8217;s timecode ie: sync them on the timeline to
 the bwavs internal timecode.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -447,22 +341,39 @@ the issues with Maya not playblasting multip audio tracks.</p>
 <dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioNode.sample_width">
 <tt class="descname">sample_width</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.sample_width" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>bytes per sample, is converted by the sample_bits into bitrate</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioNode.sample_bits">
 <tt class="descname">sample_bits</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.sample_bits" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>bit rate taken from the bytes per sample : 4,8,16,24 bit</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioNode.channels">
 <tt class="descname">channels</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.channels" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>number of channels 1=mone, 2=stereo</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.core.Red9_Audio.AudioNode.dBFS">
+<tt class="descname">dBFS</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.dBFS" title="Permalink to this definition">¶</a></dt>
+<dd><p>loudness of the AudioSegment in dBFS (db relative to the maximum possible loudness)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.core.Red9_Audio.AudioNode.max_dBFS">
+<tt class="descname">max_dBFS</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.max_dBFS" title="Permalink to this definition">¶</a></dt>
+<dd><p>The highest amplitude of any sample in the AudioSegment,
+in dBFS (relative to the highest possible amplitude value).</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioNode.startFrame">
 <tt class="descname">startFrame</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.startFrame" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Maya start frame of the sound node</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioNode.endFrame">
@@ -474,13 +385,13 @@ NOT the Maya audioNode length as it&#8217;s invalid under batch mode!</p>
 <dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioNode.startTime">
 <tt class="descname">startTime</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.startTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>this is in milliseconds</p>
+<dd><p>PRO_PACK: Maya start time of the sound node in milliseconds</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioNode.endTime">
 <tt class="descname">endTime</tt><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.endTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>this is in milliseconds</p>
+<dd><p>PRO_PACK: Maya end time of the sound node in milliseconds</p>
 </dd></dl>
 
 <dl class="method">
@@ -492,25 +403,25 @@ NOT the Maya audioNode length as it&#8217;s invalid under batch mode!</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_getHeader">
 <tt class="descname">bwav_getHeader</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_getHeader" title="Permalink to this definition">¶</a></dt>
-<dd><p>PRO PACK : get the internal BWav header data from the wav if found</p>
+<dd><p>PRO_PACK : get the internal BWav header data from the wav if found</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_timecodeMS">
 <tt class="descname">bwav_timecodeMS</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_timecodeMS" title="Permalink to this definition">¶</a></dt>
-<dd><p>PRO PACK : read the internal timecode reference from the bwav and convert that number into milliseconds</p>
+<dd><p>PRO_PACK : read the internal timecode reference from the bwav and convert that number into milliseconds</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_timecodeReference">
 <tt class="descname">bwav_timecodeReference</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_timecodeReference" title="Permalink to this definition">¶</a></dt>
-<dd><p>PRO PACK : if is BWaw return the internal timeReference</p>
+<dd><p>PRO_PACK : if is BWaw return the internal timeReference</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_timecodeFormatted">
 <tt class="descname">bwav_timecodeFormatted</tt><big>(</big><em>smpte=True</em>, <em>framerate=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_timecodeFormatted" title="Permalink to this definition">¶</a></dt>
-<dd><p>PRO PACK : if is Bwav return the internal timecode &amp; convert from milliseconds into timecode</p>
+<dd><p>PRO_PACK : if is Bwav return the internal timecode &amp; convert from milliseconds into timecode</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -528,7 +439,7 @@ NOT the Maya audioNode length as it&#8217;s invalid under batch mode!</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_sync_to_Timecode">
 <tt class="descname">bwav_sync_to_Timecode</tt><big>(</big><em>offset=0</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
-<dd><p>PRO PACK : given that self is a Bwav and has timecode reference, sync it&#8217;s position
+<dd><p>PRO_PACK : given that self is a Bwav and has timecode reference, sync it&#8217;s position
 in the Maya timeline to match</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -546,12 +457,15 @@ in the Maya timeline to match</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.isValid">
 <tt class="descname">isValid</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.isValid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>If the audionode is loaded in maya then valid is if that node we&#8217;re pointing to exists
+If the audionode is NOT loaded and we just have a pth check if that path exists</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.delete">
 <tt class="descname">delete</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Maya delete the sound node</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.offsetTime">
@@ -588,12 +502,14 @@ In maya.standalone the audio isn&#8217;t loaded correctly and always is of lengt
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.setTimeline">
 <tt class="descname">setTimeline</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.setTimeline" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set the Maya timeline to the duration oft he sound</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.mute">
 <tt class="descname">mute</tt><big>(</big><em>state=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.mute" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Maya node, mute the sound</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.openAudioPath">
@@ -660,36 +576,20 @@ track was compiled from</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavsRelativeToo">
 <tt class="descname">sync_bwavsRelativeToo</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavsRelativeToo" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>PRO_PACK</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavs">
 <tt class="descname">sync_bwavs</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>PRO_PACK</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioToolsWrap.timecodeHud">
 <tt class="descname">timecodeHud</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.timecodeHud" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</dd></dl>
-
-<dl class="function">
-<dt id="Red9.core.Red9_Audio.getMediaFileMetaData">
-<tt class="descname">getMediaFileMetaData</tt><big>(</big><em>filepath</em>, <em>ffprobePath=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_Audio.getMediaFileMetaData" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function is capable of returning most metaData from mediaFiles, the return
-is in a json format so easily accessed.
-:param ffprobePath: if not given the code will asume that ffprobe.exe has been</p>
-<blockquote>
-dropped into teh Red9/packages folder, else it&#8217;ll use the given path</blockquote>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This is a stub function that requires ffprobe.exe, you can download from 
-<a class="reference external" href="http://www.ffmpeg.org/download.html">http://www.ffmpeg.org/download.html</a> it&#8217;s part of the ffmpeg tools.
-Once downloaded drop it here Red9/pakcages/ffprobe.exe
-This inspect function will then be available to use for many common media formats.
-More info: <a class="reference external" href="http://www.ffmpeg.org/ffprobe.html">http://www.ffmpeg.org/ffprobe.html</a></p>
-</div>
 </dd></dl>
 
 </div>

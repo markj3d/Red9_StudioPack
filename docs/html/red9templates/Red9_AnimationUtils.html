@@ -77,37 +77,29 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">maya.cmds</span> <span class="kn">as</span> <span class="nn">cmds</span>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">#===========================</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#When Processing hierarchies:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># When Processing hierarchies:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">#===========================</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#Make a settings object and set the internal filter to find all</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#child nurbsCurves that have an attr called &#39;Control_Marker&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span> <span class="o">=</span> <span class="n">r9Core</span><span class="o">.</span><span class="n">FilterNode_Settings</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span> <span class="o">=</span><span class="s">&#39;nurbsCurve&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span><span class="o">.</span><span class="n">searchAttrs</span> <span class="o">=</span> <span class="s">&#39;Control_Marker&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span><span class="o">.</span><span class="n">printSettings</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># The Filter_Settings object required for hierarchy processing is now bound to </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># the class directly so you no longer need to create a filterSettigns object directly!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Lets set the filter to process nodes with a given attr &#39;myControl&#39; who&#39;s type is &#39;nurbscurve&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">=</span><span class="n">r9Anim</span><span class="o">.</span><span class="n">AnimFunctions</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">r9Core</span><span class="o">.</span><span class="n">FilterNode_Settings</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span> <span class="o">=</span><span class="s">&#39;nurbsCurve&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">searchAttrs</span> <span class="o">=</span> <span class="s">&#39;myControl&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">printSettings</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#Option 1: Run the snap using the settings object you just made</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#&#39;nodes&#39; will be the two roots of the rig hierarchies to snap.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">anim</span> <span class="o">=</span> <span class="n">r9Anim</span><span class="o">.</span><span class="n">AnimFunctions</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">anim</span><span class="o">.</span><span class="n">snapTransform</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">time</span><span class="o">=</span><span class="n">r9Anim</span><span class="o">.</span><span class="n">timeLineRangeGet</span><span class="p">(),</span> <span class="n">filterSettings</span><span class="o">=</span><span class="n">settings</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># now run any of the AnimFunctions and pass in nodes which with the filter active</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># as above would be the 2 root nodes of the hierarchies to filter</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#Option 2: Run the snap by passing in an already processed MatchedNodeInput object</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#Make the MatchedNode object and process the hierarchies by passing the settings object in</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">matched</span> <span class="o">=</span> <span class="n">r9Core</span><span class="o">.</span><span class="n">MatchedNodeInputs</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">filterSettings</span><span class="o">=</span><span class="n">settings</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">matched</span><span class="o">.</span><span class="n">processMatchedPairs</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#see what&#39;s been filtered</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">matched</span><span class="o">.</span><span class="n">MatchedPairs</span><span class="p">:</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">print</span> <span class="n">n</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">copyAttributes</span><span class="p">(</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">l</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#Rather than passing in the settings or nodes, pass in the already processed MatchedNode</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">anim</span><span class="o">.</span><span class="n">snapTransform</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">matched</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">r9Anim</span><span class="o">.</span><span class="n">timeLineRangeGet</span><span class="p">())</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">snapTransform</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">time</span><span class="o">=</span><span class="n">r9Anim</span><span class="o">.</span><span class="n">timeLineRangeGet</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">#==============================</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#When processing simple objects:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># When processing simple objects:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c">#==============================</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#If you simple ignore the filterSettings you can just process given nodes directly</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c">#the nodes are zipped into selected pairs obj[0]&gt;obj[1], obj[2]&gt;obj[3] etc</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># If you simply ignore the filterSettings you can just process given nodes directly</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># the nodes are zipped into selected pairs obj[0]&gt;obj[1], obj[2]&gt;obj[3] etc</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">anim</span> <span class="o">=</span> <span class="n">r9Anim</span><span class="o">.</span><span class="n">AnimFunctions</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">anim</span><span class="o">.</span><span class="n">snapTransform</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">time</span><span class="o">=</span><span class="n">r9Anim</span><span class="o">.</span><span class="n">timeLineRangeGet</span><span class="p">())</span>
 </pre></div>
@@ -156,7 +148,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.AnimationUI" title="Red9.core.Red9_AnimationUtils.AnimationUI"><tt class="xref py py-obj docutils literal"><span class="pre">AnimationUI</span></tt></a>([dockUI])</td>
 <td></td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.AnimFunctions" title="Red9.core.Red9_AnimationUtils.AnimFunctions"><tt class="xref py py-obj docutils literal"><span class="pre">AnimFunctions</span></tt></a>(**kws)</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.AnimFunctions" title="Red9.core.Red9_AnimationUtils.AnimFunctions"><tt class="xref py py-obj docutils literal"><span class="pre">AnimFunctions</span></tt></a>(**kws[,&nbsp;filterSettings])</td>
 <td>Most of the main Animation Functions take a settings object which is</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.RandomizeKeys" title="Red9.core.Red9_AnimationUtils.RandomizeKeys"><tt class="xref py py-obj docutils literal"><span class="pre">RandomizeKeys</span></tt></a>()</td>
@@ -180,9 +172,9 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 </tbody>
 </table>
 <dl class="data">
-<dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACK">
-<tt class="descname">RED_ANIMATION_UI_OPENCALLBACK</tt><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACK" title="Permalink to this definition">¶</a></dt>
-<dd><p>Callback globals so you can fire a command prior to the UI opening,
+<dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS">
+<tt class="descname">RED_ANIMATION_UI_OPENCALLBACKS</tt><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.</p>
 <dl class="docutils">
@@ -190,11 +182,12 @@ and to setup some additional paths.</p>
 <dd>cls.poseHandlerPaths=[&#8216;MyProjects/resources/poseHandlers&#8217;]
 cls.posePathProject =&#8217;My_projects/global/project/pose/lib&#8217;</dd>
 </dl>
-<p>r9Anim.RED_ANIMATION_UI_OPENCALLBACK = myProjectCallback</p>
-<p>NOTE:: the function call bound to the callback is passed the current instance of the animUI class
-as an arg so you can modify as you need. Also when the PoseUI popup menu is built, IF the internal path
-cls.poseHandlerPaths is valid then we bind into that popup all valid poseHandler.py files
-found the given path. This allow you to add custom handler types and expose them through the UI directly.</p>
+<p>r9Anim.RED_ANIMATION_UI_OPENCALLBACKS.append(myProjectCallback)</p>
+<p>NOTE:: the function calls bound to the callback are passed the current instance of the animUI class
+as an arg so you can modify as you need. Also when the PoseUI RMB popup menu is built, IF paths in the list
+cls.poseHandlerPaths are valid, then we bind into that popup all valid poseHandler.py files
+found the given path. This allow you to add custom handler types and expose them through the UI directly,
+they will show up in the RMB popup as such: Fingers_poseHandler.py will show as &#8216;Add Subfolder : FINGERS&#8217;</p>
 </dd></dl>
 
 <dl class="function">
@@ -266,14 +259,6 @@ ie: pointConstraint.target.targetWeight</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.core.Red9_AnimationUtils.animRangeFromNodes">
-<tt class="descname">animRangeFromNodes</tt><big>(</big><em>nodes</em>, <em>setTimeline=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.animRangeFromNodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the extend of the animation range for the given objects
-:param nodes: nodes to examine for animation data
-:param setTimeLine: whether we should set the playback timeline to the extent of the found anim data</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.animLayersConfirmCheck">
 <tt class="descname">animLayersConfirmCheck</tt><big>(</big><em>nodes=None</em>, <em>deleteMerged=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.animLayersConfirmCheck" title="Permalink to this definition">¶</a></dt>
 <dd><p>return all animLayers associated with the given nodes</p>
@@ -297,6 +282,35 @@ ie: pointConstraint.target.targetWeight</p>
 <dd><p>from the given nodes find, merge and remove any animLayers found</p>
 <p>FOR THE LOVE OF GOD AUTODESK, fix animLayers and give us a decent api for them,
 oh, and stop building massive mel commands on the fly based on bloody optVars!!!!</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_AnimationUtils.pointOnPolyCmd">
+<tt class="descname">pointOnPolyCmd</tt><big>(</big><em>nodes</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.pointOnPolyCmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a BUG FIX for Maya&#8217;s command wrapping of the pointOnPolyCon
+which doesn&#8217;t support namespaces. This deals with that limitation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_AnimationUtils.eulerSelected">
+<tt class="descname">eulerSelected</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.eulerSelected" title="Permalink to this definition">¶</a></dt>
+<dd><p>cheap trick! for selected objects run a Euler Filter and then delete Static curves</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_AnimationUtils.animCurveDrawStyle">
+<tt class="descname">animCurveDrawStyle</tt><big>(</big><em>style='simple'</em>, <em>forceBuffer=True</em>, <em>showBufferCurves=False</em>, <em>displayTangents=False</em>, <em>displayActiveKeyTangents=True</em>, <em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.animCurveDrawStyle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Toggle the state of the graphEditor curve display, used in the Filter and Randomizer to
+simplify the display and the curve whilst processing. This allows you to also pass in
+the state directly, used by the UI close event to return the editor to the last cached state</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_AnimationUtils.animRangeFromNodes">
+<tt class="descname">animRangeFromNodes</tt><big>(</big><em>nodes</em>, <em>setTimeline=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.animRangeFromNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the extend of the animation range for the given objects
+:param nodes: nodes to examine for animation data
+:param setTimeLine: whether we should set the playback timeline to the extent of the found anim data</p>
 </dd></dl>
 
 <dl class="function">
@@ -333,24 +347,17 @@ times. Basically just a wrapper to the python range function.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.core.Red9_AnimationUtils.animCurveDrawStyle">
-<tt class="descname">animCurveDrawStyle</tt><big>(</big><em>style='simple'</em>, <em>forceBuffer=True</em>, <em>showBufferCurves=False</em>, <em>displayTangents=False</em>, <em>displayActiveKeyTangents=True</em>, <em>*args</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.animCurveDrawStyle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Toggle the state of the graphEditor curve display, used in the Filter and Randomizer to
-simplify the display and the curve whilst processing. This allows you to also pass in
-the state directly, used by the UI close event to return the editor to the last cached state</p>
+<dt id="Red9.core.Red9_AnimationUtils.selectKeysByRange">
+<tt class="descname">selectKeysByRange</tt><big>(</big><em>nodes=None</em>, <em>animLen=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.selectKeysByRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>select the keys from the selected or given nodes within the
+current timeRange or selectedTimerange</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.core.Red9_AnimationUtils.pointOnPolyCmd">
-<tt class="descname">pointOnPolyCmd</tt><big>(</big><em>nodes</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.pointOnPolyCmd" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is a BUG FIX for Maya&#8217;s command wrapping of the pointOnPolyCon
-which doesn&#8217;t support namespaces. This deals with that limitation</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Red9.core.Red9_AnimationUtils.eulerSelected">
-<tt class="descname">eulerSelected</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.eulerSelected" title="Permalink to this definition">¶</a></dt>
-<dd><p>cheap trick! for selected objects run a Euler Filter and then delete Static curves</p>
+<dt id="Red9.core.Red9_AnimationUtils.setTimeRangeToo">
+<tt class="descname">setTimeRangeToo</tt><big>(</big><em>nodes=None</em>, <em>setall=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.setTimeRangeToo" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the playback timerange to be the animation range of the selected nodes.
+AnimRange is determined to be the extent of all found animation for a given node</p>
 </dd></dl>
 
 <dl class="class">
@@ -437,7 +444,7 @@ and if so, use that to extend the standard menu&#8217;s</p>
 
 <dl class="class">
 <dt id="Red9.core.Red9_AnimationUtils.AnimFunctions">
-<em class="property">class </em><tt class="descname">AnimFunctions</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">AnimFunctions</tt><big>(</big><em>filterSettings=None</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Most of the main Animation Functions take a settings object which is 
 responsible for hierarchy processing. See r9Core.FilterNode and 
@@ -463,6 +470,26 @@ in the same manor making it very simple to extend.</p>
 a dumb copy, no matching and no Hierarchy filtering, copies using
 selected pairs obj[0]&gt;obj[1], obj[2]&gt;obj[3] etc</p>
 </div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">filterSettings is also now bound to the class and if no filterSettings object
+is passed into any of the calls we use the classes instance instead. Makes coding
+a lot more simple as you can take an instance of AnimFunctions and just fill it
+directly before running the functions.</p>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># new functionality</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">=</span><span class="n">AnimFunctions</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;nurbsCurve&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">searchPattern</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ctrl&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">copyKeys</span><span class="p">([</span><span class="n">srcRootNode</span><span class="p">,</span> <span class="n">destRootNode</span><span class="p">])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># old functionality</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span><span class="o">=</span><span class="n">r9Core</span><span class="o">.</span><span class="n">FilterSettings</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;nurbsCurve&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span><span class="o">.</span><span class="n">searchPattern</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ctrl&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">copyKeys</span><span class="p">([</span><span class="n">srcRootNode</span><span class="p">,</span> <span class="n">destRootNode</span><span class="p">],</span> <span class="n">filterSettigns</span><span class="o">=</span><span class="n">settings</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.AnimFunctions.copyKeys_ToMultiHierarchy">
 <tt class="descname">copyKeys_ToMultiHierarchy</tt><big>(</big><em>nodes=None</em>, <em>time=()</em>, <em>pasteKey='replace'</em>, <em>attributes=None</em>, <em>filterSettings=None</em>, <em>matchMethod=None</em>, <em>mergeLayers=True</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.copyKeys_ToMultiHierarchy" title="Permalink to this definition">¶</a></dt>
@@ -484,8 +511,10 @@ filtered nodes, either in hierarchies or just selected pairs.</p>
 <li><strong>nodes</strong> &#8211; List of Maya nodes to process. This combines the filterSettings
 object and the MatchedNodeInputs.processMatchedPairs() call,
 making it capable of powerful hierarchy filtering and node matching methods.</li>
-<li><strong>filterSettings</strong> &#8211; Passed into the decorator and onto the FilterNode code
-to setup the hierarchy filters - See docs on the FilterNode_Settings class</li>
+<li><strong>filterSettings</strong> &#8211; Passed into the FilterNode code to setup the hierarchy filters
+see docs on the FilterNode_Settings class&#8217;
+Note that this is also now bound to the class instance and if not passed in
+we use this classes instance of filterSettings cls.settings</li>
 <li><strong>pasteKey</strong> &#8211; Uses the standard pasteKey option methods - merge,replace,
 insert etc. This is fed to the internal pasteKey method. Default=replace</li>
 <li><strong>time</strong> &#8211; Copy over a given timerange - time=(start,end). Default is
@@ -501,7 +530,7 @@ animLayer to extract a compiled version of the animData from. This gets deleted 
 </tr>
 </tbody>
 </table>
-<p>TODO: this needs to support &#8216;skipAttrs&#8217; param liek the copyAttrs does - needed for the snapTransforms calls</p>
+<p>TODO: this needs to support &#8216;skipAttrs&#8217; param like the copyAttrs does - needed for the snapTransforms calls</p>
 </dd></dl>
 
 <dl class="method">
@@ -525,8 +554,10 @@ filtered nodes, either in hierarchies or just selected pairs.</p>
 <li><strong>nodes</strong> &#8211; List of Maya nodes to process. This combines the filterSettings
 object and the MatchedNodeInputs.processMatchedPairs() call,
 making it capable of powerful hierarchy filtering and node matching methods.</li>
-<li><strong>filterSettings</strong> &#8211; Passed into the decorator and onto the FilterNode code
-to setup the hierarchy filters - See docs on the FilterNode_Settings class</li>
+<li><strong>filterSettings</strong> &#8211; Passed into the FilterNode code to setup the hierarchy filters
+see docs on the FilterNode_Settings class&#8217;
+Note that this is also now bound to the class instance and if not passed in
+we use this classes instance of filterSettings cls.settings</li>
 <li><strong>attributes</strong> &#8211; Only copy the given attributes[]</li>
 <li><strong>skipAttrs</strong> &#8211; Copy all Settable Attributes OTHER than the given, not
 used if an attributes list is passed</li>
@@ -553,8 +584,10 @@ The resulting node lists are snapped over time and keyed.
 <li><strong>nodes</strong> &#8211; List of Maya nodes to process. This combines the filterSettings
 object and the MatchedNodeInputs.processMatchedPairs() call,
 making it capable of powerful hierarchy filtering and node matching methods.</li>
-<li><strong>filterSettings</strong> &#8211; Passed into the decorator and onto the FilterNode code
-to setup the hierarchy filters - See docs on the FilterNode_Settings class</li>
+<li><strong>filterSettings</strong> &#8211; Passed into the FilterNode code to setup the hierarchy filters
+see docs on the FilterNode_Settings class&#8217;
+Note that this is also now bound to the class instance and if not passed in
+we use this classes instance of filterSettings cls.settings</li>
 <li><strong>time</strong> &#8211; Copy over a given timerange - time=(start,end). Default is
 to use no timeRange. If time is passed in via the timeLineRange() function
 then it will consider the current timeLine PlaybackRange, OR if you have a
@@ -644,8 +677,10 @@ filtered nodes, either in hierarchies or just selected pairs.</p>
 <li><strong>nodes</strong> &#8211; List of Maya nodes to process. This combines the filterSettings
 object and the MatchedNodeInputs.processMatchedPairs() call,
 making it capable of powerful hierarchy filtering and node matching methods.</li>
-<li><strong>filterSettings</strong> &#8211; Passed into the decorator and onto the FilterNode code
-to setup the hierarchy filters - See docs on the FilterNode_Settings class</li>
+<li><strong>filterSettings</strong> &#8211; Passed into the FilterNode code to setup the hierarchy filters
+see docs on the FilterNode_Settings class&#8217;
+Note that this is also now bound to the class instance and if not passed in
+we use this classes instance of filterSettings cls.settings</li>
 <li><strong>attributes</strong> &#8211; Only copy the given attributes[]</li>
 <li><strong>bindMethod</strong> &#8211; method of binding the data</li>
 <li><strong>matchMethod</strong> &#8211; arg passed to the match code, sets matchMethod used to match 2 node names</li>

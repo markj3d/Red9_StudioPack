@@ -66,7 +66,7 @@ time the tools process a hierarchy it&#8217;s these classes that deal with it.</
 <tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.nodeNameStrip" title="Red9.core.Red9_CoreUtils.nodeNameStrip"><tt class="xref py py-obj docutils literal"><span class="pre">nodeNameStrip</span></tt></a>(node)</td>
 <td>Simple method to strip any <a href="#id1"><span class="problematic" id="id2">|</span></a>Path and :Namespaces: from</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.prioritizeNodeList" title="Red9.core.Red9_CoreUtils.prioritizeNodeList"><tt class="xref py py-obj docutils literal"><span class="pre">prioritizeNodeList</span></tt></a>(inputlist,&nbsp;priorityList)</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.prioritizeNodeList" title="Red9.core.Red9_CoreUtils.prioritizeNodeList"><tt class="xref py py-obj docutils literal"><span class="pre">prioritizeNodeList</span></tt></a>(*args,&nbsp;**kws)</td>
 <td>Simple function to force the order of a given nList such that nodes</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.sortNumerically" title="Red9.core.Red9_CoreUtils.sortNumerically"><tt class="xref py py-obj docutils literal"><span class="pre">sortNumerically</span></tt></a>(data)</td>
@@ -84,8 +84,8 @@ time the tools process a hierarchy it&#8217;s these classes that deal with it.</
 <tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.timeOffset_addPadding" title="Red9.core.Red9_CoreUtils.timeOffset_addPadding"><tt class="xref py py-obj docutils literal"><span class="pre">timeOffset_addPadding</span></tt></a>([pad,&nbsp;padfrom,&nbsp;scene])</td>
 <td>simple wrap of the timeoffset class which will add padding into the</td>
 </tr>
-<tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.timeOffset_collapse" title="Red9.core.Red9_CoreUtils.timeOffset_collapse"><tt class="xref py py-obj docutils literal"><span class="pre">timeOffset_collapse</span></tt></a>([scene])</td>
-<td>simple wrap of the timeoffset that given a selected range in the timeline will</td>
+<tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.timeOffset_collapse" title="Red9.core.Red9_CoreUtils.timeOffset_collapse"><tt class="xref py py-obj docutils literal"><span class="pre">timeOffset_collapse</span></tt></a>([scene,&nbsp;timerange])</td>
+<td>Light wrap over the TimeOffset call to manage collapsing time</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.decodeString" title="Red9.core.Red9_CoreUtils.decodeString"><tt class="xref py py-obj docutils literal"><span class="pre">decodeString</span></tt></a>(val)</td>
 <td>From configObj the return is a string, we want to encode</td>
@@ -134,7 +134,7 @@ a given object DagPath ie Ns:Rig|Ns:Leg|Ns:Foot == Foot</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.prioritizeNodeList">
-<tt class="descname">prioritizeNodeList</tt><big>(</big><em>inputlist</em>, <em>priorityList</em>, <em>regex=True</em>, <em>prioritysOnly=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.prioritizeNodeList" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">prioritizeNodeList</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.prioritizeNodeList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple function to force the order of a given nList such that nodes
 in the given priority list are moved to the front of the list.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -142,13 +142,22 @@ in the given priority list are moved to the front of the list.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nList</strong> &#8211; main input list</li>
+<li><strong>inputlist</strong> &#8211; main input list</li>
 <li><strong>priorityList</strong> &#8211; list which is used to prioritize/order the main nList</li>
+<li><strong>regex</strong> &#8211; Switches from regex search to simple exact node name</li>
+<li><strong>prioritysOnly</strong> &#8211; return just the priorityList matches or the entire list sorted</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<p>#Known issue, if Regex=True and you have 2 similar str&#8217;s in the priority list then there&#8217;s 
+a chance that matching may be erractic...</p>
+<p>priorityList=[&#8216;upperLip&#8217;,&#8217;l_upperLip&#8217;]
+nodes=[&#8216;<a href="#id5"><span class="problematic" id="id6">|</span></a>my|dag|path|jaw&#8217;,|my|dag|path|l_upperLip&#8217;,&#8217;<a href="#id7"><span class="problematic" id="id8">|</span></a>my|dag|path|upperLip&#8217;,&#8217;<a href="#id9"><span class="problematic" id="id10">|</span></a>my|dag|path|lowerLip&#8217;]
+returns: [&#8216;<a href="#id11"><span class="problematic" id="id12">|</span></a>my|dag|path|l_upperLip&#8217;,&#8217;<a href="#id13"><span class="problematic" id="id14">|</span></a>my|dag|path|upperLip&#8217;,|my|dag|path|jaw,&#8217;<a href="#id15"><span class="problematic" id="id16">|</span></a>my|dag|path|lowerLip]</p>
+<p>as in regex &#8216;l_upperLip&#8217;==&#8217;upperLip&#8217; as well as &#8216;upperLip&#8217;==&#8217;upperLip&#8217;</p>
+<p>really in regex you&#8217;d need to be more specific:  priorityList=[&#8216;^upperLip&#8217;,&#8217;l_upperLip&#8217;]</p>
 </dd></dl>
 
 <dl class="function">
@@ -203,7 +212,8 @@ MetaUI and many others.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>iniput_list</strong> &#8211; list of strings to be filtered</li>
-<li><strong>filter_string</strong> &#8211; string to use in the filter, supports comma separated search strings</li>
+<li><strong>filter_string</strong> &#8211; string to use in the filter, supports comma separated search strings
+eg : &#8216;brows,smile,funnel&#8217;</li>
 <li><strong>matchcase</strong> &#8211; whether to match or ignore case sensitivity</li>
 </ul>
 </td>
@@ -248,23 +258,58 @@ class is used through out Red in conjunction with the filterNode class.</p>
 <dl class="method">
 <dt id="Red9.core.Red9_CoreUtils.FilterNode_Settings.resetFilters">
 <tt class="descname">resetFilters</tt><big>(</big><em>rigData=True</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode_Settings.resetFilters" title="Permalink to this definition">¶</a></dt>
-<dd><p>reset the MAIN filter args only
-:param rigData: this is a cached attr and not fully handled 
-by the UI hence the option NOT to reset, used by the UI presetFill calls</p>
+<dd><p>reset the MAIN filter args only</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rigData</strong> &#8211; this is a cached attr and not fully handled</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>by the UI hence the option NOT to reset, used by the UI presetFill calls</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_CoreUtils.FilterNode_Settings.write">
 <tt class="descname">write</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode_Settings.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>write the filterSettings attribute out to a ConfigFile
-:param filepath: file path to write the configFile out to</p>
+<dd><p>write the filterSettings attribute out to a ConfigFile</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> &#8211; file path to write the configFile out to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_CoreUtils.FilterNode_Settings.read">
 <tt class="descname">read</tt><big>(</big><em>filepath</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode_Settings.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a given ConfigFile and fill this object instance with the data
-:param filepath: file path to write the configFile out to</p>
+<dd><p>Read a given ConfigFile and fill this object instance with the data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> &#8211; file path to write the configFile out to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>::note ..</dt>
+<dd>If filepath doesn&#8217;t exists or you pass in just the short name of the config you 
+want to load then we try and find a matching config in the default presets dir in Red9</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -563,15 +608,15 @@ this is the CTRL_Main controller which should be Top World Space</blockquote>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.core.Red9_CoreUtils.FilterNode.processFilter">
-<tt class="descname">processFilter</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode.processFilter" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.core.Red9_CoreUtils.FilterNode.ProcessFilter">
+<tt class="descname">ProcessFilter</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode.ProcessFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>replace the &#8216;P&#8217; in the function call but not depricating it just yet
 as too much code both internally and externally relies on this method</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.core.Red9_CoreUtils.FilterNode.ProcessFilter">
-<tt class="descname">ProcessFilter</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode.ProcessFilter" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.core.Red9_CoreUtils.FilterNode.processFilter">
+<tt class="descname">processFilter</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode.processFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uses intersection to allow you to process multiple search flags for
 more accurate filtering.
 Uses the FilterNode_Settings object for all args such that:</p>
@@ -820,10 +865,14 @@ animation curves on the selected object by shifting keys
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.timeOffset_collapse">
-<tt class="descname">timeOffset_collapse</tt><big>(</big><em>scene=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.timeOffset_collapse" title="Permalink to this definition">¶</a></dt>
-<dd><p>simple wrap of the timeoffset that given a selected range in the timeline will
-collapse the keys within that range and shift forward keys back to close the gap
-:param scene: whether to process the entire scene or selected nodes</p>
+<tt class="descname">timeOffset_collapse</tt><big>(</big><em>scene=False</em>, <em>timerange=None</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.timeOffset_collapse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Light wrap over the TimeOffset call to manage collapsing time</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.timeOffset_collapseUI">
+<tt class="descname">timeOffset_collapseUI</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_CoreUtils.timeOffset_collapseUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>collapse time confirmation UI</p>
 </dd></dl>
 
 <dl class="class">

@@ -74,7 +74,7 @@ ALL NODES must have unique names or you may get unexpected  results!</p>
 </colgroup>
 <tbody valign="top">
 <tr><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.DataMap" title="Red9.core.Red9_PoseSaver.DataMap"><tt class="xref py py-obj docutils literal"><span class="pre">DataMap</span></tt></a>(*args,&nbsp;**kws[,&nbsp;filterSettings])</td>
-<td>New base class for handling data</td>
+<td>New base class for handling data storage and reloading with intelligence</td>
 </tr>
 <tr><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PoseData" title="Red9.core.Red9_PoseSaver.PoseData"><tt class="xref py py-obj docutils literal"><span class="pre">PoseData</span></tt></a>(*args,&nbsp;**kws[,&nbsp;filterSettings])</td>
 <td>The PoseData is stored per node inside an internal dict as follows:</td>
@@ -94,23 +94,28 @@ ALL NODES must have unique names or you may get unexpected  results!</p>
 if so return the filename. PoseHandlers are a way of extending or
 over-loading the standard behaviour of the poseSaver, see Vimeo for
 a more detailed explanation.</p>
+<p>TODO: have this also accept a pointer to a handler file rather than a direct
+poseHnadler.py file in each folder. This means we could point a folder to a generic handler 
+inside our presets folder rather than having the code logic in each folder.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.core.Red9_PoseSaver.DataMap">
 <em class="property">class </em><tt class="descname">DataMap</tt><big>(</big><em>filterSettings=None</em>, <em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.DataMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>New base class for handling data</p>
+<p>New base class for handling data storage and reloading with intelligence</p>
 <p>The idea of the DataMap is to make the node handling part of any system generic.
 This allows us to use this baseClass to build up things like poseSavers and all
-we have to worry about is the data extraction part, all the node handling
+we have to worry about is the data save / extraction part, all the node handling
 and file handling is already done by this class ;)</p>
 <p>Note that we&#8217;re not passing any data in terms of nodes here, We&#8217;ll deal with
 those in the Save and Load calls.</p>
 <dl class="attribute">
 <dt id="Red9.core.Red9_PoseSaver.DataMap.metaPose">
 <tt class="descname">metaPose</tt><a class="headerlink" href="#Red9.core.Red9_PoseSaver.DataMap.metaPose" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>this flag adds in the additional MetaData block for all the matching code and info extraction.
+True if self.metaRig is filled, self.settings.metaRig=True or self.metaPose=True</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.core.Red9_PoseSaver.DataMap.filepath">
@@ -159,6 +164,14 @@ or loaded. Currently only supported under MetaRig</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.DataMap.buildBlocks_fill">
+<tt class="descname">buildBlocks_fill</tt><big>(</big><em>nodes</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.DataMap.buildBlocks_fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>To Be Overloaded : What capture routines to run in order to build the DataMap up.
+Note that the self._buildBlock_poseDict(nodes) calls the self._collectNodeData per node
+as a way of gathering what info to be stored against each node.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.DataMap.buildDataMap">
 <tt class="descname">buildDataMap</tt><big>(</big><em>nodes</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.DataMap.buildDataMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>build the internal dataMap dict, useful as a separate func so it
@@ -167,6 +180,19 @@ for managing the actual pose data for save</p>
 <dl class="docutils">
 <dt>..note:</dt>
 <dd>this replaces the original pose call self.buildInternalPoseData()</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.DataMap.processPoseFile">
+<tt class="descname">processPoseFile</tt><big>(</big><em>nodes</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.DataMap.processPoseFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>pre-loader function that processes all the nodes and data prior to
+actually calling the load... why? this is for the poseMixer for speed.
+This reads the file, matches the nodes to the internal file data and fills
+up the self.matchedPairs data [(src,dest),(src,dest)]</p>
+<dl class="docutils">
+<dt>..note:</dt>
+<dd>this replaced the original call self._poseLoad_buildcache()</dd>
 </dl>
 </dd></dl>
 
@@ -180,7 +206,7 @@ from a given poseFile return or select the internal stored objects</p>
 <dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.DataMap.saveData">
 <tt class="descname">saveData</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.DataMap.saveData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Entry point for the generic PoseSave.</p>
+<dd><p>Generic entry point for the Data Save.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -201,7 +227,7 @@ class instance.</li>
 <dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.DataMap.loadData">
 <tt class="descname">loadData</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.DataMap.loadData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Entry point for the generic DataLoad.</p>
+<dd><p>Generic entry point for the Data Load.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -209,7 +235,7 @@ class instance.</li>
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; if given load the data to only these. If given and filter=True 
 this is the rootNode for the filter.</li>
-<li><strong>filepath</strong> &#8211; posefile to load - if not given the pose is loaded from a 
+<li><strong>filepath</strong> &#8211; file to load - if not given the pose is loaded from a 
 cached instance on this class.</li>
 <li><strong>useFilter</strong> &#8211; If the pose has an active Filter_Settings block and this 
 is True then use the filter on the destination hierarchy.</li>
@@ -268,6 +294,12 @@ in your own MetaRig subclasses.</p>
 those in the PoseSave and PoseLoad calls. Leaves this open for
 expansion</p>
 <dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.PoseData.buildBlocks_fill">
+<tt class="descname">buildBlocks_fill</tt><big>(</big><em>nodes</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseData.buildBlocks_fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>What capture routines to run in order to build the poseDict data</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.PoseData.poseSave">
 <tt class="descname">poseSave</tt><big>(</big><em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseData.poseSave" title="Permalink to this definition">¶</a></dt>
 <dd><p>Entry point for the generic PoseSave.</p>
@@ -311,6 +343,7 @@ relatively to the selected node.</li>
 <li><strong>maintainSpaces</strong> &#8211; this preserves any parentSwitching mismatches between 
 the stored pose and the current rig settings, current spaces are maintained. 
 This only checks those nodes in the snapList and only runs under relative mode.</li>
+<li><strong>percent</strong> &#8211; percentage of the pose to apply, used by the poseBlender in the UIs</li>
 </ul>
 </td>
 </tr>
@@ -322,7 +355,7 @@ This only checks those nodes in the snapList and only runs under relative mode.<
 
 <dl class="class">
 <dt id="Red9.core.Red9_PoseSaver.PosePointCloud">
-<em class="property">class </em><tt class="descname">PosePointCloud</tt><big>(</big><em>nodes</em>, <em>filterSettings=None</em>, <em>meshes=</em><span class="optional">[</span><span class="optional">]</span>, <em>time=()</em>, <em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">PosePointCloud</tt><big>(</big><em>nodes</em>, <em>filterSettings=None</em>, <em>meshes=</em><span class="optional">[</span><span class="optional">]</span>, <em>*args</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>PosePointCloud is the technique inside the PoseSaver used to snap the pose into
 relative space. It&#8217;s been added as a tool in it&#8217;s own right as it&#8217;s sometimes
@@ -332,7 +365,6 @@ useful to be able to shift poses in global space.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>rootReference</strong> &#8211; the object to be used as the PPT&#8217;s pivot reference</li>
 <li><strong>nodes</strong> &#8211; feed the nodes to process in as a list, if a filter is given
 then these are the rootNodes for it</li>
 <li><strong>filterSettings</strong> &#8211; pass in a filterSettings object to filter the given hierarchy</li>
@@ -344,12 +376,17 @@ which is then shapeSwapped for the PPC root node giving great reference!</li>
 </tbody>
 </table>
 <dl class="method">
-<dt id="Red9.core.Red9_PoseSaver.PosePointCloud.buildOffsetCloud">
-<tt class="descname">buildOffsetCloud</tt><big>(</big><em>rootReference=None</em>, <em>raw=False</em>, <em>projectedRots=False</em>, <em>projectedTrans=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.buildOffsetCloud" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build a point cloud up for each node in nodes
-:param nodes: list of objects to be in the cloud
-:param rootReference: the node used for the initial pivot location
-:param raw: build the cloud but DON&#8217;T snap the nodes into place - an optimisation for the PoseLoad sequence</p>
+<dt id="Red9.core.Red9_PoseSaver.PosePointCloud.syncdatafromCurrentInstance">
+<tt class="descname">syncdatafromCurrentInstance</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.syncdatafromCurrentInstance" title="Permalink to this definition">¶</a></dt>
+<dd><p>pull existing data back from the metaNode</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.PosePointCloud.getInputNodes">
+<tt class="descname">getInputNodes</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.getInputNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>handler to build up the list of nodes to generate the cloud against.
+This uses the filterSettings and the inputNodes variables to process the 
+hierarchy and is designed for overloading if required.</p>
 </dd></dl>
 
 <dl class="method">
@@ -371,10 +408,31 @@ which is then shapeSwapped for the PPC root node giving great reference!</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.PosePointCloud.snapPosePntstoNodes">
+<tt class="descname">snapPosePntstoNodes</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.snapPosePntstoNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>snap each pntCloud point to their respective Maya nodes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.PosePointCloud.snapNodestoPosePnts">
+<tt class="descname">snapNodestoPosePnts</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.snapNodestoPosePnts" title="Permalink to this definition">¶</a></dt>
+<dd><p>snap each MAYA node to it&#8217;s respective pntCloud point</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.PosePointCloud.generateVisualReference">
 <tt class="descname">generateVisualReference</tt><big>(</big><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.generateVisualReference" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic call that&#8217;s used to overload the visual handling 
 of the PPC is other instances such as the AnimationPPC</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.PosePointCloud.buildOffsetCloud">
+<tt class="descname">buildOffsetCloud</tt><big>(</big><em>rootReference=None</em>, <em>raw=False</em>, <em>projectedRots=False</em>, <em>projectedTrans=False</em><big>)</big><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.buildOffsetCloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build a point cloud up for each node in nodes
+:param nodes: list of objects to be in the cloud
+:param rootReference: the node used for the initial pivot location
+:param raw: build the cloud but DON&#8217;T snap the nodes into place - an optimisation for the PoseLoad sequence</p>
 </dd></dl>
 
 <dl class="method">
@@ -444,7 +502,7 @@ and for key in keys compare, with tolerance, the [attrs] block.</p>
 :param compareDict: the internal main dict in the pose file to compare the data with
 :param filterMap: if given this is used as a high level filter, only matching nodes get compared</p>
 <blockquote>
-others get skipped. Good for passing in a mater core skeleton to test whilst ignoring extra nodes</blockquote>
+others get skipped. Good for passing in a master core skeleton to test whilst ignoring extra nodes</blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
