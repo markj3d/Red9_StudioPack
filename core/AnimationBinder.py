@@ -52,128 +52,131 @@ log.setLevel(logging.INFO)
 BAKE_MARKER='BoundCtr'
 BNDNODE_MARKER='BindNode'
 
-class BindSettings(object):
+class Bindsettings(object):
     
     def __init__(self):
         '''
-        Settings object that we pass to the Binder Classes directly, keeps the code clean
+        settings object that we pass to the Binder Classes directly, keeps the code clean
         '''
-        self.BindTrans = True
-        self.BindRots = True
-        self.ResetTranslates = True
-        self.ResetRotates = False
-        self.BaseScale = 1
-        self.BakeDebug = False
-        self.__alignToControlTrans = True
-        self.__alignToControlRots = True
-        self.__alignToSourceTrans = False
-        self.__alignToSourceRots = False
+        self.bind_trans = True
+        self.bind_rots = True
+        self.reset_trans = True
+        self.reset_rots = False
+        self.base_scale = 1
+        self.bake_debug = False
+        self.__align_to_control_trans = True
+        self.__align_to_control_rots = True
+        self.__align_to_source_trans = False
+        self.__align_to_source_rots = False
         
     @property
-    def AlignToControlTrans(self):
-        return self.__alignToControlTrans
-    @AlignToControlTrans.setter
-    def AlignToControlTrans(self, value):
+    def align_to_control_trans(self):
+        return self.__align_to_control_trans
+    @align_to_control_trans.setter
+    def align_to_control_trans(self, value):
         if value:
-            self.__alignToSourceTrans = False
-            self.__alignToControlTrans = True
-            log.info('AlignToControlTrans=True, Switching AlignToSourceTrans=False')
+            self.__align_to_source_trans = False
+            self.__align_to_control_trans = True
+            log.info('align_to_control_trans=True, Switching align_to_source_trans=False')
         else:
-            self.__alignToControlTrans = False
+            self.__align_to_control_trans = False
       
     @property
-    def AlignToSourceTrans(self):
-        return self.__alignToSourceTrans
-    @AlignToSourceTrans.setter
-    def AlignToSourceTrans(self, value):
+    def align_to_source_trans(self):
+        return self.__align_to_source_trans
+    @align_to_source_trans.setter
+    def align_to_source_trans(self, value):
         if value:
-            self.__alignToControlTrans = False
-            self.__alignToSourceTrans = True
-            log.info('AlignToSourceTrans=True, Switching AlignToControlTrans=False')
+            self.__align_to_control_trans = False
+            self.__align_to_source_trans = True
+            log.info('align_to_source_trans=True, Switching align_to_control_trans=False')
         else:
-            self.__alignToSourceTrans = False
+            self.__align_to_source_trans = False
 
     @property
-    def AlignToControlRots(self):
-        return self.__alignToControlRots
-    @AlignToControlRots.setter
-    def AlignToControlRots(self, value):
+    def align_to_control_rots(self):
+        return self.__align_to_control_rots
+    @align_to_control_rots.setter
+    def align_to_control_rots(self, value):
         if value:
-            self.__alignToSourceRots = False
-            self.__alignToControlRots = True
-            log.info('AlignToControlRots=True, Switching AlignToSourceRots=False')
+            self.__align_to_source_rots = False
+            self.__align_to_control_rots = True
+            log.info('align_to_control_rots=True, Switching align_to_source_rots=False')
         else:
-            self.__alignToControlRots = False
+            self.__align_to_control_rots = False
 
     @property
-    def AlignToSourceRots(self):
-        return self.__alignToSourceRots
-    @AlignToSourceRots.setter
-    def AlignToSourceRots(self, value):
+    def align_to_source_rots(self):
+        return self.__align_to_source_rots
+    @align_to_source_rots.setter
+    def align_to_source_rots(self, value):
         if value:
-            self.__alignToControlRots = False
-            self.__alignToSourceRots = True
-            log.info('AlignToSourceRots=True, Switching AlignToControlRots=False')
+            self.__align_to_control_rots = False
+            self.__align_to_source_rots = True
+            log.info('align_to_source_rots=True, Switching align_to_control_rots=False')
         else:
-            self.__alignToSourceRots = False
+            self.__align_to_source_rots = False
 
-    def Print(self):
-        #for key,value in self.__dict__.items():print key,value
+    def print_settings(self):
         log.info(self.__dict__)
 
 
 class BindNodeBase(object):
 
-    def __init__(self, source, destination, settings=None):
+    def __init__(self, source=None, destination=None, settings=None):
         '''
         *arg source : Driver Joint
         *arg destination : Rig Controller to be Bound
-        *arg settings : a BindSettings object
+        *arg settings : a Bindsettings object
         '''
-        self.__sourceNode = None
-        self.__destinationNode = None
         self.BindNode = {}
+        
+        self.__source=None
+        self.__dest=None
+        if source:
+            self.sourceNode=source
+        if destination:
+            self.destinationNode=destination
 
         if settings:
-            if not issubclass(type(settings), BindSettings):
-                raise StandardError('settingsObj arg must be a BindSettings Object')
+            if not issubclass(type(settings), Bindsettings):
+                raise StandardError('settingsObj arg must be a Bindsettings Object')
             else:
-                self.Settings = settings
+                self.settings = settings
         else:
-            #take a default instance of the Settings Object
-            log.info('Taking Default SettingsObject')
-            self.Settings = BindSettings()
+            #take a default instance of the settings Object
+            log.info('Taking Default settingsObject')
+            self.settings = Bindsettings()
             
-        log.info(self.Settings.Print())
-        self.SourceNode = source
-        self.DestinationNode = destination
+        log.info(self.settings.print_settings())
+
 
     @property
-    def SourceNode(self):
-        return self.__sourceNode
-    @SourceNode.setter
-    def SourceNode(self, value):
-        if value:
-            self.__sourceNode = pm.PyNode(value)
+    def sourceNode(self):
+        return self.__source
+    @sourceNode.setter
+    def sourceNode(self, node):
+        if not cmds.objExists(node):
+            raise IOError('source node not valid')
         else:
-            raise StandardError('Source Node Not Found')
-        
+            self.__source=pm.PyNode(node)
+            
     @property
-    def DestinationNode(self):
-        return self.__destinationNode
-    @DestinationNode.setter
-    def DestinationNode(self, value):
-        if value:
-            self.__destinationNode = pm.PyNode(value)
+    def destinationNode(self):
+        return self.__dest
+    @destinationNode.setter
+    def destinationNode(self, node):
+        if not cmds.objExists(node):
+            raise IOError('destination node not valid')
         else:
-            raise StandardError('Destination Node Not Found')
-
-    def MakeBaseGeo(self, GeoType, Name):
+            self.__dest=pm.PyNode(node)
+            
+    def make_base_geo(self, GeoType, Name):
         '''
         Make the Base BindGeo Type
         '''
         node = None
-        size = 3 * self.Settings.BaseScale
+        size = 3 * self.settings.base_scale
         if GeoType == 'Diamond':
             node = pm.curve(d=1, name=Name, p=[(size, 0, -size), (size, 0, size), (-size, 0, size), \
                                            (-size, 0, -size), (size, 0, -size), (0, size, 0), \
@@ -192,7 +195,7 @@ class BindNodeBase(object):
         return node
 
     @staticmethod
-    def AddBindMarkers(Ctr, BndNode=None):
+    def add_bind_markers(Ctr, BndNode=None):
         #message link this to the controller for the BakeCode to find
         if Ctr:
             print 'Ctrl'
@@ -206,82 +209,84 @@ class BindNodeBase(object):
             Ctr.BoundCtr>>BndNode.BindNode
         
         
-    def MakeBindBase(self, Name, GeoType='Diamond'):
+    def make_bind_base(self, Name=None, GeoType='Diamond'):
         '''
         Make the unaligned BindGeo setup, this proc is overwritten for more complex binds
         Note: the BindNode is returned as a dic where ['Main'] is always the node that
         ultimately the constraints get made too, and ['Root'] is the root of the BindGroup
         *arg Name :  BaseName of the matchNode
         '''
-        self.BindNode['Main'] = self.MakeBaseGeo(GeoType, '%s_BND' % Name)
+        if not Name:
+            Name=self.destinationNode.nodeName()
+        self.BindNode['Main'] = self.make_base_geo(GeoType, '%s_BND' % Name)
         self.BindNode['Root'] = self.BindNode['Main']
         pm.select(self.BindNode['Root'])
 
 
-    def AlignBindNode(self):
+    def align_bind_node(self):
         '''
         Align the newly made BindNode as required
         '''
-        #Parent the BindNode to the Source Driver NOde
-        pm.parent(self.BindNode['Main'], self.SourceNode)
+        #Parent the BindNode to the Source Driver Node
+        pm.parent(self.BindNode['Main'], self.sourceNode)
     
         #Positional Alignment
-        if self.Settings.AlignToControlTrans:
-            pm.delete(pm.pointConstraint(self.DestinationNode, self.BindNode['Root']))
-        if self.Settings.AlignToSourceTrans:
-            pm.delete(pm.pointConstraint(self.SourceNode, self.BindNode['Root']))
+        if self.settings.align_to_control_trans:
+            pm.delete(pm.pointConstraint(self.destinationNode, self.BindNode['Root']))
+        if self.settings.align_to_source_trans:
+            pm.delete(pm.pointConstraint(self.sourceNode, self.BindNode['Root']))
 
         #Rotation Alignment
-        if self.Settings.AlignToControlRots:
-            pm.delete(pm.orientConstraint(self.DestinationNode, self.BindNode['Root']))
-        if self.Settings.AlignToSourceRots:
-            pm.delete(pm.orientConstraint(self.SourceNode, self.BindNode['Root']))
+        if self.settings.align_to_control_rots:
+            pm.delete(pm.orientConstraint(self.destinationNode, self.BindNode['Root']))
+        if self.settings.align_to_source_rots:
+            pm.delete(pm.orientConstraint(self.sourceNode, self.BindNode['Root']))
 
 
-    def LinkBindNode(self):
+    def link_bind_node(self):
         '''
         Make the actual driving connections between the Bind and Destination Nodes
         '''
         maintainOffsets = False
         # Make the Bind Between the Object
-    #       if BindTrans and BindRots:
+    #       if bind_trans and bind_rots:
     #           try:
-    #               con=pm.parentConstraint(self.BindNode['Main'], self.DestinationNode, mo=maintainOffsets)
+    #               con=pm.parentConstraint(self.BindNode['Main'], self.destinationNode, mo=maintainOffsets)
     #               con.interpType.set(2)
     #           except:
     #               raise StandardError('ParentConstraint Bind could not be made')
 
-        if self.Settings.BindTrans:
+        if self.settings.bind_trans:
             try:
-                pm.pointConstraint(self.BindNode['Main'], self.DestinationNode, mo=maintainOffsets)
+                pm.pointConstraint(self.BindNode['Main'], self.destinationNode, mo=maintainOffsets)
             except:
                 pass
-        if self.Settings.BindRots:
+        if self.settings.bind_rots:
             try:
-                con = pm.orientConstraint(self.BindNode['Main'], self.DestinationNode, mo=maintainOffsets)
+                con = pm.orientConstraint(self.BindNode['Main'], self.destinationNode, mo=maintainOffsets)
                 con.interpType.set(2)
             except:
                 pass
 
         #Add the BindMarkers so that we can ID these nodes and connections later
-        self.AddBindMarkers(self.DestinationNode, self.BindNode['Root'])
+        self.add_bind_markers(self.destinationNode, self.BindNode['Root'])
 
 
-    def AddBinderNode(self):
+    def add_binder_node(self):
         '''
         Main Wrapper to make the AnimBind setup between Source and Destination nodes
         '''
-        print ('The current Driving Object (source) is : %s' % self.SourceNode.stripNamespace())
-        print ('The current Slave Object (destination) is : %s' % self.DestinationNode.stripNamespace())
+        print ('The current Driving Object (source) is : %s' % self.sourceNode.stripNamespace())
+        print ('The current Slave Object (destination) is : %s' % self.destinationNode.stripNamespace())
 
-        self.MakeBindBase(self.DestinationNode.nodeName())  # Make the MatchObject and parent to the source
-        self.AlignBindNode()            # Align the new node to the Desitation Ctr
-        self.LinkBindNode()             # Constrain or Link the Ctrl to the New MatchNode
+        self.make_bind_base(self.destinationNode.nodeName())  # Make the MatchObject and parent to the source
+        self.align_bind_node()            # Align the new node to the Desitation Ctr
+        self.link_bind_node()             # Constrain or Link the Ctrl to the New MatchNode
         
-        if self.Settings.ResetTranslates:
+        if self.settings.reset_trans:
             log.info('resetting binders translates : %s', self.BindNode['Root'])
             self.BindNode['Root'].translate.set([0, 0, 0])
-        if self.Settings.ResetRotates:
+        if self.settings.reset_rots:
             log.info('resetting binders rotates : %s', self.BindNode['Main'])
             self.BindNode['Main'].rotate.set([0, 0, 0])
     
@@ -294,13 +299,13 @@ class BindNodeTwin(BindNodeBase):
     lengths whilst maintaining easily editable data.
     *arg source : Driver Joint
     *arg destination : Rig Controller to be Bound
-    *arg settings : a BindSettings object
+    *arg settings : a Bindsettings object
     '''
     
-    def __init__(self, source, destination, settings=None):
+    def __init__(self, source=None, destination=None, settings=None):
         super(BindNodeTwin, self).__init__(source, destination, settings)
 
-    def MakeBindBase(self, Name):
+    def make_bind_base(self, Name):
         '''
         Make the unaligned BindGeo and group/parent it up to the driver Source Joint
         Note: the BindNode is returns as a dic where ['Main'] is always the node that
@@ -308,45 +313,45 @@ class BindNodeTwin(BindNodeBase):
         *arg Name :  BaseName of the matchNode
         '''
         #Used for complex setups to separate the Trans/Rot Channels, good when over-keying
-        self.BindNode['Main'] = self.MakeBaseGeo('Diamond', '%s_Rots_BND' % Name)
-        self.BindNode['Root'] = self.MakeBaseGeo('Locator', '%s_Trans_BND' % Name)
+        self.BindNode['Main'] = self.make_base_geo('Diamond', '%s_Rots_BND' % Name)
+        self.BindNode['Root'] = self.make_base_geo('Locator', '%s_Trans_BND' % Name)
         pm.parent(self.BindNode['Main'], self.BindNode['Root'])
         pm.select(self.BindNode['Root'])
 
 
-    def AlignBindNode(self, **kws):
+    def align_bind_node(self, **kws):
         '''
         Overwrite the default behaviour: Align the newly made BindNode as required for this bind
         '''
 
-        parentNode = self.SourceNode.listRelatives(p=True)[0]
+        parentNode = self.sourceNode.listRelatives(p=True)[0]
 
         if parentNode:
             #Parent the BindNode to the Source Driver Node
-            pm.parent(self.BindNode['Root'], self.SourceNode.listRelatives(p=True)[0])
+            pm.parent(self.BindNode['Root'], self.sourceNode.listRelatives(p=True)[0])
         else:
-            pm.parent(self.BindNode['Root'], self.SourceNode)
+            pm.parent(self.BindNode['Root'], self.sourceNode)
 
-        self.BindNode['Main'].rotateOrder.set(self.SourceNode.rotateOrder.get())
-        self.BindNode['Root'].rotateOrder.set(self.DestinationNode.rotateOrder.get())
+        self.BindNode['Main'].rotateOrder.set(self.sourceNode.rotateOrder.get())
+        self.BindNode['Root'].rotateOrder.set(self.destinationNode.rotateOrder.get())
 
         #Positional Alignment
-        if self.Settings.AlignToControlTrans:
-            pm.delete(pm.pointConstraint(self.SourceNode, self.BindNode['Root']))
+        if self.settings.align_to_control_trans:
+            pm.delete(pm.pointConstraint(self.sourceNode, self.BindNode['Root']))
             pm.makeIdentity(self.BindNode['Root'], apply=True, t=1, r=0, s=0)
-            pm.delete(pm.pointConstraint(self.DestinationNode, self.BindNode['Root']))
-        if self.Settings.AlignToSourceTrans:
-            pm.delete(pm.pointConstraint(self.SourceNode, self.BindNode['Root']))
+            pm.delete(pm.pointConstraint(self.destinationNode, self.BindNode['Root']))
+        if self.settings.align_to_source_trans:
+            pm.delete(pm.pointConstraint(self.sourceNode, self.BindNode['Root']))
             pm.makeIdentity(self.BindNode['Root'], apply=True, t=1, r=0, s=0)
 
         #Rotation Alignment
         if parentNode:
-            pm.orientConstraint(self.SourceNode, self.BindNode['Root'])
+            pm.orientConstraint(self.sourceNode, self.BindNode['Root'])
 
-        if self.Settings.AlignToControlRots:
-            pm.delete(pm.orientConstraint(self.DestinationNode, self.BindNode['Main']))
-        if self.Settings.AlignToSourceRots:
-            pm.delete(pm.orientConstraint(self.SourceNode, self.BindNode['Main']))
+        if self.settings.align_to_control_rots:
+            pm.delete(pm.orientConstraint(self.destinationNode, self.BindNode['Main']))
+        if self.settings.align_to_source_rots:
+            pm.delete(pm.orientConstraint(self.sourceNode, self.BindNode['Main']))
 
 
 class BindNodeAim(BindNodeBase):
@@ -358,19 +363,19 @@ class BindNodeAim(BindNodeBase):
     *arg source : Driver Aim Node
     *arg destination : Rig Controller to be Bound
     *arg upVector : UpVector and Parent node for the AimConstraint
-    *arg settings : a BindSettings object
+    *arg settings : a Bindsettings object
     '''
     
-    def __init__(self, source, destination, upVector, settings=None):
+    def __init__(self, source=None, destination=None, upVector=None, settings=None):
         super(BindNodeAim, self).__init__(source, destination, settings)
         #Extra arg passed into the Aim BND. This becomes the parent for the
         #BND nodes as well as the location for the UpVector locator fed into
         #the AimConstraint. The Source in this instance becomes the AimObject
         self.upVectorParent = upVector
-        if self.Settings.AlignToSourceTrans or self.Settings.AlignToSourceRots:
+        if self.settings.align_to_source_trans or self.settings.align_to_source_rots:
             raise UserWarning('AlignToSource settings are NOT VALID for the AimBnd setups')
         
-    def MakeBindBase(self, Name):
+    def make_bind_base(self, Name):
         '''
         Make the unaligned BindGeo and group/parent it up to the driver Source Joint
         Note: the BindNode is returns as a dic where ['Main'] is always the node that
@@ -378,19 +383,19 @@ class BindNodeAim(BindNodeBase):
         *arg Name :  BaseName of the matchNode
         '''
         #Used for complex setups to separate the Trans/Rot Channels, good when over-keying
-        #tempScale=self.Settings.BaseScale
-        self.BindNode['Main'] = self.MakeBaseGeo('Diamond', '%s_Rots_BND' % Name)
-        self.BindNode['Root'] = self.MakeBaseGeo('Locator', '%s_Trans_BND' % Name)
-        self.BindNode['Up'] = self.MakeBaseGeo('Locator', '%s_UpVector_BND' % Name)
-        self.BindNode['AimOffset'] = self.MakeBaseGeo('Locator', '%s_AimOffset_BND' % Name)
+        #tempScale=self.settings.base_scale
+        self.BindNode['Main'] = self.make_base_geo('Diamond', '%s_Rots_BND' % Name)
+        self.BindNode['Root'] = self.make_base_geo('Locator', '%s_Trans_BND' % Name)
+        self.BindNode['Up'] = self.make_base_geo('Locator', '%s_UpVector_BND' % Name)
+        self.BindNode['AimOffset'] = self.make_base_geo('Locator', '%s_AimOffset_BND' % Name)
            
-        #self.Settings.BaseScale=tempScale*0.25
+        #self.settings.base_scale=tempScale*0.25
         pm.parent(self.BindNode['Main'], self.BindNode['Root'])
-        #self.Settings.BaseScale=tempScale
+        #self.settings.base_scale=tempScale
         pm.select(self.BindNode['Root'])
 
 
-    def AlignBindNode(self, **kws):
+    def align_bind_node(self, **kws):
         '''
         Overwrite the default behaviour: Align the newly made BindNode as required for this bind
         '''
@@ -399,33 +404,33 @@ class BindNodeAim(BindNodeBase):
         #Parent the AimLocator Object to the Source node -used to modify the AimPoint
         pm.parent(self.BindNode['Root'], self.upVectorParent)
         pm.parent(self.BindNode['Up'], self.upVectorParent)
-        pm.parent(self.BindNode['AimOffset'], self.SourceNode)
+        pm.parent(self.BindNode['AimOffset'], self.sourceNode)
 
-        #self.BindNode['Root'].scale.set(self.Settings.BaseScale,self.Settings.BaseScale,self.Settings.BaseScale)
-        self.BindNode['Main'].rotateOrder.set(self.SourceNode.rotateOrder.get())
-        self.BindNode['Root'].rotateOrder.set(self.DestinationNode.rotateOrder.get())
+        #self.BindNode['Root'].scale.set(self.settings.base_scale,self.settings.base_scale,self.settings.base_scale)
+        self.BindNode['Main'].rotateOrder.set(self.sourceNode.rotateOrder.get())
+        self.BindNode['Root'].rotateOrder.set(self.destinationNode.rotateOrder.get())
 
         #Aim Alignment
         pm.aimConstraint(self.BindNode['AimOffset'], self.BindNode['Root'], aimVector=(0,1,0),upVector=(0,0,1),\
                              worldUpType="object",worldUpObject=self.BindNode['Up'])
 
         #Positional Alignment
-        pm.delete(pm.pointConstraint(self.SourceNode, self.BindNode['AimOffset']))
+        pm.delete(pm.pointConstraint(self.sourceNode, self.BindNode['AimOffset']))
         pm.makeIdentity(self.BindNode['AimOffset'], apply=True, t=1, r=1, s=0)
         pm.delete(pm.pointConstraint(self.upVectorParent, self.BindNode['Root']))
         pm.makeIdentity(self.BindNode['Root'], apply=True, t=1, r=0, s=0)
         pm.delete(pm.pointConstraint(self.upVectorParent, self.BindNode['Up']))
         pm.makeIdentity(self.BindNode['Up'], apply=True, t=1, r=0, s=0)
-        pm.delete(pm.pointConstraint(self.DestinationNode, self.BindNode['Root']))
+        pm.delete(pm.pointConstraint(self.destinationNode, self.BindNode['Root']))
         
         #Rotate Alignment
-        pm.delete(pm.orientConstraint(self.DestinationNode, self.BindNode['Main']))
+        pm.delete(pm.orientConstraint(self.destinationNode, self.BindNode['Main']))
 
 
 class AnimBinderUI(object):
     def __init__(self):
         self.win = 'AnimBinder'
-        self.settings = BindSettings()
+        self.settings = Bindsettings()
     
     @staticmethod
     def _contactDetails(opentype='email'):
@@ -460,72 +465,72 @@ class AnimBinderUI(object):
         cmds.text(fn="boldLabelFont", label="Advanced Bind Options")
         cmds.separator(h=15, style="none")
         cmds.rowColumnLayout(numberOfColumns=2, cw=((1,150),(2,150)),cs=((1,10)))
-        cmds.checkBox(value=self.settings.BindRots, label="BindRots", ann="Bind only the Rotates of the given Controller", al="left", \
-                      onc=lambda x:self.settings.__setattr__('BindRots', True), \
-                      ofc=lambda x:self.settings.__setattr__('BindRots', False))
-        cmds.checkBox(value=self.settings.BindTrans, label="BindTrans", ann="Bind only the Translates of the given Controller", al="left", \
-                      onc=lambda x:self.settings.__setattr__('BindTrans', True), \
-                      ofc=lambda x:self.settings.__setattr__('BindTrans', False))
+        cmds.checkBox(value=self.settings.bind_rots, label="bind_rots", ann="Bind only the Rotates of the given Controller", al="left", \
+                      onc=lambda x:self.settings.__setattr__('bind_rots', True), \
+                      ofc=lambda x:self.settings.__setattr__('bind_rots', False))
+        cmds.checkBox(value=self.settings.bind_trans, label="bind_trans", ann="Bind only the Translates of the given Controller", al="left", \
+                      onc=lambda x:self.settings.__setattr__('bind_trans', True), \
+                      ofc=lambda x:self.settings.__setattr__('bind_trans', False))
         cmds.checkBox(value=1, label="AlignRots CtrSpace", ann="Force the BindLocator to the position of the Controller", al="left", \
-                      onc=lambda x:self.settings.__setattr__('AlignToControlRots', True), \
-                      ofc=lambda x:self.settings.__setattr__('AlignToSourceRots', True))
+                      onc=lambda x:self.settings.__setattr__('align_to_control_rots', True), \
+                      ofc=lambda x:self.settings.__setattr__('align_to_source_rots', True))
         cmds.checkBox(value=1, label="AlignTrans CtrSpace", ann="Force the BindLocator to the position of the Controller", al="left", \
-                      onc=lambda x:self.settings.__setattr__('AlignToControlTrans', True), \
-                      ofc=lambda x:self.settings.__setattr__('AlignToSourceTrans', True))
-        cmds.checkBox(value=self.settings.ResetRotates, label="Reset Rots Offsets", ann="Reset any Offset during bind, snapping the systems together", al="left", \
-                      onc=lambda x:self.settings.__setattr__('ResetRotates', True), \
-                      ofc=lambda x:self.settings.__setattr__('ResetRotates', False))
-        cmds.checkBox(value=self.settings.ResetTranslates, label="Reset Trans Offsets", ann="Reset any Offset during bind, snapping the systems together", al="left", \
-                      onc=lambda x:self.settings.__setattr__('ResetTranslates', True), \
-                      ofc=lambda x:self.settings.__setattr__('ResetTranslates', False))
+                      onc=lambda x:self.settings.__setattr__('align_to_control_trans', True), \
+                      ofc=lambda x:self.settings.__setattr__('align_to_source_trans', True))
+        cmds.checkBox(value=self.settings.reset_rots, label="Reset Rots Offsets", ann="Reset any Offset during bind, snapping the systems together", al="left", \
+                      onc=lambda x:self.settings.__setattr__('reset_rots', True), \
+                      ofc=lambda x:self.settings.__setattr__('reset_rots', False))
+        cmds.checkBox(value=self.settings.reset_trans, label="Reset Trans Offsets", ann="Reset any Offset during bind, snapping the systems together", al="left", \
+                      onc=lambda x:self.settings.__setattr__('reset_trans', True), \
+                      ofc=lambda x:self.settings.__setattr__('reset_trans', False))
    
         cmds.setParent('..')
         cmds.separator(h=10, style="none")
         cmds.button(label="BasicBind", al="center",\
                     ann="Select the Joint on the driving Skeleton then the Controller to be driven", \
-                    c=lambda x:BindNodeBase(pm.selected()[0], pm.selected()[1], settings=self.settings).AddBinderNode())
+                    c=lambda x:BindNodeBase(cmds.ls(sl=True,l=True)[0], cmds.ls(sl=True,l=True)[1], settings=self.settings).add_binder_node())
         cmds.button(label="ComplexBind", al="center",\
                     ann="Select the Joint on the driving Skeleton then the Controller to be driven", \
-                    c=lambda x:BindNodeTwin(pm.selected()[0], pm.selected()[1], settings=self.settings).AddBinderNode())
+                    c=lambda x:BindNodeTwin(cmds.ls(sl=True,l=True)[0], cmds.ls(sl=True,l=True)[1], settings=self.settings).add_binder_node())
         cmds.button(label="AimerBind", al="center",\
                     ann="Select the Joint on the driving Skeleton to AIM at, then the Controller to be driven, finally a node on the driven skeleton to use as UpVector", \
-                    c=lambda x:BindNodeAim(pm.selected()[0], pm.selected()[1], pm.selected()[2], settings=self.settings).AddBinderNode())
+                    c=lambda x:BindNodeAim(cmds.ls(sl=True,l=True)[0], cmds.ls(sl=True,l=True)[1], cmds.ls(sl=True,l=True)[2], settings=self.settings).add_binder_node())
         cmds.separator(h=15, style="none")
         cmds.rowColumnLayout(numberOfColumns=2,columnWidth=[(1,147),(2,147)])
         
         cmds.button(label="Add BakeMarker", al="center", \
                     ann="Add the BoundCtrl / Bake Marker to the selected nodes", \
-                    c=lambda x:addBindMarkers(cmds.ls(sl=True,l=True)))
+                    c=lambda x:add_bind_markers(cmds.ls(sl=True,l=True)))
         cmds.button(label="remove BakeMarker", al="center", \
                     ann="Remove the BoundCtrl / Bake Marker from the selected nodes", \
                     c=lambda x:removeBindMarker(cmds.ls(sl=True,l=True)))
         
         cmds.button(label="Select BindNodes", al="center", \
                     ann="Select Top Group Node of the Source Binder", \
-                    c=lambda x:pm.select(GetBindNodes(cmds.ls(sl=True,l=True))))
+                    c=lambda x:pm.select(get_bind_nodes(cmds.ls(sl=True,l=True))))
         cmds.button(label="Select BoundControls", al="center", \
                     ann="Select Top Group Node of the Bound Rig", \
-                    c=lambda x:pm.select(GetBoundControls(cmds.ls(sl=True,l=True))))
+                    c=lambda x:pm.select(get_bound_controls(cmds.ls(sl=True,l=True))))
         cmds.setParent('..')
         cmds.rowColumnLayout(numberOfColumns=2,columnWidth=[(1,200),(2,74)], columnSpacing=[(2,5)])
         cmds.button(label="Bake Binder", al="center", \
                     ann="Select Top Group Node of the Bound Rig", \
-                    c=lambda x:BakeBinderData(cmds.ls(sl=True,l=True), self.settings.BakeDebug))
-        cmds.checkBox(value=self.settings.BakeDebug, label="Debug View", ann="Keep viewport active to observe the baking process", al="left", \
-                      onc=lambda x:self.settings.__setattr__('BakeDebug', True), \
-                      ofc=lambda x:self.settings.__setattr__('BakeDebug', False))
+                    c=lambda x:bake_binder_data(cmds.ls(sl=True,l=True), self.settings.bake_debug))
+        cmds.checkBox(value=self.settings.bake_debug, label="Debug View", ann="Keep viewport active to observe the baking process", al="left", \
+                      onc=lambda x:self.settings.__setattr__('bake_debug', True), \
+                      ofc=lambda x:self.settings.__setattr__('bake_debug', False))
         cmds.setParent('..')
         cmds.separator(h=10, style="none")
         cmds.button(label="Link Skeleton Hierarchies - Direct Connect", al="center", \
                     ann="Select Root joints of the source and destination skeletons to be connected - connect via attrs", \
-                    c=lambda x:BindSkeletons(cmds.ls(sl=True)[0], cmds.ls(sl=True)[1], method='connect'))
+                    c=lambda x:bind_skeletons(cmds.ls(sl=True)[0], cmds.ls(sl=True)[1], method='connect'))
         cmds.button(label="Link Skeleton Hierarchies - Constraints", al="center", \
                     ann="Select Root joints of the source and destination skeletons to be connected - connect via parentConstraints", \
-                    c=lambda x:BindSkeletons(cmds.ls(sl=True)[0], cmds.ls(sl=True)[1], method='constrain'))
+                    c=lambda x:bind_skeletons(cmds.ls(sl=True)[0], cmds.ls(sl=True)[1], method='constrain'))
         cmds.separator(h=10, style="none")
         cmds.button(label="MakeStabilizer", al="center", \
                     ann="Select the nodes you want to extract the motion data from", \
-                    c=lambda x:MakeStabilizedNode())
+                    c=lambda x:make_stabilized_node())
 
         cmds.separator(h=20, style="none")
         cmds.iconTextButton(style='iconOnly', bgc=(0.7,0,0), image1='Rocket9_buttonStrap2.bmp',
@@ -538,7 +543,7 @@ class AnimBinderUI(object):
         cls()._UI()
         
 
-def GetBindNodes(rootNode=None):
+def get_bind_nodes(rootNode=None):
     '''
     From selected root find all BindNodes via the marker attribute 'BindNode'
     Note we're not casting to PyNodes here for speed here
@@ -548,7 +553,7 @@ def GetBindNodes(rootNode=None):
     return [node for node in cmds.listRelatives(rootNode, ad=True, f=True) \
             if cmds.attributeQuery(BNDNODE_MARKER, exists=True, node=node)]
 
-def GetBoundControls(rootNode=None):
+def get_bound_controls(rootNode=None):
     '''
     From selected root find all BoundControllers via the marker attribute 'BoundCtr'
     Note we're not casting to PyNodes here for speed here
@@ -558,18 +563,18 @@ def GetBoundControls(rootNode=None):
     return [node for node in cmds.listRelatives(rootNode, ad=True, f=True)\
              if cmds.attributeQuery(BAKE_MARKER, exists=True, node=node)]
 
-def BakeBinderData(rootNode=None, debugView=False, ignoreInFilter=[]):
+def bake_binder_data(rootNode=None, debugView=False, ignoreInFilter=[]):
     '''
     From a given Root Node search all children for the 'BoundCtr' attr marker. If none
     were found then search for the BindNode attr and use the message links to walk to
     the matching Controller.
     Those found are then baked out and the marker attribute is deleted
     '''
-    BoundCtrls = GetBoundControls(rootNode)
+    BoundCtrls = get_bound_controls(rootNode)
     
     #Found no Ctrls, try and walk the message from the BndNodes
     if not BoundCtrls:
-        BndNodes = GetBindNodes()
+        BndNodes = get_bind_nodes()
         for node in BndNodes:
             cons=cmds.listConnections('%s.%s' % (node,BNDNODE_MARKER))
             if cons:
@@ -611,7 +616,7 @@ def BakeBinderData(rootNode=None, debugView=False, ignoreInFilter=[]):
     return True
 
     
-def MatchGivenHierarchys(source, dest):
+def match_given_hierarchys(source, dest):
     '''
     Simple node name matching that strips any DAG path and namespaces prior to matching
     '''
@@ -629,7 +634,7 @@ def MatchGivenHierarchys(source, dest):
     return nameMatched
             
             
-def BindSkeletons(source, dest, method='connect'):
+def bind_skeletons(source, dest, method='connect'):
     '''
     From 2 given root joints search through each hierarchy for child joints, match
     them based on node name, then connect their trans/rots directly, or
@@ -645,7 +650,7 @@ def BindSkeletons(source, dest, method='connect'):
         
     attrs = ['rotateX', 'rotateY', 'rotateZ', 'translateX', 'translateY', 'translateZ']
      
-    for sJnt, dJnt in MatchGivenHierarchys(sourceJoints, destJoints):
+    for sJnt, dJnt in match_given_hierarchys(sourceJoints, destJoints):
         if method == 'connect':
             for attr in attrs:
                 try:
@@ -659,7 +664,7 @@ def BindSkeletons(source, dest, method='connect'):
                 pass
     
 
-def MakeStabilizedNode(nodeName=None, centered=True):
+def make_stabilized_node(nodeName=None, centered=True):
     '''
     Very simple proc to generate a Stabilized node for
     raw MoCap tracking purposes... First selected node
@@ -694,7 +699,7 @@ def MakeStabilizedNode(nodeName=None, centered=True):
     return curve
 
 
-def addBindMarkers(ctrls=None, *args):
+def add_bind_markers(ctrls=None, *args):
     '''
     add the bind markers to nodes, these dictate what gets baked
     '''
@@ -702,7 +707,7 @@ def addBindMarkers(ctrls=None, *args):
         ctrls=cmds.ls(sl=True,l=True)
     for ctr in ctrls:
         print pm.PyNode(ctr)
-        BindNodeBase.AddBindMarkers(pm.PyNode(ctr))
+        BindNodeBase.add_bind_markers(pm.PyNode(ctr))
         
 def removeBindMarker(ctrls=None, *args):
     '''

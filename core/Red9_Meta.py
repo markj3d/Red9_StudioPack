@@ -747,9 +747,15 @@ def getMetaRigs(mInstances='MetaRig', mClassGrps=['MetaRig']):
     '''
     mRigs=getMetaNodes(mInstances=mInstances, mClassGrps=mClassGrps)
     if mRigs:
+        # main return, instances of MetaRig with mClassGrp also set
         return mRigs
-    else:
+    mRigs=getMetaNodes(mTypes=mInstances)
+    if mRigs:
+        # secondary try, pure MetaRigs
         return getMetaNodes(mTypes=mInstances)
+    else:
+        # final try, mInstances of MetaRig
+        return getMetaNodes(mInstances=mInstances)
     
 def getUnregisteredMetaNodes():
     '''
