@@ -122,7 +122,7 @@ class Test_PoseDataMeta():
         assert not self.poseData.metaRig
         self.poseData.setMetaRig('L_Wrist_Ctrl')
         assert r9Meta.isMetaNode(self.poseData.metaRig)
-        assert self.poseData.metaPose==False
+        assert self.poseData.metaPose==True  # this is now part of the metaPose property,
         self.poseData.metaPose=True
         assert self.poseData.settings.metaRig==True
         
