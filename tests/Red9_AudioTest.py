@@ -181,6 +181,13 @@ class Test_timecode_converts(object):
         assert f==timecode
         
         
+    def test_timecode_formatter(self):
+        '''
+        Validate the format inspection for timecode in Pro
+        '''
+        pass
+            
+        
     
 
         
