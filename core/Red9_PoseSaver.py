@@ -461,24 +461,11 @@ class DataMap(object):
         if not type(nodes)==list:
             nodes=[nodes]  # cast to list for consistency
             
-        if self.metaPose:
-            self.setMetaRig(nodes[0])
-            
         if self.filepath and not os.path.exists(self.filepath):
             raise StandardError('Given Path does not Exist')
-                
-        if self.filepath and self.hasFolderOverload():  # and useFilter:
-            self.nodesToLoad = self.getNodesFromFolderConfig(nodes, mode='load')
-        else:
-            self.nodesToLoad=self.getNodes(nodes)
-        if not self.nodesToLoad:
-            raise StandardError('Nothing selected or returned by the filter to load the pose onto')
-        
-        if self.filepath:
-            self._readPose(self.filepath)
-            log.info('Pose Read Successfully from : %s' % self.filepath)
-
+         
         if self.metaPose:
+            self.setMetaRig(nodes[0])
             print 'infoDict : ', self.infoDict
             print 'metaRig : ', self.metaRig
             if 'metaPose' in self.infoDict and self.metaRig:
@@ -489,6 +476,17 @@ class DataMap(object):
                     self.matchMethod = 'metaData'
             else:
                 log.debug('Warning, trying to load a NON metaPose to a MRig - switching to NameMatching')
+            
+        if self.filepath and self.hasFolderOverload():  # and useFilter:
+            self.nodesToLoad = self.getNodesFromFolderConfig(nodes, mode='load')
+        else:
+            self.nodesToLoad=self.getNodes(nodes)
+        if not self.nodesToLoad:
+            raise StandardError('Nothing selected or returned by the filter to load the pose onto')
+        
+        if self.filepath:
+            self._readPose(self.filepath)
+            log.info('Pose Read Successfully from : %s' % self.filepath)
         
         #fill the skip list, these attrs will be totally ignored by the code
         self.skipAttrs=self.getSkippedAttrs(nodes[0])
