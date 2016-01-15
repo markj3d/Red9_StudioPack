@@ -3194,21 +3194,33 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
 
         #Now run the snap against the reference node we've just made
         #==========================================================
-        for time in timeRange:
-            #Switched to using the Commands time query to stop  the viewport updates
-            cmds.currentTime(time, e=True, u=False)
-            cmds.SnapTransforms(source=snapRef, destination=destObj, timeEnabled=True, snapTranslates=trans, snapRotates=rots)
-            try:
-                if trans:
-                    cmds.setKeyframe(destObj, at='translate')
-            except:
-                log.debug('failed to set translate key on %s' % destObj)
-            try:
-                if rots:
-                    cmds.setKeyframe(destObj, at='rotate')
-            except:
-                log.debug('failed to set rotate key on %s' % destObj)
-                      
+        
+        progressBar = r9General.ProgressBarContext(time[1]-time[0])
+        progressBar.setStep(step)
+        count=0
+                    
+        with progressBar:
+            for time in timeRange:
+                if progressBar.isCanceled():
+                    cancelled =True
+                    break
+
+                #Switched to using the Commands time query to stop  the viewport updates
+                cmds.currentTime(time, e=True, u=False)
+                cmds.SnapTransforms(source=snapRef, destination=destObj, timeEnabled=True, snapTranslates=trans, snapRotates=rots)
+                try:
+                    if trans:
+                        cmds.setKeyframe(destObj, at='translate')
+                except:
+                    log.debug('failed to set translate key on %s' % destObj)
+                try:
+                    if rots:
+                        cmds.setKeyframe(destObj, at='rotate')
+                except:
+                    log.debug('failed to set rotate key on %s' % destObj)
+                progressBar.setProgress(count)
+                count+=step
+                
         cmds.delete(deleteMe)
         cmds.autoKeyframe(state=autokeyState)
         cmds.select(nodes)
