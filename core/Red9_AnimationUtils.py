@@ -3162,6 +3162,7 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
             cmds.currentTime(timeRange[0], e=True)  # ensure that the initial time is updated
         else:
             timeRange = [cmds.currentTime(q=True) + step]
+            time=(timeRange[0], timeRange[0]+step)  # purely for the progressBar
         log.debug('timeRange : %s', timeRange)
         
         if not nodes:
@@ -3194,7 +3195,7 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
 
         #Now run the snap against the reference node we've just made
         #==========================================================
-        
+
         progressBar = r9General.ProgressBarContext(time[1]-time[0])
         progressBar.setStep(step)
         count=0
