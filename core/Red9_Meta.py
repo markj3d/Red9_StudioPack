@@ -2536,12 +2536,16 @@ class MetaClass(object):
             return mChild
         
     @r9General.Timer
-    def getChildMetaNodes(self, walk=False, mAttrs=None, **kws):
+    def getChildMetaNodes(self, walk=False, mAttrs=None, stepover=False, **kws):
         '''
         Find any connected Child MetaNodes to this mNode.
         
         :param walk: walk the connected network and return ALL children conntected in the tree 
         :param mAttrs: only return connected nodes that pass the given attribute filter 
+        :param stepover: if you're passing in 'mTypes' or 'mInstances' flags then this dictates if 
+            we continue to walk down a tree if it's parent didn't match the given type, default is False
+            which will abort a tree who's parent didn't match. With stepover=True we siomply stepover
+            that node and continue down all child nodes
         
         .. note:: 
             mAttrs is only searching attrs on the mNodes themselves, not all children
@@ -2552,19 +2556,15 @@ class MetaClass(object):
             Because the **kws are passed directly to the getConnectedMetaNods func, it will
             also take ALL of that functions **kws functionality in the initial search:
             source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType='mClass'
-        
-        :TODO: allow this to walk over nodes, at the moment if the direct child isn't of the correct 
-            type (if using the mTypes flag) then the walk will stop. This should continue over non matching 
-            nodes down the hierarchy so all children are tested.
-            !!!!!!!!!!!!!! THIS NEEDS FIXING ASAP !!!!!!!!!!!!!! or at least a flag to 'skip_over_unmatched'
         '''
-
         if not walk:
             return getConnectedMetaNodes(self.mNode, source=False, destination=True, mAttrs=mAttrs, dataType='mClass', **kws)
         else:
             metaNodes=[]
-            children=getConnectedMetaNodes(self.mNode, source=False, destination=True, mAttrs=mAttrs, dataType='unicode', **kws)
- 
+            if stepover:
+                children=getConnectedMetaNodes(self.mNode, source=False, destination=True, mAttrs=mAttrs, dataType='unicode')  #, **kws)
+            else:
+                children=getConnectedMetaNodes(self.mNode, source=False, destination=True, mAttrs=mAttrs, dataType='unicode', **kws)
             if children:
                 runaways=0
                 depth=0
@@ -2583,7 +2583,11 @@ class MetaClass(object):
                         children.remove(child)
                         processed.append(mNode)
                         #log.info( 'connections too : %s' % mNode)
-                        extendedChildren.extend(getConnectedMetaNodes(mNode,source=False,destination=True,mAttrs=mAttrs, dataType='unicode', **kws))
+                        if stepover:
+                            # if we're stepping over unmatched children then we remove the kws and deal with the match later
+                            extendedChildren.extend(getConnectedMetaNodes(mNode,source=False,destination=True,mAttrs=mAttrs, dataType='unicode'))  # , **kws))
+                        else:
+                            extendedChildren.extend(getConnectedMetaNodes(mNode,source=False,destination=True,mAttrs=mAttrs, dataType='unicode', **kws))
                         #log.info('left to process : %s' % ','.join([c.mNode for c in children]))
                         if not children:
                             if extendedChildren:
@@ -2593,7 +2597,24 @@ class MetaClass(object):
                                 extendedChildren=[]
                                 depth+=1
                         runaways+=1
-                return [MetaClass(node) for node in metaNodes]
+                childmNodes=[MetaClass(node) for node in metaNodes]
+                typematched=[]
+                if stepover:
+                    if 'mTypes' in kws:
+                        for node in childmNodes:
+                            if isinstance(node, RED9_META_REGISTERY[mTypesToRegistryKey(kws['mTypes'])[0]]):
+                                log.info('getChildMetaNodes : mTypes matched : %s' % node)
+                                if not node in typematched:
+                                    typematched.append(node)
+                    if 'mInstances' in kws:
+                        for node in childmNodes:
+                            if issubclass(node, RED9_META_REGISTERY[mTypesToRegistryKey(kws['mTypes'])[0]]):
+                                log.info('getChildMetaNodes : mInstances matched : %s' % node)
+                                if not node in typematched:
+                                    typematched.append(node)
+                    return typematched
+                else:
+                    return childmNodes
         return []
     
     def getParentMetaNode(self, **kws):
