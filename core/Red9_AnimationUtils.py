@@ -4381,9 +4381,9 @@ class MirrorSetup(object):
         cmds.text(l=LANGUAGE_MAP._Mirror_Setup_.side)
         cmds.rowColumnLayout(nc=3, columnWidth=[(1, 90), (2, 90), (3, 90)])
         self.uircbMirrorSide = cmds.radioCollection('mirrorSide')
-        cmds.radioButton('Right', label=LANGUAGE_MAP._Generic_.right)
-        cmds.radioButton('Centre', label=LANGUAGE_MAP._Generic_.centre)
-        cmds.radioButton('Left', label=LANGUAGE_MAP._Generic_.left)
+        cmds.radioButton('Right', label=LANGUAGE_MAP._Generic_.right, cc=self.__uicb_setupIndex)
+        cmds.radioButton('Centre', label=LANGUAGE_MAP._Generic_.centre, cc=self.__uicb_setupIndex)
+        cmds.radioButton('Left', label=LANGUAGE_MAP._Generic_.left, cc=self.__uicb_setupIndex)
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 110), (2, 60)])
@@ -4445,6 +4445,23 @@ class MirrorSetup(object):
         self.__uicb_setDefaults('default')
         cmds.window(self.win, e=True, widthHeight=(280, 410))
         cmds.radioCollection('mirrorSide', e=True, select='Centre')
+        self.__uicb_setupIndex()
+
+    def __uicb_setupIndex(self, *args):
+        '''
+        New for MetaRig: If the node selected is part of an MRig when we switch 
+        the side we automatically bump the index counter to the next available index slot ;)
+        '''
+        nodes=cmds.ls(sl=True,l=True)
+        if nodes:
+            try:
+                mRig=r9Meta.getConnectedMetaSystemRoot(nodes[0],mInstances=r9Meta.MetaRig)
+                if mRig:
+                    index=mRig.getMirror_nextSlot(side=cmds.radioCollection('mirrorSide', q=True, select=True))
+                    log.info('Setting up Next Available Index slot from connected MetaRig systems mirrorNodes')
+                    cmds.intField('ifg_mirrorIndex', e=True, v=index)
+            except:
+                log.debug('No MetaRig systems found to debug index lists from')
 
     def __uicb_getMirrorIDsFromNode(self):
         '''
@@ -4468,7 +4485,6 @@ class MirrorSetup(object):
             if not axis:
                 cmds.checkBox('setDirectCopy', e=True, v=True)
                 return
-            
         if axis:
             self.__uicb_setDefaults('custom')
             for a in axis:
