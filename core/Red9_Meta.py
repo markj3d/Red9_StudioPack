@@ -745,13 +745,19 @@ def getMetaRigs(mInstances='MetaRig', mClassGrps=['MetaRig']):
     cope with people subclassing, then we clamp the search to the Root MetaRig
     using the mClassGrps variable. This probably will expand as it's tested
     '''
+    # first try and find the Red9PRO production rig system
+    proRigs=getMetaNodes(mInstances='Red9_MetaRig', mClassGrps=mClassGrps)
+    if proRigs:
+        return proRigs
+    
+    # not found, lets widen to all instances of MetaRig with mClassGrp also set
     mRigs=getMetaNodes(mInstances=mInstances, mClassGrps=mClassGrps)
     if mRigs:
-        # main return, instances of MetaRig with mClassGrp also set
         return mRigs
+    
+    # ok widen again to all instances of MetaRig, ignoring the mClassGroup
     mRigs=getMetaNodes(mTypes=mInstances)
     if mRigs:
-        # secondary try, pure MetaRigs
         return getMetaNodes(mTypes=mInstances)
     else:
         # final try, mInstances of MetaRig
