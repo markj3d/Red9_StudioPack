@@ -4457,11 +4457,12 @@ class MirrorSetup(object):
             try:
                 mRig=r9Meta.getConnectedMetaSystemRoot(nodes[0],mInstances=r9Meta.MetaRig)
                 if mRig:
-                    index=mRig.getMirror_nextSlot(side=cmds.radioCollection('mirrorSide', q=True, select=True))
+                    index=mRig.getMirror_nextSlot(side=cmds.radioCollection('mirrorSide', q=True, select=True), forceRefresh=True)
                     log.info('Setting up Next Available Index slot from connected MetaRig systems mirrorNodes')
                     cmds.intField('ifg_mirrorIndex', e=True, v=index)
             except:
                 log.debug('No MetaRig systems found to debug index lists from')
+                cmds.intField('ifg_mirrorIndex', e=True, v=1)
 
     def __uicb_getMirrorIDsFromNode(self):
         '''
