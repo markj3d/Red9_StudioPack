@@ -42,6 +42,7 @@ import sys
 import os
 import uuid
 
+
 import Red9.startup.setup as r9Setup
 import Red9_General as r9General
 import Red9_CoreUtils as r9Core
@@ -745,10 +746,10 @@ def getMetaRigs(mInstances='MetaRig', mClassGrps=['MetaRig']):
     cope with people subclassing, then we clamp the search to the Root MetaRig
     using the mClassGrps variable. This probably will expand as it's tested
     '''
-    # first try and find the Red9PRO production rig system
-    proRigs=getMetaNodes(mInstances='Red9_MetaRig', mClassGrps=mClassGrps)
-    if proRigs:
-        return proRigs
+    # try the Red9 Production Rig nodes first
+    mRigs=getMetaNodes(mInstances=['Red9_MetaRig', 'MetaRig'], mClassGrps=['Pro_BodyRig','Pro_FacialUI','MetaRig'])
+    if mRigs:
+        return mRigs
     
     # not found, lets widen to all instances of MetaRig with mClassGrp also set
     mRigs=getMetaNodes(mInstances=mInstances, mClassGrps=mClassGrps)
@@ -1089,6 +1090,7 @@ class MClassNodeUI(object):
         cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.sort_by_nodename, command=partial(self.fillScroll,'byName'))
         cmds.menuItem(divider=True)
         cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.class_all_registered, command=partial(self.fillScroll,'byName'))
+        cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.class_print_inheritance, command=self.__uiCB_printInheritance)
         cmds.menuItem(divider=True)
         cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.pro_connect_node, command=self.__uiCB_connectNode)
         cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.pro_disconnect_node, command=self.__uiCB_disconnectNode)
@@ -1284,6 +1286,16 @@ class MClassNodeUI(object):
             self.cachedforFilter=list(self.mNodes)  # cache the results so that the filter by name is fast!
             self.__fillScrollEntries()
  
+    def __uiCB_printInheritance(self,*args):
+        '''
+        show the inheritance of the given MClass
+        '''
+        indexes=cmds.textScrollList('slMetaNodeList',q=True,sii=True)
+        if len(indexes)==1:
+            mNode=MetaClass(self.mNodes[indexes[0]-1])
+            for c in mNode.getInheritanceMap():
+                print 'Class Inheritance : ', c
+        
     def __uiCB_connectNode(self, *args):
         '''
         PRO PACK : Given a single selected mNode from the UI and a single selected MAYA node, run
@@ -1636,7 +1648,14 @@ class MetaClass(object):
                 return object.__getattribute__(self, "_MObject")
             except StandardError,error:
                 raise StandardError(error)
-        
+    
+    def getInheritanceMap(self):
+        '''
+        return the inheritance mapping of this class instance
+        '''
+        import inspect
+        return inspect.getmro(self.__class__)
+    
     @property
     def lockState(self):
         '''
@@ -2608,13 +2627,13 @@ class MetaClass(object):
                 if stepover:
                     if 'mTypes' in kws:
                         for node in childmNodes:
-                            if isinstance(node, RED9_META_REGISTERY[mTypesToRegistryKey(kws['mTypes'])[0]]):
+                            if isMetaNodeInherited(node, kws['mTypes']):
                                 log.info('getChildMetaNodes : mTypes matched : %s' % node)
                                 if not node in typematched:
                                     typematched.append(node)
                     if 'mInstances' in kws:
                         for node in childmNodes:
-                            if issubclass(node, RED9_META_REGISTERY[mTypesToRegistryKey(kws['mTypes'])[0]]):
+                            if isMetaNodeInherited(node, kws['mInstances']):
                                 log.info('getChildMetaNodes : mInstances matched : %s' % node)
                                 if not node in typematched:
                                     typematched.append(node)

@@ -571,6 +571,7 @@ class _MetaNodeUI_(object):
     sort_by_classname = 'SortBy : ClassName'
     sort_by_nodename = 'SortBy : NodeName'
     class_all_registered = 'Class : All Registered'
+    class_print_inheritance = 'Class : Print Inheritance Map'
     pro_connect_node = 'Pro: Connect Node to System'
     pro_disconnect_node = 'Pro: Disconnect Nodes from System'
     pro_addchild_metanode = 'Pro: Add Child MetaNode System'

@@ -398,7 +398,7 @@ def menuSetup(parent='MayaWindow'):
         cmds.menuItem(divider=True,p='redNineDebuggerItem')
         cmds.menuItem('redNineReloadItem',l=LANGUAGE_MAP._MainMenus_.systems_reload, p='redNineDebuggerItem',
                       ann=LANGUAGE_MAP._MainMenus_.systems_reload_ann,
-                      echoCommand=True, c=reload_Red9)  # "Red9.core._reload()")
+                      echoCommand=True, c=reload_Red9)
         cmds.menuItem(divider=True,p='redNineDebuggerItem')
         for language in get_language_maps():
             cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.language+" : %s" % language, c=partial(set_language,language),p='redNineDebuggerItem')
@@ -874,7 +874,19 @@ def boot_client_projects():
         log.info('Booting Client Module : %s' % client)
         cmds.evalDeferred("import Red9_ClientCore.%s" % client, lp=True)  # Unresolved Import
         
-
+def __reload_clients__():
+    '''
+    used in the main reload_Red9 call below to ensure that
+    the reload sequence is correct for the MetaData registry
+    '''
+    for client in get_client_modules():
+        try:
+            path='Red9_ClientCore.%s' % client
+            cmds.evalDeferred("import %s;%s._reload()" % (path,path), lp=True)  # Unresolved Import
+            log.info('Reloaded Client : "%s"' % path)
+        except:
+            log.info('Client : "%s" : does not have a _reload func internally' % path)
+        
 
 # -----------------------------------------------------------------------------------------
 # BOOT CALL ---
@@ -957,6 +969,10 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
            
            
 def reload_Red9(*args):
+    '''
+    careful reload of the systems to maintain the integrity of the 
+    MetaData registry setups for pro_pack, client_core and internals
+    '''
     #global LANGUAGE_MAP
     #reload(LANGUAGE_MAP)
     import Red9.core
@@ -965,6 +981,13 @@ def reload_Red9(*args):
     if has_pro_pack():
         import Red9.pro_pack.core
         Red9.pro_pack.core._reload()
+        
+    if has_internal_systems():
+        import Red9_Internals
+        Red9_Internals._reload()
+
+    if has_client_modules():
+        __reload_clients__()
 
 
 PRO_PACK_STUBS=pro_pack_missing_stub
