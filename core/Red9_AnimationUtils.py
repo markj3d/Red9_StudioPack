@@ -3151,18 +3151,19 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
         #can't use the anim context manager here as that resets the currentTime
         autokeyState = cmds.autoKeyframe(query=True, state=True)
         cmds.autoKeyframe(state=False)
-        
+        duration=step
         try:
             checkRunTimeCmds()
         except StandardError, error:
             raise StandardError(error)
         
         if time:
-            timeRange = timeLineRangeProcess(time[0], time[1], step, incEnds=True)
+            timeRange = timeLineRangeProcess(time[0], time[1], step, incEnds=True)  # this is a LIST of frames
             cmds.currentTime(timeRange[0], e=True)  # ensure that the initial time is updated
+            duration=time[1]-time[0]
         else:
-            timeRange = [cmds.currentTime(q=True) + step]
-            time=(timeRange[0], timeRange[0]+step)  # purely for the progressBar
+            timeRange = [cmds.currentTime(q=True) + step]  # no time specified so move forward by the step
+            duration=1
         log.debug('timeRange : %s', timeRange)
         
         if not nodes:
@@ -3196,14 +3197,13 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
         #Now run the snap against the reference node we've just made
         #==========================================================
 
-        progressBar = r9General.ProgressBarContext(time[1]-time[0])
+        progressBar = r9General.ProgressBarContext(duration)
         progressBar.setStep(step)
         count=0
                     
         with progressBar:
             for time in timeRange:
                 if progressBar.isCanceled():
-                    cancelled =True
                     break
 
                 #Switched to using the Commands time query to stop  the viewport updates
