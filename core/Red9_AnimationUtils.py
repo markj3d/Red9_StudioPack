@@ -3228,7 +3228,7 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
         
         
     def bindNodes(self, nodes=None, attributes=None, filterSettings=None,
-                  bindMethod='connect', matchMethod=None, **kws):
+                  bindMethod='connect', matchMethod=None, mo=True, **kws):
         '''
         bindNodes is a Hi-Level wrapper function to bind animation data between
         filtered nodes, either in hierarchies or just selected pairs.
@@ -3241,8 +3241,9 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
             Note that this is also now bound to the class instance and if not passed in
             we use this classes instance of filterSettings cls.settings
         :param attributes: Only copy the given attributes[]
-        :param bindMethod: method of binding the data
+        :param bindMethod: method of binding the data, supported : connect, constraint, constraintMO
         :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names
+        :param mo: passed to the constraint call if chosen as the maintainOffset flag
         #TODO: expose this to the UI's!!!!
         '''
         
@@ -3251,6 +3252,7 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
             filterSettings=self.settings
         if not matchMethod:
             matchMethod=self.matchMethod
+
             
         log.debug('bindNodes params : nodes=%s : attributes=%s : filterSettings=%s : matchMethod=%s' \
                    % (nodes, attributes, filterSettings, matchMethod))
@@ -3275,8 +3277,10 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
                             except:
                                 log.info('bindNode from %s to>> %s' %(r9Core.nodeNameStrip(src),
                                                                       r9Core.nodeNameStrip(dest)))
-                    if bindMethod=='constraint':
-                        cmds.parentConstraint(src, dest, mo=True)
+                    elif bindMethod=='constraint':
+                        log.info('BindNode constrain from %s to>> %s' % (r9Core.nodeNameStrip(src),
+                                                                          r9Core.nodeNameStrip(dest)))
+                        cmds.parentConstraint(src, dest, maintainOffset=mo)
                 except:
                     pass
         else:
