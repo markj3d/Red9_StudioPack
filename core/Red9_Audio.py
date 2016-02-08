@@ -947,9 +947,9 @@ class AudioToolsWrap(object):
             else:
                 raise IOError("selected Audio node is NOT a Bwav so can't be used as reference")
         else:
-            selectedNode = cmds.ls(sl=True)
+            selectedNode = cmds.ls(sl=True,l=True)
             if len(selectedNode)==1:
-                relativeTC = self.pro_audio.Timecode().getTimecode_from_node(selectedNode[0])
+                relativeTC = self.pro_audio.Timecode(selectedNode[0]).getTimecode_from_node()
                 actualframe = cmds.currentTime(q=True)
                 self.__cached_tc_offset = actualframe - self.pro_audio.timecode_to_frame(relativeTC)
                 cmds.text('bwavRefTC', edit=True,
