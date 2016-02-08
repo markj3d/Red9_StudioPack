@@ -2628,13 +2628,13 @@ class MetaClass(object):
                     if 'mTypes' in kws:
                         for node in childmNodes:
                             if isMetaNodeInherited(node, kws['mTypes']):
-                                log.info('getChildMetaNodes : mTypes matched : %s' % node)
+                                log.debug('getChildMetaNodes : mTypes matched : %s' % node)
                                 if not node in typematched:
                                     typematched.append(node)
                     if 'mInstances' in kws:
                         for node in childmNodes:
                             if isMetaNodeInherited(node, kws['mInstances']):
-                                log.info('getChildMetaNodes : mInstances matched : %s' % node)
+                                log.debug('getChildMetaNodes : mInstances matched : %s' % node)
                                 if not node in typematched:
                                     typematched.append(node)
                     return typematched
