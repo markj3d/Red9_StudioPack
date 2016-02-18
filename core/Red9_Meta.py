@@ -2294,7 +2294,7 @@ class MetaClass(object):
         return False
         
     @nodeLockManager
-    def connectChildren(self, nodes, attr, srcAttr=None, cleanCurrent=False, force=True, allowIncest=False):
+    def connectChildren(self, nodes, attr, srcAttr=None, cleanCurrent=False, force=True, allowIncest=False, srcSimple=False):
         '''
         Fast method of connecting multiple nodes to the mNode via a message attr link.
         This call generates a MULTI message on both sides of the connection and is designed
@@ -2312,6 +2312,9 @@ class MetaClass(object):
         :param allowIncest: Over-ride the default behaviour when dealing with child nodes that are
                         standard Maya Nodes not metaNodes. Default in this case is to NOT index manage
                         the plugs, this flag overloads that, allow multiple parents.
+        :param srcSimple: By default when we wire children we expect arrays so both plugs on the src and des 
+            side of teh connection are index managed. This flag stops the index and uses a single simple wire on the
+            srcAttr side of the plug ( the child )
         TODO: check the attr type, if attr exists and is a non-multi messgae then don't run the indexBlock
         '''
         
@@ -2350,8 +2353,12 @@ class MetaClass(object):
                             log.debug('connecting MetaData nodes via indexes :  %s.%s >> %s.%s' % (self.mNode,attr,node,srcAttr))
                         elif allowIncest:
                             log.debug('connecting Standard Maya nodes via indexes : %s.%s >> %s.%s' % (self.mNode,attr,node,srcAttr))
-                        cmds.connectAttr('%s.%s[%i]' % (self.mNode, attr, self._getNextArrayIndex(self.mNode,attr)),
+                        if not srcSimple:
+                            cmds.connectAttr('%s.%s[%i]' % (self.mNode, attr, self._getNextArrayIndex(self.mNode,attr)),
                                      '%s.%s[%i]' % (node, srcAttr, self._getNextArrayIndex(node,srcAttr)), f=force)
+                        else:
+                            cmds.connectAttr('%s.%s[%i]' % (self.mNode, attr, self._getNextArrayIndex(self.mNode,attr)),
+                                     '%s.%s' % (node, srcAttr), f=force)
                     else:
                         log.debug('connecting %s.%s >> %s.%s' % (self.mNode,attr,node,srcAttr))
                         cmds.connectAttr('%s.%s' % (self.mNode,attr),'%s.%s' % (node,srcAttr), f=force)
