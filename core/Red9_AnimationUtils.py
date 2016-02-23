@@ -365,6 +365,9 @@ def animRangeFromNodes(nodes, setTimeline=True):
             minBounds=min[0]
         if not maxBounds or max[0]>maxBounds:
             maxBounds=max[0]
+    if not minBounds and maxBounds:
+        minBounds=0
+        maxBounds=1
     if setTimeline:
         cmds.playbackOptions(min=minBounds,max=maxBounds)
     return minBounds,maxBounds
