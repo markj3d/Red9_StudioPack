@@ -214,12 +214,25 @@ def filterListByString(input_list, filter_string, matchcase=False):
     
     if not matchcase:
         filter_string=filter_string.upper()
-    filterBy=[f for f in filter_string.replace(' ','').rstrip(',').split(',') if f]
+#     filterBy=[f for f in filter_string.replace(' ','').rstrip(',').split(',') if f]
     filteredList=[]
+    
+    filterBy=[f for f in filter_string.rstrip(',').split(',') if f]
+    pattern=[]
+    for n in filterBy:
+        if ' ' in n:
+            pattern.append('(%s)' % n.replace(' ',')+.*('))
+        else:
+            pattern.append(n)
+    filterPattern='|'.join(n for n in pattern)
+    log.info('new : %s' % filterPattern)
+    
+    regexFilter=re.compile('('+filterPattern+')')  # convert into a regularExpression
+    
     for item in input_list:
         data=item
-        filterPattern='|'.join(n for n in filterBy)
-        regexFilter=re.compile('('+filterPattern+')')  # convert into a regularExpression
+        #filterPattern='|'.join(n for n in filterBy)
+        #regexFilter=re.compile('('+filterPattern+')')  # convert into a regularExpression
         if not matchcase:
             data=item.upper()
         if regexFilter.search(data):
