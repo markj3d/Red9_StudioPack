@@ -770,7 +770,54 @@ def sourceMelFolderContents(path):
         log.info('Sourcing mel script : %s' % script)
         mel.eval('source %s' % script)
 
+def delete_shelf(shelf_name):
+    '''
+    Delete maya shelve and update maya shelve optionVars
+    :param shelfname: string: name of the shelf to be deleted
+    :return:
+    '''
+    if not cmds.shelfLayout(shelf_name, q=True, ex=True):
+        return
 
+    shelfs = cmds.optionVar(q='numShelves')
+    curret_shelf = None
+
+    # Shelf preferences.
+    for i in range(shelfs + 1):
+        if shelf_name == cmds.optionVar(q="shelfName%i" % i):
+            curret_shelf = i
+            break
+
+    # manage shelve ids
+    for i in range(curret_shelf, shelfs + 1):
+        cmds.optionVar(iv=("shelfLoad%s" % str(i), cmds.optionVar(q="shelfLoad%s" % str(i + 1))))
+        cmds.optionVar(sv=("shelfName%s" % str(i), cmds.optionVar(q="shelfName%s" % str(i + 1))))
+        cmds.optionVar(sv=("shelfFile%s" % str(i), cmds.optionVar(q="shelfFile%s" % str(i + 1))))
+        
+    cmds.optionVar(remove="shelfLoad%s" % shelfs)
+    cmds.optionVar(remove="shelfName%s" % shelfs)
+    cmds.optionVar(remove="shelfFile%s" % shelfs)
+    cmds.optionVar(iv=("numShelves", shelfs - 1))
+
+    cmds.deleteUI(shelf_name, layout=True)
+    mel.eval("shelfTabChange")
+
+    log.info('Shelve deleted: % s' % shelf_name)
+
+def load_shelf(shelf_path):
+    '''
+    load Maya shelve
+    :param shelves_path: string: file path to maya shelve
+    '''
+
+    if os.path.exists(shelf_path):
+        mel.eval('loadNewShelf("%s")' % shelf_path)
+        log.info('Shelve loaded: % s' % shelf_path)
+        return True
+    else:
+        log.error('Cant load shelve, file donsnt exist: %s' % shelf_path)
+        
+        
 # -----------------------------------------------------------------------------------------
 # PRO PACK ---
 # -----------------------------------------------------------------------------------------
