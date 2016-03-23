@@ -772,10 +772,12 @@ def sourceMelFolderContents(path):
 
 def delete_shelf(shelf_name):
     '''
-    Delete maya shelve and update maya shelve optionVars
-    :param shelfname: string: name of the shelf to be deleted
+    Delete maya shelf and update maya shelf optionVars
+    :param shelf_name: string: name of the shelf to be deleted
     :return:
     '''
+    if mayaIsBatch():
+        return
     if not cmds.shelfLayout(shelf_name, q=True, ex=True):
         return
 
@@ -801,21 +803,33 @@ def delete_shelf(shelf_name):
 
     cmds.deleteUI(shelf_name, layout=True)
     mel.eval("shelfTabChange")
-
-    log.info('Shelve deleted: % s' % shelf_name)
+    log.info('Shelf deleted: % s' % shelf_name)
+    
 
 def load_shelf(shelf_path):
     '''
-    load Maya shelve
-    :param shelves_path: string: file path to maya shelve
+    load Maya shelf
+    :param shelf_path: string: file path to maya shelf
     '''
-
+    if mayaIsBatch():
+        return
+    
+    # get current top shelf
+    gShelfTopLevel = mel.eval("string $shelf_ly=$gShelfTopLevel")
+    top=cmds.shelfTabLayout(gShelfTopLevel, q=True, st=True)
+    
     if os.path.exists(shelf_path):
+        print shelf_path
+        mel.eval('source "%s"' % shelf_path)
         mel.eval('loadNewShelf("%s")' % shelf_path)
-        log.info('Shelve loaded: % s' % shelf_path)
+        log.info('Shelf loaded: % s' % shelf_path)
         return True
     else:
-        log.error('Cant load shelve, file donsnt exist: %s' % shelf_path)
+        log.error('Cant load shelf, file doesnt exist: %s' % shelf_path)
+        
+    # restore users top shelf
+    cmds.shelfTabLayout(gShelfTopLevel, e=True, st=top)
+        
         
         
 # -----------------------------------------------------------------------------------------
