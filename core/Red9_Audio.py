@@ -225,7 +225,21 @@ class AudioHandler(object):
     @property
     def mayaNodes(self):
         return [audio.audioNode for audio in self.audioNodes]
-    
+
+    def getAudioInRange(self, time=()):
+        '''
+        return any audio in the handler within a given timerange
+        
+        @param time: tuple, (min,max) timerange within which returned audio has 
+        fall within else it's ignored.
+        '''
+        audio_in_range=[]
+        for a in self.audioNodes:
+            if not a.startFrame>time[0] or not a.endFrame<time[1]:
+                continue
+            audio_in_range.append(a.audioNode)
+        return audio_in_range
+       
     def getOverallRange(self):
         '''
         return the overall frame range of the given audioNodes (min/max)
@@ -426,7 +440,11 @@ class AudioHandler(object):
                 status = False
                 failed.append(audio)
                 continue
-            sound = audio_segment.AudioSegment.from_wav(audio.path)
+            #deal with any trimming of the audio node in Maya (thanks JanR)
+            sourceStart = cmds.getAttr(audio.audioNode + '.sourceStart')
+            sourceEnd = cmds.getAttr(audio.audioNode + '.sourceEnd')
+            sound = audio_segment.AudioSegment.from_wav(audio.path)[(sourceStart / r9General.getCurrentFPS()) * 1000:(sourceEnd / r9General.getCurrentFPS()) * 1000]
+            #sound = audio_segment.AudioSegment.from_wav(audio.path)
             if sound.sample_width not in [1, 2, 4]:
                 log.warning('24bit Audio is NOT supported in Python audioop lib!  : "%s" == %i' % (audio.audioNode, sound.sample_width))
                 status = False
@@ -637,7 +655,19 @@ class AudioNode(object):
     def endTime(self, val):
         if self.isLoaded:
             cmds.setAttr('%s.offset' % self.audioNode, self.pro_audio.milliseconds_to_frame(val, framerate=None))
+            
+    @property
+    def offset(self):
+        '''
+        simply get the offset
+        '''
+        return cmds.getAttr('%s.offset' % self.audioNode)
     
+    @offset.setter
+    def offset(self, offset):
+        if self.isLoaded:
+            cmds.setAttr('%s.offset' % self.audioNode, offset)
+            
     # ---------------------------------------------------------------------------------
     # PRO_PACK : BWAV support ---
     # ---------------------------------------------------------------------------------
