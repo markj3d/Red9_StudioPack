@@ -274,7 +274,21 @@ class AudioHandler(object):
             return (minV,maxV)
         else:
             return (self.pro_audio.milliseconds_to_Timecode(minV), self.pro_audio.milliseconds_to_Timecode(maxV))
-         
+        
+    def getAudioInRange(self, time=()):
+        '''
+        return any audio in the handler within a given timerange
+        
+        @param time: tuple, (min,max) timerange within which returned audio has 
+        fall, else it's ignored.
+        '''
+        audio_in_range=[]
+        for a in self.audioNodes:
+            if not a.startFrame>time[0] or not a.endFrame<time[1]:
+                continue
+            audio_in_range.append(a.audioNode)
+        return audio_in_range
+       
     def setTimelineToAudio(self, audioNodes=None):
         '''
         set the current TimeSlider to the extent of the given audioNodes

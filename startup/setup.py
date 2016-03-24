@@ -770,7 +770,68 @@ def sourceMelFolderContents(path):
         log.info('Sourcing mel script : %s' % script)
         mel.eval('source %s' % script)
 
+def delete_shelf(shelf_name):
+    '''
+    Delete maya shelf and update maya shelf optionVars
+    :param shelf_name: string: name of the shelf to be deleted
+    :return:
+    '''
+    if mayaIsBatch():
+        return
+    if not cmds.shelfLayout(shelf_name, q=True, ex=True):
+        return
 
+    shelfs = cmds.optionVar(q='numShelves')
+    curret_shelf = None
+
+    # Shelf preferences.
+    for i in range(shelfs + 1):
+        if shelf_name == cmds.optionVar(q="shelfName%i" % i):
+            curret_shelf = i
+            break
+
+    # manage shelve ids
+    for i in range(curret_shelf, shelfs + 1):
+        cmds.optionVar(iv=("shelfLoad%s" % str(i), cmds.optionVar(q="shelfLoad%s" % str(i + 1))))
+        cmds.optionVar(sv=("shelfName%s" % str(i), cmds.optionVar(q="shelfName%s" % str(i + 1))))
+        cmds.optionVar(sv=("shelfFile%s" % str(i), cmds.optionVar(q="shelfFile%s" % str(i + 1))))
+        
+    cmds.optionVar(remove="shelfLoad%s" % shelfs)
+    cmds.optionVar(remove="shelfName%s" % shelfs)
+    cmds.optionVar(remove="shelfFile%s" % shelfs)
+    cmds.optionVar(iv=("numShelves", shelfs - 1))
+
+    cmds.deleteUI(shelf_name, layout=True)
+    mel.eval("shelfTabChange")
+    log.info('Shelf deleted: % s' % shelf_name)
+    
+
+def load_shelf(shelf_path):
+    '''
+    load Maya shelf
+    :param shelf_path: string: file path to maya shelf
+    '''
+    if mayaIsBatch():
+        return
+    
+    # get current top shelf
+    gShelfTopLevel = mel.eval("string $shelf_ly=$gShelfTopLevel")
+    top=cmds.shelfTabLayout(gShelfTopLevel, q=True, st=True)
+    
+    if os.path.exists(shelf_path):
+        print shelf_path
+        mel.eval('source "%s"' % shelf_path)
+        mel.eval('loadNewShelf("%s")' % shelf_path)
+        log.info('Shelf loaded: % s' % shelf_path)
+        return True
+    else:
+        log.error('Cant load shelf, file doesnt exist: %s' % shelf_path)
+        
+    # restore users top shelf
+    cmds.shelfTabLayout(gShelfTopLevel, e=True, st=top)
+        
+        
+        
 # -----------------------------------------------------------------------------------------
 # PRO PACK ---
 # -----------------------------------------------------------------------------------------
