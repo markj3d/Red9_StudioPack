@@ -241,7 +241,7 @@ class AudioHandler(object):
         '''
         audio_in_range=[]
         for a in self.audioNodes:
-            if not a.startFrame>time[0] or not a.endFrame<time[1]:
+            if not a.startFrame>=time[0] or not a.endFrame<=time[1]:
                 continue
             audio_in_range.append(a)
         if not asNodes:
