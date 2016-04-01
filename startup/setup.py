@@ -819,7 +819,7 @@ def load_shelf(shelf_path):
     top=cmds.shelfTabLayout(gShelfTopLevel, q=True, st=True)
     
     if os.path.exists(shelf_path):
-        print shelf_path
+        #print shelf_path
         mel.eval('source "%s"' % shelf_path)
         mel.eval('loadNewShelf("%s")' % shelf_path)
         log.info('Shelf loaded: % s' % shelf_path)
@@ -928,7 +928,7 @@ def get_client_modules():
     if has_client_modules():
         for f in os.listdir(client_core_path()):
             if os.path.isdir(os.path.join(client_core_path(), f)):
-                if not f.startswith('.'):
+                if not f.startswith('.') and not f.startswith('_'):
                     clients.append(f)
     return clients
                 
