@@ -96,6 +96,7 @@ global RED9_META_REGISTERY
 ====================================================================================
 '''
 
+        
 # ----------------------------------------------------------------------------
 # --- FactoryClass registry --- --------------------------
 # ----------------------------------------------------------------------------
@@ -149,7 +150,8 @@ def mTypesToRegistryKey(mTypes):
             keys.append(cls.__name__)
         except:
             keys.append(cls)
-    return keys
+    # remove the key if it's not registered!
+    return [key for key in keys if key in RED9_META_REGISTERY.keys()] or []
 
 def getMClassDataFromNode(node, checkInstance=True):
     '''
@@ -1361,7 +1363,7 @@ class MClassNodeUI(object):
 class MetaClass(object):
     
     cached = None
-    UNMANAGED=['mNode', 'mNodeID', '_MObject', '_MObjectHandle', '_lockState', 'lockState', '_forceAsMeta']
+    UNMANAGED=['mNode', 'mNodeID', '_MObject', '_MObjectHandle', '_MFnDependencyNode', '_lockState', 'lockState', '_forceAsMeta']
         
     def __new__(cls, *args, **kws):
         '''
@@ -1389,7 +1391,6 @@ class MetaClass(object):
                 return mNode
             
             mClass=isMetaNode(mNode, checkInstance=False, returnMClass=True)
-                #mClass=getMClassDataFromNode(mNode, checkInstance=False)
 
         if mClass:
             log.debug("mClass derived from MayaNode Attr : %s" % mClass)
@@ -1599,6 +1600,7 @@ class MetaClass(object):
                 selList.getDependNode(0,mobj)
                 object.__setattr__(self, '_MObject', mobj)
                 object.__setattr__(self, '_MObjectHandle',OpenMaya.MObjectHandle(mobj))
+                object.__setattr__(self, '_MFnDependencyNode', OpenMaya.MFnDependencyNode(mobj))
                 # if we're a DAG object store off the MDagPath
 #                if OpenMaya.MObject.hasFn(mobj, OpenMaya.MFn.kDagNode):
 #                    dag = OpenMaya.MDagPath()
@@ -1762,30 +1764,31 @@ class MetaClass(object):
         '''
         Overload the base setattr to manage the MayaNode itself
         '''
-#        if attr in MetaClass.UNMANAGED or attr=='UNMANAGED':
         object.__setattr__(self, attr, value)
         
         if attr not in MetaClass.UNMANAGED and not attr=='UNMANAGED':
-        #if attr not in self.UNMANAGED and not attr=='UNMANAGED':
-        #else:
-            if self.hasAttr(attr):  # cmds.attributeQuery(attr, exists=True, node=self.mNode):
+            if self.hasAttr(attr):
                 locked=False
                 if self.attrIsLocked(attr) and force:
                     self.attrSetLocked(attr,False)
                     locked=True
-
+                mnode=self.mNode
+                attrType=self.attrType(attr)
+                
                 #Enums Handling
-                if cmds.attributeQuery(attr, node=self.mNode, enum=True):
+                if attrType=='enum':
+                #if cmds.attributeQuery(attr, node=mnode, enum=True):
                     self.__setEnumAttr__(attr, value)
                           
                 #Message Link handling
-                elif cmds.attributeQuery(attr, node=self.mNode, message=True):
+                elif attrType=='message':
+                #elif cmds.attributeQuery(attr, node=mnode, message=True):
                     self.__setMessageAttr__(attr, value, force)
                           
                 #Standard Attribute
                 else:
-                    attrString='%s.%s' % (self.mNode, attr)       # mayaNode.attribute for cmds.get/set calls
-                    attrType=cmds.getAttr(attrString, type=True)  # the MayaNode attribute valueType
+                    attrString='%s.%s' % (mnode, attr)       # mayaNode.attribute for cmds.get/set calls
+                    #attrType=cmds.getAttr(attrString, type=True)  # the MayaNode attribute valueType
                     valueType=attributeDataType(value)            # DataType passed in to be set as Value
                     #log.debug('setting attribute type : %s to value : %s' % (attrType,value))
                     
@@ -1858,18 +1861,15 @@ class MetaClass(object):
             return attr
         try:
             #private class attr only
-#            if attr in MetaClass.UNMANAGED:
-#                return object.__getattribute__(self, attr)
+            if attr in MetaClass.UNMANAGED:
+                return object.__getattribute__(self, attr)
             
             #stops recursion, do not getAttr on mNode here
             mNode=object.__getattribute__(self, "mNode")
-
             if not mNode or not cmds.objExists(mNode):
-                attrVal=object.__getattribute__(self, attr)
-                return attrVal
+                return object.__getattribute__(self, attr)
             else:
                 #MayaNode processing - retrieve attrVals on the MayaNode
-                #if cmds.attributeQuery(attr, exists=True, node=mNode):
                 try:
                     attrType=cmds.getAttr('%s.%s' % (mNode,attr),type=True)
                     
@@ -1929,24 +1929,30 @@ class MetaClass(object):
         try:
             log.debug('attribute delete  : %s , %s' % (self,attr))
             object.__delattr__(self, attr)
-            if self.hasAttr(attr):  # cmds.attributeQuery(attr, exists=True, node=self.mNode):
+            if self.hasAttr(attr):
                 cmds.setAttr('%s.%s' % (self.mNode,attr), l=False)
                 cmds.deleteAttr('%s.%s' % (self.mNode, attr))
                 
         except StandardError,error:
             raise StandardError(error)
-          
+       
+    def attrType(self, attr):
+        '''
+        return the api attr type
+        '''
+        return cmds.getAttr('%s.%s' % (self.mNode,attr),type=True)
+         
     def hasAttr(self, attr):
         '''
         simple wrapper check for attrs on the mNode itself.
         Note this is not run in some of the core internal calls in this baseClass
         '''
-        if r9Setup.mayaVersion()<2012:
-            #The api call fails in 2011, I need to dig into this
-            return cmds.attributeQuery(attr, exists=True, node=self.mNode)
         if self.isValidMObject():
-            return OpenMaya.MFnDependencyNode(self.mNodeMObject).hasAttribute(attr)
-        return cmds.attributeQuery(attr, exists=True, node=self.mNode)
+            try:
+                return self._MFnDependencyNode.hasAttribute(attr)
+                #return OpenMaya.MFnDependencyNode(self.mNodeMObject).hasAttribute(attr)
+            except:
+                return cmds.attributeQuery(attr, exists=True, node=self.mNode)
     
     def attrIsLocked(self,attr):
         '''
@@ -2044,7 +2050,7 @@ class MetaClass(object):
                      
         #ATTR EXSISTS - EDIT CURRENT
         #---------------------------
-        if self.hasAttr(attr):  # cmds.attributeQuery(attr, exists=True, node=self.mNode):
+        if self.hasAttr(attr):
             # if attr exists do we force the value here?? NOOOO as I'm using this only
             # to ensure that when we initialize certain classes base attrs exist with certain properties.
             log.debug('"%s" :  Attr already exists on the Node' % attr)
@@ -2130,7 +2136,8 @@ class MetaClass(object):
             ret.append(mPlug.name().split('.')[1])
         return ret
     
-    
+
+
     # Utity Functions
     #-------------------------------------------------------------------------------------
          
