@@ -563,7 +563,7 @@ def get_bound_controls(rootNode=None):
     return [node for node in cmds.listRelatives(rootNode, ad=True, f=True)\
              if cmds.attributeQuery(BAKE_MARKER, exists=True, node=node)]
 
-def bake_binder_data(rootNode=None, debugView=False, ignoreInFilter=[]):
+def bake_binder_data(rootNode=None, debugView=False, runFilter=True, ignoreInFilter=[]):
     '''
     From a given Root Node search all children for the 'BoundCtr' attr marker. If none
     were found then search for the BindNode attr and use the message links to walk to
@@ -604,7 +604,8 @@ def bake_binder_data(rootNode=None, debugView=False, ignoreInFilter=[]):
                     log.info(error)
             if ignoreInFilter:
                 BoundCtrls = [node for node in BoundCtrls if node.split('|')[-1].split(':')[-1] not in ignoreInFilter]
-            cmds.filterCurve(BoundCtrls)
+            if runFilter:
+                cmds.filterCurve(BoundCtrls)
             cmds.delete(BoundCtrls, sc=True)  # static channels
         except StandardError,error:
             raise StandardError(error)

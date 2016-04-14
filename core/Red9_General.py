@@ -233,6 +233,19 @@ def evalManagerState(mode='off'):
     else:
         log.debug("evalManager skipped as you're in an older version of Maya")
     
+def evalManagerState(mode='off'):
+    '''
+    simple wrapper to manage the evalManager_switch plugin, used purely
+    so that it's recorded in the undoStack!
+    '''
+    if r9Setup.mayaVersion()>=2016:
+        if not cmds.pluginInfo('evalManager_switch', q=True, loaded=True):
+            try:
+                cmds.loadPlugin('evalManager_switch')
+            except:
+                raise StandardError('Plugin : evalManager_switch failed to load')
+        cmds.evalManager_switch(mode=mode)
+       
 class AnimationContext(object):
     """
     Simple Context Manager for restoring Animation settings
@@ -276,7 +289,6 @@ class AnimationContext(object):
         # If this was false, it would re-raise the exception when complete
         return True
     
-
 class undoContext(object):
     """
     Simple Context Manager for chunking the undoState

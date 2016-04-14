@@ -195,7 +195,7 @@ class AudioHandler(object):
         all BWav and Timecode support is in the Red9 ProPack
     '''
     def __init__(self, audio=None):
-        self._audioNodes = None
+        self._audioNodes = []
         if audio:
             self.audioNodes = audio
         else:
@@ -215,18 +215,24 @@ class AudioHandler(object):
     
     @audioNodes.setter
     def audioNodes(self, val):
-        #print val, type(val)
         if not val:
             raise StandardError('No AudioNodes selected or given to process')
         if not type(val)==list:
             val = [val]
-        self._audioNodes = [AudioNode(audio) for audio in val]
+        for a in val:
+            if issubclass(type(a), AudioNode):
+                log.debug('Instantiated AudioNode passed in  : %s' % a)
+                self._audioNodes.append(a)
+            else:
+                log.debug('unicode audio str passed in  : %s' % a)
+                self._audioNodes.append(AudioNode(a))
+        #self._audioNodes = [AudioNode(audio) for audio in val]
     
     @property
     def mayaNodes(self):
         return [audio.audioNode for audio in self.audioNodes]
 
-    def getAudioInRange(self, time=()):
+    def getAudioInRange(self, time=(), asNodes=True):
         '''
         return any audio in the handler within a given timerange
         
@@ -235,9 +241,11 @@ class AudioHandler(object):
         '''
         audio_in_range=[]
         for a in self.audioNodes:
-            if not a.startFrame>time[0] or not a.endFrame<time[1]:
+            if not a.startFrame>=time[0] or not a.endFrame<=time[1]:
                 continue
-            audio_in_range.append(a.audioNode)
+            audio_in_range.append(a)
+        if not asNodes:
+            return [a.audioNode for a in audio_in_range]
         return audio_in_range
        
     def getOverallRange(self):
@@ -733,6 +741,13 @@ class AudioNode(object):
         else:
             raise r9Setup.ProPack_Error()
 
+    def isConnected_AudioGrp(self):
+        '''
+        PRO_PACK : is this audioNode connected to a Pro_ AudioGrp metaNode 
+        for asset management in the Pro systems
+        '''
+        return r9Meta.getConnectedMetaNodes(self.audioNode,mTypes='AudioGroup')
+        
     # ---------------------------------------------------------------------------------
     # General utils ---
     # ---------------------------------------------------------------------------------
