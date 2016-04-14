@@ -37,7 +37,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
-
+#---------------------------------------------------------------------------------
 # Generic Utility Functions ---
 #---------------------------------------------------------------------------------
 
@@ -163,42 +163,50 @@ def getScriptEditorSelection():
         return func
 
 
-
+#---------------------------------------------------------------------------------
 # Context Managers and Decorators ---
 #---------------------------------------------------------------------------------
 
 def Timer(func):
     '''
-    Simple timer decorator
+    DECORATOR : DECORATOR : DECORATOR :
+    ----------------------------------
+    Simple timer function
     '''
     @wraps(func)
     def wrapper(*args, **kws):
-        t1 = time.time()
-        res=func(*args, **kws)
-        t2 = time.time()
-
-        functionTrace=''
-        try:
-            #module if found
-            mod = inspect.getmodule(args[0])
-            functionTrace+='%s >>' % mod.__name__.split('.')[-1]
-        except:
-            log.debug('function module inspect failure')
-        try:
-            #class function is part of, if found
-            cls = args[0].__class__
-            functionTrace+='%s.' % args[0].__class__.__name__
-        except:
-            log.debug('function class inspect failure')
-        functionTrace += func.__name__
-        log.debug('TIMER : %s: took %0.3f ms' % (functionTrace, (t2 - t1) * 1000.0))
-        #log.info('%s: took %0.3f ms' % (func.func_name, (t2-t1)*1000.0))
+        if log.getEffectiveLevel()==20:
+            # Timer Disabled as we're in log.Info mode so the data isn't used
+            res=func(*args, **kws)
+        else:
+            t1 = time.time()
+            res=func(*args, **kws)
+            t2 = time.time()
+    
+            functionTrace=''
+            try:
+                #module if found
+                mod = inspect.getmodule(args[0])
+                functionTrace+='%s >>' % mod.__name__.split('.')[-1]
+            except:
+                log.debug('function module inspect failure')
+            try:
+                #class function is part of, if found
+                cls = args[0].__class__
+                functionTrace+='%s.' % args[0].__class__.__name__
+            except:
+                log.debug('function class inspect failure')
+            functionTrace += func.__name__
+            log.debug('TIMER : %s: took %0.3f ms' % (functionTrace, (t2 - t1) * 1000.0))
+            #log.info('%s: took %0.3f ms' % (func.func_name, (t2-t1)*1000.0))
         return res
     return wrapper
 
 
 def runProfile(func):
     '''
+    DECORATOR : DECORATOR : DECORATOR :
+    ----------------------------------
     run the profiler - only ever used when debugging /optimizing function call speeds.
     visualize the data using 'runsnakerun' to view the profiles and debug
     '''
@@ -214,11 +222,39 @@ def runProfile(func):
         profile = cProfile.runctx("command()", globals(), locals(), dumpFileName)
         return profile
     return wrapper
+
+
+def evalManager_DG(func):
+    '''
+    DECORATOR : DECORATOR : DECORATOR :
+    ----------------------------------
+    simple decorator to call the evalManager_switch plugin and run the enclosed 
+    function in DG eval mode NOT parallel. 
     
+    .. note:: 
+        Parallel EM mode is slow at evaluating time, DG is up to 3 times faster!
+        The plugin call is registered back in the undoStack, cmds.evalmanager call is not
+    '''
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            evalmode=None
+            if r9Setup.mayaVersion()>=2016:
+                evalmode=cmds.evaluationManager(mode=True,q=True)[0]
+                if evalmode=='parallel':
+                    evalManagerState(mode='off')
+            res = func(*args, **kwargs)
+        except:
+            log.info('Failed on evalManager_DG decorator')
+        finally:
+            if evalmode:
+                evalManagerState(mode=evalmode)
+        return res
+    return wrapper
+
 
 def evalManagerState(mode='off'):
     '''
-    BODGE!!!! BODGE!!!! BODGE!!!! BODGE!!!! BODGE!!!! BODGE!!!!
     wrapper function for the evalManager so that it's switching is recorded in 
     the undo stack via the Red9.evalManager_switch plugin
     '''
@@ -227,32 +263,30 @@ def evalManagerState(mode='off'):
             try:
                 cmds.loadPlugin('evalManager_switch')
             except:
-                log.warning('failed to load evalManager_switch plugin!')
-        cmds.evalManager_switch(mode=mode)
+                log.warning('Plugin Failed to load : evalManager_switch')
+        try:
+            # via the plug-in to register the switch to the undoStack
+            cmds.evalManager_switch(mode=mode)
+        except:
+            log.debug('evalManager_switch plugin not found, running native Maya evalManager command')
+            cmds.evaluationManager(mode=mode)  # run the default maya call instead
         log.debug('EvalManager - switching state : %s' % mode)
     else:
         log.debug("evalManager skipped as you're in an older version of Maya")
     
-def evalManagerState(mode='off'):
-    '''
-    simple wrapper to manage the evalManager_switch plugin, used purely
-    so that it's recorded in the undoStack!
-    '''
-    if r9Setup.mayaVersion()>=2016:
-        if not cmds.pluginInfo('evalManager_switch', q=True, loaded=True):
-            try:
-                cmds.loadPlugin('evalManager_switch')
-            except:
-                raise StandardError('Plugin : evalManager_switch failed to load')
-        cmds.evalManager_switch(mode=mode)
-       
+
 class AnimationContext(object):
     """
+    CONTEXT MANAGER : CONTEXT MANAGER :
+    ----------------------------------
     Simple Context Manager for restoring Animation settings
+    
+    :param evalmanager: do we manage the evalManager in this context for Maya 2016 onwards
     """
-    def __init__(self):
+    def __init__(self, evalmanager=True):
         self.autoKeyState=None
         self.timeStore=None
+        self.em_manage=evalmanager
         self.evalmode=None
         self.mangage_undo=True
         
@@ -263,18 +297,18 @@ class AnimationContext(object):
             cmds.undoInfo(openChunk=True)
         else:
             cmds.undoInfo(swf=False)
-            
-        if r9Setup.mayaVersion()>=2016:
-            self.evalmode=cmds.evaluationManager(mode=True,q=True)[0]
-            if self.evalmode=='parallel':
-                evalManagerState(mode='off')
+        if self.em_manage:
+            if r9Setup.mayaVersion()>=2016:
+                self.evalmode=cmds.evaluationManager(mode=True,q=True)[0]
+                if self.evalmode=='parallel':
+                    evalManagerState(mode='off')
 
     def __exit__(self, exc_type, exc_value, traceback):
         # Close the undo chunk, warn if any exceptions were caught:
         cmds.autoKeyframe(state=self.autoKeyState)
         log.info('autoKeyState restored: %s' % self.autoKeyState)
         
-        if self.evalmode:
+        if self.em_manage and self.evalmode:
             evalManagerState(mode=self.evalmode)
             log.info('evalManager restored: %s' % self.evalmode)
         
@@ -291,6 +325,8 @@ class AnimationContext(object):
     
 class undoContext(object):
     """
+    CONTEXT MANAGER : CONTEXT MANAGER :
+    ----------------------------------
     Simple Context Manager for chunking the undoState
     """
     def __init__(self, initialUndo=False, undoFuncCache=[], undoDepth=1):
@@ -338,6 +374,8 @@ class undoContext(object):
 
 class ProgressBarContext(object):
     '''
+    CONTEXT MANAGER : CONTEXT MANAGER :
+    ----------------------------------
     Context manager to make it easier to wrap progressBars
     
     >>> #Example of using this in code
@@ -415,6 +453,8 @@ class ProgressBarContext(object):
        
 class HIKContext(object):
     """
+    CONTEXT MANAGER : CONTEXT MANAGER :
+    ----------------------------------
     Simple Context Manager for restoring HIK Animation settings and managing HIK callbacks
     """
     def __init__(self, NodeList):
@@ -454,6 +494,8 @@ class HIKContext(object):
     
 class SceneRestoreContext(object):
     """
+    CONTEXT MANAGER : CONTEXT MANAGER :
+    ----------------------------------
     Simple Context Manager for restoring Scene Global settings
     
     Basically we store the state of all the modelPanels and timeLine
@@ -598,7 +640,7 @@ class SceneRestoreContext(object):
         log.debug('Scene Restored fully')
         return True
     
-                    
+#---------------------------------------------------------------------------------               
 # General ---
 #---------------------------------------------------------------------------------
 
@@ -709,7 +751,7 @@ def getModifier():
     else:
         return False
 
-    
+#---------------------------------------------------------------------------------
 # OS functions ---
 #---------------------------------------------------------------------------------
 
