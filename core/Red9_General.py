@@ -215,6 +215,23 @@ def runProfile(func):
         return profile
     return wrapper
     
+
+def evalManagerState(mode='off'):
+    '''
+    BODGE!!!! BODGE!!!! BODGE!!!! BODGE!!!! BODGE!!!! BODGE!!!!
+    wrapper function for the evalManager so that it's switching is recorded in 
+    the undo stack via the Red9.evalManager_switch plugin
+    '''
+    if r9Setup.mayaVersion()>=2016:
+        if not cmds.pluginInfo('evalManager_switch', q=True, loaded=True):
+            try:
+                cmds.loadPlugin('evalManager_switch')
+            except:
+                log.warning('failed to load evalManager_switch plugin!')
+        cmds.evalManager_switch(mode=mode)
+        log.debug('EvalManager - switching state : %s' % mode)
+    else:
+        log.debug("evalManager skipped as you're in an older version of Maya")
     
 class AnimationContext(object):
     """
@@ -223,19 +240,37 @@ class AnimationContext(object):
     def __init__(self):
         self.autoKeyState=None
         self.timeStore=None
+        self.evalmode=None
+        self.mangage_undo=True
         
     def __enter__(self):
         self.autoKeyState=cmds.autoKeyframe(query=True, state=True)
         self.timeStore=cmds.currentTime(q=True)
-        cmds.undoInfo(openChunk=True)
+        if self.mangage_undo:
+            cmds.undoInfo(openChunk=True)
+        else:
+            cmds.undoInfo(swf=False)
+            
+        if r9Setup.mayaVersion()>=2016:
+            self.evalmode=cmds.evaluationManager(mode=True,q=True)[0]
+            if self.evalmode=='parallel':
+                evalManagerState(mode='off')
 
     def __exit__(self, exc_type, exc_value, traceback):
         # Close the undo chunk, warn if any exceptions were caught:
         cmds.autoKeyframe(state=self.autoKeyState)
-        cmds.currentTime(self.timeStore)
         log.info('autoKeyState restored: %s' % self.autoKeyState)
+        
+        if self.evalmode:
+            evalManagerState(mode=self.evalmode)
+            log.info('evalManager restored: %s' % self.evalmode)
+        
+        cmds.currentTime(self.timeStore)
         log.info('currentTime restored: %f' % self.timeStore)
-        cmds.undoInfo(closeChunk=True)
+        if self.mangage_undo:
+            cmds.undoInfo(closeChunk=True)
+        else:
+            cmds.undoInfo(swf=True)
         if exc_type:
             log.exception('%s : %s'%(exc_type, exc_value))
         # If this was false, it would re-raise the exception when complete

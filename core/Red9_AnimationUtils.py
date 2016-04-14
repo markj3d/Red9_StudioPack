@@ -365,9 +365,6 @@ def animRangeFromNodes(nodes, setTimeline=True):
             minBounds=min[0]
         if not maxBounds or max[0]>maxBounds:
             maxBounds=max[0]
-    if not minBounds and not maxBounds:
-        minBounds=0
-        maxBounds=1
     if setTimeline:
         cmds.playbackOptions(min=minBounds,max=maxBounds)
     return minBounds,maxBounds
@@ -3205,25 +3202,26 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
         count=0
                     
         with progressBar:
-            for time in timeRange:
-                if progressBar.isCanceled():
-                    break
-
-                #Switched to using the Commands time query to stop  the viewport updates
-                cmds.currentTime(time, e=True, u=False)
-                cmds.SnapTransforms(source=snapRef, destination=destObj, timeEnabled=True, snapTranslates=trans, snapRotates=rots)
-                try:
-                    if trans:
-                        cmds.setKeyframe(destObj, at='translate')
-                except:
-                    log.debug('failed to set translate key on %s' % destObj)
-                try:
-                    if rots:
-                        cmds.setKeyframe(destObj, at='rotate')
-                except:
-                    log.debug('failed to set rotate key on %s' % destObj)
-                progressBar.setProgress(count)
-                count+=step
+            with r9General.AnimationContext():
+                for time in timeRange:
+                    if progressBar.isCanceled():
+                        break
+    
+                    #Switched to using the Commands time query to stop  the viewport updates
+                    cmds.currentTime(time, e=True, u=False)
+                    cmds.SnapTransforms(source=snapRef, destination=destObj, timeEnabled=True, snapTranslates=trans, snapRotates=rots)
+                    try:
+                        if trans:
+                            cmds.setKeyframe(destObj, at='translate')
+                    except:
+                        log.debug('failed to set translate key on %s' % destObj)
+                    try:
+                        if rots:
+                            cmds.setKeyframe(destObj, at='rotate')
+                    except:
+                        log.debug('failed to set rotate key on %s' % destObj)
+                    progressBar.setProgress(count)
+                    count+=step
                 
         cmds.delete(deleteMe)
         cmds.autoKeyframe(state=autokeyState)
@@ -3231,7 +3229,7 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
         
         
     def bindNodes(self, nodes=None, attributes=None, filterSettings=None,
-                  bindMethod='connect', matchMethod=None, mo=True, **kws):
+                  bindMethod='connect', matchMethod=None, **kws):
         '''
         bindNodes is a Hi-Level wrapper function to bind animation data between
         filtered nodes, either in hierarchies or just selected pairs.
@@ -3244,9 +3242,8 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
             Note that this is also now bound to the class instance and if not passed in
             we use this classes instance of filterSettings cls.settings
         :param attributes: Only copy the given attributes[]
-        :param bindMethod: method of binding the data, supported : connect, constraint, constraintMO
+        :param bindMethod: method of binding the data
         :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names
-        :param mo: passed to the constraint call if chosen as the maintainOffset flag
         #TODO: expose this to the UI's!!!!
         '''
         
@@ -3255,7 +3252,6 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
             filterSettings=self.settings
         if not matchMethod:
             matchMethod=self.matchMethod
-
             
         log.debug('bindNodes params : nodes=%s : attributes=%s : filterSettings=%s : matchMethod=%s' \
                    % (nodes, attributes, filterSettings, matchMethod))
@@ -3280,10 +3276,8 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
                             except:
                                 log.info('bindNode from %s to>> %s' %(r9Core.nodeNameStrip(src),
                                                                       r9Core.nodeNameStrip(dest)))
-                    elif bindMethod=='constraint':
-                        log.info('BindNode constrain from %s to>> %s' % (r9Core.nodeNameStrip(src),
-                                                                          r9Core.nodeNameStrip(dest)))
-                        cmds.parentConstraint(src, dest, maintainOffset=mo)
+                    if bindMethod=='constraint':
+                        cmds.parentConstraint(src, dest, mo=True)
                 except:
                     pass
         else:
