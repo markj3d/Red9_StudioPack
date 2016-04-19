@@ -749,7 +749,7 @@ def getMetaRigs(mInstances='MetaRig', mClassGrps=['MetaRig']):
     using the mClassGrps variable. This probably will expand as it's tested
     '''
     # try the Red9 Production Rig nodes first
-    mRigs=getMetaNodes(mInstances=['Red9_MetaRig', 'Pro_MetaRig', 'MetaRig'], mClassGrps=['Pro_BodyRig','Pro_FacialUI','MetaRig'])
+    mRigs=getMetaNodes(mInstances=['Red9_MetaRig', 'Pro_MetaRig'], mClassGrps=['Pro_BodyRig','Pro_FacialUI'])
     if mRigs:
         return mRigs
     
