@@ -1405,11 +1405,16 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
         *index*: No intelligent matching, just purely zip the 
         lists together in the order they were given
         
+        *indexReversed*: No intelligent matching, just purely zip the 
+        lists together in the order they were given
+        
         *base*:  Match each element by exact name (shortName) 
         such that Spine==Spine or REF1:Spine==REF2:Spine
         
         *stripPrefix*: Match each element by a relaxed naming convention 
         allowing for prefixes one side such that RigX_Spine == Spine
+        
+        *mirrorIndex*: Match via the nodes MirrorMarker
         
     :return: matched pairs of tuples for processing [(a1,b2),[(a2,b2)]
     
@@ -1423,6 +1428,10 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
     if matchMethod == 'mirrorIndex':
         getMirrorID=r9Anim.MirrorHierarchy().getMirrorCompiledID
     if matchMethod == 'index':
+        matchedData = zip(nodeListA,nodeListB)
+    elif matchMethod == 'indexReversed':
+        nodeListA.reverse()
+        nodeListB.reverse()
         matchedData = zip(nodeListA,nodeListB)
     else:
         for nodeA in nodeListA:
