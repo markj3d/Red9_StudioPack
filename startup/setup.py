@@ -782,16 +782,16 @@ def delete_shelf(shelf_name):
         return
 
     shelfs = cmds.optionVar(q='numShelves')
-    curret_shelf = None
+    current_shelf = None
 
     # Shelf preferences.
     for i in range(shelfs + 1):
         if shelf_name == cmds.optionVar(q="shelfName%i" % i):
-            curret_shelf = i
+            current_shelf = i
             break
 
     # manage shelve ids
-    for i in range(curret_shelf, shelfs + 1):
+    for i in range(current_shelf, shelfs + 1):
         cmds.optionVar(iv=("shelfLoad%s" % str(i), cmds.optionVar(q="shelfLoad%s" % str(i + 1))))
         cmds.optionVar(sv=("shelfName%s" % str(i), cmds.optionVar(q="shelfName%s" % str(i + 1))))
         cmds.optionVar(sv=("shelfFile%s" % str(i), cmds.optionVar(q="shelfFile%s" % str(i + 1))))
@@ -802,6 +802,9 @@ def delete_shelf(shelf_name):
     cmds.optionVar(iv=("numShelves", shelfs - 1))
 
     cmds.deleteUI(shelf_name, layout=True)
+    pref_file = os.path.join(mayaPrefs(), 'prefs', 'shelves', 'shelf_%s.mel.deleted' % shelf_name)
+    if os.path.exists(pref_file):
+        os.remove(pref_file)
     mel.eval("shelfTabChange")
     log.info('Shelf deleted: % s' % shelf_name)
     
@@ -820,6 +823,7 @@ def load_shelf(shelf_path):
     
     if os.path.exists(shelf_path):
         #print shelf_path
+        delete_shelf(shelf_path)
         mel.eval('source "%s"' % shelf_path)
         mel.eval('loadNewShelf("%s")' % shelf_path)
         log.info('Shelf loaded: % s' % shelf_path)

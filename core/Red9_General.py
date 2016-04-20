@@ -282,13 +282,17 @@ class AnimationContext(object):
     Simple Context Manager for restoring Animation settings
     
     :param evalmanager: do we manage the evalManager in this context for Maya 2016 onwards
+    :param time: do we manage the time and restore the original currentTime?
+    :param undo: do we manage the undoStack, collecting everything in one chunk
     """
-    def __init__(self, evalmanager=True):
+    def __init__(self, evalmanager=True, time=True, undo=True):
         self.autoKeyState=None
         self.timeStore=None
-        self.em_manage=evalmanager
         self.evalmode=None
-        self.mangage_undo=True
+        
+        self.manage_em=evalmanager
+        self.mangage_undo=undo
+        self.manage_time=time
         
     def __enter__(self):
         self.autoKeyState=cmds.autoKeyframe(query=True, state=True)
@@ -297,7 +301,7 @@ class AnimationContext(object):
             cmds.undoInfo(openChunk=True)
         else:
             cmds.undoInfo(swf=False)
-        if self.em_manage:
+        if self.manage_em:
             if r9Setup.mayaVersion()>=2016:
                 self.evalmode=cmds.evaluationManager(mode=True,q=True)[0]
                 if self.evalmode=='parallel':
@@ -308,12 +312,12 @@ class AnimationContext(object):
         cmds.autoKeyframe(state=self.autoKeyState)
         log.info('autoKeyState restored: %s' % self.autoKeyState)
         
-        if self.em_manage and self.evalmode:
+        if self.manage_em and self.evalmode:
             evalManagerState(mode=self.evalmode)
             log.info('evalManager restored: %s' % self.evalmode)
-        
-        cmds.currentTime(self.timeStore)
-        log.info('currentTime restored: %f' % self.timeStore)
+        if self.manage_time:
+            cmds.currentTime(self.timeStore)
+            log.info('currentTime restored: %f' % self.timeStore)
         if self.mangage_undo:
             cmds.undoInfo(closeChunk=True)
         else:

@@ -3153,60 +3153,60 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
         deleteMe = []
         
         #can't use the anim context manager here as that resets the currentTime
-        autokeyState = cmds.autoKeyframe(query=True, state=True)
-        cmds.autoKeyframe(state=False)
+        #autokeyState = cmds.autoKeyframe(query=True, state=True)
+        #cmds.autoKeyframe(state=False)
         duration=step
         try:
             checkRunTimeCmds()
         except StandardError, error:
             raise StandardError(error)
         
-        if time:
-            timeRange = timeLineRangeProcess(time[0], time[1], step, incEnds=True)  # this is a LIST of frames
-            cmds.currentTime(timeRange[0], e=True)  # ensure that the initial time is updated
-            duration=time[1]-time[0]
-        else:
-            timeRange = [cmds.currentTime(q=True) + step]  # no time specified so move forward by the step
-            duration=1
-        log.debug('timeRange : %s', timeRange)
-        
-        if not nodes:
-            nodes = cmds.ls(sl=True, l=True)
-             
-        destObj = nodes[-1]
-        snapRef = cmds.spaceLocator()[0]
-        deleteMe.append(snapRef)
-        
-        # Generate the reference node that we'll use to snap too
-        # ==========================================================
-        if len(nodes) == 2:
-            # Tracker Mode 2 nodes passed in - Reference taken against the source node position
-            offsetRef = nodes[0]
+        with r9General.AnimationContext(time=False):
+            if time:
+                timeRange = timeLineRangeProcess(time[0], time[1], step, incEnds=True)  # this is a LIST of frames
+                cmds.currentTime(timeRange[0], e=True)  # ensure that the initial time is updated
+                duration=time[1]-time[0]
+            else:
+                timeRange = [cmds.currentTime(q=True) + step]  # no time specified so move forward by the step
+                duration=1
+            log.debug('timeRange : %s', timeRange)
             
-            if cmds.nodeType(nodes[0]) == 'mesh':  # Component level selection method
-                if r9Setup.mayaVersion() >= 2011:
-                    offsetRef = cmds.spaceLocator()[0]
-                    deleteMe.append(offsetRef)
-                    cmds.select([nodes[0], offsetRef])
-                    pointOnPolyCmd([nodes[0], offsetRef])
-                else:
-                    raise StandardError('Component Level Tracking is only available in Maya2011 upwards')
+            if not nodes:
+                nodes = cmds.ls(sl=True, l=True)
+                 
+            destObj = nodes[-1]
+            snapRef = cmds.spaceLocator()[0]
+            deleteMe.append(snapRef)
             
-            cmds.parent(snapRef, offsetRef)
-            cmds.SnapTransforms(source=destObj, destination=snapRef, snapTranslates=trans, snapRotates=rots)
-        else:
-            # Stabilizer Mode - take the reference from the node position itself
-            cmds.SnapTransforms(source=destObj, destination=snapRef, snapTranslates=trans, snapRotates=rots)
-
-        #Now run the snap against the reference node we've just made
-        #==========================================================
-
-        progressBar = r9General.ProgressBarContext(duration)
-        progressBar.setStep(step)
-        count=0
-                    
-        with progressBar:
-            with r9General.AnimationContext():
+            # Generate the reference node that we'll use to snap too
+            # ==========================================================
+            if len(nodes) == 2:
+                # Tracker Mode 2 nodes passed in - Reference taken against the source node position
+                offsetRef = nodes[0]
+                
+                if cmds.nodeType(nodes[0]) == 'mesh':  # Component level selection method
+                    if r9Setup.mayaVersion() >= 2011:
+                        offsetRef = cmds.spaceLocator()[0]
+                        deleteMe.append(offsetRef)
+                        cmds.select([nodes[0], offsetRef])
+                        pointOnPolyCmd([nodes[0], offsetRef])
+                    else:
+                        raise StandardError('Component Level Tracking is only available in Maya2011 upwards')
+                
+                cmds.parent(snapRef, offsetRef)
+                cmds.SnapTransforms(source=destObj, destination=snapRef, snapTranslates=trans, snapRotates=rots)
+            else:
+                # Stabilizer Mode - take the reference from the node position itself
+                cmds.SnapTransforms(source=destObj, destination=snapRef, snapTranslates=trans, snapRotates=rots)
+    
+            #Now run the snap against the reference node we've just made
+            #==========================================================
+    
+            progressBar = r9General.ProgressBarContext(duration)
+            progressBar.setStep(step)
+            count=0
+                        
+            with progressBar:
                 for time in timeRange:
                     if progressBar.isCanceled():
                         break
@@ -3228,7 +3228,7 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
                     count+=step
                 
         cmds.delete(deleteMe)
-        cmds.autoKeyframe(state=autokeyState)
+        #cmds.autoKeyframe(state=autokeyState)
         cmds.select(nodes)
         
         
