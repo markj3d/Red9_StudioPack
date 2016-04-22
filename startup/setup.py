@@ -216,7 +216,7 @@ def menuSetup(parent='MayaWindow'):
             cmds.menuItem(divider=True,p='redNineMenuItemRoot')
             for client in get_client_modules():
                 cmds.menuItem('redNineClient%sItem' % client,
-                              l='CLIENT : %s' % client, sm=True, p='redNineMenuItemRoot', tearOff=True, i='red9.jpg')
+                               l='CLIENT : %s' % client, sm=True, p='redNineMenuItemRoot', tearOff=True, i='red9.jpg')
         
         cmds.menuItem(divider=True,p='redNineMenuItemRoot')
         
@@ -938,12 +938,32 @@ def get_client_modules():
                 
 def boot_client_projects():
     '''
-    Boot all Client modules found in the Red9_ClientCore dir
+    Boot Client modules found in the Red9_ClientCore dir. This now propts
+    if multiple client projects were found.
     '''
-    for client in get_client_modules():
-        log.info('Booting Client Module : %s' % client)
-        cmds.evalDeferred("import Red9_ClientCore.%s" % client, lp=True)  # Unresolved Import
-        
+    clients=get_client_modules()
+    clientsToBoot=[]
+    if len(clients):
+        options=['All']
+        options.extend(clients)
+        result=cmds.confirmDialog(title='ProjectPicker',
+                            message=("Multiple Projects Found!\r\r"+
+                                     "Which Project would you like to boot?"),
+                            button=options, messageAlign='center')
+        if result == 'All':
+            clientsToBoot=clients
+        else:
+            clientsToBoot.append(result)
+        # boot the project / projects
+        for client in clientsToBoot:
+            log.info('Booting Client Module : %s' % result)
+            cmds.evalDeferred("import Red9_ClientCore.%s" % result, lp=True)  # Unresolved Import
+        # remove unused menuItems - added previously so that the menu grouping is clean
+        for client in clients:
+            if not client in clientsToBoot:
+                cmds.deleteUI('redNineClient%sItem' % client)
+                log.debug('Unused Client Menu Removed: %s' % client)
+                
 def __reload_clients__():
     '''
     used in the main reload_Red9 call below to ensure that
