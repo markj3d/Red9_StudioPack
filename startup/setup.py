@@ -956,8 +956,8 @@ def boot_client_projects():
             clientsToBoot.append(result)
         # boot the project / projects
         for client in clientsToBoot:
-            log.info('Booting Client Module : %s' % result)
-            cmds.evalDeferred("import Red9_ClientCore.%s" % result, lp=True)  # Unresolved Import
+            log.info('Booting Client Module : %s' % client)
+            cmds.evalDeferred("import Red9_ClientCore.%s" % client, lp=True)  # Unresolved Import
         # remove unused menuItems - added previously so that the menu grouping is clean
         for client in clients:
             if not client in clientsToBoot:
