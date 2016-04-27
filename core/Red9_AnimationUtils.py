@@ -355,23 +355,19 @@ def animRangeFromNodes(nodes, setTimeline=True):
     :param nodes: nodes to examine for animation data
     :param setTimeLine: whether we should set the playback timeline to the extent of the found anim data
     '''
-    minBounds=None
-    maxBounds=None
+    minBounds=[]
+    maxBounds=[]
     for anim in r9Core.FilterNode.lsAnimCurves(nodes, safe=True):
         count=cmds.keyframe(anim, q=True, kc=True)
-        min=cmds.keyframe(anim, q=True, index=[(0,0)], tc=True)
-        max=cmds.keyframe(anim, q=True, index=[(count-1,count-1)], tc=True)
-        if not minBounds or min[0]<minBounds:
-            minBounds=min[0]
-        if not maxBounds or max[0]>maxBounds:
-            maxBounds=max[0]
+        minBounds.append(cmds.keyframe(anim, q=True, index=[(0,0)], tc=True)[0])
+        maxBounds.append(cmds.keyframe(anim, q=True, index=[(count-1,count-1)], tc=True)[0])
     if not minBounds:
-        minBounds=0
+        minBounds=[0]
     if not maxBounds:
-        maxBounds=1
+        maxBounds=[1]
     if setTimeline:
-        cmds.playbackOptions(min=minBounds,max=maxBounds)
-    return minBounds,maxBounds
+        cmds.playbackOptions(min=min(minBounds),max=max(maxBounds))
+    return min(minBounds),max(maxBounds)
 
 def timeLineRangeGet(always=True):
     '''
