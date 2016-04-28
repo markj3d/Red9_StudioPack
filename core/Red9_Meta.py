@@ -3442,7 +3442,10 @@ class MetaRig(MetaClass):
         PRO_PACK : Binding of the animMap format for storing animation data out to file
         '''
         if r9Setup.has_pro_pack():
-            from Red9.pro_pack.core.animation import AnimMap
+            #from Red9.pro_pack.core.animation import AnimMap
+            from Red9.pro_pack import r9pro
+            r9pro.r9import('r9panim')
+            from r9panim import AnimMap
             self.animMap=AnimMap()
             self.animMap.filepath=filepath
             self.animMap.metaPose=True
@@ -3457,7 +3460,10 @@ class MetaRig(MetaClass):
         an r9Anim file
         '''
         if r9Setup.has_pro_pack():
-            from Red9.pro_pack.core.animation import AnimMap
+            #from Red9.pro_pack.core.animation import AnimMap
+            from Red9.pro_pack import r9pro
+            r9pro.r9import('r9panim')
+            from r9panim import AnimMap
             self.animMap=AnimMap()
             self.animMap.filepath=filepath
             self.animMap.metaPose=True

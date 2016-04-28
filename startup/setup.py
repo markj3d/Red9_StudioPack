@@ -943,7 +943,7 @@ def boot_client_projects():
     '''
     clients=get_client_modules()
     clientsToBoot=[]
-    if len(clients):
+    if clients and len(clients)>1:
         options=['All']
         options.extend(clients)
         result=cmds.confirmDialog(title='ProjectPicker',
@@ -954,15 +954,18 @@ def boot_client_projects():
             clientsToBoot=clients
         else:
             clientsToBoot.append(result)
-        # boot the project / projects
-        for client in clientsToBoot:
-            log.info('Booting Client Module : %s' % client)
-            cmds.evalDeferred("import Red9_ClientCore.%s" % client, lp=True)  # Unresolved Import
-        # remove unused menuItems - added previously so that the menu grouping is clean
-        for client in clients:
-            if not client in clientsToBoot:
-                cmds.deleteUI('redNineClient%sItem' % client)
-                log.debug('Unused Client Menu Removed: %s' % client)
+    else:
+        clientsToBoot=clients
+    # boot the project / projects
+    for client in clientsToBoot:
+        log.info('Booting Client Module : %s' % client)
+        cmds.evalDeferred("import Red9_ClientCore.%s" % client, lp=True)  # Unresolved Import
+    # remove unused menuItems - added previously so that the menu grouping is clean
+    for client in clients:
+        if not client in clientsToBoot:
+            cmds.deleteUI('redNineClient%sItem' % client)
+            log.debug('Unused Client Menu Removed: %s' % client)
+    
                 
 def __reload_clients__():
     '''
