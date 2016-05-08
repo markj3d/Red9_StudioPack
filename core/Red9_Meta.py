@@ -971,6 +971,7 @@ class MClassNodeUI(object):
         self.stripNamespaces=False
         self.shortname=False
         self.sortBy = 'class'
+        self.selected = []
         
     @classmethod
     def show(cls):
@@ -1081,6 +1082,7 @@ class MClassNodeUI(object):
         cmds.popupMenu('r9MetaNodeUI_Popup')
         cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.graph_selected, command=partial(self.graphNetwork))
         cmds.menuItem(divider=True)
+        cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.rename_mNode, command=partial(self.__uiCB_renameNode))
         cmds.menuItem(label=LANGUAGE_MAP._MetaNodeUI_.select_children,
                       ann=LANGUAGE_MAP._MetaNodeUI_.select_children_ann,
                       command=partial(self.doubleClick))
@@ -1135,11 +1137,13 @@ class MClassNodeUI(object):
         callback run on select in the UI, allows you to run the func passed
         in by the funcOnSelection arg
         '''
+        self.selected=[]
         indexes=cmds.textScrollList('slMetaNodeList',q=True,sii=True)
         if indexes:
             cmds.select(cl=True)
         for i in indexes:
             node=MetaClass(self.mNodes[i - 1])
+            self.selected.append(node)
             log.debug('selected : %s' % node)
             
             #func is a function passed into the UI via the funcOnSelection arg
@@ -1324,6 +1328,21 @@ class MClassNodeUI(object):
         
         r9Setup.PRO_PACK_STUBS().MetaDataUI.uiCB_disconnectNode(mNode)
         
+    def __uiCB_renameNode(self, *args):
+        '''
+        rename the selected mNode
+        '''
+        result = cmds.promptDialog(title=LANGUAGE_MAP._MetaNodeUI_.rename_mNode,
+                                   message=LANGUAGE_MAP._Generic_.name,
+                                   button=[LANGUAGE_MAP._Generic_.apply, LANGUAGE_MAP._Generic_.cancel],
+                                   defaultButton=LANGUAGE_MAP._Generic_.apply,
+                                   text=self.selected[0].shortName(),
+                                   cancelButton='Cancel',
+                                   dismissString='Cancel')
+        if result == LANGUAGE_MAP._Generic_.apply:
+            self.selected[0].rename(cmds.promptDialog(query=True, text=True))
+            self.fillScroll()
+            
     def __uiCB_connectChildMetaNode(self, mClass, *args):
         '''
         PRO PACK : Given a single selected mNode from the UI and selected MAYA nodes, run

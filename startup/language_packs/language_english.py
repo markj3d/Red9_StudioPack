@@ -134,6 +134,7 @@ class _Generic_(object):
     
     hierarchy = 'Hierarchy'
     hierarchy_ann = 'Process Hierarchy'
+    name = 'Name'
     apply = 'Apply'
     cancel = 'Cancel'
     set = 'set'
@@ -181,6 +182,7 @@ class _Generic_(object):
     no = 'No'
     min = 'Min'
     max = 'Max'
+
 
 
 # ======================================================================================
@@ -568,6 +570,8 @@ class _MetaNodeUI_(object):
     select_children_ann = 'NOTE doubleClick on the UI also runs the selectChildren call"'
     delete_selected = 'Delete Selected mNodes'
     delete_selected_ann = 'call self.delete() on the selected nModes'
+    rename_mNode = 'Rename Node'
+    rename_mNode_ann = 'Rename Selected mNode'
     sort_by_classname = 'SortBy : ClassName'
     sort_by_nodename = 'SortBy : NodeName'
     class_all_registered = 'Class : All Registered'
@@ -575,7 +579,6 @@ class _MetaNodeUI_(object):
     pro_connect_node = 'Pro: Connect Node to System'
     pro_disconnect_node = 'Pro: Disconnect Nodes from System'
     pro_addchild_metanode = 'Pro: Add Child MetaNode System'
-
     filter_by_name = 'filter by name : '
     shortname = 'shortname'
     stripnamespace = 'strip_Nspace'
