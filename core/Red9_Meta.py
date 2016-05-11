@@ -1744,7 +1744,7 @@ class MetaClass(object):
         return newUUID
     
     def getUUID(self):
-        if r9Setup.mayaVersion()<=2016:
+        if r9Setup.mayaVersion()>=2016:
             return cmds.ls(self.mNode, uuid=True)[0]
         return self.UUID
     
