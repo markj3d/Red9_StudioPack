@@ -2919,7 +2919,7 @@ class AnimFunctions(object):
                             #copy only specific attributes
                             for attr in attributes:
                                 if cmds.attributeQuery(attr, node=src, exists=True) \
-                                    and cmds.attributeQuery(attr, node=src, exists=True):
+                                    and cmds.attributeQuery(attr, node=dest, exists=True):
                                     cmds.setAttr('%s.%s' % (dest, attr), cmds.getAttr('%s.%s' % (src, attr)))
                         else:
                             attrs = []
