@@ -94,7 +94,7 @@ class Test_MetaCache():
         
     def test_uuid(self):
         a=r9Meta.MetaRig(name='rig')
-        UUID = a.UUID
+        UUID = a.getUUID()  # a.UUID
         assert UUID in r9Meta.RED9_META_NODECACHE
         
         #test the duplicate handler
