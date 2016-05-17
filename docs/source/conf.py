@@ -16,26 +16,25 @@
 import sys
 import os
 
-if os.path.exists('C:\\Program Files\\Autodesk\\Maya2014'):
-    os.environ["MAYA_LOCATION"] = "C:\\Program Files\\Autodesk\\Maya2014"
-    os.environ["PYTHONHOME"] = "C:\\Program Files\\Autodesk\\Maya2014\\Python"
-    os.environ["PATH"] = os.environ["PATH"] + ";C:\\Program Files\\Autodesk\\Maya2014\\bin;"
+if os.path.exists('C:\\Program Files\\Autodesk\\Maya2015'):
+    os.environ["MAYA_LOCATION"] = "C:\\Program Files\\Autodesk\\Maya2015"
+    os.environ["PYTHONHOME"] = "C:\\Program Files\\Autodesk\\Maya2015\\Python"
+    os.environ["PATH"] = os.environ["PATH"] + ";C:\\Program Files\\Autodesk\\Maya2015\\bin;"
 else:
-    os.environ["MAYA_LOCATION"] = "C:\\Program Files\\Autodesk\\Maya2012"
-    os.environ["PYTHONHOME"] = "C:\\Program Files\\Autodesk\\Maya2012\\Python"
-    os.environ["PATH"] = os.environ["PATH"] + ";C:\\Program Files\\Autodesk\\Maya2012\\bin;"
+    os.environ["MAYA_LOCATION"] = "C:\\Program Files\\Autodesk\\Maya2016"
+    os.environ["PYTHONHOME"] = "C:\\Program Files\\Autodesk\\Maya2016\\Python"
+    os.environ["PATH"] = os.environ["PATH"] + ";C:\\Program Files\\Autodesk\\Maya2016\\bin;"
 
 for p in sys.path:print p
 
 import maya.standalone
 maya.standalone.initialize(name='python')
 
-try:
-    import cryCoreStandalone
-except:
-    sys.path.append("P:/Red9_Pipeline/RedNine")
-    import Red9
-    Red9.start()
+
+#sys.path.append("P:/Red9_Pipeline/RedNine")
+#import Red9
+#Red9.start()
+
 
 
 
@@ -72,7 +71,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Red9'
-copyright = u'2015, Mark Jackson'
+copyright = u'2016, Mark Jackson'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
