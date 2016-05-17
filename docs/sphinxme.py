@@ -1,6 +1,6 @@
 import os
 import time
-import pymel.core as pCore
+#import pymel.core as pCore
 
 THISDIR = os.path.dirname(__file__)
 OUTPUTHTML = THISDIR + "/html"

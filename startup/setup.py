@@ -943,7 +943,7 @@ def boot_client_projects():
     '''
     clients=get_client_modules()
     clientsToBoot=[]
-    if clients and len(clients)>1:
+    if clients and len(clients)>1 and not mayaIsBatch():
         options=['All']
         options.extend(clients)
         result=cmds.confirmDialog(title='ProjectPicker',
