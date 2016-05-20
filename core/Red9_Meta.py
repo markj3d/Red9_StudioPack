@@ -3711,6 +3711,14 @@ class MetaHIKCharacterNode(MetaRig):
                 return data[0]
             return data
     
+    def getHIKPropertyStateNode(self):
+        '''
+        return the HIK Property node as a class for easy management
+        '''
+        properties=cmds.listConnections('%s.propertyState' % self.mNode)
+        if properties:
+            return MetaHIKPropertiesNode(properties[0])
+        
     def getHIKControlSetNode(self):
         controlNode=cmds.listConnections(self.mNode,type='HIKControlSetNode')
         if controlNode:
@@ -3847,7 +3855,16 @@ class MetaHIKControlSetNode(MetaRig):
                                 children.extend(cmds.ls(e,l=True))
         return children
     
+    
+class MetaHIKPropertiesNode(MetaClass):
+    '''
+    Casting HIK Properties to a Meta class for easy managing
+    '''
+    def __init__(self, *args, **kws):
+        super(MetaHIKPropertiesNode, self).__init__(*args,**kws)
 
+    
+    
 
 # EXPERIMENTAL CALLS ==========================================================
 
