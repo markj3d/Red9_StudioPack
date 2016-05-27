@@ -40,6 +40,7 @@ import maya.cmds as cmds
 import pymel.core as pm
 #import Red9_AnimationUtils as r9Anim
 import Red9.startup.setup as r9Setup
+import Red9.core.Red9_General as r9General
 
 import logging
 logging.basicConfig()
@@ -586,7 +587,8 @@ def bake_binder_data(rootNode=None, debugView=False, runFilter=True, ignoreInFil
         try:
             if not debugView:
                 cmds.refresh(su=True)
-            cmds.bakeResults(BoundCtrls, simulation=True,
+            with r9General.AnimationContext():
+                cmds.bakeResults(BoundCtrls, simulation=True,
                              sampleBy=1,
                              time=(cmds.playbackOptions(q=True, min=True), cmds.playbackOptions(q=True, max=True)),
                              disableImplicitControl=True,
