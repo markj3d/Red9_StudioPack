@@ -2007,9 +2007,9 @@ class MetaClass(object):
         '''
         if self.hasAttr(attr):
             try:
-                cmds.deleteAttr(n=self.mNode, at=attr)
-            except:
-                raise StandardError('Failed to delete given attrs : %s' % attr)
+                cmds.deleteAttr(self.mNode, at=attr)
+            except StandardError, err:
+                raise StandardError('Failed to delete given attrs : %s : %s' % (attr, err))
         
     @nodeLockManager
     def addAttr(self, attr, value=None, attrType=None, hidden=False, **kws):
@@ -2605,7 +2605,7 @@ class MetaClass(object):
         :param mAttrs: only return connected nodes that pass the given attribute filter 
         :param stepover: if you're passing in 'mTypes' or 'mInstances' flags then this dictates if 
             we continue to walk down a tree if it's parent didn't match the given type, default is False
-            which will abort a tree who's parent didn't match. With stepover=True we siomply stepover
+            which will abort a tree who's parent didn't match. With stepover=True we simply stepover
             that node and continue down all child nodes
         
         .. note:: 
@@ -3564,9 +3564,9 @@ class MetaRigSubSystem(MetaRig):
             support nodes are found. The idea being that there is always 1 main support for a system
             and the naming convention of the mNodeID reflects that ie: L_ArmSystem and L_ArmSupport
         '''
-        try:
-            subsystems=getConnectedMetaNodes(self.mNode,mInstances=MetaRigSupport,asMeta=True)
-            print subsystems
+        try:            
+            subsystems=getConnectedMetaNodes(self.mNode, source=False, destination=True, mInstances=MetaRigSupport, dataType='mClass')
+            #print 'subsystems :', subsystems
             if len(subsystems)>1:
                 for s in subsystems:
                     if s.mNodeID==self.mNodeID.replace('System', 'Support'):
