@@ -778,7 +778,7 @@ class AudioNode(object):
             else:
                 cmds.setAttr('%s.offset' % self.audioNode, self.startFrame + offset)
     
-    def importAndActivate(self):
+    def importAndActivate(self, active=True):
         '''
         If self was instantiated with filepath then this will import that wav
         into Maya and activate it on the timeline. Note that if there is already
@@ -789,10 +789,11 @@ class AudioNode(object):
         >>> audio = r9Audio.AudioNode(filepath = 'c:/my_audio.wav')
         >>> audio.importAndActivate()
         '''
+        
         a=cmds.ls(type='audio')
         cmds.file(self.path, i=True, type='audio', options='o=0')
         b=cmds.ls(type='audio')
- 
+  
         if not a == b:
             self.audioNode = (list(set(a) ^ set(b))[0])
         else:
@@ -803,7 +804,8 @@ class AudioNode(object):
                 log.warning("can't find match audioNode for path : %s" % self.path)
                 return
         self.isLoaded=True
-        self.setActive()
+        if active:
+            self.setActive()
         
     def setActive(self):
         '''
