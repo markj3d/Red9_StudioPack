@@ -2212,14 +2212,10 @@ class MetaClass(object):
         
         if cmds.lockNode(self.mNode, q=True):
             cmds.lockNode(self.mNode, lock=False)
-        #clear the node from the cache
-        if RED9_META_NODECACHE:
-            if self.hasAttr('UUID'):
-                if self.UUID in RED9_META_NODECACHE.keys():
-                    RED9_META_NODECACHE.pop(self.getUUID())
-            elif self.mNode in RED9_META_NODECACHE.keys():
-                RED9_META_NODECACHE.pop(self.mNode)
-        #delete the Maya node and this python object
+        
+        # clear the node from the cache
+        removeFromCache(self)
+
         cmds.delete(self.mNode)
         del(self)
         
@@ -2297,6 +2293,30 @@ class MetaClass(object):
                     return i
             return ind[-1]+1
     
+    def _upliftMessage(self, node, attr):
+        '''
+        if attr is a single, non-muliti message attr and it's already connected to something
+        then uplift it to a multi, non-indexed managed message attr and cast any current connections 
+        to the newly created attr
+        
+        :param node: node with the attr on it
+        :param attr: attr to uplift
+        :rtype bool: if the attr is a multi or not
+        '''
+        if cmds.attributeQuery(attr, node=node, multi=True):
+            log.debug('message attr is already multi - abort uplift')
+            return True
+
+        cons=cmds.listConnections('%s.%s' % (node, attr), s=True,d=False,p=True)  # attr is already connected?
+        if cons:
+            log.debug('attr is already connected - uplift to multi-message - im=True')
+            cmds.deleteAttr('%s.%s' % (node, attr)) # delete current attr
+            cmds.addAttr(node, longName=attr, at='message', m=True, im=True)
+            # recast previous attr connections
+            for con in cons:
+                cmds.connectAttr(con, '%s.%s[%i]' % (node, attr, self._getNextArrayIndex(node, attr)))  # na=True)
+            return True
+                
     def isChildNode(self, node, attr=None, srcAttr=None):
         '''
         test if a node is already connected to the mNode via a given attr link.
@@ -2323,7 +2343,7 @@ class MetaClass(object):
         return False
         
     @nodeLockManager
-    def connectChildren(self, nodes, attr, srcAttr=None, cleanCurrent=False, force=True, allowIncest=False, srcSimple=False):
+    def connectChildren(self, nodes, attr, srcAttr=None, cleanCurrent=False, force=True, allowIncest=False, srcSimple=False, **kws):
         '''
         Fast method of connecting multiple nodes to the mNode via a message attr link.
         This call generates a MULTI message on both sides of the connection and is designed
@@ -2341,10 +2361,11 @@ class MetaClass(object):
         :param allowIncest: Over-ride the default behaviour when dealing with child nodes that are
                         standard Maya Nodes not metaNodes. Default in this case is to NOT index manage
                         the plugs, this flag overloads that, allow multiple parents.
-        :param srcSimple: By default when we wire children we expect arrays so both plugs on the src and des 
-            side of teh connection are index managed. This flag stops the index and uses a single simple wire on the
+        :param srcSimple: By default when we wire children we expect arrays so both plugs on the src and dest 
+            side of the connection are index managed. This flag stops the index and uses a single simple wire on the
             srcAttr side of the plug ( the child )
-        TODO: check the attr type, if attr exists and is a non-multi messgae then don't run the indexBlock
+            
+        TODO: check the attr type, if attr exists and is a non-multi message then don't run the indexBlock
         '''
         
         #make sure we have the attr on the mNode
@@ -2397,7 +2418,7 @@ class MetaClass(object):
                 log.warning(error)
                 
     @nodeLockManager
-    def connectChild(self, node, attr, srcAttr=None, cleanCurrent=True, force=True):
+    def connectChild(self, node, attr, srcAttr=None, cleanCurrent=True, force=True, allow_multi=False, **kws):
         '''
         Fast method of connecting a node to the mNode via a message attr link. This call
         generates a NONE-MULTI message on both sides of the connection and is designed
@@ -2409,50 +2430,65 @@ class MetaClass(object):
         :param attr: Name for the message attribute
         :param srcAttr: If given this becomes the attr on the child node which connects it
                         to self.mNode. If NOT given this attr is set to self.mNodeID
-        :param cleanCurrent: Disconnect and clean any currently connected nodes to this attr.
+        :param cleanCurrent: Disconnect and clean any currently connected nodes to the attr on self.
                         Note this is operating on the mNode side of the connection, removing
                         any currently connected nodes to this attr prior to making the new ones
         :param force: Maya's default connectAttr 'force' flag, if the srcAttr is already connected
                         to another node force the connection to the new attr
+                        
         TODO: do we move the cleanCurrent to the end so that if the connect fails you're not left
         with a half run setup?
-        
         '''
         #make sure we have the attr on the mNode, if we already have a MULIT-message
         #should we throw a warning here???
         self.addAttr(attr, attrType='messageSimple')
-
+        src_is_multi=False
         try:
             if cleanCurrent:
                 self.__disconnectCurrentAttrPlugs(attr)  # disconnect/cleanup current plugs to this attr
             if not srcAttr:
                 srcAttr=self.mNodeID  # attr on the nodes source side for the child connection
             if not node:
-                #this allows 'None' to be passed into the set attr calls and in turn, allow
-                #self.mymessagelink=None to clear all current connections
+                # this allows 'None' to be passed into the set attr calls and in turn, allow
+                # self.mymessagelink=None to clear all current connections
                 return
+            
+            # add and manage the attr on the child node
             if isMetaNode(node):
-                if not issubclass(type(node), MetaClass):  # allows you to pass in an metaClass
-                    MetaClass(node).addAttr(srcAttr,attrType='messageSimple')
+                if not issubclass(type(node), MetaClass):
+                    MetaClass(node).addAttr(srcAttr, attrType='messageSimple')
+                    #cmds.addAttr(node, longName=srcAttr, at='message', m=False)
                 else:
-                    node.addAttr(srcAttr,attrType='messageSimple')
+                    node.addAttr(srcAttr, attrType='messageSimple')
                     node=node.mNode
             elif not cmds.attributeQuery(srcAttr, exists=True, node=node):
                 cmds.addAttr(node, longName=srcAttr, at='message', m=False)
-                
+            
+            # uplift to multi-message index managed if needed
+            if allow_multi:
+                src_is_multi=self._upliftMessage(node, srcAttr)  # uplift the message to a multi if needed
+            else:
+                src_is_multi=cmds.attributeQuery(srcAttr, node=node, multi=True)
+            
             if not self.isChildNode(node, attr, srcAttr):
-                cmds.connectAttr('%s.%s' % (self.mNode,attr),'%s.%s' % (node,srcAttr), f=force)
+                if src_is_multi:
+                    log.debug('connecting child via multi-message')
+                    cmds.connectAttr('%s.%s' % (self.mNode, attr),
+                                     '%s.%s[%i]' % (node, srcAttr, self._getNextArrayIndex(node,srcAttr)), f=force)
+                else:
+                    log.debug('connecting child via single-message')
+                    cmds.connectAttr('%s.%s' % (self.mNode,attr),'%s.%s' % (node,srcAttr), f=force)
             else:
                 raise StandardError('%s is already connected to metaNode' % node)
         except StandardError, error:
             log.warning(error)
     
     @nodeLockManager
-    def connectParent(self, node, attr, srcAttr=None, cleanCurrent=True):
+    def connectParent(self, node, attr, srcAttr=None, cleanCurrent=True, **kws):
         '''
         Fast method of connecting message links to the mNode as parents
         :param nodes: Maya nodes to connect to this mNode
-        :param attr: Name for the message attribute on eth PARENT!
+        :param attr: Name for the message attribute on the PARENT!
         :param srcAttr: If given this becomes the attr on the node which connects it
                         to the parent. If NOT given this attr is set to parents shortName
         :param cleanCurrent: Exposed from teh connectChild code which is basically what this is running in reverse

@@ -104,7 +104,7 @@ class Test_MetaCache():
         assert len(nodes)==2
         assert len(r9Meta.RED9_META_NODECACHE.keys()) == 2
         assert r9Meta.RED9_META_NODECACHE[UUID]==a
-        assert r9Meta.MetaClass(a.mNode).UUID == UUID
+        assert r9Meta.MetaClass(a.mNode).getUUID() == UUID
     
     def test_wrappedMayaNodes(self):
         '''
@@ -112,8 +112,13 @@ class Test_MetaCache():
         '''
         cmds.polyCube(name='cube1')
         n1 = r9Meta.MetaClass('|cube1')
+        UUID=cmds.ls(n1.mNode, uuid=True)[0]
         r9Meta.registerMClassNodeCache(n1)
-        assert r9Meta.RED9_META_NODECACHE['|cube1']==n1
+        # from 2016 the UUID is the key for all nodes in the Cache
+        if r9Setup.mayaVersion()>=2016:
+            assert r9Meta.RED9_META_NODECACHE[UUID]==n1
+        else:
+            assert r9Meta.RED9_META_NODECACHE['|cube1']==n1
         n1.rename('renamedCube1')
         assert n1.mNode=='|renamedCube1'
         
@@ -122,10 +127,15 @@ class Test_MetaCache():
         #the MOBject to ensure that things are still correct in the pull
         cmds.polyCube(name='cube1')
         n2 = r9Meta.MetaClass('|cube1')
+        UUID=cmds.ls(n2.mNode, uuid=True)[0]
         assert n2.mNode=='|cube1'
         assert not n2.mNode=='renamedCube1'
         r9Meta.registerMClassNodeCache(n2)
-        assert r9Meta.RED9_META_NODECACHE['|cube1']==n2
+        if r9Setup.mayaVersion()>=2016:
+            assert r9Meta.RED9_META_NODECACHE[UUID]==n2
+        else:
+            assert r9Meta.RED9_META_NODECACHE['|cube1']==n2
+
         
     def test_joshs_bastard_error(self):
         '''
@@ -371,6 +381,7 @@ class Test_MetaClass():
     
         #connect something else to Singluar - cleanCurrent=True by default so unhook cube1
         self.MClass.connectChild(cube2,'Singluar')
+        print self.MClass.Singluar,'  : mclass.Singular'
         assert self.MClass.Singluar==[cube2]
         assert not cmds.attributeQuery('MetaClassTest',node=cube1,exists=True)  # cleaned up after ourselves?
         self.MClass.connectChildren([cube3,cube4],'Singluar')
