@@ -418,9 +418,9 @@ class DataMap(object):
                 raise IOError('File is Read-Only - write aborted : %s' % filepath)
         
         ConfigObj = configobj.ConfigObj(indent_type='\t')
+        ConfigObj['info']=self.infoDict
         ConfigObj['filterNode_settings']=self.settings.__dict__
         ConfigObj['poseData']=self.poseDict
-        ConfigObj['info']=self.infoDict
         if self.skeletonDict:
             ConfigObj['skeletonDict']=self.skeletonDict
         ConfigObj.filename = filepath
