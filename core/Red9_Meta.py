@@ -2938,7 +2938,7 @@ class MetaRig(MetaClass):
         self.addAttr('renderMeshes', attrType='message')
         self.addAttr('exportSkeletonRoot', attrType='messageSimple')
         self.addAttr('scaleSystem', attrType='messageSimple')
-        #self.addAttr('timecode_node', attrType='messageSimple')
+        self.addAttr('timecode_node', attrType='messageSimple')
     
     @property
     def ctrl_main(self):
@@ -3541,7 +3541,10 @@ class MetaRig(MetaClass):
                 from Red9.pro_pack import r9pro
                 r9pro.r9import('r9paudio')
                 import r9paudio
-            return r9paudio.Timecode(self.ctrl_main)
+            if self.timecode_node:
+                return r9paudio.Timecode(self.timecode_node[0])
+            else:
+                return r9paudio.Timecode(self.ctrl_main)
 
     def timecode_get(self, atFrame=None):
         '''
