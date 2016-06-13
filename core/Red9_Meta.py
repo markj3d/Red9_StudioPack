@@ -3495,7 +3495,8 @@ class MetaRig(MetaClass):
     the extensions being added. We bind them here to make it more transparent for you guys
     running Meta, save us sub-classing MetaRig for Pro and exposes some of the codebase wrapping
     '''
-    def saveAnimation(self, filepath, incRoots=True):
+    def saveAnimation(self, filepath, incRoots=True, useFilter=True, timerange=(),
+                      storeThumbnail=False, force=False):
         '''
         PRO_PACK : Binding of the animMap format for storing animation data out to file
         '''
@@ -3504,15 +3505,21 @@ class MetaRig(MetaClass):
             from Red9.pro_pack import r9pro
             r9pro.r9import('r9panim')
             from r9panim import AnimMap
+            
             self.animMap=AnimMap()
             self.animMap.filepath=filepath
             self.animMap.metaPose=True
             self.animMap.settings.incRoots=incRoots
-            self.animMap.saveData(self.mNode,storeThumbnail=False)
+            self.animMap.saveAnim(self.mNode,
+                                  useFilter=useFilter,
+                                  timerange=timerange,
+                                  storeThumbnail=False,
+                                  force=force)
             
-            print self.animMap.filepath
+            log.info('AnimMap data saved to : %s' % self.animMap.filepath)
             
-    def loadAnimation(self, filepath, offset=0, incRoots=True):
+    def loadAnimation(self, filepath, incRoots=True, useFilter=True, 
+                      loadAsStored=True, loadFromFrm=0, referenceNode=None, *args, **kws):
         '''
         PRO_PACK : Binding of the animMap format for loading animation data from
         an r9Anim file
@@ -3522,12 +3529,16 @@ class MetaRig(MetaClass):
             from Red9.pro_pack import r9pro
             r9pro.r9import('r9panim')
             from r9panim import AnimMap
+            
             self.animMap=AnimMap()
             self.animMap.filepath=filepath
             self.animMap.metaPose=True
             self.animMap.settings.incRoots=incRoots
-            self.animMap.offset=offset
-            self.animMap.loadData(self.mNode)
+            self.animMap.loadAnim(self.mNode,
+                                  useFilter=useFilter,
+                                  loadAsStored=loadAsStored,
+                                  loadFromFrm=loadFromFrm,
+                                  referenceNode=referenceNode)
     
     @property
     def Timecode(self):
