@@ -3513,7 +3513,7 @@ class MetaRig(MetaClass):
             self.animMap.saveAnim(self.mNode,
                                   useFilter=useFilter,
                                   timerange=timerange,
-                                  storeThumbnail=False,
+                                  storeThumbnail=storeThumbnail,
                                   force=force)
             
             log.info('AnimMap data saved to : %s' % self.animMap.filepath)
