@@ -1152,7 +1152,7 @@ class MClassNodeUI(object):
             if self.func:
                 self.func(node.mNode)
             else:
-                cmds.select(node.mNode,add=True)
+                cmds.select(node.mNode,add=True,noExpand=True)
                 
         if self.closeOnSelect:
             cmds.deleteUI('MetaClassFinder',window=True)
