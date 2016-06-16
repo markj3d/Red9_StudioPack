@@ -144,6 +144,8 @@ def decodeString(val):
     From configObj the return is a string, we want to encode
     it back to it's original state so we pass it through this
     '''
+    if not val:
+        return
     if not issubclass(type(val), str) and not type(val)==unicode:
         #log.debug('Val : %s : is not a string / unicode' % val)
         #log.debug('ValType : %s > left undecoded' % type(val))
