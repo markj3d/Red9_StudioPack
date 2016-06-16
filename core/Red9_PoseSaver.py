@@ -304,12 +304,14 @@ class DataMap(object):
             # this call is the specific collection of data for this node required by this map type
             self._collectNodeData(node, key)
 
-    def buildBlocks_fill(self, nodes):
+    def buildBlocks_fill(self, nodes=None):
         '''
         To Be Overloaded : What capture routines to run in order to build the DataMap up.
         Note that the self._buildBlock_poseDict(nodes) calls the self._collectNodeData per node
         as a way of gathering what info to be stored against each node.
         '''
+        if not nodes:
+            nodes=self.nodesToStore
         self.poseDict={}
         self._buildBlock_info()
         self._buildBlock_poseDict(nodes)
@@ -724,7 +726,7 @@ class PoseData(DataMap):
         '''
         self.skeletonDict={}
         if not rootJnt:
-            log.info('skeleton rootJnt joint was not found')
+            log.info('skeleton rootJnt joint was not found - [skeletonDict] pose section will not be propagated')
             return
         
         fn=r9Core.FilterNode(rootJnt)
@@ -742,10 +744,12 @@ class PoseData(DataMap):
                 except:
                     log.debug('%s : attr is invalid in this instance' % attr)
 
-    def buildBlocks_fill(self, nodes):
+    def buildBlocks_fill(self, nodes=None):
         '''
         What capture routines to run in order to build the poseDict data
         '''
+        if not nodes:
+            nodes=self.nodesToStore
         self.poseDict={}
         self._buildBlock_info()
         self._buildBlock_poseDict(nodes)
@@ -1210,11 +1214,13 @@ class PoseCompare(object):
     >>> #build an mPose object and fill the internal poseDict
     >>> mPoseA=r9Pose.PoseData()
     >>> mPoseA.metaPose=True
-    >>> mPoseA.buildInternalPoseData(cmds.ls(sl=True))
+    >>> mPoseA.buildDataMap(cmds.ls(sl=True))
+    >>> mPoseA.buildBlocks_fill()
     >>> 
     >>> mPoseB=r9Pose.PoseData()
     >>> mPoseB.metaPose=True
-    >>> mPoseB.buildInternalPoseData(cmds.ls(sl=True))
+    >>> mPoseB.buildDataMap(cmds.ls(sl=True))
+    >>> mPoseB.buildBlocks_fill()
     >>> 
     >>> compare=r9Pose.PoseCompare(mPoseA,mPoseB)
     >>> 
@@ -1227,7 +1233,7 @@ class PoseCompare(object):
     >>> compare.fails['failedAttrs']
     '''
     def __init__(self, currentPose, referencePose, angularTolerance=0.1, linearTolerance=0.01, 
-                 compareDict='poseDict', filterMap=[], ignoreBlocks=[]):
+                 compareDict='poseDict', filterMap=[], ignoreBlocks=[], ignoreStrings=[]):
         '''
         Make sure we have 2 PoseData objects to compare
         :param currentPose: either a PoseData object or a valid pose file
@@ -1239,6 +1245,8 @@ class PoseCompare(object):
         :param filterMap: if given this is used as a high level filter, only matching nodes get compared
             others get skipped. Good for passing in a master core skeleton to test whilst ignoring extra nodes
         :param ignoreBlocks: allows the given failure blocks to be ignored. We mainly use this for ['missingKeys']
+        :param ignoreStrings: allows you to pass in a list of strings, if any of the keys in the data contain
+             that string it will be skipped, note this is a partial match so you can pass in wildcard searches ['_','_end']
         
         .. note::
             In the new setup if the skeletonRoot jnt is found we add a whole
@@ -1259,6 +1267,7 @@ class PoseCompare(object):
         
         self.filterMap = filterMap
         self.ignoreBlocks = ignoreBlocks
+        self.ignoreStrings = ignoreStrings
         
         if isinstance(currentPose, PoseData):
             self.currentPose = currentPose
@@ -1306,6 +1315,10 @@ class PoseCompare(object):
             if self.filterMap and not key in self.filterMap:
                 log.debug('node not in filterMap - skipping key %s' % key)
                 continue
+            if self.ignoreStrings:
+                for istr in self.ignoreStrings:
+                    if istr in key:
+                        continue
             if key in referenceDic:
                 referenceAttrBlock = referenceDic[key]
             else:
@@ -1336,6 +1349,7 @@ class PoseCompare(object):
                     continue
                 
                 # test the attrs value matches
+                #print 'key : ', key, 'Value :  ', value
                 value = r9Core.decodeString(value)  # decode as this may be a configObj
                 refValue = r9Core.decodeString(referenceAttrBlock['attrs'][attr])  # decode as this may be a configObj
                 
