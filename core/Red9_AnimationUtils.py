@@ -3552,7 +3552,7 @@ class RandomizeKeys(object):
                           damp=cmds.floatSliderGrp('fsg_randfloatValue', q=True, v=True),
                           percent=cmds.checkBox('cb_rand_percent', q=True, v=True))
                                 
-    def addNoise(self, curves, time=(), step=1, currentKeys=True, randomRange=[-1, 1], damp=1, percent=False):
+    def addNoise(self, curves, time=(), step=1, currentKeys=True, randomRange=[-1, 1], damp=1, percent=False, keepKeys=False):
         '''
         Simple noise function designed to add noise to keyframed animation data.
         
@@ -3562,7 +3562,9 @@ class RandomizeKeys(object):
         :param currentKeys: ONLY randomize keys that already exists
         :param randomRange: range [upper, lower] bounds passed to teh randomizer
         :param damp: damping passed into the randomizer
+        :param keepkeys: if True maintain current keys
         '''
+        keyTimes=[]
         if percent:
             damp=damp/100
         if currentKeys:
@@ -3587,6 +3589,8 @@ class RandomizeKeys(object):
                 if selectedKeyTimes:
                     time = (selectedKeyTimes[0], selectedKeyTimes[-1])
             for curve in curves:
+                if keepKeys:
+                    keyTimes = cmds.keyframe(curve, q=True)
                 if percent:
                     # figure the upper and lower value bounds
                     randomRange = self.__calcualteRangeValue(cmds.keyframe(curve, q=True, vc=True, t=time))
@@ -3596,6 +3600,9 @@ class RandomizeKeys(object):
                             if not cmds.nodeType(con)=='hyperLayout'][0]
                             
                 for t in timeLineRangeProcess(time[0], time[1], step, incEnds=True):
+                    if keepKeys:
+                        if t in keyTimes:
+                            continue
                     value = self.noiseFunc(cmds.getAttr(connection, t=t), randomRange, damp)
                     cmds.setKeyframe(connection, v=value, t=t)
                     
