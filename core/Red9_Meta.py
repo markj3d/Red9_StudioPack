@@ -667,7 +667,7 @@ def isMetaNodeInherited(node, mInstances=[]):
     mClass=getMClassDataFromNode(node)
     if mClass and mClass in RED9_META_REGISTERY:
         for inst in mTypesToRegistryKey(mInstances):
-            log.debug('testing class inheritance: %s > %s' % (inst, mClass))
+            #log.debug('testing class inheritance: %s > %s' % (inst, mClass))
             if issubclass(RED9_META_REGISTERY[mClass], RED9_META_REGISTERY[inst]):
                 log.debug('MetaNode %s is of subclass >> %s' % (mClass,inst))
                 return True
@@ -1765,7 +1765,7 @@ class MetaClass(object):
                 raise ValueError('Invalid enum string passed in: string is not in enum keys')
         log.debug('set enum attribute by index :  %s' % value)
         cmds.setAttr('%s.%s' % (self.mNode, attr), value)
-    
+
     def __setMessageAttr__(self, attr, value, force=True):
         '''
         Message : by default in the __setattr_ I'm assuming that the nodes you pass in are to be
@@ -1780,7 +1780,7 @@ class MetaClass(object):
         else:
             log.debug('set multi-message attribute connection:  %s' % value)
             self.connectChildren(value, attr, cleanCurrent=True, force=force)
-    
+                      
     @nodeLockManager
     def __setattr__(self, attr, value, force=True, **kws):
         '''
@@ -2341,9 +2341,9 @@ class MetaClass(object):
                     if '%s.' % cmds.ls(node,l=True)[0] in con:
                         return True
         return False
-        
+
     @nodeLockManager
-    def connectChildren(self, nodes, attr, srcAttr=None, cleanCurrent=False, force=True, allowIncest=False, srcSimple=False, **kws):
+    def connectChildren(self, nodes, attr, srcAttr=None, cleanCurrent=False, force=True, allowIncest=True, srcSimple=False, **kws):
         '''
         Fast method of connecting multiple nodes to the mNode via a message attr link.
         This call generates a MULTI message on both sides of the connection and is designed
@@ -2381,6 +2381,7 @@ class MetaClass(object):
             #this allows 'None' to be passed into the set attr calls and in turn, allow
             #self.mymessagelink=None to clear all current connections
             return
+        
         for node in nodes:
             ismeta=False
             if isMetaNode(node):
@@ -2398,25 +2399,43 @@ class MetaClass(object):
             try:
                 #also we need to add the self.allowIncest flag to trigger managed message links like this.
                 if not self.isChildNode(node, attr, srcAttr):
-                    if ismeta or allowIncest:
-                        if ismeta:
-                            log.debug('connecting MetaData nodes via indexes :  %s.%s >> %s.%s' % (self.mNode,attr,node,srcAttr))
-                        elif allowIncest:
-                            log.debug('connecting Standard Maya nodes via indexes : %s.%s >> %s.%s' % (self.mNode,attr,node,srcAttr))
-                        if not srcSimple:
-                            cmds.connectAttr('%s.%s[%i]' % (self.mNode, attr, self._getNextArrayIndex(self.mNode,attr)),
-                                     '%s.%s[%i]' % (node, srcAttr, self._getNextArrayIndex(node,srcAttr)), f=force)
+                    try:
+                        if ismeta or allowIncest:
+                            if ismeta:
+                                log.debug('connecting MetaData nodes via indexes :  %s.%s >> %s.%s' % (self.mNode,attr,node,srcAttr))
+                            elif allowIncest:
+                                log.debug('connecting Standard Maya nodes via indexes : %s.%s >> %s.%s' % (self.mNode,attr,node,srcAttr))
+                            if not srcSimple:
+                                cmds.connectAttr('%s.%s[%i]' % (self.mNode, attr, self._getNextArrayIndex(self.mNode,attr)),
+                                         '%s.%s[%i]' % (node, srcAttr, self._getNextArrayIndex(node,srcAttr)), f=force)
+                            else:
+                                cmds.connectAttr('%s.%s[%i]' % (self.mNode, attr, self._getNextArrayIndex(self.mNode,attr)),
+                                         '%s.%s' % (node, srcAttr), f=force)
                         else:
-                            cmds.connectAttr('%s.%s[%i]' % (self.mNode, attr, self._getNextArrayIndex(self.mNode,attr)),
-                                     '%s.%s' % (node, srcAttr), f=force)
-                    else:
-                        log.debug('connecting %s.%s >> %s.%s' % (self.mNode,attr,node,srcAttr))
+                            log.debug('connecting %s.%s >> %s.%s' % (self.mNode,attr,node,srcAttr))
+                            cmds.connectAttr('%s.%s' % (self.mNode,attr),'%s.%s' % (node,srcAttr), f=force)
+                    except:
+                        # If the add was originally a messageSimple, then this exception is a 
+                        # back-up for the previous behaviour
                         cmds.connectAttr('%s.%s' % (self.mNode,attr),'%s.%s' % (node,srcAttr), f=force)
                 else:
                     raise StandardError('"%s" is already connected to metaNode "%s"' % (node,self.mNode))
             except StandardError,error:
                 log.warning(error)
-                
+
+
+#     @nodeLockManager
+#     def connectChildren(self, nodes, attr, srcAttr=None, cleanCurrent=False, force=True, **kws):
+#         '''
+#         Thinking of depricating the original connectChildren call as the multi-message handling
+#         was just getting too clumsy to manage
+#         '''
+#         if cleanCurrent:
+#             self.__disconnectCurrentAttrPlugs(attr)  # disconnect/cleanup current plugs to this attr
+#         for node in nodes:
+#             self.connectChild(node, attr=attr, srcAttr=srcAttr, cleanCurrent=False, force=force, allow_multi=True, **kws)
+        
+                    
     @nodeLockManager
     def connectChild(self, node, attr, srcAttr=None, cleanCurrent=True, force=True, allow_multi=False, **kws):
         '''
@@ -2435,6 +2454,8 @@ class MetaClass(object):
                         any currently connected nodes to this attr prior to making the new ones
         :param force: Maya's default connectAttr 'force' flag, if the srcAttr is already connected
                         to another node force the connection to the new attr
+        :param allow_multi: allows the same node to connect back to this mNode under multiple wires
+            default behaviour is to only let a single wire from an mNode to a child
                         
         TODO: do we move the cleanCurrent to the end so that if the connect fails you're not left
         with a half run setup?
@@ -2457,7 +2478,6 @@ class MetaClass(object):
             if isMetaNode(node):
                 if not issubclass(type(node), MetaClass):
                     MetaClass(node).addAttr(srcAttr, attrType='messageSimple')
-                    #cmds.addAttr(node, longName=srcAttr, at='message', m=False)
                 else:
                     node.addAttr(srcAttr, attrType='messageSimple')
                     node=node.mNode
@@ -2467,15 +2487,14 @@ class MetaClass(object):
             # uplift to multi-message index managed if needed
             if allow_multi:
                 src_is_multi=self._upliftMessage(node, srcAttr)  # uplift the message to a multi if needed
-            else:
-                src_is_multi=cmds.attributeQuery(srcAttr, node=node, multi=True)
-            
+            #else:
+            #    src_is_multi=cmds.attributeQuery(srcAttr, node=node, multi=True)
             if not self.isChildNode(node, attr, srcAttr):
-                if src_is_multi:
+                try:
                     log.debug('connecting child via multi-message')
                     cmds.connectAttr('%s.%s' % (self.mNode, attr),
                                      '%s.%s[%i]' % (node, srcAttr, self._getNextArrayIndex(node,srcAttr)), f=force)
-                else:
+                except:
                     log.debug('connecting child via single-message')
                     cmds.connectAttr('%s.%s' % (self.mNode,attr),'%s.%s' % (node,srcAttr), f=force)
             else:
@@ -2519,10 +2538,10 @@ class MetaClass(object):
                 currentConnects=[currentConnects]
             for connection in currentConnects:
                 try:
-                    #log.debug('Disconnecting %s.%s >> from : %s' % (self.mNode,attr,connection))
+                    log.debug('Disconnecting %s.%s >> from : %s' % (self.mNode,attr,connection))
                     self.disconnectChild(connection, attr=attr, deleteSourcePlug=True, deleteDestPlug=False)
                 except:
-                    log.warning('Failed to unconnect current message link')
+                    log.warning('Failed to un-connect current message link')
                     
     @nodeLockManager
     def disconnectChild(self, node, attr=None, deleteSourcePlug=True, deleteDestPlug=True):
@@ -2565,12 +2584,14 @@ class MetaClass(object):
 
         if not cons:
             raise StandardError('%s is not connected to the mNode %s' % (node,self.mNode))
+
         for sPlug,dPlug in zip(cons[0::2],cons[1::2]):
             log.debug('attr Connection inspected : %s << %s' % (sPlug,dPlug))
             #print 'searchCon : ', searchConnection
             #print 'dPlug : ', dPlug
-            if searchConnection in dPlug:
-                log.debug('Disconnecting %s >> %s as %s found in dPlug' % (dPlug,sPlug,searchConnection))
+            if (attr and searchConnection == dPlug.split('[')[0]) or (not attr and searchConnection in dPlug):
+            #if searchConnection in dPlug:
+                log.debug('Disconnecting %s >> %s as %s found in dPlug' % (dPlug, sPlug, searchConnection))
                 cmds.disconnectAttr(dPlug,sPlug)
                 returnData.append((dPlug,sPlug))
 
@@ -3552,7 +3573,7 @@ class MetaRig(MetaClass):
                 from Red9.pro_pack import r9pro
                 r9pro.r9import('r9paudio')
                 import r9paudio
-            if self.timecode_node:
+            if self.hasAttr('timecode_node') and self.timecode_node:
                 return r9paudio.Timecode(self.timecode_node[0])
             else:
                 return r9paudio.Timecode(self.ctrl_main)
