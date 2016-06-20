@@ -296,21 +296,21 @@ class Test_MetaClass():
         master1.connectChildren([child1,child2,cube],'modules','puppet')
         assert cmds.attributeQuery('modules', node=master1.mNode, m=True)
         assert cmds.attributeQuery('modules', node=master1.mNode, im=True)
-        assert master1.modules==['|pCube1',child1,child2]
+        assert sorted(master1.modules)==sorted(['|pCube1',child1,child2])
         assert child1.puppet==[master1]
         assert child2.puppet==[master1]
         assert cmds.attributeQuery('puppet', node=cube, m=True)
-        assert not cmds.attributeQuery('puppet', node=cube, im=True)
+        #assert not cmds.attributeQuery('puppet', node=cube, im=True)  # If we switch to 'allow_incest' as default then this is no longer valid!
         assert cmds.listConnections('%s.puppet' % cube)==['master1']
         
         #mClass mNode being passed in
         master2.connectChildren([child1.mNode,child2.mNode,cube],'time','master',force=True)
-        assert master2.time==['|pCube1', child1, child2]
+        assert sorted(master2.time)==sorted(['|pCube1', child1, child2])
         assert child1.master==[master2]
         assert child2.master==[master2]
         assert cmds.listConnections('%s.master' % cube)==['master2']
         #check previous
-        assert master1.modules==['|pCube1',child1,child2]
+        assert sorted(master1.modules)==sorted(['|pCube1',child1,child2])
         assert child1.puppet==[master1]
         assert child2.puppet==[master1]
         assert cmds.listConnections('%s.puppet' % cube)==['master1']
@@ -320,9 +320,9 @@ class Test_MetaClass():
         assert sorted(child1.master,key=lambda x:x.mNode)== [master1, master2]
         assert sorted(child2.master,key=lambda x:x.mNode)== [master1, master2]
         #check previous
-        assert master2.time==['|pCube1', child1, child2]
+        assert sorted(master2.time)==sorted(['|pCube1', child1, child2])
         assert cmds.listConnections('%s.master' % cube)==['master2']
-        assert master1.modules==['|pCube1', child1, child2]
+        assert sorted(master1.modules)==sorted(['|pCube1', child1, child2])
         assert child1.puppet==[master1]
         assert child2.puppet==[master1]
         assert cmds.listConnections('%s.puppet' % cube)==['master1']
@@ -337,18 +337,18 @@ class Test_MetaClass():
         assert master1.time==[child1]
         assert child2.master==[master2]
         #check previous
-        assert master1.modules==['|pCube1',child1,child2]
-        assert master2.time==['|pCube1', child1, child2]
+        assert sorted(master1.modules)==sorted(['|pCube1',child1,child2])
+        assert sorted(master2.time)==sorted(['|pCube1', child1, child2])
         
         master1.disconnectChild(child1)
-        assert master1.modules==['|pCube1',child2]
+        assert sorted(master1.modules)==sorted(['|pCube1',child2])
         assert not master1.hasAttr('time')  # cleaned the plug
         assert child1.master==[master2]
         assert child1.hasAttr('puppet')  # ???? FIXME: this is wrong, it should have been cleaned as it's now empty!
         #assert not child1.puppet
         
         #check previous
-        assert master2.time==['|pCube1', child1, child2]
+        assert sorted(master2.time)==sorted(['|pCube1', child1, child2])
         
         #isChildNode test calls
         assert master1.isChildNode(child2.mNode)
@@ -385,7 +385,8 @@ class Test_MetaClass():
         assert self.MClass.Singluar==[cube2]
         assert not cmds.attributeQuery('MetaClassTest',node=cube1,exists=True)  # cleaned up after ourselves?
         self.MClass.connectChildren([cube3,cube4],'Singluar')
-        assert sorted(self.MClass.Singluar)==[cube2,cube3,cube4]
+        print sorted(self.MClass.Singluar), [cube2,cube3,cube4]
+        assert sorted(self.MClass.Singluar)==sorted([cube2,cube3,cube4])
         
         #setAttr has cleanCurrent and force set to true so remove all current connections to this attr
         self.MClass.Singluar=cube1
@@ -398,7 +399,7 @@ class Test_MetaClass():
             assert True
         
         self.MClass.Multiple=[cube1,cube4]
-        assert sorted(self.MClass.Multiple)==[cube1,cube4]
+        assert sorted(self.MClass.Multiple)==sorted([cube1,cube4])
     
     def test_connections_called_from_wrappedMClass(self):
         '''
@@ -748,6 +749,7 @@ class Test_MetaClass():
         assert cmds.attributeQuery('msgSingleTest',node=node.mNode, multi=True)==False
         
         #NOTE : cmds returns shortName, but all MetaClass attrs are always longName
+        print cmds.listConnections('%s.msgMultiTest' % node.mNode,c=True,p=True)
         assert cmds.listConnections('%s.msgMultiTest' % node.mNode,c=True,p=True)==['MetaClass_Test.msgMultiTest',
                                                                  'pCube2.MetaClass_Test',
                                                                  'MetaClass_Test.msgMultiTest',
