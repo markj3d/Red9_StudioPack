@@ -489,6 +489,9 @@ class AudioNode(object):
         
         if not filepath:
             if audioNode:
+                if issubclass(type(audioNode), AudioNode):
+                    #log.info('Audio is already an instatiated audioNode')
+                    self.audioNode = audioNode.audioNode
                 self.audioNode = audioNode
             else:
                 self.audioNode = audioSelected()
