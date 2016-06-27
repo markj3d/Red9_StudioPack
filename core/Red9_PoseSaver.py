@@ -1036,9 +1036,11 @@ class PosePointCloud(object):
         hierarchy and is designed for overloading if required.
         '''
         if self.settings.filterIsActive():
+            __searchPattern_cached=self.settings.searchPattern
             if self.prioritySnapOnly:
                 self.settings.searchPattern=self.settings.filterPriority
             self.inputNodes=r9Core.FilterNode(self.inputNodes, self.settings).ProcessFilter()
+            self.settings.searchPattern=__searchPattern_cached  # restore the settings back!!
             
         # auto logic for MetaRig - go find the renderMeshes wired to the systems
         if self.settings.metaRig:
