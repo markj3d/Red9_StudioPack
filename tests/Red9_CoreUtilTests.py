@@ -331,7 +331,7 @@ class Test_FilterNode():
         #order, yet in practice in Maya it does????
         for n in self.filterNode.ProcessFilter():
             print n
-        assert self.filterNode.ProcessFilter()==['|World_Root2_chSet|nurbsCircle1',
+        assert sorted(self.filterNode.ProcessFilter())==sorted(['|World_Root2_chSet|nurbsCircle1',
                                                  '|World_Root2_chSet|Spine_Ctrl',
                                                   '|World_Root2_chSet|Spine_Ctrl|L_Foot_MarkerAttr_Ctrl',
                                                   '|World_Root2_chSet|Spine_Ctrl|L_Wrist_Ctrl',
@@ -340,13 +340,13 @@ class Test_FilterNode():
                                                   '|World_Root2_chSet|Spine_Ctrl|L_Pole_Ctrl',
                                                   '|World_Root2_chSet|pCube4_AttrMarked_Bingo',
                                                   '|World_Root2_chSet|joint1|joint2_Ctrl',
-                                                  '|World_Root2_chSet|joint4|joint5_AttrMarked']
+                                                  '|World_Root2_chSet|joint4|joint5_AttrMarked'])
 
         self.filterNode.settings.resetFilters()
         self.filterNode.settings.searchAttrs=['MarkerAttr']
-        assert self.filterNode.ProcessFilter()==['|World_Root2_chSet|Spine_Ctrl|L_Foot_MarkerAttr_Ctrl',
+        assert sorted(self.filterNode.ProcessFilter())==sorted(['|World_Root2_chSet|Spine_Ctrl|L_Foot_MarkerAttr_Ctrl',
                                             '|World_Root2_chSet|pCube4_AttrMarked_Bingo',
-                                            '|World_Root2_chSet|joint4|joint5_AttrMarked']
+                                            '|World_Root2_chSet|joint4|joint5_AttrMarked'])
 
     def test_CharacterSubSetTest(self):
         #TODO: Fill Test

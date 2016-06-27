@@ -144,45 +144,46 @@ def decodeString(val):
     From configObj the return is a string, we want to encode
     it back to it's original state so we pass it through this
     '''
-    if not val:
+    try:
+        if not issubclass(type(val), str) and not type(val)==unicode:
+            #log.debug('Val : %s : is not a string / unicode' % val)
+            #log.debug('ValType : %s > left undecoded' % type(val))
+            return val
+        if val=='False' or val=='True' or val=='None':
+            #log.debug('Decoded as type(bool)')
+            return eval(val)
+        elif val=='[]':
+            #log.debug('Decoded as type(empty list)')
+            return eval(val)
+        elif val=='()':
+            #log.debug('Decoded as type(empty tuple)')
+            return eval(val)
+        elif val=='{}':
+            #log.debug('Decoded as type(empty dict)')
+            return eval(val)
+        elif (val[0]=='[' and val[-1] ==']'):
+            #log.debug('Decoded as type(list)')
+            return eval(val)
+        elif (val[0] =='(' and val[-1]==')'):
+            #log.debug('Decoded as type(tuple)')
+            return eval(val)
+        elif (val[0] =='{' and val[-1]=='}'):
+            #log.debug('Decoded as type(dict)')
+            return eval(val)
+        try:
+            encoded=int(val)
+            #log.debug('Decoded as type(int)')
+            return encoded
+        except:
+            pass
+        try:
+            encoded=float(val)
+            #log.debug('Decoded as type(float)')
+            return encoded
+        except:
+            pass
+    except:
         return
-    if not issubclass(type(val), str) and not type(val)==unicode:
-        #log.debug('Val : %s : is not a string / unicode' % val)
-        #log.debug('ValType : %s > left undecoded' % type(val))
-        return val
-    if val=='False' or val=='True' or val=='None':
-        #log.debug('Decoded as type(bool)')
-        return eval(val)
-    elif val=='[]':
-        #log.debug('Decoded as type(empty list)')
-        return eval(val)
-    elif val=='()':
-        #log.debug('Decoded as type(empty tuple)')
-        return eval(val)
-    elif val=='{}':
-        #log.debug('Decoded as type(empty dict)')
-        return eval(val)
-    elif (val[0]=='[' and val[-1] ==']'):
-        #log.debug('Decoded as type(list)')
-        return eval(val)
-    elif (val[0] =='(' and val[-1]==')'):
-        #log.debug('Decoded as type(tuple)')
-        return eval(val)
-    elif (val[0] =='{' and val[-1]=='}'):
-        #log.debug('Decoded as type(dict)')
-        return eval(val)
-    try:
-        encoded=int(val)
-        #log.debug('Decoded as type(int)')
-        return encoded
-    except:
-        pass
-    try:
-        encoded=float(val)
-        #log.debug('Decoded as type(float)')
-        return encoded
-    except:
-        pass
     #log.debug('Decoded as type(string)')
     return val
 
@@ -1197,7 +1198,10 @@ class FilterNode(object):
         if cSets:
             for cset in cSets:
                 log.debug('cSet : %s', cset)
-                self.characterSetMembers.extend(cmds.character(cset, query=True, nodesOnly=True))
+                for node in cmds.character(cset, query=True, nodesOnly=True):
+                    if not node in self.characterSetMembers:
+                        self.characterSetMembers.append(node)
+                #self.characterSetMembers.extend(cmds.character(cset, query=True, nodesOnly=True))  # sure this used to work?
             # make sure the cSets are not part of the return
             [self.characterSetMembers.remove(cset) for cset in cSets if cset in self.characterSetMembers]
                     
