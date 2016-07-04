@@ -328,7 +328,7 @@ class AnimationContext(object):
             cmds.playbackOptions(ast=self.timeStore['startTime'])
             cmds.playbackOptions(aet=self.timeStore['endTime'])
             cmds.playbackOptions(ps=self.timeStore['playSpeed'])
-            log.info('currentTime restored: %f' % self.timeStore)
+            log.info('currentTime restored: %f' % self.timeStore['currentTime'])
         if self.mangage_undo:
             cmds.undoInfo(closeChunk=True)
         else:
