@@ -738,7 +738,7 @@ class PoseData(DataMap):
             key=r9Core.nodeNameStrip(jnt)
             self.skeletonDict[key]={}
             self.skeletonDict[key]['attrs']={}
-            for attr in ['translateX','translateY','translateZ', 'rotateX','rotateY','rotateZ']:
+            for attr in ['translateX','translateY','translateZ', 'rotateX','rotateY','rotateZ','jointOrientX','jointOrientY','jointOrientZ']:
                 try:
                     self.skeletonDict[key]['attrs'][attr]=cmds.getAttr('%s.%s' % (jnt,attr))
                 except:
@@ -1262,7 +1262,7 @@ class PoseCompare(object):
         self.status = False
         self.compareDict = compareDict
         self.angularTolerance = angularTolerance
-        self.angularAttrs = ['rotateX', 'rotateY', 'rotateZ']
+        self.angularAttrs = ['rotateX', 'rotateY', 'rotateZ', 'jointOrientX', 'jointOrientY', 'jointOrientZ']
         
         self.linearTolerance = linearTolerance
         self.linearAttrs = ['translateX', 'translateY', 'translateZ']

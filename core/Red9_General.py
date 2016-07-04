@@ -287,7 +287,7 @@ class AnimationContext(object):
     """
     def __init__(self, evalmanager=True, time=True, undo=True):
         self.autoKeyState=None
-        self.timeStore=None
+        self.timeStore={}
         self.evalmode=None
         
         self.manage_em=evalmanager
@@ -296,7 +296,13 @@ class AnimationContext(object):
         
     def __enter__(self):
         self.autoKeyState=cmds.autoKeyframe(query=True, state=True)
-        self.timeStore=cmds.currentTime(q=True)
+        self.timeStore['currentTime'] = cmds.currentTime(q=True)
+        self.timeStore['minTime'] = cmds.playbackOptions(q=True, min=True)
+        self.timeStore['maxTime'] = cmds.playbackOptions(q=True, max=True)
+        self.timeStore['startTime'] = cmds.playbackOptions(q=True, ast=True)
+        self.timeStore['endTime'] = cmds.playbackOptions(q=True, aet=True)
+        self.timeStore['playSpeed'] = cmds.playbackOptions(query=True, playbackSpeed=True)
+
         if self.mangage_undo:
             cmds.undoInfo(openChunk=True)
         else:
@@ -316,7 +322,12 @@ class AnimationContext(object):
             evalManagerState(mode=self.evalmode)
             log.info('evalManager restored: %s' % self.evalmode)
         if self.manage_time:
-            cmds.currentTime(self.timeStore)
+            cmds.currentTime(self.timeStore['currentTime'])
+            cmds.playbackOptions(min=self.timeStore['minTime'])
+            cmds.playbackOptions(max=self.timeStore['maxTime'])
+            cmds.playbackOptions(ast=self.timeStore['startTime'])
+            cmds.playbackOptions(aet=self.timeStore['endTime'])
+            cmds.playbackOptions(ps=self.timeStore['playSpeed'])
             log.info('currentTime restored: %f' % self.timeStore)
         if self.mangage_undo:
             cmds.undoInfo(closeChunk=True)
