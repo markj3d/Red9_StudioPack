@@ -2083,8 +2083,12 @@ class MetaClass(object):
                         cmds.addAttr('%s.%s' % (self.mNode, attr), e=True, **addkwsToEdit)
                         log.debug('addAttr Edit flags run : %s = %s' % (attr, addkwsToEdit))
                     if setKwsToEdit:
-                        cmds.setAttr('%s.%s' % (self.mNode, attr), **setKwsToEdit)
-                        log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
+                        try:
+                            if not self.isReferenced():
+                                cmds.setAttr('%s.%s' % (self.mNode, attr), **setKwsToEdit)
+                                log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
+                        except:
+                            log.debug("mNode is referenced and the setEditFlags are therefore invalid (lock, keyable, channelBox)")
             except:
                 if self.isReferenced():
                     log.debug('Trying to modify and attr on a reference node')
@@ -2218,8 +2222,25 @@ class MetaClass(object):
 
         cmds.delete(self.mNode)
         del(self)
-        
 
+    def gatherInfo(self, level=0, *args, **kws):
+        '''
+        a generic gather function designed to be overloaded at the class level and used to 
+        collect specific information on the given class in a generic way. This is used by the
+        r9Aninm format in Pro to collect key info on the system being saved against
+        
+        :param level: added here for the more robust checking that the rigging systems need
+        '''
+        data={}
+        data['mNode'] = self.mNode
+        data['mNodeID'] = self.mNodeID
+        data['mClass'] = self.mClass
+        data['mClassGrp'] = self.mClassGrp
+        data['mSystemRoot']= self.mSystemRoot
+        data['lockState'] = self.lockState
+        return data
+    
+    
     # Reference / Namespace Management Block
     #---------------------------------------------------------------------------------
     
@@ -2954,12 +2975,37 @@ class MetaRig(MetaClass):
 
     def __bindData__(self):
         #self._lockState=True         # set the internal lockstate
-        self.addAttr('version',1.0)  # ensure these are added by default
-        self.addAttr('rigType', '')  # ensure these are added by default
-        self.addAttr('renderMeshes', attrType='message')
-        self.addAttr('exportSkeletonRoot', attrType='messageSimple')
+        self.addAttr('version',1.0)   # internal version of the rig, used by pro and bound here as a generic version ID
+        self.addAttr('rigType', '')   # type of the rig system 'biped', 'quad' etc
         self.addAttr('scaleSystem', attrType='messageSimple')
         self.addAttr('timecode_node', attrType='messageSimple')
+        
+        # Vital wires used by both StudioPack and Pro
+        self.addAttr('renderMeshes', attrType='message')  # used to ID all meshes that are part of this rig system
+        self.addAttr('exportSkeletonRoot', attrType='messageSimple')  # used to ID the skeleton root for exporters and code 
+      
+    def gatherInfo(self, level=0, *args, **kws):
+        '''
+        gather key info on this system
+        '''
+        data={}
+        data['mClass']=super(MetaRig, self).gatherInfo(level=level)
+        data['filepath'] = cmds.file(q=True,sn=True)
+        if self.hasAttr('version'):
+            data['version']=self.version
+        if self.hasAttr('rigType'):
+            data['rigType']=self.rigType
+        if self.hasAttr('exportSkeletonRoot'):
+            data['exportSkeletonRoot']=self.exportSkeletonRoot
+        if self.hasAttr('timecode_node'):
+            data['timecode_node']=self.timecode_node
+
+        data['CTRL_Prefix']=self.CTRL_Prefix
+        try:
+            data['Ctrl_Main']=self.ctrl_main
+        except:
+            log.warning('"ctrl_main" : is NOT wired correctly!')
+        return data
     
     @property
     def ctrl_main(self):
@@ -3507,7 +3553,7 @@ class MetaRig(MetaClass):
             cmds.cutKey(r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True))
         if reset:
             self.loadZeroPose(nodes)
-
+    
 
     # PRO PACK Supported Only
     # -------------------------------------------------------------------------------
@@ -3516,13 +3562,20 @@ class MetaRig(MetaClass):
     the extensions being added. We bind them here to make it more transparent for you guys
     running Meta, save us sub-classing MetaRig for Pro and exposes some of the codebase wrapping
     '''
+            
     def saveAnimation(self, filepath, incRoots=True, useFilter=True, timerange=(),
                       storeThumbnail=False, force=False):
         '''
         PRO_PACK : Binding of the animMap format for storing animation data out to file
+                
+        :param filepath: r9Anim file to load
+        :param incRoots: do we include the root node in the load, in metaRig case this is ctrl_main
+        :param useFilter: do we process all children of this rig or just selected
+        :param timerange: specific a timerange to store, else store all 
+        :param storeThumbnail: this will be an avi but currently it's a pose thumbnail
+        :param force: allow force write on a read only file
         '''
         if r9Setup.has_pro_pack():
-            #from Red9.pro_pack.core.animation import AnimMap
             from Red9.pro_pack import r9pro
             r9pro.r9import('r9panim')
             from r9panim import AnimMap
@@ -3543,10 +3596,17 @@ class MetaRig(MetaClass):
                       loadAsStored=True, loadFromFrm=0, referenceNode=None, *args, **kws):
         '''
         PRO_PACK : Binding of the animMap format for loading animation data from
-        an r9Anim file
+        an r9Anim file. The base binding of the animation format is the DataMap object
+        in the Red9_PoseSaver so many of the exposed flags come from there.
+        
+        :param filepath: r9Anim file to load
+        :param incRoots: do we include the root node in the load, in metaRig case this is ctrl_main
+        :param useFilter: do we process all children of this rig or just selected
+        :param loadAsStored: load the data from the timerange stored
+        :param loadFromFrm: load the data from a given frame
+        :param referenceNode: load relative to the given node
         '''
         if r9Setup.has_pro_pack():
-            #from Red9.pro_pack.core.animation import AnimMap
             from Red9.pro_pack import r9pro
             r9pro.r9import('r9panim')
             from r9panim import AnimMap

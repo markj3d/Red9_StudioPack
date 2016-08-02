@@ -276,6 +276,7 @@ class DataMap(object):
                 self.infoDict['version'] = self.metaRig.version
             if self.metaRig.hasAttr('rigType'):
                 self.infoDict['rigType'] = self.metaRig.rigType
+            self.infoDict.update(self.metaRig.gatherInfo())
         if self.rootJnt:
             self.infoDict['skeletonRootJnt']=self.rootJnt
                 
