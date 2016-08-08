@@ -76,16 +76,21 @@ except:
 global RED9_META_NODECACHE
 RED9_META_NODECACHE = {}
 
-global RED9_META_CALLBACKS
-RED9_META_CALLBACKS = {}
-RED9_META_CALLBACKS['Open'] = []
-RED9_META_CALLBACKS['New'] = []
-#RED9_META_CALLBACKS['DuplicatePre'] = []
-#RED9_META_CALLBACKS['DuplicatePost'] = []
-        
-
 global __RED9_META_NODESTORE__
 __RED9_META_NODESTORE__ = []
+
+if 'RED9_META_CALLBACKS' in globals():
+    log.debug('RED9_META_CALLBACKS already setup')
+else:
+    log.debug('initializing the RED9_META_CALLBACKS')
+    global RED9_META_CALLBACKS
+    RED9_META_CALLBACKS = {}
+    RED9_META_CALLBACKS['Open'] = []
+    RED9_META_CALLBACKS['New'] = []
+    #RED9_META_CALLBACKS['DuplicatePre'] = []
+    #RED9_META_CALLBACKS['DuplicatePost'] = []
+
+
 
 '''
 CRUCIAL - REGISTER INHERITED CLASSES! ==============================================
@@ -312,6 +317,8 @@ def registerMClassNodeCache(mNode):
         log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
         RED9_META_NODECACHE[UUID]=mNode
         
+    mNode._lastUUID = UUID
+        
 #    if mNode.hasAttr('UUID') or version>=2016:
 #        try:
 #            if version<2016:
@@ -477,7 +484,8 @@ def __poseDuplicateCache(*args):
     newNodes=[node for node in getMetaNodes(dataType='dag') if not node in __RED9_META_NODESTORE__]
     for node in newNodes:
         #note we set this via cmds so that the node isn't instantiated until the UUID is modified
-        if cmds.attributeQuery('UUID', node=node, exists=True):
+        #if cmds.attributeQuery('UUID', node=node, exists=True):
+        if cmds.objExists('%s.%s' % (node,'UUID')):
             cmds.setAttr('%s.UUID' % node, generateUUID(), type='string')
     #print 'post-callback : nodelist :', newNodes
 
@@ -1383,7 +1391,7 @@ class MClassNodeUI(object):
 class MetaClass(object):
     
     cached = None
-    UNMANAGED=['mNode', 'mNodeID', '_MObject', '_MObjectHandle', '_MFnDependencyNode', '_lockState', 'lockState', '_forceAsMeta']
+    UNMANAGED=['mNode', 'mNodeID', '_MObject', '_MObjectHandle', '_MFnDependencyNode', '_lockState', 'lockState', '_forceAsMeta','_lastDagPath','_lastUUID']
         
     def __new__(cls, *args, **kws):
         '''
@@ -1459,6 +1467,8 @@ class MetaClass(object):
         object.__setattr__(self, '_MObject', '')
         object.__setattr__(self, '_MObjectHandle', '')
         object.__setattr__(self, '_MDagPath', '')
+        object.__setattr__(self, '_lastDagPath', '')#...NEW...stored on mNode get
+        object.__setattr__(self, '_lastUUID', '')#...NEW...stored on cacheing of node
 #        object.__setattr__(self, 'UNMANAGED', ['mNode',
 #                                               'mNodeID',
 #                                               '_MObject',
@@ -1596,17 +1606,22 @@ class MetaClass(object):
         if mobjHandle:
             try:
                 if not mobjHandle.isValid():
-                    log.info('MObject is no longer valid - object may have been deleted or the scene reloaded?')
-                    return
+                    #...raise this error so that this stops calls on bad nodes as soon as possible. With just return, you get a series of errors
+                    raise ValueError,('MObject is no longer valid - Last good dag path was: "%s"' % object.__getattribute__(self, "_lastDagPath"))
+                    #log.warning('MObject is no longer valid - Last good dag path was: "%s"' % object.__getattribute__(self, "_lastDagPath"))
+                    #return
                 #if we have an object thats a dagNode, ensure we return FULL Path
                 mobj=object.__getattribute__(self, "_MObject")
                 if OpenMaya.MObject.hasFn(mobj, OpenMaya.MFn.kDagNode):
                     dPath = OpenMaya.MDagPath()
                     OpenMaya.MDagPath.getAPathTo(mobj,dPath)
-                    return dPath.fullPathName()
+                    _result = dPath.fullPathName()
                 else:
                     depNodeFunc = OpenMaya.MFnDependencyNode(mobj)
-                    return depNodeFunc.name()
+                    _result = depNodeFunc.name()
+                # cache the dagpath on the object as a back-up for error reporting
+                object.__setattr__(self, '_lastDagPath', _result)
+                return _result
             except StandardError,error:
                 raise StandardError(error)
 
@@ -1663,7 +1678,7 @@ class MetaClass(object):
         if mobjHandle:
             try:
                 if not mobjHandle.isValid():
-                    log.info('MObject is no longer valid - %s - object may have been deleted or the scene reloaded?'\
+                    log.info('mNodes : MObject is no longer valid - %s - object may have been deleted or the scene reloaded?'\
                               % object.__getattribute__(self,'mNodeID'))
                     return
                 #if we have an object thats a dagNode, ensure we return FULL Path
@@ -1694,15 +1709,35 @@ class MetaClass(object):
             log.debug("can't set the nodeState for : %s" % self.mNode)
 
     def __repr__(self):
-        if self.hasAttr('mClass'):
-            return "%s(mClass: '%s', node: '%s')" % (self.__class__, self.mClass, self.mNode.split('|')[-1])
-        else:
-            return "%s(Wrapped Standard MayaNode, node: '%s')" % (self.__class__, self.mNode.split('|')[-1])
+        try:
+            if self.hasAttr('mClass'):
+                return "%s(mClass: '%s', node: '%s')" % (self.__class__, self.mClass, self.mNode.split('|')[-1])
+            else:
+                return "%s(Wrapped Standard MayaNode, node: '%s')" % (self.__class__, self.mNode.split('|')[-1]) 
+        except:
+            # if this fails we have a dead node more than likely
+            try:               
+                RED9_META_NODECACHE.pop(object.__getattribute__(self, "_lastUUID"))
+                log.debug("Dead mNode %s removed from cache..." % object.__getattribute__(self, "_lastDagPath"))
+            except:
+                pass
+            try:
+                return ("Dead mNode : Last good dag path was: %s" % object.__getattribute__(self, "_lastDagPath"))
+            except:
+                return "THIS NODE BE DEAD BY THINE OWN HAND"
     
     def __eq__(self, obj):
         '''
         Equals calls are handled via the MObject cache
         '''
+        #Added this is mObject valid check as this was another place stuff breaks on a dead node...same cache clear ability
+        if not self._MObjectHandle.isValid():
+            try:             
+                RED9_META_NODECACHE.pop(object.__getattribute__(self, "_lastUUID"))
+                log.debug("Dead mNode %s removed from cache..." % object.__getattribute__(self, "_lastDagPath"))
+            except:
+                pass        
+            return False
         if isinstance(obj, self.__class__):
             if obj._MObject and self._MObject:
                 if obj._MObject == self._MObject:
@@ -1974,8 +2009,9 @@ class MetaClass(object):
                 return self._MFnDependencyNode.hasAttribute(attr)
                 #return OpenMaya.MFnDependencyNode(self.mNodeMObject).hasAttribute(attr)
             except:
-                return cmds.attributeQuery(attr, exists=True, node=self.mNode)
-    
+                #return cmds.attributeQuery(attr, exists=True, node=self.mNode)
+                return cmds.objExists('%s.%s' % (self.mNode,attr))
+                
     def attrIsLocked(self,attr):
         '''
         check the attribute on the mNode to see if it's locked
@@ -2412,7 +2448,8 @@ class MetaClass(object):
                 else:
                     node.addAttr(srcAttr, attrType='message')
                     node=node.mNode
-            elif not cmds.attributeQuery(srcAttr, exists=True, node=node):
+            #elif not cmds.attributeQuery(srcAttr, exists=True, node=node):
+            elif not cmds.objExists('%s.%s' % (node,srcAttr)):
                 if allowIncest:
                     MetaClass(node).addAttr(srcAttr, attrType='message')
                 else:
@@ -2502,7 +2539,8 @@ class MetaClass(object):
                 else:
                     node.addAttr(srcAttr, attrType='messageSimple')
                     node=node.mNode
-            elif not cmds.attributeQuery(srcAttr, exists=True, node=node):
+            #elif not cmds.attributeQuery(srcAttr, exists=True, node=node):
+            elif not cmds.objExists('%s.%s' % (node,srcAttr)):
                 cmds.addAttr(node, longName=srcAttr, at='message', m=False)
             
             # uplift to multi-message index managed if needed
@@ -2813,7 +2851,8 @@ class MetaClass(object):
                             else:
                                 for linkedNode in msgLinked:
                                     for attr in nAttrs:
-                                        if cmds.attributeQuery(attr, exists=True, node=linkedNode):
+                                        #if cmds.attributeQuery(attr, exists=True, node=linkedNode):
+                                        if cmds.objExists('%s.%s' % (linkedNode,attr)):   
                                             linkedNode = cmds.ls(linkedNode, l=True)  # cast to longNames!
                                             #children.extend(linkedNode)
                                             if not asMap:
@@ -2886,7 +2925,7 @@ class MetaClass(object):
             more flexible as it returns and filters all plugs between self and the given node.
         '''
         log.debug('getNodeConnectionAttr will be depricated soon!!!!')
-        for con in cmds.listConnections(node,s=True,d=False,p=True):
+        for con in cmds.listConnections(node,s=True,d=False,p=True) or []:
             if self.mNode in con.split('.')[0]:
                 return con.split('.')[1]
         
@@ -2899,7 +2938,7 @@ class MetaClass(object):
         :param filters: filter string to match for the returns
         '''
         cons=[]
-        for con in cmds.listConnections(node,s=True,d=False,p=True):
+        for con in cmds.listConnections(node,s=True,d=False,p=True) or []:
             if self.mNode in con.split('.')[0]:
                 if filters:
                     for flt in filters:
