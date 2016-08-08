@@ -326,7 +326,10 @@ def animCurveDrawStyle(style='simple', forceBuffer=True,
     if style == 'simple':
         print 'toggle On'
         if forceBuffer:
-            mel.eval('doBuffer snapshot;')
+            if r9Setup.mayaVersion()<2017:
+                mel.eval('doBuffer snapshot;')
+            else:
+                mel.eval('doBuffer snapshot graphEditor1GraphEd;')
         mel.eval('animCurveEditor -edit -showBufferCurves 1 -displayTangents false -displayActiveKeyTangents false graphEditor1GraphEd;')
     elif style == 'full':
         print 'toggleOff'
