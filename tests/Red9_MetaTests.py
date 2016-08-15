@@ -190,12 +190,13 @@ class Test_MetaClass():
         assert isinstance(new,r9Meta.MetaRig)
         assert self.MClass.mClass=='MetaRig'
         
+        #isReferenced
+        assert not self.MClass.isReferenced()
+        
         #delete
         self.MClass.delete()
         assert not cmds.objExists('MetaClass_Test')
         
-        #isReferenced ?? Why is this failing ??
-        assert not self.MClass.isReferenced()
     
     def test_isValid(self):
         assert self.MClass.isValid()  # strange one, isValid fails if the mNode has no connections.... is this a good decision?
@@ -1212,7 +1213,6 @@ class Test_SpeedTesting():
         now = time.clock()
         c = [r9Meta.MetaClass(p, autofill=False) for p in cubes]
         print 'SPEED: Standard Wrapped Nodes : autofill=False: %s' % str(time.clock() - now)
-        print 'Timer should be around 4.26 secs on work PC'
         print 'Timer should be around 2.28 secs on the Beast'  #3.28
         
         # verify against pymel, I know we're still a lot slower
@@ -1225,7 +1225,6 @@ class Test_SpeedTesting():
         now = time.clock()
         c = [r9Meta.MetaClass(p, autofill='all') for p in cubes]
         print 'SPEED: Standard Wrapped Nodes : autofill=all : %s' % str(time.clock() - now)
-        print 'Timer should be around 14.6 secs on work PC'
         print 'Timer should be around 9.04 secs on the Beast'  #10.48
 
         assert False
@@ -1238,14 +1237,12 @@ class Test_SpeedTesting():
         now = time.clock()
         c = [r9Meta.MetaClass(p, autofill='all') for p in nodes]
         print 'SPEED: Meta Nodes : autofill=all : %s' % str(time.clock() - now)
-        print 'Timer should be around 8.5 secs on work PC'
-        print 'Timer should be around 11.93 secs on the Beast'
+        print 'Timer should be around 8.5 secs on the Beast'
         print '\n'
         
         now = time.clock()
         c = [r9Meta.MetaClass(p, autofill='all') for p in nodes]
         print 'SPEED: Meta Nodes from Cache :  %s' % str(time.clock() - now)
-        print 'Timer should be around 8.5 secs on work PC'
         print 'Timer should be around 3.25 secs on the Beast'
         print '\n'
         
@@ -1253,8 +1250,7 @@ class Test_SpeedTesting():
         
         c = [r9Meta.MetaClass(p, autofill=False) for p in nodes]
         print 'SPEED: Meta Nodes : autofill=False : %s' % str(time.clock() - now)
-        print 'Timer should be around 8.5 secs on work PC'
-        print 'Timer should be around 10.82 secs on the Beast'
+        print 'Timer should be around 8.5 secs on the Beast'
         assert False
         
  
