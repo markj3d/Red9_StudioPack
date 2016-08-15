@@ -1925,8 +1925,7 @@ class AnimationUI(object):
         if result == 'OK':
             name=cmds.promptDialog(query=True, text=True)
             try:
-                if r9Core.validateString(name):
-                    return os.path.join(self.getPoseDir(), '%s.pose' % name)
+                return os.path.join(self.getPoseDir(), '%s.pose' % r9Core.validateString(name, fix=True))
             except ValueError, error:
                 raise ValueError(error)
    
@@ -2304,11 +2303,9 @@ class AnimationUI(object):
             self.kws['attributes'] = getChannelBoxSelection()
         if cmds.checkBox(self.uicbCAttrHierarchy, q=True, v=True):
             if self.kws['toMany']:
-                AnimFunctions(matchMethod=self.matchMethod).copyAttrs_ToMultiHierarchy(cmds.ls(sl=True, l=True),
-                                                          filterSettings=self.filterSettings,
-                                                          **self.kws)
+                AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyAttrs_ToMultiHierarchy(cmds.ls(sl=True, l=True),**self.kws)
             else:
-                AnimFunctions(matchMethod=self.matchMethod).copyAttributes(nodes=None, filterSettings=self.filterSettings, **self.kws)
+                AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyAttributes(nodes=None, **self.kws)
         else:
             print self.kws
             AnimFunctions(matchMethod=self.matchMethod).copyAttributes(nodes=None, **self.kws)
@@ -2330,11 +2327,9 @@ class AnimationUI(object):
             self.kws['attributes'] = getChannelBoxSelection()
         if cmds.checkBox(self.uicbCKeyHierarchy, q=True, v=True):
             if self.kws['toMany']:
-                AnimFunctions(matchMethod=self.matchMethod).copyKeys_ToMultiHierarchy(cmds.ls(sl=True, l=True),
-                                                          filterSettings=self.filterSettings,
-                                                          **self.kws)
+                AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyKeys_ToMultiHierarchy(cmds.ls(sl=True, l=True), **self.kws)
             else:
-                AnimFunctions(matchMethod=self.matchMethod).copyKeys(nodes=None, filterSettings=self.filterSettings, **self.kws)
+                AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyKeys(nodes=None, **self.kws)
         else:
             AnimFunctions(matchMethod=self.matchMethod).copyKeys(nodes=None, **self.kws)
     
@@ -2363,7 +2358,7 @@ class AnimationUI(object):
             self.kws['preCopyAttrs'] = True
         if cmds.checkBox(self.uicbSnapHierarchy, q=True, v=True):
             self.kws['prioritySnapOnly'] = cmds.checkBox(self.uicbSnapPriorityOnly, q=True, v=True)
-            AnimFunctions(matchMethod=self.matchMethod).snapTransform(nodes=None, filterSettings=self.filterSettings, **self.kws)
+            AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).snapTransform(nodes=None, **self.kws)
         else:
             AnimFunctions(matchMethod=self.matchMethod).snapTransform(nodes=None, **self.kws)
     
@@ -2411,7 +2406,7 @@ class AnimationUI(object):
             Filter = r9Core.FilterNode(cmds.ls(sl=True, l=True), filterSettings=self.filterSettings)
             try:
                 self.filterSettings.printSettings()
-                cmds.select(Filter.ProcessFilter())
+                cmds.select(Filter.processFilter())
                 log.info('=============  Filter Test Results  ==============')
                 print('\n'.join([node for node in Filter.intersectionData]))
                 log.info('FilterTest : Object Count Returned : %s' % len(Filter.intersectionData))
@@ -2476,8 +2471,7 @@ class AnimationUI(object):
         log.info('PosePath : %s' % path)
         poseNode=r9Pose.PoseData(self.filterSettings)
         poseNode.prioritySnapOnly=cmds.checkBox(self.uicbSnapPriorityOnly, q=True, v=True)
-        
-        poseNode.matchMethod=self.matchMethod  # needs proving as not fully tested yet!!
+        poseNode.matchMethod=self.matchMethod
         
         poseNode.poseLoad(self.__uiCB_getPoseInputNodes(),
                                                       path,
@@ -2908,7 +2902,7 @@ class AnimFunctions(object):
         log.debug('CopyAttributes params : nodes=%s\n : attributes=%s\n : filterSettings=%s\n : matchMethod=%s\n'
                    % (nodes, attributes, filterSettings, matchMethod))
         
-        #Build up the node pairs to process
+        # build up the node pairs to process
         nodeList = r9Core.processMatchedNodes(nodes,
                                               filterSettings,
                                               toMany,
@@ -3017,8 +3011,9 @@ class AnimFunctions(object):
 preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : snapTransforms=%s : snapRotates=%s' \
                    % (nodes, time, step, preCopyKeys, preCopyAttrs, filterSettings, matchMethod, prioritySnapOnly, snapTranslates, snapRotates))
         
-        #Build up the node pairs to process
+        # build up the node pairs to process
         nodeList = r9Core.processMatchedNodes(nodes, filterSettings, matchMethod=matchMethod)
+        
         if nodeList.MatchedPairs:
             nodeList.MatchedPairs.reverse()  # reverse order so we're dealing with children before their parents
             #if prioritySnap then we snap align ONLY those nodes that
@@ -4031,7 +4026,7 @@ class MirrorHierarchy(object):
         '''
         Get the list of nodes to start processing
         '''
-        return r9Core.FilterNode(self.nodes, filterSettings=self.settings).ProcessFilter()
+        return r9Core.FilterNode(self.nodes, filterSettings=self.settings).processFilter()
      
     def getMirrorSide(self, node):
         '''
