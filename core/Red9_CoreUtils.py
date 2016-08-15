@@ -188,19 +188,29 @@ def decodeString(val):
     return val
 
     
-def validateString(strText):
+def validateString(strText, fix=False, illegals=['-', '#', '!', ' ']):
     '''
     Function to validate that a string has no illegal characters
+    
+    :param strText: text to validate
+    :param fix: if True then we replace illegals with '_'
+    :param illegals: now allow you to pass in what you consider illegals, default=['-', '#', '!', ' ']
     '''
     #numerics=['1','2','3','4','5','6','7','8','9','0']
-    illegals=['-', '#', '!', ' ']
+    #illegals=['-', '#', '!', ' ']
+    base=strText
     #if strText[0] in numerics:
     #    raise ValueError('Strings must NOT start with a numeric! >> %s' % strText)
     illegal=[i for i in illegals if i in strText]
     if illegal:
-        raise ValueError('String contains illegal characters "%s" <in> "%s"' % (','.join(illegal), strText))
-    else:
-        return strText
+        if not fix:
+            raise ValueError('String contains illegal characters "%s" <in> "%s"' % (','.join(illegal), strText))
+        else:
+            for i in illegal:
+                print i
+                strText=strText.replace(i,'_')
+            log.info('%s : reformatted string to valid string : %s' % (base, strText))
+    return strText
 
 
 def filterListByString(input_list, filter_string, matchcase=False):
@@ -244,7 +254,29 @@ def filterListByString(input_list, filter_string, matchcase=False):
                 filteredList.append(item)
     return filteredList
     
+def nodes_in_hierarchy(rootNode, nodes=[], nodeType=None):
+    '''
+    check to see if a given set of nodes (shortname matched) are found in
+    the given hierarchy and return the matches
     
+    :param rootNode: rootNode of the hierarchy to search
+    :param nodes: nodes to find from their shortName
+    :param nodeType: nodeTypes within the hierarchy to search
+    '''
+    flt=FilterNode(rootNode)
+    flt.settings.nodeTypes=nodeType
+    found=[]
+    for node in nodes:
+        _name=nodeNameStrip(node)
+        flt.settings.searchPattern='^%s' % _name
+        matches=flt.processFilter()
+        if matches:
+            for m in matches:
+                if nodeNameStrip(m)==_name:
+                    found.append(m)
+    return found   
+        
+     
 # Filter Node Setups -------------------------------------------------------------
 
 class FilterNode_Settings(object):
@@ -344,7 +376,18 @@ class FilterNode_Settings(object):
         self.infoBlock=""
         if rigData:
             self.rigData={}
-                          
+        
+    def setByDict(self, data):
+        '''
+        set the filetrSettings via a dict correctly formatted, used 
+        to pull the data back from an MRig that has this data bound to it
+        '''
+        for key, val in data.items():
+            try:
+                self.__dict__[key]=decodeString(val)
+            except:
+                pass
+
     def write(self, filepath):
         '''
         write the filterSettings attribute out to a ConfigFile
@@ -527,7 +570,7 @@ class FilterNode_UI(object):
                 self._filterNode.processMode='Scene'
         
             #Main Call
-            nodes = self._filterNode.ProcessFilter()
+            nodes = self._filterNode.processFilter()
   
         elif mode == 'FullHierarchy':
             self._filterNode.rootNodes=cmds.ls(sl=True, l=True)
@@ -617,14 +660,46 @@ class FilterNode(object):
             else:
                 self._rootNodes=nodes
             self.processMode='Selected'
+            
+            # New : MetaRig Update : 
+            # if we have a single rootNode and settings.metaRig=True then process that rig
+            # to see if we have a bound settings object baked to it...if so we modify the 
+            # internal settings of this object to match
+            self.__mrig_cast_settings()
+            
         else:
             self.processMode='Scene'
             self._rootNodes=None
-            #raise StandardError('no nodes Given')
               
     rootNodes = property(__get_rootNodes, __set_rootNodes)
     
-
+    def __mrig_cast_settings(self):
+        '''
+        get connected metaNodes relative to the rootNode then validate if we have an mRig to 
+        process, if we do then we look for the internal filterSettings data the new rigs carry
+        and overload the filterSettings of this class with some of that data
+        '''
+        mrig=None
+        if not self.settings.metaRig:
+            return
+        if len(self._rootNodes)==1:
+            if r9Meta.isMetaNode(self._rootNodes[0]) and issubclass(type(self._rootNodes[0]), r9Meta.MetaRig):
+                mrig=r9Meta.MetaClass(self._rootNodes[0])
+            else:
+                mrig=r9Meta.getConnectedMetaSystemRoot(self._rootNodes[0], mInstances=r9Meta.MetaRig)
+            if mrig:
+                if mrig.hasAttr('filterSettings') and mrig.filterSettings:
+                    log.info('==============================================================')
+                    log.info('mRig : setting.filterPriority pulled directly from mNodes data')
+                    log.info('==============================================================')
+                    self.settings.filterPriority=mrig.settings.filterPriority
+                    self.settings.rigData['snapPriority']=mrig.settings.rigData['snapPriority']
+                    self.settings.printSettings()
+                    log.info('==============================================================')
+                else:
+                    log.info('mRig : No specific filter data bound to this rig')
+            return mrig
+        
     def __get_processMode(self):
             return self._processMode
 
@@ -1206,7 +1281,7 @@ class FilterNode(object):
             [self.characterSetMembers.remove(cset) for cset in cSets if cset in self.characterSetMembers]
                     
             return cmds.ls(self.characterSetMembers, l=True)
-
+                
     def lsMetaRigControllers(self, walk=True, incMain=True):
         '''
         very light wrapper to handle MetaData in the FilterSystems. This is hard coded
@@ -1219,7 +1294,7 @@ class FilterNode(object):
         rigCtrls=[]
         metaNodes=[]
         
-        #First find and connected MetaData nodes
+        #First find all connected MetaData nodes
         for root in self.rootNodes:
             meta=None
             if r9Meta.isMetaNode(root):
@@ -1303,7 +1378,8 @@ class FilterNode(object):
                     return []
             
             # MetaClass Filter ------------------------------
-            if self.settings.metaRig:
+            if self.settings.metaRig:                
+                # run the main getChildren calls for hierarchy structure  
                 nodes = self.lsMetaRigControllers(incMain=self.settings.incRoots)
                 addToIntersection(nodes)
                 if not nodes:
@@ -1582,9 +1658,9 @@ class MatchedNodeInputs(object):
             #take a single instance of a FilterNode and process both root hierarchies
             filterNode=FilterNode(filterSettings=self.settings)
             filterNode.rootNodes=self.roots[0]
-            nodesA=filterNode.ProcessFilter()
+            nodesA=filterNode.processFilter()
             filterNode.rootNodes=self.roots[1]
-            nodesB=filterNode.ProcessFilter()
+            nodesB=filterNode.processFilter()
 
             #Match the 2 nodeLists by nodeName and return the MatcherPairs list
             self.MatchedPairs=matchNodeLists(nodesA, nodesB, self.matchMethod)
@@ -2164,7 +2240,7 @@ class TimeOffset(object):
             nodes=cmds.ls(sl=True, l=True)
 
         if filterSettings:
-            nodes = FilterNode(nodes, filterSettings).ProcessFilter()
+            nodes = FilterNode(nodes, filterSettings).processFilter()
             # selectedNodes.extend(FilterNode(selectedNodes,filterSettings).ProcessFilter())
             # selectedNodes=sortNumerically(selectedNodes)
         if nodes:
