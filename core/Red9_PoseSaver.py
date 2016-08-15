@@ -145,6 +145,9 @@ class DataMap(object):
         pass
            
     def setMetaRig(self, node):
+        '''
+        Master call to bind and set the mRig for the DataMap
+        '''
         log.debug('setting internal metaRig from given node : %s' % node)
         if r9Meta.isMetaNodeInherited(node,'MetaRig'):
             self.metaRig=r9Meta.MetaClass(node)
@@ -193,7 +196,7 @@ class DataMap(object):
         if self.useFilter:
             log.debug('getNodes - useFilter=True : filteActive=True  - no custom poseHandler')
             if self.settings.filterIsActive():
-                return r9Core.FilterNode(nodes,self.settings).ProcessFilter()  # main node filter
+                return r9Core.FilterNode(nodes, self.settings).processFilter()  # main node filter
             else:
                 log.debug('getNodes - useFilter=True : filteActive=False - no custom poseHandler')
                 return nodes
@@ -469,8 +472,8 @@ class DataMap(object):
          
         if self.metaPose:
             self.setMetaRig(nodes[0])
-            print 'infoDict : ', self.infoDict
-            print 'metaRig : ', self.metaRig
+            #print 'infoDict : ', self.infoDict
+            #print 'metaRig : ', self.metaRig
             if 'metaPose' in self.infoDict and self.metaRig:
                 try:
                     if eval(self.infoDict['metaPose']):
@@ -567,7 +570,7 @@ class DataMap(object):
         else:
             #use the internal Poses filter and then Match against scene nodes
             if self.settings.filterIsActive():
-                filterData=r9Core.FilterNode(nodes,self.settings).ProcessFilter()
+                filterData=r9Core.FilterNode(nodes,self.settings).processFilter()
                 matchedPairs=self._matchNodesToPoseData(filterData)
                 if matchedPairs:
                     InternalNodes=[node for _,node in matchedPairs]
@@ -733,7 +736,7 @@ class PoseData(DataMap):
         fn=r9Core.FilterNode(rootJnt)
         fn.settings.nodeTypes='joint'
         fn.settings.incRoots=False
-        skeleton=fn.ProcessFilter()
+        skeleton=fn.processFilter()
 
         for jnt in skeleton:
             key=r9Core.nodeNameStrip(jnt)
@@ -896,9 +899,12 @@ class PoseData(DataMap):
         else:
             if self.relativePose:
                 if self.prioritySnapOnly:
-                    #we've already filtered the hierarchy, may as well just filter the results for speed
-                    self.nodesToLoad=r9Core.prioritizeNodeList(self.nodesToLoad, self.settings.filterPriority, regex=True, prioritysOnly=True)
-                    self.nodesToLoad.reverse()
+                    if not self.settings.filterPriority:
+                        log.warning('Internal filterPriority list is empty, switching "SnapPriority" flag OFF!')
+                    else:
+                        # we've already filtered the hierarchy, may as well just filter the results for speed
+                        self.nodesToLoad=r9Core.prioritizeNodeList(self.nodesToLoad, self.settings.filterPriority, regex=True, prioritysOnly=True)
+                        self.nodesToLoad.reverse()
                     
                 #setup the PosePointCloud -------------------------------------------------
                 reference=objs[0]
@@ -1038,9 +1044,16 @@ class PosePointCloud(object):
         '''
         if self.settings.filterIsActive():
             __searchPattern_cached=self.settings.searchPattern
+#             if self.prioritySnapOnly:
+#                 self.settings.searchPattern=self.settings.filterPriority
+#            self.inputNodes=r9Core.FilterNode(self.inputNodes, self.settings).processFilter()
+
+            flt=r9Core.FilterNode(self.inputNodes, self.settings)
             if self.prioritySnapOnly:
-                self.settings.searchPattern=self.settings.filterPriority
-            self.inputNodes=r9Core.FilterNode(self.inputNodes, self.settings).ProcessFilter()
+                # take from the flt instance as that now manages metaRig specific settings internally
+                self.settings.searchPattern=flt.settings.filterPriority 
+            self.inputNodes=flt.processFilter()
+            
             self.settings.searchPattern=__searchPattern_cached  # restore the settings back!!
             
         # auto logic for MetaRig - go find the renderMeshes wired to the systems
@@ -1236,7 +1249,7 @@ class PoseCompare(object):
     >>> compare.fails['failedAttrs']
     '''
     def __init__(self, currentPose, referencePose, angularTolerance=0.1, linearTolerance=0.01, 
-                 compareDict='poseDict', filterMap=[], ignoreBlocks=[], ignoreStrings=[]):
+                 compareDict='poseDict', filterMap=[], ignoreBlocks=[], ignoreStrings=[], ignoreAttrs=[]):
         '''
         Make sure we have 2 PoseData objects to compare
         :param currentPose: either a PoseData object or a valid pose file
@@ -1250,6 +1263,7 @@ class PoseCompare(object):
         :param ignoreBlocks: allows the given failure blocks to be ignored. We mainly use this for ['missingKeys']
         :param ignoreStrings: allows you to pass in a list of strings, if any of the keys in the data contain
              that string it will be skipped, note this is a partial match so you can pass in wildcard searches ['_','_end']
+        :param ignoreAttrs: allows you to skip given attrs from the poseCompare calls
         
         .. note::
             In the new setup if the skeletonRoot jnt is found we add a whole
@@ -1271,6 +1285,7 @@ class PoseCompare(object):
         self.filterMap = filterMap
         self.ignoreBlocks = ignoreBlocks
         self.ignoreStrings = ignoreStrings
+        self.ignoreAttrs = ignoreAttrs
         
         if isinstance(currentPose, PoseData):
             self.currentPose = currentPose
@@ -1338,6 +1353,8 @@ class PoseCompare(object):
                 log.debug('%s node has no attrs block in the pose' % key)
                 continue
             for attr, value in attrBlock['attrs'].items():
+                if attr in self.ignoreAttrs:
+                    continue
                 # attr missing completely from the key
                 if not attr in referenceAttrBlock['attrs']:
                     if not 'failedAttrs' in self.fails:
