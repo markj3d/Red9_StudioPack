@@ -3659,7 +3659,7 @@ class MetaRig(MetaClass):
     '''
             
     def saveAnimation(self, filepath, incRoots=True, useFilter=True, timerange=(),
-                      storeThumbnail=False, force=False):
+                      storeThumbnail=False, force=False, userInfoData='', **kws):
         '''
         PRO_PACK : Binding of the animMap format for storing animation data out to file
                 
@@ -3669,13 +3669,15 @@ class MetaRig(MetaClass):
         :param timerange: specific a timerange to store, else store all 
         :param storeThumbnail: this will be an avi but currently it's a pose thumbnail
         :param force: allow force write on a read only file
+        :param userInfoData: user information used by the AnimStore UI only
         '''
         if r9Setup.has_pro_pack():
             from Red9.pro_pack import r9pro
             r9pro.r9import('r9panim')
             from r9panim import AnimMap
             
-            self.animCache=AnimMap()
+            self.animCache=AnimMap(**kws)
+            self.animCache.userInfoData=userInfoData
             self.animCache.filepath=filepath
             self.animCache.metaPose=True
             self.animCache.settings.incRoots=incRoots
@@ -3687,7 +3689,7 @@ class MetaRig(MetaClass):
             
             log.info('AnimMap data saved to : %s' % self.animCache.filepath)
     
-    def loadAnimation_postload_call(self, *args, **kws):
+    def loadAnimation_postload_call(self, feedback, *args, **kws):
         '''
         -------------------------------------------
         Added to be Overloaded at the class level!
@@ -3701,11 +3703,13 @@ class MetaRig(MetaClass):
         nodes and any other data that's requried to be restored from the gathered info 
        
         self.animCache.infoDict
+        
+        :param feedback: data passed back into the call by the main loadAnimation func
         '''
-        print 'Anim PoseLoad func call'
+        pass
                
     def loadAnimation(self, filepath, incRoots=True, useFilter=True, 
-                      loadAsStored=True, loadFromFrm=0, referenceNode=None, *args, **kws):
+                      loadAsStored=True, loadFromFrm=0, referenceNode=None, manageRanges=1, manageFileName=True, *args, **kws):
         '''
         PRO_PACK : Binding of the animMap format for loading animation data from
         an r9Anim file. The base binding of the animation format is the DataMap object
@@ -3717,18 +3721,40 @@ class MetaRig(MetaClass):
         :param loadAsStored: load the data from the timerange stored
         :param loadFromFrm: load the data from a given frame
         :param referenceNode: load relative to the given node
+        :param manageRanges: do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded
+        :param manageFileName: if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
+            then we take the r9Anim's filename and rename the Maya scene accordingly
         
-        ..NOTE:
+        additional **KWS passed in and / or accepted in the ProPack codebase
+        
+        :KWS manageExport: If running the Red9Pro Exporter systems this will rebuild the export Tag data directly
+            from the r9Anim file's infoData block:
+            False : don't restore any exportData,
+            [] : if you pass in a list then we take that list and match internal exportloop names to it
+            'byName' : restore only exportLoops who name matches the r9Anim's name
+            'byRange': restore exportLoops that fall within the timerange of the imported r9Anim
+            'byRange_start' : restore exportLoops that start after the timerange of the importer r9Anim (ignore end time data)
+            'byRange_end' : restore exportLoops that end before the timerange of the importer r9Anim (ignore start time data)
+            'byAll' : restore ALL exportLoops in the r9Anim infoData block
+        :KWS manageAudio: If running the Red9Pro Exporter systems this will rebuild the Audio Node data directly
+            from the r9Anim file's infoData block   (False, [], 'byName', 'byRange', 'byRange_start', 'byRange_end', 'byAll')
+        
+        .. note:
             After the anim load the animData is stored on this instance as self.animMap which then 
             exposes all the data for further functions if needed.
             self.animCache.infoDict = gatherInfo block on the file and pose
             self.animCache.poseDict = the animation and pose data dict
             
+        .. note:
+            **kws are passed directly into BOTH the AnimMap class and the loadAnimation_postload_call
+            so that we can bounce additional **kws into these funcs without having to specify everything,
+            this allows us to modify the behaviour on a case by case basis for clients
         '''
         if r9Setup.has_pro_pack():
             from Red9.pro_pack import r9pro
             r9pro.r9import('r9panim')
             from r9panim import AnimMap
+            feedback=None
             
             self.animCache=AnimMap(**kws)  # **kws so we can pass back the filterSettings from the UI call in pro
             self.animCache.filepath=filepath
@@ -3738,13 +3764,22 @@ class MetaRig(MetaClass):
                 rootNodes=self.mNode
             else:
                 rootNodes=cmds.ls(sl=True,l=True)
-            feedback=self.animCache.loadAnim(nodes=rootNodes,
-                                           useFilter=useFilter,
-                                           loadAsStored=loadAsStored,
-                                           loadFromFrm=loadFromFrm,
-                                           referenceNode=referenceNode)
-            
-            self.loadAnimation_postload_call(*args, **kws)
+            try:
+                feedback=self.animCache.loadAnim(nodes=rootNodes,
+                                               useFilter=useFilter,
+                                               loadAsStored=loadAsStored,
+                                               loadFromFrm=loadFromFrm,
+                                               referenceNode=referenceNode,
+                                               manageRanges=manageRanges,
+                                               manageFileName=manageFileName,
+                                               **kws)
+                # =========================================================
+                # pass the feedback to the postload code to handle, this is 
+                # responsible, at the client level for restoring things like audioNodes
+                # and exportLoops
+                self.loadAnimation_postload_call(feedback, *args, **kws)
+            except StandardError,err:
+                log.warning(err) 
             return feedback
     
     @property
