@@ -2033,6 +2033,10 @@ class LockChannels(object):
         :param usedDefined: process all UserDefined attributes on all nodes
         
         >>> r9Core.LockChannels.processState(nodes, attrs=["sx", "sy", "sz", "v"], mode='lockall')
+        
+        .. note:
+            if attrs='all' we now set it to the following for ease:
+             ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "nds", "radius"]
         '''
         userDefAttrs=set()
         if not nodes:
@@ -2044,6 +2048,9 @@ class LockChannels(object):
             #Filter the selection for children including the selected roots
             nodes=FilterNode(nodes).lsHierarchy(incRoots=True)
         
+        if attrs=='all':
+            attrs=["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "nds", "radius"]
+            
         if not hasattr(attrs,'__iter__'):
             attrs=set([attrs])
         if not type(attrs)==set:
@@ -2477,6 +2484,33 @@ def valueToMappedRange(value, currentMin, currentMax, givenMin, givenMax):
     valueScaled = float(value - currentMin) / float(currentSpan)
     # Convert the 0-1 range into a value in the right range.
     return givenMin + (valueScaled * givenSpan)
+
+def timeIsInRange(baseRange=(), testRange=()):
+    '''
+    test that a given testRange falls within the bounds of a baseRange
+    Used to test if timeRanges fall within a baseRange
+    
+    :param baseRange: base time range to test against
+    :param testRange: range to test against the baseRange, do these times fall within the baseRange?
+    
+    .. note::
+        if you pass in baseRange as (None, 100) then we only validate against the end time.
+        if we pass in baseRange as (10, None) we only validate against the start time
+        else we validate that testRange is fully within the baseRanges times
+    '''
+    if baseRange[1] is None:
+        if testRange[0]>=baseRange[0]:
+            return True
+        else:
+            return False
+    if baseRange[0] is None:
+        if testRange[1]<=baseRange[1]:
+            return True
+        else:
+            return False
+    if not testRange[0]>=baseRange[0] or not testRange[1]<=baseRange[1]:
+        return False
+    return True
 
 def distanceBetween(nodeA, nodeB):
     '''
