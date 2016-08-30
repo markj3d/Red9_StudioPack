@@ -238,12 +238,18 @@ class AudioHandler(object):
         
         @param time: tuple, (min,max) timerange within which returned audio has 
         fall within else it's ignored.
+        
+        .. note::
+            if you pass in time as (None, 100) then we only validate against the end time.
+            if we pass in time as (10, None) we only validate against the start time
+            else we validate that testRange is fully within the times
         '''
         audio_in_range=[]
         for a in self.audioNodes:
-            if not a.startFrame>=time[0] or not a.endFrame<=time[1]:
-                continue
-            audio_in_range.append(a)
+            if r9Core.timeIsInRange(time, (a.startFrame,a.endFrame)):
+#             if not a.startFrame>=time[0] or not a.endFrame<=time[1]:
+#                 continue
+                audio_in_range.append(a)
         if not asNodes:
             return [a.audioNode for a in audio_in_range]
         return audio_in_range
