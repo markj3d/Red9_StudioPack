@@ -30,7 +30,7 @@ import os
 import Red9.packages.configobj as configobj
 import time
 import getpass
-
+import json
 
 import logging
 logging.basicConfig()
@@ -77,6 +77,9 @@ class DataMap(object):
         self.file_ext = ''  # extension the file will be saved as
         self.filepath=''    # path to load / save
         self.__filepath = ''
+        self.filename=''  # short name of the pose
+        self.dataformat='config'
+        self._dataformat_resolved=None
         self.mayaUpAxis = r9Setup.mayaUpAxis()
         self.thumbnailRes=[128,128]
         
@@ -129,15 +132,16 @@ class DataMap(object):
             self.__filepath='%s%s' % (os.path.splitext(path)[0], self.file_ext)
         else:
             self.__filepath=path
+        self.filename=os.path.splitext(os.path.basename(self.filepath))[0]
     
-    def _pre_load(self):
+    def _pre_load(self,*args, **kws):
         '''
         called directly before the loadData call so you have access
         to manage the undoQueue etc if subclassing
         '''
         pass
     
-    def _post_load(self):
+    def _post_load(self,*args, **kws):
         '''
         called directly after the loadData call so you have access
         to manage the undoQueue etc if subclassing
@@ -190,6 +194,14 @@ class DataMap(object):
         get the nodes to process
         This is designed to allow for specific hooks to be used from user
         code stored in the pose folder itself.
+        
+        .. note:
+            Update : Aug 2016
+            Because this calls FilterNode to get the data when useFilter=True it
+            allows for any mRig with internal filterSettings bound to it to dynamically
+            modify the settings on the fly to suit. This is a big update in handling
+            for ProPack to integrate without having to massively restructure
+            
         '''
         if not type(nodes)==list:
             nodes=[nodes]
@@ -415,38 +427,81 @@ class DataMap(object):
     # Process the data ---
     # --------------------------------------------------------------------------------
                                                 
-    def _writePose(self, filepath, force=False):
+    def _writePose(self, filepath=None, force=False):
         '''
         Write the Pose ConfigObj to file
         '''
+        if not filepath:
+            filepath=self.filepath
         if not force:
             if os.path.exists(filepath) and not os.access(filepath,os.W_OK):
                 raise IOError('File is Read-Only - write aborted : %s' % filepath)
-        
-        ConfigObj = configobj.ConfigObj(indent_type='\t')
-        ConfigObj['info']=self.infoDict
-        ConfigObj['filterNode_settings']=self.settings.__dict__
-        ConfigObj['poseData']=self.poseDict
-        if self.skeletonDict:
-            ConfigObj['skeletonDict']=self.skeletonDict
-        ConfigObj.filename = filepath
-        ConfigObj.write()
+        # =========================
+        # write to ConfigObject
+        # =========================
+        if self.dataformat=='config':
+            ConfigObj = configobj.ConfigObj(indent_type='\t')
+            ConfigObj['info']=self.infoDict
+            ConfigObj['filterNode_settings']=self.settings.__dict__
+            ConfigObj['poseData']=self.poseDict
+            if self.skeletonDict:
+                ConfigObj['skeletonDict']=self.skeletonDict
+            ConfigObj.filename = filepath
+            ConfigObj.write()
+            self._dataformat_resolved='config'
+        # =========================
+        # write to JSON format
+        # =========================
+        elif self.dataformat=='json':
+            data={}
+            data['info']=self.infoDict
+            data['filterNode_settings']=self.settings.__dict__
+            data['poseData']=self.poseDict
+            if self.skeletonDict:
+                data['skeletonDict']=self.skeletonDict
+            with open(filepath, 'w') as f:
+                f.write(json.dumps(data, sort_keys=True, indent=4))
+                f.close()
+            self._dataformat_resolved='json'
 
     @r9General.Timer
-    def _readPose(self, filename):
+    def _readPose(self, filename=None):
         '''
         Read the pose file and build up the internal poseDict
         TODO: do we allow the data to be filled from the pose filter thats stored???????
         '''
+        if not filename:
+            filename=self.filepath
         if filename:
             if os.path.exists(filename):
-                #for key, val in configobj.ConfigObj(filename)['filterNode_settings'].items():
-                #    self.settings.__dict__[key]=decodeString(val)
-                self.poseDict=configobj.ConfigObj(filename)['poseData']
-                if 'info' in configobj.ConfigObj(filename):
-                    self.infoDict=configobj.ConfigObj(filename)['info']
-                if 'skeletonDict' in configobj.ConfigObj(filename):
-                    self.skeletonDict=configobj.ConfigObj(filename)['skeletonDict']
+                # =========================
+                # write to JSON format
+                # =========================
+                if self.dataformat=='json':
+                    try:
+                        with open(filename, 'r') as f:
+                            data=json.load(f)
+                        self.poseDict=data['poseData']
+                        if 'info' in data.keys():
+                            self.infoDict=data['info']
+                        if 'skeletonDict' in data.keys():
+                            self.skeletonDict=data['skeletonDict']
+                        self._dataformat_resolved='json'
+                    except IOError, err:
+                        self._dataformat_resolved='config'
+                        log.info('JSON : DataMap format failed to load, reverting to legacy ConfigObj')
+                # =========================
+                # write to ConfigObject
+                # =========================    
+                if self._dataformat_resolved=='config' or self.dataformat=='config':
+                    #for key, val in configobj.ConfigObj(filename)['filterNode_settings'].items():
+                    #    self.settings.__dict__[key]=decodeString(val)
+                    self.poseDict=configobj.ConfigObj(filename)['poseData']
+                    if 'info' in configobj.ConfigObj(filename):
+                        self.infoDict=configobj.ConfigObj(filename)['info']
+                    if 'skeletonDict' in configobj.ConfigObj(filename):
+                        self.skeletonDict=configobj.ConfigObj(filename)['skeletonDict']
+                    self._dataformat_resolved='config'
             else:
                 raise StandardError('Given filepath doesnt not exist : %s' % filename)
         else:
@@ -471,9 +526,8 @@ class DataMap(object):
             raise StandardError('Given Path does not Exist')
          
         if self.metaPose:
+            # set the mRig in a consistent manner
             self.setMetaRig(nodes[0])
-            #print 'infoDict : ', self.infoDict
-            #print 'metaRig : ', self.metaRig
             if 'metaPose' in self.infoDict and self.metaRig:
                 try:
                     if eval(self.infoDict['metaPose']):
@@ -494,10 +548,10 @@ class DataMap(object):
             self._readPose(self.filepath)
             log.info('Pose Read Successfully from : %s' % self.filepath)
         
-        #fill the skip list, these attrs will be totally ignored by the code
+        # fill the skip list, these attrs will be totally ignored by the code
         self.skipAttrs=self.getSkippedAttrs(nodes[0])
                  
-        #Build the master list of matched nodes that we're going to apply data to
+        # build the master list of matched nodes that we're going to apply data to
         #Note: this is built up from matching keys in the poseDict to the given nodes
         self.matchedPairs = self._matchNodesToPoseData(self.nodesToLoad)
         
@@ -638,7 +692,7 @@ class DataMap(object):
                      
         try:
             self._pre_load()
-            
+            # main process to match and build up the data
             self.processPoseFile(nodes)
             
             if not self.matchedPairs:
@@ -891,89 +945,96 @@ class PoseData(DataMap):
         self.useFilter = useFilter  # used in the getNodes call
         self.maintainSpaces = maintainSpaces
         self.mayaUpAxis = r9Setup.mayaUpAxis()
-        
-        self.processPoseFile(nodes)
-        
-        if not self.matchedPairs:
-            raise StandardError('No Matching Nodes found in the PoseFile!')
-        else:
-            if self.relativePose:
-                if self.prioritySnapOnly:
-                    if not self.settings.filterPriority:
-                        log.warning('Internal filterPriority list is empty, switching "SnapPriority" flag OFF!')
-                    else:
-                        # we've already filtered the hierarchy, may as well just filter the results for speed
-                        self.nodesToLoad=r9Core.prioritizeNodeList(self.nodesToLoad, self.settings.filterPriority, regex=True, prioritysOnly=True)
-                        self.nodesToLoad.reverse()
-                    
-                #setup the PosePointCloud -------------------------------------------------
-                reference=objs[0]
-                self.PosePointCloud=PosePointCloud(self.nodesToLoad)
-                self.PosePointCloud.buildOffsetCloud(reference, raw=True)
-                resetCache=[cmds.getAttr('%s.translate' % self.PosePointCloud.posePointRoot),
-                            cmds.getAttr('%s.rotate' % self.PosePointCloud.posePointRoot)]
-                
-                if self.maintainSpaces:
-                    if self.metaRig:
-                        parentSpaceCache=self.getMaintainedAttrs(self.nodesToLoad, self.metaRig.parentSwitchAttr)
-                    elif 'parentSpaces' in self.settings.rigData:
-                        parentSpaceCache=self.getMaintainedAttrs(self.nodesToLoad, self.settings.rigData['parentSpaces'])
-    
-            self._applyData(percent)
 
-            if self.relativePose:
-                #snap the poseCloud to the new xform of the referenced node, snap the cloud
-                #to the pose, reset the clouds parent to the cached xform and then snap the
-                #nodes back to the cloud
-                r9Anim.AnimFunctions.snap([reference,self.PosePointCloud.posePointRoot])
-                 
-                if self.relativeRots=='projected':
-                    if self.mayaUpAxis=='y':
-                        cmds.setAttr('%s.rx' % self.PosePointCloud.posePointRoot,0)
-                        cmds.setAttr('%s.rz' % self.PosePointCloud.posePointRoot,0)
-                    elif self.mayaUpAxis=='z':  # fucking Z!!!!!!
-                        cmds.setAttr('%s.rx' % self.PosePointCloud.posePointRoot,0)
-                        cmds.setAttr('%s.ry' % self.PosePointCloud.posePointRoot,0)
-                    
-                self.PosePointCloud.snapPosePntstoNodes()
-                
-                if not self.relativeTrans=='projected':
-                    cmds.setAttr('%s.translate' % self.PosePointCloud.posePointRoot,
-                                 resetCache[0][0][0],
-                                 resetCache[0][0][1],
-                                 resetCache[0][0][2])
-                if not self.relativeRots=='projected':
-                    cmds.setAttr('%s.rotate' % self.PosePointCloud.posePointRoot,
-                                 resetCache[1][0][0],
-                                 resetCache[1][0][1],
-                                 resetCache[1][0][2])
-               
-                if self.relativeRots=='projected':
-                    if self.mayaUpAxis=='y':
-                        cmds.setAttr('%s.ry' % self.PosePointCloud.posePointRoot,resetCache[1][0][1])
-                    elif self.mayaUpAxis=='z':  # fucking Z!!!!!!
-                        cmds.setAttr('%s.rz' % self.PosePointCloud.posePointRoot,resetCache[1][0][2])
-                if self.relativeTrans=='projected':
-                    if self.mayaUpAxis=='y':
-                        cmds.setAttr('%s.tx' % self.PosePointCloud.posePointRoot,resetCache[0][0][0])
-                        cmds.setAttr('%s.tz' % self.PosePointCloud.posePointRoot,resetCache[0][0][2])
-                    elif self.mayaUpAxis=='z':  # fucking Z!!!!!!
-                        cmds.setAttr('%s.tx' % self.PosePointCloud.posePointRoot,resetCache[0][0][0])
-                        cmds.setAttr('%s.ty' % self.PosePointCloud.posePointRoot,resetCache[0][0][1])
-                
-                #if maintainSpaces then restore the original parentSwitch attr values
-                #BEFORE pushing the point cloud data back to the rig
-                if self.maintainSpaces and parentSpaceCache:  # and self.metaRig:
-                    for child,attr,value in parentSpaceCache:
-                        log.debug('Resetting parentSwitches : %s.%s = %f' % (r9Core.nodeNameStrip(child),attr,value))
-                        cmds.setAttr('%s.%s' % (child,attr), value)
-                            
-                self.PosePointCloud.snapNodestoPosePnts()
-                self.PosePointCloud.delete()
-                cmds.select(reference)
+        try:
+            self._pre_load()
+            # main process to match and build up the data
+            self.processPoseFile(nodes)
+            
+            if not self.matchedPairs:
+                raise StandardError('No Matching Nodes found in the PoseFile!')
             else:
-                if objs:
-                    cmds.select(objs)
+                if self.relativePose:
+                    if self.prioritySnapOnly:
+                        if not self.settings.filterPriority:
+                            log.warning('Internal filterPriority list is empty, switching "SnapPriority" flag OFF!')
+                        else:
+                            # we've already filtered the hierarchy, may as well just filter the results for speed
+                            self.nodesToLoad=r9Core.prioritizeNodeList(self.nodesToLoad, self.settings.filterPriority, regex=True, prioritysOnly=True)
+                            self.nodesToLoad.reverse()
+                        
+                    #setup the PosePointCloud -------------------------------------------------
+                    reference=objs[0]
+                    self.PosePointCloud=PosePointCloud(self.nodesToLoad)
+                    self.PosePointCloud.buildOffsetCloud(reference, raw=True)
+                    resetCache=[cmds.getAttr('%s.translate' % self.PosePointCloud.posePointRoot),
+                                cmds.getAttr('%s.rotate' % self.PosePointCloud.posePointRoot)]
+                    
+                    if self.maintainSpaces:
+                        if self.metaRig:
+                            parentSpaceCache=self.getMaintainedAttrs(self.nodesToLoad, self.metaRig.parentSwitchAttr)
+                        elif 'parentSpaces' in self.settings.rigData:
+                            parentSpaceCache=self.getMaintainedAttrs(self.nodesToLoad, self.settings.rigData['parentSpaces'])
+        
+                self._applyData(percent)
+    
+                if self.relativePose:
+                    #snap the poseCloud to the new xform of the referenced node, snap the cloud
+                    #to the pose, reset the clouds parent to the cached xform and then snap the
+                    #nodes back to the cloud
+                    r9Anim.AnimFunctions.snap([reference,self.PosePointCloud.posePointRoot])
+                     
+                    if self.relativeRots=='projected':
+                        if self.mayaUpAxis=='y':
+                            cmds.setAttr('%s.rx' % self.PosePointCloud.posePointRoot,0)
+                            cmds.setAttr('%s.rz' % self.PosePointCloud.posePointRoot,0)
+                        elif self.mayaUpAxis=='z':  # fucking Z!!!!!!
+                            cmds.setAttr('%s.rx' % self.PosePointCloud.posePointRoot,0)
+                            cmds.setAttr('%s.ry' % self.PosePointCloud.posePointRoot,0)
+                        
+                    self.PosePointCloud.snapPosePntstoNodes()
+                    
+                    if not self.relativeTrans=='projected':
+                        cmds.setAttr('%s.translate' % self.PosePointCloud.posePointRoot,
+                                     resetCache[0][0][0],
+                                     resetCache[0][0][1],
+                                     resetCache[0][0][2])
+                    if not self.relativeRots=='projected':
+                        cmds.setAttr('%s.rotate' % self.PosePointCloud.posePointRoot,
+                                     resetCache[1][0][0],
+                                     resetCache[1][0][1],
+                                     resetCache[1][0][2])
+                   
+                    if self.relativeRots=='projected':
+                        if self.mayaUpAxis=='y':
+                            cmds.setAttr('%s.ry' % self.PosePointCloud.posePointRoot,resetCache[1][0][1])
+                        elif self.mayaUpAxis=='z':  # fucking Z!!!!!!
+                            cmds.setAttr('%s.rz' % self.PosePointCloud.posePointRoot,resetCache[1][0][2])
+                    if self.relativeTrans=='projected':
+                        if self.mayaUpAxis=='y':
+                            cmds.setAttr('%s.tx' % self.PosePointCloud.posePointRoot,resetCache[0][0][0])
+                            cmds.setAttr('%s.tz' % self.PosePointCloud.posePointRoot,resetCache[0][0][2])
+                        elif self.mayaUpAxis=='z':  # fucking Z!!!!!!
+                            cmds.setAttr('%s.tx' % self.PosePointCloud.posePointRoot,resetCache[0][0][0])
+                            cmds.setAttr('%s.ty' % self.PosePointCloud.posePointRoot,resetCache[0][0][1])
+                    
+                    #if maintainSpaces then restore the original parentSwitch attr values
+                    #BEFORE pushing the point cloud data back to the rig
+                    if self.maintainSpaces and parentSpaceCache:  # and self.metaRig:
+                        for child,attr,value in parentSpaceCache:
+                            log.debug('Resetting parentSwitches : %s.%s = %f' % (r9Core.nodeNameStrip(child),attr,value))
+                            cmds.setAttr('%s.%s' % (child,attr), value)
+                                
+                    self.PosePointCloud.snapNodestoPosePnts()
+                    self.PosePointCloud.delete()
+                    cmds.select(reference)
+                else:
+                    if objs:
+                        cmds.select(objs)
+        except StandardError,err:
+            log.info('Pose Load Failed! : , %s' % err)
+        finally:
+            self._post_load()
 
 
 class PosePointCloud(object):
