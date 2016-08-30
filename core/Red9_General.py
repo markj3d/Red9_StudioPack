@@ -393,6 +393,12 @@ class ProgressBarContext(object):
     ----------------------------------
     Context manager to make it easier to wrap progressBars
     
+    :param maxValue: max value used in the progress
+    :param interruptable: if the progress is interruptable / escapable
+    :param step: step used in the progress bar
+    :param ismain: if we use the main progressBar OR a progressWindow to view the progress
+    :param title: only valid if ismain=False, used as the progressUI window title
+    
     >>> #Example of using this in code
     >>> 
     >>> step=5
@@ -410,8 +416,9 @@ class ProgressBarContext(object):
     >>>         count+=step
     
     '''
-    def __init__(self, maxValue=100, interruptable=True):
+    def __init__(self, maxValue=100, interruptable=True, step=1, ismain=True, title=''):
         self.disable=False
+        self.ismain=ismain
         if r9Setup.mayaIsBatch():
             self.disable=True
             return
@@ -420,29 +427,45 @@ class ProgressBarContext(object):
             raise ValueError("Max has to be greater than 0")
         self._maxValue = maxValue
         self._interruptable = interruptable
-        
         self._gMainProgressBar = mel.eval('$gmtmp = $gMainProgressBar')
+        self.title=title
+        self.step=step
                 
     def isCanceled(self):
         if not self.disable:
-            return cmds.progressBar(self._gMainProgressBar, query=True, isCancelled=True)
+            if self.ismain:
+                return cmds.progressBar(self._gMainProgressBar, query=True, isCancelled=True)
+            else:
+                return cmds.progressWindow(query=True, isCancelled=True)
 
     def setText(self, text):
         if not self.disable:
-            cmds.progressBar(self._gMainProgressBar, edit=True, status=text)
+            if self.ismain:
+                cmds.progressBar(self._gMainProgressBar, edit=True, status=text)
+            else:
+                cmds.progressWindow(edit=True, status=text)
 
     def setMaxValue(self, value):
         if not self.disable:
-            cmds.progressBar(self._gMainProgressBar, edit=True, maxValue=int(value))
+            if self.ismain:
+                cmds.progressBar(self._gMainProgressBar, edit=True, maxValue=int(value))
+            else:
+                cmds.progressWindow(edit=True, maxValue=int(value))
         
     def setStep(self, value):
         if not self.disable:
-            cmds.progressBar(self._gMainProgressBar, edit=True, step=int(value))
+            if self.ismain:
+                cmds.progressBar(self._gMainProgressBar, edit=True, step=int(value))
+            else:
+                cmds.progressWindow(edit=True, step=int(value))
     
     def setProgress(self, value):
         if not self.disable:
-            cmds.progressBar(self._gMainProgressBar, edit=True, progress=int(value))
-        
+            if self.ismain:
+                cmds.progressBar(self._gMainProgressBar, edit=True, progress=int(value))
+            else:
+                cmds.progressWindow(edit=True, progress=int(value))
+                
     def reset(self):
         if not self.disable:
             self.setMaxValue(self._maxValue)
@@ -450,20 +473,29 @@ class ProgressBarContext(object):
 
     def __enter__(self):
         if not self.disable:
-            cmds.progressBar(self._gMainProgressBar,
+            if self.ismain:
+                cmds.progressBar(self._gMainProgressBar,
                               edit=True,
                               beginProgress=True,
-                              step=1,
+                              step=self.step,
                               isInterruptable=self._interruptable,
                               maxValue=self._maxValue)
-    
+            else:
+                cmds.progressWindow(step=self.step,
+                                title=self.title,
+                                isInterruptable=self._interruptable,
+                                maxValue=self._maxValue)
+                
     def __exit__(self, exc_type, exc_value, traceback):
         if not self.disable:
-            cmds.progressBar(self._gMainProgressBar, edit=True, endProgress=True)
+            if self.ismain:
+                cmds.progressBar(self._gMainProgressBar, edit=True, endProgress=True)
+            else:
+                cmds.progressWindow(endProgress=True)
             if exc_type:
                 log.exception('%s : %s'%(exc_type, exc_value))
             del(self)
-            return False  # False so that the exceptiopn gets re-raised
+            return False  # False so that the exception gets re-raised
     
        
 class HIKContext(object):
