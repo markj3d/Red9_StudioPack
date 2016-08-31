@@ -500,6 +500,19 @@ class AnimationLayerContext(object):
         # If this was false, it would re-raise the exception when complete
         return True
 
+# ==========================================================================================================
+# Maya 2017 workspace replaces dockControl but still not got my head round how the hell you get this to run??
+# ==========================================================================================================
+'''
+work in progress: 
+
+    element=mel.eval('getUIComponentDockControl("Channel Box / Layer Editor", false);')
+    windowcall='import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.AnimationUI().show()'
+    cmds.workspaceControl('red9_anim35u', label="Red9_Animation", uiScript=windowcall, tabToControl=(element, -1))  ???
+    
+    cmds.workspaceControl('red9_anim35u', label="Red9_Animation", uiScript=windowcall, dockToControl=("MainPane","left)) ???
+'''
+# ==========================================================================================================
 
 class AnimationUI(object):
     
@@ -558,7 +571,6 @@ class AnimationUI(object):
             else:
                 print 'Switching dockState : False'
                 animUI.dock = False
-            #animUI.dock = False
    
         RED_ANIMATION_UI=animUI
         if RED_ANIMATION_UI_OPENCALLBACKS:
@@ -586,6 +598,9 @@ class AnimationUI(object):
             
     def _showUI(self):
         
+        #if r9Setup.mayaVersion()>=2017:
+        #    self.dock=False
+        #else:
         try:
             #'Maya2011 dock delete'
             if cmds.dockControl(self.dockCnt, exists=True):
@@ -1141,10 +1156,6 @@ class AnimationUI(object):
         #====================
         # Show and Dock
         #====================
-
-#         floating = True
-#         if self.dock:
-#             floating = False
             
         if self.dock:
             try:
@@ -2406,10 +2417,11 @@ class AnimationUI(object):
             Filter = r9Core.FilterNode(cmds.ls(sl=True, l=True), filterSettings=self.filterSettings)
             try:
                 self.filterSettings.printSettings()
-                cmds.select(Filter.processFilter())
+                nodes=Filter.processFilter()
                 log.info('=============  Filter Test Results  ==============')
-                print('\n'.join([node for node in Filter.intersectionData]))
-                log.info('FilterTest : Object Count Returned : %s' % len(Filter.intersectionData))
+                print('\n'.join([node for node in nodes]))
+                log.info('FilterTest : Object Count Returned : %s' % len(nodes))
+                cmds.select(nodes)
             except:
                 raise StandardError('Filter Returned Nothing')
         else:
@@ -2682,7 +2694,7 @@ class AnimationUI(object):
         except StandardError, error:
             traceback = sys.exc_info()[2]  # get the full traceback
             raise StandardError(StandardError(error), traceback)
-        if objs:
+        if objs and not func=='HierarchyTest':
             cmds.select(objs)
         # close chunk
         if mel.eval('getApplicationVersionAsFloat') < 2011:
@@ -4293,7 +4305,7 @@ class MirrorHierarchy(object):
         ConfigObj.filename = filepath
         ConfigObj.write()
         
-    def loadMirrorSetups(self, filepath, nodes=None, clearCurrent=True, matchMethod='base'):
+    def loadMirrorSetups(self, filepath, nodes=None, clearCurrent=True, matchMethod='stripPrefix'):  # used to be 'base' for some reason??
         if not os.path.exists(filepath):
             raise IOError('invalid filepath given')
         self.mirrorDict = configobj.ConfigObj(filepath)['mirror']
