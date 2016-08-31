@@ -948,6 +948,20 @@ def  convertNodeToMetaData(nodes,mClass):
         mNode.attrSetLocked('mNodeID', True)
     return [MetaClass(node) for node in nodes]
     
+def delete_mNode(mNode):
+    '''
+    wrapper to delete a given mNode via the standard mClass call
+    rather than the mNodes internal class.delete() call to avoid
+    subclass issues when calling super().delete()
+    '''
+    global RED9_META_NODECACHE 
+    if cmds.lockNode(mNode.mNode, q=True):
+        cmds.lockNode(mNode.mNode, lock=False)  
+    # clear the node from the cache
+    removeFromCache(mNode)
+    
+    cmds.delete(mNode.mNode)
+    del(mNode)
     
        
 class MClassNodeUI(object):
@@ -3085,7 +3099,36 @@ class MetaRig(MetaClass):
             flt = r9Core.FilterNode_Settings()
             flt.read(settingsobj)
             self.filterSettings=flt.__dict__
-
+            
+    def isValid(self):
+        '''
+        simple check to see if this definition is still valid and wired to
+        controllers and not just to empty subSystems as is the case if you
+        were to delete all the dag nodes in a rig, leaving the MetaRig 
+        structure in-tact but useless
+        '''
+        if not self.getChildren():
+            return False
+        return True
+    
+    def delete(self, full=True):
+        '''
+        full delete and clean of a rig system and network
+        '''
+        mNodes=[]
+        mNodes.append(self)
+        mNodes.extend(self.getChildMetaNodes(walk=True))
+        mNodes.reverse()
+        
+        for a in mNodes:
+            print a
+        
+        for metaChild in mNodes:
+            for child in metaChild.getChildren(walk=False):
+                metaChild.disconnectChild(child)
+            print 'deleting mNode: ', metaChild
+            delete_mNode(metaChild)
+        
     @property
     def ctrl_main(self):
         '''
@@ -4003,6 +4046,16 @@ class MetaHIKCharacterNode(MetaRig):
                 return data[0]
             return data
     
+    def isValid(self):
+        '''
+        simple check to see if this definition is still wired to a skeleton,
+        the the skeleton was deleted then the definition never gets cleaned up!!
+        Messy Sodding Maya!
+        '''
+        if not cmds.listConnections(self.mNode,type='joint'):
+            return False
+        return True
+        
     def getHIKPropertyStateNode(self):
         '''
         return the HIK Property node as a class for easy management
