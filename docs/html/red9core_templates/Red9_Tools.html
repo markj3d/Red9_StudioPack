@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Red9_Tools &#8212; Red9 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <link rel="next" title="Pro_Pack : Animation" href="../red9pro_templates/Red9_Pro_animation.html" />
+    <link rel="prev" title="Red9_PoseSaver" href="Red9_PoseSaver.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../red9pro_templates/Red9_Pro_animation.html" title="Pro_Pack : Animation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Red9_PoseSaver.html" title="Red9_PoseSaver"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="red9-tools">
+<h1>Red9_Tools<a class="headerlink" href="#red9-tools" title="Permalink to this headline">¶</a></h1>
+<p>Red9 Tools is the module for general tools within Red9</p>
+<span class="target" id="module-Red9.core.Red9_Tools"></span><p class="rubric">Main Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Tools.SceneReviewerUI" title="Red9.core.Red9_Tools.SceneReviewerUI"><code class="xref py py-obj docutils literal"><span class="pre">SceneReviewerUI</span></code></a>()</td>
+<td>this is the reporter Dialogue that the scriptNode calls to display and edit the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Tools.SceneReviewer" title="Red9.core.Red9_Tools.SceneReviewer"><code class="xref py py-obj docutils literal"><span class="pre">SceneReviewer</span></code></a>()</td>
+<td>This is a really simple proc that will stamp data onto the time node and retrieve it so that leads can review and enter info into the scene itself.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Tools.RecordAttrs" title="Red9.core.Red9_Tools.RecordAttrs"><code class="xref py py-obj docutils literal"><span class="pre">RecordAttrs</span></code></a>()</td>
+<td>Simple class to use the Mouse as a MoCap input device #BUG : Maya can&#8217;t now record fucking rotate channels as it pushes a unitConvert Node between the rotate and the record plugs and nothing gets captured.</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="Red9.core.Red9_Tools.SceneReviewerUI">
+<em class="property">class </em><code class="descname">SceneReviewerUI</code><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewerUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>this is the reporter Dialogue that the scriptNode calls to display and edit the
+sceneReview data, held on the time node</p>
+<dl class="classmethod">
+<dt id="Red9.core.Red9_Tools.SceneReviewerUI.show">
+<em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewerUI.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.SceneReviewerUI.getSceneName">
+<code class="descname">getSceneName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewerUI.getSceneName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.SceneReviewerUI.updateInternalDict">
+<code class="descname">updateInternalDict</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewerUI.updateInternalDict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.SceneReviewerUI.addNewComment">
+<code class="descname">addNewComment</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewerUI.addNewComment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.SceneReviewerUI.resizeTextScrollers">
+<code class="descname">resizeTextScrollers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewerUI.resizeTextScrollers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.core.Red9_Tools.SceneReviewer">
+<em class="property">class </em><code class="descname">SceneReviewer</code><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This is a really simple proc that will stamp data onto the time node and retrieve it so that
+leads can review and enter info into the scene itself. Why the time1 node??? this saves any
+issues with merging scenes as the time node is one of the only nodes in Maya that can only
+exist once, and is managed in that way internally</p>
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.SceneReviewer.addScriptNode">
+<code class="descname">addScriptNode</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewer.addScriptNode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.SceneReviewer.getReportData">
+<code class="descname">getReportData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewer.getReportData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.SceneReviewer.storeReportData">
+<code class="descname">storeReportData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewer.storeReportData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.SceneReviewer.pushCommentToHistory">
+<code class="descname">pushCommentToHistory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewer.pushCommentToHistory" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.SceneReviewer.exists">
+<code class="descname">exists</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewer.exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.SceneReviewer.selectScriptNode">
+<code class="descname">selectScriptNode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewer.selectScriptNode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.SceneReviewer.deleteScriptNode">
+<code class="descname">deleteScriptNode</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewer.deleteScriptNode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.SceneReviewer.scriptNodeFunc">
+<code class="descname">scriptNodeFunc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewer.scriptNodeFunc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.core.Red9_Tools.RecordAttrs">
+<em class="property">class </em><code class="descname">RecordAttrs</code><a class="headerlink" href="#Red9.core.Red9_Tools.RecordAttrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Simple class to use the Mouse as a MoCap input device
+#BUG : Maya can&#8217;t now record fucking rotate channels as it pushes a unitConvert Node
+between the rotate and the record plugs and nothing gets captured. Trying to figure a way
+round this</p>
+<dl class="classmethod">
+<dt id="Red9.core.Red9_Tools.RecordAttrs.show">
+<em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.RecordAttrs.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.RecordAttrs.addAttrsToRecord">
+<code class="descname">addAttrsToRecord</code><span class="sig-paren">(</span><em>attrs=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.RecordAttrs.addAttrsToRecord" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.RecordAttrs.removeAttrsToRecord">
+<code class="descname">removeAttrsToRecord</code><span class="sig-paren">(</span><em>attrs=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.RecordAttrs.removeAttrsToRecord" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.RecordAttrs.recordStart">
+<code class="descname">recordStart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.RecordAttrs.recordStart" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Tools.RecordAttrs.recordStop">
+<code class="descname">recordStop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Tools.RecordAttrs.recordStop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Red9_PoseSaver.html"
+                        title="previous chapter">Red9_PoseSaver</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../red9pro_templates/Red9_Pro_animation.html"
+                        title="next chapter">Pro_Pack : Animation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/red9core_templates/Red9_Tools.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../red9pro_templates/Red9_Pro_animation.html" title="Pro_Pack : Animation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Red9_PoseSaver.html" title="Red9_PoseSaver"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

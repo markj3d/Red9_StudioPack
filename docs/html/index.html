@@ -1,17 +1,19 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Red9’s documentation! &mdash; Red9 v2.0 documentation</title>
+    <title>Welcome to Red9’s documentation! &#8212; Red9 2.0 documentation</title>
+    
     <link rel="stylesheet" href="_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
+        URL_ROOT:    './',
         VERSION:     '2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -21,11 +23,11 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Red9 v2.0 documentation" href="#" />
-    <link rel="next" title="Red9_AnimationUtils" href="red9templates/Red9_AnimationUtils.html" /> 
+    <link rel="top" title="Red9 2.0 documentation" href="#" />
+    <link rel="next" title="Red9_AnimationUtils" href="red9core_templates/Red9_AnimationUtils.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -35,31 +37,50 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="red9templates/Red9_AnimationUtils.html" title="Red9_AnimationUtils"
+          <a href="red9core_templates/Red9_AnimationUtils.html" title="Red9_AnimationUtils"
              accesskey="N">next</a> |</li>
-        <li><a href="#">Red9 v2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Red9 2.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="welcome-to-red9-s-documentation">
 <h1>Welcome to Red9&#8217;s documentation!<a class="headerlink" href="#welcome-to-red9-s-documentation" title="Permalink to this headline">¶</a></h1>
 <p>Author : Mark Jackson</p>
-<p>Red9 Consultancy Limited
-<a class="reference external" href="http://red9consultancy.com">http://red9consultancy.com</a></p>
-<p>Red9 was born out of frustration for the lack of this kind of in-depth support
-that there is in the general Maya community. I wanted to create full production
-ready tools suite which integrated seemlessly within Maya, giving users the
-kind of pipeline support normally limited to larger studios.</p>
-<p>The Red9 core is coded in such a way as to allow most of the functions to be
-expanded upon, and used by any tech artists / programmer out there, solving many
-common issues you find when coding in Maya.</p>
-<p>The core modules are expanding rapidly so keep up to date. Red9 main repository can
-now be found on GitHub and I&#8217;ll be branching on there every release:</p>
+<div class="line-block">
+<div class="line">Red9 Consultancy Limited</div>
+<div class="line"><a class="reference external" href="http://red9consultancy.com">http://red9consultancy.com</a></div>
+</div>
+<p><a class="reference external" href="https://vimeo.com/user9491246">https://vimeo.com/user9491246</a></p>
+<div class="line-block">
+<div class="line">Red9 was born out of frustration for the lack of this kind of in-depth support that there is in the general Maya community.</div>
+<div class="line">We wanted to create full production ready tools suite which integrated seemlessly within Maya, giving users the</div>
+<div class="line">kind of pipeline support normally limited to larger studios.</div>
+</div>
+<div class="line-block">
+<div class="line">The base of all our toolsets is the Red9 StudioPack, it&#8217;s open source and has been in full production with a huge number of major studios since around 2011.</div>
+<div class="line">It&#8217;s production battered, tested in anger and always growing.</div>
+</div>
+<div class="line-block">
+<div class="line">In 2013 we setup Red9Consultancy, allowing us to expand and tailor the pipelines around a larger, more complex studio based environment.</div>
+<div class="line">Supplying Rigs, Facial systems and bespoke pipelines to studios wanting a more dedicated solution.</div>
+</div>
+<div class="line-block">
+<div class="line">To this end we now also have the Red9 ProPack, being designed alongside a number of AAA studios and including the kind of tools and workflows</div>
+<div class="line">that you can&#8217;t get in a totally generic setup. To this end we extended our MetaData systems and now offer our own Red9 Puppet system.</div>
+</div>
+</div>
+<div class="section" id="red9-studiopack-modules">
+<h1>Red9 StudioPack Modules<a class="headerlink" href="#red9-studiopack-modules" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">The Red9 StudioPack core is coded in such a way as to allow most of the functions to be expanded upon, and used by any tech artists / programmer out there,</div>
+<div class="line">solving many common issues you find when coding in Maya. The core modules are expanding rapidly so keep up to date. Red9 main repository can</div>
+<div class="line">now be found on GitHub and I&#8217;ll be branching on there every release:</div>
+</div>
 <p><a class="reference external" href="https://github.com/markj3d/Red9_StudioPack">https://github.com/markj3d/Red9_StudioPack</a></p>
 <ul class="simple">
 <li>Red9_AnimationUtils : all animation functions for dealing with data flow, key management, mirroring and time</li>
@@ -70,42 +91,66 @@ now be found on GitHub and I&#8217;ll be branching on there every release:</p>
 <li>Red9_PoseSaver : generic poseSaver for any rig</li>
 <li>Red9_Tools    : generic tools for Maya</li>
 </ul>
-</div>
-<div class="section" id="red9-modules">
-<h1>Red9 Modules<a class="headerlink" href="#red9-modules" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="core">
-<h2>core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="studiopack-core">
+<h2>StudioPack core<a class="headerlink" href="#studiopack-core" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div class="toctree-wrapper compound">
+<div><div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="red9templates/Red9_AnimationUtils.html">Red9_AnimationUtils</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="red9templates/Red9_AnimationUtils.html#processnodes">ProcessNodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="red9templates/Red9_AnimationUtils.html#animfunctions-example">AnimFunctions example:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9core_templates/Red9_AnimationUtils.html">Red9_AnimationUtils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="red9core_templates/Red9_AnimationUtils.html#processnodes">ProcessNodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="red9core_templates/Red9_AnimationUtils.html#animfunctions-example">AnimFunctions example:</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="red9templates/Red9_Audio.html">Red9_Audio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="red9templates/Red9_Core.html">Red9_CoreUtils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="red9templates/Red9_General.html">Red9_General</a></li>
-<li class="toctree-l1"><a class="reference internal" href="red9templates/Red9_Meta.html">Red9_Meta</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="red9templates/Red9_Meta.html#vimeo-demos">Vimeo Demos:</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="red9templates/Red9_Meta.html#basic-metaclass-use">Basic MetaClass Use:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9core_templates/Red9_Audio.html">Red9_Audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9core_templates/Red9_Core.html">Red9_CoreUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9core_templates/Red9_General.html">Red9_General</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9core_templates/Red9_Meta.html">Red9_Meta</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="red9core_templates/Red9_Meta.html#vimeo-demos">Vimeo Demos:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="red9core_templates/Red9_Meta.html#basic-metaclass-use">Basic MetaClass Use:</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="red9templates/Red9_PoseSaver.html">Red9_PoseSaver</a></li>
-<li class="toctree-l1"><a class="reference internal" href="red9templates/Red9_Tools.html">Red9_Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9core_templates/Red9_PoseSaver.html">Red9_PoseSaver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9core_templates/Red9_Tools.html">Red9_Tools</a></li>
 </ul>
 </div>
-</blockquote>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="red9-propack-modules">
+<h1>Red9 ProPack Modules<a class="headerlink" href="#red9-propack-modules" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">The ProPack is a far more complex in-depth set of tools, designed for mid / large studios that want that extra level service and the stress taking out of production.</div>
+<div class="line">We&#8217;ve developed the ProPack around the needs of production, including new file management systems, our own animation format, animation re-direction systems,</div>
+<div class="line">metaData based export setups, extensive HealthManagement and testing and lots more.</div>
+</div>
+<p>For more details contact us
+.</p>
+<div class="section" id="propack-core">
+<h2>ProPack core<a class="headerlink" href="#propack-core" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="red9pro_templates/Red9_Pro_animation.html">Pro_Pack : Animation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9pro_templates/Red9_Pro_audio.html">Pro_Pack : Audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9pro_templates/Red9_Pro_export.html">Pro_Pack : Exporter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9pro_templates/Red9_Pro_importexport.html">Pro_Pack : ImportExport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9pro_templates/Red9_Pro_meta .html">Pro_Pack : MetaData</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9pro_templates/Red9_Pro_optimiser.html">Pro_Pack : Optimiser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9pro_templates/Red9_Pro_r9data.html">Pro_Pack : r9Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="red9pro_templates/Red9_Pro_skinning.html">Pro_Pack : skinning</a></li>
+</ul>
+</div>
+</div></blockquote>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
 </div>
 
@@ -113,46 +158,47 @@ now be found on GitHub and I&#8217;ll be branching on there every release:</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to Red9&#8217;s documentation!</a></li>
-<li><a class="reference internal" href="#red9-modules">Red9 Modules</a><ul>
-<li><a class="reference internal" href="#core">core</a><ul>
+<li><a class="reference internal" href="#red9-studiopack-modules">Red9 StudioPack Modules</a><ul>
+<li><a class="reference internal" href="#studiopack-core">StudioPack core</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#red9-propack-modules">Red9 ProPack Modules</a><ul>
+<li><a class="reference internal" href="#propack-core">ProPack core</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
   <h4>Next topic</h4>
-  <p class="topless"><a href="red9templates/Red9_AnimationUtils.html"
+  <p class="topless"><a href="red9core_templates/Red9_AnimationUtils.html"
                         title="next chapter">Red9_AnimationUtils</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -162,14 +208,14 @@ now be found on GitHub and I&#8217;ll be branching on there every release:</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="red9templates/Red9_AnimationUtils.html" title="Red9_AnimationUtils"
+          <a href="red9core_templates/Red9_AnimationUtils.html" title="Red9_AnimationUtils"
              >next</a> |</li>
-        <li><a href="#">Red9 v2.0 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">Red9 2.0 documentation</a> &#187;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, Mark Jackson.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0b2.
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
     </div>
   </body>
 </html>

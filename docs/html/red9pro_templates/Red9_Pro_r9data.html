@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Pro_Pack : r9Data &#8212; Red9 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <link rel="next" title="Pro_Pack : skinning" href="Red9_Pro_skinning.html" />
+    <link rel="prev" title="Pro_Pack : Optimiser" href="Red9_Pro_optimiser.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_skinning.html" title="Pro_Pack : skinning"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_optimiser.html" title="Pro_Pack : Optimiser"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pro-pack-r9data">
+<h1>Pro_Pack : r9Data<a class="headerlink" href="#pro-pack-r9data" title="Permalink to this headline">¶</a></h1>
+<p>ProPack r9Data object is a custom dict handler for Python that keeps sync
+with a file version of the data. This is how all the settings files in ProPack are
+maintained. It&#8217;s also a fully dot completable dict method</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9data&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9data</span>
+</pre></div>
+</div>
+<span class="target" id="module-Red9.pro_pack.core.r9data"></span><p>Optmizer module for dealing with the health of a scene</p>
+<p class="rubric">Main Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.r9data.R9dict" title="Red9.pro_pack.core.r9data.R9dict"><code class="xref py py-obj docutils literal"><span class="pre">R9dict</span></code></a>([value,&nbsp;path,&nbsp;write,&nbsp;ID])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param value:</th><td class="field-body">expects a {} to be dotdictify</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="Red9.pro_pack.core.r9data.R9dict">
+<em class="property">class </em><code class="descname">R9dict</code><span class="sig-paren">(</span><em>value=None</em>, <em>path=None</em>, <em>write=True</em>, <em>ID=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">dict</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>value</strong> &#8211; expects a {} to be dotdictify</li>
+<li><strong>path</strong> &#8211; location to a JSON file to be dotdictify and interactively store value changes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.r9data.R9dict.marker">
+<code class="descname">marker</code><em class="property"> = &lt;object object at 0x0000000003E0BC60&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.marker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.dict_to_r9dict">
+<code class="descname">dict_to_r9dict</code><span class="sig-paren">(</span><em>data</em>, <em>r9dict</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.dict_to_r9dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.getID">
+<code class="descname">getID</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.getID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.setID">
+<code class="descname">setID</code><span class="sig-paren">(</span><em>ID=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.setID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.getrootdata">
+<code class="descname">getrootdata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.getrootdata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.r9data.R9dict.writable">
+<code class="descname">writable</code><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.writable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.set_write_state">
+<code class="descname">set_write_state</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.set_write_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.r9data.R9dict.filepath">
+<code class="descname">filepath</code><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.filepath" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the self.r9filepath attr from the root of the dictionary, regardless of the dept</td>
+</tr>
+</tbody>
+</table>
+<p>of the dictionary key from where it is call if not self.r9filepath return None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.set_filepath">
+<code class="descname">set_filepath</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.set_filepath" title="Permalink to this definition">¶</a></dt>
+<dd><p>inset filepat in self.__dict[&#8216;filepath&#8217;]__
+:param filepath: string: file path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.cd">
+<code class="descname">cd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.cd" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">if self.r9filepath return the name of self.r9filepath current directory else None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>update=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>write value changes if a path has been declare on creation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.ensurekeys">
+<code class="descname">ensurekeys</code><span class="sig-paren">(</span><em>keys</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.ensurekeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>ensures that given list of keys exist in the dictionary,
+if files already exist it will preserve original values if not
+it will assign None value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>keys</strong> &#8211; list of key names</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.deletefile">
+<code class="descname">deletefile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.deletefile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete file specify in dict.r9filepath  ensure
+:return: bool: True if file has been deleted</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.clear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.pop">
+<code class="descname">pop</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.pop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Red9_Pro_optimiser.html"
+                        title="previous chapter">Pro_Pack : Optimiser</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Red9_Pro_skinning.html"
+                        title="next chapter">Pro_Pack : skinning</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/red9pro_templates/Red9_Pro_r9data.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_skinning.html" title="Pro_Pack : skinning"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_optimiser.html" title="Pro_Pack : Optimiser"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

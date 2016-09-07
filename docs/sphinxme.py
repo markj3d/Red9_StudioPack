@@ -14,3 +14,4 @@ if __name__ == "__main__":
     #while time.strftime("%H") == starttime:
     cmd = "sphinx-build -b html %s %s" % (SOURCEFOLDER, OUTPUTHTML)
     os.system(cmd)
+

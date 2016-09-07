@@ -1,0 +1,624 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Red9_General &#8212; Red9 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <link rel="next" title="Red9_Meta" href="Red9_Meta.html" />
+    <link rel="prev" title="Red9_CoreUtils" href="Red9_Core.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Meta.html" title="Red9_Meta"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Core.html" title="Red9_CoreUtils"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="red9-general">
+<h1>Red9_General<a class="headerlink" href="#red9-general" title="Permalink to this headline">¶</a></h1>
+<p>Red9 General is a module for general functions called and used throughout the codebase.
+This includes most of the context managers and decorators.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Nothing inside this module should require any other part of Red9</p>
+</div>
+<span class="target" id="module-Red9.core.Red9_General"></span><p class="rubric">Key functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.getCurrentFPS" title="Red9.core.Red9_General.getCurrentFPS"><code class="xref py py-obj docutils literal"><span class="pre">getCurrentFPS</span></code></a>()</td>
+<td>returns the current frames per second as a number, rather than a useless string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.getModifier" title="Red9.core.Red9_General.getModifier"><code class="xref py py-obj docutils literal"><span class="pre">getModifier</span></code></a>()</td>
+<td>return the modifier key pressed</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.forceToString" title="Red9.core.Red9_General.forceToString"><code class="xref py py-obj docutils literal"><span class="pre">forceToString</span></code></a>(text)</td>
+<td>simple function to ensure that data can be passed correctly into</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.itersubclasses" title="Red9.core.Red9_General.itersubclasses"><code class="xref py py-obj docutils literal"><span class="pre">itersubclasses</span></code></a>(cls)</td>
+<td><a class="reference external" href="http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/">http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/</a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.inspectFunctionSource" title="Red9.core.Red9_General.inspectFunctionSource"><code class="xref py py-obj docutils literal"><span class="pre">inspectFunctionSource</span></code></a>(value)</td>
+<td>This is a neat little wrapper over the mel &#8220;whatIs&#8221; and Pythons inspect module that finds the given functions source filePath, either Mel or Python and opens the original file in the default program.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.getScriptEditorSelection" title="Red9.core.Red9_General.getScriptEditorSelection"><code class="xref py py-obj docutils literal"><span class="pre">getScriptEditorSelection</span></code></a>()</td>
+<td>this is a hack to bypass an issue with getting the data back from the</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.thumbNailScreen" title="Red9.core.Red9_General.thumbNailScreen"><code class="xref py py-obj docutils literal"><span class="pre">thumbNailScreen</span></code></a>(filepath,&nbsp;width,&nbsp;height[,&nbsp;mode])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.thumbnailFromPlayBlast" title="Red9.core.Red9_General.thumbnailFromPlayBlast"><code class="xref py py-obj docutils literal"><span class="pre">thumbnailFromPlayBlast</span></code></a>(filepath,&nbsp;width,&nbsp;height)</td>
+<td>Generate a ThumbNail of the screen</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.thumbnailApiFromView" title="Red9.core.Red9_General.thumbnailApiFromView"><code class="xref py py-obj docutils literal"><span class="pre">thumbnailApiFromView</span></code></a>(filename,&nbsp;width,&nbsp;height)</td>
+<td>grab the thumbnail direct from the buffer?</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.os_OpenFileDirectory" title="Red9.core.Red9_General.os_OpenFileDirectory"><code class="xref py py-obj docutils literal"><span class="pre">os_OpenFileDirectory</span></code></a>(path)</td>
+<td>open the given folder in the default OS browser</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.os_OpenFile" title="Red9.core.Red9_General.os_OpenFile"><code class="xref py py-obj docutils literal"><span class="pre">os_OpenFile</span></code></a>(filePath,&nbsp;*args)</td>
+<td>open the given file in the default program for this OS</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Context Managers / decorators</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.AnimationContext" title="Red9.core.Red9_General.AnimationContext"><code class="xref py py-obj docutils literal"><span class="pre">AnimationContext</span></code></a>([evalmanager,&nbsp;time,&nbsp;undo])</td>
+<td>CONTEXT MANAGER : Simple Context Manager for restoring Animation settings</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.undoContext" title="Red9.core.Red9_General.undoContext"><code class="xref py py-obj docutils literal"><span class="pre">undoContext</span></code></a>([initialUndo,&nbsp;undoFuncCache,&nbsp;...])</td>
+<td>CONTEXT MANAGER : Simple Context Manager for chunking the undoState</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.ProgressBarContext" title="Red9.core.Red9_General.ProgressBarContext"><code class="xref py py-obj docutils literal"><span class="pre">ProgressBarContext</span></code></a>([maxValue,&nbsp;...])</td>
+<td>CONTEXT MANAGER : Context manager to make it easier to wrap progressBars</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.HIKContext" title="Red9.core.Red9_General.HIKContext"><code class="xref py py-obj docutils literal"><span class="pre">HIKContext</span></code></a>(NodeList)</td>
+<td>CONTEXT MANAGER : Simple Context Manager for restoring HIK Animation settings and managing HIK callbacks</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.SceneRestoreContext" title="Red9.core.Red9_General.SceneRestoreContext"><code class="xref py py-obj docutils literal"><span class="pre">SceneRestoreContext</span></code></a>()</td>
+<td>CONTEXT MANAGER : Simple Context Manager for restoring Scene Global settings</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.Timer" title="Red9.core.Red9_General.Timer"><code class="xref py py-obj docutils literal"><span class="pre">Timer</span></code></a>(func)</td>
+<td>DECORATOR : Simple timer function</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.runProfile" title="Red9.core.Red9_General.runProfile"><code class="xref py py-obj docutils literal"><span class="pre">runProfile</span></code></a>(func)</td>
+<td>DECORATOR : run the profiler - only ever used when debugging /optimizing</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="Red9.core.Red9_General.getCurrentFPS">
+<code class="descname">getCurrentFPS</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.getCurrentFPS" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the current frames per second as a number, rather than a useless string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.forceToString">
+<code class="descname">forceToString</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.forceToString" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple function to ensure that data can be passed correctly into
+textFields for the UI (ensuring lists are converted)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.formatPath">
+<code class="descname">formatPath</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.formatPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>take a path and format it to forward slashes with catches for the exceptions</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.itersubclasses">
+<code class="descname">itersubclasses</code><span class="sig-paren">(</span><em>cls</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.itersubclasses" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/">http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/</a>
+Iterator to yield full inheritance from a given class, including subclasses. This
+is used in the MetaClass to build the RED9_META_REGISTERY inheritance dict</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.inspectFunctionSource">
+<code class="descname">inspectFunctionSource</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.inspectFunctionSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a neat little wrapper over the mel &#8220;whatIs&#8221; and Pythons inspect
+module that finds the given functions source filePath, either Mel or Python
+and opens the original file in the default program.
+Great for developers
+Supports all Mel functions, and Python Class / functions</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.getScriptEditorSelection">
+<code class="descname">getScriptEditorSelection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.getScriptEditorSelection" title="Permalink to this definition">¶</a></dt>
+<dd><p>this is a hack to bypass an issue with getting the data back from the
+ScriptEditorHistory scroll. We need to copy the selected text to the
+clipboard then pull it back afterwards.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.Timer">
+<code class="descname">Timer</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.Timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>DECORATOR : Simple timer function</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.runProfile">
+<code class="descname">runProfile</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.runProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>DECORATOR : run the profiler - only ever used when debugging /optimizing 
+function call speeds.visualize the data using &#8216;runsnakerun&#8217; to view the profiles and debug</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.evalManager_DG">
+<code class="descname">evalManager_DG</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.evalManager_DG" title="Permalink to this definition">¶</a></dt>
+<dd><p>DECORATOR : simple decorator to call the evalManager_switch plugin 
+and run the enclosed function in DG eval mode NOT parallel.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Parallel EM mode is slow at evaluating time, DG is up to 3 times faster!
+The plugin call is registered back in the undoStack, cmds.evalmanager call is not</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.evalManagerState">
+<code class="descname">evalManagerState</code><span class="sig-paren">(</span><em>mode='off'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.evalManagerState" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper function for the evalManager so that it&#8217;s switching is recorded in 
+the undo stack via the Red9.evalManager_switch plugin</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.core.Red9_General.AnimationContext">
+<em class="property">class </em><code class="descname">AnimationContext</code><span class="sig-paren">(</span><em>evalmanager=True</em>, <em>time=True</em>, <em>undo=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.AnimationContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>CONTEXT MANAGER : Simple Context Manager for restoring Animation settings</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>evalmanager</strong> &#8211; do we manage the evalManager in this context for Maya 2016 onwards</li>
+<li><strong>time</strong> &#8211; do we manage the time and restore the original currentTime?</li>
+<li><strong>undo</strong> &#8211; do we manage the undoStack, collecting everything in one chunk</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.core.Red9_General.undoContext">
+<em class="property">class </em><code class="descname">undoContext</code><span class="sig-paren">(</span><em>initialUndo=False</em>, <em>undoFuncCache=[]</em>, <em>undoDepth=1</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.undoContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>CONTEXT MANAGER : Simple Context Manager for chunking the undoState</p>
+<p>If initialUndo is True then the context manager will manage what to do on entry with
+the undoStack. The idea is that if True the code will look at the last functions in the
+undoQueue and if any of those mantch those in the undoFuncCache, it&#8217;ll undo them to the
+depth given. 
+WHY?????? This is specifically designed for things like floatFliders where you&#8217;ve
+set a function to act on the &#8216;dc&#8217; flag, (drag command) by passing that func through this
+each drag will only go into the stack once, enabling you to drag as much as you want
+and return to the initial state, pre ALL drags, in one chunk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>initialUndo</strong> &#8211; on first process whether undo on entry to the context manager</li>
+<li><strong>undoFuncCache</strong> &#8211; only if initialUndo = True : functions to catch in the undo stack</li>
+<li><strong>undoDepth</strong> &#8211; only if initialUndo = True : depth of the undo stack to go to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When adding funcs to this you CAN&#8217;T call the &#8216;dc&#8217; command on any slider with a lambda func,
+it has to call a specific func to catch in the undoStack. See Red9_AnimationUtils.FilterCurves
+code for a live example of this setup.</p>
+</div>
+<dl class="method">
+<dt id="Red9.core.Red9_General.undoContext.undoCall">
+<code class="descname">undoCall</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.undoContext.undoCall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.core.Red9_General.ProgressBarContext">
+<em class="property">class </em><code class="descname">ProgressBarContext</code><span class="sig-paren">(</span><em>maxValue=100</em>, <em>interruptable=True</em>, <em>step=1</em>, <em>ismain=True</em>, <em>title=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.ProgressBarContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>CONTEXT MANAGER : Context manager to make it easier to wrap progressBars</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>maxValue</strong> &#8211; max value used in the progress</li>
+<li><strong>interruptable</strong> &#8211; if the progress is interruptable / escapable</li>
+<li><strong>step</strong> &#8211; step used in the progress bar</li>
+<li><strong>ismain</strong> &#8211; if we use the main progressBar OR a progressWindow to view the progress</li>
+<li><strong>title</strong> &#8211; only valid if ismain=False, used as the progressUI window title</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#Example of using this in code</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">progressBar</span><span class="o">=</span><span class="n">r9General</span><span class="o">.</span><span class="n">ProgressBarContext</span><span class="p">(</span><span class="n">maxValue</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#now do your code but increment and check the progress state</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">progressBar</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1000</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>       <span class="k">if</span> <span class="n">progressBar</span><span class="o">.</span><span class="n">isCanceled</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="nb">print</span> <span class="s1">&#39;process cancelled&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="k">return</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">progressBar</span><span class="o">.</span><span class="n">updateProgress</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="Red9.core.Red9_General.ProgressBarContext.isCanceled">
+<code class="descname">isCanceled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.ProgressBarContext.isCanceled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_General.ProgressBarContext.setText">
+<code class="descname">setText</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.ProgressBarContext.setText" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_General.ProgressBarContext.setMaxValue">
+<code class="descname">setMaxValue</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.ProgressBarContext.setMaxValue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_General.ProgressBarContext.setStep">
+<code class="descname">setStep</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.ProgressBarContext.setStep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_General.ProgressBarContext.setProgress">
+<code class="descname">setProgress</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.ProgressBarContext.setProgress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_General.ProgressBarContext.getProgress">
+<code class="descname">getProgress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.ProgressBarContext.getProgress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_General.ProgressBarContext.updateProgress">
+<code class="descname">updateProgress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.ProgressBarContext.updateProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>more simplistic way to just update the progress. Previously we generate a
+counter and used that with the setProgress() call, this is a far better way
+to do it</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_General.ProgressBarContext.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.ProgressBarContext.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.core.Red9_General.HIKContext">
+<em class="property">class </em><code class="descname">HIKContext</code><span class="sig-paren">(</span><em>NodeList</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.HIKContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>CONTEXT MANAGER : Simple Context Manager for restoring HIK Animation settings and managing HIK callbacks</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.core.Red9_General.SceneRestoreContext">
+<em class="property">class </em><code class="descname">SceneRestoreContext</code><a class="headerlink" href="#Red9.core.Red9_General.SceneRestoreContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>CONTEXT MANAGER : Simple Context Manager for restoring Scene Global settings</p>
+<p>Basically we store the state of all the modelPanels and timeLine
+setups. Think of it like this, you export a scene, file -new, then re-import it
+but you&#8217;ve now lost all the scenes UI and setups. This is capable of returning 
+the UI to the previous state. Maybe this could be a tool in it&#8217;s own write?</p>
+<dl class="docutils">
+<dt>Things stored:</dt>
+<dd><ul class="first last simple">
+<li>All UI viewport states, display and settings</li>
+<li>currentTime, timeRanges, timeUnits, sceneUnits, upAxis</li>
+<li>Main cameras and transforms for the 4 main modelPanels</li>
+<li>active sound and sound displays</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.core.Red9_General</span> <span class="k">import</span> <span class="n">SceneRestoreContext</span> <span class="k">as</span> <span class="n">sceneStore</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">sceneStore</span><span class="p">:</span>    
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#do something to modify the scene setup</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">cmds</span><span class="o">.</span><span class="n">currentTime</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#out of the context manager the scene will be restored as it was </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#before the code entered the context. (with sceneStore:)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="Red9.core.Red9_General.SceneRestoreContext.storeSettings">
+<code class="descname">storeSettings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.SceneRestoreContext.storeSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>main work function, store all UI settings</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_General.SceneRestoreContext.restoreSettings">
+<code class="descname">restoreSettings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.SceneRestoreContext.restoreSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>restore all UI settings</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.thumbNailScreen">
+<code class="descname">thumbNailScreen</code><span class="sig-paren">(</span><em>filepath</em>, <em>width</em>, <em>height</em>, <em>mode='api'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.thumbNailScreen" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.thumbnailFromPlayBlast">
+<code class="descname">thumbnailFromPlayBlast</code><span class="sig-paren">(</span><em>filepath</em>, <em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.thumbnailFromPlayBlast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a ThumbNail of the screen
+Note: &#8216;cf&#8217; flag is broken in 2012
+:param filepath: path to Thumbnail
+:param width: width of capture
+:param height: height of capture</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.thumbnailApiFromView">
+<code class="descname">thumbnailApiFromView</code><span class="sig-paren">(</span><em>filename</em>, <em>width</em>, <em>height</em>, <em>compression='bmp'</em>, <em>modelPanel='modelPanel4'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.thumbnailApiFromView" title="Permalink to this definition">¶</a></dt>
+<dd><p>grab the thumbnail direct from the buffer?
+TODO: not yet figured out how you crop the data here?</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.getModifier">
+<code class="descname">getModifier</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.getModifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the modifier key pressed</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.core.Red9_General.Clipboard">
+<em class="property">class </em><code class="descname">Clipboard</code><a class="headerlink" href="#Red9.core.Red9_General.Clipboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get or Set data to the Windows clipboard...Used in the inspect code to grab the
+ScriptEditor&#8217;s selected history
+CURRENTLY NOT BEING CALLED - switched to pyperclip.py module</p>
+<dl class="staticmethod">
+<dt id="Red9.core.Red9_General.Clipboard.getText">
+<em class="property">static </em><code class="descname">getText</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.Clipboard.getText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get clipboard text if available</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="Red9.core.Red9_General.Clipboard.setText">
+<em class="property">static </em><code class="descname">setText</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.Clipboard.setText" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set clipbard text</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.os_OpenFileDirectory">
+<code class="descname">os_OpenFileDirectory</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.os_OpenFileDirectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>open the given folder in the default OS browser</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.os_OpenFile">
+<code class="descname">os_OpenFile</code><span class="sig-paren">(</span><em>filePath</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.os_OpenFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>open the given file in the default program for this OS</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.os_formatPath">
+<code class="descname">os_formatPath</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.os_formatPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>take the given path and format it for Maya path</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.os_listFiles">
+<code class="descname">os_listFiles</code><span class="sig-paren">(</span><em>folder</em>, <em>filters=[]</em>, <em>byDate=False</em>, <em>fullPath=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.os_listFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple os wrap to list a dir with filters for file type and sort byDate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>folder</strong> &#8211; folder to dir list</li>
+<li><strong>filters</strong> &#8211; list of file extensions to filter for</li>
+<li><strong>byData</strong> &#8211; sort the list by modified date, newest first!</li>
+<li><strong>fullPath</strong> &#8211; return either the fully matched path or just the files that match</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.os_openCrashFile">
+<code class="descname">os_openCrashFile</code><span class="sig-paren">(</span><em>openDir=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.os_openCrashFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the default temp dir where Maya stores it&#8217;s crash files and logs</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.os_fileCompare">
+<code class="descname">os_fileCompare</code><span class="sig-paren">(</span><em>file1</em>, <em>file2</em>, <em>openDiff=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.os_fileCompare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pass in 2 files for diffComparision. If files are identical, ie there are no
+differences then the code returns 0</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file1</strong> &#8211; first file to compare with second file</li>
+<li><strong>file2</strong> &#8211; second file to compare against the first</li>
+<li><strong>openDiff</strong> &#8211; if a difference was found then boot Diffmerge UI, highlighting the diff</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a stub function that requires Diffmerge.exe, you can download from 
+<a class="reference external" href="https://sourcegear.com/diffmerge/">https://sourcegear.com/diffmerge/</a>.
+Once downloaded drop it here Red9/pakcages/diffMerge.exe</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.writeJson">
+<code class="descname">writeJson</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>content=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.writeJson" title="Permalink to this definition">¶</a></dt>
+<dd><p>write json file to disk</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filepath</strong> &#8211; file pat to drive where to write the file</li>
+<li><strong>content</strong> &#8211; file content</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.readJson">
+<code class="descname">readJson</code><span class="sig-paren">(</span><em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.readJson" title="Permalink to this definition">¶</a></dt>
+<dd><p>file pat to drive where to read the file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.core.Red9_General.abcIndex">
+<em class="property">class </em><code class="descname">abcIndex</code><span class="sig-paren">(</span><em>lower=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.abcIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Alphabetic iterator</p>
+<dl class="method">
+<dt id="Red9.core.Red9_General.abcIndex.next">
+<code class="descname">next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.abcIndex.next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return and Alphabetic index</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Red9_Core.html"
+                        title="previous chapter">Red9_CoreUtils</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Red9_Meta.html"
+                        title="next chapter">Red9_Meta</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/red9core_templates/Red9_General.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Meta.html" title="Red9_Meta"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Core.html" title="Red9_CoreUtils"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>
