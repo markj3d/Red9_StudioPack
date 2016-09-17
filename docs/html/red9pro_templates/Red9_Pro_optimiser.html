@@ -535,6 +535,18 @@ tweak the results into a format that contains just the base data, or all the com
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.get_metaRigs">
+<code class="descname">get_metaRigs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.get_metaRigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic mrig call for all base tests</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.get_rootJnt">
+<code class="descname">get_rootJnt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.get_rootJnt" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic call for all tests dealing with skeleton roots</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.maya_timeUnits_test">
 <code class="descname">maya_timeUnits_test</code><span class="sig-paren">(</span><em>expected='ntsc'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.maya_timeUnits_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Maya Units: time is as expected</p>
@@ -925,7 +937,7 @@ either dq or linear. This ONLY tests skinClusters attached to mesh objects</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.skin_method_fix">
-<code class="descname">skin_method_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skin_method_fix" title="Permalink to this definition">¶</a></dt>
+<code class="descname">skin_method_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skin_method_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the skinning method on the failed nodes appropriately</p>
 </dd></dl>
 
@@ -950,10 +962,11 @@ zero_rotates. This ONLY tests skinClusters attached to mesh objects</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.skeleton_rotate_tolerance">
-<code class="descname">skeleton_rotate_tolerance</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>tolerance=0.0</em>, <em>searchPattern=[]</em>, <em>fk=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_rotate_tolerance" title="Permalink to this definition">¶</a></dt>
+<code class="descname">skeleton_rotate_tolerance</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>tolerance=0.001</em>, <em>searchPattern=[]</em>, <em>fk=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_rotate_tolerance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check that all joints under a given rootJnt have a
 rotation value under the given tolerance. This is used when binding a 
-rig-up to ensure that we get no additional gimbal introduced via a rig system etc</p>
+rig-up to ensure that we get no additional gimbal introduced via a rig system etc.</p>
+<p>Running the fix method will zero the rotate values</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -961,13 +974,46 @@ rig-up to ensure that we get no additional gimbal introduced via a rig system et
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>rootJnt</strong> &#8211; root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</li>
 <li><strong>tolerance</strong> &#8211; maximum allowed rotate in any axis for the joints</li>
-<li><strong>ignoreFilter</strong> &#8211; regex arg passed so we can do simple testing for strings and ignore matches.</li>
+<li><strong>searchPattern</strong> &#8211; regex arg passed so we can do simple testing for strings and ignore matches.</li>
 <li><strong>fk</strong> &#8211; IF we&#8217;re dealing with an mRig then this option switches the rig into FK mode before the test</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_rotate_tolerance_fix">
+<code class="descname">skeleton_rotate_tolerance_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_rotate_tolerance_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>set all failed joints to zero</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_has_keys">
+<code class="descname">skeleton_has_keys</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>searchPattern=[]</em>, <em>expected=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_has_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test to check that all joints under a given rootJnt have no animation
+keys set on them. If no rootJnt is passed then we try and inspect the
+mRig or SrcExt / exportTag nodes</p>
+<p>Running the fix method will delete all keys from the skeleton</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rootJnt</strong> &#8211; root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</li>
+<li><strong>searchPattern</strong> &#8211; regex arg passed so we can do simple testing for strings and ignore matches.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_has_keys_fix">
+<code class="descname">skeleton_has_keys_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_has_keys_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete all found animCurves on the failed joints</p>
 </dd></dl>
 
 <dl class="function">

@@ -103,7 +103,7 @@ requires the StudioPack codebase to run</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012DA5588&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012D76548&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -191,7 +191,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012F0C0C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012D68708&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -311,7 +311,12 @@ internal startFrm stored in the animMap with the given frame</li>
 <li><strong>referenceNode</strong> &#8211; reference node used as the offset Node for relative loading</li>
 <li><strong>manageRanges</strong> &#8211; do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded</li>
 <li><strong>manageFileName</strong> &#8211; if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
-thgen we take the r9Anim&#8217;s filename and rename the Maya scene accordingly</li>
+then we take the r9Anim&#8217;s filename and rename the Maya scene accordingly</li>
+<li><strong>keyStatics</strong> &#8211; if True then we key everything in the data at startFrame so that all non-keyed and static
+attrs that are stored internally as a pose are keyed.</li>
+<li><strong>blendRange</strong> &#8211; None or int : 1 is default. If an int is passed then we use this as the hold range for the data, setting a key at
+time=startFarme-blendRange to hold the current data before we load the new keys. Note that this also turns on the keyStatics
+to ensure the data is preserved</li>
 </ul>
 </td>
 </tr>
@@ -1289,7 +1294,7 @@ set display attrs of the joints to default values</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012F1D948&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012FED9C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

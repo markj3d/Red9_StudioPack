@@ -54,8 +54,9 @@
             
   <div class="section" id="pro-pack-audio">
 <h1>Pro_Pack : Audio<a class="headerlink" href="#pro-pack-audio" title="Permalink to this headline">¶</a></h1>
-<p>ProPack audio module manages Timecode and the more advanced aspects
-of dealing with Auddio within Maya.</p>
+<p>ProPack audio module manages BWav formats, Timecode and the more advanced aspects of dealing with Audio within Maya.
+All the BWav handling in the StudioPack ultimately calls this codebase but most of the actual handling in ProPack still uses the AudioNode and AudioHandler
+from the StudioPack API.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9paudio&#39;</span><span class="p">)</span>
@@ -263,7 +264,7 @@ here we validate that this is correct and returmn Flase if not</td>
 <p>simple UI to manager timecode on the mRigs</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012F1D848&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013247A88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -487,7 +488,7 @@ There is coverage for this in this module getMediaFileMetaData() does just that<
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000130F2388&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000130A5DC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

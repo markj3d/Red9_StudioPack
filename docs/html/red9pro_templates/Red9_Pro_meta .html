@@ -234,6 +234,14 @@ the linked GRP_Main Grp node</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_rootJnt">
+<code class="descname">get_rootJnt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_rootJnt" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic wrapper for some of the healthTests. This should be a reliable and consistent
+way to get the skeletonRoot jnt back from any rig system. This is here to handle simple
+mSRC style rigs that purely have an exportTag to ID the root jnt.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.addExportTag">
 <code class="descname">addExportTag</code><span class="sig-paren">(</span><em>tagID=None</em>, <em>exportClass=None</em>, <em>exportRoot=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.addExportTag" title="Permalink to this definition">¶</a></dt>
 <dd><p>add an export tag of type to the rig</p>
@@ -652,6 +660,12 @@ of the pipelines.</p>
 <p>Idea here is if a MayaNode is passed in and has the mClass attr
 we pass that into the super(__new__) such that an object of that class
 is then instantiated and returned.</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC.isValid">
+<code class="descname">isValid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC.isValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>modify the behaviour as we don&#8217;t want to be stripping SRC EXT nodes that easily</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">

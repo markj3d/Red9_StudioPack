@@ -1,8 +1,9 @@
 Pro_Pack : Audio
 ======================
 
-ProPack audio module manages Timecode and the more advanced aspects 
-of dealing with Auddio within Maya.
+ProPack audio module manages BWav formats, Timecode and the more advanced aspects of dealing with Audio within Maya.
+All the BWav handling in the StudioPack ultimately calls this codebase but most of the actual handling in ProPack still uses the AudioNode and AudioHandler
+from the StudioPack API.
 
 	>>> # import statement for the module via the r9pro decompiler
 	>>> from Red9.pro_pack import r9pro 

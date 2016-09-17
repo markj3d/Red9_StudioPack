@@ -1876,7 +1876,7 @@ nodes and any other data that&#8217;s requried to be restored from the gathered 
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.loadAnimation">
-<code class="descname">loadAnimation</code><span class="sig-paren">(</span><em>filepath</em>, <em>incRoots=True</em>, <em>useFilter=True</em>, <em>loadAsStored=True</em>, <em>loadFromFrm=0</em>, <em>referenceNode=None</em>, <em>manageRanges=1</em>, <em>manageFileName=True</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">loadAnimation</code><span class="sig-paren">(</span><em>filepath</em>, <em>incRoots=True</em>, <em>useFilter=True</em>, <em>loadAsStored=True</em>, <em>loadFromFrm=0</em>, <em>referenceNode=None</em>, <em>manageRanges=1</em>, <em>manageFileName=True</em>, <em>keyStatics=False</em>, <em>blendRange=0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>: PRO_PACK :</dt>
 <dd>Binding of the animMap format for loading animation data from
@@ -1897,6 +1897,11 @@ in the Red9_PoseSaver so many of the exposed flags come from there.</dd>
 <li><strong>manageRanges</strong> &#8211; do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded</li>
 <li><strong>manageFileName</strong> &#8211; if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
 then we take the r9Anim&#8217;s filename and rename the Maya scene accordingly</li>
+<li><strong>keyStatics</strong> &#8211; if True then we key everything in the data at startFrame so that all non-keyed and static
+attrs that are stored internally as a pose are keyed.</li>
+<li><strong>blendRange</strong> &#8211; None or int : 1 is default. If an int is passed then we use this as the hold range for the data, setting a key at
+time=startFarme-blendRange to hold the current data before we load the new keys. Note that this also turns on the keyStatics
+to ensure the data is preserved</li>
 </ul>
 </td>
 </tr>
