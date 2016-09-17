@@ -11,10 +11,11 @@
     
     This is the Core of the MetaNode implementation of the systems.
     
-    NOTE: if you're inheriting from 'MetaClass' in your own class you
-    need to make sure that the registerMClassInheritanceMapping() is called
-    such that the global RED9_META_REGISTERY is rebuilt and includes
-    your inherited class.
+    .. note::
+        if you're inheriting from 'MetaClass' in your own class you
+        need to make sure that the registerMClassInheritanceMapping() is called
+        such that the global RED9_META_REGISTERY is rebuilt and includes
+        your inherited class.
 
 
 Basic MetaClass Use:
@@ -859,6 +860,9 @@ def getConnectedMetaSystemRoot(node, mTypes=[], ignoreTypes=[], mSystemRoot=True
     '''
     mNodes=getConnectedMetaNodes(node,**kws)
     if not mNodes:
+        if isMetaNode(node):
+            log.info('given node is an mNode with no connections, returning node')
+            return MetaClass(node)
         return
     else:
         mNode=mNodes[0]
@@ -903,7 +907,7 @@ def convertMClassType(cls, newMClass, **kws):
     :param cls: initialize mClass object t9o mutate
     :param newMClass: new class definition for the given cls
     
-    ..note ::
+    .. note::
         If you're converting a StandardWrapped Maya node to a fully fledged mNode then you also
         need to ensure that that NODETYPE is registered to meta or else it won't get picked up
         when you run any of the gets.
@@ -933,7 +937,7 @@ def  convertNodeToMetaData(nodes,mClass):
     :param nodes: nodes to cast to mClass instances
     :param mClass: mClass class to convert them too
     
-    ..note ::
+    .. note::
         ideally you should use the convertMClassType func now as that wraps this if the
         nodes passed in aren't already instanitated or bound to meta
     '''
@@ -1564,7 +1568,7 @@ class MetaClass(object):
         you need at a class level. It's called by the __init__ ... 
         Intended to be overloaded as and when needed when inheriting from MetaClass
         
-        ..note::
+        .. note::
             When subclassing __bindData__ will run BEFORE your subclasses __init__
             
             To bind a new attr and serilaize it to the self.mNode (Maya node) 
@@ -2515,8 +2519,8 @@ class MetaClass(object):
         generates a NONE-MULTI message on both sides of the connection and is designed
         for simple parent child relationships.
         
-        NOTE: this call by default manages the attr to only ONE CHILD to
-        avoid this use cleanCurrent=False
+        .. note::
+            this call by default manages the attr to only ONE CHILD to avoid this use cleanCurrent=False
         :param node: Maya node to connect to this mNode
         :param attr: Name for the message attribute
         :param srcAttr: If given this becomes the attr on the child node which connects it
@@ -3689,7 +3693,10 @@ class MetaRig(MetaClass):
         if self.hasKeys(nodes):
             cmds.cutKey(r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True))
         if reset:
-            self.loadZeroPose(nodes)
+            try:
+                self.loadZeroPose(nodes)
+            except:
+                log.info('failed to load ZeroPose back to the rig - this may be an SRC system node')
     
     
     # -------------------------------------------------------------------------------
@@ -3704,7 +3711,8 @@ class MetaRig(MetaClass):
     def saveAnimation(self, filepath, incRoots=True, useFilter=True, timerange=(),
                       storeThumbnail=False, force=False, userInfoData='', **kws):
         '''
-        PRO_PACK : Binding of the animMap format for storing animation data out to file
+        : PRO_PACK :
+            Binding of the animMap format for storing animation data out to file
                 
         :param filepath: r9Anim file to load
         :param incRoots: do we include the root node in the load, in metaRig case this is ctrl_main
@@ -3734,9 +3742,9 @@ class MetaRig(MetaClass):
     
     def loadAnimation_postload_call(self, feedback, *args, **kws):
         '''
-        -------------------------------------------
-        Added to be Overloaded at the class level!
-        -------------------------------------------
+        : PRO_PACK :
+            Added to be Overloaded at the class level!
+
         call passed into the animMap class and run AFTER the r9Anim file is loaded
         on the MetaRig, this allows you to add functionality to the base load to
         extract extra data from the animMap and act upon it
@@ -3751,12 +3759,13 @@ class MetaRig(MetaClass):
         '''
         pass
                
-    def loadAnimation(self, filepath, incRoots=True, useFilter=True, 
-                      loadAsStored=True, loadFromFrm=0, referenceNode=None, manageRanges=1, manageFileName=True, *args, **kws):
+    def loadAnimation(self, filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0,
+                      referenceNode=None, manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, *args, **kws):
         '''
-        PRO_PACK : Binding of the animMap format for loading animation data from
-        an r9Anim file. The base binding of the animation format is the DataMap object
-        in the Red9_PoseSaver so many of the exposed flags come from there.
+        : PRO_PACK :
+            Binding of the animMap format for loading animation data from
+            an r9Anim file. The base binding of the animation format is the DataMap object
+            in the Red9_PoseSaver so many of the exposed flags come from there.
         
         :param filepath: r9Anim file to load
         :param incRoots: do we include the root node in the load, in metaRig case this is ctrl_main
@@ -3767,6 +3776,11 @@ class MetaRig(MetaClass):
         :param manageRanges: do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded
         :param manageFileName: if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
             then we take the r9Anim's filename and rename the Maya scene accordingly
+        :param keyStatics: if True then we key everything in the data at startFrame so that all non-keyed and static
+            attrs that are stored internally as a pose are keyed.
+        :param blendRange: None or int : 1 is default. If an int is passed then we use this as the hold range for the data, setting a key at
+            time=startFarme-blendRange to hold the current data before we load the new keys. Note that this also turns on the keyStatics
+            to ensure the data is preserved
         
         additional **KWS passed in and / or accepted in the ProPack codebase
         
@@ -3782,13 +3796,13 @@ class MetaRig(MetaClass):
         :KWS manageAudio: If running the Red9Pro Exporter systems this will rebuild the Audio Node data directly
             from the r9Anim file's infoData block   (False, [], 'byName', 'byRange', 'byRange_start', 'byRange_end', 'byAll')
         
-        .. note:
+        .. note::
             After the anim load the animData is stored on this instance as self.animMap which then 
             exposes all the data for further functions if needed.
             self.animCache.infoDict = gatherInfo block on the file and pose
             self.animCache.poseDict = the animation and pose data dict
             
-        .. note:
+        .. note::
             **kws are passed directly into BOTH the AnimMap class and the loadAnimation_postload_call
             so that we can bounce additional **kws into these funcs without having to specify everything,
             this allows us to modify the behaviour on a case by case basis for clients
@@ -3815,6 +3829,8 @@ class MetaRig(MetaClass):
                                                referenceNode=referenceNode,
                                                manageRanges=manageRanges,
                                                manageFileName=manageFileName,
+                                               keyStatics=keyStatics,
+                                               blendRange=blendRange,
                                                **kws)
                 # =========================================================
                 # pass the feedback to the postload code to handle, this is 
@@ -3828,7 +3844,7 @@ class MetaRig(MetaClass):
     @property
     def Timecode(self):
         '''
-        PRO_PACK : bind the Pro Timecode class to the node
+        : PRO_PACK : bind the Pro Timecode class to the node
         '''
         if r9Setup.has_pro_pack():
             try:
@@ -3844,14 +3860,14 @@ class MetaRig(MetaClass):
 
     def timecode_get(self, atFrame=None):
         '''
-        PRO PACK: get the timecode object back from the rig
+        : PRO PACK : get the timecode object back from the rig
         '''
         if r9Setup.has_pro_pack():
             return self.Timecode.getTimecode_from_node(time=atFrame)
 
     def timecode_addAttrs(self, tc='', propagate=False):
         '''
-        PRO PACK: simple return to check if the system has the Pro Timecode
+        : PRO PACK : simple return to check if the system has the Pro Timecode
         systems bound to it
         '''
         if r9Setup.has_pro_pack():
@@ -3859,7 +3875,7 @@ class MetaRig(MetaClass):
          
     def timecode_hasTimeCode(self):
         '''
-        PRO PACK: simple return to check if the system has the Pro Timecode
+        : PRO PACK : simple return to check if the system has the Pro Timecode
         systems bound to it
         '''
         if r9Setup.has_pro_pack():
@@ -3867,7 +3883,7 @@ class MetaRig(MetaClass):
         
     def timecode_remove(self):
         '''
-        PRO PACK: simple return to check if the system has the Pro Timecode
+        : PRO PACK : simple return to check if the system has the Pro Timecode
         systems bound to it
         '''
         if r9Setup.has_pro_pack():
@@ -4089,7 +4105,7 @@ class MetaHIKCharacterNode(MetaRig):
             cmds.lockNode(self.mNode, lock=False)
             cmds.delete(self.mNode)
 
-        self.openui()
+        #  self.openui()  ?? why were we opening up the UI????
 
     @staticmethod
     def openui():
