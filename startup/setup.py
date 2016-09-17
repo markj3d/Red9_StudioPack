@@ -911,6 +911,10 @@ def internal_module_path():
 # CLIENT MODULES ---
 # -----------------------------------------------------------------------------------------
 
+
+CLIENTS_BOOTED=[]
+
+
 def client_core_path():
     return os.path.join(os.path.dirname(os.path.dirname(red9ModulePath())),'Red9_ClientCore')
 
@@ -936,12 +940,22 @@ def get_client_modules():
                 if not f.startswith('.') and not f.startswith('_'):
                     clients.append(f)
     return clients
-                
+
+def clients_booted():
+    '''
+    return the client modules booted by the system
+    '''
+    global CLIENTS_BOOTED
+    return CLIENTS_BOOTED
+    
+                   
 def boot_client_projects():
     '''
     Boot Client modules found in the Red9_ClientCore dir. This now propts
     if multiple client projects were found.
     '''
+    global CLIENTS_BOOTED
+    CLIENTS_BOOTED=[]
     clients=get_client_modules()
     clientsToBoot=[]
     if clients and len(clients)>1 and not mayaIsBatch():
@@ -957,16 +971,18 @@ def boot_client_projects():
             clientsToBoot.append(result)
     else:
         clientsToBoot=clients
+        
     # boot the project / projects
     for client in clientsToBoot:
         log.info('Booting Client Module : %s' % client)
         cmds.evalDeferred("import Red9_ClientCore.%s" % client, lp=True)  # Unresolved Import
+        CLIENTS_BOOTED.append(client)
+        
     # remove unused menuItems - added previously so that the menu grouping is clean
     for client in clients:
         if not client in clientsToBoot:
             cmds.deleteUI('redNineClient%sItem' % client)
             log.debug('Unused Client Menu Removed: %s' % client)
-    
                 
 def __reload_clients__():
     '''
