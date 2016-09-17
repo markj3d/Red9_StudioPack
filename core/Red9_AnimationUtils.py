@@ -112,11 +112,12 @@ def myProjectCallback(cls)
     
 r9Anim.RED_ANIMATION_UI_OPENCALLBACKS.append(myProjectCallback)
 
-NOTE:: the function calls bound to the callback are passed the current instance of the animUI class 
-as an arg so you can modify as you need. Also when the PoseUI RMB popup menu is built, IF paths in the list
-cls.poseHandlerPaths are valid, then we bind into that popup all valid poseHandler.py files
-found the given path. This allow you to add custom handler types and expose them through the UI directly,
-they will show up in the RMB popup as such: Fingers_poseHandler.py will show as 'Add Subfolder : FINGERS'
+.. note:: 
+    the function calls bound to the callback are passed the current instance of the animUI class 
+    as an arg so you can modify as you need. Also when the PoseUI RMB popup menu is built, IF paths in the list
+    cls.poseHandlerPaths are valid, then we bind into that popup all valid poseHandler.py files
+    found the given path. This allow you to add custom handler types and expose them through the UI directly,
+    they will show up in the RMB popup as such: Fingers_poseHandler.py will show as 'Add Subfolder : FINGERS'
 '''
 
 
@@ -2547,9 +2548,10 @@ class AnimationUI(object):
             
     def __PosePointCloud(self, func):
         '''
-        Note: this is dependant on EITHER a wire from the root of the pose to a GEO
-        under the attr 'renderMeshes' OR the second selected object is the reference Mesh
-        Without either of these you'll just get a locator as the PPC root
+        .. note::
+            this is dependant on EITHER a wire from the root of the pose to a GEO
+            under the attr 'renderMeshes' OR the second selected object is the reference Mesh
+            Without either of these you'll just get a locator as the PPC root
         '''
         objs=cmds.ls(sl=True)
         rootReference=objs[0]
@@ -2793,7 +2795,7 @@ class AnimFunctions(object):
                           matchMethod=matchMethod,
                           mergeLayers=mergeLayers)
                
-    @r9General.Timer
+    #@r9General.Timer
     def copyKeys(self, nodes=None, time=(), pasteKey='replace', attributes=None,
                  filterSettings=None, toMany=False, matchMethod=None, mergeLayers=False, timeOffset=0, **kws):
         '''
@@ -2962,7 +2964,7 @@ class AnimFunctions(object):
     # Transform Snapping
     #===========================================================================
     
-    @r9General.Timer
+    #@r9General.Timer
     def snapTransform(self, nodes=None, time=(), step=1, preCopyKeys=1, preCopyAttrs=1, filterSettings=None,
                       iterations=1, matchMethod=None, prioritySnapOnly=False, snapRotates=True, snapTranslates=True, **kws):
         '''
@@ -2998,9 +3000,8 @@ class AnimFunctions(object):
             you can also pass the CopyKey kws in to the preCopy call, see copyKeys above
         
         .. note:: 
-            using prioritySnap with animLayers may produce unexpected results! CopyKeys doesn't yet
-            deal correctly with animLayer data when copying, it will only copy from the first active layer,
-            really need to merge layers down first!!
+            by default when using the preCopyKeys flag we run a temp merge of any animLayers
+            and copy that merged animLayer data for consistency. The layers are restored afterwards
         
         '''
         self.snapCacheData = {}  # TO DO - Cache the data and check after first run data is all valid
@@ -3050,9 +3051,7 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
                     if preCopyKeys:
                         self.copyKeys(nodes=nodeList, time=time, filterSettings=filterSettings, **kws)
                     
-                    progressBar = r9General.ProgressBarContext(time[1]-time[0])
-                    progressBar.setStep(step)
-                    count=0
+                    progressBar = r9General.ProgressBarContext(maxValue=time[1]-time[0], step=step, ismain=True)
                     
                     with progressBar:
                         for t in timeLineRangeProcess(time[0], time[1], step, incEnds=True):
@@ -3083,8 +3082,8 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
                                 processRepeat -= 1
                                 if not processRepeat:
                                     dataAligned = True
-                            progressBar.setProgress(count)
-                            count+=step
+                            progressBar.updateProgress()
+
             else:
                 for _ in range(0, iterations):
                     for src, dest in self.nodesToSnap:  # nodeList.MatchedPairs:
@@ -3119,6 +3118,10 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
         account offsets in the pivots of the objects. Uses the API MFnTransform nodes
         to calculate the data via a command plugin. This is a stripped down version
         of the snapTransforms cmd
+        
+        :param nodes: [src,dest]
+        :param snapTranslates: snap the translate data
+        :param snapRotates: snap the rotate data
         '''
         try:
             checkRunTimeCmds()
@@ -3152,6 +3155,8 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
         :param nodes: either single (Stabilize) or twin to track
         :param time: [start,end] for a frameRange
         :param step: int value for frame advance between process runs
+        :param trans: track translates
+        :param rots: track rotates
         '''
         
         #destObj = None  #Main Object being manipulated and keyed
@@ -3208,10 +3213,8 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
             #Now run the snap against the reference node we've just made
             #==========================================================
     
-            progressBar = r9General.ProgressBarContext(duration)
-            progressBar.setStep(step)
-            count=0
-                        
+            progressBar = r9General.ProgressBarContext(duration, step=step, ismain=True)
+
             with progressBar:
                 for time in timeRange:
                     if progressBar.isCanceled():
@@ -3230,9 +3233,8 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
                             cmds.setKeyframe(destObj, at='rotate')
                     except:
                         log.debug('failed to set rotate key on %s' % destObj)
-                    progressBar.setProgress(count)
-                    count+=step
-                
+                    progressBar.updateProgress()
+
         cmds.delete(deleteMe)
         #cmds.autoKeyframe(state=autokeyState)
         cmds.select(nodes)
@@ -3254,7 +3256,8 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
         :param attributes: Only copy the given attributes[]
         :param bindMethod: method of binding the data
         :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names
-        #TODO: expose this to the UI's!!!!
+        
+        TODO: expose this to the UI's!!!!
         '''
         
         # this is so it carries on the legacy behaviour where these are always passed in
@@ -3871,26 +3874,25 @@ class MirrorHierarchy(object):
     pack, using a filterSettings node thats passed into the __init__
     
     >>> mirror=MirrorHierarchy(cmds.ls(sl=True)[0])
-    >>> #set the settings object to run metaData
+    >>> # set the settings object to run metaData
     >>> mirror.settings.metaRig=True
     >>> mirror.settings.printSettings()
     >>> mirror.mirrorData(mode='Anim')
     
-    >>># Useful snippets:
-    >>># offset all selected nodes mirrorID by 5
-    >>>mirror=r9Anim.MirrorHierarchy()
-    >>>mirror.incrementIDs(cmds.ls(sl=True), offset=5)
+    >>> # useful code snippets:
+    >>> # offset all selected nodes mirrorID by 5
+    >>> mirror=r9Anim.MirrorHierarchy()
+    >>> mirror.incrementIDs(cmds.ls(sl=True), offset=5)
     >>>
-    >>># set all the mirror axis on the selected
-    >>>for node in cmds.ls(sl=True):
-    >>>    mirror.setMirrorIDs(node,axis='translateX,rotateY,rotateZ')
+    >>> # set all the mirror axis on the selected
+    >>> for node in cmds.ls(sl=True):
+    >>>     mirror.setMirrorIDs(node,axis='translateX,rotateY,rotateZ')
     >>>
-    >>># copy mirrorId's from one node to another
-    >>>for src, dest in zip(srcNodes, destNodes):
-    >>>    mirror.copyMirrorIDs(src,dest)
+    >>> # copy mirrorId's from one node to another
+    >>> for src, dest in zip(srcNodes, destNodes):
+    >>>     mirror.copyMirrorIDs(src,dest)
     
     TODO: We need to do a UI for managing these marker attrs and the Index lists
-    
     TODO: allow the mirror block to include an offset so that if you need to inverse AND offset 
         by 180 to get left and right working you can still do so.
     '''
@@ -4074,9 +4076,13 @@ class MirrorHierarchy(object):
         '''
         get any custom attributes set at node level to inverse, if none found
         return the default axis setup in the __init__
-        NOTE: if mirrorAxis attr has been added to the node but is empty then
-        no axis will be inversed at all. If the attr doesn't exist then the
-        default inverse axis will be used
+        
+        :param node: node return the axis from
+        
+        .. note::
+            if mirrorAxis attr has been added to the node but is empty then
+            no axis will be inversed at all. If the attr doesn't exist then the
+            default inverse axis will be used
         '''
         if cmds.attributeQuery(self.mirrorAxis, node=node, exists=True):
             axis = cmds.getAttr('%s.%s' % (node, self.mirrorAxis))
@@ -4092,6 +4098,7 @@ class MirrorHierarchy(object):
         '''
         Filter the given nodes into the mirrorDict
         such that {'Centre':{id:node,},'Left':{id:node,},'Right':{id:node,}}
+        
         :param nodes: only process a given list of nodes, else run the filterSettings 
             call from the initial nodes passed to the class
         '''
@@ -4175,6 +4182,10 @@ class MirrorHierarchy(object):
         '''
         take the left and right matched pairs and exchange the animData
         or poseData across between them
+        
+        :param objA: 
+        :param objB:
+        :param mode: 'Anim' or 'Pose'
 
         '''
         objs = cmds.ls(sl=True, l=True)
@@ -4317,8 +4328,6 @@ class MirrorHierarchy(object):
         #log.debug('nodes to load mirrors onto: %s' % ','.join(nodesToMap))
         
         progressBar = r9General.ProgressBarContext(len(nodesToMap))
-        progressBar.setStep(1)
-        count=0
  
         with progressBar:
             for node in nodesToMap:
@@ -4369,8 +4378,8 @@ class MirrorHierarchy(object):
                                 self.setMirrorIDs(node, side='Centre', slot=int(index))
                             break
    
-                progressBar.setProgress(count)
-                count += 1
+                progressBar.updateProgress()
+
                    
 class MirrorSetup(object):
 
