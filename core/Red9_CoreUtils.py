@@ -59,16 +59,16 @@ def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False)
     :param regex: Switches from regex search to simple exact node name
     :param prioritysOnly: return just the priorityList matches or the entire list sorted
     
-    #Known issue, if Regex=True and you have 2 similar str's in the priority list then there's 
-    a chance that matching may be erractic... 
-    
-    priorityList=['upperLip','l_upperLip']
-    nodes=['|my|dag|path|jaw',|my|dag|path|l_upperLip','|my|dag|path|upperLip','|my|dag|path|lowerLip']
-    returns: ['|my|dag|path|l_upperLip','|my|dag|path|upperLip',|my|dag|path|jaw,'|my|dag|path|lowerLip]
-    
-    as in regex 'l_upperLip'=='upperLip' as well as 'upperLip'=='upperLip' 
-    
-    really in regex you'd need to be more specific:  priorityList=['^upperLip','l_upperLip']
+    .. note::
+        Known issue, if Regex=True and you have 2 similar str's in the priority list then there's 
+        a chance that matching may be erractic... 
+        
+        >>> priorityList=['upperLip','l_upperLip']
+        >>> nodes=['|my|dag|path|jaw',|my|dag|path|l_upperLip','|my|dag|path|upperLip','|my|dag|path|lowerLip']
+        >>> returns: ['|my|dag|path|l_upperLip','|my|dag|path|upperLip',|my|dag|path|jaw,'|my|dag|path|lowerLip]
+        
+        as in regex 'l_upperLip'=='upperLip' as well as 'upperLip'=='upperLip' 
+        really in regex you'd need to be more specific:  priorityList=['^upperLip','l_upperLip']
     '''
     #stripped = [nodeNameStrip(node) for node in inputlist]  # stripped back to nodeName
     nList=list(inputlist)  # take a copy so we don't mutate the input list
@@ -111,11 +111,11 @@ def sortNumerically(data):
     
     >>> data=['Joint_1','Joint_2','Joint_9','Joint_10','Joint_11','Joint_12']
     >>>
-    >>> #standard gives us:
+    >>> # standard gives us:
     >>> data.sort()
     >>> ['Joint_1', 'Joint_10', 'Joint_11', 'Joint_12', 'Joint_2', 'Joint_9']
     >>> 
-    >>> #sortNumerically gives us:
+    >>> # sortNumerically gives us:
     >>> sortNumerically(data)
     >>> ['Joint_1', 'Joint_2', 'Joint_9', 'Joint_10', 'Joint_11', 'Joint_12']
     """
@@ -130,7 +130,9 @@ def stringReplace(text, replace_dict):
     with the associated value, return the modified text.
     Only whole words are replaced.
     Note that replacement is case sensitive, but attached
-    quotes and punctuation marks are neutral.
+    quotes and punctuation marks are neutral. 
+    
+    :param replace_dict: 
     '''
     rc = re.compile(r"[A-Za-z_]\w*")
     def translate(match):
@@ -334,11 +336,18 @@ class FilterNode_Settings(object):
         return '%s(ActiveFilters: %s)' % (self.__class__.__name__, (', ').join(activeFilters))
     
     def filterIsActive(self):
+        '''
+        the filter is deemed to be active if any of the filterSettings would 
+        produce a hierarchy search.
+        '''
         if self.nodeTypes or self.searchAttrs or self.searchPattern or self.hierarchy or self.metaRig:
             return True
         return False
     
     def printSettings(self):
+        '''
+        prettyr print the filterSettings data
+        '''
         log.info('FilterNode Settings : nodeTypes : %s :   %s' %
                  (self.nodeTypes, type(self.nodeTypes)))
         log.info('FilterNode Settings : searchAttrs : %s :   %s' %
@@ -363,7 +372,7 @@ class FilterNode_Settings(object):
         reset the MAIN filter args only
         
         :param rigData: this is a cached attr and not fully handled 
-        by the UI hence the option NOT to reset, used by the UI presetFill calls
+            by the UI hence the option NOT to reset, used by the UI presetFill calls
         '''
         self.nodeTypes=[]
         self.searchAttrs=[]
@@ -381,6 +390,10 @@ class FilterNode_Settings(object):
         '''
         set the filetrSettings via a dict correctly formatted, used 
         to pull the data back from an MRig that has this data bound to it
+        
+        :param data: dict of data formatted as per the filterSettings keys.
+            this is a new function allowing a dict of data to be passed into the
+            object from a config file or mNode directly
         '''
         for key, val in data.items():
             try:
@@ -406,7 +419,7 @@ class FilterNode_Settings(object):
         
         :param filepath: file path to write the configFile out to
         
-        ::note ..
+        .. note::
             If filepath doesn't exists or you pass in just the short name of the config you 
             want to load then we try and find a matching config in the default presets dir in Red9
         '''
@@ -735,18 +748,22 @@ class FilterNode(object):
     def getObjectSetMembers(self, objSet):
         '''
         return objectSet members in long form
+        
+        :param objSet: set to inspect and return the memebers from
         '''
         return cmds.ls(cmds.sets(objSet, q=True, nodesOnly=True), l=True, type='transform') or []
         
     def lsHierarchy(self, incRoots=False, transformClamp=False):
-        
         '''
         Simple wrapper of the listRelatives, BUT with the option
         to include the rootNodes and select the results
 
         Also if a single rootNode is passed, and it's of type 'character'
         then the code will return the characterMembers instead
+        
         :param incRoots: include the given rootNodes in the filter
+        :param transformClamp: clamp all searches so that any shape style node returns it's parent transform
+         
         TODO: objectSet modifications need testing!!!!!
         '''
 
@@ -956,7 +973,7 @@ class FilterNode(object):
         return self.lsSearchNodeTypes('parentConstraint')
       
     @staticmethod
-    @r9General.Timer
+    #@r9General.Timer
     def lsAnimCurves(nodes=None, safe=False):
         '''
         Search for animationCurves. If no nodes are passed in to process then this
@@ -1329,7 +1346,8 @@ class FilterNode(object):
     
     def ProcessFilter(self):
         '''
-        replace the 'P' in the function call but not depricating it just yet
+        :Depricated Function:
+        Replace the 'P' in the function call but not depricating it just yet
         as too much code both internally and externally relies on this method
         '''
         return self.processFilter()
@@ -1483,25 +1501,22 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
     '''
     Matches 2 given NODE LISTS by node name via various methods.
     
+    :param nodeListA: list of nodes
+    :param nodeListB: list of nodes
     :param matchMethod: default 'stripPrefix' 
-        *index*: No intelligent matching, just purely zip the 
-        lists together in the order they were given
-        
-        *indexReversed*: No intelligent matching, just purely zip the 
-        lists together in the order they were given
-        
-        *base*:  Match each element by exact name (shortName) 
-        such that Spine==Spine or REF1:Spine==REF2:Spine
-        
-        *stripPrefix*: Match each element by a relaxed naming convention 
-        allowing for prefixes one side such that RigX_Spine == Spine
-        
-        *mirrorIndex*: Match via the nodes MirrorMarker
+    
+        | * matchMethod="index" : No intelligent matching, just purely zip the lists 
+            together in the order they were given  
+        | * matchMethod="indexReversed" : No intelligent matching, just purely zip 
+            the lists together in the reverse order they were given  
+        | * matchMethod="base" :  Match each element by exact name (shortName) such 
+            that Spine==Spine or REF1:Spine==REF2:Spine  
+        | * matchMethod="stripPrefix" : Match each element by a relaxed naming convention 
+            allowing for prefixes one side such that RigX_Spine == Spine
+        | * matchMethod="mirrorIndex" : Match via the nodes MirrorMarker
         
     :return: matched pairs of tuples for processing [(a1,b2),[(a2,b2)]
-    
     '''
-
     infoPrint = ""
     matchedData = []
     
@@ -1961,6 +1976,11 @@ class LockChannels(object):
         From a given chnMap file restore the channelBox status for all attributes
         found that are in the map file. ie, keyable, hidden, locked
         
+        :param filepath: filepath to the map to load
+        :param nodes: nodes to load the data onto, if hierarcchy=True this is the rootNode
+        :param hierarchy: process all child nodes of the nodes passed in
+        :param serializeNode: if Meta then this is used to serialize the attrMap to the node itself
+        
         .. note:: 
             Here we're dealing with 2 possible sets of data, either decoded by the
             ConfigObj decoder or a JSON deserializer and there's subtle differences in the dict
@@ -2033,10 +2053,9 @@ class LockChannels(object):
         :param usedDefined: process all UserDefined attributes on all nodes
         
         >>> r9Core.LockChannels.processState(nodes, attrs=["sx", "sy", "sz", "v"], mode='lockall')
-        
-        .. note:
-            if attrs='all' we now set it to the following for ease:
-             ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "nds", "radius"]
+        >>> 
+        >>> # note: if attrs='all' we now set it to the following for ease:
+        >>> ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "nds", "radius"]
         '''
         userDefAttrs=set()
         if not nodes:
@@ -2105,8 +2124,10 @@ def timeOffset_addPadding(pad=None, padfrom=None, scene=False):
     '''
     simple wrap of the timeoffset class which will add padding into the
     animation curves on the selected object by shifting keys
+    
     :param pad: amount of padding frames to add
     :param padfrom: frame to pad from
+    :param scene: offset the entire scene
     '''
     nodes = None
     if not pad:
@@ -2131,6 +2152,9 @@ def timeOffset_addPadding(pad=None, padfrom=None, scene=False):
 def timeOffset_collapse(scene=False, timerange=None):
     '''
     Light wrap over the TimeOffset call to manage collapsing time
+    
+    :param scene: offset the entire scene or just selected
+    :param timerange: specific timerange to collapse else we use the r9 timerange get call
     '''
     if not timerange:
         timerange = r9Anim.timeLineRangeGet(always=True)
@@ -2420,7 +2444,7 @@ class TimeOffset(object):
         Offset special handling for MetaNodes. Inspect the metaNode and see if 
         the 'timeOffset' method has been implemented and if so, call it.
         
-        .. note: 
+        .. note::
             ONLY runs in Scene mode and timerange and ripple are down to the metaNode
             to handle in it's internal implementation
         
@@ -2476,6 +2500,7 @@ def valueToMappedRange(value, currentMin, currentMax, givenMin, givenMax):
     we have a min max range, lets say 0.5 - 15 and we want to map the
     range to a new range say 0-1 and return where the value given is
     in that new range
+
     '''
     # Figure out how 'wide' each range is
     currentSpan = currentMax - currentMin
