@@ -46,7 +46,7 @@ log.setLevel(logging.INFO)
   2009          .  2009  .  ??????  .  2.5.1     na    .  2009    . 2008-10-01
   2010          .  2010  .  201000  .  2.6.1     na    .  2010    . 2009-08-01
   2011 Hotfix2  .  2011  .  201102  .  2.6.4    4.5.3  .  2011    .
-  2011 SAP      .  2011  .  201104  .  2.6.4    4.5.3  .  2011.5  . 2010-09-29  . 2011 binary compliant
+  2011 SAP      .  2011  .  201104  .  2.6.4    4.5.3  .  2011.5  . 2010-09-29
 
   2012          .  2012  .  201200  .  2.6.4    4.7.1  .  2012    . 2011-04-01
   2012 SP1      .  2012  .  ??????  .  2.6.4    4.7.1  .  2012    .
@@ -60,8 +60,11 @@ log.setLevel(logging.INFO)
 
   2014          .  2014  .  201400  .  2.6.4    4.8.2  .  2014    . 2013-04-10
   2015          .  2015  .  201500  .  2.7      4.8.5  .  2015    . 2014-04-15
+  2015 SP6      .  2015  .  201516  .  2.7      4.8.5  .  2015
   2016          .  2016  .  201600  .  2.7      4.8.6  .  2016    . 2015-04-15
-  2017          .  2017  .  
+  2016 EXT1 SP6 .  2016  .  201614  .  2.7      4.8.6  .  2016
+  2016 EXT2     .  2016  .  201650  .  2.7      4.8.6  .  2016.5  . 2016-04-15
+  2017          .  2017  .  201700  .  2.7      5.6.1  .  2017    . 2016-05-15
   
 ------------------------------------------------------------------------------------------
 '''
@@ -105,6 +108,7 @@ MAYA_INTERNAL_DATA = {}  # cached Maya internal vars for speed
 def mayaFullSpecs():
     print 'Maya version : ', mayaVersion()
     print 'Maya API version: ', mayaVersionRelease()
+    print 'Maya Release: ', cmds.about(v=True)
     print 'QT build: ', mayaVersionQT()
     print 'Prefs folder: ',mayaPrefs()
     print 'OS build: ', osBuild()
@@ -112,8 +116,10 @@ def mayaFullSpecs():
     print MAYA_INTERNAL_DATA
      
 def mayaVersion():
-    #need to manage this better and use the API version,
-    #eg: 2013.5 returns 2013
+    '''
+    get the application version back, this doesn't track service packs or extensions
+    TODO: need to manage this better and use the API version, eg: 2013.5 returns 2013
+    '''
     if 'version' in MAYA_INTERNAL_DATA and MAYA_INTERNAL_DATA['version']:
         return MAYA_INTERNAL_DATA['version']
     else:
@@ -121,12 +127,30 @@ def mayaVersion():
         return MAYA_INTERNAL_DATA['version']
 
 def mayaVersionRelease():
+    '''
+    get the api version back so we can track service packs etc
+    '''
     if 'api' in MAYA_INTERNAL_DATA and MAYA_INTERNAL_DATA['api']:
         return MAYA_INTERNAL_DATA['api']
     else:
         MAYA_INTERNAL_DATA['api'] = cmds.about(api=True)
         return MAYA_INTERNAL_DATA['api']
 
+def mayaRelease():
+    '''
+    wrap over the version and api to return EXT builds that modify the 
+    codebase significantly, prefs being set to 20XX.5 is a general clue
+    but we use the api build id to be specific
+    '''
+    base=mayaVersion()
+    api=mayaVersionRelease()
+    if base==2016:
+        if api>=201615:
+            return 2016.5
+        return base
+    return base
+    
+    
 def mayaVersionQT():
     try:
         if 'qt' in MAYA_INTERNAL_DATA and MAYA_INTERNAL_DATA['qt']:
@@ -607,11 +631,16 @@ def red9MayaNativePath():
     '''
     Returns the MayaVersioned Hacked script path if valid and found
     '''
-    _version=int(mayaVersion())
+    _version=mayaRelease()  # switched to manage ext builds that divert to a .5 release (2016.5)
+    basepath=os.path.join(red9ModulePath(),'startup','maya_native','maya_%s' % str(int(_version)))
     path=os.path.join(red9ModulePath(),'startup','maya_native','maya_%s' % str(_version))
-   
+    
     if os.path.exists(path):
+        # version including .5 handler
         return path
+    elif os.path.exists(basepath):
+        # simple int version
+        return basepath
     else:
         log.info('Red9MayaHacked Folder not found for this build of Maya : %s' % path)
   
