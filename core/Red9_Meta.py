@@ -699,8 +699,8 @@ def isMetaNodeClassGrp(node, mClassGrps=[]):
                 return True
         except:
             log.debug('mNode has no MClassGrp attr, must be a legacy system and needs updating!! %s' % node)
-
-            
+ 
+               
 @r9General.Timer
 def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType='mClass', nTypes=None, mSystemRoot=False, **kws):
     '''
@@ -895,7 +895,7 @@ def getConnectedMetaSystemRoot(node, mTypes=[], ignoreTypes=[], mSystemRoot=True
                         return mNode
             runaways+=1
             parents=getConnectedMetaNodes(mNode.mNode,source=True,destination=False)
-
+    return False
 
 @nodeLockManager
 def convertMClassType(cls, newMClass, **kws):
@@ -966,8 +966,8 @@ def delete_mNode(mNode):
     
     cmds.delete(mNode.mNode)
     del(mNode)
-    
-       
+           
+                 
 class MClassNodeUI(object):
     '''
     Simple UI to display all MetaNodes in the scene
@@ -3210,8 +3210,8 @@ class MetaRig(MetaClass):
         
         .. note::
             MetaRig getChildren has overloads adding the CTRL_Prefix to the cAttrs so that
-            the retunr is just the controllers in the rig. It also now has additional logic
-            to add any FacialCore system chidren by adding it's internal CTRL_Prefix to the list
+            the return is just the controllers in the rig. It also now has additional logic
+            to add any FacialCore system children by adding it's internal CTRL_Prefix to the list
         '''
         if not cAttrs:
             cAttrs=['RigCtrls', '%s_*' % self.CTRL_Prefix]
@@ -3221,8 +3221,17 @@ class MetaRig(MetaClass):
                     cAttrs.append('%s_*' % facialSystem.CTRL_Prefix)
 
         return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=asMeta, asMap=asMap)
-        #return self.getRigCtrls(walk=walk, mAttrs=mAttrs)
-       
+    
+    def selectChildren(self, walk=True):
+        '''
+        light wrap over the getChildren so we can more carefully manage it in some of the pro proc bindings
+        '''  
+        nodes=self.getChildren(walk=walk, asMeta=False, asMap=False)
+        if r9General.getModifier()=='Shift':
+            cmds.select(nodes, add=True)
+        else:
+            cmds.select(nodes)
+        
     def getSkeletonRoots(self):
         '''
         get the Skeleton Root, used in the poseSaver. By default this looks
@@ -3670,7 +3679,7 @@ class MetaRig(MetaClass):
             nodes=self.getChildren(walk=True)
         return r9Anim.animRangeFromNodes(nodes,setTimeline=setTimeline)
     
-    def hasKeys(self, nodes=[]):
+    def keyChildren(self, nodes=[], walk=True):
         '''
         return True if any of the rig's controllers have existing
         animation curve/key data
@@ -3678,10 +3687,21 @@ class MetaRig(MetaClass):
         :param nodes: nodes to check, if None process the entire rig
         '''
         if not nodes:
-            nodes=self.getChildren()
+            nodes=self.getChildren(walk=walk)
+        cmds.setKeyframe(nodes)    
+    
+    def hasKeys(self, nodes=[], walk=True):
+        '''
+        return True if any of the rig's controllers have existing
+        animation curve/key data
+        
+        :param nodes: nodes to check, if None process the entire rig
+        '''
+        if not nodes:
+            nodes=self.getChildren(walk=walk)
         return r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True) or False
 
-    def cutKeys(self, nodes=[], reset=True):
+    def cutKeys(self, nodes=[], reset=True, walk=True):
         '''
         cut all animation keys from the rig and reset
         
@@ -3689,7 +3709,7 @@ class MetaRig(MetaClass):
         :param reset: if true reset the rig after key removal
         '''
         if not nodes:
-            nodes=self.getChildren()
+            nodes=self.getChildren(walk=walk)
         if self.hasKeys(nodes):
             cmds.cutKey(r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True))
         if reset:
@@ -3699,9 +3719,10 @@ class MetaRig(MetaClass):
                 log.info('failed to load ZeroPose back to the rig - this may be an SRC system node')
     
     
-    # -------------------------------------------------------------------------------
-    # PRO PACK Supported Only ---
-    # -------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------------
+    # PRO PACK : Supported Only ------
+    #---------------------------------------------------------------------------------
+    
     '''
     All these commands are bound purely for those running the Red9 ProPack and are examples of
     the extensions being added. We bind them here to make it more transparent for you guys
@@ -3759,7 +3780,7 @@ class MetaRig(MetaClass):
         '''
         pass
                
-    def loadAnimation(self, filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0,
+    def loadAnimation(self, filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False, timecodeBinding=[None,None],
                       referenceNode=None, manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, *args, **kws):
         '''
         : PRO_PACK :
@@ -3772,6 +3793,11 @@ class MetaRig(MetaClass):
         :param useFilter: do we process all children of this rig or just selected
         :param loadAsStored: load the data from the timerange stored
         :param loadFromFrm: load the data from a given frame
+        :param loadFromTimecode: load against a given SMPTE timecode / frm binding, calculating the offset of 
+            the data to load against a given timecode reference. IF timecodeBinding isn't set then we gather the reference timecode from 
+            the mRig's internal data, else we use the timecode binding supplied
+        :param timecodeBinding: (frm, str('00:00:00:00'))  Tuple where the first arg is the frame at which the second arg's SMPTE timecode 
+            has been set as reference, basically we're saying that the timecode at frm is x
         :param referenceNode: load relative to the given node
         :param manageRanges: do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded
         :param manageFileName: if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
@@ -3826,6 +3852,8 @@ class MetaRig(MetaClass):
                                                useFilter=useFilter,
                                                loadAsStored=loadAsStored,
                                                loadFromFrm=loadFromFrm,
+                                               loadFromTimecode=loadFromTimecode,
+                                               timecodeBinding=timecodeBinding,
                                                referenceNode=referenceNode,
                                                manageRanges=manageRanges,
                                                manageFileName=manageFileName,
@@ -3888,8 +3916,9 @@ class MetaRig(MetaClass):
         '''
         if r9Setup.has_pro_pack():
             return self.Timecode.removedTimecode_from_node() or False
-        
-        
+       
+
+              
 class MetaRigSubSystem(MetaRig):
     '''
     SubClass of the MRig, designed to organize Rig sub-systems (ie L_ArmSystem, L_LegSystem..)
