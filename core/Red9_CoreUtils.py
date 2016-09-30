@@ -2510,19 +2510,22 @@ def valueToMappedRange(value, currentMin, currentMax, givenMin, givenMax):
     # Convert the 0-1 range into a value in the right range.
     return givenMin + (valueScaled * givenSpan)
 
-def timeIsInRange(baseRange=(), testRange=()):
+def timeIsInRange(baseRange=(), testRange=(), start_inRange=True, end_inRange=True):
     '''
-    test that a given testRange falls within the bounds of a baseRange
+    test that a given testRange [start,end], falls within the bounds of a baseRange [start,end]
     Used to test if timeRanges fall within a baseRange
     
     :param baseRange: base time range to test against
     :param testRange: range to test against the baseRange, do these times fall within the baseRange?
+    :param start_inRange: check is the testRange[0] value falls fully in the baseRange
+    :param end_inRange: check is the testRange[1] value falls fully in the baseRange
     
     .. note::
-        if you pass in baseRange as (None, 100) then we only validate against the end time.
-        if we pass in baseRange as (10, None) we only validate against the start time
+        if you pass in baseRange as (None, 100) then we only validate against the end time regardless of the flags.
+        if we pass in baseRange as (10, None) we only validate against the start time regardless of the flags.
         else we validate that testRange is fully within the baseRanges times
     '''
+    
     if baseRange[1] is None:
         if testRange[0]>=baseRange[0]:
             return True
@@ -2533,9 +2536,24 @@ def timeIsInRange(baseRange=(), testRange=()):
             return True
         else:
             return False
-    if not testRange[0]>=baseRange[0] or not testRange[1]<=baseRange[1]:
-        return False
-    return True
+    start=False
+    end=False
+    if start_inRange:
+        if testRange[0]>=baseRange[0] and testRange[0]<=baseRange[1]:
+            start=True
+        else:
+            start=False
+        if not end_inRange:
+            return start
+    if end_inRange:
+        if testRange[1]<=baseRange[1] and testRange[1]>=baseRange[0]:
+            end=True
+        else:
+            end=False
+        if not start_inRange:
+            return end
+    return all([start, end])
+
 
 def distanceBetween(nodeA, nodeB):
     '''
