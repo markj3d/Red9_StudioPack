@@ -231,14 +231,16 @@ class AudioHandler(object):
     def mayaNodes(self):
         return [audio.audioNode for audio in self.audioNodes]
 
-    def getAudioInRange(self, time=(), asNodes=True):
+    def getAudioInRange(self, time=(), asNodes=True, start_inRange=True, end_inRange=True):
         '''
         return any audio in the handler within a given timerange
         
         :param time: tuple, (min,max) timerange within which returned audio has 
             fall within else it's ignored.
         :param asNodes: return the data as r9Audio.AudioNodes
-        
+        :param start_inRange: check is the testRange[0] value falls fully in the baseRange
+        :param end_inRange: check is the testRange[1] value falls fully in the baseRange
+    
         .. note::
             if you pass in time as (None, 100) then we only validate against the end time.
             if we pass in time as (10, None) we only validate against the start time
@@ -246,9 +248,7 @@ class AudioHandler(object):
         '''
         audio_in_range=[]
         for a in self.audioNodes:
-            if r9Core.timeIsInRange(time, (a.startFrame,a.endFrame)):
-#             if not a.startFrame>=time[0] or not a.endFrame<=time[1]:
-#                 continue
+            if r9Core.timeIsInRange(time, (a.startFrame,a.endFrame), start_inRange=start_inRange, end_inRange=end_inRange):
                 audio_in_range.append(a)
         if not asNodes:
             return [a.audioNode for a in audio_in_range]
@@ -565,6 +565,7 @@ class AudioNode(object):
             self.isLoaded=True
             self.__audioNode=node
     
+        
     # ---------------------------------------------------------------------------------
     # pyDub inspect calls ---
     # ---------------------------------------------------------------------------------
@@ -807,21 +808,23 @@ class AudioNode(object):
         >>> audio = r9Audio.AudioNode(filepath = 'c:/my_audio.wav')
         >>> audio.importAndActivate()
         '''
-        
-        a=cmds.ls(type='audio')
-        cmds.file(self.path, i=True, type='audio', options='o=0')
-        b=cmds.ls(type='audio')
-  
-        if not a == b:
-            self.audioNode = (list(set(a) ^ set(b))[0])
-        else:
-            matchingnode = [audio for audio in a if cmds.getAttr('%s.filename' % audio) == self.path]
-            if matchingnode:
-                self.audioNode = matchingnode[0]
+        if not self.isLoaded:
+            a=cmds.ls(type='audio')
+            cmds.file(self.path, i=True, type='audio', options='o=0')
+            b=cmds.ls(type='audio')
+      
+            if not a == b:
+                self.audioNode = (list(set(a) ^ set(b))[0])
             else:
-                log.warning("can't find match audioNode for path : %s" % self.path)
-                return
-        self.isLoaded=True
+                matchingnode = [audio for audio in a if cmds.getAttr('%s.filename' % audio) == self.path]
+                if matchingnode:
+                    self.audioNode = matchingnode[0]
+                else:
+                    log.warning("can't find match audioNode for path : %s" % self.path)
+                    return
+            self.isLoaded=True
+        else:
+            log.info('given Audio Path is already loaded in the Maya Scene')
         if active:
             self.setActive()
         
