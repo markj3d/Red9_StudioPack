@@ -11,10 +11,11 @@
     
     This is the Core of the MetaNode implementation of the systems.
     
-    NOTE: if you're inheriting from 'MetaClass' in your own class you
-    need to make sure that the registerMClassInheritanceMapping() is called
-    such that the global RED9_META_REGISTERY is rebuilt and includes
-    your inherited class.
+    .. note::
+        if you're inheriting from 'MetaClass' in your own class you
+        need to make sure that the registerMClassInheritanceMapping() is called
+        such that the global RED9_META_REGISTERY is rebuilt and includes
+        your inherited class.
 
 
 Basic MetaClass Use:
@@ -76,16 +77,21 @@ except:
 global RED9_META_NODECACHE
 RED9_META_NODECACHE = {}
 
-global RED9_META_CALLBACKS
-RED9_META_CALLBACKS = {}
-RED9_META_CALLBACKS['Open'] = []
-RED9_META_CALLBACKS['New'] = []
-#RED9_META_CALLBACKS['DuplicatePre'] = []
-#RED9_META_CALLBACKS['DuplicatePost'] = []
-        
-
 global __RED9_META_NODESTORE__
 __RED9_META_NODESTORE__ = []
+
+if 'RED9_META_CALLBACKS' in globals():
+    log.debug('RED9_META_CALLBACKS already setup')
+else:
+    log.debug('initializing the RED9_META_CALLBACKS')
+    global RED9_META_CALLBACKS
+    RED9_META_CALLBACKS = {}
+    RED9_META_CALLBACKS['Open'] = []
+    RED9_META_CALLBACKS['New'] = []
+    #RED9_META_CALLBACKS['DuplicatePre'] = []
+    #RED9_META_CALLBACKS['DuplicatePost'] = []
+
+
 
 '''
 CRUCIAL - REGISTER INHERITED CLASSES! ==============================================
@@ -312,6 +318,8 @@ def registerMClassNodeCache(mNode):
         log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
         RED9_META_NODECACHE[UUID]=mNode
         
+    mNode._lastUUID = UUID
+        
 #    if mNode.hasAttr('UUID') or version>=2016:
 #        try:
 #            if version<2016:
@@ -477,7 +485,8 @@ def __poseDuplicateCache(*args):
     newNodes=[node for node in getMetaNodes(dataType='dag') if not node in __RED9_META_NODESTORE__]
     for node in newNodes:
         #note we set this via cmds so that the node isn't instantiated until the UUID is modified
-        if cmds.attributeQuery('UUID', node=node, exists=True):
+        #if cmds.attributeQuery('UUID', node=node, exists=True):
+        if cmds.objExists('%s.%s' % (node,'UUID')):
             cmds.setAttr('%s.UUID' % node, generateUUID(), type='string')
     #print 'post-callback : nodelist :', newNodes
 
@@ -690,8 +699,8 @@ def isMetaNodeClassGrp(node, mClassGrps=[]):
                 return True
         except:
             log.debug('mNode has no MClassGrp attr, must be a legacy system and needs updating!! %s' % node)
-
-            
+ 
+               
 @r9General.Timer
 def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType='mClass', nTypes=None, mSystemRoot=False, **kws):
     '''
@@ -780,7 +789,7 @@ def getUnregisteredMetaNodes():
     
 @r9General.Timer
 def getConnectedMetaNodes(nodes, source=True, destination=True, mTypes=[], mInstances=[], \
-                          mAttrs=None, dataType='mClass', nTypes=None, **kws):
+                          mAttrs=None, dataType='mClass', nTypes=None, skipTypes=[], skipInstances=[], **kws):
     '''
     From a given set of Maya Nodes return all connected mNodes
     Default return is mClass objects
@@ -796,6 +805,10 @@ def getConnectedMetaNodes(nodes, source=True, destination=True, mTypes=[], mInst
     :param dataType: default='mClass' return the nodes already instantiated to
                     the correct class object. If not then return the Maya node
     :param nTypes: only return nodes of a given type, note this type must be registered to meta!
+    :param skipTypes: if given this is a list of specific mNode types that will be skipped during the 
+        search WITHOUT instantiating their mNodes
+    :param skipInstances: if given this is a list of specific mNode mInstances types that will be skipped during the 
+        search WITHOUT instantiating their mNodes
     '''
     mNodes=[]
     connections=[]
@@ -817,12 +830,26 @@ def getConnectedMetaNodes(nodes, source=True, destination=True, mTypes=[], mInst
         return mNodes
     
     for node in connections:
+        addNode=False
         if not mInstances:
             if isMetaNode(node, mTypes=mTypes):
-                mNodes.append(node)
+                addNode=True
+                #mNodes.append(node)
         else:
             if isMetaNodeInherited(node,mInstances):
-                mNodes.append(node)
+                addNode=True
+                #mNodes.append(node)
+        if skipTypes:
+            if isMetaNode(node, mTypes=skipTypes):
+                log.debug('skipping node mType found >> %s = %s' % (node,getMClassDataFromNode(node)))
+                addNode=False
+        if skipInstances:
+            if isMetaNodeInherited(node, skipInstances):
+                log.debug('skipping node mInstance found >> %s = %s' % (node,getMClassDataFromNode(node)))
+                addNode=False 
+        if addNode:
+            mNodes.append(node)
+                
     if mAttrs:
         #lazy to avoid cyclic imports
         import Red9_CoreUtils as r9Core
@@ -851,6 +878,9 @@ def getConnectedMetaSystemRoot(node, mTypes=[], ignoreTypes=[], mSystemRoot=True
     '''
     mNodes=getConnectedMetaNodes(node,**kws)
     if not mNodes:
+        if isMetaNode(node):
+            log.info('given node is an mNode with no connections, returning node')
+            return MetaClass(node)
         return
     else:
         mNode=mNodes[0]
@@ -883,7 +913,7 @@ def getConnectedMetaSystemRoot(node, mTypes=[], ignoreTypes=[], mSystemRoot=True
                         return mNode
             runaways+=1
             parents=getConnectedMetaNodes(mNode.mNode,source=True,destination=False)
-
+    return False
 
 @nodeLockManager
 def convertMClassType(cls, newMClass, **kws):
@@ -895,7 +925,7 @@ def convertMClassType(cls, newMClass, **kws):
     :param cls: initialize mClass object t9o mutate
     :param newMClass: new class definition for the given cls
     
-    ..note ::
+    .. note::
         If you're converting a StandardWrapped Maya node to a fully fledged mNode then you also
         need to ensure that that NODETYPE is registered to meta or else it won't get picked up
         when you run any of the gets.
@@ -925,7 +955,7 @@ def  convertNodeToMetaData(nodes,mClass):
     :param nodes: nodes to cast to mClass instances
     :param mClass: mClass class to convert them too
     
-    ..note ::
+    .. note::
         ideally you should use the convertMClassType func now as that wraps this if the
         nodes passed in aren't already instanitated or bound to meta
     '''
@@ -940,8 +970,22 @@ def  convertNodeToMetaData(nodes,mClass):
         mNode.attrSetLocked('mNodeID', True)
     return [MetaClass(node) for node in nodes]
     
+def delete_mNode(mNode):
+    '''
+    wrapper to delete a given mNode via the standard mClass call
+    rather than the mNodes internal class.delete() call to avoid
+    subclass issues when calling super().delete()
+    '''
+    global RED9_META_NODECACHE 
+    if cmds.lockNode(mNode.mNode, q=True):
+        cmds.lockNode(mNode.mNode, lock=False)  
+    # clear the node from the cache
+    removeFromCache(mNode)
     
-       
+    cmds.delete(mNode.mNode)
+    del(mNode)
+           
+                 
 class MClassNodeUI(object):
     '''
     Simple UI to display all MetaNodes in the scene
@@ -1383,7 +1427,7 @@ class MClassNodeUI(object):
 class MetaClass(object):
     
     cached = None
-    UNMANAGED=['mNode', 'mNodeID', '_MObject', '_MObjectHandle', '_MFnDependencyNode', '_lockState', 'lockState', '_forceAsMeta']
+    UNMANAGED=['mNode', 'mNodeID', '_MObject', '_MObjectHandle', '_MFnDependencyNode', '_lockState', 'lockState', '_forceAsMeta','_lastDagPath','_lastUUID']
         
     def __new__(cls, *args, **kws):
         '''
@@ -1459,6 +1503,8 @@ class MetaClass(object):
         object.__setattr__(self, '_MObject', '')
         object.__setattr__(self, '_MObjectHandle', '')
         object.__setattr__(self, '_MDagPath', '')
+        object.__setattr__(self, '_lastDagPath', '')#...NEW...stored on mNode get
+        object.__setattr__(self, '_lastUUID', '')#...NEW...stored on cacheing of node
 #        object.__setattr__(self, 'UNMANAGED', ['mNode',
 #                                               'mNodeID',
 #                                               '_MObject',
@@ -1540,7 +1586,7 @@ class MetaClass(object):
         you need at a class level. It's called by the __init__ ... 
         Intended to be overloaded as and when needed when inheriting from MetaClass
         
-        ..note::
+        .. note::
             When subclassing __bindData__ will run BEFORE your subclasses __init__
             
             To bind a new attr and serilaize it to the self.mNode (Maya node) 
@@ -1596,17 +1642,22 @@ class MetaClass(object):
         if mobjHandle:
             try:
                 if not mobjHandle.isValid():
-                    log.info('MObject is no longer valid - object may have been deleted or the scene reloaded?')
-                    return
+                    #...raise this error so that this stops calls on bad nodes as soon as possible. With just return, you get a series of errors
+                    raise ValueError,('MObject is no longer valid - Last good dag path was: "%s"' % object.__getattribute__(self, "_lastDagPath"))
+                    #log.warning('MObject is no longer valid - Last good dag path was: "%s"' % object.__getattribute__(self, "_lastDagPath"))
+                    #return
                 #if we have an object thats a dagNode, ensure we return FULL Path
                 mobj=object.__getattribute__(self, "_MObject")
                 if OpenMaya.MObject.hasFn(mobj, OpenMaya.MFn.kDagNode):
                     dPath = OpenMaya.MDagPath()
                     OpenMaya.MDagPath.getAPathTo(mobj,dPath)
-                    return dPath.fullPathName()
+                    _result = dPath.fullPathName()
                 else:
                     depNodeFunc = OpenMaya.MFnDependencyNode(mobj)
-                    return depNodeFunc.name()
+                    _result = depNodeFunc.name()
+                # cache the dagpath on the object as a back-up for error reporting
+                object.__setattr__(self, '_lastDagPath', _result)
+                return _result
             except StandardError,error:
                 raise StandardError(error)
 
@@ -1663,7 +1714,7 @@ class MetaClass(object):
         if mobjHandle:
             try:
                 if not mobjHandle.isValid():
-                    log.info('MObject is no longer valid - %s - object may have been deleted or the scene reloaded?'\
+                    log.info('mNodes : MObject is no longer valid - %s - object may have been deleted or the scene reloaded?'\
                               % object.__getattribute__(self,'mNodeID'))
                     return
                 #if we have an object thats a dagNode, ensure we return FULL Path
@@ -1694,15 +1745,35 @@ class MetaClass(object):
             log.debug("can't set the nodeState for : %s" % self.mNode)
 
     def __repr__(self):
-        if self.hasAttr('mClass'):
-            return "%s(mClass: '%s', node: '%s')" % (self.__class__, self.mClass, self.mNode.split('|')[-1])
-        else:
-            return "%s(Wrapped Standard MayaNode, node: '%s')" % (self.__class__, self.mNode.split('|')[-1])
+        try:
+            if self.hasAttr('mClass'):
+                return "%s(mClass: '%s', node: '%s')" % (self.__class__, self.mClass, self.mNode.split('|')[-1])
+            else:
+                return "%s(Wrapped Standard MayaNode, node: '%s')" % (self.__class__, self.mNode.split('|')[-1]) 
+        except:
+            # if this fails we have a dead node more than likely
+            try:               
+                RED9_META_NODECACHE.pop(object.__getattribute__(self, "_lastUUID"))
+                log.debug("Dead mNode %s removed from cache..." % object.__getattribute__(self, "_lastDagPath"))
+            except:
+                pass
+            try:
+                return ("Dead mNode : Last good dag path was: %s" % object.__getattribute__(self, "_lastDagPath"))
+            except:
+                return "THIS NODE BE DEAD BY THINE OWN HAND"
     
     def __eq__(self, obj):
         '''
         Equals calls are handled via the MObject cache
         '''
+        #Added this is mObject valid check as this was another place stuff breaks on a dead node...same cache clear ability
+        if not self._MObjectHandle.isValid():
+            try:             
+                RED9_META_NODECACHE.pop(object.__getattribute__(self, "_lastUUID"))
+                log.debug("Dead mNode %s removed from cache..." % object.__getattribute__(self, "_lastDagPath"))
+            except:
+                pass        
+            return False
         if isinstance(obj, self.__class__):
             if obj._MObject and self._MObject:
                 if obj._MObject == self._MObject:
@@ -1974,8 +2045,9 @@ class MetaClass(object):
                 return self._MFnDependencyNode.hasAttribute(attr)
                 #return OpenMaya.MFnDependencyNode(self.mNodeMObject).hasAttribute(attr)
             except:
-                return cmds.attributeQuery(attr, exists=True, node=self.mNode)
-    
+                #return cmds.attributeQuery(attr, exists=True, node=self.mNode)
+                return cmds.objExists('%s.%s' % (self.mNode,attr))
+                
     def attrIsLocked(self,attr):
         '''
         check the attribute on the mNode to see if it's locked
@@ -2083,8 +2155,12 @@ class MetaClass(object):
                         cmds.addAttr('%s.%s' % (self.mNode, attr), e=True, **addkwsToEdit)
                         log.debug('addAttr Edit flags run : %s = %s' % (attr, addkwsToEdit))
                     if setKwsToEdit:
-                        cmds.setAttr('%s.%s' % (self.mNode, attr), **setKwsToEdit)
-                        log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
+                        try:
+                            if not self.isReferenced():
+                                cmds.setAttr('%s.%s' % (self.mNode, attr), **setKwsToEdit)
+                                log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
+                        except:
+                            log.debug("mNode is referenced and the setEditFlags are therefore invalid (lock, keyable, channelBox)")
             except:
                 if self.isReferenced():
                     log.debug('Trying to modify and attr on a reference node')
@@ -2218,8 +2294,25 @@ class MetaClass(object):
 
         cmds.delete(self.mNode)
         del(self)
-        
 
+    def gatherInfo(self, level=0, *args, **kws):
+        '''
+        a generic gather function designed to be overloaded at the class level and used to 
+        collect specific information on the given class in a generic way. This is used by the
+        r9Aninm format in Pro to collect key info on the system being saved against
+        
+        :param level: added here for the more robust checking that the rigging systems need
+        '''
+        data={}
+        data['mNode'] = self.mNode
+        data['mNodeID'] = self.mNodeID
+        data['mClass'] = self.mClass
+        data['mClassGrp'] = self.mClassGrp
+        data['mSystemRoot']= self.mSystemRoot
+        data['lockState'] = self.lockState
+        return data
+    
+    
     # Reference / Namespace Management Block
     #---------------------------------------------------------------------------------
     
@@ -2391,7 +2484,8 @@ class MetaClass(object):
                 else:
                     node.addAttr(srcAttr, attrType='message')
                     node=node.mNode
-            elif not cmds.attributeQuery(srcAttr, exists=True, node=node):
+            #elif not cmds.attributeQuery(srcAttr, exists=True, node=node):
+            elif not cmds.objExists('%s.%s' % (node,srcAttr)):
                 if allowIncest:
                     MetaClass(node).addAttr(srcAttr, attrType='message')
                 else:
@@ -2443,8 +2537,8 @@ class MetaClass(object):
         generates a NONE-MULTI message on both sides of the connection and is designed
         for simple parent child relationships.
         
-        NOTE: this call by default manages the attr to only ONE CHILD to
-        avoid this use cleanCurrent=False
+        .. note::
+            this call by default manages the attr to only ONE CHILD to avoid this use cleanCurrent=False
         :param node: Maya node to connect to this mNode
         :param attr: Name for the message attribute
         :param srcAttr: If given this becomes the attr on the child node which connects it
@@ -2481,7 +2575,8 @@ class MetaClass(object):
                 else:
                     node.addAttr(srcAttr, attrType='messageSimple')
                     node=node.mNode
-            elif not cmds.attributeQuery(srcAttr, exists=True, node=node):
+            #elif not cmds.attributeQuery(srcAttr, exists=True, node=node):
+            elif not cmds.objExists('%s.%s' % (node,srcAttr)):
                 cmds.addAttr(node, longName=srcAttr, at='message', m=False)
             
             # uplift to multi-message index managed if needed
@@ -2671,9 +2766,9 @@ class MetaClass(object):
             by going getChildMetaNodes(mAttrs='mClass=MetaRig')
         
         .. note:: 
-            Because the **kws are passed directly to the getConnectedMetaNods func, it will
+            Because the **kws are passed directly to the getConnectedMetaNodes func, it will
             also take ALL of that functions **kws functionality in the initial search:
-            source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType='mClass'
+            source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType='mClass', skipTypes=[], skipInstances=[]
         '''
         if not walk:
             return getConnectedMetaNodes(self.mNode, source=False, destination=True, mAttrs=mAttrs, dataType='mClass', **kws)
@@ -2715,6 +2810,9 @@ class MetaClass(object):
                                 extendedChildren=[]
                                 depth+=1
                         runaways+=1
+                
+                # at this point we're still dealing with unicode nodes
+                
                 childmNodes=[MetaClass(node) for node in metaNodes]
                 typematched=[]
                 if stepover:
@@ -2751,7 +2849,7 @@ class MetaClass(object):
             return mNodes[0]
 
     @r9General.Timer
-    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False):
+    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False, **kws):
         '''
         This finds all UserDefined attrs of type message and returns all connected nodes
         This is now being run in the MetaUI on doubleClick. This is a generic call, implemented
@@ -2769,12 +2867,17 @@ class MetaClass(object):
         .. note:: 
             mAttrs is only searching attrs on the mNodes themselves, not the children
             cAttrs is searching the connection attr names from the mNodes, uses the cmds.listAttr 'st' flag
+            
+        .. note:: 
+            Because the **kws are passed directly to the getConnectedMetaNodes func via the getChildMetaNodes call,
+            it will also take ALL of that functions **kws functionality in the initial search:
+            source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType='mClass', skipTypes=[], skipInstances=[]
         '''
         childMetaNodes=[self]
         children=[]
         attrMapData={}
         if walk:
-            childMetaNodes.extend([node for node in self.getChildMetaNodes(walk=True, mAttrs=mAttrs)])
+            childMetaNodes.extend([node for node in self.getChildMetaNodes(walk=True, mAttrs=mAttrs, **kws)])
         for node in childMetaNodes:
             log.debug('MetaNode getChildren : %s >> %s' % (type(node), node.mNode))
             attrs = cmds.listAttr(node.mNode, ud=True, st=cAttrs)
@@ -2792,7 +2895,8 @@ class MetaClass(object):
                             else:
                                 for linkedNode in msgLinked:
                                     for attr in nAttrs:
-                                        if cmds.attributeQuery(attr, exists=True, node=linkedNode):
+                                        #if cmds.attributeQuery(attr, exists=True, node=linkedNode):
+                                        if cmds.objExists('%s.%s' % (linkedNode,attr)):   
                                             linkedNode = cmds.ls(linkedNode, l=True)  # cast to longNames!
                                             #children.extend(linkedNode)
                                             if not asMap:
@@ -2865,7 +2969,7 @@ class MetaClass(object):
             more flexible as it returns and filters all plugs between self and the given node.
         '''
         log.debug('getNodeConnectionAttr will be depricated soon!!!!')
-        for con in cmds.listConnections(node,s=True,d=False,p=True):
+        for con in cmds.listConnections(node,s=True,d=False,p=True) or []:
             if self.mNode in con.split('.')[0]:
                 return con.split('.')[1]
         
@@ -2878,7 +2982,7 @@ class MetaClass(object):
         :param filters: filter string to match for the returns
         '''
         cons=[]
-        for con in cmds.listConnections(node,s=True,d=False,p=True):
+        for con in cmds.listConnections(node,s=True,d=False,p=True) or []:
             if self.mNode in con.split('.')[0]:
                 if filters:
                     for flt in filters:
@@ -2951,16 +3055,110 @@ class MetaRig(MetaClass):
         self.parentSwitchAttr = ['parent']  # attr used for parentSwitching
         self.MirrorClass = None         # capital as this binds to the MirrorClass directly
         # self.poseSkippedAttrs = []    # attributes which are to be IGNORED by the posesaver, set by you for your needs!
+        self.filterSettings=None        # used in the settings func
 
     def __bindData__(self):
         #self._lockState=True         # set the internal lockstate
-        self.addAttr('version',1.0)  # ensure these are added by default
-        self.addAttr('rigType', '')  # ensure these are added by default
-        self.addAttr('renderMeshes', attrType='message')
-        self.addAttr('exportSkeletonRoot', attrType='messageSimple')
+        self.addAttr('version',1.0)   # internal version of the rig, used by pro and bound here as a generic version ID
+        self.addAttr('rigType', '')   # type of the rig system 'biped', 'quad' etc
         self.addAttr('scaleSystem', attrType='messageSimple')
         self.addAttr('timecode_node', attrType='messageSimple')
+        
+        # Vital wires used by both StudioPack and Pro
+        self.addAttr('renderMeshes', attrType='message')  # used to ID all meshes that are part of this rig system
+        self.addAttr('exportSkeletonRoot', attrType='messageSimple')  # used to ID the skeleton root for exporters and code 
+                 
+    def gatherInfo(self, level=0, *args, **kws):
+        '''
+        gather key info on this system
+        '''
+        data={}
+        data['mClass']=super(MetaRig, self).gatherInfo(level=level)
+        data['filepath'] = cmds.file(q=True,sn=True)
+        if self.hasAttr('version'):
+            data['version']=self.version
+        if self.hasAttr('rigType'):
+            data['rigType']=self.rigType
+        if self.hasAttr('exportSkeletonRoot'):
+            data['exportSkeletonRoot']=self.exportSkeletonRoot
+        if self.hasAttr('timecode_node'):
+            data['timecode_node']=self.timecode_node
+
+        data['CTRL_Prefix']=self.CTRL_Prefix
+        try:
+            data['Ctrl_Main']=self.ctrl_main
+        except:
+            log.warning('"ctrl_main" : is NOT wired correctly!')
+        return data
     
+    @property
+    def settings(self):
+        '''
+        bound filterSettings object used by the Animation Systems
+        from now on so that this data can be bound directly to the 
+        rig so we don't have to use the preset config's all the time
+        '''
+        flt=r9Core.FilterNode_Settings()
+        if self.filterSettings:
+            flt.setByDict(self.filterSettings)
+        else:
+            # no specific filter bound to the rig so set the metaRig flag as default
+            flt.metaRig=True
+        return flt
+    
+    @settings.setter
+    def settings(self, settingsobj):
+        '''
+        set the internal filterSettings data to the string attr on the
+        mrig, binding the settings directly to the rig rather than always having
+        to pull them back from configs
+        
+        :param settingsobj: either a valid filterSettings object OR a path
+            to a valid config preset that then gets read and consumed
+        '''
+        
+        # we're specifically setting the data so we cast it to the mNode itself
+        self.addAttr('filterSettings', '') 
+        
+        # set by an existing instance of a filterSettings object
+        if isinstance(type(settingsobj), r9Core.FilterNode_Settings):
+            self.filterSettings=settingsobj.__dict__
+            
+        # set by filepath
+        elif os.path.exists(settingsobj):
+            flt = r9Core.FilterNode_Settings()
+            flt.read(settingsobj)
+            self.filterSettings=flt.__dict__
+            
+    def isValid(self):
+        '''
+        simple check to see if this definition is still valid and wired to
+        controllers and not just to empty subSystems as is the case if you
+        were to delete all the dag nodes in a rig, leaving the MetaRig 
+        structure in-tact but useless
+        '''
+        if not self.getChildren():
+            return False
+        return True
+    
+    def delete(self, full=True):
+        '''
+        full delete and clean of a rig system and network
+        '''
+        mNodes=[]
+        mNodes.append(self)
+        mNodes.extend(self.getChildMetaNodes(walk=True))
+        mNodes.reverse()
+        
+        for a in mNodes:
+            print a
+        
+        for metaChild in mNodes:
+            for child in metaChild.getChildren(walk=False):
+                metaChild.disconnectChild(child)
+            print 'deleting mNode: ', metaChild
+            delete_mNode(metaChild)
+        
     @property
     def ctrl_main(self):
         '''
@@ -3031,15 +3229,28 @@ class MetaRig(MetaClass):
         '''
         return self.getChildren(walk, mAttrs)
         
-    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False, incFacial=False):
+    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False, incFacial=False, **kws):
         '''
         Massively important bit of code, this is used by most bits of code
         to find the child controllers linked to this metaRig instance.
         
+        :param walk: walk all subMeta connections and include all their children too
+        :param mAttrs: only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)
+        :param cAttrs: only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)
+        :param nAttrs: search returned MayaNodes for given set of attrs and only return matched nodes
+        :param asMeta: return instantiated mNodes regardless of type
+        :param asMap: return the data as a map such that {mNode.plugAttr:[nodes], mNode.plugAttr:[nodes]}
+        :param incFacial: if we have a facial system linked include it's children in the return (uses the getFacialSystem to id the facial node)
+        
         .. note::
             MetaRig getChildren has overloads adding the CTRL_Prefix to the cAttrs so that
-            the retunr is just the controllers in the rig. It also now has additional logic
-            to add any FacialCore system chidren by adding it's internal CTRL_Prefix to the list
+            the return is just the controllers in the rig. It also now has additional logic
+            to add any FacialCore system children by adding it's internal CTRL_Prefix to the list
+        
+        .. note:: 
+            Because the **kws are passed directly to the getConnectedMetaNodes func via the getChildMetaNodes call,
+            it will also take ALL of that functions **kws functionality in the initial search:
+            source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType='mClass', skipTypes=[], skipInstances=[]
         '''
         if not cAttrs:
             cAttrs=['RigCtrls', '%s_*' % self.CTRL_Prefix]
@@ -3048,9 +3259,27 @@ class MetaRig(MetaClass):
                 if facialSystem:
                     cAttrs.append('%s_*' % facialSystem.CTRL_Prefix)
 
-        return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=asMeta, asMap=asMap)
-        #return self.getRigCtrls(walk=walk, mAttrs=mAttrs)
-       
+        return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=asMeta, asMap=asMap, **kws)
+    
+    def selectChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[]):
+        '''
+        light wrap over the getChildren so we can more carefully manage it in some of the pro proc bindings
+        
+        :param walk: walk all subMeta connections and include all their children too
+        :param mAttrs: only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)
+        :param cAttrs: only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)
+        :param nAttrs: search returned MayaNodes for given set of attrs and only return matched nodes
+        
+        .. note::
+            the wrapper also accepts the 'Shift' modifier key, if pressed when this is called then we set the selection to 'add'
+            else it's a fresh selection thats made
+        '''  
+        nodes=self.getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=False, asMap=False)
+        if r9General.getModifier()=='Shift':
+            cmds.select(nodes, add=True)
+        else:
+            cmds.select(nodes)
+        
     def getSkeletonRoots(self):
         '''
         get the Skeleton Root, used in the poseSaver. By default this looks
@@ -3170,8 +3399,9 @@ class MetaRig(MetaClass):
         Arm system.
         
         :param systemType: Attribute used in the message link. Note this is what you use
-            to transerve the Dag tree so use something sensible!
-        :param mirrorSide: Side to designate the system. This is an enum: Centre,Left,Right
+            to traserve the Dag tree so use something sensible!
+        :param side: Side to designate the system. This is an enum: Centre,Left,Right
+        :param attr: wire name to use in the connections, if not given wire will be side[0]_systemType_'System'
         :param nodeName: Name of the MetaClass network node created
         :param mClass: the class to be used for the support node - 'MetaRigSubSystem' by default
         '''
@@ -3323,9 +3553,8 @@ class MetaRig(MetaClass):
     
     # Utilities
     #---------------------------------------------------------------------------------
-    
     @nodeLockManager
-    def poseCacheStore(self, attr=None, filepath=None, incRoots=True, *args, **kws):
+    def poseCacheStore(self, attr=None, filepath=None, incRoots=True, storeThumbnail=False, *args, **kws):
         '''
         intended as a cached pose for this mRig, if an attr is given then
         the cached pose is stored internally on the node so it can be loaded
@@ -3340,7 +3569,11 @@ class MetaRig(MetaClass):
         self.poseCache=r9Pose.PoseData()
         self.poseCache.metaPose=True
         self.poseCache.settings.incRoots=incRoots
-        self.poseCache.poseSave(self.mNode, filepath=filepath, useFilter=True, *args, **kws)  # no path so cache against this pose instance
+        self.poseCache.poseSave(self.mNode,
+                                filepath=filepath,
+                                useFilter=True,
+                                storeThumbnail=storeThumbnail,
+                                *args, **kws)  # no path so cache against this pose instance
         if attr:
             if not self.hasAttr(attr):
                 self.addAttr(attr, value=self.poseCache.poseDict, hidden=True)
@@ -3348,7 +3581,8 @@ class MetaRig(MetaClass):
                 setattr(self, attr, self.poseCache.poseDict)
             self.attrSetLocked(attr,True)
         
-    def poseCacheLoad(self, nodes=None, attr=None, filepath=None, incRoots=True, *args, **kws):
+    def poseCacheLoad(self, nodes=None, attr=None, filepath=None, incRoots=True, relativePose=False, relativeRots='projected',
+                      relativeTrans='projected', maintainSpaces=False, *args, **kws):
         '''
         load a cached pose back to this mRig. If attr is given then its assumed
         that that attr is a cached poseDict on the mNode. If not given then it
@@ -3363,18 +3597,25 @@ class MetaRig(MetaClass):
         '''
         import Red9.core.Red9_PoseSaver as r9Pose  # lazy loaded
         if attr or filepath:
-            self.poseCache=r9Pose.PoseData()
+            self.poseCache=r9Pose.PoseData(**kws)  # **kws so we can pass the filterSettings directly if needed
             self.poseCache.metaPose=True
             self.poseCache.settings.incRoots=incRoots
             if attr:
                 self.poseCache.poseDict=getattr(self,attr)
         if self.poseCache:
             if not nodes:
-                self.poseCache.poseLoad(self.mNode, filepath=filepath, useFilter=True, *args, **kws)
+                self.poseCache.poseLoad(self.mNode,
+                                        filepath=filepath,
+                                        useFilter=True,
+                                        relativePose=relativePose,
+                                        relativeRots=relativeRots,
+                                        relativeTrans=relativeTrans,
+                                        maintainSpaces=maintainSpaces, *args, **kws)
             else:
+                # in non hierarchy / filter mode relative is NOT supported
                 self.poseCache.poseLoad(nodes, filepath=filepath, useFilter=False, *args, **kws)
      
-    def poseCompare(self, poseFile, supressWarning=False, compareDict='skeletonDict', filterMap=[], ignoreBlocks=[]):
+    def poseCompare(self, poseFile, supressWarning=False, compareDict='skeletonDict', filterMap=[], ignoreBlocks=[], ignoreStrings=[], ignoreAttrs=[]):
         '''
         Integrated poseCompare, this checks the mRigs current pose against
         a given poseFile. This checks against the 'skeletonDict'
@@ -3385,11 +3626,18 @@ class MetaRig(MetaClass):
         :param filterMap: if given this is used as a high level filter, only matching nodes get compared
             others get skipped. Good for passing in a master core skeleton to test whilst ignoring extra nodes
         :param ignoreBlocks: used to stop certain blocks in the compare from causing a fail eg : ['missingKeys']
+        :param ignoreAttrs: allows you to skip given attrs from the poseCompare calls
         :return: returns a 'PoseCompare' class object with all the compare data in it
         '''
         import Red9.core.Red9_PoseSaver as r9Pose  # lazy loaded
         self.poseCacheStore()
-        compare=r9Pose.PoseCompare(self.poseCache, poseFile, compareDict=compareDict, filterMap=filterMap, ignoreBlocks=ignoreBlocks)
+        compare=r9Pose.PoseCompare(self.poseCache,
+                                   poseFile,
+                                   compareDict=compareDict,
+                                   filterMap=filterMap,
+                                   ignoreBlocks=ignoreBlocks,
+                                   ignoreStrings=ignoreStrings,
+                                   ignoreAttrs=ignoreAttrs)
         if not compare.compare():
             info='Selected Pose is different to the rigs current pose\nsee script editor for debug details'
         else:
@@ -3483,7 +3731,22 @@ class MetaRig(MetaClass):
             nodes=self.getChildren(walk=True)
         return r9Anim.animRangeFromNodes(nodes,setTimeline=setTimeline)
     
-    def hasKeys(self, nodes=[]):
+    def keyChildren(self, nodes=[], walk=True, mAttrs=None, cAttrs=[], nAttrs=[]):
+        '''
+        return True if any of the rig's controllers have existing
+        animation curve/key data
+        
+        :param nodes: nodes to check, if None process the entire rig via all the flags which are passed into the getChildren call
+        :param walk: walk all subMeta connections and include all their children too
+        :param mAttrs: only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)
+        :param cAttrs: only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)
+        :param nAttrs: search returned MayaNodes for given set of attrs and only return matched nodes
+        '''
+        if not nodes:
+            nodes=self.getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=False, asMap=False)
+        cmds.setKeyframe(nodes)    
+    
+    def hasKeys(self, nodes=[], walk=True):
         '''
         return True if any of the rig's controllers have existing
         animation curve/key data
@@ -3491,10 +3754,10 @@ class MetaRig(MetaClass):
         :param nodes: nodes to check, if None process the entire rig
         '''
         if not nodes:
-            nodes=self.getChildren()
+            nodes=self.getChildren(walk=walk)
         return r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True) or False
 
-    def cutKeys(self, nodes=[], reset=True):
+    def cutKeys(self, nodes=[], reset=True, walk=True):
         '''
         cut all animation keys from the rig and reset
         
@@ -3502,69 +3765,170 @@ class MetaRig(MetaClass):
         :param reset: if true reset the rig after key removal
         '''
         if not nodes:
-            nodes=self.getChildren()
+            nodes=self.getChildren(walk=walk)
         if self.hasKeys(nodes):
             cmds.cutKey(r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True))
         if reset:
-            self.loadZeroPose(nodes)
+            try:
+                self.loadZeroPose(nodes)
+            except:
+                log.info('failed to load ZeroPose back to the rig - this may be an SRC system node')
 
 
-    # PRO PACK Supported Only
-    # -------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------------
+    # PRO PACK : Supported Only ------
+    #---------------------------------------------------------------------------------
+    
     '''
     All these commands are bound purely for those running the Red9 ProPack and are examples of
     the extensions being added. We bind them here to make it more transparent for you guys
     running Meta, save us sub-classing MetaRig for Pro and exposes some of the codebase wrapping
     '''
+            
     def saveAnimation(self, filepath, incRoots=True, useFilter=True, timerange=(),
-                      storeThumbnail=False, force=False):
+                      storeThumbnail=False, force=False, userInfoData='', **kws):
         '''
-        PRO_PACK : Binding of the animMap format for storing animation data out to file
+        : PRO_PACK :
+            Binding of the animMap format for storing animation data out to file
+                
+        :param filepath: r9Anim file to load
+        :param incRoots: do we include the root node in the load, in metaRig case this is ctrl_main
+        :param useFilter: do we process all children of this rig or just selected
+        :param timerange: specific a timerange to store, else store all 
+        :param storeThumbnail: this will be an avi but currently it's a pose thumbnail
+        :param force: allow force write on a read only file
+        :param userInfoData: user information used by the AnimStore UI only
         '''
         if r9Setup.has_pro_pack():
-            #from Red9.pro_pack.core.animation import AnimMap
             from Red9.pro_pack import r9pro
             r9pro.r9import('r9panim')
             from r9panim import AnimMap
             
-            self.animMap=AnimMap()
-            self.animMap.filepath=filepath
-            self.animMap.metaPose=True
-            self.animMap.settings.incRoots=incRoots
-            self.animMap.saveAnim(self.mNode,
-                                  useFilter=useFilter,
-                                  timerange=timerange,
-                                  storeThumbnail=storeThumbnail,
-                                  force=force)
+            self.animCache=AnimMap(**kws)
+            self.animCache.userInfoData=userInfoData
+            self.animCache.filepath=filepath
+            self.animCache.metaPose=True
+            self.animCache.settings.incRoots=incRoots
+            self.animCache.saveAnim(self.mNode,
+                                    useFilter=useFilter,
+                                    timerange=timerange,
+                                    storeThumbnail=storeThumbnail,
+                                    force=force)
             
-            log.info('AnimMap data saved to : %s' % self.animMap.filepath)
-            
-    def loadAnimation(self, filepath, incRoots=True, useFilter=True, 
-                      loadAsStored=True, loadFromFrm=0, referenceNode=None, *args, **kws):
+            log.info('AnimMap data saved to : %s' % self.animCache.filepath)
+    
+    def loadAnimation_postload_call(self, feedback, *args, **kws):
         '''
-        PRO_PACK : Binding of the animMap format for loading animation data from
-        an r9Anim file
+        : PRO_PACK :
+            Added to be Overloaded at the class level!
+
+        call passed into the animMap class and run AFTER the r9Anim file is loaded
+        on the MetaRig, this allows you to add functionality to the base load to
+        extract extra data from the animMap and act upon it
+        
+        This allows us to act on the animMap stored on the class object and rebuld
+        data from the infoDict if required. We use this to rebuild audio links, exporter
+        nodes and any other data that's requried to be restored from the gathered info 
+       
+        self.animCache.infoDict
+        
+        :param feedback: data passed back into the call by the main loadAnimation func
+        '''
+        pass
+               
+    def loadAnimation(self, filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False, timecodeBinding=[None,None],
+                      referenceNode=None, manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, *args, **kws):
+        '''
+        : PRO_PACK :
+            Binding of the animMap format for loading animation data from
+            an r9Anim file. The base binding of the animation format is the DataMap object
+            in the Red9_PoseSaver so many of the exposed flags come from there.
+        
+        :param filepath: r9Anim file to load
+        :param incRoots: do we include the root node in the load, in metaRig case this is ctrl_main
+        :param useFilter: do we process all children of this rig or just selected
+        :param loadAsStored: load the data from the timerange stored
+        :param loadFromFrm: load the data from a given frame
+        :param loadFromTimecode: load against a given SMPTE timecode / frm binding, calculating the offset of 
+            the data to load against a given timecode reference. IF timecodeBinding isn't set then we gather the reference timecode from 
+            the mRig's internal data, else we use the timecode binding supplied
+        :param timecodeBinding: (frm, str('00:00:00:00'))  Tuple where the first arg is the frame at which the second arg's SMPTE timecode 
+            has been set as reference, basically we're saying that the timecode at frm is x
+        :param referenceNode: load relative to the given node
+        :param manageRanges: do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded
+        :param manageFileName: if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
+            then we take the r9Anim's filename and rename the Maya scene accordingly
+        :param keyStatics: if True then we key everything in the data at startFrame so that all non-keyed and static
+            attrs that are stored internally as a pose are keyed.
+        :param blendRange: None or int : 1 is default. If an int is passed then we use this as the hold range for the data, setting a key at
+            time=startFarme-blendRange to hold the current data before we load the new keys. Note that this also turns on the keyStatics
+            to ensure the data is preserved
+        
+        additional **KWS passed in and / or accepted in the ProPack codebase
+        
+        :KWS manageExport: If running the Red9Pro Exporter systems this will rebuild the export Tag data directly
+            from the r9Anim file's infoData block:
+            False : don't restore any exportData,
+            [] : if you pass in a list then we take that list and match internal exportloop names to it
+            'byName' : restore only exportLoops who name matches the r9Anim's name
+            'byRange': restore exportLoops that fall within the timerange of the imported r9Anim
+            'byRange_start' : restore exportLoops that start after the timerange of the importer r9Anim (ignore end time data)
+            'byRange_end' : restore exportLoops that end before the timerange of the importer r9Anim (ignore start time data)
+            'byAll' : restore ALL exportLoops in the r9Anim infoData block
+        :KWS manageAudio: If running the Red9Pro Exporter systems this will rebuild the Audio Node data directly
+            from the r9Anim file's infoData block   (False, [], 'byName', 'byRange', 'byRange_start', 'byRange_end', 'byAll')
+        
+        .. note::
+            After the anim load the animData is stored on this instance as self.animMap which then 
+            exposes all the data for further functions if needed.
+            self.animCache.infoDict = gatherInfo block on the file and pose
+            self.animCache.poseDict = the animation and pose data dict
+            
+        .. note::
+            **kws are passed directly into BOTH the AnimMap class and the loadAnimation_postload_call
+            so that we can bounce additional **kws into these funcs without having to specify everything,
+            this allows us to modify the behaviour on a case by case basis for clients
         '''
         if r9Setup.has_pro_pack():
-            #from Red9.pro_pack.core.animation import AnimMap
             from Red9.pro_pack import r9pro
             r9pro.r9import('r9panim')
             from r9panim import AnimMap
+            feedback=None
             
-            self.animMap=AnimMap()
-            self.animMap.filepath=filepath
-            self.animMap.metaPose=True
-            self.animMap.settings.incRoots=incRoots
-            self.animMap.loadAnim(self.mNode,
-                                  useFilter=useFilter,
-                                  loadAsStored=loadAsStored,
-                                  loadFromFrm=loadFromFrm,
-                                  referenceNode=referenceNode)
+            self.animCache=AnimMap(**kws)  # **kws so we can pass back the filterSettings from the UI call in pro
+            self.animCache.filepath=filepath
+            self.animCache.metaPose=True
+            self.animCache.settings.incRoots=incRoots
+            if useFilter:
+                rootNodes=self.mNode
+            else:
+                rootNodes=cmds.ls(sl=True,l=True)
+            try:
+                feedback=self.animCache.loadAnim(nodes=rootNodes,
+                                               useFilter=useFilter,
+                                               loadAsStored=loadAsStored,
+                                               loadFromFrm=loadFromFrm,
+                                               loadFromTimecode=loadFromTimecode,
+                                               timecodeBinding=timecodeBinding,
+                                               referenceNode=referenceNode,
+                                               manageRanges=manageRanges,
+                                               manageFileName=manageFileName,
+                                               keyStatics=keyStatics,
+                                               blendRange=blendRange,
+                                               **kws)
+                # =========================================================
+                # pass the feedback to the postload code to handle, this is 
+                # responsible, at the client level for restoring things like audioNodes
+                # and exportLoops
+                self.loadAnimation_postload_call(feedback, *args, **kws)
+            except StandardError,err:
+                log.warning(err) 
+            return feedback
     
     @property
     def Timecode(self):
         '''
-        PRO_PACK : bind the Pro Timecode class to the node
+        : PRO_PACK : bind the Pro Timecode class to the node
         '''
         if r9Setup.has_pro_pack():
             try:
@@ -3580,14 +3944,14 @@ class MetaRig(MetaClass):
 
     def timecode_get(self, atFrame=None):
         '''
-        PRO PACK: get the timecode object back from the rig
+        : PRO PACK : get the timecode object back from the rig
         '''
         if r9Setup.has_pro_pack():
             return self.Timecode.getTimecode_from_node(time=atFrame)
 
     def timecode_addAttrs(self, tc='', propagate=False):
         '''
-        PRO PACK: simple return to check if the system has the Pro Timecode
+        : PRO PACK : simple return to check if the system has the Pro Timecode
         systems bound to it
         '''
         if r9Setup.has_pro_pack():
@@ -3595,7 +3959,7 @@ class MetaRig(MetaClass):
          
     def timecode_hasTimeCode(self):
         '''
-        PRO PACK: simple return to check if the system has the Pro Timecode
+        : PRO PACK : simple return to check if the system has the Pro Timecode
         systems bound to it
         '''
         if r9Setup.has_pro_pack():
@@ -3603,13 +3967,14 @@ class MetaRig(MetaClass):
         
     def timecode_remove(self):
         '''
-        PRO PACK: simple return to check if the system has the Pro Timecode
+        : PRO PACK : simple return to check if the system has the Pro Timecode
         systems bound to it
         '''
         if r9Setup.has_pro_pack():
             return self.Timecode.removedTimecode_from_node() or False
-        
-        
+       
+
+              
 class MetaRigSubSystem(MetaRig):
     '''
     SubClass of the MRig, designed to organize Rig sub-systems (ie L_ArmSystem, L_LegSystem..)
@@ -3782,6 +4147,16 @@ class MetaHIKCharacterNode(MetaRig):
                 return data[0]
             return data
     
+    def isValid(self):
+        '''
+        simple check to see if this definition is still wired to a skeleton,
+        the the skeleton was deleted then the definition never gets cleaned up!!
+        Messy Sodding Maya!
+        '''
+        if not cmds.listConnections(self.mNode,type='joint'):
+            return False
+        return True
+        
     def getHIKPropertyStateNode(self):
         '''
         return the HIK Property node as a class for easy management
@@ -3815,7 +4190,7 @@ class MetaHIKCharacterNode(MetaRig):
             cmds.lockNode(self.mNode, lock=False)
             cmds.delete(self.mNode)
 
-        self.openui()
+        #  self.openui()  ?? why were we opening up the UI????
 
     @staticmethod
     def openui():
@@ -4274,113 +4649,132 @@ class MetaHUDNode(MetaClass):
             self.killHud()
             wasActive=True
         self.monitorAttrs.remove(attr)
-        #serialize back to the node
+        # serialize back to the node
         self.monitorAttrCache=self.monitorAttrs
         super(MetaHUDNode, self).__delattr__(attr)
         if wasActive==True:
             self.drawHUD()
             
 
-class MetaTimeCodeHUD(MetaHUDNode):
-    '''
-    Generate's a HUD node connected to the main timecode attrs,
-    allows us to show the actual internal timecode attrs as their 
-    original SMPTE time's
-    
-    Crucial things to be aware of: 
-    
-    We construct timecode from 3 attrs on the given node: 
-    timecode_ref        : the original timecode converted to milliseconds 
-    timecode_count      : a linear curve that increments every frame based on the samplerate 
-    timecode_samplerate : samplerate that the linear counter was generated against 
-    
-    SMPTE timecode is then reconstructed like so: 
-    
-    >>> r9Audio.milliseconds_to_Timecode(ref + ((count / samplerate) * 1000)) 
-    >>> 
-    >>> tcHUD=cFacialMeta.MetaTimeCodeHUD() 
-    >>> tcHUD.addMonitoredTimecodeNode(cmds.ls(sl=True)[0]) 
-    >>> tcHUD.drawHUD() 
-    
-    '''
-    def __init__(self, *args, **kws):
-        super(MetaTimeCodeHUD, self).__init__(*args, **kws)
-        
-        if self.cached:
-            log.debug('CACHE : Aborting __init__ on pre-cached %s Object' % self.__class__)
-            return
-
-        if r9Setup.has_pro_pack():
-            import Red9.core.Red9_Audio as r9Audio
-            r9paudio=r9Audio.bind_pro_audio()
-            self.func=r9paudio.milliseconds_to_Timecode
-        else:
-            raise r9Setup.ProPack_Error('Timecode HUD requires ProPack')
-        
-        tc=r9paudio.Timecode()
-        self.tc_count = tc.count
-        self.tc_samplerate = tc.samplerate
-        self.tc_ref = tc.ref
-        self.attrCache={}
-        
-
-    def addMonitoredTimecodeNode(self, nodes, valid=True):
-        '''
-        add a node with the TimeCode attrs on it to monitor
-        '''
-        if not type(nodes)==list:
-            nodes=[nodes]
-
-        for node in nodes:
-            node=MetaClass(node)
-            if not node.hasAttr(self.tc_ref):
-                continue
-            if node.nameSpace():
-                monitoredAttr='%s_%s_%s' % (r9Core.nodeNameStrip(node.nameSpace()[0]),
-                                        r9Core.nodeNameStrip(node.mNode),
-                                        'Timecode')
-            else:
-                monitoredAttr='%s_%s' % (r9Core.nodeNameStrip(node.mNode),
-                                        'Timecode')
-            if not node.timecode_ref >1000 and valid:
-                log.warning('%s : Skipping as timecode is invalid' % monitoredAttr)
-                continue
-            
-            self.addMonitoredAttr(monitoredAttr, value=getattr(node, self.tc_count), refresh=False)
-            cmds.connectAttr('%s.%s' % (node.mNode, self.tc_count), '%s.%s' % (self.mNode, monitoredAttr))
-            
-            #add the data that we can to the cache for speed
-            self.attrCache[monitoredAttr]={'mNode':node, 'ref':getattr(node, self.tc_ref), 'samplerate':getattr(node, self.tc_samplerate)}
-            
-    def __compute__(self, attr, *args):
-        '''
-        Data computed on the refresh - convert all the attrs to meaningful timecode
-        '''
-        cacheData=self.attrCache[attr]
-        try:
-            return self.func(cacheData['ref'] + ((float(getattr(self, attr)) / cacheData['samplerate']) * 1000))
-        except:
-            return 'InvalidDataSet'
-  
-    def removeMonitoredAttr(self,attr):
-        super(MetaTimeCodeHUD,self).removeMonitoredAttr(attr)
-        self.attrCache.pop(attr)
-        
-    @r9General.Timer
-    def connectTimecodeSystems(self, metaRigs=True):
-        if metaRigs:
-            rigs=getMetaNodes(mInstances=MetaRig)
-            flt=r9Core.FilterNode([rig for rig in rigs if rig.isValid()])
-            flt.settings.metaRig=True
-        else:
-            flt=r9Core.FilterNode()
-            flt.settings.nodeTypes='transform'
-        flt.settings.searchAttrs = self.tc_ref
-        nodes=flt.ProcessFilter()
-        if nodes:
-            self.addMonitoredTimecodeNode(nodes)
-        else:
-            raise StandardError('No nodes found through the filters that contain timecode attrs')
+# class MetaTimeCodeHUD(MetaHUDNode):
+#     '''
+#     Generate's a HUD node connected to the main timecode attrs,
+#     allows us to show the actual internal timecode attrs as their 
+#     original SMPTE time's
+#     
+#     Crucial things to be aware of: 
+#     
+#     We construct timecode from 3 attrs on the given node: 
+#     timecode_ref        : the original timecode converted to milliseconds 
+#     timecode_count      : a linear curve that increments every frame based on the samplerate 
+#     timecode_samplerate : samplerate that the linear counter was generated against 
+#     
+#     SMPTE timecode is then reconstructed like so: 
+#     
+#     >>> r9Audio.milliseconds_to_Timecode(ref + ((count / samplerate) * 1000)) 
+#     >>> 
+#     >>> tcHUD=cFacialMeta.MetaTimeCodeHUD() 
+#     >>> tcHUD.addMonitoredTimecodeNode(cmds.ls(sl=True)[0]) 
+#     >>> tcHUD.drawHUD() 
+#     
+#     '''
+#     def __init__(self, *args, **kws):
+#         super(MetaTimeCodeHUD, self).__init__(*args, **kws)
+#         
+#         if self.cached:
+#             log.debug('CACHE : Aborting __init__ on pre-cached %s Object' % self.__class__)
+#             return
+# 
+#         if r9Setup.has_pro_pack():
+#             import Red9.core.Red9_Audio as r9Audio
+#             r9paudio=r9Audio.bind_pro_audio()
+#             self.func=r9paudio.milliseconds_to_Timecode
+#         else:
+#             raise r9Setup.ProPack_Error('Timecode HUD requires ProPack')
+# 
+#         self.tc_count = r9paudio.Timecode.count
+#         self.tc_samplerate = r9paudio.Timecode.samplerate
+#         self.tc_ref = r9paudio.Timecode.ref
+#         self.attrCache={}
+#         
+#     def __compute__(self, attr, *args):
+#         '''
+#         Data computed on the refresh - convert all the attrs to meaningful timecode
+#         '''
+#         cacheData=self.attrCache[attr]
+#         try:
+#             return self.func(cacheData['ref'] + ((float(getattr(self, attr)) / cacheData['samplerate']) * 1000))
+#         except:
+#             return 'InvalidDataSet'  
+#     
+#     def addMonitoredTimecodeNode(self, nodes, valid=True):
+#         '''
+#         add a node with the TimeCode attrs on it to monitor
+#         '''
+#         if not type(nodes)==list:
+#             nodes=[nodes]
+# 
+#         for node in nodes:
+#             node=MetaClass(node)
+#             if not node.hasAttr(self.tc_ref):
+#                 continue
+#             if node.nameSpace():
+#                 monitoredAttr='%s_%s_%s' % (r9Core.nodeNameStrip(node.nameSpace()[0]),
+#                                         r9Core.nodeNameStrip(node.mNode),
+#                                         'Timecode')
+#             else:
+#                 monitoredAttr='%s_%s' % (r9Core.nodeNameStrip(node.mNode),
+#                                         'Timecode')
+#             if not node.timecode_ref >1000 and valid:
+#                 log.warning('%s : Skipping as timecode is invalid' % monitoredAttr)
+#                 continue
+#             
+#             self.addMonitoredAttr(monitoredAttr, value=getattr(node, self.tc_count), refresh=False)
+#             cmds.connectAttr('%s.%s' % (node.mNode, self.tc_count), '%s.%s' % (self.mNode, monitoredAttr))
+#             
+#             #add the data that we can to the cache for speed
+#             self.attrCache[monitoredAttr]={'mNode':node, 'ref':getattr(node, self.tc_ref), 'samplerate':getattr(node, self.tc_samplerate)}
+#         
+#     def removeMonitoredTimecodeNode(self, nodes):
+#         '''
+#         remove a given node from the timecode 
+#         ''' 
+#         if not type(nodes)==list:
+#             nodes=[nodes] 
+#         for node in nodes:
+#             node=MetaClass(node)
+#             for k,data in self.attrCache.items():
+#                 if data['mNode']==node:
+#                     self.removeMonitoredAttr(k)
+#             
+#     def removeMonitoredAttr(self,attr):
+#         '''
+#         remove a specific attr from the HUD
+#         '''
+#         super(MetaTimeCodeHUD,self).removeMonitoredAttr(attr)
+#         self.attrCache.pop(attr)
+#         if not self.attrCache:
+#             print 'Deleting : empty TimecodeHUD node'
+#             self.delete()
+#         
+#     @r9General.Timer
+#     def connectTimecodeSystems(self, metaRigs=True):
+#         '''
+#         connect all mRigs in the scene to the HUD node
+#         '''
+#         if metaRigs:
+#             rigs=getMetaNodes(mInstances=MetaRig)
+#             flt=r9Core.FilterNode([rig for rig in rigs if rig.isValid()])
+#             flt.settings.metaRig=True
+#         else:
+#             flt=r9Core.FilterNode()
+#             flt.settings.nodeTypes='transform'
+#         flt.settings.searchAttrs = self.tc_ref
+#         nodes=flt.processFilter()
+#         if nodes:
+#             self.addMonitoredTimecodeNode(nodes)
+#         else:
+#             raise StandardError('No nodes found through the filters that contain timecode attrs')
 
             
 '''
