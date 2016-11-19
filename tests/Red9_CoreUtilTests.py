@@ -467,7 +467,29 @@ class Test_baseFunctions():
         assert not r9Core.floatIsEqual(1, -89, tolerance=0.01, allowGimbal=False)
         assert r9Core.floatIsEqual(0.05, 90, tolerance=1, allowGimbal=True)
                 
+    def test_timeIsInRange(self):
         
+        assert r9Core.timeIsInRange((0,100),(9,80))
+        assert not r9Core.timeIsInRange((10,100),(9,80))
+        assert not r9Core.timeIsInRange((-100,10),(9,80))
+        assert r9Core.timeIsInRange((-100,10),(-100,0))
+        
+        assert r9Core.timeIsInRange((-100,None),(9,80))
+        assert r9Core.timeIsInRange((0,None),(9,80))
+        assert not r9Core.timeIsInRange((0,None),(-5,80))
+        
+        assert r9Core.timeIsInRange((None,100),(9,80))
+        assert not r9Core.timeIsInRange((None,100),(9,101))
+        assert r9Core.timeIsInRange((None,100),(-5,0))
+        
+        assert r9Core.timeIsInRange((40,100),(40,100), start_inRange=True, end_inRange=True)
+        assert r9Core.timeIsInRange((40,100),(50,99), start_inRange=True, end_inRange=True)
+        assert not r9Core.timeIsInRange((40,100),(40,101), start_inRange=True, end_inRange=True)
+        assert r9Core.timeIsInRange((40,100),(50,101), start_inRange=True, end_inRange=False)
+        assert r9Core.timeIsInRange((40,100),(20,50), start_inRange=False, end_inRange=True)
+        assert not r9Core.timeIsInRange((40,100),(20,101), start_inRange=False, end_inRange=True)
+
+  
 class Test_LockNodes(object):
     def setup(self):
         cmds.file(new=True,f=True)

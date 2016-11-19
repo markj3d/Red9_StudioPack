@@ -56,9 +56,14 @@ class Test_MetaRig():
         '''
         self.mRig.poseCacheLoad(filepath = os.path.join(self.poseFolder, 'jump_f218.pose'))
         
-        assert self.mRig.poseCompare(os.path.join(self.poseFolder,'jump_f218.pose'), supressWarning=True).status
+        assert self.mRig.poseCompare(os.path.join(self.poseFolder,'jump_f218.pose'),
+                                     supressWarning=True,
+                                     ignoreAttrs=['jointOrientX','jointOrientY','jointOrientZ']).status
         cmds.setAttr('%s.ty' % self.mRig.L_ArmSystem.CTRL_L_Elbow[0], 0)
-        compareData=self.mRig.poseCompare(os.path.join(self.poseFolder,'jump_f218.pose'), supressWarning=True)
+        compareData=self.mRig.poseCompare(os.path.join(self.poseFolder,'jump_f218.pose'),
+                                          supressWarning=True,
+                                          compareDict='skeletonDict',
+                                          ignoreAttrs=['jointOrientX','jointOrientY','jointOrientZ'])
         assert not compareData.status
         assert compareData.fails['failedAttrs'].keys() == ['Character1_LeftArm', 'Character1_LeftHand']
         assert str(compareData.fails['failedAttrs'])=="{u'Character1_LeftArm': {'attrMismatch': ['rotateX', 'rotateY', 'rotateZ']}, u'Character1_LeftHand': {'attrMismatch': ['rotateX', 'rotateY', 'rotateZ']}}"
@@ -71,7 +76,10 @@ class Test_MetaRig():
         
         cmds.currentTime(0)
         self.mRig.poseCacheLoad(attr='poseAttr')
-        compareData=self.mRig.poseCompare(os.path.join(self.poseFolder,'jump_f9.pose'), supressWarning=True)
+        compareData=self.mRig.poseCompare(os.path.join(self.poseFolder,'jump_f9.pose'),
+                                          supressWarning=True,
+                                          compareDict='skeletonDict',
+                                          ignoreAttrs=['jointOrientX','jointOrientY','jointOrientZ'])
         assert compareData.status
         
     def test_poseCacheStoreFile(self):
@@ -84,10 +92,16 @@ class Test_MetaRig():
         #validate the new file
         cmds.currentTime(0)
         self.mRig.poseCacheLoad(filepath=filepath)
-        compareData=self.mRig.poseCompare(os.path.join(self.poseFolder,'jump_f9.pose'), supressWarning=True)
+        compareData=self.mRig.poseCompare(os.path.join(self.poseFolder,'jump_f9.pose'),
+                                          compareDict='skeletonDict',
+                                          supressWarning=True,
+                                          ignoreAttrs=['jointOrientX','jointOrientY','jointOrientZ'])
         assert compareData.status
         #validate the compare actually ran as expected
-        compareData=self.mRig.poseCompare(os.path.join(self.poseFolder,'jump_f218.pose'), supressWarning=True)
+        compareData=self.mRig.poseCompare(os.path.join(self.poseFolder,'jump_f218.pose'),
+                                          compareDict='skeletonDict',
+                                          supressWarning=True,
+                                          ignoreAttrs=['jointOrientX','jointOrientY','jointOrientZ'])
         assert not compareData.status
         os.remove(filepath)
 
@@ -98,7 +112,10 @@ class Test_MetaRig():
         assert self.mRig.poseCache
         cmds.currentTime(9)
         self.mRig.poseCacheLoad()
-        compareData=self.mRig.poseCompare(os.path.join(self.poseFolder,'jump_f218.pose'), supressWarning=True)
+        compareData=self.mRig.poseCompare(os.path.join(self.poseFolder,'jump_f218.pose'),
+                                          compareDict='skeletonDict',
+                                          supressWarning=True,
+                                          ignoreAttrs=['jointOrientX','jointOrientY','jointOrientZ'])
         assert compareData.status
 
 
@@ -293,7 +310,9 @@ class Test_PoseData_loaders():
         #we need up update the internal pose before comparing
         nodes=self.poseData.buildDataMap(self.rootNode)
         self.poseData.buildBlocks_fill(nodes)
-        assert not r9Pose.PoseCompare(self.poseData, filepath, compareDict='poseDict').compare()
+        assert not r9Pose.PoseCompare(self.poseData,
+                                      filepath,
+                                      compareDict='poseDict').compare()
         assert r9Pose.PoseCompare(self.poseData, os.path.join(self.poseFolder,'jump_f9_absolute29.pose'), compareDict='poseDict').compare()
     
     def test_poseLoad_relativeAbsolute_mirrorIndex(self):
@@ -314,7 +333,9 @@ class Test_PoseData_loaders():
         #we need up update the internal pose before comparing
         nodes=self.poseData.buildDataMap(self.rootNode)
         self.poseData.buildBlocks_fill(nodes)
-        assert not r9Pose.PoseCompare(self.poseData, filepath, compareDict='poseDict').compare()
+        assert not r9Pose.PoseCompare(self.poseData,
+                                      filepath,
+                                      compareDict='poseDict').compare()
         assert r9Pose.PoseCompare(self.poseData, os.path.join(self.poseFolder,'jump_f9_absolute29.pose'), compareDict='poseDict').compare()
          
     
