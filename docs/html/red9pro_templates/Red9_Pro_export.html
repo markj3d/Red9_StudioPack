@@ -56,8 +56,12 @@
 <h1>Pro_Pack : Exporter<a class="headerlink" href="#pro-pack-exporter" title="Permalink to this headline">¶</a></h1>
 <p>ProPack exporter module is our own export management system for
 handling the output of files based on the metaData export node
+<<<<<<< HEAD
 class systems. This module is largely the UI management as the
 majority of the codebase is bound to the metadata_pro mNode classes</p>
+=======
+class systems.</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9exp&#39;</span><span class="p">)</span>
@@ -71,8 +75,28 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
+<<<<<<< HEAD
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.exporter.ExportManager" title="Red9.pro_pack.core.exporter.ExportManager"><code class="xref py py-obj docutils literal"><span class="pre">ExportManager</span></code></a>()</td>
 <td>Base Export Manager class to be used and over-loaded at the client level</td>
+=======
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">AnimationStore</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">AnimMap</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Anim_Redirect</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">AnimPointCloud</span></code></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">Anim_Transfer</span></code></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">LimbMatchingUI</span></code></td>
+<td></td>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </tr>
 </tbody>
 </table>
@@ -120,7 +144,11 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject">
+<<<<<<< HEAD
 <code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013322A48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000130F5648&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd></dd></dl>
 
 </dd></dl>
@@ -156,14 +184,22 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject">
+<<<<<<< HEAD
 <code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012F08EC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.exporter.JntSel">
+<<<<<<< HEAD
 <em class="property">class </em><code class="descname">JntSel</code><span class="sig-paren">(</span><em>tag</em>, <em>loop=None</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel" title="Permalink to this definition">¶</a></dt>
+=======
+<em class="property">class </em><code class="descname">JntSel</code><span class="sig-paren">(</span><em>tag</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_mw_aditive_joint_selector</span></code></p>
 <p>Simple UI to filter the hierarchy from Skeletonroot and present a text scroll
 with all joints so the user can select one</p>
@@ -179,12 +215,15 @@ with all joints so the user can select one</p>
 </dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.exporter.JntSel.set_multi_mode">
 <code class="descname">set_multi_mode</code><span class="sig-paren">(</span><em>multi=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.set_multi_mode" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the selection mode, single or multiple</p>
 </dd></dl>
 
 <dl class="method">
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dt id="Red9.pro_pack.core.exporter.JntSel.get_joints">
 <code class="descname">get_joints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.get_joints" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -192,6 +231,7 @@ with all joints so the user can select one</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.JntSel.set_joints_list">
 <code class="descname">set_joints_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.set_joints_list" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>set the list widget up</p>
 </dd></dl>
 
@@ -200,29 +240,48 @@ with all joints so the user can select one</p>
 <code class="descname">select_current_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.select_current_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>select the currently set items on the loop to the list selections</p>
 </dd></dl>
+=======
+<dd></dd></dl>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.JntSel.clear_selection">
 <code class="descname">clear_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.clear_selection" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>clear the exportroot_specific completely and close the UI</p>
 </dd></dl>
+=======
+<dd></dd></dl>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.JntSel.get_selection">
 <code class="descname">get_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.get_selection" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>set the data</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.JntSel.staticMetaObject">
 <code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001332AEC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+=======
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.exporter.JntSel.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012F08C08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget">
+<<<<<<< HEAD
 <em class="property">class </em><code class="descname">ExportLoop_Widget</code><span class="sig-paren">(</span><em>name</em>, <em>loop</em>, <em>item=None</em>, <em>exportui=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget" title="Permalink to this definition">¶</a></dt>
+=======
+<em class="property">class </em><code class="descname">ExportLoop_Widget</code><span class="sig-paren">(</span><em>name</em>, <em>loop</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QWidget</span></code></p>
 <p>Bespoke QT Widget to handle the LoopData display and management</p>
 <dl class="method">
@@ -237,6 +296,7 @@ with all joints so the user can select one</p>
 </dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.refresh_ui">
 <code class="descname">refresh_ui</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.refresh_ui" title="Permalink to this definition">¶</a></dt>
 <dd><p>pull the loop nodes data to the UI</p>
@@ -263,6 +323,16 @@ with all joints so the user can select one</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject">
 <code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001332A8C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+=======
+<dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.setup">
+<code class="descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>pull the loop nodes data to the UI</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012F08CC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd></dd></dl>
 
 </dd></dl>
@@ -284,18 +354,26 @@ with all joints so the user can select one</p>
 </dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.exporter.ExportUI.refresh_ui">
 <code class="descname">refresh_ui</code><span class="sig-paren">(</span><em>lists='all'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.refresh_ui" title="Permalink to this definition">¶</a></dt>
+=======
+<dt id="Red9.pro_pack.core.exporter.ExportUI.refreshUI">
+<code class="descname">refreshUI</code><span class="sig-paren">(</span><em>lists='all'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.refreshUI" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd><p>wrapper to call after the tag management calls
 to refresh and redraw the UI lists</p>
 </dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.exporter.ExportUI.clear_selections">
 <code class="descname">clear_selections</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.clear_selections" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dt id="Red9.pro_pack.core.exporter.ExportUI.closeEvent">
 <code class="descname">closeEvent</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwrds</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.closeEvent" title="Permalink to this definition">¶</a></dt>
 <dd><p>ensure we close the tag ui if we close main</p>
@@ -318,6 +396,7 @@ to refresh and redraw the UI lists</p>
 <dd></dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.exporter.ExportUI.copy_loops">
 <code class="descname">copy_loops</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.copy_loops" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -328,6 +407,8 @@ to refresh and redraw the UI lists</p>
 <dd></dd></dl>
 
 <dl class="method">
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dt id="Red9.pro_pack.core.exporter.ExportUI.add_time_range">
 <code class="descname">add_time_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.add_time_range" title="Permalink to this definition">¶</a></dt>
 <dd><p>add and connect a TimeRange node to the given expTag</p>
@@ -336,9 +417,13 @@ to refresh and redraw the UI lists</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.edit_time_range">
 <code class="descname">edit_time_range</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.edit_time_range" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>should really only be for the STRING based loop display only now as the QT 
 widget bind the TagUI via the edit button
 edit a given looptag</p>
+=======
+<dd><p>edit a given looptag</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="method">
@@ -388,12 +473,15 @@ than the base class level</p>
 </dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.exporter.ExportUI.graph_tag">
 <code class="descname">graph_tag</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.graph_tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple call to select and graph the tag in the nodeEditor</p>
 </dd></dl>
 
 <dl class="method">
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dt id="Red9.pro_pack.core.exporter.ExportUI.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>main run call for the export tags</p>
@@ -401,6 +489,7 @@ than the base class level</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.staticMetaObject">
+<<<<<<< HEAD
 <code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013304FC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
@@ -480,6 +569,9 @@ else we set the self.currentProcess</li>
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.LoopProcessStatus.printStatusLog">
 <code class="descname">printStatusLog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.LoopProcessStatus.printStatusLog" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012DA8548&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd></dd></dl>
 
 </dd></dl>
@@ -506,6 +598,7 @@ else we set the self.currentProcess</li>
 </dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.exporter.ExportManager.export_r9Anim">
 <code class="descname">export_r9Anim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.export_r9Anim" title="Permalink to this definition">¶</a></dt>
 <dd><p>export the mRig data to r9Anim format files</p>
@@ -518,6 +611,8 @@ else we set the self.currentProcess</li>
 </dd></dl>
 
 <dl class="method">
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dt id="Red9.pro_pack.core.exporter.ExportManager.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main Call : wrapped to make sure we manage the scene status</p>
@@ -526,8 +621,12 @@ else we set the self.currentProcess</li>
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportManager.run_files">
 <code class="descname">run_files</code><span class="sig-paren">(</span><em>files</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.run_files" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>light wrapper of the run call to handle processing of multiple given files whilst
 managing the progressBarQT escape and file loading</p>
+=======
+<dd><p>light wrapper of the run call to handle the progressBar escape and file loading</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 </dd></dl>

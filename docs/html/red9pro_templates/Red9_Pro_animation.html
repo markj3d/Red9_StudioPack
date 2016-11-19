@@ -103,7 +103,11 @@ requires the StudioPack codebase to run</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationUI.staticMetaObject">
+<<<<<<< HEAD
 <code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013310FC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012D76548&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd></dd></dl>
 
 </dd></dl>
@@ -122,8 +126,12 @@ requires the StudioPack codebase to run</p>
 <li><strong>mode</strong> &#8211; &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;&#8217;  modifies the ranges sent to test, if 
 * byRange_start - then we send [None,end] to test, ignoring the start and only testing if the end falls within bound
 * byRange_end - then we send [start,None] to test, ignoring the end and only testing if the start falls within bound
+<<<<<<< HEAD
 * byRange - we test that the testRange falls within both the baseRanges start and end times
 * byAll - we don&#8217;t test, we just pass everything through</li>
+=======
+* byall - we test that the testRange falls within both the baseRanges start and end times</li>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <li><strong>idtext</strong> &#8211; used only by the log.info call as a display hint</li>
 </ul>
 </td>
@@ -155,7 +163,10 @@ to save loading that data again</li>
 </tr>
 </tbody>
 </table>
+<<<<<<< HEAD
 <p>TODO: add a test to see if the infoDict has timecode, else we bail the TC flag is set and warn!!</p>
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="function">
@@ -193,7 +204,11 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
+<<<<<<< HEAD
 <code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013341A48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012D68708&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd></dd></dl>
 
 </dd></dl>
@@ -310,11 +325,14 @@ use the filter on the destination hierarchy.</li>
 <li><strong>loadAsStored</strong> &#8211; load the anim data from the original time</li>
 <li><strong>loadFromFrm</strong> &#8211; if not loadAsStored, load the animation data from a given frame by comparing the 
 internal startFrm stored in the animMap with the given frame</li>
+<<<<<<< HEAD
 <li><strong>loadFromTimecode</strong> &#8211; load against a given SMPTE timecode / frm binding, calculating the offset of 
 the data to load against a given timecode reference. IF timecodeBinding isn&#8217;t set then we gather the reference timecode from 
 the mRig&#8217;s internal data, else we use the timecode binding supplied</li>
 <li><strong>timecodeBinding</strong> &#8211; (frm, str(&#8216;00:00:00:00&#8217;))  Tuple where the first arg is the frame at which the second arg&#8217;s SMPTE timecode 
 has been set as reference, basically we&#8217;re saying that the timecode at frm is x</li>
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <li><strong>referenceNode</strong> &#8211; reference node used as the offset Node for relative loading</li>
 <li><strong>manageRanges</strong> &#8211; do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded</li>
 <li><strong>manageFileName</strong> &#8211; if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
@@ -331,6 +349,7 @@ to ensure the data is preserved</li>
 </table>
 </dd></dl>
 
+<<<<<<< HEAD
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimMap.extractData_Export">
 <code class="descname">extractData_Export</code><span class="sig-paren">(</span><em>manageExport='byAll'</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.extractData_Export" title="Permalink to this definition">¶</a></dt>
@@ -371,6 +390,8 @@ r9Anim offset/start and end ranges</p>
 </table>
 </dd></dl>
 
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="class">
@@ -1095,6 +1116,7 @@ modified the tracking point and need to sync the cloud to the modified track poi
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.set_timerange_from_rig_ctrls">
 <code class="descname">set_timerange_from_rig_ctrls</code><span class="sig-paren">(</span><em>timeline=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.set_timerange_from_rig_ctrls" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the current timeranges from the extent of the animation found on the mRig controllers</p>
+<<<<<<< HEAD
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1103,23 +1125,34 @@ modified the tracking point and need to sync the cloud to the modified track poi
 </tr>
 </tbody>
 </table>
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.delete_exportloops">
 <code class="descname">delete_exportloops</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.delete_exportloops" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>delete all export loops currently connected to the mRigs ExportTag</p>
+=======
+<dd><p>delete all export loops in the export tag</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.delete_animation_on_binder_skeleton">
 <code class="descname">delete_animation_on_binder_skeleton</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.delete_animation_on_binder_skeleton" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>delete all animation on binder skeleton</p>
+=======
+<dd><p>delete any animation on binder skeleton</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.add_export_loop">
 <code class="descname">add_export_loop</code><span class="sig-paren">(</span><em>loopname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.add_export_loop" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>add an export loop to mRigs ExportTag, the timeranges for this are taken from 
 the internal start and end frames setup during the transfer</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1130,17 +1163,29 @@ the internal start and end frames setup during the transfer</p>
 </tr>
 </tbody>
 </table>
+=======
+<dd><p>add export loop to character export tag
+:param loopname: name for export loop</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.openbinderfile">
 <code class="descname">openbinderfile</code><span class="sig-paren">(</span><em>binderfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.openbinderfile" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>open a character binder file in current Maya session</p>
+=======
+<dd><p>open a character binder file in current Maya setion</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
+<<<<<<< HEAD
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bndfile</strong> &#8211; path to character binder file</td>
+=======
+<tr class="field-odd field"><th class="field-name">Bndfile:</th><td class="field-body">path to character binder file</td>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">path to character binder file</td>
 </tr>
@@ -1151,14 +1196,22 @@ the internal start and end frames setup during the transfer</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.scenebasename">
 <code class="descname">scenebasename</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.scenebasename" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>base name of the Maya scene less the extension</p>
 </dd></dl>
+=======
+<dd></dd></dl>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.scenename">
 <code class="descname">scenename</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.scenename" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>current Maya sceneName</p>
 </dd></dl>
+=======
+<dd></dd></dl>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.scenedir">
@@ -1182,9 +1235,15 @@ the internal start and end frames setup during the transfer</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>startFrame</strong> &#8211; start frame of the output</li>
 <li><strong>endFrame</strong> &#8211; end frame of the output</li>
+<<<<<<< HEAD
 <li><strong>filepath</strong> &#8211; filepath to write to</li>
 <li><strong>prefix</strong> &#8211; simple prefix for the scenename on output</li>
 <li><strong>export</strong> &#8211; the main export call to fbx, if this is False then we just prep the file for export, without calling the FBX output</li>
+=======
+<li><strong>filepath</strong> &#8211; filepath to write</li>
+<li><strong>prefix</strong> &#8211; simple prefix for the scenename on output</li>
+<li><strong>export</strong> &#8211; the main export call to fbx, without this we just prep the file</li>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </ul>
 </td>
 </tr>
@@ -1195,9 +1254,13 @@ the internal start and end frames setup during the transfer</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.bake_hi">
 <code class="descname">bake_hi</code><span class="sig-paren">(</span><em>root</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.bake_hi" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>simple bake hierarchy from a given root node, used to bake the data to the clean
 skeleton hierarchy that we ultimately output to FBX. This code also runs a filterCurve
 call on the baked data to reduce it&#8217;s footprint</p>
+=======
+<dd><p>bake hierarchy animation and filter sample the generated animation curves</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1211,17 +1274,28 @@ call on the baked data to reduce it&#8217;s footprint</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.export_to_fbx">
 <code class="descname">export_to_fbx</code><span class="sig-paren">(</span><em>node</em>, <em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.export_to_fbx" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>export a given node to fbx</p>
+=======
+<dd><p>export node to fbx
+:param node: string: name of node to be exported if node is a</p>
+<blockquote>
+<div>root of a hierarchy, all hierarchy will be exported</div></blockquote>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
+<<<<<<< HEAD
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>node</strong> &#8211; string: name of node to be exported if node is a
 root of a hierarchy, all hierarchy will be exported</li>
 <li><strong>filepath</strong> &#8211; string: file path to export to</li>
 </ul>
 </td>
+=======
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; string: file path to export to</td>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </tr>
 </tbody>
 </table>
@@ -1247,7 +1321,11 @@ set display attrs of the joints to default values</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder">
 <code class="descname">fbx_to_binder</code><span class="sig-paren">(</span><em>fbxfiles</em>, <em>binderfile=None</em>, <em>usecurrentscene=False</em>, <em>bake=False</em>, <em>runFilter=True</em>, <em>useTakeData=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>Main FBX &gt; Binder call, (PRO_TO_BND) loads the FBX file in, loads the binder in, and transfers the data</p>
+=======
+<dd><p>Main FBX &gt; Binder call, loads the FBX file in, loads the binder in, and transfers the data</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1257,7 +1335,11 @@ set display attrs of the joints to default values</p>
 <li><strong>binderfile</strong> &#8211; BND binder file to use in the transfer</li>
 <li><strong>usecurrentscene</strong> &#8211; if true use the current scene, which then expects a binder file to be already loaded</li>
 <li><strong>bake</strong> &#8211; do we bake the results to the Red9 puppet and clean-up after our-selves?</li>
+<<<<<<< HEAD
 <li><strong>runFilter</strong> &#8211; do we run the curve filter on the baked animation to try and optimise the results, removing static data etc</li>
+=======
+<li><strong>runFilter</strong> &#8211; do we run the curve filter on the baked results to try and optimise the results, removing statics etc</li>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <li><strong>useTakeData</strong> &#8211; if True use the internal fbx take[1]&#8217;s timeSpan when setting the ranges</li>
 </ul>
 </td>
@@ -1363,7 +1445,11 @@ set display attrs of the joints to default values</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
+<<<<<<< HEAD
 <code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012DA4048&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012FED9C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd></dd></dl>
 
 <dl class="method">

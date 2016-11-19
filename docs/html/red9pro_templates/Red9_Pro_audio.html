@@ -243,6 +243,7 @@ default (None) uses the current scenes framerate</li>
 </dd></dl>
 
 <dl class="function">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.audio.timecode_difference">
 <code class="descname">timecode_difference</code><span class="sig-paren">(</span><em>referencedTC</em>, <em>inputTC</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.timecode_difference" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate the difference between 2 timecodes in frames</p>
@@ -261,6 +262,8 @@ default (None) uses the current scenes framerate</li>
 </dd></dl>
 
 <dl class="function">
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dt id="Red9.pro_pack.core.audio.validate_timecodeString">
 <code class="descname">validate_timecodeString</code><span class="sig-paren">(</span><em>timecode</em>, <em>smpte=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.validate_timecodeString" title="Permalink to this definition">¶</a></dt>
 <dd><p>validate that any timecode string entered is correctly formatted</p>
@@ -282,7 +285,11 @@ here we validate that this is correct and returmn Flase if not</td>
 <p>simple UI to manager timecode on the mRigs</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject">
+<<<<<<< HEAD
 <code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012DA2048&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013247A88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd></dd></dl>
 
 </dd></dl>
@@ -302,6 +309,7 @@ extracting data from nodes, decoding data and syncing assets.</p>
 </tbody>
 </table>
 <dl class="attribute">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.audio.Timecode.count">
 <code class="descname">count</code><em class="property"> = 'timecode_count'</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.count" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -317,6 +325,8 @@ extracting data from nodes, decoding data and syncing assets.</p>
 <dd></dd></dl>
 
 <dl class="attribute">
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dt id="Red9.pro_pack.core.audio.Timecode.timecode_input">
 <code class="descname">timecode_input</code><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.timecode_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>internal timecode cached on the class instance</p>
@@ -380,7 +390,11 @@ ui which binds a given frame to a given timecode. This code compensates for that
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.audio.Timecode.addTimecode_to_node">
+<<<<<<< HEAD
 <code class="descname">addTimecode_to_node</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em>, <em>suppress=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.addTimecode_to_node" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">addTimecode_to_node</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.addTimecode_to_node" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd><p>wrapper to add the timecode attrs to a node and if set 
 propagate that data to the node and fill the attrs up</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -390,7 +404,10 @@ propagate that data to the node and fill the attrs up</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>tc</strong> &#8211; optional timecode, used in conjunction with the propagate flag</li>
 <li><strong>propagate</strong> &#8211; push the timecode given onto the node and bake the count attr against the current fps</li>
+<<<<<<< HEAD
 <li><strong>suppress</strong> &#8211; confirmDialog warnings supression</li>
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </ul>
 </td>
 </tr>
@@ -412,6 +429,7 @@ more obvious when setting the timecode up rather than calling add, which actuial
 </dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.audio.Timecode.timecode_difference_to">
 <code class="descname">timecode_difference_to</code><span class="sig-paren">(</span><em>referenceTC</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.timecode_difference_to" title="Permalink to this definition">¶</a></dt>
 <dd><p>get the difference in frames between this instances timecode and a given reference TC</p>
@@ -485,6 +503,13 @@ more obvious when setting the timecode up rather than calling add, which actuial
 </tr>
 </tbody>
 </table>
+=======
+<dt id="Red9.pro_pack.core.audio.Timecode.enterTimecodeUI">
+<code class="descname">enterTimecodeUI</code><span class="sig-paren">(</span><em>buttonlabel='set'</em>, <em>buttonfunc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.enterTimecodeUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic UI to enter timecode</p>
+<p>:param buttonlabel&#8217; = label to add to the button
+:param buttonfunc&#8217; = function to bind to the button on exit</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 </dd></dl>
@@ -582,17 +607,28 @@ There is coverage for this in this module getMediaFileMetaData() does just that<
 <dd><p>disconnect the selected linked audio from the tag</p>
 </dd></dl>
 
+<<<<<<< HEAD
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject">
 <code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012DAB9C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dl class="method">
 <dt id="Red9.pro_pack.core.audio.AudioGRP_Manager.connectAudio">
 <code class="descname">connectAudio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.connectAudio" title="Permalink to this definition">¶</a></dt>
 <dd><p>connect the selected audio in the scene list to the selected tag</p>
 </dd></dl>
 
+<<<<<<< HEAD
+=======
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000130A5DC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="function">

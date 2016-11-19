@@ -320,7 +320,11 @@ is True then use the filter on the destination hierarchy.</li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">][</span><span class="s1">&#39;translateY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">][</span><span class="s1">&#39;translateZ&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">22</span> 
 <span class="gp">&gt;&gt;&gt; </span>
+<<<<<<< HEAD
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># if we&#39;re storing as MetaData we also include:</span>
+=======
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#if we&#39;re storing as MetaData we also include:</span>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;metaData&#39;</span><span class="p">][</span><span class="s1">&#39;metaAttr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CTRL_L_Thing</span>    <span class="o">=</span> <span class="n">the</span> <span class="n">attr</span> <span class="n">that</span> <span class="n">wires</span> <span class="n">this</span> <span class="n">node</span> <span class="n">to</span> <span class="n">the</span> <span class="n">MetaSubsystem</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;metaData&#39;</span><span class="p">][</span><span class="s1">&#39;metaNodeID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">L_Arm_System</span>  <span class="o">=</span> <span class="n">the</span> <span class="n">metaNode</span> <span class="n">this</span> <span class="n">node</span> <span class="ow">is</span> <span class="n">wired</span> <span class="n">to</span> <span class="n">via</span> <span class="n">the</span> <span class="n">above</span> <span class="n">attr</span>
 </pre></div>
@@ -332,6 +336,7 @@ from this class instance, wraps things up nicely for you:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">=</span><span class="n">r9Pose</span><span class="o">.</span><span class="n">PoseData</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">metaPose</span><span class="o">=</span><span class="kc">True</span>
 <span class="go">&gt;&gt;&gt;</span>
+<<<<<<< HEAD
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># cache the pose (just don&#39;t pass in a filePath)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">poseSave</span><span class="p">(</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># reload the cache you just stored</span>
@@ -350,6 +355,14 @@ from this class instance, wraps things up nicely for you:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">_applyData</span><span class="p">(</span><span class="n">percent</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
+=======
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#cache the pose (just don&#39;t pass in a filePath)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">poseSave</span><span class="p">(</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#reload the cache you just stored</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">poseLoad</span><span class="p">(</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>If the root node of the hierarchy passed into the poseSave() has a message attr 

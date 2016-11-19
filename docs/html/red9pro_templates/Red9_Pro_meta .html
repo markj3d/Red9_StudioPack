@@ -153,6 +153,7 @@ production board, or an external board connected to the node such as 3Laterals</
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.metadata_pro.get_ExportTags">
+<<<<<<< HEAD
 <code class="descname">get_ExportTags</code><span class="sig-paren">(</span><em>tagIDs=[]</em>, <em>exactmatch=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.get_ExportTags" title="Permalink to this definition">¶</a></dt>
 <dd><p>wrapper to return all ExportTags in the scene with optional filtering by tagID</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -167,10 +168,15 @@ production board, or an external board connected to the node such as 3Laterals</
 </tr>
 </tbody>
 </table>
+=======
+<code class="descname">get_ExportTags</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.get_ExportTags" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper to return all ExportTags in the scene</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.metadata_pro.get_ExportLoops">
+<<<<<<< HEAD
 <code class="descname">get_ExportLoops</code><span class="sig-paren">(</span><em>loopnames=[]</em>, <em>exactmatch=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.get_ExportLoops" title="Permalink to this definition">¶</a></dt>
 <dd><p>wrapper to return all ExportLoopNodes in the scene with optional filtering by loopname</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -185,6 +191,10 @@ production board, or an external board connected to the node such as 3Laterals</
 </tr>
 </tbody>
 </table>
+=======
+<code class="descname">get_ExportLoops</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.get_ExportLoops" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper to return all ExportTags in the scene</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="function">
@@ -372,7 +382,11 @@ AnimMap filehandlers</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyExportLoops">
+<<<<<<< HEAD
 <code class="descname">copyExportLoops</code><span class="sig-paren">(</span><em>mRig</em>, <em>loops=[]</em>, <em>loopnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyExportLoops" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">copyExportLoops</code><span class="sig-paren">(</span><em>mRig</em>, <em>loops=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyExportLoops" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd><p>copy all exportLoop nodes from self to given mRig system</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -381,7 +395,10 @@ AnimMap filehandlers</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>mRig</strong> &#8211; destination mRig to copy the animation data over too</li>
 <li><strong>loops</strong> &#8211; optional specific loops to copy, else we copy all loops found</li>
+<<<<<<< HEAD
 <li><strong>loopnames</strong> &#8211; if not loops then this becomes a filter to find loops with specific names</li>
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </ul>
 </td>
 </tr>
@@ -520,12 +537,15 @@ This is the Red9 Puppets master base class into all the systems.</p>
 <p>Idea here is if a MayaNode is passed in and has the mClass attr
 we pass that into the super(__new__) such that an object of that class
 is then instantiated and returned.</p>
+<<<<<<< HEAD
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.Skeleton">
 <code class="descname">Skeleton</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.Skeleton" title="Permalink to this definition">¶</a></dt>
 <dd><p>INTERNAL RED9 : binding of the skeleton class used by the build code</p>
 </dd></dl>
 
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.gatherInfo">
 <code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=3</em>, <em>keys=[]</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.gatherInfo" title="Permalink to this definition">¶</a></dt>
@@ -610,7 +630,11 @@ switching off the body&#8217;s head geo and turning on the facialCores head.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_to_fk">
 <code class="descname">switch_to_fk</code><span class="sig-paren">(</span><em>mSystems=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_to_fk" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>switch the entire rig to FK, this throws the ik_fk_blender attrs value to 1 for all systems</p>
+=======
+<dd><p>switch the entire rig to FK</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -624,7 +648,11 @@ switching off the body&#8217;s head geo and turning on the facialCores head.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_to_ik">
 <code class="descname">switch_to_ik</code><span class="sig-paren">(</span><em>mSystems=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_to_ik" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>switch the entire rig to IK, this throws the ik_fk_blender attrs value to 0 for all systems</p>
+=======
+<dd><p>switch the entire rig to IK</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -636,6 +664,7 @@ switching off the body&#8217;s head geo and turning on the facialCores head.</p>
 </dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_toggle">
 <code class="descname">fk_ik_toggle</code><span class="sig-paren">(</span><em>system</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_toggle" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple toggle call to switch the current state of the system between fk and ik
@@ -646,14 +675,22 @@ Used in the new DagProcMenu systems</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match">
 <code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
+=======
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match">
+<code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd><p>Set the system to FK MODE : match the fk system to that of the ik</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<<<<<<< HEAD
 <li><strong>nodes</strong> &#8211; [] hint nodes wired to the systems you want to match, used to find id subSystems</li>
 <li><strong>mSystems</strong> &#8211; [] list of mSystem nodes to switch, if given we don&#8217;t process the nodes args</li>
+=======
+<li><strong>node</strong> &#8211; hint nodes wired to the systems you want to match</li>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <li><strong>time</strong> &#8211; whether to run the match over time or not</li>
 <li><strong>switch</strong> &#8211; also switch the ik_fk_blender attr to leave the system in FK mode</li>
 <li><strong>keyswitch</strong> &#8211; if switch is true, this also adds in keys to control the switch mode</li>
@@ -666,15 +703,23 @@ Used in the new DagProcMenu systems</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match">
+<<<<<<< HEAD
 <code class="descname">ik_fk_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">ik_fk_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd><p>Set the system to IK MODE : match the ik to the fk system</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<<<<<<< HEAD
 <li><strong>nodes</strong> &#8211; [] hint nodes wired to the systems you want to match, used to find id subSystems</li>
 <li><strong>mSystems</strong> &#8211; [] list of mSystem nodes to switch, if given we don&#8217;t process the nodes args</li>
+=======
+<li><strong>nodes</strong> &#8211; hint nodes wired to the systems you want to match</li>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <li><strong>time</strong> &#8211; whether to run the match over time or not</li>
 <li><strong>switch</strong> &#8211; also switch the ik_fk_blender attr to leave the system in IK mode</li>
 <li><strong>keyswitch</strong> &#8211; if switch is true, this also adds in keys to control the switch mode</li>
@@ -993,12 +1038,15 @@ this export tag</p>
 </dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.mrig">
 <code class="descname">mrig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.mrig" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the parent mRig to this ExportTag</p>
 </dd></dl>
 
 <dl class="method">
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.gatherInfo">
 <code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>info block gather for the export systems</p>
@@ -1082,6 +1130,7 @@ we delete ALL overrides under the full hierarchy from the exportRoot</p>
 </dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.connectTimeRanges">
 <code class="descname">connectTimeRanges</code><span class="sig-paren">(</span><em>loops</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.connectTimeRanges" title="Permalink to this definition">¶</a></dt>
 <dd><p>connect / cast current timerange nodes to this expTag. Note that we verify that the class
@@ -1097,6 +1146,8 @@ of each loop matches the expected internal exportLoopBase_class bound to this ex
 </dd></dl>
 
 <dl class="method">
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.loopNameExists">
 <code class="descname">loopNameExists</code><span class="sig-paren">(</span><em>loopname</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.loopNameExists" title="Permalink to this definition">¶</a></dt>
 <dd><p>check if the loopName about to be used exists</p>
@@ -1112,6 +1163,7 @@ of each loop matches the expected internal exportLoopBase_class bound to this ex
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getTimeRanges">
+<<<<<<< HEAD
 <code class="descname">getTimeRanges</code><span class="sig-paren">(</span><em>loopnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getTimeRanges" title="Permalink to this definition">¶</a></dt>
 <dd><p>get connected exportLoop nodes</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1128,6 +1180,10 @@ of each loop matches the expected internal exportLoopBase_class bound to this ex
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getExporLoops">
 <code class="descname">getExporLoops</code><span class="sig-paren">(</span><em>loopnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getExporLoops" title="Permalink to this definition">¶</a></dt>
 <dd><p>renamed func call for the getTimeRanges</p>
+=======
+<code class="descname">getTimeRanges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getTimeRanges" title="Permalink to this definition">¶</a></dt>
+<dd><p>get connected exportLoop nodes</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="method">
@@ -1260,7 +1316,11 @@ generated by the gatherInfo call itself</td>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.getRootNode">
+<<<<<<< HEAD
 <code class="descname">getRootNode</code><span class="sig-paren">(</span><em>allowMulti=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.getRootNode" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">getRootNode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.getRootNode" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd><p>from the loopNode return the exportRoot from the main Tag. This is a wrapper
 so that exporters can just get all the loopNodes and grab all data directly
 rather than lots of walking logic</p>
@@ -1274,6 +1334,7 @@ prefix or suffix handling set on it&#8217;s parent exportTag class</p>
 </dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.setLoopName">
 <code class="descname">setLoopName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.setLoopName" title="Permalink to this definition">¶</a></dt>
 <dd><p>this is a wrapper to be used instead of setting self.loopname directly. 
@@ -1299,6 +1360,8 @@ on this instance directly ;)</p>
 </dd></dl>
 
 <dl class="method">
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.getExportFile">
 <code class="descname">getExportFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.getExportFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>get the full file name, this is built from running the
@@ -1323,24 +1386,30 @@ be over-loaded at a client level to support any bespoke project behaviour</p>
 <dd><p>return the catenated export path for r9anim files</p>
 </dd></dl>
 
+<<<<<<< HEAD
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_r9Anim_reset">
 <code class="descname">path_r9Anim_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_r9Anim_reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>reset any specific r9Anim path thats been set by the property</p>
 </dd></dl>
 
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_fbx">
 <code class="descname">path_fbx</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_fbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the catenated export path for r9anim files</p>
 </dd></dl>
 
+<<<<<<< HEAD
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_fbx_reset">
 <code class="descname">path_fbx_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_fbx_reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>reset any specific fbx path thats been set by the property</p>
 </dd></dl>
 
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.isAdditive">
 <code class="descname">isAdditive</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.isAdditive" title="Permalink to this definition">¶</a></dt>
@@ -1359,6 +1428,7 @@ the Loops non-additive state.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
+<<<<<<< HEAD
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jnts</strong> &#8211; [] joints to set as specific root nodes for the exporters</td>
 </tr>
 </tbody>
@@ -1368,6 +1438,12 @@ the Loops non-additive state.</p>
 <p class="last">the joints go through the r9Core.nodes_in_hierarchy codebase so can be shortname pointers as these
 are converted back to full path in the getRootNode calls</p>
 </div>
+=======
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jnts</strong> &#8211; joints to set as specific root nodes for the exporters</td>
+</tr>
+</tbody>
+</table>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="attribute">
@@ -1591,19 +1667,27 @@ connected audio node data</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.getAudioNodes">
+<<<<<<< HEAD
 <code class="descname">getAudioNodes</code><span class="sig-paren">(</span><em>time=()</em>, <em>start_inRange=True</em>, <em>end_inRange=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.getAudioNodes" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">getAudioNodes</code><span class="sig-paren">(</span><em>time=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.getAudioNodes" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd><p>return an AudioNode object that fall within a given 
 timerange, if not timerange is given return all linked audio</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
+<<<<<<< HEAD
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>time</strong> &#8211; time (start, end) tuple as a range.</li>
 <li><strong>start_inRange</strong> &#8211; check is the testRange[0] value falls fully in the baseRange</li>
 <li><strong>end_inRange</strong> &#8211; check is the testRange[1] value falls fully in the baseRange</li>
 </ul>
 </td>
+=======
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>time</strong> &#8211; time (start, end) tuple as a range.</td>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </tr>
 </tbody>
 </table>
@@ -1622,6 +1706,7 @@ else we validate that testRange is fully within the baseRanges times</p>
 
 </dd></dl>
 
+<<<<<<< HEAD
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD">
 <em class="property">class </em><code class="descname">MetaTimeCodeHUD</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD" title="Permalink to this definition">¶</a></dt>
@@ -1689,6 +1774,8 @@ re-build the cached attrs for the timecode systems</p>
 
 </dd></dl>
 
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </div>
 
 

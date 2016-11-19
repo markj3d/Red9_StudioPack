@@ -482,6 +482,7 @@ class Test_baseFunctions():
         assert not r9Core.timeIsInRange((None,100),(9,101))
         assert r9Core.timeIsInRange((None,100),(-5,0))
         
+<<<<<<< HEAD
         assert r9Core.timeIsInRange((40,100),(40,100), start_inRange=True, end_inRange=True)
         assert r9Core.timeIsInRange((40,100),(50,99), start_inRange=True, end_inRange=True)
         assert not r9Core.timeIsInRange((40,100),(40,101), start_inRange=True, end_inRange=True)
@@ -490,6 +491,9 @@ class Test_baseFunctions():
         assert not r9Core.timeIsInRange((40,100),(20,101), start_inRange=False, end_inRange=True)
 
   
+=======
+        
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 class Test_LockNodes(object):
     def setup(self):
         cmds.file(new=True,f=True)

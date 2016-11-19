@@ -335,12 +335,15 @@ the results are consistent.</p>
 </dd></dl>
 
 <dl class="method">
+<<<<<<< HEAD
 <dt id="Red9.pro_pack.core.optimiser.HealthTestObject.set_by_failed">
 <code class="descname">set_by_failed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject.set_by_failed" title="Permalink to this definition">¶</a></dt>
 <dd><p>automatically set failed if there are failed results in the test object</p>
 </dd></dl>
 
 <dl class="method">
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dt id="Red9.pro_pack.core.optimiser.HealthTestObject.set_failed">
 <code class="descname">set_failed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject.set_failed" title="Permalink to this definition">¶</a></dt>
 <dd><p>set test as failed, note this also sets the has_run flag to True</p>
@@ -1217,17 +1220,27 @@ that&#8217;s acceptable</li>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.constraints_interpType">
+<<<<<<< HEAD
 <code class="descname">constraints_interpType</code><span class="sig-paren">(</span><em>expected=[2, 0]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.constraints_interpType" title="Permalink to this definition">¶</a></dt>
 <dd><p>test all orient and parent constraints and validate their interpType is set
 as expected. This by default is set to a list [2,0], allowing noflip and shortest
 to pass and all other interTypes to fail. The first var in the expected list is
 then used as the default which fails will get set too</p>
+=======
+<code class="descname">constraints_interpType</code><span class="sig-paren">(</span><em>expected=2</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.constraints_interpType" title="Permalink to this definition">¶</a></dt>
+<dd><p>test all orient and parent constraints and validate their interpType is set
+as expected</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
+<<<<<<< HEAD
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> &#8211; [2, 0]  where 0=&#8217;noflip&#8217;, 1=&#8217;average&#8217;, 2=&#8217;shortest&#8217;, not that is this is given as
 a list then the first arg is the default that failed interTypes will get set too.</td>
+=======
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> &#8211; 1=&#8217;average&#8217;, 2=&#8217;shortest&#8217;,</td>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </tr>
 </tbody>
 </table>

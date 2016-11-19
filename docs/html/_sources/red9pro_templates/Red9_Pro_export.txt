@@ -3,12 +3,7 @@ Pro_Pack : Exporter
 
 ProPack exporter module is our own export management system for
 handling the output of files based on the metaData export node
-<<<<<<< HEAD
-class systems. This module is largely the UI management as the 
-majority of the codebase is bound to the metadata_pro mNode classes
-=======
 class systems.
->>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 
 	>>> # import statement for the module via the r9pro decompiler
 	>>> from Red9.pro_pack import r9pro 
@@ -21,16 +16,12 @@ class systems.
 
    .. autosummary::
    	  
-<<<<<<< HEAD
-      ExportManager
-=======
       AnimationStore
       AnimMap
       Anim_Redirect
       AnimPointCloud
       Anim_Transfer
       LimbMatchingUI
->>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 
 
     

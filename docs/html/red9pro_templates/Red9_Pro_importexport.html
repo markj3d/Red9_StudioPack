@@ -226,7 +226,10 @@ scene their anim data will be updated</p>
 <div class="line-block">
 <div class="line"><a class="reference external" href="http://www.perforce.com/perforce/doc.current/manuals/p4script/python.programming.html">http://www.perforce.com/perforce/doc.current/manuals/p4script/python.programming.html</a></div>
 <div class="line"><a class="reference external" href="http://www.perforce.com/perforce/doc.current/manuals/p4script/03_python.html">http://www.perforce.com/perforce/doc.current/manuals/p4script/03_python.html</a></div>
+<<<<<<< HEAD
 <div class="line"><a class="reference external" href="https://www.perforce.com/perforce/r14.2/manuals/cmdref/p4_fstat.html">https://www.perforce.com/perforce/r14.2/manuals/cmdref/p4_fstat.html</a></div>
+=======
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -243,27 +246,42 @@ as &#8216;//depot/path/to/stuff/...ma&#8217; for example</p>
 <dd><p>check if our given path var is a dir or a single file object, ie endsWith &#8216;...&#8217; or &#8216;*&#8217;</p>
 </dd></dl>
 
+<<<<<<< HEAD
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.info">
 <code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.info" title="Permalink to this definition">¶</a></dt>
+=======
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.info">
+<code class="descname">info</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.info" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd><p>get the general Perforce session info</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.username">
 <code class="descname">username</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.username" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>return the current userName from P4 info keys</p>
 </dd></dl>
+=======
+<dd></dd></dl>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.clientroot">
 <code class="descname">clientroot</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.clientroot" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>return the clientRoot from P4 info keys</p>
 </dd></dl>
+=======
+<dd></dd></dl>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.clientname">
 <code class="descname">clientname</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.clientname" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>return the clientName from P4 info keys</p>
 </dd></dl>
 
@@ -272,17 +290,33 @@ as &#8216;//depot/path/to/stuff/...ma&#8217; for example</p>
 <code class="descname">revision</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.revision" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the current revision that you have in your workspace</p>
 </dd></dl>
+=======
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.revision">
+<code class="descname">revision</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.revision" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.exists">
 <code class="descname">exists</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.exists" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>simple bool, is the file path already in P4? Checked via a simple fstat call</p>
+=======
+<dd><p>simple bool, is the file path already in P4? Checked via fstat</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.exists_local">
 <code class="descname">exists_local</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.exists_local" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>os check if the file exists locally. Issue is that P4 can say you have the file in your workspace but you may have deleted it locally</p>
+=======
+<dd><p>os check if the file exists locally</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="attribute">
@@ -313,11 +347,16 @@ rather than a file pointer.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.is_head">
 <code class="descname">is_head</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.is_head" title="Permalink to this definition">¶</a></dt>
+<<<<<<< HEAD
 <dd><p>return True if you have the head revision in your workspace, this DOESN&#8217;T check if it exists locally however</p>
+=======
+<dd><p>return true is the file is already at the head version</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.have_rev">
+<<<<<<< HEAD
 <code class="descname">have_rev</code><span class="sig-paren">(</span><em>rev=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.have_rev" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the revision you have locally in your workspace,
 if this returns nothing then the file does not exist in your
@@ -367,11 +406,47 @@ have deleted the local file. This validates both cases.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.depot_parentfolder">
 <code class="descname">depot_parentfolder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.depot_parentfolder" title="Permalink to this definition">¶</a></dt>
+=======
+<code class="descname">have_rev</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.have_rev" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the revision you have locally in your workspace,
+if this returns nothing then the file does not exist in your
+workspace yet and return False</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.head_revision">
+<code class="descname">head_revision</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.head_revision" title="Permalink to this definition">¶</a></dt>
+<dd><p>head revision number of the fileobject</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.client_file">
+<code class="descname">client_file</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.client_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>local &#8216;client&#8217; path to the fileobject</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.depot_file">
+<code class="descname">depot_file</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.depot_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>local &#8216;depotFile&#8217; path to the fileobject</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.client_parentfolder">
+<code class="descname">client_parentfolder</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.client_parentfolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the stripped back parent folder on the client side</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.depot_parentfolder">
+<code class="descname">depot_parentfolder</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.depot_parentfolder" title="Permalink to this definition">¶</a></dt>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 <dd><p>return the stripped back parent folder on the depot side</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.sync">
+<<<<<<< HEAD
 <code class="descname">sync</code><span class="sig-paren">(</span><em>force=False</em>, <em>exists=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.sync" title="Permalink to this definition">¶</a></dt>
 <dd><p>sync the file to headRevision of this fileobject</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -386,6 +461,10 @@ have deleted the local file. This validates both cases.</p>
 </tr>
 </tbody>
 </table>
+=======
+<code class="descname">sync</code><span class="sig-paren">(</span><em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>sync the file to headRevision of this fileobject</p>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </dd></dl>
 
 <dl class="method">
@@ -398,8 +477,12 @@ have deleted the local file. This validates both cases.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>changelist</strong> &#8211; if given use this changelist else use the default</li>
+<<<<<<< HEAD
 <li><strong>force</strong> &#8211; if the file is NOT in your workspace, sync it before checkout,
 this also verifies that you haven&#8217;t deleted the local version of that file</li>
+=======
+<li><strong>force</strong> &#8211; if the file is NOT in your workspace, sync it before checkout</li>
+>>>>>>> d7ab8a039c4da0838a07bf4a9ec3ad957667b21e
 </ul>
 </td>
 </tr>
