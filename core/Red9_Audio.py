@@ -191,7 +191,6 @@ class AudioHandler(object):
     process on multiple audio nodes within the Maya scene, ie, already loaded
     
     .. note::
-    
         all BWav and Timecode support is in the Red9 ProPack
     '''
     def __init__(self, audio=None):
@@ -232,18 +231,25 @@ class AudioHandler(object):
     def mayaNodes(self):
         return [audio.audioNode for audio in self.audioNodes]
 
-    def getAudioInRange(self, time=(), asNodes=True):
+    def getAudioInRange(self, time=(), asNodes=True, start_inRange=True, end_inRange=True):
         '''
         return any audio in the handler within a given timerange
         
-        @param time: tuple, (min,max) timerange within which returned audio has 
-        fall within else it's ignored.
+        :param time: tuple, (min,max) timerange within which returned audio has 
+            fall within else it's ignored.
+        :param asNodes: return the data as r9Audio.AudioNodes
+        :param start_inRange: check is the testRange[0] value falls fully in the baseRange
+        :param end_inRange: check is the testRange[1] value falls fully in the baseRange
+    
+        .. note::
+            if you pass in time as (None, 100) then we only validate against the end time.
+            if we pass in time as (10, None) we only validate against the start time
+            else we validate that testRange is fully within the times
         '''
         audio_in_range=[]
         for a in self.audioNodes:
-            if not a.startFrame>=time[0] or not a.endFrame<=time[1]:
-                continue
-            audio_in_range.append(a)
+            if r9Core.timeIsInRange(time, (a.startFrame,a.endFrame), start_inRange=start_inRange, end_inRange=end_inRange):
+                audio_in_range.append(a)
         if not asNodes:
             return [a.audioNode for a in audio_in_range]
         return audio_in_range
@@ -261,8 +267,9 @@ class AudioHandler(object):
 
     def getOverallBwavTimecodeRange(self, ms=False):
         '''
-        PRO_PACK : return the overall internal BWAV timecode range for the given 
-        nodes. Note this is the internal timecode plus the length of the files
+        : PRO_PACK : 
+            return the overall internal BWAV timecode range for the given 
+            nodes. Note this is the internal timecode plus the length of the files
         
         :param ms: return the (minV,maxV) in milliseconds or SMPTE timecode 
         '''
@@ -353,10 +360,11 @@ class AudioHandler(object):
             
     def bwav_sync_to_Timecode(self, relativeToo=None, offset=0, *args):
         '''
-        PRO_PACK : process either selected or all audio nodes and IF they are found 
-        to be BWav's with valid timecode references, sync them in Maya such
-        that their offset = Bwav's timecode ie: sync them on the timeline to
-        the bwavs internal timecode.
+        : PRO_PACK :  
+            process either selected or all audio nodes and IF they are found 
+            to be BWav's with valid timecode references, sync them in Maya such
+            that their offset = Bwav's timecode ie: sync them on the timeline to
+            the bwavs internal timecode.
         
         :param relativeToo: This is fucking clever, even though I do say so. Pass in another bWav node and I 
             calculate it's internal timecode against where it is in the timeline. I then use any difference in 
@@ -557,6 +565,7 @@ class AudioNode(object):
             self.isLoaded=True
             self.__audioNode=node
     
+        
     # ---------------------------------------------------------------------------------
     # pyDub inspect calls ---
     # ---------------------------------------------------------------------------------
@@ -644,7 +653,7 @@ class AudioNode(object):
     @property
     def startTime(self):
         '''
-        PRO_PACK: Maya start time of the sound node in milliseconds
+        : PRO_PACK : Maya start time of the sound node in milliseconds
         '''
         if self.isLoaded:
             return (self.startFrame / r9General.getCurrentFPS()) * 1000
@@ -658,7 +667,7 @@ class AudioNode(object):
     @property
     def endTime(self):
         '''
-        PRO_PACK: Maya end time of the sound node in milliseconds
+        : PRO_PACK : Maya end time of the sound node in milliseconds
         '''
         return (self.endFrame / r9General.getCurrentFPS()) * 1000
     
@@ -685,7 +694,7 @@ class AudioNode(object):
 
     def isBwav(self):
         '''
-        PRO PACK : validate if the given source Wav is a BWav or not
+        : PRO_PACK : validate if the given source Wav is a BWav or not
         '''
         if self.pro_bwav:
             return self.pro_bwav.isBwav()
@@ -694,7 +703,7 @@ class AudioNode(object):
     
     def bwav_getHeader(self):
         '''
-        PRO_PACK : get the internal BWav header data from the wav if found
+        : PRO_PACK : get the internal BWav header data from the wav if found
         '''
         if self.pro_bwav:
             self.bwav_HeaderData = self.pro_bwav.bwav_getHeader()
@@ -704,7 +713,7 @@ class AudioNode(object):
         
     def bwav_timecodeMS(self):
         '''
-        PRO_PACK : read the internal timecode reference from the bwav and convert that number into milliseconds
+        : PRO_PACK : read the internal timecode reference from the bwav and convert that number into milliseconds
         '''
         if self.pro_bwav:
             return self.pro_bwav.bwav_timecodeMS()
@@ -713,7 +722,7 @@ class AudioNode(object):
     
     def bwav_timecodeReference(self):
         '''
-        PRO_PACK : if is BWaw return the internal timeReference
+        : PRO_PACK : if is BWaw return the internal timeReference
         '''
         if self.pro_bwav:
             return self.pro_bwav.bwav_timecodeReference()
@@ -722,7 +731,7 @@ class AudioNode(object):
 
     def bwav_timecodeFormatted(self, smpte=True, framerate=None):
         '''
-        PRO_PACK : if is Bwav return the internal timecode & convert from milliseconds into timecode
+        : PRO_PACK : if is Bwav return the internal timecode & convert from milliseconds into timecode
 
         :param smpte: format the timecode HH:MM:SS:FF where FF is frames, else milliseconds
         :param framerate: when using smpte this is the framerate used in the FF block
@@ -734,7 +743,7 @@ class AudioNode(object):
 
     def bwav_sync_to_Timecode(self, offset=0):
         '''
-        PRO_PACK : given that self is a Bwav and has timecode reference, sync it's position
+        : PRO_PACK : given that self is a Bwav and has timecode reference, sync it's position
         in the Maya timeline to match
         
         :param offset: offset to apply to the internal timecode of the given wav's
@@ -746,7 +755,7 @@ class AudioNode(object):
 
     def isConnected_AudioGrp(self):
         '''
-        PRO_PACK : is this audioNode connected to a Pro_ AudioGrp metaNode 
+        : PRO_PACK : is this audioNode connected to a Pro_ AudioGrp metaNode 
         for asset management in the Pro systems
         '''
         return r9Meta.getConnectedMetaNodes(self.audioNode,mTypes='AudioGroup')
@@ -773,6 +782,11 @@ class AudioNode(object):
             cmds.delete(self.audioNode)
             
     def offsetTime(self, offset):
+        '''
+        offset the time of this audioNode instance
+        
+        :param offset: amount to offset
+        '''
         if self.isLoaded:
             if r9Setup.mayaVersion() == 2011:
                 #Autodesk fucked up in 2011 and we need to manage both these attrs
@@ -788,25 +802,29 @@ class AudioNode(object):
         an instance of a sound node in Maya that points to this path them the 
         class will bind itself to that node.
         
-        >>> #example of use:
+        :param active: do we set the imported audio to be active on the timerange in Maya
+        
+        >>> # example of use:
         >>> audio = r9Audio.AudioNode(filepath = 'c:/my_audio.wav')
         >>> audio.importAndActivate()
         '''
-        
-        a=cmds.ls(type='audio')
-        cmds.file(self.path, i=True, type='audio', options='o=0')
-        b=cmds.ls(type='audio')
-  
-        if not a == b:
-            self.audioNode = (list(set(a) ^ set(b))[0])
-        else:
-            matchingnode = [audio for audio in a if cmds.getAttr('%s.filename' % audio) == self.path]
-            if matchingnode:
-                self.audioNode = matchingnode[0]
+        if not self.isLoaded:
+            a=cmds.ls(type='audio')
+            cmds.file(self.path, i=True, type='audio', options='o=0')
+            b=cmds.ls(type='audio')
+      
+            if not a == b:
+                self.audioNode = (list(set(a) ^ set(b))[0])
             else:
-                log.warning("can't find match audioNode for path : %s" % self.path)
-                return
-        self.isLoaded=True
+                matchingnode = [audio for audio in a if cmds.getAttr('%s.filename' % audio) == self.path]
+                if matchingnode:
+                    self.audioNode = matchingnode[0]
+                else:
+                    log.warning("can't find match audioNode for path : %s" % self.path)
+                    return
+            self.isLoaded=True
+        else:
+            log.info('given Audio Path is already loaded in the Maya Scene')
         if active:
             self.setActive()
         
@@ -863,6 +881,8 @@ class AudioNode(object):
     def lockTimeInputs(self, state=True):
         '''
         lock the audio in time so it can't be accidentally shifted
+        
+        :param state: the lock state of the node, True or False
         '''
         cmds.setAttr('%s.offset' % self.audioNode, l=state)
         cmds.setAttr('%s.sourceEnd' % self.audioNode, l=state)
@@ -881,8 +901,10 @@ class AudioNode(object):
 
     def stampCompiled(self, audioNodes):
         '''
-        Used by the compiler - stamp the audioNodes from which this audio
+        Used by the Audio compiler - stamp the audioNodes from which this audio
         track was compiled from
+        
+        :param audioNodes: the audioNodes being compiled
         '''
         if self.isLoaded:
             cmds.addAttr(self.audioNode, longName='compiledAudio', dt='string')
@@ -976,11 +998,11 @@ class AudioToolsWrap(object):
 
     def __uicb_setReferenceBwavNode(self, *args):
         '''
-        PRO_PACK: set the internal reference offset used to offset the audionode. 
+        : PRO_PACK : set the internal reference offset used to offset the audionode. 
         
-        .. note:
-                If you pass this a bwav then it caches that bwav for use as the offset. 
-                If you pass it a node, and that node has the timecode attrs, then it caches the offset itself.
+        .. note::
+            If you pass this a bwav then it caches that bwav for use as the offset. 
+            If you pass it a node, and that node has the timecode attrs, then it caches the offset itself.
         '''
         selectedAudio=cmds.ls(sl=True, type='audio')
         self.__bwav_reference = None
@@ -1053,9 +1075,22 @@ class AudioToolsWrap(object):
         self.audioHandler.bwav_sync_to_Timecode()
         
     def timecodeHud(self,*args):
+        '''
+        PRO_PACK
+        '''
+        if r9Setup.has_pro_pack():
+            try:
+                import Red9.pro_pack.core.metadata_pro as r9pmeta   # dev mode only ;)
+            except:
+                from Red9.pro_pack import r9pro
+                r9pro.r9import('r9pmeta')
+                import r9pmeta
+        else:
+            log.warning('Timecode is ONLY supported in ProPack...')
+
         nodes=cmds.ls(sl=True)
         if nodes:
-            tcHUD=r9Meta.MetaTimeCodeHUD()
+            tcHUD=r9pmeta.MetaTimeCodeHUD()
             for node in nodes:
                 tcHUD.addMonitoredTimecodeNode(node)
             tcHUD.drawHUD()
