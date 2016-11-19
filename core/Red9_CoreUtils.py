@@ -59,16 +59,16 @@ def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False)
     :param regex: Switches from regex search to simple exact node name
     :param prioritysOnly: return just the priorityList matches or the entire list sorted
     
-    #Known issue, if Regex=True and you have 2 similar str's in the priority list then there's 
-    a chance that matching may be erractic... 
-    
-    priorityList=['upperLip','l_upperLip']
-    nodes=['|my|dag|path|jaw',|my|dag|path|l_upperLip','|my|dag|path|upperLip','|my|dag|path|lowerLip']
-    returns: ['|my|dag|path|l_upperLip','|my|dag|path|upperLip',|my|dag|path|jaw,'|my|dag|path|lowerLip]
-    
-    as in regex 'l_upperLip'=='upperLip' as well as 'upperLip'=='upperLip' 
-    
-    really in regex you'd need to be more specific:  priorityList=['^upperLip','l_upperLip']
+    .. note::
+        Known issue, if Regex=True and you have 2 similar str's in the priority list then there's 
+        a chance that matching may be erractic... 
+        
+        >>> priorityList=['upperLip','l_upperLip']
+        >>> nodes=['|my|dag|path|jaw',|my|dag|path|l_upperLip','|my|dag|path|upperLip','|my|dag|path|lowerLip']
+        >>> returns: ['|my|dag|path|l_upperLip','|my|dag|path|upperLip',|my|dag|path|jaw,'|my|dag|path|lowerLip]
+        
+        as in regex 'l_upperLip'=='upperLip' as well as 'upperLip'=='upperLip' 
+        really in regex you'd need to be more specific:  priorityList=['^upperLip','l_upperLip']
     '''
     #stripped = [nodeNameStrip(node) for node in inputlist]  # stripped back to nodeName
     nList=list(inputlist)  # take a copy so we don't mutate the input list
@@ -111,11 +111,11 @@ def sortNumerically(data):
     
     >>> data=['Joint_1','Joint_2','Joint_9','Joint_10','Joint_11','Joint_12']
     >>>
-    >>> #standard gives us:
+    >>> # standard gives us:
     >>> data.sort()
     >>> ['Joint_1', 'Joint_10', 'Joint_11', 'Joint_12', 'Joint_2', 'Joint_9']
     >>> 
-    >>> #sortNumerically gives us:
+    >>> # sortNumerically gives us:
     >>> sortNumerically(data)
     >>> ['Joint_1', 'Joint_2', 'Joint_9', 'Joint_10', 'Joint_11', 'Joint_12']
     """
@@ -130,7 +130,9 @@ def stringReplace(text, replace_dict):
     with the associated value, return the modified text.
     Only whole words are replaced.
     Note that replacement is case sensitive, but attached
-    quotes and punctuation marks are neutral.
+    quotes and punctuation marks are neutral. 
+    
+    :param replace_dict: 
     '''
     rc = re.compile(r"[A-Za-z_]\w*")
     def translate(match):
@@ -188,19 +190,29 @@ def decodeString(val):
     return val
 
     
-def validateString(strText):
+def validateString(strText, fix=False, illegals=['-', '#', '!', ' ']):
     '''
     Function to validate that a string has no illegal characters
+    
+    :param strText: text to validate
+    :param fix: if True then we replace illegals with '_'
+    :param illegals: now allow you to pass in what you consider illegals, default=['-', '#', '!', ' ']
     '''
     #numerics=['1','2','3','4','5','6','7','8','9','0']
-    illegals=['-', '#', '!', ' ']
+    #illegals=['-', '#', '!', ' ']
+    base=strText
     #if strText[0] in numerics:
     #    raise ValueError('Strings must NOT start with a numeric! >> %s' % strText)
     illegal=[i for i in illegals if i in strText]
     if illegal:
-        raise ValueError('String contains illegal characters "%s" <in> "%s"' % (','.join(illegal), strText))
-    else:
-        return strText
+        if not fix:
+            raise ValueError('String contains illegal characters "%s" <in> "%s"' % (','.join(illegal), strText))
+        else:
+            for i in illegal:
+                print i
+                strText=strText.replace(i,'_')
+            log.info('%s : reformatted string to valid string : %s' % (base, strText))
+    return strText
 
 
 def filterListByString(input_list, filter_string, matchcase=False):
@@ -244,7 +256,29 @@ def filterListByString(input_list, filter_string, matchcase=False):
                 filteredList.append(item)
     return filteredList
     
+def nodes_in_hierarchy(rootNode, nodes=[], nodeType=None):
+    '''
+    check to see if a given set of nodes (shortname matched) are found in
+    the given hierarchy and return the matches
     
+    :param rootNode: rootNode of the hierarchy to search
+    :param nodes: nodes to find from their shortName
+    :param nodeType: nodeTypes within the hierarchy to search
+    '''
+    flt=FilterNode(rootNode)
+    flt.settings.nodeTypes=nodeType
+    found=[]
+    for node in nodes:
+        _name=nodeNameStrip(node)
+        flt.settings.searchPattern='^%s' % _name
+        matches=flt.processFilter()
+        if matches:
+            for m in matches:
+                if nodeNameStrip(m)==_name:
+                    found.append(m)
+    return found   
+        
+     
 # Filter Node Setups -------------------------------------------------------------
 
 class FilterNode_Settings(object):
@@ -302,11 +336,18 @@ class FilterNode_Settings(object):
         return '%s(ActiveFilters: %s)' % (self.__class__.__name__, (', ').join(activeFilters))
     
     def filterIsActive(self):
+        '''
+        the filter is deemed to be active if any of the filterSettings would 
+        produce a hierarchy search.
+        '''
         if self.nodeTypes or self.searchAttrs or self.searchPattern or self.hierarchy or self.metaRig:
             return True
         return False
     
     def printSettings(self):
+        '''
+        prettyr print the filterSettings data
+        '''
         log.info('FilterNode Settings : nodeTypes : %s :   %s' %
                  (self.nodeTypes, type(self.nodeTypes)))
         log.info('FilterNode Settings : searchAttrs : %s :   %s' %
@@ -331,7 +372,7 @@ class FilterNode_Settings(object):
         reset the MAIN filter args only
         
         :param rigData: this is a cached attr and not fully handled 
-        by the UI hence the option NOT to reset, used by the UI presetFill calls
+            by the UI hence the option NOT to reset, used by the UI presetFill calls
         '''
         self.nodeTypes=[]
         self.searchAttrs=[]
@@ -344,7 +385,22 @@ class FilterNode_Settings(object):
         self.infoBlock=""
         if rigData:
             self.rigData={}
-                          
+        
+    def setByDict(self, data):
+        '''
+        set the filetrSettings via a dict correctly formatted, used 
+        to pull the data back from an MRig that has this data bound to it
+        
+        :param data: dict of data formatted as per the filterSettings keys.
+            this is a new function allowing a dict of data to be passed into the
+            object from a config file or mNode directly
+        '''
+        for key, val in data.items():
+            try:
+                self.__dict__[key]=decodeString(val)
+            except:
+                pass
+
     def write(self, filepath):
         '''
         write the filterSettings attribute out to a ConfigFile
@@ -363,7 +419,7 @@ class FilterNode_Settings(object):
         
         :param filepath: file path to write the configFile out to
         
-        ::note ..
+        .. note::
             If filepath doesn't exists or you pass in just the short name of the config you 
             want to load then we try and find a matching config in the default presets dir in Red9
         '''
@@ -527,7 +583,7 @@ class FilterNode_UI(object):
                 self._filterNode.processMode='Scene'
         
             #Main Call
-            nodes = self._filterNode.ProcessFilter()
+            nodes = self._filterNode.processFilter()
   
         elif mode == 'FullHierarchy':
             self._filterNode.rootNodes=cmds.ls(sl=True, l=True)
@@ -617,14 +673,46 @@ class FilterNode(object):
             else:
                 self._rootNodes=nodes
             self.processMode='Selected'
+            
+            # New : MetaRig Update : 
+            # if we have a single rootNode and settings.metaRig=True then process that rig
+            # to see if we have a bound settings object baked to it...if so we modify the 
+            # internal settings of this object to match
+            self.__mrig_cast_settings()
+            
         else:
             self.processMode='Scene'
             self._rootNodes=None
-            #raise StandardError('no nodes Given')
               
     rootNodes = property(__get_rootNodes, __set_rootNodes)
     
-
+    def __mrig_cast_settings(self):
+        '''
+        get connected metaNodes relative to the rootNode then validate if we have an mRig to 
+        process, if we do then we look for the internal filterSettings data the new rigs carry
+        and overload the filterSettings of this class with some of that data
+        '''
+        mrig=None
+        if not self.settings.metaRig:
+            return
+        if len(self._rootNodes)==1:
+            if r9Meta.isMetaNode(self._rootNodes[0]) and issubclass(type(self._rootNodes[0]), r9Meta.MetaRig):
+                mrig=r9Meta.MetaClass(self._rootNodes[0])
+            else:
+                mrig=r9Meta.getConnectedMetaSystemRoot(self._rootNodes[0], mInstances=r9Meta.MetaRig)
+            if mrig:
+                if mrig.hasAttr('filterSettings') and mrig.filterSettings:
+                    log.info('==============================================================')
+                    log.info('mRig : setting.filterPriority pulled directly from mNodes data')
+                    log.info('==============================================================')
+                    self.settings.filterPriority=mrig.settings.filterPriority
+                    self.settings.rigData['snapPriority']=mrig.settings.rigData['snapPriority']
+                    self.settings.printSettings()
+                    log.info('==============================================================')
+                else:
+                    log.info('mRig : No specific filter data bound to this rig')
+            return mrig
+        
     def __get_processMode(self):
             return self._processMode
 
@@ -660,18 +748,22 @@ class FilterNode(object):
     def getObjectSetMembers(self, objSet):
         '''
         return objectSet members in long form
+        
+        :param objSet: set to inspect and return the memebers from
         '''
         return cmds.ls(cmds.sets(objSet, q=True, nodesOnly=True), l=True, type='transform') or []
         
     def lsHierarchy(self, incRoots=False, transformClamp=False):
-        
         '''
         Simple wrapper of the listRelatives, BUT with the option
         to include the rootNodes and select the results
 
         Also if a single rootNode is passed, and it's of type 'character'
         then the code will return the characterMembers instead
+        
         :param incRoots: include the given rootNodes in the filter
+        :param transformClamp: clamp all searches so that any shape style node returns it's parent transform
+         
         TODO: objectSet modifications need testing!!!!!
         '''
 
@@ -881,7 +973,7 @@ class FilterNode(object):
         return self.lsSearchNodeTypes('parentConstraint')
       
     @staticmethod
-    @r9General.Timer
+    #@r9General.Timer
     def lsAnimCurves(nodes=None, safe=False):
         '''
         Search for animationCurves. If no nodes are passed in to process then this
@@ -1206,7 +1298,7 @@ class FilterNode(object):
             [self.characterSetMembers.remove(cset) for cset in cSets if cset in self.characterSetMembers]
                     
             return cmds.ls(self.characterSetMembers, l=True)
-
+                
     def lsMetaRigControllers(self, walk=True, incMain=True):
         '''
         very light wrapper to handle MetaData in the FilterSystems. This is hard coded
@@ -1219,7 +1311,7 @@ class FilterNode(object):
         rigCtrls=[]
         metaNodes=[]
         
-        #First find and connected MetaData nodes
+        #First find all connected MetaData nodes
         for root in self.rootNodes:
             meta=None
             if r9Meta.isMetaNode(root):
@@ -1254,7 +1346,8 @@ class FilterNode(object):
     
     def ProcessFilter(self):
         '''
-        replace the 'P' in the function call but not depricating it just yet
+        :Depricated Function:
+        Replace the 'P' in the function call but not depricating it just yet
         as too much code both internally and externally relies on this method
         '''
         return self.processFilter()
@@ -1303,7 +1396,8 @@ class FilterNode(object):
                     return []
             
             # MetaClass Filter ------------------------------
-            if self.settings.metaRig:
+            if self.settings.metaRig:                
+                # run the main getChildren calls for hierarchy structure  
                 nodes = self.lsMetaRigControllers(incMain=self.settings.incRoots)
                 addToIntersection(nodes)
                 if not nodes:
@@ -1407,25 +1501,22 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
     '''
     Matches 2 given NODE LISTS by node name via various methods.
     
+    :param nodeListA: list of nodes
+    :param nodeListB: list of nodes
     :param matchMethod: default 'stripPrefix' 
-        *index*: No intelligent matching, just purely zip the 
-        lists together in the order they were given
-        
-        *indexReversed*: No intelligent matching, just purely zip the 
-        lists together in the order they were given
-        
-        *base*:  Match each element by exact name (shortName) 
-        such that Spine==Spine or REF1:Spine==REF2:Spine
-        
-        *stripPrefix*: Match each element by a relaxed naming convention 
-        allowing for prefixes one side such that RigX_Spine == Spine
-        
-        *mirrorIndex*: Match via the nodes MirrorMarker
+    
+        | * matchMethod="index" : No intelligent matching, just purely zip the lists 
+            together in the order they were given  
+        | * matchMethod="indexReversed" : No intelligent matching, just purely zip 
+            the lists together in the reverse order they were given  
+        | * matchMethod="base" :  Match each element by exact name (shortName) such 
+            that Spine==Spine or REF1:Spine==REF2:Spine  
+        | * matchMethod="stripPrefix" : Match each element by a relaxed naming convention 
+            allowing for prefixes one side such that RigX_Spine == Spine
+        | * matchMethod="mirrorIndex" : Match via the nodes MirrorMarker
         
     :return: matched pairs of tuples for processing [(a1,b2),[(a2,b2)]
-    
     '''
-
     infoPrint = ""
     matchedData = []
     
@@ -1582,9 +1673,9 @@ class MatchedNodeInputs(object):
             #take a single instance of a FilterNode and process both root hierarchies
             filterNode=FilterNode(filterSettings=self.settings)
             filterNode.rootNodes=self.roots[0]
-            nodesA=filterNode.ProcessFilter()
+            nodesA=filterNode.processFilter()
             filterNode.rootNodes=self.roots[1]
-            nodesB=filterNode.ProcessFilter()
+            nodesB=filterNode.processFilter()
 
             #Match the 2 nodeLists by nodeName and return the MatcherPairs list
             self.MatchedPairs=matchNodeLists(nodesA, nodesB, self.matchMethod)
@@ -1885,6 +1976,11 @@ class LockChannels(object):
         From a given chnMap file restore the channelBox status for all attributes
         found that are in the map file. ie, keyable, hidden, locked
         
+        :param filepath: filepath to the map to load
+        :param nodes: nodes to load the data onto, if hierarcchy=True this is the rootNode
+        :param hierarchy: process all child nodes of the nodes passed in
+        :param serializeNode: if Meta then this is used to serialize the attrMap to the node itself
+        
         .. note:: 
             Here we're dealing with 2 possible sets of data, either decoded by the
             ConfigObj decoder or a JSON deserializer and there's subtle differences in the dict
@@ -1951,12 +2047,15 @@ class LockChannels(object):
         in the channelBox.
         
         :param nodes: nodes to process
-        :param attrs: set() of attrs
+        :param attrs: set() of attrs, or 'all'
         :param mode: 'lock', 'unlock', 'hide', 'unhide', 'fullkey', 'lockall'
         :param hierarchy: process all child nodes, default is now False
         :param usedDefined: process all UserDefined attributes on all nodes
         
         >>> r9Core.LockChannels.processState(nodes, attrs=["sx", "sy", "sz", "v"], mode='lockall')
+        >>> 
+        >>> # note: if attrs='all' we now set it to the following for ease:
+        >>> ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "nds", "radius"]
         '''
         userDefAttrs=set()
         if not nodes:
@@ -1968,6 +2067,9 @@ class LockChannels(object):
             #Filter the selection for children including the selected roots
             nodes=FilterNode(nodes).lsHierarchy(incRoots=True)
         
+        if attrs=='all':
+            attrs=["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "nds", "radius"]
+            
         if not hasattr(attrs,'__iter__'):
             attrs=set([attrs])
         if not type(attrs)==set:
@@ -2022,8 +2124,10 @@ def timeOffset_addPadding(pad=None, padfrom=None, scene=False):
     '''
     simple wrap of the timeoffset class which will add padding into the
     animation curves on the selected object by shifting keys
+    
     :param pad: amount of padding frames to add
     :param padfrom: frame to pad from
+    :param scene: offset the entire scene
     '''
     nodes = None
     if not pad:
@@ -2048,6 +2152,9 @@ def timeOffset_addPadding(pad=None, padfrom=None, scene=False):
 def timeOffset_collapse(scene=False, timerange=None):
     '''
     Light wrap over the TimeOffset call to manage collapsing time
+    
+    :param scene: offset the entire scene or just selected
+    :param timerange: specific timerange to collapse else we use the r9 timerange get call
     '''
     if not timerange:
         timerange = r9Anim.timeLineRangeGet(always=True)
@@ -2164,7 +2271,7 @@ class TimeOffset(object):
             nodes=cmds.ls(sl=True, l=True)
 
         if filterSettings:
-            nodes = FilterNode(nodes, filterSettings).ProcessFilter()
+            nodes = FilterNode(nodes, filterSettings).processFilter()
             # selectedNodes.extend(FilterNode(selectedNodes,filterSettings).ProcessFilter())
             # selectedNodes=sortNumerically(selectedNodes)
         if nodes:
@@ -2337,7 +2444,7 @@ class TimeOffset(object):
         Offset special handling for MetaNodes. Inspect the metaNode and see if 
         the 'timeOffset' method has been implemented and if so, call it.
         
-        .. note: 
+        .. note::
             ONLY runs in Scene mode and timerange and ripple are down to the metaNode
             to handle in it's internal implementation
         
@@ -2393,6 +2500,7 @@ def valueToMappedRange(value, currentMin, currentMax, givenMin, givenMax):
     we have a min max range, lets say 0.5 - 15 and we want to map the
     range to a new range say 0-1 and return where the value given is
     in that new range
+
     '''
     # Figure out how 'wide' each range is
     currentSpan = currentMax - currentMin
@@ -2401,6 +2509,51 @@ def valueToMappedRange(value, currentMin, currentMax, givenMin, givenMax):
     valueScaled = float(value - currentMin) / float(currentSpan)
     # Convert the 0-1 range into a value in the right range.
     return givenMin + (valueScaled * givenSpan)
+
+def timeIsInRange(baseRange=(), testRange=(), start_inRange=True, end_inRange=True):
+    '''
+    test that a given testRange [start,end], falls within the bounds of a baseRange [start,end]
+    Used to test if timeRanges fall within a baseRange
+    
+    :param baseRange: base time range to test against
+    :param testRange: range to test against the baseRange, do these times fall within the baseRange?
+    :param start_inRange: check is the testRange[0] value falls fully in the baseRange
+    :param end_inRange: check is the testRange[1] value falls fully in the baseRange
+    
+    .. note::
+        if you pass in baseRange as (None, 100) then we only validate against the end time regardless of the flags.
+        if we pass in baseRange as (10, None) we only validate against the start time regardless of the flags.
+        else we validate that testRange is fully within the baseRanges times
+    '''
+    
+    if baseRange[1] is None:
+        if testRange[0]>=baseRange[0]:
+            return True
+        else:
+            return False
+    if baseRange[0] is None:
+        if testRange[1]<=baseRange[1]:
+            return True
+        else:
+            return False
+    start=False
+    end=False
+    if start_inRange:
+        if testRange[0]>=baseRange[0] and testRange[0]<=baseRange[1]:
+            start=True
+        else:
+            start=False
+        if not end_inRange:
+            return start
+    if end_inRange:
+        if testRange[1]<=baseRange[1] and testRange[1]>=baseRange[0]:
+            end=True
+        else:
+            end=False
+        if not start_inRange:
+            return end
+    return all([start, end])
+
 
 def distanceBetween(nodeA, nodeB):
     '''
