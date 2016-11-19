@@ -1,0 +1,1442 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Pro_Pack : Animation &#8212; Red9 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <link rel="next" title="Pro_Pack : Audio" href="Red9_Pro_audio.html" />
+    <link rel="prev" title="Red9_Tools" href="../red9core_templates/Red9_Tools.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_audio.html" title="Pro_Pack : Audio"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../red9core_templates/Red9_Tools.html" title="Red9_Tools"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pro-pack-animation">
+<h1>Pro_Pack : Animation<a class="headerlink" href="#pro-pack-animation" title="Permalink to this headline">¶</a></h1>
+<p>ProPack animation module deals with the more complex animation functions
+such as the r9Anim format handling and animation re-director systems.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9panim&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9panim</span>
+</pre></div>
+</div>
+<span class="target" id="module-Red9.pro_pack.core.animation"></span><p>This module is extensions to the main animation support through the Red9 StudioPack and
+requires the StudioPack codebase to run</p>
+<p class="rubric">Main Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.animation.AnimationStore" title="Red9.pro_pack.core.animation.AnimationStore"><code class="xref py py-obj docutils literal"><span class="pre">AnimationStore</span></code></a>([parent])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.animation.AnimMap" title="Red9.pro_pack.core.animation.AnimMap"><code class="xref py py-obj docutils literal"><span class="pre">AnimMap</span></code></a>([filterSettings,&nbsp;timerange])</td>
+<td>New base class for the Red9 Animation Format - r9Anim This inherits most of it&#8217;s node handling directly from the DataMap class in Red9.core.Red9_PoseSaver making it incredibly flexible when it comes to mapping animation data between nodes and rigs.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.animation.Anim_Redirect" title="Red9.pro_pack.core.animation.Anim_Redirect"><code class="xref py py-obj docutils literal"><span class="pre">Anim_Redirect</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Utilises the AnimPointCloud to allow animation to be re-directed via guide and reference meshes.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.animation.AnimPointCloud" title="Red9.pro_pack.core.animation.AnimPointCloud"><code class="xref py py-obj docutils literal"><span class="pre">AnimPointCloud</span></code></a>(nodes[,&nbsp;filterSettings,&nbsp;...])</td>
+<td>This relies heavily on the PosePointCloud base class.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.animation.Anim_Transfer" title="Red9.pro_pack.core.animation.Anim_Transfer"><code class="xref py py-obj docutils literal"><span class="pre">Anim_Transfer</span></code></a>([mrig])</td>
+<td>main animation transfer class for bouncing data to and from fbx</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.animation.LimbMatchingUI" title="Red9.pro_pack.core.animation.LimbMatchingUI"><code class="xref py py-obj docutils literal"><span class="pre">LimbMatchingUI</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Basic UI for the FK/IK matching used by metaData</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="Red9.pro_pack.core.animation.anim_redirect_ui">
+<code class="descname">anim_redirect_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.anim_redirect_ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>stub for the pro openUI call</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.animation.AnimationUI">
+<em class="property">class </em><code class="descname">AnimationUI</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.AnimationUI.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013310FC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.animation.timeWithinRange">
+<code class="descname">timeWithinRange</code><span class="sig-paren">(</span><em>baseRange</em>, <em>testRange</em>, <em>mode</em>, <em>idtext=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.timeWithinRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>test for the range handling in the UI / AnimMap <a href="#id1"><span class="problematic" id="id2">**</span></a>kws</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>baseRange</strong> &#8211; [start,end] which we want to see if our testRange falls within</li>
+<li><strong>testRange</strong> &#8211; [start,end] that we&#8217;re testing</li>
+<li><strong>mode</strong> &#8211; &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;&#8217;  modifies the ranges sent to test, if 
+* byRange_start - then we send [None,end] to test, ignoring the start and only testing if the end falls within bound
+* byRange_end - then we send [start,None] to test, ignoring the end and only testing if the start falls within bound
+* byRange - we test that the testRange falls within both the baseRanges start and end times
+* byAll - we don&#8217;t test, we just pass everything through</li>
+<li><strong>idtext</strong> &#8211; used only by the log.info call as a display hint</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.animation.animMap_validate_preload">
+<code class="descname">animMap_validate_preload</code><span class="sig-paren">(</span><em>mrig</em>, <em>filepath=None</em>, <em>infoDict=None</em>, <em>match='exact'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.animMap_validate_preload" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic call that raises a user prompt, used by the Animation_Load UI to validate the internal 
+AnimMap mRig type about to be loaded matches the given mRig class, if there&#8217;s a mismatch then 
+raise a confirmDialog for the user to choose whether to abort of not.</p>
+<p>this is a separate function so it can be used by multiple UI&#8217;s and not have to run through
+the AnimMap base code, verify before we hit the load calls ;)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mrig</strong> &#8211; mrig to test against</li>
+<li><strong>filepath</strong> &#8211; if given we load that r9Anim Map to extract the infoDict</li>
+<li><strong>infoDict</strong> &#8211; we may have already consumed this r9Anim file so we can pass the infoDict in directly
+to save loading that data again</li>
+<li><strong>match</strong> &#8211; not implemented yet</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>TODO: add a test to see if the infoDict has timecode, else we bail the TC flag is set and warn!!</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.animation.animMap_validate_presave">
+<code class="descname">animMap_validate_presave</code><span class="sig-paren">(</span><em>mrig</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.animMap_validate_presave" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic call that raises a user prompt, used by the Animation_Save UI to validate that
+the mrig about to be saved is NOT on an active Binder, and therefore has no keys!</p>
+<p>this is a separate function so it can be used by multiple UI&#8217;s and not have to run through
+the AnimMap base code, verify before we hit the load calls ;)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mrig</strong> &#8211; mrig to test against</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.animation.AnimationStore">
+<em class="property">class </em><code class="descname">AnimationStore</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimationStore.saveAnimMap">
+<code class="descname">saveAnimMap</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.saveAnimMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>main save wrapper for the animationUI</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimationStore.loadAnimMap">
+<code class="descname">loadAnimMap</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.loadAnimMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>main load wrapper for the animationUI</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013341A48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.animation.AnimMap">
+<em class="property">class </em><code class="descname">AnimMap</code><span class="sig-paren">(</span><em>filterSettings=None</em>, <em>timerange=()</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_PoseSaver.html#Red9.core.Red9_PoseSaver.DataMap" title="Red9.core.Red9_PoseSaver.DataMap"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_PoseSaver.DataMap</span></code></a></p>
+<p>New base class for the Red9 Animation Format - r9Anim
+This inherits most of it&#8217;s node handling directly from the DataMap class in Red9.core.Red9_PoseSaver
+making it incredibly flexible when it comes to mapping animation data between nodes and rigs.</p>
+<p>Like the PoseSaver this is capable of loading animation data relatively against a given node, 
+allowing you to load libraries of animations one after another in different spaces to that which they were saved.</p>
+<p>Vimeo example : <a class="reference external" href="https://vimeo.com/167872211">https://vimeo.com/167872211</a></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9panim&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9panim</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">=</span><span class="n">r9PAnim</span><span class="o">.</span><span class="n">AnimMap</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># like the pose saver you can load in a given filterSettings object directly</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r9Setup</span><span class="o">.</span><span class="n">red9Presets</span><span class="p">(),</span><span class="s1">&#39;Red9_DevRig.cfg&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">incRoots</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;# OR modify it on the fly in the class</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">metaData</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nurbsCurve&#39;</span><span class="p">]</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rootNode</span><span class="o">=</span><span class="s1">&#39;Red9:Main_Ctr&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;d:/test&#39;</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># saving</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">saveAnim</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># basic loading</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">offset</span><span class="o">=</span><span class="mi">20</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">loadAnim</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># load relative to a given startFrame</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">loadAnim</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">loadAsStored</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loadFromFrm</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># loading relative to a given node</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">loadAnim</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">loadAsStored</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loadFromFrm</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">referenceNode</span><span class="o">=</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">like many of these more complex calls this is bound directly to the mRig all the same flags are supported
+and the behaviour is also extended by way of a postload handler, currently designed to restore exportLoops
+and audio data that are gathered in the format on save from mRig</p>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">loadAnimation</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>I&#8217;m not passing any data in terms of nodes here, We&#8217;ll deal with
+those in the PoseSave and PoseLoad calls. Leaves this open for
+expansion</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filterSettings</strong> &#8211; specify a filterSettings object, or just use the settings that are bound to the class instance</li>
+<li><strong>timerange</strong> &#8211; specify a timerange to process, else use the default Red9 behaviour</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimMap.buildBlocks_fill">
+<code class="descname">buildBlocks_fill</code><span class="sig-paren">(</span><em>nodes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.buildBlocks_fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main capture routines to build the DataMap, see the Red9.core.Red9_PoseSaver for more details here</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimMap.saveAnim">
+<code class="descname">saveAnim</code><span class="sig-paren">(</span><em>nodes</em>, <em>filepath=None</em>, <em>useFilter=True</em>, <em>timerange=()</em>, <em>storeThumbnail=False</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.saveAnim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the animation out to an r9Anim file. Note that this currently stores JUST the animation data and doesn&#8217;t sample.
+It will however temporarily flatten animCurves to capture the collapsed effect of all.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; if use filter is on this is the root of the systems to filter from, else it&#8217;s given nodes to process</li>
+<li><strong>filepath</strong> &#8211; r9Anim file to load</li>
+<li><strong>useFilter</strong> &#8211; do we process all children of this rig or just selected</li>
+<li><strong>timerange</strong> &#8211; specific a timerange to store, else store all</li>
+<li><strong>storeThumbnail</strong> &#8211; this will be an avi but currently it&#8217;s a pose thumbnail</li>
+<li><strong>force</strong> &#8211; allow force write on a read only file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimMap.loadAnim">
+<code class="descname">loadAnim</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.loadAnim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a given r9Anim file, this is the same system as the r9Pose file system, 
+all the base handling comes from the r9Pose.DataMap base class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; if given load the data to only these. If given and filter=True this is the rootNode for the filter.</li>
+<li><strong>filepath</strong> &#8211; file to load - if not given the pose is loaded from a cached instance on this class.</li>
+<li><strong>useFilter</strong> &#8211; If the pose has an active Filter_Settings block and this is True then 
+use the filter on the destination hierarchy.</li>
+<li><strong>loadAsStored</strong> &#8211; load the anim data from the original time</li>
+<li><strong>loadFromFrm</strong> &#8211; if not loadAsStored, load the animation data from a given frame by comparing the 
+internal startFrm stored in the animMap with the given frame</li>
+<li><strong>loadFromTimecode</strong> &#8211; load against a given SMPTE timecode / frm binding, calculating the offset of 
+the data to load against a given timecode reference. IF timecodeBinding isn&#8217;t set then we gather the reference timecode from 
+the mRig&#8217;s internal data, else we use the timecode binding supplied</li>
+<li><strong>timecodeBinding</strong> &#8211; (frm, str(&#8216;00:00:00:00&#8217;))  Tuple where the first arg is the frame at which the second arg&#8217;s SMPTE timecode 
+has been set as reference, basically we&#8217;re saying that the timecode at frm is x</li>
+<li><strong>referenceNode</strong> &#8211; reference node used as the offset Node for relative loading</li>
+<li><strong>manageRanges</strong> &#8211; do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded</li>
+<li><strong>manageFileName</strong> &#8211; if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
+then we take the r9Anim&#8217;s filename and rename the Maya scene accordingly</li>
+<li><strong>keyStatics</strong> &#8211; if True then we key everything in the data at startFrame so that all non-keyed and static
+attrs that are stored internally as a pose are keyed.</li>
+<li><strong>blendRange</strong> &#8211; None or int : 1 is default. If an int is passed then we use this as the hold range for the data, setting a key at
+time=startFarme-blendRange to hold the current data before we load the new keys. Note that this also turns on the keyStatics
+to ensure the data is preserved</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimMap.extractData_Export">
+<code class="descname">extractData_Export</code><span class="sig-paren">(</span><em>manageExport='byAll'</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.extractData_Export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the key IDs for the exportLoops found in the r9Anim file, this
+passes through the manageExport code to match loop timings with the 
+r9Anim offset/start and end ranges</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>manageExport</strong> &#8211; byAll, byRange_start, byRange_end, byRange uses the timeWithinRange call</li>
+<li><strong>sort</strong> &#8211; sort the returned data by the endFrame in each loops data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimMap.extractData_Audio">
+<code class="descname">extractData_Audio</code><span class="sig-paren">(</span><em>manageAudio='byAll'</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.extractData_Audio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the key IDs for the AudioNodes found in the r9Anim file, this
+passes through the manageExport code to match loop timings with the 
+r9Anim offset/start and end ranges</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>manageExport</strong> &#8211; byAll, byRange_start, byRange_end, uses the timeWithinRange call</li>
+<li><strong>sort</strong> &#8211; sort the returned data by the endFrame in each loops data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.animation.Anim_Redirect">
+<em class="property">class </em><code class="descname">Anim_Redirect</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Utilises the AnimPointCloud to allow animation to be re-directed via guide and reference meshes. 
+This generates a spline based gyuide that you can edit to redirect animation around a scene and 
+because it uses the pointCloud setups nothing is bound to the animation data itself</p>
+<p>Vimeo demo: <a class="reference external" href="https://vimeo.com/126124902">https://vimeo.com/126124902</a></p>
+<dl class="classmethod">
+<dt id="Red9.pro_pack.core.animation.Anim_Redirect.show">
+<em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud">
+<em class="property">class </em><code class="descname">AnimPointCloud</code><span class="sig-paren">(</span><em>nodes</em>, <em>filterSettings=None</em>, <em>meshes=None</em>, <em>time=()</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_PoseSaver.html#Red9.core.Red9_PoseSaver.PosePointCloud" title="Red9.core.Red9_PoseSaver.PosePointCloud"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_PoseSaver.PosePointCloud</span></code></a></p>
+<p>This relies heavily on the PosePointCloud base class. This means we can
+hook directly into the renderMeshes variable to find the Geo for reference</p>
+<p>Utilises the AnimPointCloud to allow animation to be re-directed via guide and reference meshes. 
+This generates a spline based gyuide that you can edit to redirect animation around a scene and 
+because it uses the pointCloud setups nothing is bound to the animation data itself</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9panim&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9panim</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ppt</span><span class="o">=</span><span class="n">r9proAnim</span><span class="o">.</span><span class="n">AnimPointCloud</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="s1">&#39;MRig:Locomotion_Root_Ctrl&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ppt</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;Red9_DevRig.cfg&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ppt</span><span class="o">.</span><span class="n">time</span><span class="o">=</span><span class="n">r9Anim</span><span class="o">.</span><span class="n">timeLineRangeGet</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># build the cloud reference, select the point to use as root reference</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ppt</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># apply any offsets you may have made</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ppt</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; nodes or the root node of the hierarchy to process</li>
+<li><strong>filterSettings</strong> &#8211; specific filterSettings object to pass in, else we bind one to settings internally</li>
+<li><strong>meshes</strong> &#8211; meshes used as reference Geo when constructing the pointCloud nodes</li>
+<li><strong>time</strong> &#8211; timerange to process</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.syncdatafromCurrentInstance">
+<code class="descname">syncdatafromCurrentInstance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.syncdatafromCurrentInstance" title="Permalink to this definition">¶</a></dt>
+<dd><p>upgrade the sync call to include anim specific data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.generateVisualReference">
+<code class="descname">generateVisualReference</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.generateVisualReference" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.generateAnimationReference">
+<code class="descname">generateAnimationReference</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.generateAnimationReference" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate a spline track to represent the animation over time 
+and add reference meshes for start and end frames</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.snapPosePntstoNodes">
+<code class="descname">snapPosePntstoNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.snapPosePntstoNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>snap each pntCloud point to their respective Maya nodes over time.
+This call is used in the UI to &#8216;ReSync&#8217; the anim cloud if you&#8217;ve 
+modified the tracking point and need to sync the cloud to the modified track point</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.snapNodestoPosePnts">
+<code class="descname">snapNodestoPosePnts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.snapNodestoPosePnts" title="Permalink to this definition">¶</a></dt>
+<dd><p>snap each MAYA node to it&#8217;s respective pntCloud point over time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.build">
+<code class="descname">build</code><span class="sig-paren">(</span><em>rootReference=None</em>, <em>raw=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main build call to generate the system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rootReference</strong> &#8211; the node used for the initial pivot location</li>
+<li><strong>raw</strong> &#8211; Build the cloud system but do NOT snap the cloud to the animation data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.apply">
+<code class="descname">apply</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>pull data back from the cloud and snap the animationData to track</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.animation.Interpolation">
+<em class="property">class </em><code class="descname">Interpolation</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Generate interpolation values
+:param str_value: attr value of first keyframe
+:param end_value: attr value of second keyframe</p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Interpolation.space">
+<code class="descname">space</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.space" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">return the value between str_value and end_value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinquad">
+<code class="descname">easeinquad</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinquad" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeoutquad">
+<code class="descname">easeoutquad</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeoutquad" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinoutquad">
+<code class="descname">easeinoutquad</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinoutquad" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeincubic">
+<code class="descname">easeincubic</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeincubic" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeoutcubic">
+<code class="descname">easeoutcubic</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeoutcubic" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinoutcubic">
+<code class="descname">easeinoutcubic</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinoutcubic" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinquart">
+<code class="descname">easeinquart</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinquart" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeoutquart">
+<code class="descname">easeoutquart</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeoutquart" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinoutquart">
+<code class="descname">easeinoutquart</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinoutquart" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinquint">
+<code class="descname">easeinquint</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinquint" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeoutquint">
+<code class="descname">easeoutquint</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeoutquint" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinoutquint">
+<code class="descname">easeinoutquint</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinoutquint" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinback">
+<code class="descname">easeinback</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinback" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeoutback">
+<code class="descname">easeoutback</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeoutback" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinoutback">
+<code class="descname">easeinoutback</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinoutback" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinelastic">
+<code class="descname">easeinelastic</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinelastic" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeoutelastic">
+<code class="descname">easeoutelastic</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeoutelastic" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinoutelastic">
+<code class="descname">easeinoutelastic</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinoutelastic" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeoutbounce">
+<code class="descname">easeoutbounce</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeoutbounce" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinbounce">
+<code class="descname">easeinbounce</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinbounce" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinoutbounce">
+<code class="descname">easeinoutbounce</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinoutbounce" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeIncirc">
+<code class="descname">easeIncirc</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeIncirc" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeoutcirc">
+<code class="descname">easeoutcirc</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeoutcirc" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinoutcirc">
+<code class="descname">easeinoutcirc</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinoutcirc" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinexpo">
+<code class="descname">easeinexpo</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinexpo" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeoutexpo">
+<code class="descname">easeoutexpo</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeoutexpo" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinoutexpo">
+<code class="descname">easeinoutexpo</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinoutexpo" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinsine">
+<code class="descname">easeinsine</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinsine" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeoutsine">
+<code class="descname">easeoutsine</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeoutsine" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Interpolation.easeinoutsine">
+<code class="descname">easeinoutsine</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Interpolation.easeinoutsine" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; factor = current key iteration / by the number of keys between str_value and end_value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current animation value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.animation.Keyer">
+<em class="property">class </em><code class="descname">Keyer</code><span class="sig-paren">(</span><em>animcurve=None</em>, <em>frame=None</em>, <em>direction=True</em>, <em>samples=1</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Keyer.getkeyframedata">
+<code class="descname">getkeyframedata</code><span class="sig-paren">(</span><em>animcurve_frame</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.getkeyframedata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Keyer.goforward">
+<code class="descname">goforward</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.goforward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Keyer.gobackward">
+<code class="descname">gobackward</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.gobackward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Keyer.str_frame">
+<code class="descname">str_frame</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.str_frame" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Keyer.end_frame">
+<code class="descname">end_frame</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.end_frame" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Keyer.str_value">
+<code class="descname">str_value</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.str_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Keyer.end_value">
+<code class="descname">end_value</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.end_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Keyer.time">
+<code class="descname">time</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Keyer.future_keys">
+<code class="descname">future_keys</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.future_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Keyer.getselectedkeys">
+<code class="descname">getselectedkeys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.getselectedkeys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Keyer.iterselectedkeys">
+<code class="descname">iterselectedkeys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.iterselectedkeys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Keyer.setkeysonselection">
+<code class="descname">setkeysonselection</code><span class="sig-paren">(</span><em>interpolationtype</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.setkeysonselection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Keyer.setkeys">
+<code class="descname">setkeys</code><span class="sig-paren">(</span><em>interpolationtype</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyer.setkeys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.animation.Keyerui">
+<em class="property">class </em><code class="descname">Keyerui</code><span class="sig-paren">(</span><em>uifile='D:/Red9_Core/Red9_Core_Main/Red9/pro_pack\UI\uifiles\interpolationkeyer.ui'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.UI.uibase.BaseUI</span></code></p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Keyerui.setdirection">
+<code class="descname">setdirection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.setdirection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Keyerui.setamples">
+<code class="descname">setamples</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.setamples" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer">
+<em class="property">class </em><code class="descname">Anim_Transfer</code><span class="sig-paren">(</span><em>mrig=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>main animation transfer class for bouncing data to and from fbx</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.get_mrig">
+<code class="descname">get_mrig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.get_mrig" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">first MetaRigs found in the scene</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.get_data_from_binder">
+<code class="descname">get_data_from_binder</code><span class="sig-paren">(</span><em>binder_hik=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.get_data_from_binder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.get_data_from_mrig">
+<code class="descname">get_data_from_mrig</code><span class="sig-paren">(</span><em>mrig=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.get_data_from_mrig" title="Permalink to this definition">¶</a></dt>
+<dd><p>propagate the data from the mRig</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.get_binder_joints">
+<code class="descname">get_binder_joints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.get_binder_joints" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of all joint names in binder skeleton</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.set_timerange_from_binder_joints">
+<code class="descname">set_timerange_from_binder_joints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.set_timerange_from_binder_joints" title="Permalink to this definition">¶</a></dt>
+<dd><p>set scene timeranges using the animation ranges for binder joints animation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.set_timerange_from_rig_ctrls">
+<code class="descname">set_timerange_from_rig_ctrls</code><span class="sig-paren">(</span><em>timeline=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.set_timerange_from_rig_ctrls" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the current timeranges from the extent of the animation found on the mRig controllers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeline</strong> &#8211; set the Maya timeranges as well as the internal start/end data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.delete_exportloops">
+<code class="descname">delete_exportloops</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.delete_exportloops" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete all export loops currently connected to the mRigs ExportTag</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.delete_animation_on_binder_skeleton">
+<code class="descname">delete_animation_on_binder_skeleton</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.delete_animation_on_binder_skeleton" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete all animation on binder skeleton</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.add_export_loop">
+<code class="descname">add_export_loop</code><span class="sig-paren">(</span><em>loopname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.add_export_loop" title="Permalink to this definition">¶</a></dt>
+<dd><p>add an export loop to mRigs ExportTag, the timeranges for this are taken from 
+the internal start and end frames setup during the transfer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loopname</strong> &#8211; name for export loop</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.openbinderfile">
+<code class="descname">openbinderfile</code><span class="sig-paren">(</span><em>binderfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.openbinderfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>open a character binder file in current Maya session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bndfile</strong> &#8211; path to character binder file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">path to character binder file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.scenebasename">
+<code class="descname">scenebasename</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.scenebasename" title="Permalink to this definition">¶</a></dt>
+<dd><p>base name of the Maya scene less the extension</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.scenename">
+<code class="descname">scenename</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.scenename" title="Permalink to this definition">¶</a></dt>
+<dd><p>current Maya sceneName</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.scenedir">
+<code class="descname">scenedir</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.scenedir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.rigs_to_fbx">
+<code class="descname">rigs_to_fbx</code><span class="sig-paren">(</span><em>mayafiles</em>, <em>prefix=''</em>, <em>usecurrentscene=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.rigs_to_fbx" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrap over multiple files for processing</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.rig_to_fbx">
+<code class="descname">rig_to_fbx</code><span class="sig-paren">(</span><em>startFrame=None</em>, <em>endFrame=None</em>, <em>filepath=None</em>, <em>prefix=''</em>, <em>export=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.rig_to_fbx" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a given Red9 Puppet Rig output a clean FBX skeleton anim via a bound duplicated skeleton method</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>startFrame</strong> &#8211; start frame of the output</li>
+<li><strong>endFrame</strong> &#8211; end frame of the output</li>
+<li><strong>filepath</strong> &#8211; filepath to write to</li>
+<li><strong>prefix</strong> &#8211; simple prefix for the scenename on output</li>
+<li><strong>export</strong> &#8211; the main export call to fbx, if this is False then we just prep the file for export, without calling the FBX output</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.bake_hi">
+<code class="descname">bake_hi</code><span class="sig-paren">(</span><em>root</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.bake_hi" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple bake hierarchy from a given root node, used to bake the data to the clean
+skeleton hierarchy that we ultimately output to FBX. This code also runs a filterCurve
+call on the baked data to reduce it&#8217;s footprint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>root</strong> &#8211; string: root node of the hierarchy</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.export_to_fbx">
+<code class="descname">export_to_fbx</code><span class="sig-paren">(</span><em>node</em>, <em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.export_to_fbx" title="Permalink to this definition">¶</a></dt>
+<dd><p>export a given node to fbx</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node</strong> &#8211; string: name of node to be exported if node is a
+root of a hierarchy, all hierarchy will be exported</li>
+<li><strong>filepath</strong> &#8211; string: file path to export to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.clean_joint_hi">
+<code class="descname">clean_joint_hi</code><span class="sig-paren">(</span><em>root</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.clean_joint_hi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete everything that is not a joint from a hierarchy and
+set display attrs of the joints to default values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>root</strong> &#8211; string: root joint of the hierarchy</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list : list of strings, names of deleted nodes from the hierarchy</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder">
+<code class="descname">fbx_to_binder</code><span class="sig-paren">(</span><em>fbxfiles</em>, <em>binderfile=None</em>, <em>usecurrentscene=False</em>, <em>bake=False</em>, <em>runFilter=True</em>, <em>useTakeData=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main FBX &gt; Binder call, (PRO_TO_BND) loads the FBX file in, loads the binder in, and transfers the data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fbxfiles</strong> &#8211; list of fbx files to transfer</li>
+<li><strong>binderfile</strong> &#8211; BND binder file to use in the transfer</li>
+<li><strong>usecurrentscene</strong> &#8211; if true use the current scene, which then expects a binder file to be already loaded</li>
+<li><strong>bake</strong> &#8211; do we bake the results to the Red9 puppet and clean-up after our-selves?</li>
+<li><strong>runFilter</strong> &#8211; do we run the curve filter on the baked animation to try and optimise the results, removing static data etc</li>
+<li><strong>useTakeData</strong> &#8211; if True use the internal fbx take[1]&#8217;s timeSpan when setting the ranges</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.bakebinder">
+<code class="descname">bakebinder</code><span class="sig-paren">(</span><em>runFilter=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.bakebinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic call to bake the binder data down to the rig and clean-up</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.animation.track_to_locator">
+<code class="descname">track_to_locator</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>timerange=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.track_to_locator" title="Permalink to this definition">¶</a></dt>
+<dd><p>for each nodes create a locator named accordingly and track it over the selected time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; nodes to track, if not passed in them we use the selected objects</li>
+<li><strong>timerange</strong> &#8211; do we track timerange or not, uses the same Red9 timerange handler as everything else</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.animation.LimbMatchingUI">
+<em class="property">class </em><code class="descname">LimbMatchingUI</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Basic UI for the FK/IK matching used by metaData</p>
+<dl class="classmethod">
+<dt id="Red9.pro_pack.core.animation.LimbMatchingUI.show">
+<em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui">
+<em class="property">class </em><code class="descname">Fbx_To_Bnd_ui</code><span class="sig-paren">(</span><em>fbxfiles=None</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_mw_fbx_to_bnd</span></code></p>
+<p>Main window for CI animation transfer from fbx to a rerd9 binder rig</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.buildpresets">
+<code class="descname">buildpresets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.buildpresets" title="Permalink to this definition">¶</a></dt>
+<dd><p>populate the presets comboBox from the Project object if set</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setuisettings">
+<code class="descname">setuisettings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setuisettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>populate ui settings using SETTINGS data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setbinder">
+<code class="descname">setbinder</code><span class="sig-paren">(</span><em>browse=True</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setbinder" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the binder file from the browse button or the change of the preset combo</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setusecurrentscene">
+<code class="descname">setusecurrentscene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setusecurrentscene" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setbake">
+<code class="descname">setbake</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setbake" title="Permalink to this definition">¶</a></dt>
+<dd><p>manage the bake flag and warn about the r9Anim outputs</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.runfilter">
+<code class="descname">runfilter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.runfilter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setr9anim">
+<code class="descname">setr9anim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setr9anim" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the r9Anim settings</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setp4Managed">
+<code class="descname">setp4Managed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setp4Managed" title="Permalink to this definition">¶</a></dt>
+<dd><p>ui callback for perforce icaf management</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setupLogFile">
+<code class="descname">setupLogFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setupLogFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates a log file for the anim transfer code</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012DA4048&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.writeToLog">
+<code class="descname">writeToLog</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.writeToLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>func to call to write the supplied data to the log file.
+Closes it every time, because the batch can kill maya outright.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.transfer">
+<code class="descname">transfer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.transfer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main transfer wrap from the UI, including the export call</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../red9core_templates/Red9_Tools.html"
+                        title="previous chapter">Red9_Tools</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Red9_Pro_audio.html"
+                        title="next chapter">Pro_Pack : Audio</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/red9pro_templates/Red9_Pro_animation.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_audio.html" title="Pro_Pack : Audio"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../red9core_templates/Red9_Tools.html" title="Red9_Tools"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

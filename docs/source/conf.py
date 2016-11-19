@@ -16,7 +16,19 @@
 import sys
 import os
 
-if os.path.exists('C:\\Program Files\\Autodesk\\Maya2015'):
+if os.path.exists('C:\\Program Files\\Autodesk\\Maya2012'):
+    os.environ["MAYA_LOCATION"] = "C:\\Program Files\\Autodesk\\Maya2012"
+    os.environ["PYTHONHOME"] = "C:\\Program Files\\Autodesk\\Maya2012\\Python"
+    os.environ["PATH"] = os.environ["PATH"] + ";C:\\Program Files\\Autodesk\\Maya2012\\bin;" 
+elif os.path.exists('C:\\Program Files\\Autodesk\\Maya2013'):
+    os.environ["MAYA_LOCATION"] = "C:\\Program Files\\Autodesk\\Maya2013"
+    os.environ["PYTHONHOME"] = "C:\\Program Files\\Autodesk\\Maya2013\\Python"
+    os.environ["PATH"] = os.environ["PATH"] + ";C:\\Program Files\\Autodesk\\Maya2013\\bin;" 
+elif os.path.exists('C:\\Program Files\\Autodesk\\Maya2014'):
+    os.environ["MAYA_LOCATION"] = "C:\\Program Files\\Autodesk\\Maya2014"
+    os.environ["PYTHONHOME"] = "C:\\Program Files\\Autodesk\\Maya2014\\Python"
+    os.environ["PATH"] = os.environ["PATH"] + ";C:\\Program Files\\Autodesk\\Maya2014\\bin;" 
+elif os.path.exists('C:\\Program Files\\Autodesk\\Maya2015'):
     os.environ["MAYA_LOCATION"] = "C:\\Program Files\\Autodesk\\Maya2015"
     os.environ["PYTHONHOME"] = "C:\\Program Files\\Autodesk\\Maya2015\\Python"
     os.environ["PATH"] = os.environ["PATH"] + ";C:\\Program Files\\Autodesk\\Maya2015\\bin;"
@@ -25,12 +37,15 @@ else:
     os.environ["PYTHONHOME"] = "C:\\Program Files\\Autodesk\\Maya2016\\Python"
     os.environ["PATH"] = os.environ["PATH"] + ";C:\\Program Files\\Autodesk\\Maya2016\\bin;"
 
+
+
 for p in sys.path:print p
 
 import maya.standalone
 maya.standalone.initialize(name='python')
 
-
+import time
+time.sleep(2)
 #sys.path.append("P:/Red9_Pipeline/RedNine")
 #import Red9
 #Red9.start()

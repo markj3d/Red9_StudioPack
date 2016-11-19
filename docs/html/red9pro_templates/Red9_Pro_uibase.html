@@ -1,0 +1,481 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Pro_Pack : uibase &#8212; Red9 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <link rel="prev" title="Pro_Pack : skinning" href="Red9_Pro_skinning - Copy.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_skinning - Copy.html" title="Pro_Pack : skinning"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pro-pack-uibase">
+<h1>Pro_Pack : uibase<a class="headerlink" href="#pro-pack-uibase" title="Permalink to this headline">¶</a></h1>
+<p>ProPack uibase QT and UI management for ProPack</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9uib&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9uib</span>
+</pre></div>
+</div>
+<span class="target" id="module-Red9.pro_pack.UI.uibase"></span><p>This module is the base for all the Qt windows in Red9pro</p>
+<p class="rubric">Main Classes</p>
+<dl class="class">
+<dt id="Red9.pro_pack.UI.uibase.Icons">
+<em class="property">class </em><code class="descname">Icons</code><span class="sig-paren">(</span><em>iconsFolder=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.Icons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.Icons.createIconsFrom">
+<code class="descname">createIconsFrom</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.Icons.createIconsFrom" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.Icons.createIcons">
+<code class="descname">createIcons</code><span class="sig-paren">(</span><em>extTypes</em>, <em>dirname</em>, <em>files</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.Icons.createIcons" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.createicon">
+<code class="descname">createicon</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.createicon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a QIcon object from a guiven path
+:param path: path to an image
+:return: custom QIcon objet</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.hline">
+<code class="descname">hline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.hline" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.VLine">
+<code class="descname">VLine</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.VLine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.clear_layout">
+<code class="descname">clear_layout</code><span class="sig-paren">(</span><em>layout</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.clear_layout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.setr9btn">
+<code class="descname">setr9btn</code><span class="sig-paren">(</span><em>btn</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.setr9btn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.setr9css">
+<code class="descname">setr9css</code><span class="sig-paren">(</span><em>uiinstance</em>, <em>css=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.setr9css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.UI.uibase.MessageBox">
+<em class="property">class </em><code class="descname">MessageBox</code><span class="sig-paren">(</span><em>message</em>, <em>funcyes=None</em>, <em>funcno=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.MessageBox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Simple Context Manager for MessageBox</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.UI.uibase.FileDialog">
+<em class="property">class </em><code class="descname">FileDialog</code><a class="headerlink" href="#Red9.pro_pack.UI.uibase.FileDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>wraper for cmds.fileDialog2
+EX.</p>
+<p>f = FileDialog()</p>
+<p>#Get an existing file path
+filepath = f.getFile(&#8216;jpg&#8217;)</p>
+<p>#None existing file path
+filepath = f.setFile(&#8216;jpg&#8217;)</p>
+<p>#Get an existing folder path
+folderpath = f.getFolder()</p>
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.FileDialog.getFile">
+<code class="descname">getFile</code><span class="sig-paren">(</span><em>ext=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.FileDialog.getFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an existing file path
+:param ext: string with extention name for the  file to be open ex. &#8216;jpg&#8217;
+:return: string with the file path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.FileDialog.setFile">
+<code class="descname">setFile</code><span class="sig-paren">(</span><em>ext=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.FileDialog.setFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set None existing file path
+:param ext: string with extension name for the  file to be save ex. &#8216;jpg&#8217;
+:return: string with the file path</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.FileDialog.getFolder">
+<code class="descname">getFolder</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.FileDialog.getFolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an existing folder path
+:return: string with the folder path</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.loadUiType">
+<code class="descname">loadUiType</code><span class="sig-paren">(</span><em>ui_file</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.loadUiType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pyside &#8220;loadUiType&#8221; command like PyQt4 has one, so we have to convert the
+ui file to py code in-memory first and then execute it in a special frame
+to retrieve the form_class.</p>
+<p>Ex.
+base_class, form_class = loadUiType(r&#8217;D:ui.ui&#8217;)</p>
+<dl class="docutils">
+<dt>class Test(base_class, form_class):</dt>
+<dd><dl class="first last docutils">
+<dt>def __init__(self, parent=get_maya_main_window()):</dt>
+<dd>super(Test, self).__init__(parent)
+self.setupUi(self)</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.loadUi">
+<code class="descname">loadUi</code><span class="sig-paren">(</span><em>uifile</em>, <em>parent=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.loadUi" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>uifile</strong> &#8211; path to .ui file</li>
+<li><strong>parent</strong> &#8211; patent window for .ui file, if no parent guiven, it will use the main maya ui</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">.ui file as an instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.saveFileName">
+<code class="descname">saveFileName</code><span class="sig-paren">(</span><em>windowtitle=''</em>, <em>path=None</em>, <em>_filter='All Files (*)'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.saveFileName" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>windowtitle</strong> &#8211; string with title of the window</li>
+<li><strong>path</strong> &#8211; path where to start</li>
+<li><strong>_filter</strong> &#8211; filter the file formats</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">full path to new file</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>EX.
+image = saveFileName(windowtitle=&#8217;Save File&#8217;,</p>
+<blockquote>
+<div>path=path,
+_filter=&#8221;Image Files (<a href="#id1"><span class="problematic" id="id2">*</span></a>.png <a href="#id3"><span class="problematic" id="id4">*</span></a>.jpg <a href="#id5"><span class="problematic" id="id6">*</span></a>.bmp)&#8221;)</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.openFileName">
+<code class="descname">openFileName</code><span class="sig-paren">(</span><em>windowtitle=''</em>, <em>path=None</em>, <em>_filter='All Files (*)'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.openFileName" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>windowtitle</strong> &#8211; string with title of the window</li>
+<li><strong>path</strong> &#8211; path where to start</li>
+<li><strong>_filter</strong> &#8211; filter the file formats</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">full path to selected file</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>EX.
+image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
+<blockquote>
+<div>path=path,
+_filter=&#8221;Image Files (<a href="#id7"><span class="problematic" id="id8">*</span></a>.png <a href="#id9"><span class="problematic" id="id10">*</span></a>.jpg <a href="#id11"><span class="problematic" id="id12">*</span></a>.bmp)&#8221;)</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.openFileNames">
+<code class="descname">openFileNames</code><span class="sig-paren">(</span><em>windowtitle=''</em>, <em>path=None</em>, <em>_filter='All Files (*)'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.openFileNames" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>windowtitle</strong> &#8211; string with title of the window</li>
+<li><strong>path</strong> &#8211; path where to start</li>
+<li><strong>_filter</strong> &#8211; filter the file formats</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">full path to selected file</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>EX.
+image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
+<blockquote>
+<div>path=path,
+_filter=&#8221;Image Files (<a href="#id13"><span class="problematic" id="id14">*</span></a>.png <a href="#id15"><span class="problematic" id="id16">*</span></a>.jpg <a href="#id17"><span class="problematic" id="id18">*</span></a>.bmp)&#8221;)</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.openDirName">
+<code class="descname">openDirName</code><span class="sig-paren">(</span><em>windowtitle=''</em>, <em>path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.openDirName" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>windowtitle</strong> &#8211; string with title of the window</li>
+<li><strong>path</strong> &#8211; path where to start</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">full path to selected directory</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>EX.
+image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
+<blockquote>
+<div>path=path&#8221;)</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.UI.uibase.ListModel">
+<em class="property">class </em><code class="descname">ListModel</code><span class="sig-paren">(</span><em>alist=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ListModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtCore.QAbstractListModel</span></code></p>
+<p>List View Model setup for better management</p>
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.ListModel.rowCount">
+<code class="descname">rowCount</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ListModel.rowCount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.ListModel.data">
+<code class="descname">data</code><span class="sig-paren">(</span><em>index</em>, <em>role</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ListModel.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.ListModel.resetItems">
+<code class="descname">resetItems</code><span class="sig-paren">(</span><em>model</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ListModel.resetItems" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.UI.uibase.ListModel.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001246BD08&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ListModel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.setComboBox">
+<code class="descname">setComboBox</code><span class="sig-paren">(</span><em>comboBox</em>, <em>data=None</em>, <em>setCurrentIndex=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.setComboBox" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.validateEmail">
+<code class="descname">validateEmail</code><span class="sig-paren">(</span><em>email</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.validateEmail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.addaction">
+<code class="descname">addaction</code><span class="sig-paren">(</span><em>addTo</em>, <em>text=None</em>, <em>cmd=None</em>, <em>separator=False</em>, <em>enabled=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.addaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add QAction to a given widget
+:param addTo: QAction to add action to
+:param text: string : name of the QAction
+:param cmd: command for that QAction will execute
+:param separator: boolean : True to add a separator
+:return: QAction object</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.addQListWidgetItem">
+<code class="descname">addQListWidgetItem</code><span class="sig-paren">(</span><em>text</em>, <em>listWiget</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.addQListWidgetItem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.UI.uibase.BaseUI">
+<em class="property">class </em><code class="descname">BaseUI</code><span class="sig-paren">(</span><em>uifile=None</em>, <em>unik=True</em>, <em>parent=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.BaseUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.BaseUI.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>dock=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.BaseUI.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.BaseUI.dock">
+<code class="descname">dock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.BaseUI.dock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.BaseUI.addQAction">
+<code class="descname">addQAction</code><span class="sig-paren">(</span><em>addTo</em>, <em>text=None</em>, <em>cmd=None</em>, <em>separator=False</em>, <em>enabled=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.BaseUI.addQAction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.BaseUI.addQListWidgetItem">
+<code class="descname">addQListWidgetItem</code><span class="sig-paren">(</span><em>text</em>, <em>listWiget</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.BaseUI.addQListWidgetItem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.UI.uibase.ProgressBarDialog_QTContext">
+<em class="property">class </em><code class="descname">ProgressBarDialog_QTContext</code><span class="sig-paren">(</span><em>maxValue=100</em>, <em>step=1</em>, <em>title=''</em>, <em>text=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ProgressBarDialog_QTContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>CONTEXT MANAGER : Context manager to make it easier to wrap progressBars</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>maxValue</strong> &#8211; max value used in the progress</li>
+<li><strong>interruptable</strong> &#8211; if the progress is interruptable / escapable</li>
+<li><strong>step</strong> &#8211; step used in the progress bar</li>
+<li><strong>ismain</strong> &#8211; if we use the main progressBar OR a progressWindow to view the progress</li>
+<li><strong>title</strong> &#8211; only valid if ismain=False, used as the progressUI window title</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#Example of using this in code</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">progressBar</span><span class="o">=</span><span class="n">ProgressBarContext</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#now do your code but increment and check the progress state</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">progressBar</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>       <span class="k">if</span> <span class="n">progressBar</span><span class="o">.</span><span class="n">isCancelled</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="nb">print</span> <span class="s1">&#39;process cancelled&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="k">break</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">progressBar</span><span class="o">.</span><span class="n">updateProgress</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.ProgressBarDialog_QTContext.isCanceled">
+<code class="descname">isCanceled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ProgressBarDialog_QTContext.isCanceled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.ProgressBarDialog_QTContext.setText">
+<code class="descname">setText</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ProgressBarDialog_QTContext.setText" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.UI.uibase.ProgressBarDialog_QTContext.updateProgress">
+<code class="descname">updateProgress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ProgressBarDialog_QTContext.updateProgress" title="Permalink to this definition">¶</a></dt>
+<dd><p>more simplistic way to just update the progress. Previously we generate a
+counter and used that with the setProgress() call, this is a far better way
+to do it</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Red9_Pro_skinning - Copy.html"
+                        title="previous chapter">Pro_Pack : skinning</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/red9pro_templates/Red9_Pro_uibase.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_skinning - Copy.html" title="Pro_Pack : skinning"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

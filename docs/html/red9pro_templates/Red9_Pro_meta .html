@@ -1,0 +1,1750 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Pro_Pack : MetaData &#8212; Red9 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <link rel="next" title="Pro_Pack : Optimiser" href="Red9_Pro_optimiser.html" />
+    <link rel="prev" title="Pro_Pack : ImportExport" href="Red9_Pro_importexport.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_optimiser.html" title="Pro_Pack : Optimiser"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_importexport.html" title="Pro_Pack : ImportExport"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pro-pack-metadata">
+<h1>Pro_Pack : MetaData<a class="headerlink" href="#pro-pack-metadata" title="Permalink to this headline">¶</a></h1>
+<p>ProPack metadata module contains all the specifically build nodes for the
+extended pipelines running under ProPack. These include our Red9Puppet and
+the exporter and audio managementsystems</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9pmeta&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9pmeta</span>
+</pre></div>
+</div>
+<span class="target" id="module-Red9.pro_pack.core.metadata_pro"></span><p>This module is extensions to the main metaData support through the Red9 StudioPack and
+requires the StudioPack codebase to run</p>
+<p class="rubric">Main Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig_Base</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Red9 bespoke Base Class for Rig system MetaRig core.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Red9 bespoke Puppet Rig system MetaRig core ;) This is the Red9 Puppets master base class into all the systems.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig_SRC</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Class node used by the publisher systems.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig_Prop</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Idea here is if a MayaNode is passed in and has the mClass attr we pass that into the super(__new__) such that an object of that class is then instantiated and returned.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig_FacialUI</span></code></a>(*args,&nbsp;**kws)</td>
+<td>SubClass of the MetaRig, designed to manage facial board style controls for a facial system.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI" title="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI"><code class="xref py py-obj docutils literal"><span class="pre">SRC_RiggingUI</span></code></a>()</td>
+<td>SRC extension rigging UI, allowing you to add a new SRC_Extension MNode and wire controllers to it.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-obj docutils literal"><span class="pre">ExportTag_Base</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Generic Export base class inheriting from MetaClass.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Character" title="Red9.pro_pack.core.metadata_pro.ExportTag_Character"><code class="xref py py-obj docutils literal"><span class="pre">ExportTag_Character</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Export subclass for characters</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Facial" title="Red9.pro_pack.core.metadata_pro.ExportTag_Facial"><code class="xref py py-obj docutils literal"><span class="pre">ExportTag_Facial</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Export subclass for Facial UI systems</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Prop" title="Red9.pro_pack.core.metadata_pro.ExportTag_Prop"><code class="xref py py-obj docutils literal"><span class="pre">ExportTag_Prop</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Export subclass for props</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Environment" title="Red9.pro_pack.core.metadata_pro.ExportTag_Environment"><code class="xref py py-obj docutils literal"><span class="pre">ExportTag_Environment</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Export subclass for environments</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode" title="Red9.pro_pack.core.metadata_pro.ExportLoopNode"><code class="xref py py-obj docutils literal"><span class="pre">ExportLoopNode</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Export Timerange node, intended to hook to a valid ExportTag</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.SceneMover" title="Red9.pro_pack.core.metadata_pro.SceneMover"><code class="xref py py-obj docutils literal"><span class="pre">SceneMover</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Scene Shift Handler : to move an entire Maya scene in world space</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.AudioGroup" title="Red9.pro_pack.core.metadata_pro.AudioGroup"><code class="xref py py-obj docutils literal"><span class="pre">AudioGroup</span></code></a>(*args,&nbsp;**kws)</td>
+<td>a simple node designed to group / link audio sound nodes to together so they can</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="Red9.pro_pack.core.metadata_pro.wireControlsToNewMetaRig">
+<code class="descname">wireControlsToNewMetaRig</code><span class="sig-paren">(</span><em>nodes</em>, <em>name=None</em>, <em>mRig=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.wireControlsToNewMetaRig" title="Permalink to this definition">¶</a></dt>
+<dd><p>fast way to wire nodes to a blank MetaRig to gain some of the support
+features of the codebase without having to manually build a structured network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; nodes to wire as controllers to the MetaRig</li>
+<li><strong>name</strong> &#8211; name of the MetaRig node generated if no mRig was passed in.</li>
+<li><strong>mRig</strong> &#8211; optional MetaRig instance to add the controls too, 
+if blank then we generate a new instance and return that</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.metadata_pro.get_Red9ProductionRig">
+<code class="descname">get_Red9ProductionRig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.get_Red9ProductionRig" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper to specifically return instances of the ProMeta body Rig for 
+clients running our rigging systems</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.metadata_pro.get_Red9ProductionFacialUI">
+<code class="descname">get_Red9ProductionFacialUI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.get_Red9ProductionFacialUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper to specifically return instances of the ProMeta facial GUI, be that our internal
+production board, or an external board connected to the node such as 3Laterals</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.metadata_pro.get_ExportTags">
+<code class="descname">get_ExportTags</code><span class="sig-paren">(</span><em>tagIDs=[]</em>, <em>exactmatch=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.get_ExportTags" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper to return all ExportTags in the scene with optional filtering by tagID</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tagIDs</strong> &#8211; [] if given only return exportTags whos id matches</li>
+<li><strong>exactmatch</strong> &#8211; bool, if True we name the exact string passed in, else we do &#8216;if x in y&#8217; : default=False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.metadata_pro.get_ExportLoops">
+<code class="descname">get_ExportLoops</code><span class="sig-paren">(</span><em>loopnames=[]</em>, <em>exactmatch=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.get_ExportLoops" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper to return all ExportLoopNodes in the scene with optional filtering by loopname</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>loopname</strong> &#8211; [] if given only return ExportLoops whos loopname matches</li>
+<li><strong>exactmatch</strong> &#8211; bool, if True we name the exact string passed in, else we do &#8216;if x in y&#8217; : default=False</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.metadata_pro.get_fileProductionType">
+<code class="descname">get_fileProductionType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.get_fileProductionType" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the status of the currently loaded file depending on the systems found</p>
+<p>rType: &#8216;SRC_EXT&#8217;,&#8217;RIG&#8217;,&#8217;PUB&#8217;</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.Inspector">
+<em class="property">class </em><code class="descname">Inspector</code><span class="sig-paren">(</span><em>mRig</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Inspector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>mNode inspector is designed to retrieve information on all the
+internal systems of a given mRig</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base">
+<em class="property">class </em><code class="descname">Pro_MetaRig_Base</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaRig" title="Red9.core.Red9_Meta.MetaRig"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaRig</span></code></a></p>
+<p>Red9 bespoke Base Class for Rig system MetaRig core. This is a general
+extension to the default MetaRig to include systems such as the export handling.
+This is aimed to be used for simple bespoke rigs and to provide a new base set of
+functions for the main rig and facial classes that inherit from it</p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.isBound">
+<code class="descname">isBound</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.isBound" title="Permalink to this definition">¶</a></dt>
+<dd><p>check to see if this rig is on a live binder</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.visibility_renderMeshes">
+<code class="descname">visibility_renderMeshes</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.visibility_renderMeshes" title="Permalink to this definition">¶</a></dt>
+<dd><p>if self.renderMeshes is connected then switch the visibility state of 
+the linked geo</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; switch state</li>
+<li><strong>query</strong> &#8211; query the current state of the renderMeshes visibility</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.visibility_grpmain">
+<code class="descname">visibility_grpmain</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.visibility_grpmain" title="Permalink to this definition">¶</a></dt>
+<dd><p>if self.GRP_Main is set then switch the visibility state of 
+the linked GRP_Main Grp node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; switch state</li>
+<li><strong>query</strong> &#8211; query the current state of the grpmain visibility</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_rootJnt">
+<code class="descname">get_rootJnt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_rootJnt" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic wrapper for some of the healthTests. This should be a reliable and consistent
+way to get the skeletonRoot jnt back from any rig system. This is here to handle simple
+mSRC style rigs that purely have an exportTag to ID the root jnt.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.addExportTag">
+<code class="descname">addExportTag</code><span class="sig-paren">(</span><em>tagID=None</em>, <em>exportClass=None</em>, <em>exportRoot=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.addExportTag" title="Permalink to this definition">¶</a></dt>
+<dd><p>add an export tag of type to the rig</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tag</strong> &#8211; ID of the tag as a string</li>
+<li><strong>exportClass</strong> &#8211; class of exportTag to link up, this can be a string or the actual class</li>
+<li><strong>exportRoot</strong> &#8211; the root joint for the export</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>TODO : run a getExportTags first to make sure we validate 1 ExpTag of type per rig
+BUT an mRig should be able to have 1 character and 1 facial tag at the same time</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.getExportTags">
+<code class="descname">getExportTags</code><span class="sig-paren">(</span><em>exportClass=None</em>, <em>singular=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.getExportTags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all bound exportTags in the system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>exportClass</strong> &#8211; if given only search for exportClass of type else return all connected exportTags</li>
+<li><strong>singular</strong> &#8211; if True we clamp this to the exportTag wire from self rather than any network searching</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.load_pickerTemplate">
+<code class="descname">load_pickerTemplate</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.load_pickerTemplate" title="Permalink to this definition">¶</a></dt>
+<dd><p>load and bind a given characterPicker template file to the rig</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; cpicker template file to load to the rig</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.loadAnimation_postload_call">
+<code class="descname">loadAnimation_postload_call</code><span class="sig-paren">(</span><em>feedback</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.loadAnimation_postload_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded call that gets run after the mRig.loadAnimation func so we can
+deal and expand with additional functionality without padding out the main
+AnimMap filehandlers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>feedback</strong> &#8211; the feedback data from the loadAnimations call</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyAnimation">
+<code class="descname">copyAnimation</code><span class="sig-paren">(</span><em>mRig</em>, <em>incRoots=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyAnimation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy the animation data from self onto the given destination mRig</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mRig</strong> &#8211; destination mRig to copy the animation data over too</li>
+<li><strong>incRoots</strong> &#8211; usual flag to include the CTRL_Main controller in the copy</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyPose">
+<code class="descname">copyPose</code><span class="sig-paren">(</span><em>mRig</em>, <em>incRoots=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyPose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy the pose data from self onto the given destination mRig</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mRig</strong> &#8211; destination mRig to copy the animation data over too</li>
+<li><strong>incRoots</strong> &#8211; usual flag to include the CTRL_Main controller in the copy</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyExportLoops">
+<code class="descname">copyExportLoops</code><span class="sig-paren">(</span><em>mRig</em>, <em>loops=[]</em>, <em>loopnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyExportLoops" title="Permalink to this definition">¶</a></dt>
+<dd><p>copy all exportLoop nodes from self to given mRig system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mRig</strong> &#8211; destination mRig to copy the animation data over too</li>
+<li><strong>loops</strong> &#8211; optional specific loops to copy, else we copy all loops found</li>
+<li><strong>loopnames</strong> &#8211; if not loops then this becomes a filter to find loops with specific names</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.castAudioGrp">
+<code class="descname">castAudioGrp</code><span class="sig-paren">(</span><em>mRig</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.castAudioGrp" title="Permalink to this definition">¶</a></dt>
+<dd><p>connect any instance of an AudioGrp node from this mRig over to the given</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mRig</strong> &#8211; destination mRig to copy the animation data over too</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyData_to_rig">
+<code class="descname">copyData_to_rig</code><span class="sig-paren">(</span><em>mRig</em>, <em>animation=True</em>, <em>exportData=True</em>, <em>audioGrp=True</em>, <em>refEdits=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyData_to_rig" title="Permalink to this definition">¶</a></dt>
+<dd><p>cast all animation data on this mRig over to the given mRig</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mRig</strong> &#8211; the rig to take the animation data over too</li>
+<li><strong>animation</strong> &#8211; copy the animation data from self to the given mRig</li>
+<li><strong>exportData</strong> &#8211; copy the exportData data from self to the given mRig</li>
+<li><strong>audioGrp</strong> &#8211; copy the audioGrp data from self to the given mRig</li>
+<li><strong>refEdits</strong> &#8211; copy the refEdits data from self to the given mRig, 
+not yet implemented!</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>TODO: cast referenced edits to this source rig</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.gatherInfo">
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=3</em>, <em>keys=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>collect key info on this rig system, used to pass data into the
+r9Anim and r9Pose files as cross-reference</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>level</strong> &#8211; 0,1,2,3 : the detail into which we gather data in the report
+0 = just gather data on self
+1 = gather data on self and connected subsystems
+2 = more granular detail on all systems, exporter goes into timeranges at this level
+3 = run everything and gather as much as we can at the mNode level network
+4 = including going down to the renderMeshes and inspecting those for shaders, textures, blends etc</li>
+<li><strong>keys</strong> &#8211; only return specific keys within the gathered data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_exportData">
+<code class="descname">info_exportData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_exportData" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a dict of all info on the exporter networks including the loops / export paths &amp; roots</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_texturePaths">
+<code class="descname">info_texturePaths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_texturePaths" title="Permalink to this definition">¶</a></dt>
+<dd><p>return all textures bound to this mRig&#8217;s renderMeshes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_shaders">
+<code class="descname">info_shaders</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_shaders" title="Permalink to this definition">¶</a></dt>
+<dd><p>return all currently connected shadingEngines from the connected renderMeshes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_jointCount">
+<code class="descname">info_jointCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_jointCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the current joint count of the bound Skeleton hierarchy
+the root of this is found firstly via the exportTags, if these aren&#8217;t setup
+then the skeletonRoot is found from the exportSkeletonRoot wire to the mRig</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_blendShapes">
+<code class="descname">info_blendShapes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_blendShapes" title="Permalink to this definition">¶</a></dt>
+<dd><p>return all blendshapes bound to the connected renderMeshes history</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_blendCount">
+<code class="descname">info_blendCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_blendCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the current blendshape count of any blendshapes in the connected renderMeshes history</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_audioGrp">
+<code class="descname">info_audioGrp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_audioGrp" title="Permalink to this definition">¶</a></dt>
+<dd><p>return all audioGRP info connected to this rig system including connected audioNodes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_timecode">
+<code class="descname">info_timecode</code><span class="sig-paren">(</span><em>timerange=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_timecode" title="Permalink to this definition">¶</a></dt>
+<dd><p>return all timecode data for this rig</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timerange</strong> &#8211; we need to process the Timecode against a start and end time to get the 
+range of the anim data, if none is passed in then we grab the timeline ranges</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig">
+<em class="property">class </em><code class="descname">Pro_MetaRig</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<p>Red9 bespoke Puppet Rig system MetaRig core ;)
+This is the Red9 Puppets master base class into all the systems.</p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.Skeleton">
+<code class="descname">Skeleton</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.Skeleton" title="Permalink to this definition">¶</a></dt>
+<dd><p>INTERNAL RED9 : binding of the skeleton class used by the build code</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.gatherInfo">
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=3</em>, <em>keys=[]</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>collect key info on this Red9 Puppet rig system, used to pass data into the
+r9Anim and r9Pose files as cross-reference</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>level</strong> &#8211; 0,1,2,3 : the detail into which we gather data in the report
+0 = just gather data on self
+1 = gather data on self and connected subsystems
+2 = more granular detail on all systems, exporter goes into timeranges at this level
+3 = run everything and gather as much as we can at the mNode level network
+4 = including going down to the renderMeshes and inspecting those for shaders,textures, blends etc</li>
+<li><strong>keys</strong> &#8211; only return specific keys within the gathered data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.connectFacialUI">
+<code class="descname">connectFacialUI</code><span class="sig-paren">(</span><em>facialcore=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.connectFacialUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>connect an instance of the FacialCore to the mRig</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_patches">
+<code class="descname">get_patches</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_patches" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the patch data and print details</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.isBound">
+<code class="descname">isBound</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.isBound" title="Permalink to this definition">¶</a></dt>
+<dd><p>check to see if this rig is on a live binder</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_renderMeshes_head">
+<code class="descname">visibility_renderMeshes_head</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_renderMeshes_head" title="Permalink to this definition">¶</a></dt>
+<dd><p>switch off the display of all body_Rig head geo based on the renderMesh_head attr
+and if we have a facial rig wired, turn ON it&#8217;s renderMesh geo</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; switch the state of the renderMeshs</li>
+<li><strong>query</strong> &#8211; query the current state</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_facial">
+<code class="descname">visibility_facial</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_facial" title="Permalink to this definition">¶</a></dt>
+<dd><p>if the FacialCore attr is wired to a facial rig then this will toggle
+the rigs renderMeshes_Head and the FacialCore&#8217;s renderMeshes, effectively
+switching off the body&#8217;s head geo and turning on the facialCores head.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; switch state, True favours the FacialCore&#8217;s geo to be visible</li>
+<li><strong>query</strong> &#8211; query the current state of the facial visibility</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_to_fk">
+<code class="descname">switch_to_fk</code><span class="sig-paren">(</span><em>mSystems=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_to_fk" title="Permalink to this definition">¶</a></dt>
+<dd><p>switch the entire rig to FK, this throws the ik_fk_blender attrs value to 1 for all systems</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mSystems</strong> &#8211; systems to switch mode for</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_to_ik">
+<code class="descname">switch_to_ik</code><span class="sig-paren">(</span><em>mSystems=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_to_ik" title="Permalink to this definition">¶</a></dt>
+<dd><p>switch the entire rig to IK, this throws the ik_fk_blender attrs value to 0 for all systems</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mSystems</strong> &#8211; systems to switch mode for</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_toggle">
+<code class="descname">fk_ik_toggle</code><span class="sig-paren">(</span><em>system</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_toggle" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple toggle call to switch the current state of the system between fk and ik
+This checks the switch attr and if 0 switches over to FK, if it&#8217;s 1 then we switch to IK
+Used in the new DagProcMenu systems</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match">
+<code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the system to FK MODE : match the fk system to that of the ik</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; [] hint nodes wired to the systems you want to match, used to find id subSystems</li>
+<li><strong>mSystems</strong> &#8211; [] list of mSystem nodes to switch, if given we don&#8217;t process the nodes args</li>
+<li><strong>time</strong> &#8211; whether to run the match over time or not</li>
+<li><strong>switch</strong> &#8211; also switch the ik_fk_blender attr to leave the system in FK mode</li>
+<li><strong>keyswitch</strong> &#8211; if switch is true, this also adds in keys to control the switch mode</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match">
+<code class="descname">ik_fk_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the system to IK MODE : match the ik to the fk system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; [] hint nodes wired to the systems you want to match, used to find id subSystems</li>
+<li><strong>mSystems</strong> &#8211; [] list of mSystem nodes to switch, if given we don&#8217;t process the nodes args</li>
+<li><strong>time</strong> &#8211; whether to run the match over time or not</li>
+<li><strong>switch</strong> &#8211; also switch the ik_fk_blender attr to leave the system in IK mode</li>
+<li><strong>keyswitch</strong> &#8211; if switch is true, this also adds in keys to control the switch mode</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC">
+<em class="property">class </em><code class="descname">Pro_MetaRig_SRC</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<p>Class node used by the publisher systems. With the SRC_RiggingUI you can add into an SRC file
+an Pro_MetaRig_SRC node which is designed as a basic, client facing extension to the Red9Puppet.</p>
+<p>The SRC file in our definition is the file with the base character, skeleton and skinning plus client 
+specific controllers in it. By wiring these to the SRC node our Red9 Publishing systems sees the data
+and merges it into the main MetaRig on build. This means that client can add in their own subsystems,
+manage new controllers and be certain that this data is then merged into the main rig for all the rest
+of the pipelines.</p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC.isValid">
+<code class="descname">isValid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC.isValid" title="Permalink to this definition">¶</a></dt>
+<dd><p>modify the behaviour as we don&#8217;t want to be stripping SRC EXT nodes that easily</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop">
+<em class="property">class </em><code class="descname">Pro_MetaRig_Prop</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI">
+<em class="property">class </em><code class="descname">Pro_MetaRig_FacialUI</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<p>SubClass of the MetaRig, designed to manage facial board style controls
+for a facial system. Just an extract class to inherit from but it means that
+all our facial logic will find custom class control boards based on being
+subclassed from this consistent base.</p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple wrap to load the zeroPose if found</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_facemesh">
+<code class="descname">add_cam_facemesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_facemesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>add and attached to the mNode a new camera constrained to the faceMesh of the system</p>
+<p>TODO: make focal length 60 ish, we don&#8217;t want fisheye on the face cam</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_UI">
+<code class="descname">add_cam_UI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_UI" title="Permalink to this definition">¶</a></dt>
+<dd><p>add and attached to the mNode a new camera constrained to the facialGui of the system, identified
+as self.ctrl_main</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_facemesh">
+<code class="descname">get_cam_facemesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_facemesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the camera targeted to the HeadMesh</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_UI">
+<code class="descname">get_cam_UI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_UI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the camera targeted to the Facial Control Board</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_brows">
+<code class="descname">get_ctrls_brows</code><span class="sig-paren">(</span><em>select=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_brows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get child controls wired via &#8216;brow&#8217; connection attrs
+Designed to be overloaded for your own facial systems</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>select</strong> &#8211; select the controllers found</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_lips">
+<code class="descname">get_ctrls_lips</code><span class="sig-paren">(</span><em>select=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_lips" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get child controls wired via &#8216;<em>lip</em>&#8216;,&#8217;<em>funnel</em>&#8216;,&#8217;<em>pucker</em>&#8216; connection attrs,
+Designed to be overloaded for your own facial systems</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>select</strong> &#8211; select the controllers found</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_eyes">
+<code class="descname">get_ctrls_eyes</code><span class="sig-paren">(</span><em>select=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_eyes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get child controls wired via &#8216;eye&#8217; connection attrs,
+Designed to be overloaded for your own facial systems</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>select</strong> &#8211; select the controllers found</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI">
+<em class="property">class </em><code class="descname">SRC_RiggingUI</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>SRC extension rigging UI, allowing you to add a new SRC_Extension MNode and
+wire controllers to it. These will get merged into the main rig when we Publish</p>
+<p>This runs the main SRC_Extension subclass from pro_meta which manages the connections</p>
+<dl class="classmethod">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.show">
+<em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.filetype">
+<code class="descname">filetype</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.filetype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.src_node">
+<code class="descname">src_node</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.src_node" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.exp_tag">
+<code class="descname">exp_tag</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.exp_tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.mrig">
+<code class="descname">mrig</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.mrig" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.validateSRCFile">
+<code class="descname">validateSRCFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.validateSRCFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>ensure we&#8217;re working on the SRC file not the RIG or PUB</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.add_src_extnode">
+<code class="descname">add_src_extnode</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.add_src_extnode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.add_ctrl">
+<code class="descname">add_ctrl</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.add_ctrl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the STUB bindings for the connect to CTRL so that prefix is managed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.remove_ctrl">
+<code class="descname">remove_ctrl</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.remove_ctrl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the STUB bindings for the connect to CTRL so that prefix is managed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.addExportTag">
+<code class="descname">addExportTag</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.addExportTag" title="Permalink to this definition">¶</a></dt>
+<dd><p>add the default export Tag for characters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.validateRIGFile">
+<code class="descname">validateRIGFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.validateRIGFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>ensure we&#8217;re working on the SRC file not the RIG or PUB</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.runRigHealth">
+<code class="descname">runRigHealth</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.runRigHealth" title="Permalink to this definition">¶</a></dt>
+<dd><p>run the RIG validation setup for Cloud</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.printRigHealth">
+<code class="descname">printRigHealth</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.printRigHealth" title="Permalink to this definition">¶</a></dt>
+<dd><p>print the results of the Health testing</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.mirrorUI">
+<code class="descname">mirrorUI</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RiggingUI.mirrorUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>open up the Red9 MirrorUI setup</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.ProMetaFacialUI">
+<em class="property">class </em><code class="descname">ProMetaFacialUI</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ProMetaFacialUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI</span></code></a></p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.Red9_MetaRig">
+<em class="property">class </em><code class="descname">Red9_MetaRig</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Red9_MetaRig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig</span></code></a></p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.SRC_RigExtension">
+<em class="property">class </em><code class="descname">SRC_RigExtension</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RigExtension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC</span></code></a></p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.metadata_pro.addExportNode">
+<code class="descname">addExportNode</code><span class="sig-paren">(</span><em>node</em>, <em>exportClass</em>, <em>tag</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.addExportNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>add an ExportTag to a given node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node</strong> &#8211; node to bind the export tag to</li>
+<li><strong>exportClass</strong> &#8211; class of tag to generate and link</li>
+<li><strong>tag</strong> &#8211; name for the tag</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>TODO : add MetaRig handling and checking</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.metadata_pro.deleteExportNode">
+<code class="descname">deleteExportNode</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.deleteExportNode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base">
+<em class="property">class </em><code class="descname">ExportTag_Base</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
+<p>Generic Export base class inheriting from MetaClass. This is designed as a tagging system for assets
+that are then time managed via the ExportLoopNodes attached. Design is such that a rig would have a single
+exportTag, denoting asset name, base paths, root export joint, any suffix or prefix handling and any number 
+of other key aspects regarding how that rig/asset is handled within a clients pipelines.</p>
+<p>Hanging from the ExportTag would be individual exportLoops that tell the export managers what timeranges to process,
+where the files should get stored, what they get called etc.</p>
+<p>key internal vars to note:</p>
+<ul class="simple">
+<li>self.resolvedpath : this will be built up in any logic from custom exporter handlers</li>
+<li>self.subfolder : if data then we insert the entry as a sub-folder from the main exportRoot so &#8216;my/export/path&#8217; =  &#8216;my/export/path/subfolder</li>
+<li>self.loop_prefix : if data then we prefix any loop-names when we resolve paths - so &#8216;my_walk.icaf&#8217; loop = &#8216;prefix_my_walk.icaf&#8217;</li>
+<li>self.loop_suffix : if data then we suffix any loop-names when we resolve paths - so &#8216;my_walk.icaf&#8217; loop = &#8216;my_walk_suffix.icaf&#8217;</li>
+<li>self.exportLoopBase_class = ExportLoopNode  : class we generate for exportLoops, used so that this can be overloaded for client specific behaviour</li>
+<li>self.audio_allowed  : determines if AudioGrp management is allowed on this class of tag</li>
+</ul>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.validate">
+<code class="descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add Validation methods to run prior to processing
+this export tag</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.tagType">
+<code class="descname">tagType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.tagType" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple code to return the tags type based on it&#8217;s class inheritance</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">&#8216;CHARACTER&#8217;,&#8217;FACIAL&#8217;,&#8217;PROP&#8217;,&#8217;ENVIRONMENT&#8217; or &#8216;BASE&#8217;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.mrig">
+<code class="descname">mrig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.mrig" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the parent mRig to this ExportTag</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.gatherInfo">
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>info block gather for the export systems</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mClass&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">super</span><span class="p">(</span><span class="n">ExportTag_Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">gatherInfo</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;tagID&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tagID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;isActive&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">isActive</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;exportPath&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">exportPath</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;exportRoot_specific&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">exportRoot_specific</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;audioGrp&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">audioGrp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;exportLoops&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">loop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exportLoops</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;exportLoops&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">loop</span><span class="o">.</span><span class="n">loopname</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;subfolder&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subfolder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;loop_prefix&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loop_prefix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;loop_suffix&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loop_suffix</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getNodes">
+<code class="descname">getNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>base handling of getNodes to wrap the override handlers</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.addSelectionOverride">
+<code class="descname">addSelectionOverride</code><span class="sig-paren">(</span><em>nodes</em>, <em>state=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.addSelectionOverride" title="Permalink to this definition">¶</a></dt>
+<dd><p>A way of by-passing the getNode logic by adding specific
+marker attr to nodes under the hierarchy</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; nodes to add the override behaviour too</li>
+<li><strong>state</strong> &#8211; initial state of the override</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getSelectionOverrides">
+<code class="descname">getSelectionOverrides</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getSelectionOverrides" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a dic of nodes that are to be either force included, or excluded
+from any processed node list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.setSelectionOverride">
+<code class="descname">setSelectionOverride</code><span class="sig-paren">(</span><em>nodes</em>, <em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.setSelectionOverride" title="Permalink to this definition">¶</a></dt>
+<dd><p>change the state of the override marker on the given nodes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.removeSelectionOverrides">
+<code class="descname">removeSelectionOverrides</code><span class="sig-paren">(</span><em>nodes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.removeSelectionOverrides" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove any override marker on the given nodes, if no nodes are passed 
+we delete ALL overrides under the full hierarchy from the exportRoot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.addTimeRange">
+<code class="descname">addTimeRange</code><span class="sig-paren">(</span><em>times=()</em>, <em>loopname=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.addTimeRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a new timerange node to the tag</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>times</strong> &#8211; (start,end) float values of times</li>
+<li><strong>loopname</strong> &#8211; loopID used for export file name</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.connectTimeRanges">
+<code class="descname">connectTimeRanges</code><span class="sig-paren">(</span><em>loops</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.connectTimeRanges" title="Permalink to this definition">¶</a></dt>
+<dd><p>connect / cast current timerange nodes to this expTag. Note that we verify that the class
+of each loop matches the expected internal exportLoopBase_class bound to this expTag class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loops</strong> &#8211; instantiated ExportLoop nodes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.loopNameExists">
+<code class="descname">loopNameExists</code><span class="sig-paren">(</span><em>loopname</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.loopNameExists" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if the loopName about to be used exists</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loopname</strong> &#8211; the name of the loop were searching for</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getTimeRanges">
+<code class="descname">getTimeRanges</code><span class="sig-paren">(</span><em>loopnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getTimeRanges" title="Permalink to this definition">¶</a></dt>
+<dd><p>get connected exportLoop nodes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loopnames</strong> &#8211; [] if given this acts as a filter to return only matching loop names on this expTag</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getExporLoops">
+<code class="descname">getExporLoops</code><span class="sig-paren">(</span><em>loopnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getExporLoops" title="Permalink to this definition">¶</a></dt>
+<dd><p>renamed func call for the getTimeRanges</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.audioGrp_add">
+<code class="descname">audioGrp_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.audioGrp_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a child AudioGrp node to manage linked audio for this tag. We use
+this to manage who in the scene is talking what lines of dialog</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.audioGrp_connect">
+<code class="descname">audioGrp_connect</code><span class="sig-paren">(</span><em>audioGrp</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.audioGrp_connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>connect a current instance of an audioGrp node to self</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>audioGrp</strong> &#8211; audioGrp node we&#8217;re wanting to connect</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.attach_asset">
+<code class="descname">attach_asset</code><span class="sig-paren">(</span><em>asset_tag</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.attach_asset" title="Permalink to this definition">¶</a></dt>
+<dd><p>connect a current instance of an ExportTag node to self as attachment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>asset_tag</strong> &#8211; aset tag to attach</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Character">
+<em class="property">class </em><code class="descname">ExportTag_Character</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Character" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
+<p>Export subclass for characters</p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Facial">
+<em class="property">class </em><code class="descname">ExportTag_Facial</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Facial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
+<p>Export subclass for Facial UI systems</p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Prop">
+<em class="property">class </em><code class="descname">ExportTag_Prop</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
+<p>Export subclass for props</p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Prop.get_attachment_node">
+<code class="descname">get_attachment_node</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Prop.get_attachment_node" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Environment">
+<em class="property">class </em><code class="descname">ExportTag_Environment</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Environment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
+<p>Export subclass for environments</p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode">
+<em class="property">class </em><code class="descname">ExportLoopNode</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
+<p>Export Timerange node, intended to hook to a valid ExportTag
+metaNode to define exact timeranges and paths etc</p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.gatherInfo">
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>gather key info on this loop node and return a dic</p>
+<blockquote>
+<div>&gt;&gt; # base data handling
+&gt;&gt;&gt; data[&#8216;mClass&#8217;]=super(ExportLoopNode, self).gatherInfo(level=level)
+&gt;&gt;&gt; data[&#8216;loopname&#8217;]=self.loopname
+&gt;&gt;&gt; data[&#8216;loopname_resolved&#8217;]=self.loopname_resolved
+&gt;&gt;&gt; data[&#8216;startFrame&#8217;]=self.startFrame
+&gt;&gt;&gt; data[&#8216;endFrame&#8217;]=self.endFrame
+&gt;&gt;&gt; data[&#8216;isActive&#8217;]=self.isActive
+&gt;&gt;&gt; data[&#8216;exportPath&#8217;]=self.exportPath
+&gt;&gt;&gt; data[&#8216;exportPath_resolved&#8217;] = self.getExportPath()  # resolved export path from the loops logic call
+&gt;&gt;&gt; data[&#8216;exportRoot_resolved&#8217;] = self.getRootNode()
+&gt;&gt;&gt; data[&#8216;exportRoot_specific&#8217;]=self.exportRoot_specific
+&gt;&gt;&gt; data[&#8216;additive&#8217;]=self.additive
+&gt;&gt;&gt; if self.hasAttr(&#8216;skeletonAlias&#8217;):
+&gt;&gt;&gt;     data[&#8216;skeletonAlias&#8217;] = self.skeletonAlias</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.consumeInfo">
+<code class="descname">consumeInfo</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.consumeInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the data gathered reset all the vars to self from this data.
+Allows us to record the data and reconstruct it in a consistent manner</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> &#8211; data to consume in a form of a correctly formatted dict,
+generated by the gatherInfo call itself</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.getRootNode">
+<code class="descname">getRootNode</code><span class="sig-paren">(</span><em>allowMulti=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.getRootNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>from the loopNode return the exportRoot from the main Tag. This is a wrapper
+so that exporters can just get all the loopNodes and grab all data directly
+rather than lots of walking logic</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.loopname_resolved">
+<code class="descname">loopname_resolved</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.loopname_resolved" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the loopname in a resolved manner, taking into account any 
+prefix or suffix handling set on it&#8217;s parent exportTag class</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.setLoopName">
+<code class="descname">setLoopName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.setLoopName" title="Permalink to this definition">¶</a></dt>
+<dd><p>this is a wrapper to be used instead of setting self.loopname directly. 
+The reason is that this first goes through the resolve function to see if we need to 
+append/prepend the loopname with anything, ie, name == name_face. It also validates the
+string, removing invalid characters, and checks for duplicate names, managing copy_naming</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the name to set the loopname attr too</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.ProcessStatus">
+<code class="descname">ProcessStatus</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.ProcessStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class instance, we bind the Exporter class LoopProcessStatus to the loopNode
+so that when it&#8217;s passed into the exporters we can track it&#8217;s process status
+on this instance directly ;)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.getExportFile">
+<code class="descname">getExportFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.getExportFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the full file name, this is built from running the
+getExportPath and catenating the loop_name to the end + the exportTags 
+internal var self.export_file_ext</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.getExportPath">
+<code class="descname">getExportPath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.getExportPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>base logic to grab / catenate the exportPath.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this path is without the filename, just the dir and is designed to 
+be over-loaded at a client level to support any bespoke project behaviour</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_r9anim">
+<code class="descname">path_r9anim</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_r9anim" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the catenated export path for r9anim files</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_r9Anim_reset">
+<code class="descname">path_r9Anim_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_r9Anim_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset any specific r9Anim path thats been set by the property</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_fbx">
+<code class="descname">path_fbx</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_fbx" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the catenated export path for r9anim files</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_fbx_reset">
+<code class="descname">path_fbx_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_fbx_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset any specific fbx path thats been set by the property</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.isAdditive">
+<code class="descname">isAdditive</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.isAdditive" title="Permalink to this definition">¶</a></dt>
+<dd><p>return true if the additive bool if set on the tag</p>
+<p>This first checks the Loop node itself, if thats set Additive we return that,
+if not we then check the exportTag mNode and return it&#8217;s additive state. 
+Logic is that the exportTag is the parent of the loop therefore would over-load
+the Loops non-additive state.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.exportRoot_specific_set">
+<code class="descname">exportRoot_specific_set</code><span class="sig-paren">(</span><em>jnts=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.exportRoot_specific_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>this is so that when setting the exportSpecific_root we can run validation on it first</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jnts</strong> &#8211; [] joints to set as specific root nodes for the exporters</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the joints go through the r9Core.nodes_in_hierarchy codebase so can be shortname pointers as these
+are converted back to full path in the getRootNode calls</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.skeletonAlias">
+<code class="descname">skeletonAlias</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.skeletonAlias" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the skeletonAlias stamped against the exportTag</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.setSampleSpace">
+<code class="descname">setSampleSpace</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.setSampleSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>set a wire to another transform that we&#8217;re going to use as the
+relative space for any export. This all depends on the export of course!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.removeSampleSpace">
+<code class="descname">removeSampleSpace</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.removeSampleSpace" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.getTimeRanges">
+<code class="descname">getTimeRanges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.getTimeRanges" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the timerange of the loop</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.setTimeRanges">
+<code class="descname">setTimeRanges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.setTimeRanges" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the current playback timerange to this node</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.check_isActive">
+<code class="descname">check_isActive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.check_isActive" title="Permalink to this definition">¶</a></dt>
+<dd><p>yes we already have a bool on the node however, if the timeranges
+parent exportTag is set inActive then that should over-ride the local
+flag</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.timeOffset">
+<code class="descname">timeOffset</code><span class="sig-paren">(</span><em>offset</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.timeOffset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Offset the timerange data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>offset</strong> &#8211; offset the timerange data for this instance</li>
+<li><strong>timerange</strong> &#8211; unused at the moment</li>
+<li><strong>ripple</strong> &#8211; unused at the moment</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.copyLoop_to">
+<code class="descname">copyLoop_to</code><span class="sig-paren">(</span><em>expTag</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.copyLoop_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>duplicate this exportLoop to a different exportTag system, 
+used for casting data between mRigs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expTag</strong> &#8211; destination exportTag that will take the duplicated ExportLoopNode</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.SceneMover">
+<em class="property">class </em><code class="descname">SceneMover</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SceneMover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
+<p>Scene Shift Handler : to move an entire Maya scene in world space
+under a managed node</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mover</span><span class="o">=</span><span class="n">SceneMover</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mover</span><span class="o">.</span><span class="n">scene_shift</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># do your export stuff</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mover</span><span class="o">.</span><span class="n">scene_restore</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>SceneMover is a SINGLETON and there can only ever be a single instance of it, 
+when initialized we autogenerate a locator which becomes the root transform
+for the shift</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SceneMover.cacheTransforms">
+<code class="descname">cacheTransforms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SceneMover.cacheTransforms" title="Permalink to this definition">¶</a></dt>
+<dd><p>cache any initial transforms from the shiftRoot if it already exists</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.SceneMover.sceneroot">
+<code class="descname">sceneroot</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SceneMover.sceneroot" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper to the sceneRoot maya node itself</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SceneMover.create_root">
+<code class="descname">create_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SceneMover.create_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>when we take the instance is there already an existing SshiftRoot in the scene?
+if there is then the chances are that was left on purpose so we set the delet flags off</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SceneMover.groupAll">
+<code class="descname">groupAll</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SceneMover.groupAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>group the nodes up under a single root node and manage then under meta</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SceneMover.scene_shift">
+<code class="descname">scene_shift</code><span class="sig-paren">(</span><em>transforms={}</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SceneMover.scene_shift" title="Permalink to this definition">¶</a></dt>
+<dd><p>actual process, group the scene nodes under subgrps and parent
+to a single instance of a SceneShiftRoot node. Finally apply the
+given transforms if specified</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transforms</strong> &#8211; format: {&#8216;translate&#8217;:(0,0,0), &#8216;rotate&#8217;:(0,0,0)} if given in these are 
+the transforms used on the node after everything has been grouped up</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SceneMover.scene_restore">
+<code class="descname">scene_restore</code><span class="sig-paren">(</span><em>reset=True</em>, <em>delete=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SceneMover.scene_restore" title="Permalink to this definition">¶</a></dt>
+<dd><p>restore the scene as it was before the shift</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>reset</strong> &#8211; whether we restore the scene as it originally was, or leave it in it&#8217;s shifted state</li>
+<li><strong>delete</strong> &#8211; whether to fully delete the system nodes after restore</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.SceneMover.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SceneMover.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>carefully deletion of the system</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.AudioGroup">
+<em class="property">class </em><code class="descname">AudioGroup</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
+<p>a simple node designed to group / link audio sound nodes to together so they can
+be linked to a character rig for export logic handling</p>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.audioNodes">
+<code class="descname">audioNodes</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.audioNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the linked audio as instantiates r9Audio.AudioNodes objects</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.audioHandler">
+<code class="descname">audioHandler</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.audioHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the audioNodes linked as an r9Audio.AudioHandler object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.gatherInfo">
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>gather key info on this AudioGrp node and return a dic of all
+connected audio node data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.connectAudioNodes">
+<code class="descname">connectAudioNodes</code><span class="sig-paren">(</span><em>audio=[]</em>, <em>paths=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.connectAudioNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>connect given sound nodes to the group</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>audio</strong> &#8211; [] maya audio to connect to this AudioGrp</li>
+<li><strong>paths</strong> &#8211; [] if we give it raw filepaths this will import and then link up to the audioGrp</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.disconnectAudioNodes">
+<code class="descname">disconnectAudioNodes</code><span class="sig-paren">(</span><em>audio</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.disconnectAudioNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>disconnect the given audio nodes form the grp</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nodes</strong> &#8211; audio to connect to this AudioGrp</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.getAudioNodes">
+<code class="descname">getAudioNodes</code><span class="sig-paren">(</span><em>time=()</em>, <em>start_inRange=True</em>, <em>end_inRange=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.getAudioNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>return an AudioNode object that fall within a given 
+timerange, if not timerange is given return all linked audio</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>time</strong> &#8211; time (start, end) tuple as a range.</li>
+<li><strong>start_inRange</strong> &#8211; check is the testRange[0] value falls fully in the baseRange</li>
+<li><strong>end_inRange</strong> &#8211; check is the testRange[1] value falls fully in the baseRange</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">if you pass in baseRange as (None, 100) then we only validate against the end time.
+if we pass in baseRange as (10, None) we only validate against the start time
+else we validate that testRange is fully within the baseRanges times</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.isConnected">
+<code class="descname">isConnected</code><span class="sig-paren">(</span><em>audio</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.isConnected" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD">
+<em class="property">class </em><code class="descname">MetaTimeCodeHUD</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaHUDNode" title="Red9.core.Red9_Meta.MetaHUDNode"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaHUDNode</span></code></a></p>
+<p>Generate&#8217;s a HUD node connected to the main timecode attrs,
+allows us to show the actual internal timecode attrs as their 
+original SMPTE time&#8217;s</p>
+<p>Crucial things to be aware of:</p>
+<p>We construct timecode from 3 attrs on the given node: 
+timecode_ref        : the original timecode converted to milliseconds 
+timecode_count      : a linear curve that increments every frame based on the samplerate 
+timecode_samplerate : samplerate that the linear counter was generated against</p>
+<p>SMPTE timecode is then reconstructed like so:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r9Audio</span><span class="o">.</span><span class="n">milliseconds_to_Timecode</span><span class="p">(</span><span class="n">ref</span> <span class="o">+</span> <span class="p">((</span><span class="n">count</span> <span class="o">/</span> <span class="n">samplerate</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span> 
+</pre></div>
+</div>
+<p>The easiest and expected way to use this class is directly from the Pro_MetaRig.Timecode class 
+binding in which this HUD class is managed in a correct manner. See audio.Timecode class for
+more details.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">Timecode</span><span class="o">.</span><span class="n">addTimecode_to_node</span><span class="p">(</span><span class="n">tc</span><span class="o">=</span><span class="s1">&#39;01:00:00:00&#39;</span><span class="p">,</span> <span class="n">propagate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># add timecode to the mRig</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">Timecode</span><span class="o">.</span><span class="n">hud_connect</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can of course run this directly from a class instance, however, the nodes
+passed to the addMonitored call have to have the timecode attrs already bound to them</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tcHUD</span><span class="o">=</span><span class="n">r9pmeta</span><span class="o">.</span><span class="n">MetaTimeCodeHUD</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tcHUD</span><span class="o">.</span><span class="n">addMonitoredTimecodeNode</span><span class="p">(</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># node must have valid timecode attrs already</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tcHUD</span><span class="o">.</span><span class="n">drawHUD</span><span class="p">()</span> 
+</pre></div>
+</div>
+<p>Idea here is if a MayaNode is passed in and has the mClass attr
+we pass that into the super(__new__) such that an object of that class
+is then instantiated and returned.</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.refreshHud">
+<code class="descname">refreshHud</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.refreshHud" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refresh the HUD by killing it and re-drawing it from scratch, we also
+re-build the cached attrs for the timecode systems</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.addMonitoredTimecodeNode">
+<code class="descname">addMonitoredTimecodeNode</code><span class="sig-paren">(</span><em>nodes</em>, <em>valid=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.addMonitoredTimecodeNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a node with the TimeCode attrs on it to monitor</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.removeMonitoredTimecodeNode">
+<code class="descname">removeMonitoredTimecodeNode</code><span class="sig-paren">(</span><em>nodes</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.removeMonitoredTimecodeNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove a given node from the timecode</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.removeMonitoredAttr">
+<code class="descname">removeMonitoredAttr</code><span class="sig-paren">(</span><em>attr</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.removeMonitoredAttr" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove a specific attr from the HUD</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.connectTimecodeSystems">
+<code class="descname">connectTimecodeSystems</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.connectTimecodeSystems" title="Permalink to this definition">¶</a></dt>
+<dd><p>connect all mRigs in the scene to the HUD node</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Red9_Pro_importexport.html"
+                        title="previous chapter">Pro_Pack : ImportExport</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Red9_Pro_optimiser.html"
+                        title="next chapter">Pro_Pack : Optimiser</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/red9pro_templates/Red9_Pro_meta .txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_optimiser.html" title="Pro_Pack : Optimiser"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_importexport.html" title="Pro_Pack : ImportExport"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>
