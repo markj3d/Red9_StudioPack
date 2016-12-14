@@ -1075,9 +1075,22 @@ class AudioToolsWrap(object):
         self.audioHandler.bwav_sync_to_Timecode()
         
     def timecodeHud(self,*args):
+        '''
+        PRO_PACK
+        '''
+        if r9Setup.has_pro_pack():
+            try:
+                import Red9.pro_pack.core.metadata_pro as r9pmeta   # dev mode only ;)
+            except:
+                from Red9.pro_pack import r9pro
+                r9pro.r9import('r9pmeta')
+                import r9pmeta
+        else:
+            log.warning('Timecode is ONLY supported in ProPack...')
+
         nodes=cmds.ls(sl=True)
         if nodes:
-            tcHUD=r9Meta.MetaTimeCodeHUD()
+            tcHUD=r9pmeta.MetaTimeCodeHUD()
             for node in nodes:
                 tcHUD.addMonitoredTimecodeNode(node)
             tcHUD.drawHUD()
