@@ -393,10 +393,10 @@ class ProgressBarContext(object):
     >>> 
     >>> #now do your code but increment and check the progress state
     >>> with progressBar:
-    >>>     for i in range(1:1000):
-    >>>        if progressBar.isCanceled():
+    >>>     for i in range(1,1000,1):
+    >>>        if progressBar.isCancelled():
     >>>             print 'process cancelled'
-    >>>             return
+    >>>             break
     >>>         progressBar.updateProgress()
     
     '''
