@@ -112,10 +112,10 @@ class Test_MetaCache():
         '''
         cmds.polyCube(name='cube1')
         n1 = r9Meta.MetaClass('|cube1')
-        UUID=cmds.ls(n1.mNode, uuid=True)[0]
         r9Meta.registerMClassNodeCache(n1)
         # from 2016 the UUID is the key for all nodes in the Cache
         if r9Setup.mayaVersion()>=2016:
+            UUID=cmds.ls(n1.mNode, uuid=True)[0]
             assert r9Meta.RED9_META_NODECACHE[UUID]==n1
         else:
             assert r9Meta.RED9_META_NODECACHE['|cube1']==n1
@@ -127,11 +127,12 @@ class Test_MetaCache():
         #the MOBject to ensure that things are still correct in the pull
         cmds.polyCube(name='cube1')
         n2 = r9Meta.MetaClass('|cube1')
-        UUID=cmds.ls(n2.mNode, uuid=True)[0]
+        
         assert n2.mNode=='|cube1'
         assert not n2.mNode=='renamedCube1'
         r9Meta.registerMClassNodeCache(n2)
         if r9Setup.mayaVersion()>=2016:
+            UUID=cmds.ls(n2.mNode, uuid=True)[0]
             assert r9Meta.RED9_META_NODECACHE[UUID]==n2
         else:
             assert r9Meta.RED9_META_NODECACHE['|cube1']==n2
