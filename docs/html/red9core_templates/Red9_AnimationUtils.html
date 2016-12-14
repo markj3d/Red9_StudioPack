@@ -175,7 +175,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 </table>
 <dl class="data">
 <dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS">
-<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BFFA860&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BFFA860&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BFFA860&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC0E3C8&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC0E3C8&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC0E3C8&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC0E3C8&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC0E3C8&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.</p>
@@ -313,7 +313,7 @@ the state directly, used by the UI close event to return the editor to the last 
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.animRangeFromNodes">
 <code class="descname">animRangeFromNodes</code><span class="sig-paren">(</span><em>nodes</em>, <em>setTimeline=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.animRangeFromNodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the extend of the animation range for the given objects
+<dd><p>return the extent of the animation range for the given objects
 :param nodes: nodes to examine for animation data
 :param setTimeLine: whether we should set the playback timeline to the extent of the found anim data</p>
 </dd></dl>
@@ -375,7 +375,8 @@ the data as is afterwards</p>
 <dl class="classmethod">
 <dt id="Red9.core.Red9_AnimationUtils.AnimationUI.show">
 <em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimationUI.show" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>main UI call. manages 2017 workspaces here..</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.AnimationUI.setPoseSelected">
@@ -716,6 +717,12 @@ we use this classes instance of filterSettings cls.settings</li>
 <dt id="Red9.core.Red9_AnimationUtils.AnimFunctions.inverseAttributes">
 <em class="property">static </em><code class="descname">inverseAttributes</code><span class="sig-paren">(</span><em>node</em>, <em>channels</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.inverseAttributes" title="Permalink to this definition">¶</a></dt>
 <dd><p>really basic method used in the Mirror calls</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="Red9.core.Red9_AnimationUtils.AnimFunctions.inverseAnimCurves">
+<em class="property">static </em><code class="descname">inverseAnimCurves</code><span class="sig-paren">(</span><em>nodes</em>, <em>curves=[]</em>, <em>time=()</em>, <em>timePivot=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.inverseAnimCurves" title="Permalink to this definition">¶</a></dt>
+<dd><p>really basic method to inverse anim curves for a given time, or for the current playback timerange</p>
 </dd></dl>
 
 </dd></dl>
@@ -1127,6 +1134,9 @@ frame the currently selected objects per frame, or rather per frameStep.</p>
 <dt id="Red9.core.Red9_AnimationUtils.ReconnectAnimData">
 <em class="property">class </em><code class="descname">ReconnectAnimData</code><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.ReconnectAnimData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This is a method for debugging and re-connecting animation curves when theyve become
+disconnected from a scene. This happens occasionally when using referencing where the
+refEdits pointing to the connect calls get broken..</p>
 <dl class="classmethod">
 <dt id="Red9.core.Red9_AnimationUtils.ReconnectAnimData.show">
 <em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.ReconnectAnimData.show" title="Permalink to this definition">¶</a></dt>

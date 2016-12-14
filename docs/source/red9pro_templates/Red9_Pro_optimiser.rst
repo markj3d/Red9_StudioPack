@@ -40,7 +40,7 @@ set of tests, for example to health check a rig prior to releasing to an animato
 	...     # set the internal results_expected to that arg passed in
 	...     HealthObject.results_expected = expected
 	...     
-	...     # bind a fix method is you have one written
+	...     # bind a fix method if you have one written
 	...     # HealthObject.fix_method=maya_timeUnits_fix
 	...     
 	...     # run the actual test and push it's result to the HealthObject

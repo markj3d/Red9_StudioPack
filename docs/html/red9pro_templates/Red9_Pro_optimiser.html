@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
-    <link rel="next" title="Pro_Pack : r9Data" href="Red9_Pro_r9data.html" />
+    <link rel="next" title="Pro_Pack : project" href="Red9_Pro_r9data.html" />
     <link rel="prev" title="Pro_Pack : MetaData" href="Red9_Pro_meta .html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_r9data.html" title="Pro_Pack : r9Data"
+          <a href="Red9_Pro_r9data.html" title="Pro_Pack : project"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="Red9_Pro_meta .html" title="Pro_Pack : MetaData"
@@ -91,7 +91,7 @@ set of tests, for example to health check a rig prior to releasing to an animato
 <span class="gp">... </span>    <span class="c1"># set the internal results_expected to that arg passed in</span>
 <span class="gp">... </span>    <span class="n">HealthObject</span><span class="o">.</span><span class="n">results_expected</span> <span class="o">=</span> <span class="n">expected</span>
 <span class="gp">...</span>
-<span class="gp">... </span>    <span class="c1"># bind a fix method is you have one written</span>
+<span class="gp">... </span>    <span class="c1"># bind a fix method if you have one written</span>
 <span class="gp">... </span>    <span class="c1"># HealthObject.fix_method=maya_timeUnits_fix</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="c1"># run the actual test and push it&#39;s result to the HealthObject</span>
@@ -335,6 +335,12 @@ the results are consistent.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.optimiser.HealthTestObject.set_by_failed">
+<code class="descname">set_by_failed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject.set_by_failed" title="Permalink to this definition">¶</a></dt>
+<dd><p>automatically set failed if there are failed results in the test object</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.optimiser.HealthTestObject.set_failed">
 <code class="descname">set_failed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject.set_failed" title="Permalink to this definition">¶</a></dt>
 <dd><p>set test as failed, note this also sets the has_run flag to True</p>
@@ -549,7 +555,7 @@ tweak the results into a format that contains just the base data, or all the com
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.maya_timeUnits_test">
 <code class="descname">maya_timeUnits_test</code><span class="sig-paren">(</span><em>expected='ntsc'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.maya_timeUnits_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Maya Units: time is as expected</p>
+<dd><p>Maya Units: timeUnit is as expected</p>
 </dd></dl>
 
 <dl class="function">
@@ -583,7 +589,7 @@ tweak the results into a format that contains just the base data, or all the com
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.maya_evalManager_test">
 <code class="descname">maya_evalManager_test</code><span class="sig-paren">(</span><em>expected='off'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.maya_evalManager_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Maya Eval Manager: off, parallel or serial (which should never be run in production only for debugging)</p>
+<dd><p>Maya Eval Manager: off, parallel or serial (serial should never be run in production only for debugging)</p>
 </dd></dl>
 
 <dl class="function">
@@ -595,13 +601,13 @@ tweak the results into a format that contains just the base data, or all the com
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.maya_timerange_test">
 <code class="descname">maya_timerange_test</code><span class="sig-paren">(</span><em>expected=(0</em>, <em>1)</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.maya_timerange_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Maya Eval Manager: off, parallel or serial (which should never be run in production only for debugging)</p>
+<dd><p>Maya Timeranges: are the current playback timeranges as expected (used mainly when setting the rigs up)</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.maya_timerange_fix">
 <code class="descname">maya_timerange_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.maya_timerange_fix" title="Permalink to this definition">¶</a></dt>
-<dd><p>fix the evalManager graph to the expected result</p>
+<dd><p>fix the timeranges as expected</p>
 </dd></dl>
 
 <dl class="function">
@@ -613,7 +619,7 @@ tweak the results into a format that contains just the base data, or all the com
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.meta_nodes_get">
 <code class="descname">meta_nodes_get</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.meta_nodes_get" title="Permalink to this definition">¶</a></dt>
-<dd><p>simple get for all metaNodes in the scene</p>
+<dd><p>simple get for all metaNodes in the scene, this only returns the dag paths NOT instantiated mNode</p>
 </dd></dl>
 
 <dl class="function">
@@ -645,7 +651,7 @@ method internally if not already run.</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_haveKeys_test">
 <code class="descname">mRigs_haveKeys_test</code><span class="sig-paren">(</span><em>expected=False</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_haveKeys_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test to check is all mRigs in the scene have existing keys or not
+<dd><p>Test to check if all mRigs in the scene have existing keys or not
 Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -672,7 +678,7 @@ method internally if not already run.</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_zeroPose_test">
 <code class="descname">mRigs_zeroPose_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_zeroPose_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test to check is all mRigs in the scene have existing zeroPoses
+<dd><p>Test to check if all mRigs in the scene have existing zeroPoses
 Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -699,7 +705,7 @@ method internally if not already run.</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_attrMap_test">
 <code class="descname">mRigs_attrMap_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_attrMap_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test to check is all mRigs in the scene have existing attrMaps
+<dd><p>Test to check if all mRigs in the scene have existing attrMaps
 Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -726,7 +732,7 @@ method internally if not already run.</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_renderMeshes_hooked">
 <code class="descname">mRigs_renderMeshes_hooked</code><span class="sig-paren">(</span><em>expected=1</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_renderMeshes_hooked" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test to check is all mRigs in the scene have existing renderMeshes hooked up
+<dd><p>Test to check if all mRigs in the scene have existing renderMeshes hooked up
 or at least the expected number or above. This wire is used by the PoseSaver 
 to create the PosePointCloud visual mesh reference
 Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
@@ -768,7 +774,7 @@ Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_exportSkeletonRoot">
 <code class="descname">mRigs_exportSkeletonRoot</code><span class="sig-paren">(</span><em>expected=None</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_exportSkeletonRoot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test to check is all mRigs in the scene have existing exportSkeletonRoot hooked up
+<dd><p>Test to check if all mRigs in the scene have existing exportSkeletonRoot hooked up
 this wire is used by the PoseSaver to generate the skeletonData block
 Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -826,7 +832,7 @@ Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),...]</
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_unwired_ctrls_test">
 <code class="descname">mRigs_unwired_ctrls_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>mRigs=[]</em>, <em>searchPattern=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_unwired_ctrls_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test to check that all nurbsCurves, with optional name matching under the ctrl_main
+<dd><p>Test to check that all child nurbsCurves, with optional name matching, under the mrig.ctrl_main
 of the mRig are wired to the systems. This is a WARNING only as it&#8217;s a very general test
 but useful for debugging everything
 Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),...]</p>
@@ -1211,14 +1217,17 @@ that&#8217;s acceptable</li>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.constraints_interpType">
-<code class="descname">constraints_interpType</code><span class="sig-paren">(</span><em>expected=2</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.constraints_interpType" title="Permalink to this definition">¶</a></dt>
+<code class="descname">constraints_interpType</code><span class="sig-paren">(</span><em>expected=[2, 0]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.constraints_interpType" title="Permalink to this definition">¶</a></dt>
 <dd><p>test all orient and parent constraints and validate their interpType is set
-as expected</p>
+as expected. This by default is set to a list [2,0], allowing noflip and shortest
+to pass and all other interTypes to fail. The first var in the expected list is
+then used as the default which fails will get set too</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> &#8211; 1=&#8217;average&#8217;, 2=&#8217;shortest&#8217;,</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> &#8211; [2, 0]  where 0=&#8217;noflip&#8217;, 1=&#8217;average&#8217;, 2=&#8217;shortest&#8217;, note that is this is given as
+a list then the first arg is the default that failed interTypes will get set too.</td>
 </tr>
 </tbody>
 </table>
@@ -1274,6 +1283,8 @@ file pointer and are therefore invalid</p>
 </tr>
 </tbody>
 </table>
+<p>TODO: this needs to be fixed and kept in order so that we can deal with
+nested namespaces correctly</p>
 </dd></dl>
 
 <dl class="function">
@@ -1346,7 +1357,7 @@ file pointer and are therefore invalid</p>
                         title="previous chapter">Pro_Pack : MetaData</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="Red9_Pro_r9data.html"
-                        title="next chapter">Pro_Pack : r9Data</a></p>
+                        title="next chapter">Pro_Pack : project</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -1378,7 +1389,7 @@ file pointer and are therefore invalid</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_r9data.html" title="Pro_Pack : r9Data"
+          <a href="Red9_Pro_r9data.html" title="Pro_Pack : project"
              >next</a> |</li>
         <li class="right" >
           <a href="Red9_Pro_meta .html" title="Pro_Pack : MetaData"

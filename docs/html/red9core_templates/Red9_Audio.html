@@ -196,7 +196,7 @@ audio path</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.getAudioInRange">
-<code class="descname">getAudioInRange</code><span class="sig-paren">(</span><em>time=()</em>, <em>asNodes=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.getAudioInRange" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getAudioInRange</code><span class="sig-paren">(</span><em>time=()</em>, <em>asNodes=True</em>, <em>start_inRange=True</em>, <em>end_inRange=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.getAudioInRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>return any audio in the handler within a given timerange</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -206,6 +206,8 @@ audio path</p>
 <li><strong>time</strong> &#8211; tuple, (min,max) timerange within which returned audio has 
 fall within else it&#8217;s ignored.</li>
 <li><strong>asNodes</strong> &#8211; return the data as r9Audio.AudioNodes</li>
+<li><strong>start_inRange</strong> &#8211; check is the testRange[0] value falls fully in the baseRange</li>
+<li><strong>end_inRange</strong> &#8211; check is the testRange[1] value falls fully in the baseRange</li>
 </ul>
 </td>
 </tr>
@@ -658,7 +660,8 @@ track was compiled from</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioToolsWrap.timecodeHud">
 <code class="descname">timecodeHud</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.timecodeHud" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>PRO_PACK</p>
+</dd></dl>
 
 </dd></dl>
 

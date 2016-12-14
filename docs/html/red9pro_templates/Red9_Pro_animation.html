@@ -77,8 +77,8 @@ requires the StudioPack codebase to run</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.animation.AnimMap" title="Red9.pro_pack.core.animation.AnimMap"><code class="xref py py-obj docutils literal"><span class="pre">AnimMap</span></code></a>([filterSettings,&nbsp;timerange])</td>
 <td>New base class for the Red9 Animation Format - r9Anim This inherits most of it&#8217;s node handling directly from the DataMap class in Red9.core.Red9_PoseSaver making it incredibly flexible when it comes to mapping animation data between nodes and rigs.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.animation.Anim_Redirect" title="Red9.pro_pack.core.animation.Anim_Redirect"><code class="xref py py-obj docutils literal"><span class="pre">Anim_Redirect</span></code></a>(*args,&nbsp;**kws)</td>
-<td>Utilises the AnimPointCloud to allow animation to be re-directed via guide and reference meshes.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.animation.Anim_Redirect" title="Red9.pro_pack.core.animation.Anim_Redirect"><code class="xref py py-obj docutils literal"><span class="pre">Anim_Redirect</span></code></a>([parent])</td>
+<td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.animation.AnimPointCloud" title="Red9.pro_pack.core.animation.AnimPointCloud"><code class="xref py py-obj docutils literal"><span class="pre">AnimPointCloud</span></code></a>(nodes[,&nbsp;filterSettings,&nbsp;...])</td>
 <td>This relies heavily on the PosePointCloud base class.</td>
@@ -91,23 +91,6 @@ requires the StudioPack codebase to run</p>
 </tr>
 </tbody>
 </table>
-<dl class="function">
-<dt id="Red9.pro_pack.core.animation.anim_redirect_ui">
-<code class="descname">anim_redirect_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.anim_redirect_ui" title="Permalink to this definition">¶</a></dt>
-<dd><p>stub for the pro openUI call</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="Red9.pro_pack.core.animation.AnimationUI">
-<em class="property">class </em><code class="descname">AnimationUI</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationUI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.animation.AnimationUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012D76548&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 <dl class="function">
 <dt id="Red9.pro_pack.core.animation.timeWithinRange">
 <code class="descname">timeWithinRange</code><span class="sig-paren">(</span><em>baseRange</em>, <em>testRange</em>, <em>mode</em>, <em>idtext=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.timeWithinRange" title="Permalink to this definition">¶</a></dt>
@@ -122,7 +105,8 @@ requires the StudioPack codebase to run</p>
 <li><strong>mode</strong> &#8211; &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;&#8217;  modifies the ranges sent to test, if 
 * byRange_start - then we send [None,end] to test, ignoring the start and only testing if the end falls within bound
 * byRange_end - then we send [start,None] to test, ignoring the end and only testing if the start falls within bound
-* byall - we test that the testRange falls within both the baseRanges start and end times</li>
+* byRange - we test that the testRange falls within both the baseRanges start and end times
+* byAll - we don&#8217;t test, we just pass everything through</li>
 <li><strong>idtext</strong> &#8211; used only by the log.info call as a display hint</li>
 </ul>
 </td>
@@ -154,6 +138,7 @@ to save loading that data again</li>
 </tr>
 </tbody>
 </table>
+<p>TODO: add a test to see if the infoDict has timecode, else we bail the TC flag is set and warn!!</p>
 </dd></dl>
 
 <dl class="function">
@@ -191,7 +176,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012D68708&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012D21EC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -308,6 +293,11 @@ use the filter on the destination hierarchy.</li>
 <li><strong>loadAsStored</strong> &#8211; load the anim data from the original time</li>
 <li><strong>loadFromFrm</strong> &#8211; if not loadAsStored, load the animation data from a given frame by comparing the 
 internal startFrm stored in the animMap with the given frame</li>
+<li><strong>loadFromTimecode</strong> &#8211; load against a given SMPTE timecode / frm binding, calculating the offset of 
+the data to load against a given timecode reference. IF timecodeBinding isn&#8217;t set then we gather the reference timecode from 
+the mRig&#8217;s internal data, else we use the timecode binding supplied</li>
+<li><strong>timecodeBinding</strong> &#8211; (frm, str(&#8216;00:00:00:00&#8217;))  Tuple where the first arg is the frame at which the second arg&#8217;s SMPTE timecode 
+has been set as reference, basically we&#8217;re saying that the timecode at frm is x</li>
 <li><strong>referenceNode</strong> &#8211; reference node used as the offset Node for relative loading</li>
 <li><strong>manageRanges</strong> &#8211; do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded</li>
 <li><strong>manageFileName</strong> &#8211; if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
@@ -324,19 +314,55 @@ to ensure the data is preserved</li>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimMap.extractData_Export">
+<code class="descname">extractData_Export</code><span class="sig-paren">(</span><em>manageExport='byAll'</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.extractData_Export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the key IDs for the exportLoops found in the r9Anim file, this
+passes through the manageExport code to match loop timings with the 
+r9Anim offset/start and end ranges</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>manageExport</strong> &#8211; byAll, byRange_start, byRange_end, byRange uses the timeWithinRange call</li>
+<li><strong>sort</strong> &#8211; sort the returned data by the endFrame in each loops data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimMap.extractData_Audio">
+<code class="descname">extractData_Audio</code><span class="sig-paren">(</span><em>manageAudio='byAll'</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.extractData_Audio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the key IDs for the AudioNodes found in the r9Anim file, this
+passes through the manageExport code to match loop timings with the 
+r9Anim offset/start and end ranges</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>manageExport</strong> &#8211; byAll, byRange_start, byRange_end, uses the timeWithinRange call</li>
+<li><strong>sort</strong> &#8211; sort the returned data by the endFrame in each loops data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.animation.Anim_Redirect">
-<em class="property">class </em><code class="descname">Anim_Redirect</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Utilises the AnimPointCloud to allow animation to be re-directed via guide and reference meshes. 
-This generates a spline based gyuide that you can edit to redirect animation around a scene and 
-because it uses the pointCloud setups nothing is bound to the animation data itself</p>
-<p>Vimeo demo: <a class="reference external" href="https://vimeo.com/126124902">https://vimeo.com/126124902</a></p>
-<dl class="classmethod">
-<dt id="Red9.pro_pack.core.animation.Anim_Redirect.show">
-<em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.show" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Anim_Redirect</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001305EE48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -379,22 +405,93 @@ because it uses the pointCloud setups nothing is bound to the animation data its
 </tr>
 </tbody>
 </table>
+<ul class="simple">
+<li>self.curveSamples = 10          : the number of cv&#8217;s samples on the ground curve</li>
+<li>self.meshReference = True       : add the visual mesh reference</li>
+<li>self.attachMotionPath = True    : build the motionPath editable setup or not</li>
+<li>self.buildHandles=False         : whether to build the additional cv handle nodes</li>
+<li>self.projectedRootTrans=True    : project the PPT root node pivot to world plane translates</li>
+<li>self.projectedRootRots=True     : project the PPT root node pivot to world plane rotates</li>
+<li>self.pathProjectY=True          : project the MotionPath to the world plane at Y=0</li>
+<li>self.pathAllowHeightVariant=True : allow the path to track height variants</li>
+<li>self.motionFollowScale=10       : simple scale of the follow object on the path</li>
+<li>self.fractionMode=True          : whether to use the fractionMode on the motionPath built</li>
+</ul>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimPointCloud.syncdatafromCurrentInstance">
 <code class="descname">syncdatafromCurrentInstance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.syncdatafromCurrentInstance" title="Permalink to this definition">¶</a></dt>
-<dd><p>upgrade the sync call to include anim specific data</p>
+<dd><p>Overloaded from DataMap
+upgrade the sync call to include anim specific data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.makeClusterControls">
+<code class="descname">makeClusterControls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.makeClusterControls" title="Permalink to this definition">¶</a></dt>
+<dd><p>if we&#8217;ve built the motionPath then this will add implicitSphere&#8217;s as 
+controllers per cv rather than animators having to drop to 
+component mode to edit the path cv&#8217;s directly</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.saveClusterPose">
+<code class="descname">saveClusterPose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.saveClusterPose" title="Permalink to this definition">¶</a></dt>
+<dd><p>store a cluster control pose</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.loadClusterPose">
+<code class="descname">loadClusterPose</code><span class="sig-paren">(</span><em>percent=100</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.loadClusterPose" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a stored cluster control pose</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.getClusterCtrls">
+<code class="descname">getClusterCtrls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.getClusterCtrls" title="Permalink to this definition">¶</a></dt>
+<dd><p>find the child cluster controls if generated, return is sorted by cv index</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.selectClusterCtrls">
+<code class="descname">selectClusterCtrls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.selectClusterCtrls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.groupClusterControls">
+<code class="descname">groupClusterControls</code><span class="sig-paren">(</span><em>mode='flat'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.groupClusterControls" title="Permalink to this definition">¶</a></dt>
+<dd><p>group the cluster controls in a chain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mode</strong> &#8211; &#8216;flat&#8217; &#8216;start&#8217; &#8216;end&#8217; where: 
+flat = the grouping is flat under the HandleControls group, all cv controls are independant of eachother
+start = the cv controls are grouped under eachother such that cv1 is the parent of cv2, cv 2 is the parent of cv3 etc
+end = the cv controls are grouped under eachother such that cv1 is the child of cv2, cv 2 is the child of cv3 etc</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.straightenCurve">
+<code class="descname">straightenCurve</code><span class="sig-paren">(</span><em>blendV</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.straightenCurve" title="Permalink to this definition">¶</a></dt>
+<dd><p>blend the rotateY values such that when in a chain, the curve is straightened out</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.generateAnimationReference">
+<code class="descname">generateAnimationReference</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.generateAnimationReference" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the main call to generate the reference spline track to represent the 
+animation over time and add reference meshes for start and end frames. 
+If buildHandles flags are set this will also generate the motionPath and the 
+control handles / cluster grouping setup. This is the core of the redirect setup!</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimPointCloud.generateVisualReference">
 <code class="descname">generateVisualReference</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.generateVisualReference" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.animation.AnimPointCloud.generateAnimationReference">
-<code class="descname">generateAnimationReference</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.generateAnimationReference" title="Permalink to this definition">¶</a></dt>
-<dd><p>generate a spline track to represent the animation over time 
-and add reference meshes for start and end frames</p>
+<dd><p>Overloaded from DataMap
+modified reference building code to deal with the animation setup</p>
 </dd></dl>
 
 <dl class="method">
@@ -983,7 +1080,7 @@ modified the tracking point and need to sync the cloud to the modified track poi
 <dl class="class">
 <dt id="Red9.pro_pack.core.animation.Keyerui">
 <em class="property">class </em><code class="descname">Keyerui</code><span class="sig-paren">(</span><em>uifile='D:/Red9_Core/Red9_Core_Main/Red9/pro_pack\UI\uifiles\interpolationkeyer.ui'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.UI.uibase.BaseUI</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="Red9_Pro_uibase.html#Red9.pro_pack.UI.uibase.BaseUI" title="Red9.pro_pack.UI.uibase.BaseUI"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.UI.uibase.BaseUI</span></code></a></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Keyerui.setdirection">
 <code class="descname">setdirection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.setdirection" title="Permalink to this definition">¶</a></dt>
@@ -1048,36 +1145,52 @@ modified the tracking point and need to sync the cloud to the modified track poi
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.set_timerange_from_rig_ctrls">
 <code class="descname">set_timerange_from_rig_ctrls</code><span class="sig-paren">(</span><em>timeline=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.set_timerange_from_rig_ctrls" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the current timeranges from the extent of the animation found on the mRig controllers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeline</strong> &#8211; set the Maya timeranges as well as the internal start/end data</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.delete_exportloops">
 <code class="descname">delete_exportloops</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.delete_exportloops" title="Permalink to this definition">¶</a></dt>
-<dd><p>delete all export loops in the export tag</p>
+<dd><p>delete all export loops currently connected to the mRigs ExportTag</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.delete_animation_on_binder_skeleton">
 <code class="descname">delete_animation_on_binder_skeleton</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.delete_animation_on_binder_skeleton" title="Permalink to this definition">¶</a></dt>
-<dd><p>delete any animation on binder skeleton</p>
+<dd><p>delete all animation on binder skeleton</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.add_export_loop">
 <code class="descname">add_export_loop</code><span class="sig-paren">(</span><em>loopname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.add_export_loop" title="Permalink to this definition">¶</a></dt>
-<dd><p>add export loop to character export tag
-:param loopname: name for export loop</p>
+<dd><p>add an export loop to mRigs ExportTag, the timeranges for this are taken from 
+the internal start and end frames setup during the transfer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loopname</strong> &#8211; name for export loop</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.openbinderfile">
 <code class="descname">openbinderfile</code><span class="sig-paren">(</span><em>binderfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.openbinderfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>open a character binder file in current Maya setion</p>
+<dd><p>open a character binder file in current Maya session</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Bndfile:</th><td class="field-body">path to character binder file</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bndfile</strong> &#8211; path to character binder file</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">path to character binder file</td>
 </tr>
@@ -1088,12 +1201,14 @@ modified the tracking point and need to sync the cloud to the modified track poi
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.scenebasename">
 <code class="descname">scenebasename</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.scenebasename" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>base name of the Maya scene less the extension</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.scenename">
 <code class="descname">scenename</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.scenename" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>current Maya sceneName</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.scenedir">
@@ -1117,9 +1232,9 @@ modified the tracking point and need to sync the cloud to the modified track poi
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>startFrame</strong> &#8211; start frame of the output</li>
 <li><strong>endFrame</strong> &#8211; end frame of the output</li>
-<li><strong>filepath</strong> &#8211; filepath to write</li>
+<li><strong>filepath</strong> &#8211; filepath to write to</li>
 <li><strong>prefix</strong> &#8211; simple prefix for the scenename on output</li>
-<li><strong>export</strong> &#8211; the main export call to fbx, without this we just prep the file</li>
+<li><strong>export</strong> &#8211; the main export call to fbx, if this is False then we just prep the file for export, without calling the FBX output</li>
 </ul>
 </td>
 </tr>
@@ -1130,7 +1245,9 @@ modified the tracking point and need to sync the cloud to the modified track poi
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.bake_hi">
 <code class="descname">bake_hi</code><span class="sig-paren">(</span><em>root</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.bake_hi" title="Permalink to this definition">¶</a></dt>
-<dd><p>bake hierarchy animation and filter sample the generated animation curves</p>
+<dd><p>simple bake hierarchy from a given root node, used to bake the data to the clean
+skeleton hierarchy that we ultimately output to FBX. This code also runs a filterCurve
+call on the baked data to reduce it&#8217;s footprint</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1144,15 +1261,17 @@ modified the tracking point and need to sync the cloud to the modified track poi
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.export_to_fbx">
 <code class="descname">export_to_fbx</code><span class="sig-paren">(</span><em>node</em>, <em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.export_to_fbx" title="Permalink to this definition">¶</a></dt>
-<dd><p>export node to fbx
-:param node: string: name of node to be exported if node is a</p>
-<blockquote>
-<div>root of a hierarchy, all hierarchy will be exported</div></blockquote>
+<dd><p>export a given node to fbx</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; string: file path to export to</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node</strong> &#8211; string: name of node to be exported if node is a
+root of a hierarchy, all hierarchy will be exported</li>
+<li><strong>filepath</strong> &#8211; string: file path to export to</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1177,8 +1296,8 @@ set display attrs of the joints to default values</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder">
-<code class="descname">fbx_to_binder</code><span class="sig-paren">(</span><em>fbxfiles</em>, <em>binderfile=None</em>, <em>usecurrentscene=False</em>, <em>bake=False</em>, <em>runFilter=True</em>, <em>useTakeData=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Main FBX &gt; Binder call, loads the FBX file in, loads the binder in, and transfers the data</p>
+<code class="descname">fbx_to_binder</code><span class="sig-paren">(</span><em>fbxfiles</em>, <em>binderfile=None</em>, <em>usecurrentscene=False</em>, <em>bake=False</em>, <em>runFilter=True</em>, <em>useTakeData=False</em>, <em>mayafile=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main FBX &gt; Binder call, (PRO_TO_BND) loads the FBX file in, loads the binder in, and transfers the data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1188,8 +1307,10 @@ set display attrs of the joints to default values</p>
 <li><strong>binderfile</strong> &#8211; BND binder file to use in the transfer</li>
 <li><strong>usecurrentscene</strong> &#8211; if true use the current scene, which then expects a binder file to be already loaded</li>
 <li><strong>bake</strong> &#8211; do we bake the results to the Red9 puppet and clean-up after our-selves?</li>
-<li><strong>runFilter</strong> &#8211; do we run the curve filter on the baked results to try and optimise the results, removing statics etc</li>
+<li><strong>runFilter</strong> &#8211; do we run the curve filter on the baked animation to try and optimise the results, removing static data etc</li>
 <li><strong>useTakeData</strong> &#8211; if True use the internal fbx take[1]&#8217;s timeSpan when setting the ranges</li>
+<li><strong>mayafile</strong> &#8211; save the resulting Maya files out. This is a flag so that if this func is being called as part of another process
+we can choose if we want the Maya file or Not</li>
 </ul>
 </td>
 </tr>
@@ -1249,7 +1370,7 @@ set display attrs of the joints to default values</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setuisettings">
 <code class="descname">setuisettings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setuisettings" title="Permalink to this definition">¶</a></dt>
-<dd><p>populate ui settings using SETTINGS data</p>
+<dd><p>populate ui settings from the users last SETTINGS data</p>
 </dd></dl>
 
 <dl class="method">
@@ -1287,15 +1408,16 @@ set display attrs of the joints to default values</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setMayaFile">
+<code class="descname">setMayaFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setMayaFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>ui callback for mayafile management</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setupLogFile">
 <code class="descname">setupLogFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.setupLogFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>creates a log file for the anim transfer code</p>
 </dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012FED9C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.writeToLog">
@@ -1303,6 +1425,11 @@ set display attrs of the joints to default values</p>
 <dd><p>func to call to write the supplied data to the log file.
 Closes it every time, because the batch can kill maya outright.</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001306BE48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.transfer">

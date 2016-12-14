@@ -946,7 +946,7 @@ in the channelBox.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; nodes to process</li>
-<li><strong>attrs</strong> &#8211; set() of attrs</li>
+<li><strong>attrs</strong> &#8211; set() of attrs, or &#8216;all&#8217;</li>
 <li><strong>mode</strong> &#8211; &#8216;lock&#8217;, &#8216;unlock&#8217;, &#8216;hide&#8217;, &#8216;unhide&#8217;, &#8216;fullkey&#8217;, &#8216;lockall&#8217;</li>
 <li><strong>hierarchy</strong> &#8211; process all child nodes, default is now False</li>
 <li><strong>usedDefined</strong> &#8211; process all UserDefined attributes on all nodes</li>
@@ -1018,7 +1018,7 @@ animation curves on the selected object by shifting keys</p>
 <span class="gp">&gt;&gt;&gt; </span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1">#build a filterSettings object up, in this case we&#39;re loading a current one.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span><span class="o">=</span><span class="n">r9Core</span><span class="o">.</span><span class="n">FilterNode_Settings</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r9Setup</span><span class="o">.</span><span class="n">red9Presets</span><span class="p">(),</span><span class="s1">&#39;Crytek_New_Meta.cfg&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r9Setup</span><span class="o">.</span><span class="n">red9Presets</span><span class="p">(),</span><span class="s1">&#39;Red9_DevRig.cfg&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span><span class="o">.</span><span class="n">incRoots</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span><span class="o">.</span><span class="n">printSettings</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span>
@@ -1209,8 +1209,8 @@ in that new range</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.timeIsInRange">
-<code class="descname">timeIsInRange</code><span class="sig-paren">(</span><em>baseRange=()</em>, <em>testRange=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.timeIsInRange" title="Permalink to this definition">¶</a></dt>
-<dd><p>test that a given testRange falls within the bounds of a baseRange
+<code class="descname">timeIsInRange</code><span class="sig-paren">(</span><em>baseRange=()</em>, <em>testRange=()</em>, <em>start_inRange=True</em>, <em>end_inRange=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.timeIsInRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>test that a given testRange [start,end], falls within the bounds of a baseRange [start,end]
 Used to test if timeRanges fall within a baseRange</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1219,6 +1219,8 @@ Used to test if timeRanges fall within a baseRange</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>baseRange</strong> &#8211; base time range to test against</li>
 <li><strong>testRange</strong> &#8211; range to test against the baseRange, do these times fall within the baseRange?</li>
+<li><strong>start_inRange</strong> &#8211; check is the testRange[0] value falls fully in the baseRange</li>
+<li><strong>end_inRange</strong> &#8211; check is the testRange[1] value falls fully in the baseRange</li>
 </ul>
 </td>
 </tr>
@@ -1226,8 +1228,8 @@ Used to test if timeRanges fall within a baseRange</p>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">if you pass in baseRange as (None, 100) then we only validate against the end time.
-if we pass in baseRange as (10, None) we only validate against the start time
+<p class="last">if you pass in baseRange as (None, 100) then we only validate against the end time regardless of the flags.
+if we pass in baseRange as (10, None) we only validate against the start time regardless of the flags.
 else we validate that testRange is fully within the baseRanges times</p>
 </div>
 </dd></dl>
