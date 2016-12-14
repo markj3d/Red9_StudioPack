@@ -774,22 +774,19 @@ class FilterNode(object):
                 if cmds.nodeType(node)=='character':
                     self.hierarchy.extend(self.lsCharacterMembers())
                 elif cmds.nodeType(node)=='objectSet':
-                    #print 'objectSets - here'
                     self.hierarchy.extend(self.getObjectSetMembers(node))
                     childSets=cmds.listConnections(node, type='objectSet', s=True, d=False)  # need a walk here??
                     if childSets:
-                        #print 'childSet : ', childSets
                         for childSet in childSets:
                             self.hierarchy.extend(self.getObjectSetMembers(childSet))
                 else:
                     if incRoots:
                         self.hierarchy.append(node)
                     if not transformClamp:
-                        self.hierarchy.extend(cmds.listRelatives(node, ad=True, f=True))
+                        self.hierarchy.extend(cmds.listRelatives(node, ad=True, f=True) or [])
                     else:
                         #Still not sure this is the right place for the transform clamp
-                        self.hierarchy.extend(cmds.listRelatives(node, ad=True, f=True,
-                                                                 type='transform'))
+                        self.hierarchy.extend(cmds.listRelatives(node, ad=True, f=True, type='transform') or [])
             return self.hierarchy
         else:
             raise StandardError('rootNodes not given to class - processing at SceneLevel Only - lsHierarchy is therefore invalid')
@@ -2047,7 +2044,7 @@ class LockChannels(object):
         in the channelBox.
         
         :param nodes: nodes to process
-        :param attrs: set() of attrs
+        :param attrs: set() of attrs, or 'all'
         :param mode: 'lock', 'unlock', 'hide', 'unhide', 'fullkey', 'lockall'
         :param hierarchy: process all child nodes, default is now False
         :param usedDefined: process all UserDefined attributes on all nodes
@@ -2217,7 +2214,7 @@ class TimeOffset(object):
     >>> 
     >>> #build a filterSettings object up, in this case we're loading a current one.
     >>> flt=r9Core.FilterNode_Settings()
-    >>> flt.read(os.path.join(r9Setup.red9Presets(),'Crytek_New_Meta.cfg'))
+    >>> flt.read(os.path.join(r9Setup.red9Presets(),'Red9_DevRig.cfg'))
     >>> flt.incRoots=True
     >>> flt.printSettings()
     >>> 
