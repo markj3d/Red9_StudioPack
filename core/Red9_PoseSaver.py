@@ -371,18 +371,20 @@ class DataMap(object):
                     if self.rootJnt:
                         self.rootJnt=self.rootJnt[0]
             else:
-                if cmds.attributeQuery('exportSkeletonRoot',node=rootNode,exists=True):
+                if cmds.attributeQuery('exportSkeletonRoot',node=rootNode, exists=True):
                     connectedSkel=cmds.listConnections('%s.%s' % (rootNode,'exportSkeletonRoot'),destination=True,source=True)
                     if connectedSkel and cmds.nodeType(connectedSkel)=='joint':
                         self.rootJnt=connectedSkel[0]
                     elif cmds.nodeType(rootNode)=='joint':
                         self.rootJnt=rootNode
-                if cmds.attributeQuery('animSkeletonRoot',node=rootNode,exists=True):
+                elif cmds.attributeQuery('animSkeletonRoot',node=rootNode, exists=True):
                     connectedSkel=cmds.listConnections('%s.%s' % (rootNode,'animSkeletonRoot'),destination=True,source=True)
                     if connectedSkel and cmds.nodeType(connectedSkel)=='joint':
                         self.rootJnt=connectedSkel[0]
                     elif cmds.nodeType(rootNode)=='joint':
                         self.rootJnt=rootNode
+                elif self.settings.nodeTypes==['joint']:
+                    self.rootJnt=rootNode
         else:
             if self.metaPose:
                 self.setMetaRig(rootNode)
@@ -600,10 +602,12 @@ class DataMap(object):
                 if not mirrorID:
                     continue
                 for key in self.poseDict.keys():
-                    if self.poseDict[key]['mirrorID'] and self.poseDict[key]['mirrorID']==mirrorID:
-                        matchedPairs.append((key,node))
-                        log.debug('poseKey : %s %s >> matched MirrorIndex : %s' % (key, node, self.poseDict[key]['mirrorID']))
-                        break
+                    if 'mirrorID' in self.poseDict[key] and self.poseDict[key]['mirrorID']:
+                        poseID=self.poseDict[key]['mirrorID']
+                        if poseID==mirrorID:
+                            matchedPairs.append((key,node))
+                            log.debug('poseKey : %s %s >> matched MirrorIndex : %s' % (key, node, self.poseDict[key]['mirrorID']))
+                            break
         # unlike 'mirrorIndex' this matches JUST the ID's, the above matches SIDE_ID
         if self.matchMethod=='mirrorIndex_ID':
             getMirrorID=r9Anim.MirrorHierarchy().getMirrorIndex
@@ -612,10 +616,15 @@ class DataMap(object):
                 if not mirrorID:
                     continue
                 for key in self.poseDict.keys():
-                    if self.poseDict[key]['mirrorID'] and int(self.poseDict[key]['mirrorID'].split('_')[-1])==mirrorID:
-                        matchedPairs.append((key,node))
-                        log.debug('poseKey : %s %s >> matched MirrorIndex : %s' % (key, node, self.poseDict[key]['mirrorID']))
-                        break
+                    if 'mirrorID' in self.poseDict[key] and self.poseDict[key]['mirrorID']:
+                        poseID=self.poseDict[key]['mirrorID'].split('_')[-1]
+                        if not poseID=='None':
+                            if int(poseID)==mirrorID:
+                                matchedPairs.append((key,node))
+                                log.debug('poseKey : %s %s >> matched MirrorIndex : %s' % (key, node, self.poseDict[key]['mirrorID']))
+                                break
+                        else:
+                            log.debug('poseKey SKIPPED : %s:%s : as incorrect MirrorIDs' % (key,self.poseDict[key]['mirrorID']))
                     
         if self.matchMethod=='metaData':
             getMetaDict=self.metaRig.getNodeConnectionMetaDataMap  # optimisation
@@ -753,7 +762,7 @@ class PoseData(DataMap):
     >>> poseDict['TestCtr']['attrs']['translateY'] = 1.0 
     >>> poseDict['TestCtr']['attrs']['translateZ'] = 22 
     >>> 
-    >>> #if we're storing as MetaData we also include:
+    >>> # if we're storing as MetaData we also include:
     >>> poseDict['TestCtr']['metaData']['metaAttr'] = CTRL_L_Thing    = the attr that wires this node to the MetaSubsystem
     >>> poseDict['TestCtr']['metaData']['metaNodeID'] = L_Arm_System  = the metaNode this node is wired to via the above attr
     
@@ -766,11 +775,23 @@ class PoseData(DataMap):
         >>> pose=r9Pose.PoseData()
         >>> pose.metaPose=True
         >>>
-        >>> #cache the pose (just don't pass in a filePath)
+        >>> # cache the pose (just don't pass in a filePath)
         >>> pose.poseSave(cmds.ls(sl=True))
-        >>> #reload the cache you just stored
+        >>> # reload the cache you just stored
         >>> pose.poseLoad(cmds.ls(sl=True))
     
+    We can also load in a percentage of a pose by running the PoseData._applyData(percent) as follows:
+    
+        >>> pose=r9Pose.PoseData()
+        >>> pose.metaPose=True
+        >>> pose.filepath='C:/mypose.pose'
+        >>> 
+        >>> # processPoseFile does just that, processes and build up the list of data but doesn't apply it
+        >>> pose.processPoseFile(nodes='myRootNode')
+        >>> 
+        >>> # now we can dial in a percentage of the pose, we bind this to a floatSlider in the UI
+        >>> pose._applyData(percent=20)
+        
     .. note::
         If the root node of the hierarchy passed into the poseSave() has a message attr 
         'exportSkeletonRoot' or 'animSkeletonRoot' and that message is connected to a 
@@ -800,6 +821,8 @@ class PoseData(DataMap):
         self.relativePose=False
         self.relativeRots='projected'
         self.relativeTrans='projected'
+        
+        self.mirrorInverse=False  # when loading do we inverse the attrs values being loaded (PRO-PACK finger systems)
 
     def _collectNodeData(self, node, key):
         '''
@@ -863,6 +886,7 @@ class PoseData(DataMap):
     def _applyData(self, percent=None):
         '''
         :param percent: percent of the pose to load
+        
         '''
         mix_percent=False  # gets over float values of zero from failing
         if percent or type(percent)==float:
@@ -881,6 +905,21 @@ class PoseData(DataMap):
                         continue
                     try:
                         val = eval(val)
+                        # =====================================================================
+                        # inverse the correct mirror attrs if the mirrorInverse flag was thrown
+                        # =====================================================================
+                        # this is mainly for the ProPack finger systems support hooks
+                        if self.mirrorInverse and 'mirrorID' in self.poseDict[key] and self.poseDict[key]['mirrorID']:
+                            axis=r9Anim.MirrorHierarchy().getMirrorAxis(dest)
+                            side=r9Anim.MirrorHierarchy().getMirrorSide(dest)
+                            if attr in axis:
+                                poseSide=self.poseDict[key]['mirrorID'].split('_')[0]
+                                if not poseSide==side:
+                                    val = 0-val
+                                    log.debug('Inversing Pose Values for Axis: %s, stored side: %s, nodes side: %s, node: %s' % (attr,
+                                                                                                                                  poseSide,
+                                                                                                                                  side,
+                                                                                                                                  r9Core.nodeNameStrip(dest)))
                     except:
                         pass
                     log.debug('node : %s : attr : %s : val %s' % (dest, attr, val))
@@ -1111,8 +1150,8 @@ class PosePointCloud(object):
         on build push the data to a metaNode so it's cached in the scene incase we need to 
         reconstruct anything at a later date. This is used extensivly in the AnimReDirect calls
         '''
-        self.ppcMeta = r9Meta.MetaClass(name='PPC_Root')
-        self.ppcMeta.mClassGrp='PPCROOT'
+        #self.ppcMeta = r9Meta.MetaClass(name='PPC_Root')
+        #self.ppcMeta.mClassGrp='PPCROOT'
         self.ppcMeta.connectChild(self.posePointRoot, 'posePointRoot')
         self.ppcMeta.addAttr('posePointCloudNodes', self.posePointCloudNodes)
          
@@ -1214,6 +1253,10 @@ class PosePointCloud(object):
         
         self.deleteCurrentInstances()
 
+        # moved the mNode generation earlier so the rest of the code can bind to it during build
+        self.ppcMeta = r9Meta.MetaClass(name='PPC_Root')
+        self.ppcMeta.mClassGrp='PPCROOT'
+        
         self.posePointRoot=cmds.ls(cmds.spaceLocator(name='posePointCloud'),sl=True,l=True)[0]
         print self.posePointRoot
         cmds.setAttr('%s.visibility' % self.posePointRoot, self.isVisible)
@@ -1508,22 +1551,29 @@ def batchPatchPoses(posedir, config, poseroot, load=True, save=True, patchfunc=N
     '''
 
     filterObj=r9Core.FilterNode_Settings()
-    filterObj.read(os.path.join(r9Setup.red9ModulePath(), 'presets', config))  # 'Crytek_New_Meta.cfg'))
+    filterObj.read(os.path.join(r9Setup.red9ModulePath(), 'presets', config))
     mPose=PoseData(filterObj)
-    
+    mPose.setMetaRig(poseroot)
     files=os.listdir(posedir)
     files.sort()
     for f in files:
         if f.lower().endswith('.pose'):
             if load:
-                mPose.poseLoad(poseroot, os.path.join(posedir,f),
+                print 'Loading Pose : %s' % os.path.join(posedir,f)
+                mPose.poseLoad(nodes=poseroot, 
+                               filepath=os.path.join(posedir,f),
                                useFilter=True,
                                relativePose=relativePose,
                                relativeRots=relativeRots,
                                relativeTrans=relativeTrans)
             if patchfunc:
+                print 'Applying patch'
                 patchfunc(f)
             if save:
-                mPose.poseSave(poseroot, os.path.join(posedir,f), useFilter=True, storeThumbnail=False)
+                print 'Saving Pose : %s' % os.path.join(posedir,f)
+                mPose.poseSave(nodes=poseroot,
+                               filepath=os.path.join(posedir,f),
+                               useFilter=True,
+                               storeThumbnail=False)
             log.info('Processed Pose File :  %s' % f)
 
