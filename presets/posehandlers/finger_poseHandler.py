@@ -10,61 +10,29 @@ MarkJ blog: http://markj3d.blogspot.co.uk
 
 ================================================================
 
-Advanced Pose Data management!
+Advanced Pose Data management. 
 
-This is a template example for a poseHandler.py file that the 
-PoseSaver now optionally looks for in any pose folder. If this 
-file is found then the main poseCall runs one of the two main funcs 
-below, by-passing the standard PoseData.getNodes() call and allowing 
-you to tailor the poseSaver on a folder by folder level.
+---------------------------------------
+RIG SPEC :  MetaData wired or HIK WIRED
+---------------------------------------
+This handler is designed to turn a folder into a finger pose library.
+The rig must be either wired to Meta or wired to HIK. 
+Required subMetaSystems : 'L_ArmSystem','R_ArmSystem'
 
-Why?? well without this you have no real way to tailor a pose to 
-a given rig other than setting up the preset in the hierarchy filter 
-and changing the rootNode. Now that's fine for individuals but in a 
-production environment you may want more control. You may want to
-have specific handlers for finger poses, facial etc and this allows 
-all of that to be done, animators just switch to a folder and that 
-folder controls how the data is processed.
+-------------------------------
+CASE : Fingers matched by Index
+-------------------------------
+for fingers where we want to match left and right fingers 
+based on their hierarchy index ONLY...ie left and right finger 
+should have the same hierarchy under the wrist
 
-NOTE: 'poseObj' arg is the actual PoseData class instance passed into 
-the calls from the main class. This allows you to monkey-patch and modify
-the internal object on the fly if you need too.
+-------------------------------
+INPUT : 
+-------------------------------
+the code requires you to select a controller on either the left or right 
+side of the rig that has mirror markers on it. From this we determine which
+finger systems (left or right) to load the data onto
 
-
-example:
-This is an example I use at work for our finger pose folder just to 
-show what can be done here. The key is that you have to return a list 
-of nodes that are then pushed into the poseData for processing.
-
-def getNodesOverload(poseObj,nodes,*args):
-
-    #NOTE: poseObj already has an attr 'metaRig' which is filled  
-    #automatically in the main buildInternalPoseData() call
-    metaNode=poseObj.metaRig
-
-    #catch the currently selected node
-    currentSelection=cmds.ls(sl=True,l=True)
-
-    #see if we have a left or right controller selected and switch to the
-    #appropriate subMetaSystem
-    if cmds.getAttr('%s.mirrorSide' % currentSelection[0])==1:
-        filteredNodes=metaNode.L_ArmSystem.L_Fingers_System.getChildren()
-        [filtered.append(node) for node in cmds.listRelatives(filtered,type='joint',ad=True,f=True)]
-        
-    elif cmds.getAttr('%s.mirrorSide' % currentSelection[0])==2:
-        filteredNodes=metaNode.R_ArmSystem.R_Fingers_System.getChildren()
-        [filtered.append(node) for node in cmds.listRelatives(filtered,type='joint',ad=True,f=True)]
-        
-    #modify the actual PoseData object, changing the data to be matched on index
-    #rather than using the standard name or metaMap matching
-    poseObj.metaPose=False
-    poseObj.matchMethod='index'
-    
-    return filteredNodes
-
-
-In the most basic case you could just construct a list of nodes
-and return that!
 ================================================================
 '''
 

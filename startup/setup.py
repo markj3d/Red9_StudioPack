@@ -581,7 +581,7 @@ def red9ButtonBGC(colour, qt=False):
     elif colour==3 or colour=='red':
         rgb=[1,0.3,0.3]
     elif colour==4 or colour=='white':
-        rgb=[0.75,0.8,0.8]
+        rgb=[0.75,0.75,0.8]
     elif colour==5 or colour=='dark':
         rgb=[0.15,0.25,0.25]
     if qt:
@@ -1118,14 +1118,20 @@ def reload_Red9(*args):
     Red9.core._reload()
     
     if has_pro_pack():
+        print '\nReloading ProPack Systems (INTERNAL USE)'
+        print '='*40
         import Red9.pro_pack.core
         Red9.pro_pack.core._reload()
         
     if has_internal_systems():
+        print '\nReloading Internal Codebase'
+        print '='*40
         import Red9_Internals
         Red9_Internals._reload()
 
     if has_client_modules():
+        print '\nReloading Client Codebase'
+        print '='*40
         __reload_clients__()
 
 
