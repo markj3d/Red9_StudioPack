@@ -715,14 +715,18 @@ class FilterNode(object):
             else:
                 mrig=r9Meta.getConnectedMetaSystemRoot(self._rootNodes[0], mInstances=r9Meta.MetaRig)
             if mrig:
+                # PRO PACK ONLY:
                 if mrig.hasAttr('filterSettings') and mrig.filterSettings:
-                    log.info('==============================================================')
-                    log.info('mRig : setting.filterPriority pulled directly from mNodes data')
-                    log.info('==============================================================')
-                    self.settings.filterPriority=mrig.settings.filterPriority
-                    self.settings.rigData['snapPriority']=mrig.settings.rigData['snapPriority']
-                    self.settings.printSettings()
-                    log.info('==============================================================')
+                    try:
+                        log.info('==============================================================')
+                        log.info('mRig : setting.filterPriority pulled directly from mNodes data')
+                        log.info('==============================================================')
+                        self.settings.filterPriority=mrig.settings.filterPriority
+                        self.settings.rigData['snapPriority']=mrig.settings.rigData['snapPriority']
+                        self.settings.printSettings()
+                        log.info('==============================================================')
+                    except:
+                        log.info('mRig has FilterSettings data but is NOT a Pro_MetaRig - settings aborted')
                 else:
                     log.info('mRig : No specific filter data bound to this rig')
             return mrig
