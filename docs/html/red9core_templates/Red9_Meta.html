@@ -318,7 +318,8 @@ all still valid by testing the MObjectHandles.</p>
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.resetCache">
 <code class="descname">resetCache</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.resetCache" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>reset the global cache, called after SceneOpen or NewScene</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.resetCacheOnSceneNew">
@@ -435,6 +436,13 @@ the correct class object. If not then return the Maya node itself</li>
 We use mInstances rather than mTypes directly for MetaRig to 
 cope with people subclassing, then we clamp the search to the Root MetaRig
 using the mClassGrps variable. This probably will expand as it&#8217;s tested</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_Meta.getMetaRigs_fromSelected">
+<code class="descname">getMetaRigs_fromSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.getMetaRigs_fromSelected" title="Permalink to this definition">¶</a></dt>
+<dd><p>light wrap over the getMetaRigs function to return a list of mRigs connected
+to the selected nodes</p>
 </dd></dl>
 
 <dl class="function">
@@ -642,6 +650,15 @@ in by the funcOnSelection arg</p>
 <code class="descname">printMetaNodeCache</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MClassNodeUI.printMetaNodeCache" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="exception">
+<dt id="Red9.core.Red9_Meta.MetaInstanceError">
+<em class="property">exception </em><code class="descname">MetaInstanceError</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaInstanceError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+<p>exception thrown if the mClass object iunstance is no longer valid
+usually thrown if the class object is called after the Maya scene has been 
+changed by loading or new</p>
 </dd></dl>
 
 <dl class="class">
@@ -1139,7 +1156,7 @@ by going getChildMetaNodes(mAttrs=&#8217;mClass=MetaRig&#8217;)</p>
 <p class="first admonition-title">Note</p>
 <p class="last">Because the <a href="#id3"><span class="problematic" id="id4">**</span></a>kws are passed directly to the getConnectedMetaNodes func, it will
 also take ALL of that functions <a href="#id5"><span class="problematic" id="id6">**</span></a>kws functionality in the initial search:
-source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType=&#8217;mClass&#8217;, skipTypes=[], skipInstances=[]</p>
+mTypes=[], mInstances=[], mAttrs=None, dataType=&#8217;mClass&#8217;, skipTypes=[], skipInstances=[]</p>
 </div>
 </dd></dl>
 
@@ -1151,7 +1168,7 @@ source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType=&
 <p class="first admonition-title">Note</p>
 <p class="last">Because the <a href="#id7"><span class="problematic" id="id8">**</span></a>kws are passed directly to the getConnectedMetaNods func, it will
 also take ALL of that functions kws
-source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType=&#8217;mClass&#8217;</p>
+mTypes=[], mInstances=[], mAttrs=None, dataType=&#8217;mClass&#8217;</p>
 </div>
 <p>TODO: implement a walk here to go upstream</p>
 </dd></dl>
@@ -1189,7 +1206,7 @@ cAttrs is searching the connection attr names from the mNodes, uses the cmds.lis
 <p class="first admonition-title">Note</p>
 <p class="last">Because the <a href="#id9"><span class="problematic" id="id10">**</span></a>kws are passed directly to the getConnectedMetaNodes func via the getChildMetaNodes call,
 it will also take ALL of that functions <a href="#id11"><span class="problematic" id="id12">**</span></a>kws functionality in the initial search:
-source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType=&#8217;mClass&#8217;, skipTypes=[], skipInstances=[]</p>
+mTypes=[], mInstances=[], mAttrs=None, dataType=&#8217;mClass&#8217;, skipTypes=[], skipInstances=[]</p>
 </div>
 </dd></dl>
 
@@ -1283,14 +1300,6 @@ in a seamless manner and bind some core functionality.</p>
 <dt id="Red9.core.Red9_Meta.MetaRig.gatherInfo">
 <code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>gather key info on this system</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.core.Red9_Meta.MetaRig.settings">
-<code class="descname">settings</code><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.settings" title="Permalink to this definition">¶</a></dt>
-<dd><p>bound filterSettings object used by the Animation Systems
-from now on so that this data can be bound directly to the 
-rig so we don&#8217;t have to use the preset config&#8217;s all the time</p>
 </dd></dl>
 
 <dl class="method">
@@ -1721,6 +1730,7 @@ on this object instance only.</p>
 <li><strong>attr</strong> &#8211; optional - attr to store the cached pose to</li>
 <li><strong>filepath</strong> &#8211; optional - path to store the pose too</li>
 <li><strong>incRoots</strong> &#8211; passed directly to the filterSettings object in the pose, do we process self.ctrl_main?</li>
+<li><strong>storeThumbnail</strong> &#8211; do we save the thumbnail out or not?</li>
 </ul>
 </td>
 </tr>
@@ -1738,15 +1748,19 @@ will load the cached pose from this objects instance, if there is one stored.</p
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; if given load only the cached pose to the given nodes</li>
 <li><strong>attr</strong> &#8211; optional - attr in which a pose has been stored internally on the mRig</li>
 <li><strong>filepath</strong> &#8211; optional - posefile to load back</li>
 <li><strong>incRoots</strong> &#8211; passed directly to the filterSettings object in the pose, do we process self.ctrl_main?</li>
+<li><strong>relativePose</strong> &#8211; kick in the posePointCloud to align the loaded pose 
+relatively to the selected node.</li>
+<li><strong>relativeRots</strong> &#8211; &#8216;projected&#8217; or &#8216;absolute&#8217; - how to calculate the offset.</li>
+<li><strong>relativeTrans</strong> &#8211; &#8216;projected&#8217; or &#8216;absolute&#8217; - how to calculate the offset.</li>
+<li><strong>maintainSpaces</strong> &#8211; this preserves any parentSwitching mismatches between 
+the stored pose and the current rig settings, current spaces are maintained. 
+This only checks those nodes in the snapList and only runs under relative mode.</li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">TODO:</th><td class="field-body"><p class="first last">add relative flags so that they can pass through this call</p>
 </td>
 </tr>
 </tbody>
@@ -1803,7 +1817,7 @@ so it doesn&#8217;t interfer with any display layers etc</p>
 <dt id="Red9.core.Red9_Meta.MetaRig.hideNodes">
 <code class="descname">hideNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.hideNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>wrap over the nodeVisibility to set False for all Controllers
-with the exceptiojn of the Main_Ctrl</p>
+with the exception of the Main_Ctrl</p>
 </dd></dl>
 
 <dl class="method">
@@ -1993,7 +2007,7 @@ the mRig&#8217;s internal data, else we use the timecode binding supplied</li>
 <li><strong>timecodeBinding</strong> &#8211; (frm, str(&#8216;00:00:00:00&#8217;))  Tuple where the first arg is the frame at which the second arg&#8217;s SMPTE timecode 
 has been set as reference, basically we&#8217;re saying that the timecode at frm is x</li>
 <li><strong>referenceNode</strong> &#8211; load relative to the given node</li>
-<li><strong>manageRanges</strong> &#8211; do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded</li>
+<li><strong>manageRanges</strong> &#8211; valid values : 0=leave,  1=extend, 2=set the timeranges according to the anim data loaded</li>
 <li><strong>manageFileName</strong> &#8211; if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
 then we take the r9Anim&#8217;s filename and rename the Maya scene accordingly</li>
 <li><strong>keyStatics</strong> &#8211; if True then we key everything in the data at startFrame so that all non-keyed and static
@@ -2012,19 +2026,21 @@ to ensure the data is preserved</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name" colspan="2">KWS manageExport:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">If running the Red9Pro Exporter systems this will rebuild the export Tag data directly
-from the r9Anim file&#8217;s infoData block:
-False : don&#8217;t restore any exportData,
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">If running the Red9Pro Exporter systems this will rebuild the export Tag data directly
+from the r9Anim file&#8217;s infoData block:</p>
+<p>False : don&#8217;t restore any exportData,
 [] : if you pass in a list then we take that list and match internal exportloop names to it
 &#8216;byName&#8217; : restore only exportLoops who name matches the r9Anim&#8217;s name
 &#8216;byRange&#8217;: restore exportLoops that fall within the timerange of the imported r9Anim
 &#8216;byRange_start&#8217; : restore exportLoops that start after the timerange of the importer r9Anim (ignore end time data)
 &#8216;byRange_end&#8217; : restore exportLoops that end before the timerange of the importer r9Anim (ignore start time data)
-&#8216;byAll&#8217; : restore ALL exportLoops in the r9Anim infoData block</td>
+&#8216;byAll&#8217; : restore ALL exportLoops in the r9Anim infoData block</p>
+</td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">KWS manageAudio:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">If running the Red9Pro Exporter systems this will rebuild the Audio Node data directly
-from the r9Anim file&#8217;s infoData block   (False, [], &#8216;byName&#8217;, &#8216;byRange&#8217;, &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;byAll&#8217;)</td>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">If running the Red9Pro Exporter systems this will rebuild the Audio Node data directly
+from the r9Anim file&#8217;s infoData block   (False, [], &#8216;byName&#8217;, &#8216;byRange&#8217;, &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;byAll&#8217;)</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -2052,14 +2068,45 @@ this allows us to modify the behaviour on a case by case basis for clients</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.timecode_get">
 <code class="descname">timecode_get</code><span class="sig-paren">(</span><em>atFrame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.timecode_get" title="Permalink to this definition">¶</a></dt>
-<dd><p>: PRO PACK : get the timecode object back from the rig</p>
+<dd><p>: PRO PACK : get the timecode back from the rig</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.timecode_addAttrs">
 <code class="descname">timecode_addAttrs</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.timecode_addAttrs" title="Permalink to this definition">¶</a></dt>
-<dd><p>: PRO PACK : simple return to check if the system has the Pro Timecode
-systems bound to it</p>
+<dd><p>: PRO PACK : add the timecode attributes and push the given timecode 
+to the mRigs timecode node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tc</strong> &#8211; timecode to set</li>
+<li><strong>propagate</strong> &#8211; do we just set the attrs or push the counter keys</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRig.timecode_setTimecode">
+<code class="descname">timecode_setTimecode</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em>, <em>ui=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.timecode_setTimecode" title="Permalink to this definition">¶</a></dt>
+<dd><p>: PRO PACK : wrap over the timecode_addAttrs but exposes the enterTimecode ui</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tc</strong> &#8211; timecode to set</li>
+<li><strong>propagate</strong> &#8211; do we just set the attrs or push the counter keys, if the UI is True then this is True by default</li>
+<li><strong>ui</strong> &#8211; do we launch the Timecode UI to enter a specific timecode manually</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -2072,8 +2119,7 @@ systems bound to it</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.timecode_remove">
 <code class="descname">timecode_remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.timecode_remove" title="Permalink to this definition">¶</a></dt>
-<dd><p>: PRO PACK : simple return to check if the system has the Pro Timecode
-systems bound to it</p>
+<dd><p>: PRO PACK : remove the Timecode attrs and system from this mRig</p>
 </dd></dl>
 
 </dd></dl>
@@ -2084,9 +2130,6 @@ systems bound to it</p>
 <dd><p>Bases: <a class="reference internal" href="#Red9.core.Red9_Meta.MetaRig" title="Red9.core.Red9_Meta.MetaRig"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaRig</span></code></a></p>
 <p>SubClass of the MRig, designed to organize Rig sub-systems (ie L_ArmSystem, L_LegSystem..)
 within a complex rig structure. This or MetaRig should have the Controllers wired to it</p>
-<p>Idea here is if a MayaNode is passed in and has the mClass attr
-we pass that into the super(__new__) such that an object of that class
-is then instantiated and returned.</p>
 <dl class="attribute">
 <dt id="Red9.core.Red9_Meta.MetaRigSubSystem.SupportNode">
 <code class="descname">SupportNode</code><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRigSubSystem.SupportNode" title="Permalink to this definition">¶</a></dt>
@@ -2108,9 +2151,6 @@ and the naming convention of the mNodeID reflects that ie: L_ArmSystem and L_Arm
 <p>SubClass of MetaClass, designed to organize support nodes, solvers and other internal
 nodes within a complex rig structure which you may need to ID at a later date.
 Controllers should NOT be wired to this node</p>
-<p>Idea here is if a MayaNode is passed in and has the mClass attr
-we pass that into the super(__new__) such that an object of that class
-is then instantiated and returned.</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRigSupport.addSupportNode">
 <code class="descname">addSupportNode</code><span class="sig-paren">(</span><em>node</em>, <em>attr</em>, <em>boundData=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRigSupport.addSupportNode" title="Permalink to this definition">¶</a></dt>
@@ -2138,9 +2178,6 @@ is then instantiated and returned.</p>
 <dd><p>Bases: <a class="reference internal" href="#Red9.core.Red9_Meta.MetaRig" title="Red9.core.Red9_Meta.MetaRig"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaRig</span></code></a></p>
 <p>SubClass of the MetaRig, designed to be manage Facial systems in the MetaData
 Dag tree for organizing Facial Controllers and support nodes</p>
-<p>Idea here is if a MayaNode is passed in and has the mClass attr
-we pass that into the super(__new__) such that an object of that class
-is then instantiated and returned.</p>
 </dd></dl>
 
 <dl class="class">
@@ -2150,9 +2187,6 @@ is then instantiated and returned.</p>
 <p>SubClass of the MetaClass, designed to organize support nodes, solvers and other internal
 nodes within a complex rig structure which you may need to ID at a later date.
 Controllers should NOT be wired to this node</p>
-<p>Idea here is if a MayaNode is passed in and has the mClass attr
-we pass that into the super(__new__) such that an object of that class
-is then instantiated and returned.</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaFacialRigSupport.addSupportNode">
 <code class="descname">addSupportNode</code><span class="sig-paren">(</span><em>node</em>, <em>attr</em>, <em>boundData=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaFacialRigSupport.addSupportNode" title="Permalink to this definition">¶</a></dt>
@@ -2181,9 +2215,6 @@ is then instantiated and returned.</p>
 <p>Casting HIK directly to a metaClass so it&#8217;s treated as meta by default.
 Why the hell not, it&#8217;s a complex character node that is default in Maya
 and useful for management in the systems</p>
-<p>Idea here is if a MayaNode is passed in and has the mClass attr
-we pass that into the super(__new__) such that an object of that class
-is then instantiated and returned.</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHIKCharacterNode.isValid">
 <code class="descname">isValid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKCharacterNode.isValid" title="Permalink to this definition">¶</a></dt>
@@ -2258,9 +2289,6 @@ Messy Sodding Maya!</p>
 <p>Casting HIK directly to a metaClass so it&#8217;s treated as meta by default.
 Why the hell not, it&#8217;s a complex character node that is default in Maya
 and useful for management in the systems</p>
-<p>Idea here is if a MayaNode is passed in and has the mClass attr
-we pass that into the super(__new__) such that an object of that class
-is then instantiated and returned.</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHIKControlSetNode.getHIKCharacterNode">
 <code class="descname">getHIKCharacterNode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKControlSetNode.getHIKCharacterNode" title="Permalink to this definition">¶</a></dt>
@@ -2279,9 +2307,6 @@ is then instantiated and returned.</p>
 <em class="property">class </em><code class="descname">MetaHIKPropertiesNode</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKPropertiesNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
 <p>Casting HIK Properties to a Meta class for easy managing</p>
-<p>Idea here is if a MayaNode is passed in and has the mClass attr
-we pass that into the super(__new__) such that an object of that class
-is then instantiated and returned.</p>
 </dd></dl>
 
 <dl class="function">
@@ -2333,9 +2358,6 @@ via an attrChange callback</td>
 </tr>
 </tbody>
 </table>
-<p>Idea here is if a MayaNode is passed in and has the mClass attr
-we pass that into the super(__new__) such that an object of that class
-is then instantiated and returned.</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaHUDNode.addMonitoredAttr">
 <code class="descname">addMonitoredAttr</code><span class="sig-paren">(</span><em>attr</em>, <em>value=None</em>, <em>attrType=None</em>, <em>refresh=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHUDNode.addMonitoredAttr" title="Permalink to this definition">¶</a></dt>

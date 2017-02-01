@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
-    <link rel="next" title="Pro_Pack : project" href="Red9_Pro_r9data.html" />
+    <link rel="next" title="Pro_Pack : project" href="Red9_Pro_project.html" />
     <link rel="prev" title="Pro_Pack : MetaData" href="Red9_Pro_meta .html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_r9data.html" title="Pro_Pack : project"
+          <a href="Red9_Pro_project.html" title="Pro_Pack : project"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="Red9_Pro_meta .html" title="Pro_Pack : MetaData"
@@ -877,8 +877,8 @@ Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),...]</
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.optimiser.mRig_pickertemplate_test">
-<code class="descname">mRig_pickertemplate_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=[]</em>, <em>templatefile=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRig_pickertemplate_test" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.optimiser.mRigs_pickertemplate_test">
+<code class="descname">mRigs_pickertemplate_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=[]</em>, <em>templatefile=''</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_pickertemplate_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>generic MetaRig also supported with this test
 check to see if the mRig has a valid Pro Picker template</p>
 <p>This is a Warning failure only</p>
@@ -889,7 +889,9 @@ check to see if the mRig has a valid Pro Picker template</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>expected</strong> &#8211; if we were expecting a picker or not</li>
 <li><strong>mRigs</strong> &#8211; given mRigs to test, if None then we find all instances of mRigs in the scene</li>
-<li><strong>templatefile</strong> &#8211; template file to use iun the fix method if not already found</li>
+<li><strong>templatefile</strong> &#8211; template file to use in the fix method if not already found</li>
+<li><strong>force</strong> &#8211; if force and template file given then the test if failed by default allowing the fix to 
+force update any template already loaded on the mRig</li>
 </ul>
 </td>
 </tr>
@@ -898,9 +900,37 @@ check to see if the mRig has a valid Pro Picker template</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.optimiser.mRig_pickertemplate_fix">
-<code class="descname">mRig_pickertemplate_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRig_pickertemplate_fix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add production TimeCode attrs to CTRL_Main if not found</p>
+<dt id="Red9.pro_pack.core.optimiser.mRigs_pickertemplate_fix">
+<code class="descname">mRigs_pickertemplate_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_pickertemplate_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the Picker Template to mRig if not found</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_filterssettings_test">
+<code class="descname">mRigs_filterssettings_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=[]</em>, <em>templatefile='Red9_DevRig.cfg'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_filterssettings_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic MetaRig also supported with this test
+check to see if the mRig has a filterSettings config 
+bound to it internally</p>
+<p>This is a Warning failure only</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expected</strong> &#8211; if we were expecting a settings or not</li>
+<li><strong>mRigs</strong> &#8211; given mRigs to test, if None then we find all instances of mRigs in the scene</li>
+<li><strong>templatefile</strong> &#8211; template file to use in the fix method if not already found</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_filterssettings_fix">
+<code class="descname">mRigs_filterssettings_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_filterssettings_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bind the given fiklterSettings preset config file internally to the mRig</p>
 </dd></dl>
 
 <dl class="function">
@@ -1356,7 +1386,7 @@ nested namespaces correctly</p>
   <p class="topless"><a href="Red9_Pro_meta .html"
                         title="previous chapter">Pro_Pack : MetaData</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="Red9_Pro_r9data.html"
+  <p class="topless"><a href="Red9_Pro_project.html"
                         title="next chapter">Pro_Pack : project</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -1389,7 +1419,7 @@ nested namespaces correctly</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_r9data.html" title="Pro_Pack : project"
+          <a href="Red9_Pro_project.html" title="Pro_Pack : project"
              >next</a> |</li>
         <li class="right" >
           <a href="Red9_Pro_meta .html" title="Pro_Pack : MetaData"

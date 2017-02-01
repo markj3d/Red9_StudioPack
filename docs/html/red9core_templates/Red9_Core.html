@@ -83,10 +83,10 @@ time the tools process a hierarchy it&#8217;s these classes that deal with it.</
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh" title="Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh"><code class="xref py py-obj docutils literal"><span class="pre">getBlendTargetsFromMesh</span></code></a>(node[,&nbsp;asList,&nbsp;...])</td>
 <td>quick func to return the blendshape targets found from a give mesh&#8217;s connected blendshape&#8217;s</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.timeOffset_addPadding" title="Red9.core.Red9_CoreUtils.timeOffset_addPadding"><code class="xref py py-obj docutils literal"><span class="pre">timeOffset_addPadding</span></code></a>([pad,&nbsp;padfrom,&nbsp;scene])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.timeOffset_addPadding" title="Red9.core.Red9_CoreUtils.timeOffset_addPadding"><code class="xref py py-obj docutils literal"><span class="pre">timeOffset_addPadding</span></code></a>([pad,&nbsp;padfrom,&nbsp;scene,&nbsp;...])</td>
 <td>simple wrap of the timeoffset class which will add padding into the</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.timeOffset_collapse" title="Red9.core.Red9_CoreUtils.timeOffset_collapse"><code class="xref py py-obj docutils literal"><span class="pre">timeOffset_collapse</span></code></a>([scene,&nbsp;timerange])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.timeOffset_collapse" title="Red9.core.Red9_CoreUtils.timeOffset_collapse"><code class="xref py py-obj docutils literal"><span class="pre">timeOffset_collapse</span></code></a>([scene,&nbsp;timerange,&nbsp;mRigs])</td>
 <td>Light wrap over the TimeOffset call to manage collapsing time</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.decodeString" title="Red9.core.Red9_CoreUtils.decodeString"><code class="xref py py-obj docutils literal"><span class="pre">decodeString</span></code></a>(val)</td>
@@ -967,7 +967,7 @@ in the channelBox.</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.timeOffset_addPadding">
-<code class="descname">timeOffset_addPadding</code><span class="sig-paren">(</span><em>pad=None</em>, <em>padfrom=None</em>, <em>scene=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.timeOffset_addPadding" title="Permalink to this definition">¶</a></dt>
+<code class="descname">timeOffset_addPadding</code><span class="sig-paren">(</span><em>pad=None</em>, <em>padfrom=None</em>, <em>scene=False</em>, <em>mRigs=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.timeOffset_addPadding" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple wrap of the timeoffset class which will add padding into the
 animation curves on the selected object by shifting keys</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -987,7 +987,7 @@ animation curves on the selected object by shifting keys</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.timeOffset_collapse">
-<code class="descname">timeOffset_collapse</code><span class="sig-paren">(</span><em>scene=False</em>, <em>timerange=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.timeOffset_collapse" title="Permalink to this definition">¶</a></dt>
+<code class="descname">timeOffset_collapse</code><span class="sig-paren">(</span><em>scene=False</em>, <em>timerange=None</em>, <em>mRigs=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.timeOffset_collapse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Light wrap over the TimeOffset call to manage collapsing time</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1027,7 +1027,7 @@ animation curves on the selected object by shifting keys</p>
 </div>
 <dl class="classmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.fullScene">
-<em class="property">classmethod </em><code class="descname">fullScene</code><span class="sig-paren">(</span><em>offset</em>, <em>timelines=False</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.fullScene" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">fullScene</code><span class="sig-paren">(</span><em>offset</em>, <em>timelines=False</em>, <em>timerange=None</em>, <em>ripple=True</em>, <em>startfrm=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.fullScene" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the entire scene and time offset all suitable nodes</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1038,6 +1038,8 @@ animation curves on the selected object by shifting keys</p>
 <li><strong>timelines</strong> &#8211; offset the playback timelines</li>
 <li><strong>timerange</strong> &#8211; only offset times within a given timerange</li>
 <li><strong>ripple</strong> &#8211; manage the upper range of data and ripple them with the offset</li>
+<li><strong>startfrm</strong> &#8211; this turns the offset arg into a new target start frame fopr the animation, 
+calculating the offset for you such that timerange[0] starts at the offset frm value, only works if timerange is passed in</li>
 </ul>
 </td>
 </tr>
@@ -1047,7 +1049,7 @@ animation curves on the selected object by shifting keys</p>
 
 <dl class="classmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.fromSelected">
-<em class="property">classmethod </em><code class="descname">fromSelected</code><span class="sig-paren">(</span><em>offset</em>, <em>nodes=None</em>, <em>filterSettings=None</em>, <em>flocking=False</em>, <em>randomize=False</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.fromSelected" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">fromSelected</code><span class="sig-paren">(</span><em>offset</em>, <em>nodes=None</em>, <em>filterSettings=None</em>, <em>flocking=False</em>, <em>randomize=False</em>, <em>timerange=None</em>, <em>ripple=True</em>, <em>mRigs=False</em>, <em>startfrm=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.fromSelected" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the current selection list and offset as appropriate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1056,10 +1058,14 @@ animation curves on the selected object by shifting keys</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>offset</strong> &#8211; number of frames to offset</li>
 <li><strong>nodes</strong> &#8211; nodes to offset (or root of the filterSettings)</li>
-<li><strong>flocking</strong> &#8211; wether to sucessively increment nodes during offset</li>
-<li><strong>randomize</strong> &#8211; whether to add a ramdon factor to each succesive nodes offset</li>
+<li><strong>flocking</strong> &#8211; whether to successively increment nodes during offset</li>
+<li><strong>randomize</strong> &#8211; whether to add a random factor to each successive nodes offset</li>
 <li><strong>timerange</strong> &#8211; only offset times within a given timerange</li>
 <li><strong>ripple</strong> &#8211; manage the upper range of data and ripple them with the offset</li>
+<li><strong>mRigs</strong> &#8211; if True then the nodes used be resolved via mRig.getChildren but for all 
+mRigs wired to the given nodes</li>
+<li><strong>startfrm</strong> &#8211; this turns the offset arg into a new target start frame fopr the animation, 
+calculating the offset for you such that timerange[0] starts at the offset frm value, only works if timerange is passed in</li>
 <li><strong>filterSettings</strong> &#8211; <p>this is a FilterSettings_Node object used to pass all 
 the filter types into the FilterNode code. Internally the following is true:</p>
 <div class="line-block">

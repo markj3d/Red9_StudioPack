@@ -80,13 +80,23 @@ class _MainMenus_(object):
     collapse_selected_ann = 'Collapse the keys in the selected TimeRange (Red highlighted)'
     collapse_full = 'Collapse : Full Scene'
     collapse_full_ann = 'Collapse the keys in the selected TimeRange (Red highlighted)'
+    collapse_mrig = 'Collapse : Selected mRigs'
+    collapse_mrig_ann = 'ONLY Applicable for Meta based mRig systems\nCollapse the keys in the selected TimeRange (Red highlighted)'
     
     insert_padding = 'Red9: Insert Padding'
     pad_selected = 'Pad : Selected Only'
     pad_selected_ann = 'Insert time in the selected TimeRange (Red highlighted)'
     pad_full_scene = 'Pad : Full Scene'
     pad_full_scene_ann = 'Insert time in the selected TimeRange (Red highlighted)'
-    
+    pad_mrigs = 'Pad : Selected mRigs'
+    pad_mrigs_ann = 'ONLY Applicable for Meta based mRig systems\nInsert time in the selected TimeRange (Red highlighted)'
+     
+    inverse_anim = 'Red9: Reverse Animation'
+    inverse_selected = 'Reverse: Selected Only'
+    inverse_selected_ann = 'ONLY Applicable for Meta based mRig systems\nReverse the animation data over the selected timeRange'
+    inverse_mrigs = 'Reverse: Selected mRigs'
+    inverse_mrigs_ann = 'ONLY Applicable for Meta based mRig systems\nReverse the animation data over the selected timeRange for the entire mRig'
+
     range_submenu = 'Red9: Range'
     selectkeys_timerange = 'Keys : Select from Range'
     selectkeys_timerange_ann = 'Select all keys from the selected Objects within the given TimeRange or selected TimeRange(Red highlighted)'
@@ -311,8 +321,12 @@ Track Component Mode :  Select a Component (poly,vert,edge) then an Object - sec
     track_process_forward = '>>  Process Fwd  >>'
     
     timeoffset = 'TimeOffset'
+    offsetby = 'Offset By'
     offset = 'Offset'
     offset_ann = 'If processing at Scene Level then this will offset all appropriate: AnimCurves,Sound and Clips. If processing on selected it will deal with each node type as it finds'
+    offset_start  = 'Offset Start Frame To'
+    offset_start_ann = 'If processing at Scene Level then this will offset all appropriate: AnimCurves,Sound and Clips. If processing on selected it will deal with each node type as it finds'
+  
     offset_hierarchy_ann = 'Offset Hierarchy'
     offset_fullscene = 'FullScene'
     offset_fullscene_ann = 'ON:Scene Level Processing: OFF:SelectedNode Processing - Offsets Animation, Sound and Clip data as appropriate'
@@ -326,7 +340,10 @@ Track Component Mode :  Select a Component (poly,vert,edge) then an Object - sec
     offset_ripple = 'RippleEdits'
     offset_ripple_ann = 'Ripple the edits to the upper bounds, keys, clips, audio etc will get pushed'
     offset_frms_ann = 'Frames to offset the data by'
-    
+    offset_startfrm = 'To Start At'
+    offset_startfrm_ann = 'Switches the offset mode such that the offset passed in is the new start frame for the range, moving the animation accordingly'
+
+
     mirror_hierarchy_ann = 'Mirror Hierarchy, or Mirror Selected nodes if they have the Mirror Marker data'
     mirror_controls = 'Mirror Controls'
     mirror_animation = 'Mirror Animation'

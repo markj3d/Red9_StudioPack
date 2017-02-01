@@ -1,9 +1,10 @@
 Pro_Pack : MetaData
 ======================
 
-ProPack metadata module contains all the specifically build nodes for the 
+ProPack metadata module contains all the specifically built nodes for the 
 extended pipelines running under ProPack. These include our Red9Puppet and
-the exporter and audio managementsystems 
+the exporter and audio management systems. This is the very core of all the Red9 
+pipeline when running the Red9 Puppet rig.
 
 	>>> # import statement for the module via the r9pro decompiler
 	>>> from Red9.pro_pack import r9pro 

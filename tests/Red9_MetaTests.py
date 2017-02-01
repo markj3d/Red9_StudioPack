@@ -1214,7 +1214,8 @@ class Test_SpeedTesting():
         now = time.clock()
         c = [r9Meta.MetaClass(p, autofill=False) for p in cubes]
         print 'SPEED: Standard Wrapped Nodes : autofill=False: %s' % str(time.clock() - now)
-        print 'Timer should be around 2.28 secs on the Beast'  #3.28
+        print 'Timer 05/01/17 should be around 2.48 secs on the Beast'
+        print 'Timer should be around 2.28 secs on the Beast'  
         
         # verify against pymel, I know we're still a lot slower
         now = time.clock()
@@ -1226,7 +1227,8 @@ class Test_SpeedTesting():
         now = time.clock()
         c = [r9Meta.MetaClass(p, autofill='all') for p in cubes]
         print 'SPEED: Standard Wrapped Nodes : autofill=all : %s' % str(time.clock() - now)
-        print 'Timer should be around 9.04 secs on the Beast'  #10.48
+        print 'Timer 05/01/17 should be around 5.27 secs on the Beast'
+        print 'Timer should be around 9.04 secs on the Beast'  
 
         assert False
         
@@ -1238,12 +1240,14 @@ class Test_SpeedTesting():
         now = time.clock()
         c = [r9Meta.MetaClass(p, autofill='all') for p in nodes]
         print 'SPEED: Meta Nodes : autofill=all : %s' % str(time.clock() - now)
+        print 'Timer 05/01/17 should be around 6.25 secs on the Beast'
         print 'Timer should be around 8.5 secs on the Beast'
         print '\n'
         
         now = time.clock()
         c = [r9Meta.MetaClass(p, autofill='all') for p in nodes]
         print 'SPEED: Meta Nodes from Cache :  %s' % str(time.clock() - now)
+        print 'Timer 05/01/17 should be around 2.93 secs on the Beast'
         print 'Timer should be around 3.25 secs on the Beast'
         print '\n'
         
@@ -1251,6 +1255,7 @@ class Test_SpeedTesting():
         
         c = [r9Meta.MetaClass(p, autofill=False) for p in nodes]
         print 'SPEED: Meta Nodes : autofill=False : %s' % str(time.clock() - now)
+        print 'Timer 05/01/17 should be around 7.39 secs on the Beast'
         print 'Timer should be around 8.5 secs on the Beast'
         assert False
         

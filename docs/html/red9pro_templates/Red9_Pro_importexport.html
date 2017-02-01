@@ -69,7 +69,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.P4_sourceControl" title="Red9.pro_pack.core.importexport.P4_sourceControl"><code class="xref py py-obj docutils literal"><span class="pre">P4_sourceControl</span></code></a>([path])</td>
-<td>Perforce format reference:</td>
+<td>The P4_sourceControl object is bound to the r9File instance automatically if your project is set to run with Perforce.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.r9File" title="Red9.pro_pack.core.importexport.r9File"><code class="xref py py-obj docutils literal"><span class="pre">r9File</span></code></a>([path])</td>
 <td>Red9 file handler system, bound to OS calls directly by inheritance  from pm.util.path which then exposes all OS calls directly to the class instance.</td>
@@ -222,6 +222,18 @@ scene their anim data will be updated</p>
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl">
 <em class="property">class </em><code class="descname">P4_sourceControl</code><span class="sig-paren">(</span><em>path=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The P4_sourceControl object is bound to the r9File instance automatically if your project
+is set to run with Perforce. This is done through the /Red9_ClientCore/MyClient/resource/client.project file
+which Red9 as a consultancy service will usually setup for you.</p>
+<p>This project file and it&#8217;s subsequent binding during boot to the PROJECT_DATA object controls all 
+aspects of the project and paths used by all codebase.</p>
+<p>For Perforce this simple json dict needs the key &#8216;p4_project&#8217; set to True and P4 must be available. 
+On boot we test this and set the systems accordingly. If the following does not return &#8216;perforce&#8217; then
+the Perforce environment wasn&#8217;t found at boot and all P4 source control will be disabled.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">source_control</span><span class="p">()</span>
+</pre></div>
+</div>
 <p>Perforce format reference:</p>
 <div class="line-block">
 <div class="line"><a class="reference external" href="http://www.perforce.com/perforce/doc.current/manuals/p4script/python.programming.html">http://www.perforce.com/perforce/doc.current/manuals/p4script/python.programming.html</a></div>

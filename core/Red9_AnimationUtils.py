@@ -667,7 +667,10 @@ class AnimationUI(object):
         self.uicbTimeOffsetFlocking = 'uicbTimeOffsetFlocking'
         self.uicbTimeOffsetRandom = 'uicbTimeOffsetRandom'
         self.uicbTimeOffsetRipple = 'uicbTimeOffsetRipple'
+        self.uicbTimeOffsetStartfrm = 'uicbTimeOffsetStartfrm'
         self.uiffgTimeOffset = 'uiffgTimeOffset'
+        self.uibtnTimeOffset = 'uibtnTimeOffset'
+        
         self.uicbMirrorHierarchy = 'uicbMirrorHierarchy'
         
         # Hierarchy Controls 
@@ -909,45 +912,51 @@ class AnimationUI(object):
         cmds.checkBox(self.uicbTimeOffsetHierarchy,
                                             l=LANGUAGE_MAP._Generic_.hierarchy, al='left', en=True, v=False,
                                             ann=LANGUAGE_MAP._AnimationUI_.offset_hierarchy_ann,
-                                            ofc=partial(self.__uiCB_manageTimeOffsetChecks, 'Off'),
-                                            onc=partial(self.__uiCB_manageTimeOffsetChecks),
-                                            cc=lambda x: self.__uiCache_addCheckbox(self.uicbTimeOffsetHierarchy))
-              
+                                            ofc=partial(self.__uiCB_manageTimeOffsetChecks, ''),
+                                            onc=partial(self.__uiCB_manageTimeOffsetChecks, 'Hier'))
+                                            #cc=lambda x: self.__uiCache_addCheckbox(self.uicbTimeOffsetHierarchy)) 
         cmds.checkBox(self.uicbTimeOffsetScene,
                                             l=LANGUAGE_MAP._AnimationUI_.offset_fullscene,
                                             ann=LANGUAGE_MAP._AnimationUI_.offset_fullscene_ann,
                                             al='left', v=False,
-                                            ofc=partial(self.__uiCB_manageTimeOffsetChecks, 'Off'),
-                                            onc=partial(self.__uiCB_manageTimeOffsetChecks, 'Full'),
-                                            cc=lambda x: self.__uiCache_addCheckbox(self.uicbTimeOffsetScene))
+                                            ofc=partial(self.__uiCB_manageTimeOffsetChecks, ''),
+                                            onc=partial(self.__uiCB_manageTimeOffsetChecks, 'Full'))
+                                            #cc=lambda x: self.__uiCache_addCheckbox(self.uicbTimeOffsetScene))
         
         cmds.checkBox(self.uicbTimeOffsetPlayback, l=LANGUAGE_MAP._AnimationUI_.offset_timelines,
                                             ann=LANGUAGE_MAP._AnimationUI_.offset_timelines_ann,
                                             al='left', v=False, en=False,
                                             cc=lambda x: self.__uiCache_addCheckbox(self.uicbTimeOffsetPlayback))
-
         cmds.checkBox(self.uicbTimeOffsetRange,
                                             l=LANGUAGE_MAP._AnimationUI_.timerange, al='left', en=True, v=False,
                                             ann=LANGUAGE_MAP._AnimationUI_.offset_timerange_ann,
-                                            ofc=partial(self.__uiCB_manageTimeOffsetChecks, 'Ripple'),
-                                            onc=partial(self.__uiCB_manageTimeOffsetChecks, 'Ripple'),
-                                            cc=lambda x: self.__uiCache_addCheckbox(self.uicbTimeOffsetRange))
+                                            cc=partial(self.__uiCB_manageTimeOffsetChecks, 'Timerange'))
         cmds.checkBox(self.uicbTimeOffsetFlocking,
                                             l=LANGUAGE_MAP._AnimationUI_.offset_flocking, al='left', en=True, v=False,
-                                            ann=LANGUAGE_MAP._AnimationUI_.offset_flocking_ann)
+                                            ann=LANGUAGE_MAP._AnimationUI_.offset_flocking_ann,
+                                            cc=lambda x: self.__uiCache_addCheckbox(self.uicbTimeOffsetFlocking))   
         cmds.checkBox(self.uicbTimeOffsetRandom, l=LANGUAGE_MAP._AnimationUI_.offset_randomizer,
                                             ann=LANGUAGE_MAP._AnimationUI_.offset_randomizer_ann,
-                                            al='left', v=False)
+                                            al='left', v=False,
+                                            cc=lambda x: self.__uiCache_addCheckbox(self.uicbTimeOffsetRandom))   
         cmds.checkBox(self.uicbTimeOffsetRipple, l=LANGUAGE_MAP._AnimationUI_.offset_ripple,
                                             ann=LANGUAGE_MAP._AnimationUI_.offset_ripple_ann,
-                                            al='left', v=False,
+                                            al='left', v=False,  en=False,
                                             cc=lambda x: self.__uiCache_addCheckbox(self.uicbTimeOffsetRipple))
+        cmds.checkBox(self.uicbTimeOffsetStartfrm, l=LANGUAGE_MAP._AnimationUI_.offset_startfrm,
+                                            ann=LANGUAGE_MAP._AnimationUI_.offset_startfrm_ann,
+                                            al='left', v=False, en=False,
+                                            ofc=partial(self.__uiCB_manageTimeOffsetChecks),
+                                            onc=partial(self.__uiCB_manageTimeOffsetChecks),
+                                            cc=lambda x: self.__uiCache_addCheckbox(self.uicbTimeOffsetStartfrm))     
+        
+        
         cmds.separator(style='none')
         cmds.setParent('..')
         cmds.separator(h=2, style='none')
-        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 250), (2, 60)], columnSpacing=[(2, 5)])
-       
-        cmds.button(label=LANGUAGE_MAP._AnimationUI_.offset, bgc=self.buttonBgc,
+               
+        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 250), (2, 60)], columnSpacing=[(2, 5)]) 
+        cmds.button(self.uibtnTimeOffset, label=LANGUAGE_MAP._AnimationUI_.offsetby, bgc=self.buttonBgc,
                      ann=LANGUAGE_MAP._AnimationUI_.offset_ann,
                      command=partial(self.__uiCall, 'TimeOffset'))
         cmds.floatFieldGrp(self.uiffgTimeOffset, value1=1, ann=LANGUAGE_MAP._AnimationUI_.offset_frms_ann)
@@ -1310,28 +1319,54 @@ class AnimationUI(object):
         cmds.checkBox(self.uicbSnapPreCopyKeys, e=True, en=val)
         cmds.intFieldGrp(self.uiifgSnapStep, e=True, en=val)
         self.__uiCache_addCheckbox(self.uicbSnapRange)
-        
-    def __uiCB_manageTimeOffsetChecks(self, *args):
+    
+    def __uiCB_manageTimeOffsetChecks(self, mode, *args):
         '''
-        Manage timeOffset checks
+        manage time mode switches
         '''
-        if args[0] == 'Full':
-            cmds.checkBox(self.uicbTimeOffsetHierarchy, e=True, v=False)
-            cmds.checkBox(self.uicbTimeOffsetPlayback, e=True, en=True)
+        if cmds.checkBox(self.uicbTimeOffsetStartfrm, q=True, v=False) and cmds.checkBox(self.uicbTimeOffsetRange, q=True, v=True):
+            cmds.button(self.uibtnTimeOffset, e=True, l=LANGUAGE_MAP._AnimationUI_.offset_start)
+        else:
+            cmds.button(self.uibtnTimeOffset, e=True, l=LANGUAGE_MAP._AnimationUI_.offsetby)
+
+        if any([mode=='Full', mode=='Hier', mode=='Timerange']):
+            # selected base flags
+            cmds.checkBox(self.uicbTimeOffsetPlayback, e=True, en=False)
             cmds.checkBox(self.uicbTimeOffsetFlocking, e=True, en=False)
             cmds.checkBox(self.uicbTimeOffsetRandom, e=True, en=False)
-            cmds.checkBox(self.uicbTimeOffsetRange, e=True, en=True)  # en=False)
-        elif args[0] == 'Ripple':
-            if cmds.checkBox(self.uicbTimeOffsetRange, q=True, v=True):
-                cmds.checkBox(self.uicbTimeOffsetRipple, e=True, en=True)
-            else:
-                cmds.checkBox(self.uicbTimeOffsetRipple, e=True, en=False)
-        else:
-            cmds.checkBox(self.uicbTimeOffsetPlayback, e=True, en=False)
-            cmds.checkBox(self.uicbTimeOffsetScene, e=True, v=False)
-            cmds.checkBox(self.uicbTimeOffsetFlocking, e=True, en=True)
-            cmds.checkBox(self.uicbTimeOffsetRandom, e=True, en=True)
-            cmds.checkBox(self.uicbTimeOffsetRange, e=True, en=True)
+                 
+            # switch main mode
+            if mode == 'Full':
+                cmds.checkBox(self.uicbTimeOffsetHierarchy, e=True, v=False)
+                cmds.checkBox(self.uicbTimeOffsetPlayback, e=True, en=True)
+                cmds.checkBox(self.uicbTimeOffsetFlocking, e=True, en=False)
+                cmds.checkBox(self.uicbTimeOffsetRandom, e=True, en=False)
+            elif mode == 'Hier':
+                cmds.checkBox(self.uicbTimeOffsetScene, e=True, v=False)
+                cmds.checkBox(self.uicbTimeOffsetPlayback, e=True, en=False)
+                cmds.checkBox(self.uicbTimeOffsetFlocking, e=True, en=True)
+                cmds.checkBox(self.uicbTimeOffsetRandom, e=True, en=True)    
+            elif mode == 'Timerange':
+                if cmds.checkBox(self.uicbTimeOffsetRange, q=True, v=True):
+                    cmds.checkBox(self.uicbTimeOffsetRipple, e=True, en=True)
+                    cmds.checkBox(self.uicbTimeOffsetStartfrm, e=True, en=True)
+                else:
+                    cmds.checkBox(self.uicbTimeOffsetRipple, e=True, en=False)
+                    cmds.checkBox(self.uicbTimeOffsetStartfrm, e=True, en=False)
+            
+            self.__uiCache_addCheckbox(self.uicbTimeOffsetHierarchy)
+            self.__uiCache_addCheckbox(self.uicbTimeOffsetScene)  
+            self.__uiCache_addCheckbox(self.uicbTimeOffsetRange)  
+    
+    def __uiCB_manageTimeOffsetState(self, *args):
+        '''
+        Manage timeOffset initial state
+        '''
+        if cmds.checkBox(self.uicbTimeOffsetHierarchy, q=True, v=True):
+            self.__uiCB_manageTimeOffsetChecks('Heir')
+        elif cmds.checkBox(self.uicbTimeOffsetScene, q=True, v=True):
+            self.__uiCB_manageTimeOffsetChecks('Full')
+        self.__uiCB_manageTimeOffsetChecks('Timerange')
         
     def __uiCB_addToNodeTypes(self, nodeType, *args):
         '''
@@ -2370,6 +2405,7 @@ class AnimationUI(object):
             self.__uiCB_switchPosePathMode(self.posePathMode)  # pose Mode - 'local' or 'project'
             self.__uiCB_manageSnapHierachy()  # preCopyAttrs
             self.__uiCB_manageSnapTime()  # preCopyKeys
+            self.__uiCB_manageTimeOffsetState()
             
             
         except StandardError, err:
@@ -2504,10 +2540,13 @@ class AnimationUI(object):
         Internal UI call for TimeOffset
         '''
         offset = cmds.floatFieldGrp(self.uiffgTimeOffset, q=True, v=True)[0]
+        self.kws['ripple'] = cmds.checkBox(self.uicbTimeOffsetRipple, q=True, v=True)
         if cmds.checkBox(self.uicbTimeOffsetRange, q=True, v=True):
             self.kws['timerange'] = timeLineRangeGet()
-        self.kws['ripple'] = cmds.checkBox(self.uicbTimeOffsetRipple, q=True, v=True)
-            
+        if cmds.checkBox(self.uicbTimeOffsetStartfrm, q=True, en=True):
+                self.kws['startfrm'] = cmds.checkBox(self.uicbTimeOffsetStartfrm, q=True, v=True)  
+                
+        # process scene or fromSelected modes
         if cmds.checkBox(self.uicbTimeOffsetScene, q=True, v=True):
             r9Core.TimeOffset.fullScene(offset, cmds.checkBox(self.uicbTimeOffsetPlayback, q=True, v=True), **self.kws)
         else:
@@ -3434,16 +3473,59 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
                 log.debug('failed to inverse %s.%s attr' % (node, chan))
                 
     @staticmethod
-    def inverseAnimCurves(nodes, curves=[], time=(), timePivot=None):
+    def inverseAnimCurves(nodes=None, curves=[], time=(), timePivot=None, mode='object', mRigs=False):
         '''
         really basic method to inverse anim curves for a given time, or for the current playback timerange
+        
+        :param nodes: nodes to find animCurves on IF curves were not specified directly
+        :param curves: specific animCurves to act on, else we inspect the nodes given
+        :param time: timerange to inverse, if not given we use the default timeLineRangeGet function as per
+            all other Red9 timerange enabled calls
+        :param timePivot: if given this is the pivot for the scale inverse, else we automatically work
+            this out from the time ranges given
+        :param mode: 'object' or 'keys' are we acting at the object level or at the selected keys level in the graphEditor?
+            'object' is default
+        :param mRigs: if we're in object mode then we modify the nodes to be all child members of linked mRig systems
         '''
-        curves=r9Core.FilterNode.lsAnimCurves(nodes, safe=True)
-        if time:
-            cmds.scaleKey(curves, timeScale=-1, timePivot=(time[0] + time[1]) / 2, time=time)
+        if not curves:                    
+            if mode=='object':   
+                if not nodes:
+                    nodes=cmds.ls(sl=True, l=True)
+        
+                # New mrig section so that we can process rigs as entire entities for all the calls
+                if mRigs:
+                    _mrigs=[]
+                    for node in nodes:
+                        mrig=r9Meta.getConnectedMetaSystemRoot(node)
+                        if mrig and not mrig in _mrigs:
+                            _mrigs.append(mrig)
+                    if _mrigs:
+                        nodes=[]
+                        for rig in _mrigs:
+                            nodes.extend(rig.getChildren())
+                
+                if not curves:
+                    curves=r9Core.FilterNode.lsAnimCurves(nodes, safe=True)
+                if not time:
+                    time=timeLineRangeGet()
+            elif mode=='keys':
+                curves = cmds.keyframe(q=True, sl=True, n=True)
+                if curves:
+                    keys = sorted(cmds.keyframe(curves, sl=True, q=True, tc=True))
+                    time = (keys[0], keys[-1])  # note the int conversion in case first key is on a sub-frame
+            
+        if not timePivot:
+            timePivot=(float(time[0]) + float(time[1])) / 2
+            
+        if curves:
+            log.info('AnimCurveInverse : timePivot=%f' % timePivot)
+            if time:
+                cmds.scaleKey(curves, timeScale=-1, timePivot=timePivot, time=time)
+                log.info('AnimCurveInverse : time=(%s,%s)' % (time[0],time[1]))
+            else:
+                cmds.scaleKey(curves, timeScale=-1, timePivot=timePivot)
         else:
-            time=timeLineRangeGet()
-            cmds.scaleKey(curves, timeScale=-1, timePivot=(time[0] + time[1]) / 2)
+            log.warning('No Curves found or selected to act upon!')
 
 
 class curveModifierContext(object):
@@ -3974,7 +4056,7 @@ class FilterCurves(object):
             time = ()
         else:
             keys = sorted(cmds.keyframe(curves, sl=True, q=True, tc=True))
-            time = (int(keys[0]), keys[-1])  # note the int convertion in case frist key is on a sub-frame
+            time = (int(keys[0]), keys[-1])  # note the int conversion in case first key is on a sub-frame
         with self.contextManager(True, undoFuncCache=self.undoFuncCache):
             cmds.bakeResults(curves, t=time, sb=step, pok=True)
 

@@ -24,6 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <link rel="next" title="Pro_Pack : uibase" href="Red9_Pro_uibase.html" />
     <link rel="prev" title="Pro_Pack : r9Data" href="Red9_Pro_r9data.html" /> 
   </head>
   <body role="document">
@@ -36,6 +37,9 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_uibase.html" title="Pro_Pack : uibase"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="Red9_Pro_r9data.html" title="Pro_Pack : r9Data"
              accesskey="P">previous</a> |</li>
@@ -93,6 +97,405 @@
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.Selectionfilter.ls">
 <code class="descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Selectionfilter.ls" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.skining.R9skn">
+<em class="property">class </em><code class="descname">R9skn</code><span class="sig-paren">(</span><em>shape=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skining.R9skn.skincluster">
+<code class="descname">skincluster</code><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.skincluster" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string skinCluster node name attached to the shape</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.create_skincluster">
+<code class="descname">create_skincluster</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.create_skincluster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.select_vrtx">
+<code class="descname">select_vrtx</code><span class="sig-paren">(</span><em>vrtx_id</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.select_vrtx" title="Permalink to this definition">¶</a></dt>
+<dd><p>select given vertex id
+:param vrtx_id: int vertex id</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.select_vrtxs">
+<code class="descname">select_vrtxs</code><span class="sig-paren">(</span><em>vrtx_ids</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.select_vrtxs" title="Permalink to this definition">¶</a></dt>
+<dd><p>select given vertex id
+:param vrtx_ids: list of ints</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.get_selected_vrtx_ids">
+<code class="descname">get_selected_vrtx_ids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_selected_vrtx_ids" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a string list of numeric ids of currently selected vertex</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.idfromattr">
+<code class="descname">idfromattr</code><span class="sig-paren">(</span><em>attr</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.idfromattr" title="Permalink to this definition">¶</a></dt>
+<dd><p>split a guiven string attribute to return the numeric id as string
+:param attr: string attr
+:return: string numeric id</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.vrtxids">
+<code class="descname">vrtxids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.vrtxids" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list of vertex ids that belong to the skin cluster
+:return: list of string of vrtx ids</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.jntids">
+<code class="descname">jntids</code><span class="sig-paren">(</span><em>key='id'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.jntids" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a dictionary of joint ids that belong to the skin cluster, keyword key can be use to specify
+the way the data is return if key=&#8217;id&#8217; id will be the keys of the dictionary and joint name the value
+if key=&#8217;joint&#8217; the joint name will be the key and the id the value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> &#8211; string to define which value is the key of the dictionary, valid parameters are &#8216;id&#8217; and &#8216;joint&#8217;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary containing ids and joint names the order of keys and values can be change by the use of</td>
+</tr>
+</tbody>
+</table>
+<p>key keyword</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.get_data">
+<code class="descname">get_data</code><span class="sig-paren">(</span><em>debug=False</em>, <em>ignore_selection=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.get_vrtx_weights">
+<code class="descname">get_vrtx_weights</code><span class="sig-paren">(</span><em>vrtxid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_vrtx_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>analise a given or selected vertex and return a dictionary wit the joints and influence values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vrtxid</strong> &#8211; numeric id of the vertex</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary with the weight values of the vertex keys are the joint influence name and value the is the
+value of influence</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.get_vrtxs_weights">
+<code class="descname">get_vrtxs_weights</code><span class="sig-paren">(</span><em>vrtx_ids=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_vrtxs_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>analise a given list or selected vertexes and return a dictionary of dictionaries wit the joints and
+influence values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vrtxids</strong> &#8211; list of numeric ids of vertexes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary of dictionaries with the numeric id of the vertex as a key and  a dictionary as value</td>
+</tr>
+</tbody>
+</table>
+<p>containing skinning values, the joint influence name as key and weight value as value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.get_all_weights">
+<code class="descname">get_all_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_all_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the skiing weights of all vertices of the shape</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dictionary of dictionaries with the numeric id of the vertex as a key and  a dictionary as value</td>
+</tr>
+</tbody>
+</table>
+<p>containing skinning values, the joint influence name as key and weight value as value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em>, <em>vrtx_ids=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.fix_weights">
+<code class="descname">fix_weights</code><span class="sig-paren">(</span><em>fix=False</em>, <em>select=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.fix_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.check_set_data">
+<code class="descname">check_set_data</code><span class="sig-paren">(</span><em>data</em>, <em>vrtxids</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_set_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.check_weight_values">
+<code class="descname">check_weight_values</code><span class="sig-paren">(</span><em>data=None</em>, <em>select=True</em>, <em>fix=False</em>, <em>logit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_weight_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.check_maximun_infuences">
+<code class="descname">check_maximun_infuences</code><span class="sig-paren">(</span><em>data=None</em>, <em>select=True</em>, <em>fix=False</em>, <em>logit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_maximun_infuences" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn.check_negative_weights">
+<code class="descname">check_negative_weights</code><span class="sig-paren">(</span><em>data=None</em>, <em>select=True</em>, <em>fix=False</em>, <em>logit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_negative_weights" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.skining.R9skn_file">
+<em class="property">class </em><code class="descname">R9skn_file</code><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn_file.get_skns">
+<code class="descname">get_skns</code><span class="sig-paren">(</span><em>selection=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.get_skns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn_file.get_file_path">
+<code class="descname">get_file_path</code><span class="sig-paren">(</span><em>action='save'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.get_file_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn_file.read_skin_file">
+<code class="descname">read_skin_file</code><span class="sig-paren">(</span><em>file_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.read_skin_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn_file.save_file">
+<code class="descname">save_file</code><span class="sig-paren">(</span><em>file_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.save_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn_file.namebaseonscene">
+<code class="descname">namebaseonscene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.namebaseonscene" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9skn_file.get_scene_data">
+<code class="descname">get_scene_data</code><span class="sig-paren">(</span><em>debug=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.get_scene_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget">
+<em class="property">class </em><code class="descname">R9Skn_widget</code><span class="sig-paren">(</span><em>ui</em>, <em>shape</em>, <em>data</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QHBoxLayout</span></code></p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.data">
+<code class="descname">data</code><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.save">
+<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.debug">
+<code class="descname">debug</code><span class="sig-paren">(</span><em>fix=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.remap">
+<code class="descname">remap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.remap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.remap_jnt">
+<code class="descname">remap_jnt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.remap_jnt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.select_shape">
+<code class="descname">select_shape</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.select_shape" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.select_joints">
+<code class="descname">select_joints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.select_joints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.select_vertex">
+<code class="descname">select_vertex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.select_vertex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.select_skincluster">
+<code class="descname">select_skincluster</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.select_skincluster" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.shape_exist">
+<code class="descname">shape_exist</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.shape_exist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.deleteLater">
+<code class="descname">deleteLater</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.deleteLater" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skining.R9Skn_widget.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012ACC6C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.skining.R9sknui2">
+<em class="property">class </em><code class="descname">R9sknui2</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_mw_r9skn</span></code></p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9sknui2.clear_ui">
+<code class="descname">clear_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.clear_ui" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9sknui2.set_sknfile_actions">
+<code class="descname">set_sknfile_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.set_sknfile_actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9sknui2.save">
+<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9sknui2.open_file">
+<code class="descname">open_file</code><span class="sig-paren">(</span><em>file_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.open_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9sknui2.set_widgets">
+<code class="descname">set_widgets</code><span class="sig-paren">(</span><em>selection=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.set_widgets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9sknui2.add_widget">
+<code class="descname">add_widget</code><span class="sig-paren">(</span><em>shape</em>, <em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.add_widget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9sknui2.load">
+<code class="descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.R9sknui2.debug">
+<code class="descname">debug</code><span class="sig-paren">(</span><em>fix=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skining.R9sknui2.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012ACC108&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap">
+<em class="property">class </em><code class="descname">Jnt_remap</code><span class="sig-paren">(</span><em>parent=None</em>, <em>Skn_widget=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_mw_aditive_joint_selector</span></code></p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.data">
+<code class="descname">data</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.joints">
+<code class="descname">joints</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.joints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.old_jnt">
+<code class="descname">old_jnt</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.old_jnt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.old_joints">
+<code class="descname">old_joints</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.old_joints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.new_jnt">
+<code class="descname">new_jnt</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.new_jnt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.select_joint_old">
+<code class="descname">select_joint_old</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.select_joint_old" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.select_joint_new">
+<code class="descname">select_joint_new</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.select_joint_new" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.select_vertex">
+<code class="descname">select_vertex</code><span class="sig-paren">(</span><em>list_to_use='old'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.select_vertex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.refresh">
+<code class="descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.refresh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.set_old">
+<code class="descname">set_old</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.set_old" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.set_new">
+<code class="descname">set_new</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.set_new" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.remap">
+<code class="descname">remap</code><span class="sig-paren">(</span><em>old_jnt</em>, <em>new_jnt</em>, <em>get_data=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.remap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skining.Jnt_remap.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012ACC188&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -271,7 +674,7 @@
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.Sknfile.saveWeights">
-<code class="descname">saveWeights</code><span class="sig-paren">(</span><em>sknfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile.saveWeights" title="Permalink to this definition">¶</a></dt>
+<code class="descname">saveWeights</code><span class="sig-paren">(</span><em>sknfile=None</em>, <em>debug=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile.saveWeights" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -335,7 +738,7 @@
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.skining.Shapelayout.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012E55B08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012ACCF48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -351,7 +754,7 @@
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.R9sknui.save">
-<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.save" title="Permalink to this definition">¶</a></dt>
+<code class="descname">save</code><span class="sig-paren">(</span><em>debug=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.save" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -381,7 +784,7 @@
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.skining.R9sknui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012E554C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012ACF5C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -397,6 +800,9 @@
   <h4>Previous topic</h4>
   <p class="topless"><a href="Red9_Pro_r9data.html"
                         title="previous chapter">Pro_Pack : r9Data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Red9_Pro_uibase.html"
+                        title="next chapter">Pro_Pack : uibase</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -427,6 +833,9 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_uibase.html" title="Pro_Pack : uibase"
+             >next</a> |</li>
         <li class="right" >
           <a href="Red9_Pro_r9data.html" title="Pro_Pack : r9Data"
              >previous</a> |</li>

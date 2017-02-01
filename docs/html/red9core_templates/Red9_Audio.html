@@ -89,7 +89,7 @@ a &#8216;compile&#8217; flag in the playblast command but it&#8217;s never worke
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Audio.combineAudio" title="Red9.core.Red9_Audio.combineAudio"><code class="xref py py-obj docutils literal"><span class="pre">combineAudio</span></code></a>()</td>
 <td>this is a logic wrapper over the main compile call in the AudioHandler</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Audio.inspect_wav" title="Red9.core.Red9_Audio.inspect_wav"><code class="xref py py-obj docutils literal"><span class="pre">inspect_wav</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Audio.inspect_wav" title="Red9.core.Red9_Audio.inspect_wav"><code class="xref py py-obj docutils literal"><span class="pre">inspect_wav</span></code></a>([multi,&nbsp;audioNodes])</td>
 <td>Simple UI to show internal Wav file properties.</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">getMediaFileMetaData</span></code></td>
@@ -171,8 +171,20 @@ audio path</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Audio.inspect_wav">
-<code class="descname">inspect_wav</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.inspect_wav" title="Permalink to this definition">¶</a></dt>
+<code class="descname">inspect_wav</code><span class="sig-paren">(</span><em>multi=False</em>, <em>audioNodes=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.inspect_wav" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple UI to show internal Wav file properties. Supports full Broadcast Wav inspection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>multi</strong> &#8211; allow multiple audio nodes to be inspected</li>
+<li><strong>audioNodes</strong> &#8211; allows you to pass in either Maya sound nodes or filepaths to wavs to inspect</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -203,11 +215,11 @@ audio path</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>time</strong> &#8211; tuple, (min,max) timerange within which returned audio has 
-fall within else it&#8217;s ignored.</li>
-<li><strong>asNodes</strong> &#8211; return the data as r9Audio.AudioNodes</li>
-<li><strong>start_inRange</strong> &#8211; check is the testRange[0] value falls fully in the baseRange</li>
-<li><strong>end_inRange</strong> &#8211; check is the testRange[1] value falls fully in the baseRange</li>
+<li><strong>time</strong> &#8211; tuple, (min,max) timerange which returned audio has to fall
+within else it&#8217;s ignored.</li>
+<li><strong>asNodes</strong> &#8211; return the data as r9Audio.AudioNodes, default=True</li>
+<li><strong>start_inRange</strong> &#8211; check if the audio startFrame is after the time[0] value</li>
+<li><strong>end_inRange</strong> &#8211; check if the audio endFrame is before the time[1] value</li>
 </ul>
 </td>
 </tr>
@@ -217,7 +229,7 @@ fall within else it&#8217;s ignored.</li>
 <p class="first admonition-title">Note</p>
 <p class="last">if you pass in time as (None, 100) then we only validate against the end time.
 if we pass in time as (10, None) we only validate against the start time
-else we validate that testRange is fully within the times</p>
+else we validate that the audio&#8217;s start and end times are fully within the time range given</p>
 </div>
 </dd></dl>
 
@@ -275,6 +287,14 @@ order of self.audioNodes</p>
 <dd><p>offset all audio such that they start relative to a given frame,
 takes the earliest startpoint of the given audio to calculate how much
 to offset by</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>startFrame</strong> &#8211; the required start frame to set too</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -285,7 +305,15 @@ to offset by</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.lockTimeInputs">
 <code class="descname">lockTimeInputs</code><span class="sig-paren">(</span><em>state=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.lockTimeInputs" title="Permalink to this definition">¶</a></dt>
-<dd><p>lock the time attrs of thie audio nodes so they can&#8217;t be slipped or moved by accident</p>
+<dd><p>lock the time attrs of the audio nodes so they can&#8217;t be slipped or moved by accident</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> &#8211; state of the lock, True or False</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -301,7 +329,7 @@ to offset by</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode">
-<code class="descname">bwav_sync_to_Timecode</code><span class="sig-paren">(</span><em>relativeToo=None</em>, <em>offset=0</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bwav_sync_to_Timecode</code><span class="sig-paren">(</span><em>relativeToo=None</em>, <em>offset=0</em>, <em>timecodebase=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>: PRO_PACK</dt>
  <span class="classifier-delimiter">:</span> <span class="classifier"></span><dd>process either selected or all audio nodes and IF they are found 
@@ -314,11 +342,15 @@ the bwavs internal timecode.</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>relativeToo</strong> &#8211; This is fucking clever, even though I do say so. Pass in another bWav node and I 
-calculate it&#8217;s internal timecode against where it is in the timeline. I then use any difference in 
+<li><strong>relativeToo</strong> &#8211; This is fucking clever, even though I do say so. Pass in another BWav node and we 
+calculate it&#8217;s internal timecode against where it is in the timeline. We then use any difference in 
 that nodes time as an offset for all the other nodes in self.audioNodes. Basically syncing multiple 
 bwav&#8217;s against a given sound.</li>
-<li><strong>offset</strong> &#8211; given offset to pass to the sync call, does not process with the relativeToo flag</li>
+<li><strong>offset</strong> &#8211; given offset (in frames) to pass to the sync call</li>
+<li><strong>timecodebase</strong> &#8211; optional mapping for a reference timecode so we can manipulate the offset
+relative to a given timecodebase rather than assuming that frame 1 = &#8216;00:00:00:00&#8217;
+ie, we set the timecodebase to &#8216;01:00:00:00&#8217; therefore day 1 timecode is stripped from 
+all the calculations and a bwav who&#8217;s timecode is &#8216;00:00:00:10&#8217; is set to frame 10</li>
 </ul>
 </td>
 </tr>
@@ -360,6 +392,13 @@ the issues with Maya not playblasting multip audio tracks.</p>
 <dt id="Red9.core.Red9_Audio.AudioNode.audioNode">
 <code class="descname">audioNode</code><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.audioNode" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioNode.gatherInfo">
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>gather all general data on this audioNode
+replicates the ProPack&#8217;s gatherInfo call on mNodes</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioNode.sampleRate">
@@ -473,14 +512,21 @@ NOT the Maya audioNode length as it&#8217;s invalid under batch mode!</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.bwav_sync_to_Timecode">
-<code class="descname">bwav_sync_to_Timecode</code><span class="sig-paren">(</span><em>offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bwav_sync_to_Timecode</code><span class="sig-paren">(</span><em>offset=0</em>, <em>timecodebase=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
 <dd><p>: PRO_PACK : given that self is a Bwav and has timecode reference, sync it&#8217;s position
 in the Maya timeline to match</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>offset</strong> &#8211; offset to apply to the internal timecode of the given wav&#8217;s</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>offset</strong> &#8211; offset (in frames) to apply to the internal timecode of the given wav&#8217;s</li>
+<li><strong>timecodebase</strong> &#8211; optional mapping for a reference timecode so we can manipulate the offset
+relative to a given timecodebase rather than assuming that frame 1 = &#8216;00:00:00:00&#8217;
+ie, we set the timecodebase to &#8216;01:00:00:00&#8217; therefore day 1 timecode is stripped from 
+all the calculations and a bwav who&#8217;s timecode is &#8216;00:00:00:10&#8217; is set to frame 10</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -497,7 +543,7 @@ for asset management in the Pro systems</p>
 <dt id="Red9.core.Red9_Audio.AudioNode.isValid">
 <code class="descname">isValid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.isValid" title="Permalink to this definition">¶</a></dt>
 <dd><p>If the audionode is loaded in maya then valid is if that node we&#8217;re pointing to exists
-If the audionode is NOT loaded and we just have a pth check if that path exists</p>
+If the audionode is NOT loaded and we just have a path check if that path exists</p>
 </dd></dl>
 
 <dl class="method">
@@ -545,7 +591,7 @@ class will bind itself to that node.</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.setActive">
 <code class="descname">setActive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.setActive" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set sound node as active on the timeSlider</p>
+<dd><p>Set the sound node as active on the timeSlider</p>
 </dd></dl>
 
 <dl class="method">
@@ -558,13 +604,21 @@ In maya.standalone the audio isn&#8217;t loaded correctly and always is of lengt
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.setTimeline">
 <code class="descname">setTimeline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.setTimeline" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the Maya timeline to the duration oft he sound</p>
+<dd><p>Set the Maya timeline to the duration of the sound</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.mute">
 <code class="descname">mute</code><span class="sig-paren">(</span><em>state=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.mute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Maya node, mute the sound</p>
+<dd><p>Maya sound node, mute the sound</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> &#8211; the mute state to use, default is True</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -644,24 +698,6 @@ track was compiled from</p>
 <dt id="Red9.core.Red9_Audio.AudioToolsWrap.offsetRipple">
 <code class="descname">offsetRipple</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.offsetRipple" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavsRelativeToo">
-<code class="descname">sync_bwavsRelativeToo</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavsRelativeToo" title="Permalink to this definition">¶</a></dt>
-<dd><p>PRO_PACK</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavs">
-<code class="descname">sync_bwavs</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.sync_bwavs" title="Permalink to this definition">¶</a></dt>
-<dd><p>PRO_PACK</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.core.Red9_Audio.AudioToolsWrap.timecodeHud">
-<code class="descname">timecodeHud</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.timecodeHud" title="Permalink to this definition">¶</a></dt>
-<dd><p>PRO_PACK</p>
-</dd></dl>
 
 </dd></dl>
 

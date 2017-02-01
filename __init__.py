@@ -59,10 +59,13 @@ import maya.cmds as cmds
 import startup.setup as setup
 
 def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindow'):
-  
+    '''
+    <<<< Red9 Boot Entry call >>>>
+    
+    :param Menu: do we build the main Red9 menu
+    :param MenuUIHooks: do we add all the additional menu hooks to the native Maya menus
+    :param MayaOverloads: do we run the additional hacks to overload certain Maya base functions, allowing the menu hacks
+    '''
     #Run the main setups. If you DON'T want the Red9Menu set 'Menu=False'
     cmds.evalDeferred("import Red9;Red9.setup.start(Menu=%s,MayaUIHooks=%s,MayaOverloads=%s,parentMenu='%s')" % (Menu,MayaUIHooks,MayaOverloads,parentMenu))
-    #Import the core, note this is on LowPriority to make sure it
-    #happens after the main setups have finished above
-#     cmds.evalDeferred("import Red9.core", lp=True)
 

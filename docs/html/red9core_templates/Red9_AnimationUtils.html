@@ -175,7 +175,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 </table>
 <dl class="data">
 <dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS">
-<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC0E3C8&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC0E3C8&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC0E3C8&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC0E3C8&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC0E3C8&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BFE9390&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BFE9390&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BFE9390&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BFE9390&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BFE9390&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.</p>
@@ -721,8 +721,27 @@ we use this classes instance of filterSettings cls.settings</li>
 
 <dl class="staticmethod">
 <dt id="Red9.core.Red9_AnimationUtils.AnimFunctions.inverseAnimCurves">
-<em class="property">static </em><code class="descname">inverseAnimCurves</code><span class="sig-paren">(</span><em>nodes</em>, <em>curves=[]</em>, <em>time=()</em>, <em>timePivot=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.inverseAnimCurves" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">inverseAnimCurves</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>curves=[]</em>, <em>time=()</em>, <em>timePivot=None</em>, <em>mode='object'</em>, <em>mRigs=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.inverseAnimCurves" title="Permalink to this definition">¶</a></dt>
 <dd><p>really basic method to inverse anim curves for a given time, or for the current playback timerange</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; nodes to find animCurves on IF curves were not specified directly</li>
+<li><strong>curves</strong> &#8211; specific animCurves to act on, else we inspect the nodes given</li>
+<li><strong>time</strong> &#8211; timerange to inverse, if not given we use the default timeLineRangeGet function as per
+all other Red9 timerange enabled calls</li>
+<li><strong>timePivot</strong> &#8211; if given this is the pivot for the scale inverse, else we automatically work
+this out from the time ranges given</li>
+<li><strong>mode</strong> &#8211; &#8216;object&#8217; or &#8216;keys&#8217; are we acting at the object level or at the selected keys level in the graphEditor?
+&#8216;object&#8217; is default</li>
+<li><strong>mRigs</strong> &#8211; if we&#8217;re in object mode then we modify the nodes to be all child members of linked mRig systems</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -1077,8 +1096,23 @@ are no keys.</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.MirrorHierarchy.loadMirrorSetups">
-<code class="descname">loadMirrorSetups</code><span class="sig-paren">(</span><em>filepath</em>, <em>nodes=None</em>, <em>clearCurrent=True</em>, <em>matchMethod='stripPrefix'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy.loadMirrorSetups" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">loadMirrorSetups</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>nodes=None</em>, <em>clearCurrent=True</em>, <em>matchMethod='stripPrefix'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy.loadMirrorSetups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a Mirror Map to the nodes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> &#8211; filepath to a mirrorMap, if none given then we assume that the internal mirrorDict is already setup</li>
+<li><strong>nodes</strong> &#8211; nodes to load, or the root of a system to filter</li>
+<li><strong>clearCurrent</strong> &#8211; if True then the load will first remove all current mirrormarkers</li>
+<li><strong>matchMethod</strong> &#8211; method used to match the data to the nodes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
