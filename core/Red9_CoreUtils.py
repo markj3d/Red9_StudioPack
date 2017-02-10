@@ -1529,16 +1529,19 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
         | * matchMethod="stripPrefix" : Match each element by a relaxed naming convention 
             allowing for prefixes one side such that RigX_Spine == Spine
         | * matchMethod="mirrorIndex" : Match via the nodes MirrorMarker
+        | * matchMethod="metaData" : matc the nodes based on their wiring connections to the MetaData framework
         
     :return: matched pairs of tuples for processing [(a1,b2),[(a2,b2)]
     '''
     infoPrint = ""
     matchedData = []
-    
+    #print 'MatchMethod : ', matchedData
     #take a copy of B as we modify the data here
     hierarchyB=list(nodeListB)
     if matchMethod == 'mirrorIndex':
         getMirrorID=r9Anim.MirrorHierarchy().getMirrorCompiledID
+    if matchMethod == 'metaData':
+        getMetaDict=r9Meta.MetaClass.getNodeConnectionMetaDataMap  # optimisation
     if matchMethod == 'index':
         matchedData = zip(nodeListA,nodeListB)
     elif matchMethod == 'indexReversed':
@@ -1550,12 +1553,14 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
             strippedA = nodeNameStrip(nodeA)
             if matchMethod == 'mirrorIndex':
                 indexA=getMirrorID(nodeA)
+            if matchMethod == 'metaData':
+                metaDictA=getMetaDict(nodeA)
             for nodeB in hierarchyB:
                 #strip the path off for the compare
                 #strippedA = nodeNameStrip(nodeA)
                 strippedB = nodeNameStrip(nodeB)
                 
-                #BaseMatch is a direct compare ONLY
+                # BaseMatch is a direct compare ONLY
                 if matchMethod == 'base':
                     if strippedA.upper() == strippedB.upper():
                         infoPrint += '\nMatch Method : %s : %s == %s' % \
@@ -1564,7 +1569,7 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
                         hierarchyB.remove(nodeB)
                         break
                     
-                #Compare allowing for prefixing which is stripped off
+                # Compare allowing for prefixing which is stripped off
                 elif matchMethod == 'stripPrefix':
                     if strippedA.upper().endswith(strippedB.upper()) \
                         or strippedB.upper().endswith(strippedA.upper()):
@@ -1574,9 +1579,17 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
                         hierarchyB.remove(nodeB)
                         break
                     
-                #Compare using the nodes internal mirrorIndex if found
+                # Compare using the nodes internal mirrorIndex if found
                 elif matchMethod == 'mirrorIndex':
                     if indexA and indexA==getMirrorID(nodeB):
+                        infoPrint += '\nMatch Method : %s : %s == %s' % \
+                                (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
+                        matchedData.append((nodeA, nodeB))
+                        hierarchyB.remove(nodeB)
+                        break
+                
+                elif matchMethod == 'metaData':
+                    if metaDictA and metaDictA == getMetaDict(nodeB):
                         infoPrint += '\nMatch Method : %s : %s == %s' % \
                                 (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
                         matchedData.append((nodeA, nodeB))

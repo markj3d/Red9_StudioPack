@@ -1082,7 +1082,7 @@ class AnimationUI(object):
         cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.match_stripprefix, ann=LANGUAGE_MAP._AnimationUI_.match_stripprefix_ann)
         cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.match_index, ann=LANGUAGE_MAP._AnimationUI_.match_index_ann)
         cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.match_mirror, ann=LANGUAGE_MAP._AnimationUI_.match_mirror_ann)
-        
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.match_metadata, ann=LANGUAGE_MAP._AnimationUI_.match_metadata_ann)   
         cmds.optionMenu('om_MatchMethod', e=True, v='stripPrefix')
 
         cmds.setParent(self.FilterLayout)
@@ -3139,7 +3139,7 @@ class AnimFunctions(object):
             all channel Values on all nodes will have their data taken across
         :param iterations: Number of times to process the frame.
         :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names
-        :param prioritySnapOnly: if True ONLY snap the nodes in the filterPriority list withing the filterSettings object = Super speed up!!
+        :param prioritySnapOnly: if True ONLY snap the nodes in the filterPriority list within the filterSettings object = Super speed up!!
         :param snapTranslates: only snap the translate data
         :param snapRotates: only snap the rotate data
         
