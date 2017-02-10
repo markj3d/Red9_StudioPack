@@ -401,6 +401,8 @@ checkBoxes will process all children of the roots'''
     match_index_ann = 'No matching logic at all, just matched in the order the nodes were found in the hierarchies'
     match_mirror = 'mirrorIndex'
     match_mirror_ann = 'Match nodes via their internal r9MirrorIndexes if found'
+    match_metadata = 'metaData'
+    match_metadata_ann = 'Match nodes based on their wiring in the MetaData framework'
     
     filter_test = 'Test Filter'
     filter_test_ann = 'Test the Hierarchy Filter on the selected root node'
