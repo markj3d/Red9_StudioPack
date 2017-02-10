@@ -377,12 +377,12 @@ class DataMap(object):
                         self.rootJnt=connectedSkel[0]
                     elif cmds.nodeType(rootNode)=='joint':
                         self.rootJnt=rootNode
-                elif cmds.attributeQuery('animSkeletonRoot',node=rootNode, exists=True):
-                    connectedSkel=cmds.listConnections('%s.%s' % (rootNode,'animSkeletonRoot'),destination=True,source=True)
-                    if connectedSkel and cmds.nodeType(connectedSkel)=='joint':
-                        self.rootJnt=connectedSkel[0]
-                    elif cmds.nodeType(rootNode)=='joint':
-                        self.rootJnt=rootNode
+#                 elif cmds.attributeQuery('animSkeletonRoot',node=rootNode, exists=True):
+#                     connectedSkel=cmds.listConnections('%s.%s' % (rootNode,'animSkeletonRoot'),destination=True,source=True)
+#                     if connectedSkel and cmds.nodeType(connectedSkel)=='joint':
+#                         self.rootJnt=connectedSkel[0]
+#                     elif cmds.nodeType(rootNode)=='joint':
+#                         self.rootJnt=rootNode
                 elif self.settings.nodeTypes==['joint']:
                     self.rootJnt=rootNode
         else:
