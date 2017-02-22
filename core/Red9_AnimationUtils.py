@@ -596,6 +596,7 @@ class AnimationUI(object):
                                       initialWidth=355, 
                                       initialHeight=720,
                                       minimumWidth=True,
+                                      widthProperty='fixed',
                                       retain=False,
                                       loadImmediately=False)  
             else:

@@ -200,7 +200,7 @@ class Test_MetaClass():
         
     
     def test_isValid(self):
-        assert self.MClass.isValid()  # strange one, isValid fails if the mNode has no connections.... is this a good decision?
+        assert not self.MClass.isValid()  # strange one, isValid fails if the mNode has no connections.... is this a good decision?
         cube1=cmds.ls(cmds.polyCube()[0],l=True)[0]
         newMeta=r9Meta.MetaClass(cube1)
         assert newMeta.isValid()
@@ -549,6 +549,14 @@ class Test_MetaClass():
         except:
             assert True
         assert cmds.addAttr('%s.max' % self.MClass.mNode, q=True,max=True) == 10
+        
+        # check that adding attrs back onto an mNode through cmds still gets picked up
+        mObj1 = r9Meta.MetaClass(name = 'testr9')
+        cmds.addAttr(mObj1.mNode, ln = 'stringTest', dt = 'string')
+        cmds.setAttr('%s.stringTest' % mObj1.mNode, 'maya_added_attr',type='string')
+        assert cmds.getAttr('%s.stringTest' % mObj1.mNode) == 'maya_added_attr'
+        assert mObj1.stringTest == 'maya_added_attr'
+        
         
         
     def test_attributeHandling(self):

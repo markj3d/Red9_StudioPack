@@ -77,7 +77,7 @@ requires the StudioPack codebase to run</p>
 <td>Red9 Puppet Rig bespoke Base Class for Rig system MetaRig core.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig</span></code></a>(*args,&nbsp;**kws)</td>
-<td>Red9 bespoke Puppet Rig system MetaRig core ;) This is the Red9 Puppets master base class into all the systems.</td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig_SRC</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Class node used by the publisher systems.</td>
@@ -142,6 +142,38 @@ if blank then we generate a new instance and return that</li>
 <dt id="Red9.pro_pack.core.metadata_pro.wire_SRC_basefile">
 <code class="descname">wire_SRC_basefile</code><span class="sig-paren">(</span><em>name=None</em>, <em>prompt=False</em>, <em>exportRoot=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.wire_SRC_basefile" title="Permalink to this definition">¶</a></dt>
 <dd><p>wire an SRC base client file to an SCR_Extension node and hook up the exporter</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.metadata_pro.add_fkik_matchpnt">
+<code class="descname">add_fkik_matchpnt</code><span class="sig-paren">(</span><em>mSystem</em>, <em>ctrl_wire</em>, <em>fk_wire</em>, <em>matchid</em>, <em>prefix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.add_fkik_matchpnt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an ik_match_pnt node into the given mSystem, this parents a new matchpnt transform
+to the given fk_wire controller thats aligned to the IK controller requiring snapping
+during the fk_to_fk_match call</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mSystem</strong> &#8211; mSystem to wire the matchpnt too</li>
+<li><strong>ctrl_wire</strong> &#8211; attr wire connecting the controller to the mSystem, OR the controller object itself - wired to a MetaRigSubSystem</li>
+<li><strong>fk_wire</strong> &#8211; attr wire connecting the fk_jnt to the mSystem, OR object to use directly</li>
+<li><strong>matchid</strong> &#8211; denotes the matchpnts base wire name - &#8220;end&#8221;, &#8220;pole&#8221;</li>
+<li><strong>prefix</strong> &#8211; usually just the side id for the system &#8216;L&#8217;,&#8217;R&#8217;,&#8217;C&#8217;, if not given we ID this from the system mirrorSide</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.metadata_pro.wire_fkik_matchpoints">
+<code class="descname">wire_fkik_matchpoints</code><span class="sig-paren">(</span><em>mrig</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.wire_fkik_matchpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>patch to add in ik matchpnts for the ik&gt;fk matching setups</p>
+<p>This is exposed for Clients wanting to patch NON Red9 Puppet based systems
+but requires each system to have mSystem.SupportNode.GRP_IK_chain, GRP_FK_chain as
+wires to denote the group directly above the Ik and Fk chains in the system.</p>
 </dd></dl>
 
 <dl class="function">
@@ -551,8 +583,8 @@ range of the anim data, if none is passed in then we grab the timeline ranges</t
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig">
 <em class="property">class </em><code class="descname">Pro_MetaRig</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
-<p>Red9 bespoke Puppet Rig system MetaRig core ;)
-This is the Red9 Puppets master base class into all the systems.</p>
+<p>This is the Red9 Puppets master base class However with a little careful
+wiring any other external rig system can be wired too and utilise these functions.</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.Skeleton">
 <code class="descname">Skeleton</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.Skeleton" title="Permalink to this definition">¶</a></dt>
@@ -661,7 +693,8 @@ switching off the body&#8217;s head geo and turning on the facialCores head.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_to_fk">
 <code class="descname">switch_to_fk</code><span class="sig-paren">(</span><em>mSystems=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_to_fk" title="Permalink to this definition">¶</a></dt>
-<dd><p>switch the entire rig to FK, this throws the ik_fk_blender attrs value to 1 for all systems</p>
+<dd><p>switch the entire rig or just a given set of mSystems to FK mode (NO MATCHING)
+This just throws the defined self.ik_fk_switchattr attr to self.fk_switch_val</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -675,7 +708,8 @@ switching off the body&#8217;s head geo and turning on the facialCores head.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_to_ik">
 <code class="descname">switch_to_ik</code><span class="sig-paren">(</span><em>mSystems=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_to_ik" title="Permalink to this definition">¶</a></dt>
-<dd><p>switch the entire rig to IK, this throws the ik_fk_blender attrs value to 0 for all systems</p>
+<dd><p>switch the entire rig or just a given set of mSystems to IK mode (NO MATCHING)
+This just throws the defined self.ik_fk_switchattr attr to self.ik_switch_val</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -689,9 +723,10 @@ switching off the body&#8217;s head geo and turning on the facialCores head.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_toggle">
 <code class="descname">fk_ik_toggle</code><span class="sig-paren">(</span><em>mSystem</em>, <em>time=False</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_toggle" title="Permalink to this definition">¶</a></dt>
-<dd><p>simple toggle call to switch the current state of the system between fk and ik
-This checks the switch attr and if 0 switches over to FK, if it&#8217;s 1 then we switch to IK
-Used in the new DagProcMenu systems</p>
+<dd><p>simple toggle call to switch the current state of the system between fk and ik with matching.
+This checks the self.ik_fk_switchattr and if it equals self.fk_switch_val toggles over to FK, 
+if it equals self.ik_switch_val then we switch to IK.</p>
+<p>Used in the new DagProcMenu systems</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -710,8 +745,8 @@ mrig.L_ArmSystem</li>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match">
-<code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the system to FK MODE : match the fk system to that of the ik</p>
+<code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em>, <em>ikchainmethod='jnt_index'</em>, <em>fkchainmethod='fk_wires'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the system TO FK MODE : match the fk system to that of the ik</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -722,6 +757,12 @@ mrig.L_ArmSystem</li>
 <li><strong>time</strong> &#8211; whether to run the match over time or not</li>
 <li><strong>switch</strong> &#8211; also switch the ik_fk_blender attr to leave the system in FK mode</li>
 <li><strong>keyswitch</strong> &#8211; if switch is true, this also adds in keys to control the switch mode</li>
+<li><strong>ikmethod</strong> &#8211; method of extracting the ik jnts, currently supported:
+* jnt_index - straight joint hierarchy from the mSystem.SupportNode.GRP_IK_chain[0] node</li>
+<li><strong>fkmethod</strong> &#8211; method of extracting the fk controls, currently supported:
+* jnt_index - straight joint hierarchy from the mSystem.SupportNode.GRP_FK_chain[0] node
+* ctrl_index - filtered hierarchy of nurbsCurve controllers from the mSystem.SupportNode.GRP_FK_chain[0] node
+* fk_wires - uses the mSystem&#8217;s CTRL_FK* wiring to grab and return the nodes from the mSystem itself</li>
 </ul>
 </td>
 </tr>
@@ -732,7 +773,7 @@ mrig.L_ArmSystem</li>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match">
 <code class="descname">ik_fk_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the system to IK MODE : match the ik to the fk system</p>
+<dd><p>Set the system TO IK MODE : match the ik to the fk system, relies on the IK_matchpnt&#8217;s</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

@@ -313,7 +313,8 @@ all still valid by testing the MObjectHandles.</p>
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.removeFromCache">
 <code class="descname">removeFromCache</code><span class="sig-paren">(</span><em>mNodes</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.removeFromCache" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>remove instanciated mNodes from the cache</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.resetCache">
@@ -1167,8 +1168,8 @@ mTypes=[], mInstances=[], mAttrs=None, dataType=&#8217;mClass&#8217;, skipTypes=
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Because the <a href="#id7"><span class="problematic" id="id8">**</span></a>kws are passed directly to the getConnectedMetaNods func, it will
-also take ALL of that functions kws
-mTypes=[], mInstances=[], mAttrs=None, dataType=&#8217;mClass&#8217;</p>
+also take ALL of that functions kws if passed as a kws dict
+mTypes=[], mInstances=[], mAttrs=None, dataType=&#8217;mClass&#8217;, nTypes=None, skipTypes=[], skipInstances=[]</p>
 </div>
 <p>TODO: implement a walk here to go upstream</p>
 </dd></dl>
@@ -1901,7 +1902,7 @@ animation curve/key data</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.hasKeys">
-<code class="descname">hasKeys</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>walk=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.hasKeys" title="Permalink to this definition">¶</a></dt>
+<code class="descname">hasKeys</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>walk=True</em>, <em>returnCtrls=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.hasKeys" title="Permalink to this definition">¶</a></dt>
 <dd><p>return True if any of the rig&#8217;s controllers have existing
 animation curve/key data</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -2000,7 +2001,7 @@ in the Red9_PoseSaver so many of the exposed flags come from there.</dd>
 <li><strong>incRoots</strong> &#8211; do we include the root node in the load, in metaRig case this is ctrl_main</li>
 <li><strong>useFilter</strong> &#8211; do we process all children of this rig or just selected</li>
 <li><strong>loadAsStored</strong> &#8211; load the data from the timerange stored</li>
-<li><strong>loadFromFrm</strong> &#8211; load the data from a given frame</li>
+<li><strong>loadFromFrm</strong> &#8211; load the data from a given frame, this requires the loadAsStored=False else is ignored</li>
 <li><strong>loadFromTimecode</strong> &#8211; load against a given SMPTE timecode / frm binding, calculating the offset of 
 the data to load against a given timecode reference. IF timecodeBinding isn&#8217;t set then we gather the reference timecode from 
 the mRig&#8217;s internal data, else we use the timecode binding supplied</li>
@@ -2063,6 +2064,21 @@ this allows us to modify the behaviour on a case by case basis for clients</p>
 <dt id="Red9.core.Red9_Meta.MetaRig.Timecode">
 <code class="descname">Timecode</code><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.Timecode" title="Permalink to this definition">¶</a></dt>
 <dd><p>: PRO_PACK : bind the Pro Timecode class to the node</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.core.Red9_Meta.MetaRig.timecode_ctrlnode">
+<code class="descname">timecode_ctrlnode</code><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.timecode_ctrlnode" title="Permalink to this definition">¶</a></dt>
+<dd><p>: PRO_PACK : return the actual node that the timecode data is stamped onto in the rig</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRig.timecode_isValid">
+<code class="descname">timecode_isValid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.timecode_isValid" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>: PRO_PACK</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">check if the timecode is in a valid format, particularly the sample_rate attr</span><dd>which must NOT be set to Zero</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">

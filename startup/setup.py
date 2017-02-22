@@ -564,6 +564,10 @@ def addAudioMenu(parent=None, rootMenu='redNineTraxRoot'):
         cmds.menuItem(l='PRO: Timecode Manager', p=rootMenu,
                   ann='Pro Time and Audio offset management tools',
                   c="from Red9.pro_pack import Pro_MenuStubs;Pro_MenuStubs('r9timecode_manager')")  
+        cmds.menuItem(l='PRO: Audio Manager', p=rootMenu,
+                  ann='Pro Audio Manager for linking audio to mRig export nodes - data links saved in the r9Anim hooks',
+                  c="from Red9.pro_pack import Pro_MenuStubs;Pro_MenuStubs('r9audio_manager')")         
+
     cmds.menuItem(d=True)
     cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_activate_selected_audio, p=rootMenu,
                   ann=LANGUAGE_MAP._MainMenus_.sound_activate_selected_audio_ann,
@@ -625,6 +629,8 @@ def red9ButtonBGC(colour, qt=False):
         rgb=[0.75,0.75,0.8]
     elif colour==5 or colour=='dark':
         rgb=[0.15,0.25,0.25]
+    elif colour==6 or colour=='yellow':
+        rgb=[0.98,0.7,0.0]
     if qt:
         return [rgb[0]*255,rgb[1]*255,rgb[2]*255]
     else:

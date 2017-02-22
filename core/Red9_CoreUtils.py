@@ -140,7 +140,22 @@ def stringReplace(text, replace_dict):
         return replace_dict.get(word, word)
     return rc.sub(translate, text)
 
-
+def removeNameSpace_fromDag(dagpath):
+    '''
+    from a given DagPath remove any namespaces - used in the poseCompare to only compare the native hierarchies
+    
+    such that:
+        "|test:Reference|test:Hips|test:Spine|test:Spine1|test:Spine2|test:Spine3|test:Spine4|test:Neck|test:Neck1|test:Neck2|test:Head"
+    will return:
+        "|Reference|Hips|Spine|Spine1|Spine2|Spine3|Spine4|Neck|Neck1|Neck2|Head"
+    '''
+    clean=dagpath.split(':')[-1]
+    if not clean==dagpath:
+        dirty=dagpath.split('|')[-1]
+        namespaces=dirty.split(clean)[0]
+        return dagpath.replace(namespaces,'')
+    return dagpath
+    
 def decodeString(val):
     '''
     From configObj the return is a string, we want to encode
@@ -240,7 +255,7 @@ def filterListByString(input_list, filter_string, matchcase=False):
         else:
             pattern.append(n)
     filterPattern='|'.join(n for n in pattern)
-    log.info('new : %s' % filterPattern)
+    log.debug('new : %s' % filterPattern)
     
     regexFilter=re.compile('('+filterPattern+')')  # convert into a regularExpression
     

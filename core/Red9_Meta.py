@@ -2884,12 +2884,12 @@ class MetaClass(object):
         
         .. note::
             Because the **kws are passed directly to the getConnectedMetaNods func, it will
-            also take ALL of that functions kws
-            mTypes=[], mInstances=[], mAttrs=None, dataType='mClass'
+            also take ALL of that functions kws if passed as a kws dict
+            mTypes=[], mInstances=[], mAttrs=None, dataType='mClass', nTypes=None, skipTypes=[], skipInstances=[]
             
         TODO: implement a walk here to go upstream
         '''
-        mNodes=getConnectedMetaNodes(self.mNode,source=True,destination=False, **kws)
+        mNodes=getConnectedMetaNodes(self.mNode,source=True, destination=False, **kws)
         if mNodes:
             return mNodes[0]
 
@@ -3174,8 +3174,10 @@ class MetaRig(MetaClass):
         can't rely on the default CTRL_Main[0] wire, so we wrap it with the current 
         instances self.CTRL_Prefix
         '''
-        return getattr(self,'%s_Main' % self.CTRL_Prefix)[0]
-    
+        if self.hasAttr('%s_Main' % self.CTRL_Prefix):
+            return getattr(self,'%s_Main' % self.CTRL_Prefix)[0]
+        log.warning('mRig has no "CTRL_Main" bound')
+        
     @property
     def characterSet(self):
         '''
@@ -3761,7 +3763,7 @@ class MetaRig(MetaClass):
             nodes=self.getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=False, asMap=False)
         cmds.setKeyframe(nodes)    
     
-    def hasKeys(self, nodes=[], walk=True):
+    def hasKeys(self, nodes=[], walk=True, returnCtrls=False):
         '''
         return True if any of the rig's controllers have existing
         animation curve/key data
@@ -3770,7 +3772,14 @@ class MetaRig(MetaClass):
         '''
         if not nodes:
             nodes=self.getChildren(walk=walk)
-        return r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True) or False
+        if not returnCtrls:
+            return r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True) or False
+        else:
+            failed=[]
+            for node in nodes:
+                if r9Anim.r9Core.FilterNode.lsAnimCurves(node, safe=True):
+                    failed.append(node)
+            return failed                
 
     def cutKeys(self, nodes=[], reset=True, walk=True):
         '''
@@ -3959,10 +3968,31 @@ class MetaRig(MetaClass):
                 from Red9.pro_pack import r9pro
                 r9pro.r9import('r9paudio')
                 import r9paudio
-            if self.hasAttr('timecode_node') and self.timecode_node:
-                return r9paudio.Timecode(self.timecode_node[0])
-            else:
-                return r9paudio.Timecode(self.ctrl_main)
+            try:
+                return r9paudio.Timecode(self.timecode_ctrlnode)
+            except StandardError, err:
+                log.error(err)
+                # instantiate a blank Timecode class
+                return r9paudio.Timecode(node=None)
+            
+    @property        
+    def timecode_ctrlnode(self):
+        '''
+        : PRO_PACK : return the actual node that the timecode data is stamped onto in the rig
+        '''
+        if self.hasAttr('timecode_node') and self.timecode_node:
+            return self.timecode_node[0]
+        else:
+            return self.ctrl_main
+        
+    def timecode_isValid(self):
+        '''
+        : PRO_PACK : check if the timecode is in a valid format, particularly the sample_rate attr
+            which must NOT be set to Zero
+        '''
+        if r9Setup.has_pro_pack():
+            if self.timecode_hasTimeCode():
+                return self.Timecode.isValid()
 
     def timecode_get(self, atFrame=None):
         '''
