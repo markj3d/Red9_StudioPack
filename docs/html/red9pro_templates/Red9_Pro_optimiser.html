@@ -193,8 +193,7 @@ the internal tests list but it&#8217;s often easier to have a bespoke class to t
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.optimizer_ui">
 <code class="descname">optimizer_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.optimizer_ui" title="Permalink to this definition">¶</a></dt>
-<dd><p>stub for the pro openUI call</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.OptimizerUI">
@@ -261,6 +260,28 @@ should return a list of nodes / data that it&#8217;s fixed and this decorator
 prints that status out after the fix method has been run.</p>
 </dd></dl>
 
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.get_heathtest_from_cls">
+<code class="descname">get_heathtest_from_cls</code><span class="sig-paren">(</span><em>cls</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.get_heathtest_from_cls" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the tests bound to a HealthValidation Object</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.get_healthTests">
+<code class="descname">get_healthTests</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.get_healthTests" title="Permalink to this definition">¶</a></dt>
+<dd><p>get all tests that we deem to be valid HealthTests. We first find any subclasses of the base HealthValidation
+class, then we use that to find all modules that may contain health tests. From that we inspect all methods in 
+the module, matching them for a &#8216;_test&#8217; in the name and extracting all args and docstrs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return dict:</th><td class="field-body">full data dump for later processing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.HealthTestObject">
 <em class="property">class </em><code class="descname">HealthTestObject</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject" title="Permalink to this definition">¶</a></dt>
@@ -306,8 +327,9 @@ and the test failed then run the fix method.</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.optimiser.HealthTestObject.print_status">
-<code class="descname">print_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject.print_status" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">print_status</code><span class="sig-paren">(</span><em>detailed=True</em>, <em>indepth=True</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject.print_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>print a status report for this HealthTestObject</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.optimiser.HealthTestObject.status">
@@ -374,6 +396,16 @@ the results are consistent.</p>
 <code class="descname">passed</code><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject.passed" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.optimiser.HealthTestObject.warning">
+<code class="descname">warning</code><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject.warning" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.optimiser.HealthTestObject.corrupted">
+<code class="descname">corrupted</code><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject.corrupted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -387,6 +419,12 @@ collate data and fix issues via the run_fix_methods</p>
 <p>In Pro for clients this is also bound to the fileOpen callback, allowing us to test 
 the scene after load against a given project template.</p>
 <p>See examples in the API docs above</p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.optimiser.HealthValidation.HealthResultObjects_ordered">
+<code class="descname">HealthResultObjects_ordered</code><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthValidation.HealthResultObjects_ordered" title="Permalink to this definition">¶</a></dt>
+<dd><p>ordered list of result objects</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="Red9.pro_pack.core.optimiser.HealthValidation.bindTests">
 <code class="descname">bindTests</code><span class="sig-paren">(</span><em>testdata=[]</em>, <em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthValidation.bindTests" title="Permalink to this definition">¶</a></dt>
@@ -874,6 +912,18 @@ Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),...]</
 <dt id="Red9.pro_pack.core.optimiser.mRigs_timecode_attrs_fix">
 <code class="descname">mRigs_timecode_attrs_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_timecode_attrs_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add production TimeCode attrs to CTRL_Main if not found</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_timecode_valid_test">
+<code class="descname">mRigs_timecode_valid_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_timecode_valid_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>check to see if the mRig timecode attrs are valid, particularly the SampleRate which doesn&#8217;t handle zero values!</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_timecode_valid_fix">
+<code class="descname">mRigs_timecode_valid_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_timecode_valid_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>try and fix issues in the timecode attrs</p>
 </dd></dl>
 
 <dl class="function">

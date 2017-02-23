@@ -203,6 +203,18 @@ quotes and punctuation marks are neutral.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.removeNameSpace_fromDag">
+<code class="descname">removeNameSpace_fromDag</code><span class="sig-paren">(</span><em>dagpath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.removeNameSpace_fromDag" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a given DagPath remove any namespaces - used in the poseCompare to only compare the native hierarchies</p>
+<dl class="docutils">
+<dt>such that:</dt>
+<dd>&#8220;<a href="#id5"><span class="problematic" id="id6">|</span></a>test:Reference|test:Hips|test:Spine|test:Spine1|test:Spine2|test:Spine3|test:Spine4|test:Neck|test:Neck1|test:Neck2|test:Head&#8221;</dd>
+<dt>will return:</dt>
+<dd>&#8220;<a href="#id7"><span class="problematic" id="id8">|</span></a>Reference|Hips|Spine|Spine1|Spine2|Spine3|Spine4|Neck|Neck1|Neck2|Head&#8221;</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.decodeString">
 <code class="descname">decodeString</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.decodeString" title="Permalink to this definition">¶</a></dt>
 <dd><p>From configObj the return is a string, we want to encode
@@ -792,6 +804,7 @@ that Spine==Spine or REF1:Spine==REF2:Spine  </div>
 <div class="line">* matchMethod=&#8221;stripPrefix&#8221; : Match each element by a relaxed naming convention 
 allowing for prefixes one side such that RigX_Spine == Spine</div>
 <div class="line">* matchMethod=&#8221;mirrorIndex&#8221; : Match via the nodes MirrorMarker</div>
+<div class="line">* matchMethod=&#8221;metaData&#8221; : matc the nodes based on their wiring connections to the MetaData framework</div>
 </div>
 </li>
 </ul>

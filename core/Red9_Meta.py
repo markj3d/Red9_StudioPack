@@ -2884,12 +2884,12 @@ class MetaClass(object):
         
         .. note::
             Because the **kws are passed directly to the getConnectedMetaNods func, it will
-            also take ALL of that functions kws
-            mTypes=[], mInstances=[], mAttrs=None, dataType='mClass'
+            also take ALL of that functions kws if passed as a kws dict
+            mTypes=[], mInstances=[], mAttrs=None, dataType='mClass', nTypes=None, skipTypes=[], skipInstances=[]
             
         TODO: implement a walk here to go upstream
         '''
-        mNodes=getConnectedMetaNodes(self.mNode,source=True,destination=False, **kws)
+        mNodes=getConnectedMetaNodes(self.mNode,source=True, destination=False, **kws)
         if mNodes:
             return mNodes[0]
 
@@ -3174,8 +3174,10 @@ class MetaRig(MetaClass):
         can't rely on the default CTRL_Main[0] wire, so we wrap it with the current 
         instances self.CTRL_Prefix
         '''
-        return getattr(self,'%s_Main' % self.CTRL_Prefix)[0]
-    
+        if self.hasAttr('%s_Main' % self.CTRL_Prefix):
+            return getattr(self,'%s_Main' % self.CTRL_Prefix)[0]
+        log.warning('mRig has no "CTRL_Main" bound')
+        
     @property
     def characterSet(self):
         '''
@@ -3630,18 +3632,25 @@ class MetaRig(MetaClass):
                 # in non hierarchy / filter mode relative is NOT supported
                 self.poseCache.poseLoad(nodes, filepath=filepath, useFilter=False, *args, **kws)
      
-    def poseCompare(self, poseFile, supressWarning=False, compareDict='skeletonDict', filterMap=[], ignoreBlocks=[], ignoreStrings=[], ignoreAttrs=[]):
+    def poseCompare(self, poseFile, supressWarning=False, compareDict='skeletonDict', filterMap=[], ignoreBlocks=[], 
+                    ignoreStrings=[], ignoreAttrs=[], longName=False, angularTolerance=0.1, linearTolerance=0.01, **kws):
         '''
         Integrated poseCompare, this checks the mRigs current pose against
         a given poseFile. This checks against the 'skeletonDict'
         
         :param poseFile: given .pose file with valid skeletonDict block
         :param supressWarning: if False raise the confirmDialogue
-        :param compareDict: what block in the poseFile to compare the data against
+        :param angularTolerance: the tolerance used to check rotate attr float values
+        :param linearTolerance: the tolerance used to check all other float attrs
+        :param compareDict: the internal main dict in the pose file to compare the data with : base options : 'poseDict', 'skeletonDict'
         :param filterMap: if given this is used as a high level filter, only matching nodes get compared
             others get skipped. Good for passing in a master core skeleton to test whilst ignoring extra nodes
-        :param ignoreBlocks: used to stop certain blocks in the compare from causing a fail eg : ['missingKeys']
+        :param ignoreBlocks: allows the given failure blocks to be ignored. We mainly use this for ['missingKeys']
+        :param ignoreStrings: allows you to pass in a list of strings, if any of the keys in the data contain
+             that string it will be skipped, note this is a partial match so you can pass in wildcard searches ['_','_end']
         :param ignoreAttrs: allows you to skip given attrs from the poseCompare calls
+        :param longName: compare the longName DAG path stored against each node, note that the compare strips out any namespaces before compare
+        
         :return: returns a 'PoseCompare' class object with all the compare data in it
         '''
         import Red9.core.Red9_PoseSaver as r9Pose  # lazy loaded
@@ -3649,10 +3658,14 @@ class MetaRig(MetaClass):
         compare=r9Pose.PoseCompare(self.poseCache,
                                    poseFile,
                                    compareDict=compareDict,
+                                   linearTolerance=linearTolerance,
+                                   angularTolerance=angularTolerance,
                                    filterMap=filterMap,
                                    ignoreBlocks=ignoreBlocks,
                                    ignoreStrings=ignoreStrings,
-                                   ignoreAttrs=ignoreAttrs)
+                                   ignoreAttrs=ignoreAttrs,
+                                   longName=longName,
+                                   **kws)
         if not compare.compare():
             info='Selected Pose is different to the rigs current pose\nsee script editor for debug details'
         else:
@@ -3761,7 +3774,7 @@ class MetaRig(MetaClass):
             nodes=self.getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=False, asMap=False)
         cmds.setKeyframe(nodes)    
     
-    def hasKeys(self, nodes=[], walk=True):
+    def hasKeys(self, nodes=[], walk=True, returnCtrls=False):
         '''
         return True if any of the rig's controllers have existing
         animation curve/key data
@@ -3770,7 +3783,14 @@ class MetaRig(MetaClass):
         '''
         if not nodes:
             nodes=self.getChildren(walk=walk)
-        return r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True) or False
+        if not returnCtrls:
+            return r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True) or False
+        else:
+            failed=[]
+            for node in nodes:
+                if r9Anim.r9Core.FilterNode.lsAnimCurves(node, safe=True):
+                    failed.append(node)
+            return failed                
 
     def cutKeys(self, nodes=[], reset=True, walk=True):
         '''
@@ -3959,10 +3979,31 @@ class MetaRig(MetaClass):
                 from Red9.pro_pack import r9pro
                 r9pro.r9import('r9paudio')
                 import r9paudio
-            if self.hasAttr('timecode_node') and self.timecode_node:
-                return r9paudio.Timecode(self.timecode_node[0])
-            else:
-                return r9paudio.Timecode(self.ctrl_main)
+            try:
+                return r9paudio.Timecode(self.timecode_ctrlnode)
+            except StandardError, err:
+                log.error(err)
+                # instantiate a blank Timecode class
+                return r9paudio.Timecode(node=None)
+            
+    @property        
+    def timecode_ctrlnode(self):
+        '''
+        : PRO_PACK : return the actual node that the timecode data is stamped onto in the rig
+        '''
+        if self.hasAttr('timecode_node') and self.timecode_node:
+            return self.timecode_node[0]
+        else:
+            return self.ctrl_main
+        
+    def timecode_isValid(self):
+        '''
+        : PRO_PACK : check if the timecode is in a valid format, particularly the sample_rate attr
+            which must NOT be set to Zero
+        '''
+        if r9Setup.has_pro_pack():
+            if self.timecode_hasTimeCode():
+                return self.Timecode.isValid()
 
     def timecode_get(self, atFrame=None):
         '''

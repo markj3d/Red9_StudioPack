@@ -1370,7 +1370,31 @@ class PoseCompare(object):
     It will compare either the main [poseData].keys or the ['skeletonDict'].keys 
     and for key in keys compare, with tolerance, the [attrs] block. 
     
-    >>> #build an mPose object and fill the internal poseDict
+        
+    >>> # lets do simple skeleton comparison giving it 2 rootjnts
+    >>> import Red9.core.Red9_PoseSaver as r9Pose
+    >>> # root jnts of skeletons to test
+    >>> test_root='root_of_skl_to_test'
+    >>> master_root='root_of_correct_skl'
+    >>>
+    >>> mPoseA=r9Pose.PoseData()
+    >>> mPoseA.settings.nodeTypes=['joint']
+    >>> mPoseA.buildDataMap(test_root)
+    >>> mPoseA.buildBlocks_fill()
+    >>>
+    >>> mPoseA=r9Pose.PoseData()
+    >>> mPoseA.settings.nodeTypes=['joint']
+    >>> mPoseA.buildDataMap(master_root)
+    >>> mPoseA.buildBlocks_fill()   
+    >>>
+    >>> compare=r9Pose.PoseCompare(mPoseA,mPoseB)
+    >>> compare.compare() #>> bool, True = same
+    
+    >>> ----------------------------------------------------
+    >>> # mRig manual pose testing - note that mRig has 
+    >>> # poseCompare wrapped as an internal function also!
+    >>> ----------------------------------------------------
+    >>> # build an mPose object and fill the internal poseDict
     >>> mPoseA=r9Pose.PoseData()
     >>> mPoseA.metaPose=True
     >>> mPoseA.buildDataMap(cmds.ls(sl=True))
@@ -1392,27 +1416,27 @@ class PoseCompare(object):
     >>> compare.fails['failedAttrs']
     '''
     def __init__(self, currentPose, referencePose, angularTolerance=0.1, linearTolerance=0.01, 
-                 compareDict='poseDict', filterMap=[], ignoreBlocks=[], ignoreStrings=[], ignoreAttrs=[]):
+                 compareDict='poseDict', filterMap=[], ignoreBlocks=[], ignoreStrings=[], ignoreAttrs=[], longName=False):
         '''
         Make sure we have 2 PoseData objects to compare
         :param currentPose: either a PoseData object or a valid pose file
         :param referencePose: either a PoseData object or a valid pose file
-        :param tolerance: tolerance by which floats are matched
         :param angularTolerance: the tolerance used to check rotate attr float values
         :param linearTolerance: the tolerance used to check all other float attrs
-        :param compareDict: the internal main dict in the pose file to compare the data with
+        :param compareDict: the internal main dict in the pose file to compare the data with : base options : 'poseDict', 'skeletonDict'
         :param filterMap: if given this is used as a high level filter, only matching nodes get compared
             others get skipped. Good for passing in a master core skeleton to test whilst ignoring extra nodes
         :param ignoreBlocks: allows the given failure blocks to be ignored. We mainly use this for ['missingKeys']
         :param ignoreStrings: allows you to pass in a list of strings, if any of the keys in the data contain
              that string it will be skipped, note this is a partial match so you can pass in wildcard searches ['_','_end']
         :param ignoreAttrs: allows you to skip given attrs from the poseCompare calls
+        :param longName: compare the longName DAG path stores against each node, note that the compare strips out any namespaces before compare
         
         .. note::
-            In the new setup if the skeletonRoot jnt is found we add a whole
-            new dict to serialize the current skeleton data to the pose, this means that
-            we can compare a pose on a rig via the internal skeleton transforms as well
-            as the actual rig controllers...makes validation a lot more accurate for export
+            In the new setup if the pose being generated had it's settings.nodeTypes=['joint'] or we found the 
+            exportSkeletonRoot jnt (mrig) then we add a whole new dict to serialize the current skeleton data to the pose, 
+            this means that we can then compare a pose on a rig via the internal skeleton transforms as well
+            as the actual rig controllers... makes validation a lot more accurate for export
                 * 'poseDict'     = [poseData] main controller data
                 * 'skeletonDict' = [skeletonDict] block generated if exportSkeletonRoot is connected
                 * 'infoDict'     = [info] block
@@ -1429,6 +1453,7 @@ class PoseCompare(object):
         self.ignoreBlocks = ignoreBlocks
         self.ignoreStrings = ignoreStrings
         self.ignoreAttrs = ignoreAttrs
+        self.longName = longName
         
         if isinstance(currentPose, PoseData):
             self.currentPose = currentPose
@@ -1476,10 +1501,22 @@ class PoseCompare(object):
             if self.filterMap and not key in self.filterMap:
                 log.debug('node not in filterMap - skipping key %s' % key)
                 continue
+            skip=False
+            
+            # --------------------------------------------
+            # check that the key isn't in the ignoreStrings
+            # --------------------------------------------
             if self.ignoreStrings:
                 for istr in self.ignoreStrings:
                     if istr in key:
-                        continue
+                        skip=True
+                        break
+            if skip:
+                continue
+            
+            # ---------------------------------------------         
+            # "missingKeys" block - check that the key exists
+            # ---------------------------------------------
             if key in referenceDic:
                 referenceAttrBlock = referenceDic[key]
             else:
@@ -1492,48 +1529,72 @@ class PoseCompare(object):
                     log.debug('missingKeys in ignoreblock : node is missing from data but being skipped "%s"' % key)
                 continue
 
+            # ---------------------------------------------         
+            # "hierarchyMismatch" block - check full dagPaths
+            # ---------------------------------------------
+            try:
+                expectedDag=r9Core.removeNameSpace_fromDag(referenceAttrBlock['longName'])
+                currentDag=r9Core.removeNameSpace_fromDag(attrBlock['longName'])
+    
+                if self.longName and not expectedDag == currentDag:
+                    if not 'dagMismatch' in self.ignoreBlocks:
+                        logprint += 'ERROR: hierarchy Mismatch : currentValue="%s" >> expected="%s"\n' % (currentDag,expectedDag)
+                        if not 'dagMismatch' in self.fails:
+                            self.fails['dagMismatch'] = []
+                        self.fails['dagMismatch'].append(key)
+                    else:
+                        log.debug('dagMismatch in ignoreblock : DagPath compare being skipped "%s"' % key)
+            except:
+                log.debug('Skipping DAGPATH compare as "longName" was not found in the reference pose : "%s"' % key)
+    
+            # ---------------------------------------------         
+            # "failedAttrs" block - compare attr values
+            # ---------------------------------------------
+                        
+            # check that this object actually has attr data in the pose
             if not 'attrs' in attrBlock:
                 log.debug('%s node has no attrs block in the pose' % key)
                 continue
-            for attr, value in attrBlock['attrs'].items():
-                if attr in self.ignoreAttrs:
+            else:
+                if 'failedAttrs' in self.ignoreBlocks:
+                    log.debug('failedAttrs in ignoreblock : attr compare being skipped "%s"' % key)
                     continue
-                # attr missing completely from the key
-                if not attr in referenceAttrBlock['attrs']:
-                    if not 'failedAttrs' in self.fails:
-                        self.fails['failedAttrs'] = {}
-                    if not key in self.fails['failedAttrs']:
-                        self.fails['failedAttrs'][key] = {}
-                    if not 'missingAttrs' in self.fails['failedAttrs'][key]:
-                        self.fails['failedAttrs'][key]['missingAttrs'] = []
-                    self.fails['failedAttrs'][key]['missingAttrs'].append(attr)
-                    # log.info('missing attribute in data : "%s.%s"' % (key,attr))
-                    logprint += 'ERROR: Missing attribute in data : "%s.%s"\n' % (key, attr)
-                    continue
-                
-                # test the attrs value matches
-                #print 'key : ', key, 'Value :  ', value
-                value = r9Core.decodeString(value)  # decode as this may be a configObj
-                refValue = r9Core.decodeString(referenceAttrBlock['attrs'][attr])  # decode as this may be a configObj
-                
-                if type(value) == float:
-                    matched = False
-                    if attr in self.angularAttrs:
-                        matched = r9Core.floatIsEqual(value, refValue, self.angularTolerance, allowGimbal=True)
-                    else:
-                        matched = r9Core.floatIsEqual(value, refValue, self.linearTolerance, allowGimbal=False)
-                    if not matched:
-                        self.__addFailedAttr(key, attr)
-                        # log.info('AttrValue float mismatch : "%s.%s" currentValue=%s >> expectedValue=%s' % (key,attr,value,refValue))
-                        logprint += 'ERROR: AttrValue float mismatch : "%s.%s" currentValue=%s >> expectedValue=%s\n' % (key, attr, value, refValue)
+                # main compare block for attr values
+                for attr, value in attrBlock['attrs'].items():
+                    if attr in self.ignoreAttrs:
                         continue
-                elif not value == refValue:
-                    self.__addFailedAttr(key, attr)
-                    # log.info('AttrValue mismatch : "%s.%s" currentValue=%s >> expectedValue=%s' % (key,attr,value,refValue))
-                    logprint += 'ERROR: AttrValue mismatch : "%s.%s" currentValue=%s >> expectedValue=%s\n' % (key, attr, value, refValue)
-                    continue
+                    # attr missing completely from the key
+                    if not attr in referenceAttrBlock['attrs']:
+                        if not 'failedAttrs' in self.fails:
+                            self.fails['failedAttrs'] = {}
+                        if not key in self.fails['failedAttrs']:
+                            self.fails['failedAttrs'][key] = {}
+                        if not 'missingAttrs' in self.fails['failedAttrs'][key]:
+                            self.fails['failedAttrs'][key]['missingAttrs'] = []
+                        self.fails['failedAttrs'][key]['missingAttrs'].append(attr)
+                        logprint += 'ERROR: Missing attribute in data : "%s.%s"\n' % (key, attr)
+                        continue
+                    
+                    # test the attrs value matches
+                    value = r9Core.decodeString(value)  # decode as this may be a configObj
+                    refValue = r9Core.decodeString(referenceAttrBlock['attrs'][attr])  # decode as this may be a configObj
+                    
+                    if type(value) == float:
+                        matched = False
+                        if attr in self.angularAttrs:
+                            matched = r9Core.floatIsEqual(value, refValue, self.angularTolerance, allowGimbal=True)
+                        else:
+                            matched = r9Core.floatIsEqual(value, refValue, self.linearTolerance, allowGimbal=False)
+                        if not matched:
+                            self.__addFailedAttr(key, attr)
+                            logprint += 'ERROR: AttrValue float mismatch : "%s.%s" currentValue=%s >> expectedValue=%s\n' % (key, attr, value, refValue)
+                            continue
+                    elif not value == refValue:
+                        self.__addFailedAttr(key, attr)
+                        logprint += 'ERROR: AttrValue mismatch : "%s.%s" currentValue=%s >> expectedValue=%s\n' % (key, attr, value, refValue)
+                        continue
                 
-        if 'missingKeys' in self.fails or 'failedAttrs' in self.fails:
+        if any(['missingKeys' in self.fails, 'failedAttrs' in self.fails, 'dagMismatch' in self.fails]):
             logprint += 'PoseCompare returns : ========================================'
             print logprint
             return False

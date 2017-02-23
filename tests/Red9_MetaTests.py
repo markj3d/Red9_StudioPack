@@ -200,7 +200,7 @@ class Test_MetaClass():
         
     
     def test_isValid(self):
-        assert self.MClass.isValid()  # strange one, isValid fails if the mNode has no connections.... is this a good decision?
+        assert not self.MClass.isValid()  # strange one, isValid fails if the mNode has no connections.... is this a good decision?
         cube1=cmds.ls(cmds.polyCube()[0],l=True)[0]
         newMeta=r9Meta.MetaClass(cube1)
         assert newMeta.isValid()
