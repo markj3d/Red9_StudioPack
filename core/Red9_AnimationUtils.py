@@ -463,7 +463,7 @@ class AnimationLayerContext(object):
         self.srcNodes = srcNodes  # nodes to check for animLayer membership / process
         self.mergeLayers = mergeLayers  # mute the behaviour of this context
         self.restoreOnExit = restoreOnExit  # restore the original layers after processing
-        
+        self.keymode = None
         self.deleteBaked=True
         if self.restoreOnExit:
             self.deleteBaked=False
@@ -472,6 +472,11 @@ class AnimationLayerContext(object):
     
     def __enter__(self):
         self.animLayers=getAnimLayersFromGivenNodes(self.srcNodes)
+
+        # set to "Hybrid" just in case as we need the exposure of all keys for most functions
+        self.keymode = cmds.optionVar(q='animLayerSelectionKey')
+        cmds.optionVar(iv=('animLayerSelectionKey', 1))
+
         if self.animLayers:
             if self.mergeLayers:
                 try:
@@ -481,8 +486,8 @@ class AnimationLayerContext(object):
                                            'locked':cmds.animLayer(layer, q=True, lock=True)}
                     mergeAnimLayers(self.srcNodes, deleteBaked=self.deleteBaked)
                     if self.restoreOnExit:
-                        #return the original mute and lock states and select the new
-                        #MergedLayer ready for the rest of the copy code to deal with
+                        # return the original mute and lock states and select the new
+                        # mergedLayer ready for the rest of the copy code to deal with
                         for layer,cache in layerCache.items():
                             for layer,cache in layerCache.items():
                                 cmds.animLayer(layer, edit=True, mute=cache['mute'])
@@ -495,13 +500,15 @@ class AnimationLayerContext(object):
                 log.warning('SrcNodes have animLayers, results may be erratic unless Baked!')
 
     def __exit__(self, exc_type, exc_value, traceback):
-        # Close the undo chunk, warn if any exceptions were caught:
+        # close the undo chunk, warn if any exceptions were caught:
+        cmds.optionVar(iv=('animLayerSelectionKey', self.keymode))
         if self.mergeLayers and self.restoreOnExit:
             if self.animLayers and cmds.animLayer('Merged_Layer', query=True, exists=True):
                 cmds.delete('Merged_Layer')
         if exc_type:
             log.exception('%s : %s'%(exc_type, exc_value))
-        # If this was false, it would re-raise the exception when complete
+            
+        # if this was false, it would re-raise the exception when complete
         return True
 
 
@@ -3537,26 +3544,34 @@ class curveModifierContext(object):
     NOTE that this is optimized to run with a floatSlider and used in both interactive
     Randomizer and FilterCurves
     """
-    def __init__(self, initialUndo=False, undoFuncCache=[], undoDepth=1):
+    def __init__(self, initialUndo=False, undoFuncCache=[], undoDepth=1, processBlanks=False):
         '''
         :param initialUndo: on first process whether undo on entry to the context manager
         :param undoFuncCache: functions to catch in the undo stack
         :param undoDepth: depth of the undo stack to go to
+        :param processBlanks: if undoFuncCache is empty but the last undoName is blank then we consider
+            this a match and run the undo. Why, this is because it's bloody hard to get QT to register
+            calls to the undo stack and that was blocking some of the ProPack functionality
         '''
         self.initialUndo = initialUndo
-        self.undoFuncCache = undoFuncCache
+        self.undoFuncCache = undoFuncCache + ['curveModifierContext']
         self.undoDepth = undoDepth
+        self.processBlanks = processBlanks
     
     def undoCall(self):
         for _ in range(1, self.undoDepth + 1):
-            #log.depth('undoDepth : %s' %  i)
-            if [func for func in self.undoFuncCache if func in cmds.undoInfo(q=True, undoName=True)]:
-                cmds.undo()
-                      
+            #print cmds.undoInfo(q=True, undoName=True)
+            if self.undoFuncCache:
+                if [func for func in self.undoFuncCache if func in cmds.undoInfo(q=True, undoName=True)]:
+                    cmds.undo()
+            else:
+                if self.processBlanks and not cmds.undoInfo(q=True, undoName=True):
+                    cmds.undo()
+             
     def __enter__(self):
         if self.initialUndo:
             self.undoCall()
-        cmds.undoInfo(openChunk=True)
+        cmds.undoInfo(openChunk=True, chunkName='curveModifierContext')
         
         self.range=None
         self.keysSelected=cmds.keyframe(q=True, n=True, sl=True)
