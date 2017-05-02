@@ -2088,17 +2088,34 @@ class MetaClass(object):
     def attrIsLocked(self,attr):
         '''
         check the attribute on the mNode to see if it's locked
+        
+        :param attr: attribute to test. Note that this now takes a list and if passed it returns the
+            overall state, ie, if any of the attrs in the list are locked then it will return True, only 
+            if they're all unlocked do we return False
         '''
+        if hasattr(attr, '__iter__'):
+            locked=False
+            for a in attr:
+                if cmds.getAttr('%s.%s' % (self.mNode, a), l=True):
+                    locked=True
+                    break
+            return locked
         return cmds.getAttr('%s.%s' % (self.mNode,attr), l=True)
     
     @nodeLockManager
     def attrSetLocked(self, attr, state):
         '''
         set the lockState of a given attr on the mNode
+        
+        :param attr: the attr to lock, this now also takes a list of attrs
+        :param state: lock state
         '''
         try:
+            if not hasattr(attr, '__iter__'):
+                attr=[attr]
             if not self.isReferenced():
-                cmds.setAttr('%s.%s' % (self.mNode,attr), l=state)
+                for a in attr:
+                    cmds.setAttr('%s.%s' % (self.mNode,a), l=state)
         except StandardError,error:
             log.debug(error)
     
@@ -2349,6 +2366,21 @@ class MetaClass(object):
         data['lockState'] = self.lockState
         return data
     
+    @property
+    def userinfo(self):
+        '''
+        a simple node descriptor so that sub-classes can have tracking or just user info blocks that
+        animators can use as notation
+        '''
+        if self.hasAttr('userinfo_attr'):
+            return self.userinfo_attr
+        return ''
+
+    @userinfo.setter
+    def userinfo(self, text):
+        if text:
+            self.addAttr('userinfo_attr', attrType='string')
+            self.userinfo_attr=text
     
     # Reference / Namespace Management Block
     #---------------------------------------------------------------------------------
@@ -2387,10 +2419,10 @@ class MetaClass(object):
         of the node, not all nested namespaces if found. Now returns a string
         '''
         if self.isReferenced():
-            return cmds.referenceQuery(self.mNode, ns=True).replace(':','')
-        ns=self.mNode.split(':')
+            return cmds.referenceQuery(self.mNode, ns=True).split(':')[-1]
+        ns=self.mNode.split('|')[-1].split(':')
         if len(ns)>1:
-            return ns[:-1][0]
+            return ns[:-1][-1]
         return ''
 
     def nameSpaceFull(self, asList=False):
@@ -2402,7 +2434,7 @@ class MetaClass(object):
         
         :param asList: either return the namespaces in a list or as a catenated string (default)
         '''
-        ns=self.mNode.split(':')
+        ns=self.mNode.split('|')[-1].split(':')
         if len(ns)>1:
             if asList:
                 return ns[:-1]
@@ -3128,6 +3160,11 @@ class MetaRig(MetaClass):
             data['exportSkeletonRoot']=self.exportSkeletonRoot
         if self.hasAttr('timecode_node'):
             data['timecode_node']=self.timecode_node
+        if self.isReferenced():
+            data['namespace'] = self.nameSpace()
+            data['namespace_full'] = self.nameSpaceFull()
+            data['referenced_rigPath'] = self.referencePath()
+            data['referenced_grp'] = self.referenceGroup()
 
         data['CTRL_Prefix']=self.CTRL_Prefix
         try:
@@ -4012,30 +4049,32 @@ class MetaRig(MetaClass):
         if r9Setup.has_pro_pack():
             return self.Timecode.getTimecode_from_node(time=atFrame)
 
-    def timecode_addAttrs(self, tc='', propagate=False):
+    def timecode_addAttrs(self, tc='', propagate=False, timerange=()):
         '''
         : PRO PACK : add the timecode attributes and push the given timecode 
         to the mRigs timecode node
         
         :param tc: timecode to set
         :param propagate: do we just set the attrs or push the counter keys
+        :param timerange: If propagate then this is an optional timerange over which to set the data
         '''
         if r9Setup.has_pro_pack():
-            return self.Timecode.addTimecode_to_node(tc=tc, propagate=propagate)
+            return self.Timecode.addTimecode_to_node(tc=tc, propagate=propagate, timerange=timerange)
     
-    def timecode_setTimecode(self, tc='', propagate=False, ui=False):
+    def timecode_setTimecode(self, tc='', propagate=False, ui=False, timerange=()):
         '''
         : PRO PACK : wrap over the timecode_addAttrs but exposes the enterTimecode ui
         
         :param tc: timecode to set
         :param propagate: do we just set the attrs or push the counter keys, if the UI is True then this is True by default
         :param ui: do we launch the Timecode UI to enter a specific timecode manually
+        :param timerange: If propagate then this is an optional timerange over which to set the data
         '''
         if r9Setup.has_pro_pack():
             if ui:
-                self.Timecode.enterTimecodeUI(buttonlabel='Set / Add Timecpde', buttonfunc=None, default='01:00:00:00', propagate=True)
+                self.Timecode.enterTimecodeUI(buttonlabel='Set / Add Timecpde', buttonfunc=None, default='01:00:00:00', propagate=True, timerange=timerange)
             else:
-                self.timecode_addAttrs(tc=tc, propagate=propagate)
+                self.timecode_addAttrs(tc=tc, propagate=propagate, timerange=timerange)
            
     def timecode_hasTimeCode(self):
         '''
@@ -4268,8 +4307,6 @@ class MetaHIKCharacterNode(MetaRig):
         if cmds.objExists(self.mNode):
             cmds.lockNode(self.mNode, lock=False)
             cmds.delete(self.mNode)
-
-        #  self.openui()  ?? why were we opening up the UI????
 
     @staticmethod
     def openui():
