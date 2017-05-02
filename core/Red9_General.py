@@ -253,13 +253,13 @@ def keepSelection(func):
     def wrapper(*args, **kwargs):
         currentSelection = cmds.ls(sl=True)
 
-        func(*args, **kwargs)
+        res=func(*args, **kwargs)
 
         if currentSelection:
             cmds.select(currentSelection)
         else:
             cmds.select(cl=True)
-
+        return res
     return wrapper
 
 def evalManagerState(mode='off'):

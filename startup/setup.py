@@ -69,6 +69,8 @@ log.setLevel(logging.INFO)
 ------------------------------------------------------------------------------------------
 '''
 
+# TODO check if there's a current Autodesk Exchange Build so we don't have clashing modules!
+# C:\ProgramData\Autodesk\ApplicationPlugins\Red9StudioPack
 
 #=========================================================================================
 # LANGUAGE MAPPING -----------------------------------------------------------------------
@@ -126,16 +128,19 @@ def mayaVersion():
         MAYA_INTERNAL_DATA['version'] = mel.eval('getApplicationVersionAsFloat')
         return MAYA_INTERNAL_DATA['version']
 
-def mayaInstallDir(version='2016'):
+def mayaInstallDir():
     '''
     This is more for future reference, we read the key from the win registry and return the MAYA_INSTALL_LOCATION
+    
+    https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2015/ENU/Maya/files/Environment-Variables-File-path-variables-htm.html
     '''
-    try:
-        import _winreg    
-        key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Autodesk\Maya\{0}\Setup\InstallPath".format(version), 0, _winreg.KEY_READ)
-        return _winreg.QueryValueEx(key, "MAYA_INSTALL_LOCATION")[0]
-    except:
-        raise StandardError('Given Maya key not found in Registry')
+    return os.environ['MAYA_LOCATION']
+#     try:
+#         import _winreg    
+#         key = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Autodesk\Maya\{0}\Setup\InstallPath".format(version), 0, _winreg.KEY_READ)
+#         return _winreg.QueryValueEx(key, "MAYA_INSTALL_LOCATION")[0]
+#     except:
+#         raise StandardError('Given Maya key not found in Registry')
 
 
 def mayaVersionRelease():
@@ -309,7 +314,7 @@ def menuSetup(parent='MayaWindow'):
         cmds.menuItem('redNineMirrorUIItem',
                       l=LANGUAGE_MAP._MainMenus_.mirror_setup,
                       ann=LANGUAGE_MAP._MainMenus_.mirror_setup_ann,
-                      p='redNineMenuItemRoot', echoCommand=True,
+                      p='redNineMenuItemRoot', echoCommand=True, i='mirror_30.png',
                       c="import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.MirrorSetup().show()")
         cmds.menuItem('redNineCameraTrackItem', i='camera_30.png',
                       l='CameraTracker',sm=True,p='redNineMenuItemRoot')
@@ -1018,7 +1023,26 @@ class pro_pack_missing_stub(object):
     '''
     def __init__(self):
         raise ProPack_UIError()
-    
+
+def get_pro_pack_user_dir():
+    '''
+    :return: string with Red9pro user directory path, this directory is mainly use to store Red9 pro pack user files
+    '''
+    path = os.path.join(os.path.dirname(mayaPrefs()), 'R9_PRO')
+    if not os.path.exists(path):
+        os.mkdir(path)
+    if os.path.exists(path):
+        return os.path.normpath(path).replace('\\', '/')
+
+def get_pro_pack_prefs():
+    '''
+    :return: string with Red9pro prefs directory path, this directory is mainly use to storing user setting files
+    '''
+    path = os.path.join(get_pro_pack_user_dir(), 'prefs')
+    if not os.path.exists(path):
+        os.mkdir(path)
+    if os.path.exists(path):
+        return os.path.normpath(path).replace('\\', '/')
 
 
 # -----------------------------------------------------------------------------------------
@@ -1093,25 +1117,34 @@ def boot_client_projects():
         result=cmds.confirmDialog(title='ProjectPicker',
                             message=("Multiple Projects Found!\r\r"+
                                      "Which Project would you like to boot?"),
-                            button=options, messageAlign='center')
+                            button=options, messageAlign='center',icon='question',
+                            dismissString='Cancel')
         if result == 'All':
             clientsToBoot=clients
-        else:
+        elif not result == 'Cancel':
             clientsToBoot.append(result)
     else:
         clientsToBoot=clients
         
     # boot the project / projects
     for client in clientsToBoot:
-        #log.info('Booting Client Module : %s' % client)
+
+        # manage default project folders
+        if os.path.exists(os.path.join(client_core_path(),client,'icons')):
+            addIconsPath(os.path.join(client_core_path(),client,'icons'))
+            
         cmds.evalDeferred("import Red9_ClientCore.%s" % client, lp=True)  # Unresolved Import
+
         CLIENTS_BOOTED.append(client)
         
     # remove unused menuItems - added previously so that the menu grouping is clean
     for client in clients:
         if not client in clientsToBoot:
-            cmds.deleteUI('redNineClient%sItem' % client)
-            log.debug('Unused Client Menu Removed: %s' % client)
+            try:
+                cmds.deleteUI('redNineClient%sItem' % client)
+                log.debug('Unused Client Menu Removed: %s' % client)
+            except:
+                pass
                 
 def __reload_clients__():
     '''

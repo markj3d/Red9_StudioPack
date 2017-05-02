@@ -737,13 +737,13 @@ class FilterNode(object):
                 # PRO PACK ONLY:
                 if mrig.hasAttr('filterSettings') and mrig.filterSettings:
                     try:
-                        log.info('==============================================================')
+                        #log.info('==============================================================')
                         log.info('mRig : setting.filterPriority pulled directly from mNodes data')
-                        log.info('==============================================================')
+                        #log.info('==============================================================')
                         self.settings.filterPriority=mrig.settings.filterPriority
                         self.settings.rigData['snapPriority']=mrig.settings.rigData['snapPriority']
-                        self.settings.printSettings()
-                        log.info('==============================================================')
+                        #self.settings.printSettings()
+                        #log.info('==============================================================')
                     except:
                         log.info('mRig has FilterSettings data but is NOT a Pro_MetaRig - settings aborted')
                 else:
@@ -1477,7 +1477,7 @@ class FilterNode(object):
             return self.intersectionData
 
     
-def getBlendTargetsFromMesh(node, asList=True, returnAll=False, levels=4):  # levels=1)
+def getBlendTargetsFromMesh(node, asList=True, returnAll=False, levels=4, indexes=False):  # levels=1)
     '''
     quick func to return the blendshape targets found from a give mesh's connected blendshape's
     
@@ -1489,6 +1489,7 @@ def getBlendTargetsFromMesh(node, asList=True, returnAll=False, levels=4):  # le
     :param asList: return as a straight list of target names or a dict of data
     :param returnAll: if multiple blendshapes are found do we return all, or just the first
     :param levels: same as the 'levels' flag in listHistory as that's ultimately what grabs the blendShape nodes here
+    :param indexes: return the data as a tuple (index, plug(weight[index]), blendtarget )
     '''
     if asList:
         targetData=[]
@@ -1499,16 +1500,19 @@ def getBlendTargetsFromMesh(node, asList=True, returnAll=False, levels=4):  # le
     if blendshapes:
         for blend in blendshapes:
             weights=cmds.aliasAttr(blend,q=True)
+            print weights
             if weights:
                 data=zip(weights[1::2], weights[0::2])
                 weightKey=lambda x:int(x[0].replace('weight[','').replace(']',''))
                 weightSorted=sorted(data, key=weightKey)
                 if asList:
-                    data=[t for _, t in weightSorted]
+                    data=[t for i, t in weightSorted]
+                    if indexes:
+                        data=[(int(i.replace('weight[','').replace(']','')), i, t) for i, t in weightSorted]
                     if returnAll:
                         targetData.extend(data)
                     else:
-                        #means we only return the first blend in the history
+                        # means we only return the first blend in the history
                         return data
                 else:
                     targetData[blend] = weightSorted

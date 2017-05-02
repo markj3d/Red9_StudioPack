@@ -75,7 +75,7 @@ def getNodesOverload(poseObj, nodes, *args):
             elif result == 'R_Fingers':
                 msystem = metaNode.R_ArmSystem
             elif result == 'L_Toes':
-                msystem = metaNode.R_LegSystem
+                msystem = metaNode.L_LegSystem
             elif result == 'R_Toes':
                 msystem = metaNode.R_LegSystem
         else:   

@@ -299,6 +299,7 @@ class DataMap(object):
         self.infoDict['sceneUnits']=cmds.currentUnit(q=True, fullName=True, linear=True)
         self.infoDict['upAxis'] = cmds.upAxis(q=True, axis=True)
         self.infoDict['metaPose']=self.metaPose
+
         if self.metaRig:
             self.infoDict['metaRigNode']=self.metaRig.mNode
             self.infoDict['metaRigNodeID']=self.metaRig.mNodeID
@@ -1490,7 +1491,11 @@ class PoseCompare(object):
         for processing later if required
         '''
         self.fails = {}
-        logprint = 'PoseCompare returns : %s ========================================\n' % self.compareDict
+        logprint_keymismacth=''
+        logprint_dagpath=''
+        logprint_missingattr=''
+        logprint_missingfail=''
+                              
         currentDic = getattr(self.currentPose, self.compareDict)
         referenceDic = getattr(self.referencePose, self.compareDict)
         
@@ -1517,11 +1522,12 @@ class PoseCompare(object):
             # ---------------------------------------------         
             # "missingKeys" block - check that the key exists
             # ---------------------------------------------
+
             if key in referenceDic:
                 referenceAttrBlock = referenceDic[key]
             else:
                 if not 'missingKeys' in self.ignoreBlocks:
-                    logprint += 'ERROR: Key Mismatch : %s\n' % key
+                    logprint_keymismacth += 'ERROR: Key Mismatch : %s\n' % key
                     if not 'missingKeys' in self.fails:
                         self.fails['missingKeys'] = []
                     self.fails['missingKeys'].append(key)
@@ -1538,7 +1544,7 @@ class PoseCompare(object):
     
                 if self.longName and not expectedDag == currentDag:
                     if not 'dagMismatch' in self.ignoreBlocks:
-                        logprint += 'ERROR: hierarchy Mismatch : currentValue="%s" >> expected="%s"\n' % (currentDag,expectedDag)
+                        logprint_dagpath += 'ERROR: hierarchy Mismatch : \n\t\tcurrentValue=\t"%s" >> \n\t\texpectedValue=\t"%s"\n' % (currentDag, expectedDag)
                         if not 'dagMismatch' in self.fails:
                             self.fails['dagMismatch'] = []
                         self.fails['dagMismatch'].append(key)
@@ -1572,7 +1578,7 @@ class PoseCompare(object):
                         if not 'missingAttrs' in self.fails['failedAttrs'][key]:
                             self.fails['failedAttrs'][key]['missingAttrs'] = []
                         self.fails['failedAttrs'][key]['missingAttrs'].append(attr)
-                        logprint += 'ERROR: Missing attribute in data : "%s.%s"\n' % (key, attr)
+                        logprint_missingattr += 'ERROR: Missing attribute in data : "%s.%s"\n' % (key, attr)
                         continue
                     
                     # test the attrs value matches
@@ -1587,16 +1593,24 @@ class PoseCompare(object):
                             matched = r9Core.floatIsEqual(value, refValue, self.linearTolerance, allowGimbal=False)
                         if not matched:
                             self.__addFailedAttr(key, attr)
-                            logprint += 'ERROR: AttrValue float mismatch : "%s.%s" currentValue=%s >> expectedValue=%s\n' % (key, attr, value, refValue)
+                            logprint_missingfail += 'ERROR: AttrValue float mismatch : "%s.%s" currentValue=%s >> expectedValue=%s\n' % (key, attr, value, refValue)
                             continue
                     elif not value == refValue:
                         self.__addFailedAttr(key, attr)
-                        logprint += 'ERROR: AttrValue mismatch : "%s.%s" currentValue=%s >> expectedValue=%s\n' % (key, attr, value, refValue)
+                        logprint_missingfail += 'ERROR: AttrValue mismatch : "%s.%s" currentValue=%s >> expectedValue=%s\n' % (key, attr, value, refValue)
                         continue
                 
         if any(['missingKeys' in self.fails, 'failedAttrs' in self.fails, 'dagMismatch' in self.fails]):
-            logprint += 'PoseCompare returns : ========================================'
-            print logprint
+            print 'PoseCompare returns : "%s" ========================================\n' % self.compareDict
+            if logprint_keymismacth:
+                print logprint_keymismacth
+            if logprint_dagpath:
+                print logprint_dagpath
+            if logprint_missingattr:
+                print logprint_missingattr
+            if logprint_missingfail:
+                print logprint_missingfail
+            print 'PoseCompare returns : ========================================'
             return False
         self.status = True
         return True
