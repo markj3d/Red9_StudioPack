@@ -120,7 +120,7 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013350E08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013311B88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -156,7 +156,7 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001331CB48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001332F048&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -215,19 +215,37 @@ with all joints so the user can select one</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.JntSel.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001351EC48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001332F588&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget">
-<em class="property">class </em><code class="descname">ExportLoop_Widget</code><span class="sig-paren">(</span><em>name</em>, <em>loop</em>, <em>item=None</em>, <em>exportui=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">ExportLoop_Widget</code><span class="sig-paren">(</span><em>name</em>, <em>loop</em>, <em>item=None</em>, <em>exportui=None</em>, <em>engine='unreal'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QWidget</span></code></p>
 <p>Bespoke QT Widget to handle the LoopData display and management</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.connect_signals">
 <code class="descname">connect_signals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.connect_signals" title="Permalink to this definition">¶</a></dt>
+<dd><p>connect the change signals up for the widgets</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.set_layout_specs">
+<code class="descname">set_layout_specs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.set_layout_specs" title="Permalink to this definition">¶</a></dt>
+<dd><p>based on the engine target we hide and modify the layout so that we
+can tailor the view to different engine targets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.set_start_frm">
+<code class="descname">set_start_frm</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.set_start_frm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.set_end_frm">
+<code class="descname">set_end_frm</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.set_end_frm" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -255,6 +273,11 @@ with all joints so the user can select one</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.select_widget">
+<code class="descname">select_widget</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.select_widget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.edittag_ui_show">
 <code class="descname">edittag_ui_show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.edittag_ui_show" title="Permalink to this definition">¶</a></dt>
 <dd><p>open the Tag edit UI for more specific editing</p>
@@ -262,7 +285,7 @@ with all joints so the user can select one</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001351EC88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001332F208&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -271,6 +294,7 @@ with all joints so the user can select one</p>
 <dt id="Red9.pro_pack.core.exporter.ExportUI">
 <em class="property">class </em><code class="descname">ExportUI</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
+<p>Main Export UI class that manages all the export calls, loops and functions</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.selected_exptags">
 <code class="descname">selected_exptags</code><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.selected_exptags" title="Permalink to this definition">¶</a></dt>
@@ -413,7 +437,7 @@ than the base class level</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000132388C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

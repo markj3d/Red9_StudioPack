@@ -175,7 +175,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 </table>
 <dl class="data">
 <dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS">
-<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC3F748&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC3F748&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC3F748&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC3F748&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC3F748&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA96630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA96630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA96630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA96630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA96630&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.</p>
@@ -748,7 +748,7 @@ this out from the time ranges given</li>
 
 <dl class="class">
 <dt id="Red9.core.Red9_AnimationUtils.curveModifierContext">
-<em class="property">class </em><code class="descname">curveModifierContext</code><span class="sig-paren">(</span><em>initialUndo=False</em>, <em>undoFuncCache=[]</em>, <em>undoDepth=1</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.curveModifierContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">curveModifierContext</code><span class="sig-paren">(</span><em>initialUndo=False</em>, <em>undoFuncCache=[]</em>, <em>undoDepth=1</em>, <em>processBlanks=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.curveModifierContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Simple Context Manager to allow modifications to animCurves in the
 graphEditor interactively by simply managing the undo stack and making
@@ -763,6 +763,9 @@ Randomizer and FilterCurves</p>
 <li><strong>initialUndo</strong> &#8211; on first process whether undo on entry to the context manager</li>
 <li><strong>undoFuncCache</strong> &#8211; functions to catch in the undo stack</li>
 <li><strong>undoDepth</strong> &#8211; depth of the undo stack to go to</li>
+<li><strong>processBlanks</strong> &#8211; if undoFuncCache is empty but the last undoName is blank then we consider
+this a match and run the undo. Why, this is because it&#8217;s bloody hard to get QT to register
+calls to the undo stack and that was blocking some of the ProPack functionality</li>
 </ul>
 </td>
 </tr>

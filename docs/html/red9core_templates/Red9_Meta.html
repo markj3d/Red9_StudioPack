@@ -786,12 +786,34 @@ Note this is not run in some of the core internal calls in this baseClass</p>
 <dt id="Red9.core.Red9_Meta.MetaClass.attrIsLocked">
 <code class="descname">attrIsLocked</code><span class="sig-paren">(</span><em>attr</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.attrIsLocked" title="Permalink to this definition">¶</a></dt>
 <dd><p>check the attribute on the mNode to see if it&#8217;s locked</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> &#8211; attribute to test. Note that this now takes a list and if passed it returns the
+overall state, ie, if any of the attrs in the list are locked then it will return True, only 
+if they&#8217;re all unlocked do we return False</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.attrSetLocked">
 <code class="descname">attrSetLocked</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.attrSetLocked" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the lockState of a given attr on the mNode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>attr</strong> &#8211; the attr to lock, this now also takes a list of attrs</li>
+<li><strong>state</strong> &#8211; lock state</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -912,6 +934,13 @@ r9Aninm format in Pro to collect key info on the system being saved against</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.core.Red9_Meta.MetaClass.userinfo">
+<code class="descname">userinfo</code><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.userinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>a simple node descriptor so that sub-classes can have tracking or just user info blocks that
+animators can use as notation</p>
 </dd></dl>
 
 <dl class="method">

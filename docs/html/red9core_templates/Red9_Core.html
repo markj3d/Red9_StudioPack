@@ -743,7 +743,7 @@ Uses the FilterNode_Settings object for all args such that:</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh">
-<code class="descname">getBlendTargetsFromMesh</code><span class="sig-paren">(</span><em>node</em>, <em>asList=True</em>, <em>returnAll=False</em>, <em>levels=4</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getBlendTargetsFromMesh</code><span class="sig-paren">(</span><em>node</em>, <em>asList=True</em>, <em>returnAll=False</em>, <em>levels=4</em>, <em>indexes=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh" title="Permalink to this definition">¶</a></dt>
 <dd><p>quick func to return the blendshape targets found from a give mesh&#8217;s connected blendshape&#8217;s</p>
 <p>TODO: missing index&#8217;s used to be an issue if you&#8217;d deleted a target Maya would leave the 
 index free resulting in blank targets, doesn&#8217;t seem to do that now?? Also what do we 
@@ -757,6 +757,7 @@ return and in what format if we have multiple blendShapes on the node?</p>
 <li><strong>asList</strong> &#8211; return as a straight list of target names or a dict of data</li>
 <li><strong>returnAll</strong> &#8211; if multiple blendshapes are found do we return all, or just the first</li>
 <li><strong>levels</strong> &#8211; same as the &#8216;levels&#8217; flag in listHistory as that&#8217;s ultimately what grabs the blendShape nodes here</li>
+<li><strong>indexes</strong> &#8211; return the data as a tuple (index, plug(weight[index]), blendtarget )</li>
 </ul>
 </td>
 </tr>

@@ -165,6 +165,7 @@ during the fk_to_fk_match call</p>
 </tr>
 </tbody>
 </table>
+<p>r9pmeta.add_fkik_matchpnt(self.mRig.Tail, &#8216;C_mid_spine_ik_Ctrl_1&#8217;,&#8217;C_spine_fk_Ctrl_3&#8217;, &#8216;mid&#8217;)</p>
 </dd></dl>
 
 <dl class="function">
@@ -389,6 +390,44 @@ over the StudioPack AnimatioUtils call for the pose blending but setup for the m
 <li><strong>percentage</strong> &#8211; if not None them we pass this percentage directly into the load call, by-passing the slider ui</li>
 </ul>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig">
+<code class="descname">bake_rig</code><span class="sig-paren">(</span><em>selected=False</em>, <em>runFilter=True</em>, <em>deleteStatics=True</em>, <em>sampleby=1</em>, <em>ignoreInFilter=[]</em>, <em>debugView=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a generic bake call for the rig controllers - mainly used in conjunction with the Red9 Binder setup but bu no means tied to it. 
+This call will bake all animation down to the rig and remove the Binder system hooks if found. It also manages AnimLayer removal during the bake,
+removing a controller from all animation layers if it can do so and should any animLayer become empty, we delete them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>selected</strong> &#8211; bake only the selected ctrls if True, else bake all children of this mRig class</li>
+<li><strong>runFilter</strong> &#8211; if True run a Euler filter on the baked rotate data</li>
+<li><strong>deleteStatics</strong> &#8211; if True delete static anim curves created, reducing the data set</li>
+<li><strong>sampleby</strong> &#8211; bake frame step, default=1</li>
+<li><strong>ignoreFilter</strong> &#8211; [] a list of nodes to skip the curve filter post bake if given</li>
+<li><strong>debugView</strong> &#8211; if True we allow the Maya UI to refresh each frame, else we suspend update</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.trax_makeclip">
+<code class="descname">trax_makeclip</code><span class="sig-paren">(</span><em>clipname=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.trax_makeclip" title="Permalink to this definition">¶</a></dt>
+<dd><p>make a TraxEditor clip from the current anim data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>clipname</strong> &#8211; if given this is the name of the clip generated</td>
 </tr>
 </tbody>
 </table>
@@ -625,6 +664,20 @@ r9Anim and r9Pose files as cross-reference</p>
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_patches">
 <code class="descname">get_patches</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_patches" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the patch data and print details</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_systems_by_type">
+<code class="descname">get_systems_by_type</code><span class="sig-paren">(</span><em>systype</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_systems_by_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>get a list of given child Meta Node Systems by type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>systype</strong> &#8211; the system type we&#8217;re looking for based on the systemType mAttr on the Red9 Puppet nodes</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
@@ -1219,6 +1272,7 @@ this export tag</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;subfolder&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subfolder</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;loop_prefix&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loop_prefix</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;loop_suffix&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loop_suffix</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;userinfo&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">userinfo</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1433,6 +1487,7 @@ logic used by the export classes.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;exportRoot_resolved&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getRootNode</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;exportRoot_specific&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">exportRoot_specific</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;additive&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">additive</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;userinfo&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">userinfo</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasAttr</span><span class="p">(</span><span class="s1">&#39;skeletonAlias&#39;</span><span class="p">):</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;skeletonAlias&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skeletonAlias</span>
 </pre></div>
