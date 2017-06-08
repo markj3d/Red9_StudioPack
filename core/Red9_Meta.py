@@ -2851,8 +2851,12 @@ class MetaClass(object):
             return getConnectedMetaNodes(self.mNode, source=False, destination=True, mAttrs=mAttrs, dataType='mClass', **kws)
         else:
             metaNodes=[]
+            if not any(['mTypes' in kws, 'mInstances' in kws, mAttrs]):
+                # no flags passed so the stepover flag is redundant
+                stepover=False
             if stepover:
-                children=getConnectedMetaNodes(self.mNode, source=False, destination=True, mAttrs=mAttrs, dataType='unicode')  #, **kws)
+                # if we're stepping over unmatched children then we remove the kws and deal with the match later
+                children=getConnectedMetaNodes(self.mNode, source=False, destination=True, dataType='unicode')  #, **kws)
             else:
                 children=getConnectedMetaNodes(self.mNode, source=False, destination=True, mAttrs=mAttrs, dataType='unicode', **kws)
             if children:
@@ -2875,9 +2879,9 @@ class MetaClass(object):
                         #log.info( 'connections too : %s' % mNode)
                         if stepover:
                             # if we're stepping over unmatched children then we remove the kws and deal with the match later
-                            extendedChildren.extend(getConnectedMetaNodes(mNode,source=False,destination=True,mAttrs=mAttrs, dataType='unicode'))  # , **kws))
+                            extendedChildren.extend(getConnectedMetaNodes(mNode, source=False, destination=True, dataType='unicode'))  # , **kws))
                         else:
-                            extendedChildren.extend(getConnectedMetaNodes(mNode,source=False,destination=True,mAttrs=mAttrs, dataType='unicode', **kws))
+                            extendedChildren.extend(getConnectedMetaNodes(mNode, source=False, destination=True, mAttrs=mAttrs, dataType='unicode', **kws))
                         #log.info('left to process : %s' % ','.join([c.mNode for c in children]))
                         if not children:
                             if extendedChildren:
@@ -2889,22 +2893,23 @@ class MetaClass(object):
                         runaways+=1
                 
                 # at this point we're still dealing with unicode nodes
-                
                 childmNodes=[MetaClass(node) for node in metaNodes]
+                
                 typematched=[]
                 if stepover:
-                    if 'mTypes' in kws:
-                        for node in childmNodes:
-                            if isMetaNodeInherited(node, kws['mTypes']):
+                    for node in childmNodes:
+                        if 'mTypes' in kws and not node in typematched:
+                            if isMetaNode(node, kws['mTypes']):
                                 log.debug('getChildMetaNodes : mTypes matched : %s' % node)
-                                if not node in typematched:
-                                    typematched.append(node)
-                    if 'mInstances' in kws:
-                        for node in childmNodes:
+                                typematched.append(node)
+                        if 'mInstances' in kws and not node in typematched:
                             if isMetaNodeInherited(node, kws['mInstances']):
                                 log.debug('getChildMetaNodes : mInstances matched : %s' % node)
-                                if not node in typematched:
-                                    typematched.append(node)
+                                typematched.append(node)
+                        if mAttrs and not node in typematched:
+                            if r9Core.FilterNode().lsSearchAttributes(mAttrs, nodes=[node.mNode]):
+                                log.debug('getChildMetaNodes : mAttrs matched : %s' % node)
+                                typematched.append(node)
                     return typematched
                 else:
                     return childmNodes
