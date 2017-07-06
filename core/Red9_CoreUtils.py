@@ -2156,11 +2156,15 @@ class LockChannels(object):
                     userDefAttrs=set(userDef)
             for attr in (attrs | userDefAttrs):
                 try:
-                    #log.debug('node: %s.%s' % (node,attr))
+                    # log.debug('node: %s.%s' % (node,attr))
+                    '''
+                    If you pass in .tx but you've already locked the compound .translate then
+                    the unlock will fail as it's parent compound is locked... do we fix this?
+                    '''
                     if cmds.attributeQuery(attr, node=node, exists=True):
                         attrString='%s.%s' % (node, attr)
                         if cmds.getAttr(attrString, type=True) in ['double3','float3']:
-                            #why?? Maya fails to set the 'keyable' flag status for compound attrs!
+                            # why?? Maya fails to set the 'keyable' flag status for compound attrs!
                             childAttrs=cmds.listAttr(attrString, multi=True)
                             childAttrs.remove(attr)
                             log.debug('compoundAttr handler for node: %s.%s' % (node,attr))
@@ -2341,28 +2345,33 @@ class TimeOffset(object):
                   (offset, flocking, randomize, str(timerange), ripple))
         
         if not nodes:
-            nodes=cmds.ls(sl=True, l=True)
-                    
+            basenodes=cmds.ls(sl=True, l=True)
+        else: 
+            if not hasattr(nodes, '__iter__'):
+                basenodes=[nodes] 
+            else:
+                basenodes=nodes
+                
+        filtered=[]          
         # New mrig section so that we can process rigs as entire entities for all the calls
         if mRigs:
             _mrigs=[]
-            for node in nodes:
+            for node in basenodes:
                 mrig=r9Meta.getConnectedMetaSystemRoot(node)
                 if mrig and not mrig in _mrigs:
                     _mrigs.append(mrig)
             if _mrigs:
-                nodes=[]
                 for rig in _mrigs:
-                    nodes.extend(rig.getChildren())
+                    filtered.extend(rig.getChildren())
+                    
+        elif filterSettings:
+            filtered = FilterNode(basenodes, filterSettings).processFilter()
             
-        if filterSettings:
-            nodes = FilterNode(nodes, filterSettings).processFilter()
-
-        if nodes:
+        if filtered:
             if flocking or randomize:
                 cachedOffset = 0  # Cached last flocking value
                 increment = 0
-                for node in nodes:
+                for node in filtered:
                     if randomize and not flocking:
                         increment = random.uniform(0, offset)
                     if flocking and not randomize:
@@ -2377,15 +2386,15 @@ class TimeOffset(object):
                                    ripple=ripple)
                     log.debug('animData randon/flock modified offset : %f on node: %s' % (increment, nodeNameStrip(node)))
             else:
-                cls.animCurves(offset, nodes=nodes,
+                cls.animCurves(offset, nodes=filtered,
                                timerange=timerange,
                                ripple=ripple)
                 cls.sound(offset, mode='Selected',
-                                audioNodes=FilterNode().lsSearchNodeTypes('audio', nodes),
+                                audioNodes=FilterNode().lsSearchNodeTypes('audio', filtered),
                                 timerange=timerange,
                                 ripple=ripple)
                 cls.animClips(offset, mode='Selected',
-                                clips=FilterNode().lsSearchNodeTypes('animClip', nodes),
+                                clips=FilterNode().lsSearchNodeTypes('animClip', filtered),
                                 timerange=timerange,
                                 ripple=ripple)
             log.info('Selected Nodes Offset Successfully')
