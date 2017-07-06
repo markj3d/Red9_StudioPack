@@ -47,7 +47,6 @@ Code examples:
     >>> # the class directly so you no longer need to create a filterSettigns object directly!
     >>> # Lets set the filter to process nodes with a given attr 'myControl' who's type is 'nurbscurve'
     >>> animFunc=r9Anim.AnimFunctions()
-    >>> animFunc.settings = r9Core.FilterNode_Settings()
     >>> animFunc.settings.nodeTypes ='nurbsCurve'
     >>> animFunc.settings.searchAttrs = 'myControl'
     >>> animFunc.settings.printSettings()
@@ -203,8 +202,33 @@ def getSettableChannels(node=None, incStatics=True):
     else:
         #all settable attrs in the channelBox
         return getChannelBoxAttrs(node, asDict=False, incLocked=False)
-        
 
+def nodesDriven(nodes, allowReferenced=False):
+    '''
+    return a list of those nodes that are actively constrained or connected to a pairBlend
+    
+    param allowReferenced: if True we allow all constraints to be returned, if False any constraints 
+        that are referenced are skipped. This by-passes internal rig constraints and only returns
+        constraints made in the main scene.
+    '''
+    driven=[]
+    for node in nodes:
+        plug=cmds.listConnections(node, type='character', s=True, d=False, p=True)
+        if not plug:
+            plug=node
+        if plug:
+            con=cmds.listConnections(plug, s=True, d=False, type='constraint', c=True)
+            if not con:
+                con=cmds.listConnections(node, s=True, d=False, type='pairBlend', c=True)
+            if con:
+                if allowReferenced:
+                    driven.append((node, con[1]))
+                    log.info('%s is currently driven by >> %s' % (r9Core.nodeNameStrip(node), con[1]))
+                elif not cmds.referenceQuery(con[1], inr=True):
+                    driven.append((node, con[1]))  
+                    log.info('%s is currently driven by >> %s' % (r9Core.nodeNameStrip(node), con[1]))
+    return driven
+    
 def getAnimLayersFromGivenNodes(nodes):
     '''
     return all animLayers associated with the given nodes
@@ -323,30 +347,33 @@ def animCurveDrawStyle(style='simple', forceBuffer=True, showBufferCurves=False,
     the state directly, used by the UI close event to return the editor to the last cached state
     '''
     print 'toggleCalled', style, showBufferCurves, displayTangents, displayActiveKeyTangents
-
-    if style == 'simple':
-        print 'toggle On'
+    if forceBuffer is not None:
         if forceBuffer:
             if r9Setup.mayaVersion()<2017:
                 mel.eval('doBuffer snapshot;')
             else:
                 mel.eval('doBuffer snapshot graphEditor1GraphEd;')
+    if style == 'simple':
+        #print 'toggle On'
         mel.eval('animCurveEditor -edit -showBufferCurves 1 -displayTangents false -displayActiveKeyTangents false graphEditor1GraphEd;')
     elif style == 'full':
-        print 'toggleOff'
+        #print 'toggleOff'
         cmd='animCurveEditor -edit'
-        if showBufferCurves:
-            cmd+=' -showBufferCurves 1'
-        else:
-            cmd+=' -showBufferCurves 0'
-        if displayTangents:
-            cmd+=' -displayTangents true'
-        else:
-            cmd+=' -displayTangents false'
-        if displayActiveKeyTangents:
-            cmd+= ' -displayActiveKeyTangents true'
-        else:
-            cmd+= ' -displayActiveKeyTangents false'
+        if showBufferCurves is not None:
+            if showBufferCurves:
+                cmd+=' -showBufferCurves 1'
+            else:
+                cmd+=' -showBufferCurves 0'
+        if displayTangents is not None:
+            if displayTangents:
+                cmd+=' -displayTangents true'
+            else:
+                cmd+=' -displayTangents false'
+        if displayActiveKeyTangents is not None:
+            if displayActiveKeyTangents:
+                cmd+= ' -displayActiveKeyTangents true'
+            else:
+                cmd+= ' -displayActiveKeyTangents false'
         mel.eval('%s graphEditor1GraphEd;' % cmd)
 
 
@@ -468,7 +495,7 @@ class AnimationLayerContext(object):
         if self.restoreOnExit:
             self.deleteBaked=False
         self.animLayers=[]
-        log.debug('Context Manager : mergeLayers : %s, restoreOnExit : %s' % (self.mergeLayers, self.restoreOnExit))
+        #log.debug('Context Manager : mergeLayers : %s, restoreOnExit : %s' % (self.mergeLayers, self.restoreOnExit))
     
     def __enter__(self):
         self.animLayers=getAnimLayersFromGivenNodes(self.srcNodes)
@@ -2455,6 +2482,23 @@ class AnimationUI(object):
     # MAIN UI FUNCTION CALLS ---
     #------------------------------------------------------------------------------
     
+    def __validate_roots(self):
+        '''
+        new wrapper func to return any mRig system roots from selected
+        when processing in Hierarchy mode only! This now means that all the
+        hierarchy checkbox in the UI will deal with the mRigs as a whole rather
+        than at a system level
+        '''
+        objs=cmds.ls(sl=True)
+        nodes=[]
+        if self.filterSettings.metaRig:
+            for obj in objs:
+                sysroot=r9Meta.getConnectedMetaSystemRoot(obj)
+                if sysroot:
+                    nodes.append(sysroot)
+            return nodes
+        return objs
+            
     def __CopyAttrs(self):
         '''
         Internal UI call for CopyAttrs
@@ -2467,9 +2511,9 @@ class AnimationUI(object):
             self.kws['attributes'] = getChannelBoxSelection()
         if cmds.checkBox(self.uicbCAttrHierarchy, q=True, v=True):
             if self.kws['toMany']:
-                AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyAttrs_ToMultiHierarchy(cmds.ls(sl=True, l=True),**self.kws)
+                AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyAttrs_ToMultiHierarchy(self.__validate_roots(),**self.kws)
             else:
-                AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyAttributes(nodes=None, **self.kws)
+                AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyAttributes(nodes=self.__validate_roots(), **self.kws)
         else:
             print self.kws
             AnimFunctions(matchMethod=self.matchMethod).copyAttributes(nodes=None, **self.kws)
@@ -2491,9 +2535,9 @@ class AnimationUI(object):
             self.kws['attributes'] = getChannelBoxSelection()
         if cmds.checkBox(self.uicbCKeyHierarchy, q=True, v=True):
             if self.kws['toMany']:
-                AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyKeys_ToMultiHierarchy(cmds.ls(sl=True, l=True), **self.kws)
+                AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyKeys_ToMultiHierarchy(self.__validate_roots(), **self.kws)
             else:
-                AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyKeys(nodes=None, **self.kws)
+                AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyKeys(nodes=self.__validate_roots(), **self.kws)
         else:
             AnimFunctions(matchMethod=self.matchMethod).copyKeys(nodes=None, **self.kws)
     
@@ -2522,7 +2566,7 @@ class AnimationUI(object):
             self.kws['preCopyAttrs'] = True
         if cmds.checkBox(self.uicbSnapHierarchy, q=True, v=True):
             self.kws['prioritySnapOnly'] = cmds.checkBox(self.uicbSnapPriorityOnly, q=True, v=True)
-            AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).snapTransform(nodes=None, **self.kws)
+            AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).snapTransform(nodes=self.__validate_roots(), **self.kws)
         else:
             AnimFunctions(matchMethod=self.matchMethod).snapTransform(nodes=None, **self.kws)
     
@@ -2561,7 +2605,7 @@ class AnimationUI(object):
             self.kws['flocking']= cmds.checkBox(self.uicbTimeOffsetFlocking, q=True, v=True)
             self.kws['randomize'] = cmds.checkBox(self.uicbTimeOffsetRandom, q=True, v=True)
             if cmds.checkBox(self.uicbTimeOffsetHierarchy, q=True, v=True):
-                r9Core.TimeOffset.fromSelected(offset, filterSettings=self.filterSettings, **self.kws)
+                r9Core.TimeOffset.fromSelected(offset, filterSettings=self.filterSettings, mRigs=self.filterSettings.metaRig, **self.kws)
             else:
                 r9Core.TimeOffset.fromSelected(offset, **self.kws)
    
@@ -2743,15 +2787,17 @@ class AnimationUI(object):
         '''
         Internal UI call for Mirror Animation / Pose
         '''
-
-        if not cmds.ls(sl=True, l=True):
+        nodes=cmds.ls(sl=True, l=True)
+        if not nodes:
             log.warning('Nothing selected to process from!!')
             return
   
         self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
         hierarchy=cmds.checkBox(self.uicbMirrorHierarchy, q=True, v=True)
         
-        mirror=MirrorHierarchy(nodes=cmds.ls(sl=True, l=True),
+        if hierarchy:
+            nodes=self.__validate_roots()
+        mirror=MirrorHierarchy(nodes=nodes,
                                filterSettings=self.filterSettings,
                                **self.kws)
         
@@ -2984,9 +3030,9 @@ class AnimFunctions(object):
         if not matchMethod:
             matchMethod=self.matchMethod
             
-        log.debug('CopyKey params : \n \
-\tnodes=%s \t\n:time=%s \t\n: pasteKey=%s \t\n: attributes=%s \t\n: filterSettings=%s \t\n: matchMethod=%s \t\n: mergeLayers=%s \t\n: timeOffset=%s' \
-                   % (nodes, time, pasteKey, attributes, filterSettings, matchMethod, mergeLayers, timeOffset))
+#         log.debug('CopyKey params : \n \
+# \tnodes=%s \t\n:time=%s \t\n: pasteKey=%s \t\n: attributes=%s \t\n: filterSettings=%s \t\n: matchMethod=%s \t\n: mergeLayers=%s \t\n: timeOffset=%s' \
+#                    % (nodes, time, pasteKey, attributes, filterSettings, matchMethod, mergeLayers, timeOffset))
                 
         #Build up the node pairs to process
         nodeList = r9Core.processMatchedNodes(nodes,
@@ -3068,8 +3114,8 @@ class AnimFunctions(object):
         if not filterSettings:
             filterSettings=self.settings
             
-        log.debug('CopyAttributes params : nodes=%s\n : attributes=%s\n : filterSettings=%s\n : matchMethod=%s\n'
-                   % (nodes, attributes, filterSettings, matchMethod))
+#         log.debug('CopyAttributes params : nodes=%s\n : attributes=%s\n : filterSettings=%s\n : matchMethod=%s\n'
+#                    % (nodes, attributes, filterSettings, matchMethod))
         
         # build up the node pairs to process
         nodeList = r9Core.processMatchedNodes(nodes,
@@ -3544,7 +3590,7 @@ class curveModifierContext(object):
     NOTE that this is optimized to run with a floatSlider and used in both interactive
     Randomizer and FilterCurves
     """
-    def __init__(self, initialUndo=False, undoFuncCache=[], undoDepth=1, processBlanks=False):
+    def __init__(self, initialUndo=False, undoFuncCache=[], undoDepth=1, processBlanks=False, reselectKeys=True):
         '''
         :param initialUndo: on first process whether undo on entry to the context manager
         :param undoFuncCache: functions to catch in the undo stack
@@ -3552,26 +3598,33 @@ class curveModifierContext(object):
         :param processBlanks: if undoFuncCache is empty but the last undoName is blank then we consider
             this a match and run the undo. Why, this is because it's bloody hard to get QT to register
             calls to the undo stack and that was blocking some of the ProPack functionality
+        :param reselectKeys: if keys were selected on entry we reselect them based on their original timerange
         '''
         self.initialUndo = initialUndo
         self.undoFuncCache = undoFuncCache + ['curveModifierContext']
         self.undoDepth = undoDepth
         self.processBlanks = processBlanks
+        self.reselectKeys=reselectKeys
     
     def undoCall(self):
         for _ in range(1, self.undoDepth + 1):
-            #print cmds.undoInfo(q=True, undoName=True)
+            #print 'undoCall stack : ', cmds.undoInfo(q=True, printQueue=True)
             if self.undoFuncCache:
                 if [func for func in self.undoFuncCache if func in cmds.undoInfo(q=True, undoName=True)]:
+                    #print func
                     cmds.undo()
             else:
                 if self.processBlanks and not cmds.undoInfo(q=True, undoName=True):
+                    #print 'processes blank func : '
                     cmds.undo()
              
-    def __enter__(self):
+    def __enter__(self):        
+        # turn the undo queue on if it's off
+        if not cmds.undoInfo(q=True, state=True):
+            cmds.undoInfo(state=True)
         if self.initialUndo:
             self.undoCall()
-        cmds.undoInfo(openChunk=True, chunkName='curveModifierContext')
+        cmds.undoInfo(openChunk=True, chunkName='curveModifierContext')  # enter and create a named chunk
         
         self.range=None
         self.keysSelected=cmds.keyframe(q=True, n=True, sl=True)
@@ -3580,9 +3633,9 @@ class curveModifierContext(object):
             self.range=cmds.keyframe(q=True, sl=True, timeChange=True)
             
     def __exit__(self, exc_type, exc_value, traceback):
-        if self.keysSelected and self.range:
+        if self.reselectKeys and self.keysSelected and self.range:
             cmds.selectKey(self.keysSelected, t=(self.range[0], self.range[-1]))
-        cmds.undoInfo(closeChunk=True)
+        cmds.undoInfo(closeChunk=True, chunkName='curveModifierContext')
         if exc_type:
             log.exception('%s : %s'%(exc_type, exc_value))
         # If this was false, it would re-raise the exception when complete
@@ -4042,7 +4095,7 @@ class FilterCurves(object):
         '''
         straight simplify of curves using a managed cmds.simplfy call
         '''
-        with self.contextManager(self.dragActive,
+        with self.contextManager(initialUndo=self.dragActive,
                                  undoFuncCache=self.undoFuncCache,
                                  undoDepth=self.undoDepth):
             self.dragActive=True  # turn on the undo management
@@ -4115,15 +4168,18 @@ class MirrorHierarchy(object):
         by 180 to get left and right working you can still do so.
     '''
     
-    def __init__(self, nodes=[], filterSettings=None, **kws):
+    def __init__(self, nodes=[], filterSettings=None, suppress=False, **kws):
         '''
         :param nodes: initial nodes to process
         :param filterSettings: filterSettings object to process hierarchies
+        :param suppress: suppress the new warnings and validation call, default=False
         '''
         
         self.nodes = nodes
         if not type(self.nodes) == list:
             self.nodes = [self.nodes]
+            
+        self.suppresss_warnings=suppress
         
         # default Attributes used to define the system
         self.defaultMirrorAxis = ['translateX', 'rotateY', 'rotateZ']
@@ -4136,7 +4192,7 @@ class MirrorHierarchy(object):
         self.kws = kws  # allows us to pass kws into the copyKey and copyAttr call if needed, ie, pasteMethod!
         #print 'kws in Mirror call : ', self.kws
         
-        #cache the function pointers for speed
+        # cache the function pointers for speed
         self.transferCallKeys = AnimFunctions().copyKeys
         self.transferCallAttrs = AnimFunctions().copyAttributes
         
@@ -4152,7 +4208,7 @@ class MirrorHierarchy(object):
         # ensure we use the mirrorSide attr search ensuring all nodes
         # returned are part of the Mirror system
         self.settings.searchAttrs.append(self.mirrorSide)
-    
+                 
     def _validateMirrorEnum(self, side):
         '''
         validate the given side to make sure it's formatted correctly before setting the data
@@ -4168,7 +4224,27 @@ class MirrorHierarchy(object):
             raise ValueError('given mirror side is not a valid key: Left, Right or Centre')
         else:
             return True
-        
+    
+    def _validateConstraints(self, nodes):
+        '''
+        check that none of the nodes about to be mirrored are constrained
+        '''
+        if not self.suppresss_warnings:
+            constrained=nodesDriven(nodes)
+            if constrained:
+                result = cmds.confirmDialog(title='Pre Mirror Validations',
+                                            message='Some nodes about to be mirrored are currently Driven by constraints or pairBlends, are you sure you want to continue?\n\n' \
+                                                    'we recommend baking the nodes down before continuing',
+                                            button=['Continue', 'Cancel'],
+                                            defaultButton='OK',
+                                            cancelButton='Cancel',
+                                            icon='warning',
+                                            dismissString='Cancel')
+                if result == 'Continue':
+                    return True
+                return False
+        return True
+            
     def setMirrorIDs(self, node, side=None, slot=None, axis=None):
         '''
         Add/Set the default attrs required by the MirrorSystems.
@@ -4257,6 +4333,10 @@ class MirrorHierarchy(object):
     def getNodes(self):
         '''
         Get the list of nodes to start processing
+        
+        .. note::
+            this has been modified to respect mRigs first to save you having to select the
+            top level of hierarchy in the mRig itself. Instead we walk the children as expected
         '''
         return r9Core.FilterNode(self.nodes, filterSettings=self.settings).processFilter()
      
@@ -4281,7 +4361,7 @@ class MirrorHierarchy(object):
    
     def getMirrorCompiledID(self, node):
         '''
-        This return the mirror data in a compiled mannor for the poseSaver
+        This return the mirror data in a compiled manor for the poseSaver
         such that mirror data  for a node : Center, ID 10 == Center_10
         '''
         try:
@@ -4493,6 +4573,10 @@ class MirrorHierarchy(object):
         if not self.indexednodes:
             raise IOError('No nodes mirrorIndexed nodes found from given / selected nodes')
         
+        if not self._validateConstraints(self.indexednodes):
+            log.warning('Failed validation call - some nodes may be driven by constraints or pairBlends')
+            return
+        
         if mode == 'Anim':
             inverseCall = AnimFunctions.inverseAnimChannels
             self.mergeLayers=True
@@ -4500,7 +4584,6 @@ class MirrorHierarchy(object):
             inverseCall = AnimFunctions.inverseAttributes
             self.mergeLayers=False
             
-        # with r9General.HIKContext(nodes):
         with AnimationLayerContext(self.indexednodes, mergeLayers=self.mergeLayers, restoreOnExit=False):
             # Switch Pairs on the Left and Right and inverse the channels
             for index, leftData in self.mirrorDict['Left'].items():
@@ -4701,6 +4784,17 @@ class MirrorSetup(object):
         cmds.radioCollection('mirrorSide', e=True, select='Centre')
         self.__uicb_setupIndex()
 
+    def __get_nodes(self):
+        '''
+        this is a wrap to manage mRig root systems
+        '''
+        nodes=cmds.ls(sl=True,l=True)
+        if nodes:
+            try:
+                return r9Meta.getConnectedMetaSystemRoot(nodes[0],mInstances=r9Meta.MetaRig).masterNode
+            except:
+                return nodes
+
     def __uicb_setupIndex(self, *args):
         '''
         New for MetaRig: If the node selected is part of an MRig when we switch 
@@ -4760,7 +4854,7 @@ class MirrorSetup(object):
             self.__uicb_setDefaults('default')
         
     def __printDebugs(self):
-        self.mirrorClass.nodes = cmds.ls(sl=True)
+        self.mirrorClass.nodes = self.__get_nodes()  # cmds.ls(sl=True)
         self.mirrorClass.printMirrorDict()
     
     def __deleteMarkers(self):
@@ -4860,12 +4954,13 @@ class MirrorSetup(object):
         self.mirrorClass.nodes = cmds.ls(sl=True)
         if cmds.checkBox('mirrorSaveLoadHierarchy', q=True, v=True):
             self.mirrorClass.settings.hierarchy = True
+            self.mirrorClass.nodes = self.__get_nodes()  # cmds.ls(sl=True)
         self.mirrorClass.saveMirrorSetups(filepath=filepath)
 
     def __loadMirrorSetups(self):
         filepath = cmds.fileDialog2(fileFilter="mirrorMap Files (*.mirrorMap *.mirrorMap);;", okc='Load', cap='Load MirrorSetups', fileMode=1)[0]
         if cmds.checkBox('mirrorSaveLoadHierarchy', q=True, v=True):
-            self.mirrorClass.nodes = cmds.ls(sl=True, l=True)
+            self.mirrorClass.nodes = self.__get_nodes()  # cmds.ls(sl=True, l=True)
             self.mirrorClass.loadMirrorSetups(filepath=filepath, clearCurrent=cmds.checkBox('mirrorClearCurrent', q=True, v=True))
         else:
             self.mirrorClass.loadMirrorSetups(filepath=filepath, nodes=cmds.ls(sl=True, l=True), clearCurrent=cmds.checkBox('mirrorClearCurrent', q=True, v=True))
