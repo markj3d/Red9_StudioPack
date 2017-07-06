@@ -1008,7 +1008,43 @@ def delete_mNode(mNode):
     cmds.delete(mNode.mNode)
     del(mNode)
            
-                 
+
+def createMetaNode(mType=None, *args, **kws):
+    '''
+    cheers Josh for this suggestion and code snippet ;)
+    '''
+    _str_func = 'createMetaNode'
+    
+    if not type(mType) in [unicode, str]:
+        try:
+            mType = mType.__name__
+        except Exception, err:
+            raise ValueError, "mType not a string and not a usable class name. mType: {0}".format(mType)    
+    if mType not in RED9_META_REGISTERY:
+        raise ValueError, "mType not found in class registry. mType: {0}".format(mType)    
+    
+    _call = RED9_META_REGISTERY.get(mType)
+    
+    log.debug("|{0}| >> mType: {1} | class: {2}".format(_str_func, mType, _call))             
+  
+    try:    
+        return _call(*args, **kws)
+    except Exception, err:
+        log.info("|{0}| >> mType: {1} | class: {2}".format(_str_func, mType, _call))                     
+        if args:
+            log.info("|{0}| >> Args...".format(_str_func))                         
+            for i, arg in enumerate(args):
+                log.info("    arg {0}: {1}".format(i, arg))
+        if kws:
+            log.info("|{0}| >> Kws...".format(_str_func))                                     
+            for items in kws.items():
+                log.info("    kw: {0}".format(items))   
+                
+        for arg in err.args:
+            log.error(arg)            
+        raise Exception, err
+
+               
 class MClassNodeUI(object):
     '''
     Simple UI to display all MetaNodes in the scene
@@ -1906,11 +1942,11 @@ class MetaClass(object):
                         if valueType=='string' or valueType=='unicode':
                             cmds.setAttr(attrString, value, type='string')
                             log.debug("setAttr : %s : type : 'string' to value : %s" % (attr,value))
-                            return
+                            #return  # why was this returned here, by-passing the attr lock handling?
                         elif valueType=='complex':
                             log.debug("setAttr : %s : type : 'complex_string' to value : %s" % (attr,self.__serializeComplex(value)))
                             cmds.setAttr(attrString, self.__serializeComplex(value), type='string')
-                            return
+                            #return  # why was this returned here, by-passing the attr lock handling?
                         
                     elif attrType in ['double3','float3'] and valueType=='complex':
                         try:
@@ -2419,7 +2455,10 @@ class MetaClass(object):
         of the node, not all nested namespaces if found. Now returns a string
         '''
         if self.isReferenced():
-            return cmds.referenceQuery(self.mNode, ns=True).split(':')[-1]
+            try:
+                return cmds.referenceQuery(self.mNode, ns=True).split(':')[-1]
+            except:
+                return ''
         ns=self.mNode.split('|')[-1].split(':')
         if len(ns)>1:
             return ns[:-1][-1]
