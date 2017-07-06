@@ -386,7 +386,7 @@ class AudioHandler(object):
             that their offset = Bwav's timecode ie: sync them on the timeline to
             the bwavs internal timecode.
         
-        :param relativeToo: This is fucking clever, even though I do say so. Pass in another BWav node and we 
+        :param relativeToo: This is fucking clever, even though I do say so. Pass in another BWav Audio node and we 
             calculate it's internal timecode against where it is in the timeline. We then use any difference in 
             that nodes time as an offset for all the other nodes in self.audioNodes. Basically syncing multiple 
             bwav's against a given sound.
@@ -394,7 +394,7 @@ class AudioHandler(object):
         :param timecodebase: optional mapping for a reference timecode so we can manipulate the offset
             relative to a given timecodebase rather than assuming that frame 1 = '00:00:00:00'
             ie, we set the timecodebase to '01:00:00:00' therefore day 1 timecode is stripped from 
-            all the calculations and a bwav who's timecode is '00:00:00:10' is set to frame 10
+            all the calculations and a bwav who's timecode is '01:00:00:10' is set to frame 10
         '''
         fails=[]
         if not relativeToo:
@@ -424,7 +424,31 @@ class AudioHandler(object):
                 print 'Error : Audio node is not in Bwav format : %s' % f
             log.warning('Some Audio Node were not in Bwav format, see script editor for debug')
             #self.offsetBy(diff)
-              
+
+
+    def bwav_sync_to_dynamic(self, tc_node):
+        '''
+        : PRO_PACK :       
+            like the baw_sync_to_timecode func this will sync this audio bwav node to a given timecode
+            but the difference here is that that timecode is extracted dynamically from a given node,
+            stamped with the Red9 timecode attrs. This also supports multiple timecode takes within the
+            same node
+            
+        :param tc_node: the Maya node that has the Red9 Timecode attrs that we want to sync against
+        '''
+        fails=[]
+        _timecode=self.pro_audio.Timecode(tc_node)
+        _bounds = _timecode.getTimecode_bounds()
+        for audio in self.audioNodes:
+            if audio.isBwav():
+                synced=audio.bwav_sync_to_dynamic(tc_node, bounds=_bounds)
+            else:
+                fails.append(audio.audioNode)
+        if fails:
+            for f in fails:
+                print 'Error : Audio node failed to sync : %s' % f
+            log.warning('Some Audio Node were not in Bwav format, see script editor for debug')
+                             
 #     def delCombined(self):
 #         audioNodes=cmds.ls(type='audio')
 #         if not audioNodes:
@@ -444,7 +468,7 @@ class AudioHandler(object):
     def combineAudio(self, filepath):
         '''
         Combine audio tracks into a single wav file. This by-passes
-        the issues with Maya not playblasting multip audio tracks.
+        the issues with Maya not playblasting multipe audio tracks.
         
         :param filepath: filepath to store the combined audioTrack
         TODO: Deal with offset start and end data + silence
@@ -481,7 +505,7 @@ class AudioHandler(object):
                 status = False
                 failed.append(audio)
                 continue
-            #deal with any trimming of the audio node in Maya (thanks JanR)
+            # deal with any trimming of the audio node in Maya
             sourceStart = cmds.getAttr(audio.audioNode + '.sourceStart')
             sourceEnd = cmds.getAttr(audio.audioNode + '.sourceEnd')
             sound = audio_segment.AudioSegment.from_wav(audio.path)[(sourceStart / r9General.getCurrentFPS()) * 1000:(sourceEnd / r9General.getCurrentFPS()) * 1000]
@@ -598,6 +622,7 @@ class AudioNode(object):
         data={}
         data['SoundNode']=self.audioNode
         data['Filepath']=self.path
+        data['Duration']=self.duration
         data['Sample_Width']=self.sample_width
         data['BitRate']=self.sample_bits
         data['SampleRate']=self.sampleRate
@@ -661,6 +686,13 @@ class AudioNode(object):
         in dBFS (relative to the highest possible amplitude value).
         '''
         return audio_segment.AudioSegment.from_wav(self.path).max_dBFS
+    
+    @property
+    def duration(self):
+        '''
+        return the duration of the wav from the file directly
+        '''
+        return audio_segment.AudioSegment.from_wav(self.path).duration_seconds
     
     # pyDub end ---
     
@@ -734,7 +766,13 @@ class AudioNode(object):
     def offset(self, offset):
         if self.isLoaded:
             cmds.setAttr('%s.offset' % self.audioNode, offset)
-            
+
+    def inspect(self):
+        '''
+        simple warp over the inspect function to bind it to this audioNode instance
+        '''
+        inspect_wav(multi=False, audioNodes=[self.audioNode])       
+        
     # ---------------------------------------------------------------------------------
     # PRO_PACK : BWAV support ---
     # ---------------------------------------------------------------------------------
@@ -807,6 +845,25 @@ class AudioNode(object):
         else:
             raise r9Setup.ProPack_Error()
 
+    def bwav_sync_to_dynamic(self, tc_node, bounds=[]):
+        '''
+        like the baw_sync_to_timecode func this will sync this audio bwav node to a given timecode
+        but the difference here is that that timecode is extracted dynamically from a given node,
+        stamped with the Red9 timecode attrs. This also supports multiple timecode takes within the
+        same node
+        '''
+        if self.isLoaded and self.pro_bwav and self.pro_bwav.isBwav():
+            _timecode=self.pro_audio.Timecode(tc_node)
+            if not bounds:
+                bounds = _timecode.getTimecode_bounds()
+            matchedStart_tc = _timecode.find_Timecode_frame(self.pro_bwav.bwav_timecodeFormatted(), bounds=bounds, set=False)
+            if matchedStart_tc:
+                self.startFrame = matchedStart_tc
+            else:
+                pass
+        else:
+            raise r9Setup.ProPack_Error()   
+  
     def isConnected_AudioGrp(self):
         '''
         : PRO_PACK : is this audioNode connected to a Pro_ AudioGrp metaNode 
