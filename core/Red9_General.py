@@ -61,9 +61,16 @@ def forceToString(text):
     
 def formatPath(path):
     '''
-    take a path and format it to forward slashes with catches for the exceptions
+    take a path and format it to forward slashes with catches for the exceptions so that paths
+    are always Pythonized not OS based
     '''
     return os.path.normpath(path).replace('\\','/').replace('\t','/t').replace('\n','/n').replace('\a', '/a')
+
+def formatPath_join(path, *paths):
+    '''
+    wrapper over os.path.join and formatPath so it's always returned as a valid Python Path
+    '''
+    return formatPath(os.path.join(path, *paths))
     
 def itersubclasses(cls, _seen=None):
     """
