@@ -812,8 +812,8 @@ method internally if not already run.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.optimiser.mRigs_renderMeshes_hooked">
-<code class="descname">mRigs_renderMeshes_hooked</code><span class="sig-paren">(</span><em>expected=1</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_renderMeshes_hooked" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.optimiser.mRigs_renderMeshes_hooked_test">
+<code class="descname">mRigs_renderMeshes_hooked_test</code><span class="sig-paren">(</span><em>expected=1</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_renderMeshes_hooked_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check if all mRigs in the scene have existing renderMeshes hooked up
 or at least the expected number or above. This wire is used by the PoseSaver 
 to create the PosePointCloud visual mesh reference
@@ -854,8 +854,8 @@ Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.optimiser.mRigs_exportSkeletonRoot">
-<code class="descname">mRigs_exportSkeletonRoot</code><span class="sig-paren">(</span><em>expected=None</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_exportSkeletonRoot" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.optimiser.mRigs_exportSkeletonRoot_test">
+<code class="descname">mRigs_exportSkeletonRoot_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_exportSkeletonRoot_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check if all mRigs in the scene have existing exportSkeletonRoot hooked up
 this wire is used by the PoseSaver to generate the skeletonData block
 Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
@@ -1091,8 +1091,8 @@ zero_rotates. This ONLY tests skinClusters attached to mesh objects</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.optimiser.skeleton_rotate_tolerance">
-<code class="descname">skeleton_rotate_tolerance</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>tolerance=0.001</em>, <em>searchPattern=[]</em>, <em>fk=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_rotate_tolerance" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.optimiser.skeleton_rotate_tolerance_test">
+<code class="descname">skeleton_rotate_tolerance_test</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>tolerance=0.001</em>, <em>searchPattern=[]</em>, <em>fk=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_rotate_tolerance_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check that all joints under a given rootJnt have a
 rotation value under the given tolerance. This is used when binding a 
 rig-up to ensure that we get no additional gimbal introduced via a rig system etc.</p>
@@ -1121,8 +1121,8 @@ nature of IK joints will move slightly regardless, so testing in FK ensures at t
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.optimiser.skeleton_has_keys">
-<code class="descname">skeleton_has_keys</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>searchPattern=[]</em>, <em>expected=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_has_keys" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.optimiser.skeleton_has_keys_test">
+<code class="descname">skeleton_has_keys_test</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>searchPattern=[]</em>, <em>expected=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_has_keys_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check that all joints under a given rootJnt have no animation
 keys set on them. If no rootJnt is passed then we try and inspect the
 mRig or SrcExt / exportTag nodes</p>
@@ -1293,7 +1293,7 @@ by-passing the FBX export issue</td>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.blends_target_missing_indexes_fix">
-<code class="descname">blends_target_missing_indexes_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.blends_target_missing_indexes_fix" title="Permalink to this definition">¶</a></dt>
+<code class="descname">blends_target_missing_indexes_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.blends_target_missing_indexes_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>brute force fix by adding in a duplicated base mesh padder shape wired as a 
 new target for the missing index, there by fixing the FBX export issue for Unreal etc.</p>
 </dd></dl>
@@ -1423,8 +1423,8 @@ that&#8217;s acceptable</li>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.optimiser.constraints_interpType">
-<code class="descname">constraints_interpType</code><span class="sig-paren">(</span><em>expected=[2, 0]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.constraints_interpType" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.optimiser.constraints_interpType_test">
+<code class="descname">constraints_interpType_test</code><span class="sig-paren">(</span><em>expected=[2, 0]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.constraints_interpType_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>test all orient and parent constraints and validate their interpType is set
 as expected. This by default is set to a list [2,0], allowing noflip and shortest
 to pass and all other interTypes to fail. The first var in the expected list is

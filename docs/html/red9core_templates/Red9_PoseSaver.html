@@ -81,7 +81,7 @@ ALL NODES must have unique names or you may get unexpected  results!</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PoseData" title="Red9.core.Red9_PoseSaver.PoseData"><code class="xref py py-obj docutils literal"><span class="pre">PoseData</span></code></a>([filterSettings])</td>
 <td>The PoseData is stored per node inside an internal dict as follows:</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PosePointCloud" title="Red9.core.Red9_PoseSaver.PosePointCloud"><code class="xref py py-obj docutils literal"><span class="pre">PosePointCloud</span></code></a>(nodes[,&nbsp;filterSettings,&nbsp;meshes])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PosePointCloud" title="Red9.core.Red9_PoseSaver.PosePointCloud"><code class="xref py py-obj docutils literal"><span class="pre">PosePointCloud</span></code></a>(nodes[,&nbsp;filterSettings,&nbsp;...])</td>
 <td>PosePointCloud is the technique inside the PoseSaver used to snap the pose into relative space.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PoseCompare" title="Red9.core.Red9_PoseSaver.PoseCompare"><code class="xref py py-obj docutils literal"><span class="pre">PoseCompare</span></code></a>(currentPose,&nbsp;referencePose[,&nbsp;...])</td>
@@ -426,11 +426,36 @@ This only checks those nodes in the snapList and only runs under relative mode.<
 
 <dl class="class">
 <dt id="Red9.core.Red9_PoseSaver.PosePointCloud">
-<em class="property">class </em><code class="descname">PosePointCloud</code><span class="sig-paren">(</span><em>nodes</em>, <em>filterSettings=None</em>, <em>meshes=[]</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">PosePointCloud</code><span class="sig-paren">(</span><em>nodes</em>, <em>filterSettings=None</em>, <em>meshes=[]</em>, <em>prioritySnapOnly=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>PosePointCloud is the technique inside the PoseSaver used to snap the pose into
 relative space. It&#8217;s been added as a tool in it&#8217;s own right as it&#8217;s sometimes
 useful to be able to shift poses in global space.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># heres an mRig example, it will also work with any other rigs by just setting up</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the filter settings object in the same way for any of the Red9 tools</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Red9.core.Red9_PoseSaver</span> <span class="k">as</span> <span class="nn">r9Pose</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Red9.core.Red9_Meta</span> <span class="k">as</span> <span class="nn">r9Meta</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># grab our mRig node</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">=</span><span class="n">r9Pose</span><span class="o">.</span><span class="n">PosePointCloud</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">mrig</span><span class="o">.</span><span class="n">ctrl_main</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">metaRig</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">.</span><span class="n">prioritySnapOnly</span><span class="o">=</span><span class="kc">True</span>  <span class="c1"># for rigs you can turn this on so that ONLY those nodes in the filterPriority list get built and used</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># build the cloud system</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">.</span><span class="n">buildOffsetCloud</span><span class="p">()</span>   <span class="c1"># you can also pass a root point in, used as the base pivot ( rootReference=&#39;pSphere1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># to apply the cloud, snapping the rig into the clouds pose</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">.</span><span class="n">applyPosePointCloud</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># to sync the cloud to the rigs current frame, allowing you to update the clouds internal pose</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">.</span><span class="n">updatePosePointCloud</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># delete the ppc node</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -441,6 +466,7 @@ then these are the rootNodes for it</li>
 <li><strong>filterSettings</strong> &#8211; pass in a filterSettings object to filter the given hierarchy</li>
 <li><strong>meshes</strong> &#8211; this is really for reference, rather than make a locator, pass in a reference geo
 which is then shapeSwapped for the PPC root node giving great reference!</li>
+<li><strong>prioritySnapOnly</strong> &#8211; ONLY make ppc points for the filterPriority nodes</li>
 </ul>
 </td>
 </tr>

@@ -283,7 +283,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000132201C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -308,7 +308,7 @@ allowing you to load libraries of animations one after another in different spac
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r9Setup</span><span class="o">.</span><span class="n">red9Presets</span><span class="p">(),</span><span class="s1">&#39;Red9_DevRig.cfg&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">incRoots</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="go">&gt;&gt;&gt;# OR modify it on the fly in the class</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># OR modify it on the fly in the class</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">metaData</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nurbsCurve&#39;</span><span class="p">]</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -339,7 +339,20 @@ and audio data that are gathered in the format on save from mRig</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">loadAnimation</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>I&#8217;m not passing any data in terms of nodes here, We&#8217;ll deal with
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Internal File Format:</p>
+<p>self.poseDict[key][keydata]:</p>
+<ul class="simple">
+<li>file_version : 1.0 = (time, value, inTanType, outTanType, inTanAngle, outTanAngle),</li>
+<li>file_version : 2.0 = (time, value, inTanType, outTanType, inTanAngle, outTanAngle, inWeight, outWeight, lock, weightLock),</li>
+</ul>
+<p>self.poseDict[key][keydata_bases]:</p>
+<ul class="last simple">
+<li>[weightedTangents, preInfinity, postInfinity, denseBaked, inttan_accumulated, outttan_accumulated]</li>
+</ul>
+</div>
+<p>We&#8217;re not passing any data in terms of nodes here, We&#8217;ll deal with
 those in the PoseSave and PoseLoad calls. Leaves this open for
 expansion</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -349,12 +362,14 @@ expansion</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>filterSettings</strong> &#8211; specify a filterSettings object, or just use the settings that are bound to the class instance</li>
 <li><strong>timerange</strong> &#8211; specify a timerange to process, else use the default Red9 behaviour</li>
+<li><strong>restoreTangents</strong> &#8211; this is an additional <a href="#id3"><span class="problematic" id="id4">**</span></a>kws and switches OFF the loading of keyframe tangents to speed the load on dense data
+IF this is set to &#8216;auto&#8217; (default) then we first test if the keydata_bases was marked as &#8216;denseData&#8217; and if so we turn OFF the Tangent
+load for any channels marked as such. The idea being that dense data doesn&#8217;t need tangents as it&#8217;s baled at key per frame.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>:<a href="#id3"><span class="problematic" id="id4">**</span></a>kws additional supported : &#8216;restoreTangents&#8217; : switches OFF the loading of keyframe tangents to speed the load on dense data</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimMap.buildBlocks_fill">
 <code class="descname">buildBlocks_fill</code><span class="sig-paren">(</span><em>nodes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.buildBlocks_fill" title="Permalink to this definition">¶</a></dt>
@@ -433,7 +448,7 @@ r9Anim offset/start and end ranges</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>manageExport</strong> &#8211; byAll, byRange_start, byRange_end, byRange uses the timeWithinRange call</li>
+<li><strong>manageExport</strong> &#8211; byAll, byName, byRange_start, byRange_end, byRange uses the timeWithinRange call</li>
 <li><strong>sort</strong> &#8211; sort the returned data by the endFrame in each loops data</li>
 </ul>
 </td>
@@ -453,7 +468,7 @@ r9Anim offset/start and end ranges</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>manageExport</strong> &#8211; byAll, byRange_start, byRange_end, uses the timeWithinRange call</li>
+<li><strong>manageAudio</strong> &#8211; byAll, byName, byRange_start, byRange_end, uses the timeWithinRange call</li>
 <li><strong>sort</strong> &#8211; sort the returned data by the endFrame in each loops data</li>
 </ul>
 </td>
@@ -470,14 +485,14 @@ r9Anim offset/start and end ranges</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012E24508&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000132A5DC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.animation.AnimPointCloud">
-<em class="property">class </em><code class="descname">AnimPointCloud</code><span class="sig-paren">(</span><em>nodes</em>, <em>filterSettings=None</em>, <em>meshes=None</em>, <em>time=()</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">AnimPointCloud</code><span class="sig-paren">(</span><em>nodes</em>, <em>filterSettings=None</em>, <em>meshes=None</em>, <em>time=()</em>, <em>prioritySnapOnly=True</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_PoseSaver.html#Red9.core.Red9_PoseSaver.PosePointCloud" title="Red9.core.Red9_PoseSaver.PosePointCloud"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_PoseSaver.PosePointCloud</span></code></a></p>
 <p>This relies heavily on the PosePointCloud base class. This means we can
 hook directly into the renderMeshes variable to find the Geo for reference</p>
@@ -508,6 +523,7 @@ because it uses the pointCloud setups nothing is bound to the animation data its
 <li><strong>filterSettings</strong> &#8211; specific filterSettings object to pass in, else we bind one to settings internally</li>
 <li><strong>meshes</strong> &#8211; meshes used as reference Geo when constructing the pointCloud nodes</li>
 <li><strong>time</strong> &#8211; timerange to process</li>
+<li><strong>prioritySnapOnly</strong> &#8211; only make ppc points for the filterPriority nodes, this is default for speed</li>
 </ul>
 </td>
 </tr>
@@ -996,7 +1012,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013180A48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1020,7 +1036,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013311E08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

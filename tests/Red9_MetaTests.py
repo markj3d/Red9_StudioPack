@@ -759,11 +759,10 @@ class Test_MetaClass():
         assert cmds.attributeQuery('msgSingleTest',node=node.mNode, multi=True)==False
         
         #NOTE : cmds returns shortName, but all MetaClass attrs are always longName
-        print cmds.listConnections('%s.msgMultiTest' % node.mNode,c=True,p=True)
-        assert cmds.listConnections('%s.msgMultiTest' % node.mNode,c=True,p=True)==['MetaClass_Test.msgMultiTest',
-                                                                 'pCube2.MetaClass_Test',
-                                                                 'MetaClass_Test.msgMultiTest',
-                                                                 'pCube1.MetaClass_Test']
+        assert cmds.listConnections('%s.msgMultiTest' % node.mNode,c=True,p=True)==['MetaClass_Test.msgMultiTest[0]',
+                                                                 'pCube1.MetaClass_Test[0]',
+                                                                 'MetaClass_Test.msgMultiTest[1]',
+                                                                 'pCube2.MetaClass_Test[0]']
         assert cmds.listConnections('%s.msgSingleTest' % node.mNode,c=True,p=True)==['MetaClass_Test.msgSingleTest',
                                                                                      'pCube3.MetaClass_Test']
    
@@ -774,10 +773,11 @@ class Test_MetaClass():
         node.msgMultiTest=[cube5,cube6]
         assert sorted(node.msgMultiTest)==[cube5,cube6]
         assert not cmds.attributeQuery('MetaClass_Test',node=cube1, exists=True)  # disconnect should delete the old connection attr
-        assert cmds.listConnections('%s.msgMultiTest' % node.mNode,c=True,p=True)==['MetaClass_Test.msgMultiTest',
-                                                                 'pCube6.MetaClass_Test',
-                                                                 'MetaClass_Test.msgMultiTest',
-                                                                 'pCube5.MetaClass_Test']
+        print cmds.listConnections('%s.msgMultiTest' % node.mNode,c=True,p=True)
+        assert cmds.listConnections('%s.msgMultiTest' % node.mNode,c=True,p=True)==['MetaClass_Test.msgMultiTest[0]',
+                                                                 'pCube5.MetaClass_Test[0]',
+                                                                 'MetaClass_Test.msgMultiTest[1]',
+                                                                 'pCube6.MetaClass_Test[0]']
         node.msgMultiTest=[cube1,cube2,cube4,cube6]
         assert sorted(node.msgMultiTest)==[cube1,cube2,cube4,cube6]
         assert sorted(cmds.listConnections('%s.msgMultiTest' % node.mNode))==['pCube1','pCube2','pCube4','pCube6']
@@ -1142,7 +1142,45 @@ class Test_MetaRig():
                         
     def test_getNodeConnections(self):
         assert self.mRig.L_Leg_System.getNodeConnections('|World_Ctrl|L_Foot_grp|L_Foot_Ctrl') == ['CTRL_L_Foot']
+
+    def test_getChildMetaNodes(self):
+        # test that the new flags in the get calls are running
+        assert sorted([n.mNode for n in self.mRig.getChildMetaNodes(walk=False, mAttrs=['systemType=Arm'], stepover=False)]) == ['L_ArmSystem',
+                                                                                                                                 'R_ArmSystem'] 
+        # stepover non matched test
+        assert self.mRig.getChildMetaNodes(walk=True, mAttrs=['systemType=Fingers'], stepover=False) == []
+        assert sorted([n.mNode for n in self.mRig.getChildMetaNodes(walk=True, mAttrs=['systemType=Fingers'], stepover=True)]) == ['L_Fingers_System',
+                                                                                                                                   'R_Fingers_System']
+    
+        assert sorted([n.mNode for n in self.mRig.getChildMetaNodes(walk=True, mTypes=['MetaRigSupport'], stepover=True)])==['L_ArmSupport',
+                                                                                                                             'L_LegSupport',
+                                                                                                                             'R_ArmSupport',
+                                                                                                                             'R_LegSupport',
+                                                                                                                             'SpineSupport']
         
+        assert sorted([n.mNode for n in self.mRig.getChildMetaNodes(walk=True, mInstances=['MetaRig'], stepover=True)])==[  'L_ArmSystem',
+                                                                                                                            'L_Fingers_System',
+                                                                                                                            'L_LegSystem',
+                                                                                                                            'R_ArmSystem',
+                                                                                                                            'R_Fingers_System',
+                                                                                                                            'R_LegSystem',
+                                                                                                                            'SpineSystem']
+        
+        assert sorted([n.mNode for n in self.mRig.getChildMetaNodes(walk=True, mInstances=['MetaClass'], stepover=True)])==['L_ArmSupport',
+                                                                                                                            'L_ArmSystem',
+                                                                                                                            'L_Fingers_System',
+                                                                                                                            'L_LegSupport',
+                                                                                                                            'L_LegSystem',
+                                                                                                                            'R_ArmSupport',
+                                                                                                                            'R_ArmSystem',
+                                                                                                                            'R_Fingers_System',
+                                                                                                                            'R_LegSupport',
+                                                                                                                            'R_LegSystem',
+                                                                                                                            'SpineSupport',
+                                                                                                                            'SpineSystem']  
+        assert self.mRig.getChildMetaNodes(walk=True, mInstances=['MetaRigSupport'], stepover=False)==[]   
+        assert [n.mNode for n in self.mRig.L_ArmSystem.getChildMetaNodes(walk=True, mInstances=['MetaRigSupport'], stepover=False)]==['L_ArmSupport']
+          
 #    def test_getChildren_mAttrs(self):
 #        #TODO: Fill Test
 #        pass
@@ -1363,13 +1401,8 @@ class Test_MetaNetworks():
         assert not r9Meta.getConnectedMetaSystemRoot('R_Fingers_System', ignoreTypes='MetaRig')
         
         assert r9Meta.getConnectedMetaSystemRoot('R_Toes_System').mClass=='MetaClass'
-        assert r9Meta.getConnectedMetaSystemRoot('R_Toes_System', ignoreTypes=['MetaClass']).mClass=='MetaRig'
-                
-    def test_getChildMetaNodes_mAttrs(self):
-        #TODO: this code needs fixing and then testing!!!!!!
-        #self.mRig.getChildMetaNodes(walk=True,mAttrs='ddddddddddddd')
-        pass
-    
+        assert r9Meta.getConnectedMetaSystemRoot('R_Toes_System', ignoreTypes=['MetaClass']).mClass=='MetaRig'       
+          
     def test_getMetaNodes_mAttrs(self):
         mNodes=r9Meta.getMetaNodes(mAttrs='mirrorSide=1')
         assert sorted([node.mNodeID for node in mNodes])==['L_Arm_System',

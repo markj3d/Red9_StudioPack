@@ -342,7 +342,7 @@ the bwavs internal timecode.</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>relativeToo</strong> &#8211; This is fucking clever, even though I do say so. Pass in another BWav node and we 
+<li><strong>relativeToo</strong> &#8211; This is fucking clever, even though I do say so. Pass in another BWav Audio node and we 
 calculate it&#8217;s internal timecode against where it is in the timeline. We then use any difference in 
 that nodes time as an offset for all the other nodes in self.audioNodes. Basically syncing multiple 
 bwav&#8217;s against a given sound.</li>
@@ -350,9 +350,29 @@ bwav&#8217;s against a given sound.</li>
 <li><strong>timecodebase</strong> &#8211; optional mapping for a reference timecode so we can manipulate the offset
 relative to a given timecodebase rather than assuming that frame 1 = &#8216;00:00:00:00&#8217;
 ie, we set the timecodebase to &#8216;01:00:00:00&#8217; therefore day 1 timecode is stripped from 
-all the calculations and a bwav who&#8217;s timecode is &#8216;00:00:00:10&#8217; is set to frame 10</li>
+all the calculations and a bwav who&#8217;s timecode is &#8216;01:00:00:10&#8217; is set to frame 10</li>
 </ul>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_dynamic">
+<code class="descname">bwav_sync_to_dynamic</code><span class="sig-paren">(</span><em>tc_node</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_dynamic" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>: PRO_PACK</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier"></span><dd>like the baw_sync_to_timecode func this will sync this audio bwav node to a given timecode
+but the difference here is that that timecode is extracted dynamically from a given node,
+stamped with the Red9 timecode attrs. This also supports multiple timecode takes within the
+same node</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tc_node</strong> &#8211; the Maya node that has the Red9 Timecode attrs that we want to sync against</td>
 </tr>
 </tbody>
 </table>
@@ -530,6 +550,15 @@ all the calculations and a bwav who&#8217;s timecode is &#8216;00:00:00:10&#8217
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioNode.bwav_sync_to_dynamic">
+<code class="descname">bwav_sync_to_dynamic</code><span class="sig-paren">(</span><em>tc_node</em>, <em>bounds=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.bwav_sync_to_dynamic" title="Permalink to this definition">¶</a></dt>
+<dd><p>like the baw_sync_to_timecode func this will sync this audio bwav node to a given timecode
+but the difference here is that that timecode is extracted dynamically from a given node,
+stamped with the Red9 timecode attrs. This also supports multiple timecode takes within the
+same node</p>
 </dd></dl>
 
 <dl class="method">

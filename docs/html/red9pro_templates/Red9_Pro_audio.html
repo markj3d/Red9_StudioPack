@@ -106,7 +106,7 @@ requires the StudioPack codebase to run</p>
 <td>Timecode class designed to be integrated into a pipeline for adding timecode markers, extracting data from nodes, decoding data and syncing assets.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.audio.BWav_Handler" title="Red9.pro_pack.core.audio.BWav_Handler"><code class="xref py py-obj docutils literal"><span class="pre">BWav_Handler</span></code></a>(filepath)</td>
-<td></td>
+<td>a class designed to extract Timecode from a BWav&#8217;s header data and</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.audio.AudioGRP_Manager" title="Red9.pro_pack.core.audio.AudioGRP_Manager"><code class="xref py py-obj docutils literal"><span class="pre">AudioGRP_Manager</span></code></a>([parent])</td>
 <td>simple UI to edit a given ExportLoop tag</td>
@@ -246,7 +246,8 @@ default (None) uses the current scenes framerate</li>
 <dt id="Red9.pro_pack.core.audio.timecode_difference">
 <code class="descname">timecode_difference</code><span class="sig-paren">(</span><em>referencedTC</em>, <em>inputTC</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.timecode_difference" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate the difference between 2 timecodes in frames
-timecodes are in a string format &#8216;00:00:00:00&#8217;</p>
+timecodes are in a string format &#8216;00:00:00:00&#8217;. Mainly used in the 
+r9Anim load when we load against a given timecode and need to calculate the offsets</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -259,6 +260,25 @@ timecodes are in a string format &#8216;00:00:00:00&#8217;</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.audio.timecode_falls_within">
+<code class="descname">timecode_falls_within</code><span class="sig-paren">(</span><em>timecode</em>, <em>timecode_bounds</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.timecode_falls_within" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a given list of timecode bounds in smpte format [(startTC, endTC),....] see if the 
+given TC falls within any of them and if so return that timecode section. This is a little 
+like searching an EDL for the correct take based on a given timecode</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">timecode_falls_within</span><span class="p">(</span><span class="s1">&#39;06:35:01:18&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;06:34:36:17&#39;</span><span class="p">,</span> <span class="s1">&#39;06:34:40:11&#39;</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>                                      <span class="p">(</span><span class="s1">&#39;06:34:59:21&#39;</span><span class="p">,</span> <span class="s1">&#39;06:35:03:24&#39;</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>                                      <span class="p">(</span><span class="s1">&#39;06:33:25:28&#39;</span><span class="p">,</span> <span class="s1">&#39;06:33:31:10&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Result : (&#39;06:34:59:21&#39;, &#39;06:35:03:24&#39;)</span>
+</pre></div>
+</div>
+<p>Alternatively if we have a node with timecode stamped we can do the following</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tc</span><span class="o">=</span><span class="n">r9Audio</span><span class="o">.</span><span class="n">Timecode</span><span class="p">(</span><span class="s1">&#39;my_node_with_timecode&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timecode_falls_within</span><span class="p">(</span><span class="s1">&#39;06:35:01:18&#39;</span><span class="p">,</span> <span class="n">tc</span><span class="o">.</span><span class="n">getTimecode_bounds</span><span class="p">(</span><span class="n">tc_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -357,7 +377,8 @@ the selected audio is shifted to start at the given frame</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.audio.Timecode_Wrangler.mrig_copy_timecode">
 <code class="descname">mrig_copy_timecode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.mrig_copy_timecode" title="Permalink to this definition">¶</a></dt>
-<dd><p>set the timecode for all selected mRigs</p>
+<dd><p>set the timecode for all selected mRigs based on the first selected node 
+being from the master rig from which all others will be synced</p>
 </dd></dl>
 
 <dl class="method">
@@ -386,7 +407,7 @@ the selected audio is shifted to start at the given frame</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000138C5188&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -454,6 +475,12 @@ sample-rate set when the counter attr was generated</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.audio.Timecode.hasTimeCode">
+<code class="descname">hasTimeCode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.hasTimeCode" title="Permalink to this definition">¶</a></dt>
+<dd><p>test to check if our node has all the required TimeCode setups</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.audio.Timecode.getTimecode_from_node">
 <code class="descname">getTimecode_from_node</code><span class="sig-paren">(</span><em>time=None</em>, <em>smpte=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.getTimecode_from_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>wrapper method to get the timecode back from a the node bound to the class</p>
@@ -472,9 +499,44 @@ sample-rate set when the counter attr was generated</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.audio.Timecode.hasTimeCode">
-<code class="descname">hasTimeCode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.hasTimeCode" title="Permalink to this definition">¶</a></dt>
-<dd><p>test to check if our node has all the required TimeCode setups</p>
+<dt id="Red9.pro_pack.core.audio.Timecode.getTimecode_bounds">
+<code class="descname">getTimecode_bounds</code><span class="sig-paren">(</span><em>tol=2</em>, <em>tc_only=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.getTimecode_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>from node bound to the class find all timecode bounds and return as a list of tuples</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tol</strong> &#8211; key gradient thats allowed, usually count attr is a linear counter of val 1 but 
+default for this is 2 to give us a margin of error</li>
+<li><strong>tc_only</strong> &#8211; if True we only return the found bounds as timecode data [(startTC, endTC)....]
+else the return includes the frame times [(startFrm, endFrm, startTC, endTC)]</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">timecode bounds in this case are obvious slices of timecode within an animation curve,
+a rig may have many different timecode sections bound to it and this will find and return
+those ranges for processing, think of them as cuts in an EDL edit</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.audio.Timecode.find_Timecode_frame">
+<code class="descname">find_Timecode_frame</code><span class="sig-paren">(</span><em>timecode</em>, <em>bounds=[]</em>, <em>set=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.find_Timecode_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>find a given timecode on the node, this searches all the timecode bounds on the node
+to try and find an appropriate match, then returns the actual frame it was found at</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bounds</strong> &#8211; default return from the getTimecode_bounds function</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -504,7 +566,7 @@ of the visual timecode on the timeslider in Maya</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.audio.Timecode.addTimecode_to_node">
-<code class="descname">addTimecode_to_node</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em>, <em>suppress=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.addTimecode_to_node" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addTimecode_to_node</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em>, <em>suppress=False</em>, <em>timerange=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.addTimecode_to_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>wrapper to add the timecode attrs to a node and if set 
 propagate that data to the node and fill the attrs up</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -515,6 +577,7 @@ propagate that data to the node and fill the attrs up</p>
 <li><strong>tc</strong> &#8211; optional timecode, used in conjunction with the propagate flag</li>
 <li><strong>propagate</strong> &#8211; push the timecode given onto the node and bake the count attr against the current fps</li>
 <li><strong>suppress</strong> &#8211; confirmDialog warnings supression</li>
+<li><strong>timerange</strong> &#8211; If propagate then this is an optional timerange over which to set the data</li>
 </ul>
 </td>
 </tr>
@@ -608,7 +671,7 @@ more obvious when setting the timecode up rather than calling add, which actuial
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.audio.Timecode.enterTimecodeUI">
-<code class="descname">enterTimecodeUI</code><span class="sig-paren">(</span><em>buttonlabel='Set'</em>, <em>buttonfunc=None</em>, <em>runfunc=True</em>, <em>default='01:00:00:00'</em>, <em>propagate=True</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.enterTimecodeUI" title="Permalink to this definition">¶</a></dt>
+<code class="descname">enterTimecodeUI</code><span class="sig-paren">(</span><em>buttonlabel='Set'</em>, <em>buttonfunc=None</em>, <em>runfunc=True</em>, <em>default='01:00:00:00'</em>, <em>propagate=True</em>, <em>timerange=()</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.enterTimecodeUI" title="Permalink to this definition">¶</a></dt>
 <dd><p>generic UI to enter timecode</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -636,6 +699,8 @@ if this is called from mRig this will be the current timecode bound to that rig<
 <dt id="Red9.pro_pack.core.audio.BWav_Handler">
 <em class="property">class </em><code class="descname">BWav_Handler</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.BWav_Handler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>a class designed to extract Timecode from a BWav&#8217;s header data and
+return it in various formats</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.audio.BWav_Handler.isBwav">
 <code class="descname">isBwav</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.BWav_Handler.isBwav" title="Permalink to this definition">¶</a></dt>
@@ -721,7 +786,7 @@ There is coverage for this in this module getMediaFileMetaData() does just that<
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001364E308&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013032B88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

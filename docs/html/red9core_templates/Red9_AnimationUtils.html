@@ -85,7 +85,6 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># the class directly so you no longer need to create a filterSettigns object directly!</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Lets set the filter to process nodes with a given attr &#39;myControl&#39; who&#39;s type is &#39;nurbscurve&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">=</span><span class="n">r9Anim</span><span class="o">.</span><span class="n">AnimFunctions</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">r9Core</span><span class="o">.</span><span class="n">FilterNode_Settings</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span> <span class="o">=</span><span class="s1">&#39;nurbsCurve&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">searchAttrs</span> <span class="o">=</span> <span class="s1">&#39;myControl&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">animFunc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">printSettings</span><span class="p">()</span>
@@ -159,7 +158,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.FilterCurves" title="Red9.core.Red9_AnimationUtils.FilterCurves"><code class="xref py py-obj docutils literal"><span class="pre">FilterCurves</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy" title="Red9.core.Red9_AnimationUtils.MirrorHierarchy"><code class="xref py py-obj docutils literal"><span class="pre">MirrorHierarchy</span></code></a>([nodes,&nbsp;filterSettings])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy" title="Red9.core.Red9_AnimationUtils.MirrorHierarchy"><code class="xref py py-obj docutils literal"><span class="pre">MirrorHierarchy</span></code></a>([nodes,&nbsp;filterSettings,&nbsp;...])</td>
 <td>This class is designed to mirror pose and animation data on any given hierarchy.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.MirrorSetup" title="Red9.core.Red9_AnimationUtils.MirrorSetup"><code class="xref py py-obj docutils literal"><span class="pre">MirrorSetup</span></code></a>()</td>
@@ -175,7 +174,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 </table>
 <dl class="data">
 <dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS">
-<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA96630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA96630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA96630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA96630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA96630&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C01D048&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C01D048&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C01D048&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C01D048&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C01D048&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C01D048&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.</p>
@@ -255,6 +254,17 @@ False returns a list (non ordered) of all attr states.</li>
 <p>FIXME: BUG some Compound attrs such as constraints return invalid data for some of the
 base functions using this as they can&#8217;t be simply set. Do we strip them here?
 ie: pointConstraint.target.targetWeight</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_AnimationUtils.nodesDriven">
+<code class="descname">nodesDriven</code><span class="sig-paren">(</span><em>nodes</em>, <em>allowReferenced=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.nodesDriven" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list of those nodes that are actively constrained or connected to a pairBlend</p>
+<dl class="docutils">
+<dt>param allowReferenced: if True we allow all constraints to be returned, if False any constraints </dt>
+<dd>that are referenced are skipped. This by-passes internal rig constraints and only returns
+constraints made in the main scene.</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -748,7 +758,7 @@ this out from the time ranges given</li>
 
 <dl class="class">
 <dt id="Red9.core.Red9_AnimationUtils.curveModifierContext">
-<em class="property">class </em><code class="descname">curveModifierContext</code><span class="sig-paren">(</span><em>initialUndo=False</em>, <em>undoFuncCache=[]</em>, <em>undoDepth=1</em>, <em>processBlanks=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.curveModifierContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">curveModifierContext</code><span class="sig-paren">(</span><em>initialUndo=False</em>, <em>undoFuncCache=[]</em>, <em>undoDepth=1</em>, <em>processBlanks=False</em>, <em>reselectKeys=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.curveModifierContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Simple Context Manager to allow modifications to animCurves in the
 graphEditor interactively by simply managing the undo stack and making
@@ -766,6 +776,7 @@ Randomizer and FilterCurves</p>
 <li><strong>processBlanks</strong> &#8211; if undoFuncCache is empty but the last undoName is blank then we consider
 this a match and run the undo. Why, this is because it&#8217;s bloody hard to get QT to register
 calls to the undo stack and that was blocking some of the ProPack functionality</li>
+<li><strong>reselectKeys</strong> &#8211; if keys were selected on entry we reselect them based on their original timerange</li>
 </ul>
 </td>
 </tr>
@@ -864,7 +875,7 @@ implementation is too regular.</p>
 
 <dl class="class">
 <dt id="Red9.core.Red9_AnimationUtils.MirrorHierarchy">
-<em class="property">class </em><code class="descname">MirrorHierarchy</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>filterSettings=None</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">MirrorHierarchy</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>filterSettings=None</em>, <em>suppress=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>This class is designed to mirror pose and animation data on any given
 hierarchy. The hierarchy is filtered like everything else in the Red9
@@ -901,6 +912,7 @@ TODO: allow the mirror block to include an offset so that if you need to inverse
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; initial nodes to process</li>
 <li><strong>filterSettings</strong> &#8211; filterSettings object to process hierarchies</li>
+<li><strong>suppress</strong> &#8211; suppress the new warnings and validation call, default=False</li>
 </ul>
 </td>
 </tr>
@@ -958,6 +970,11 @@ systems when the MirrorMap fails due to naming.</p>
 <dt id="Red9.core.Red9_AnimationUtils.MirrorHierarchy.getNodes">
 <code class="descname">getNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy.getNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the list of nodes to start processing</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this has been modified to respect mRigs first to save you having to select the
+top level of hierarchy in the mRig itself. Instead we walk the children as expected</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -976,7 +993,7 @@ such that Left and Right Controllers to switch will have the same index</p>
 <dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.MirrorHierarchy.getMirrorCompiledID">
 <code class="descname">getMirrorCompiledID</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy.getMirrorCompiledID" title="Permalink to this definition">¶</a></dt>
-<dd><p>This return the mirror data in a compiled mannor for the poseSaver
+<dd><p>This return the mirror data in a compiled manor for the poseSaver
 such that mirror data  for a node : Center, ID 10 == Center_10</p>
 </dd></dl>
 

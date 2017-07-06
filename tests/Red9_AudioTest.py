@@ -116,7 +116,7 @@ class Test_BwavHandler(object):
         #print self.audioNode.bwav_timecodeFormatted()
         cmds.currentUnit(time='ntscf')
         assert r9General.getCurrentFPS()==60
-        #print 'ntscf' ,  self.audioNode.bwav_timecodeFormatted()
+        print 'ntscf' ,  self.audioNode.bwav_timecodeFormatted()
         assert self.audioNode.bwav_timecodeFormatted()=='01:26:04:11'
         cmds.currentUnit(time='pal')
         assert r9General.getCurrentFPS()==25
@@ -161,25 +161,43 @@ class Test_timecode_converts(object):
         timecode='00:10:13:22'
         
         a=r9Audio.timecode_to_milliseconds(timecode, smpte=True, framerate=framerate)
-        assert r9Core.floatIsEqual(a, 613733.333333, 0.0001)
+        print a
+        assert r9Core.floatIsEqual(a, 613733, 0.0001)
         
         b=r9Audio.milliseconds_to_frame(a, framerate=framerate)
-        assert r9Core.floatIsEqual(b, 18412.0, 0.0001)
-        
+        print b
+        assert r9Core.floatIsEqual(b, 18412.0 , 0.0001)
+                
         c=r9Audio.frame_to_milliseconds(b, framerate=framerate)
-        assert r9Core.floatIsEqual(c, 613733.333333, 0.0001)
+        print c
+        assert r9Core.floatIsEqual(c, 613733.0, 0.0001)
         
         d=r9Audio.milliseconds_to_Timecode(c, smpte=False, framerate=framerate)
+        print d
         assert d=='00:10:13:733'  # note converted to non-smpte
         
         e=r9Audio.timecode_to_frame(d, smpte=False, framerate=framerate)
-        assert r9Core.floatIsEqual(e, 18411.99, 0.0001)
+        print e
+        assert r9Core.floatIsEqual(e, 18412.0, 0.0001)
         
         f=r9Audio.frame_to_timecode(e, smpte=True, framerate=framerate)
+        print e
         assert f=='00:10:13:22'
         
         assert f==timecode
         
+        # try again with single tests
+        assert r9Audio.timecode_to_frame('06:10:29:29', smpte=True, framerate=framerate) == 666899.0
+        assert r9Audio.frame_to_timecode(666899.0) == '06:10:29:29'
+        
+        assert r9Audio.timecode_to_milliseconds('06:10:29:29') == 22229966
+        assert r9Audio.milliseconds_to_Timecode(22229966) == '06:10:29:29'
+        
+        assert r9Audio.frame_to_milliseconds(666899.0) == 22229966
+        assert r9Audio.milliseconds_to_frame(22229966) == 666899.0
+        
+        assert r9Audio.timecode_to_frame('06:10:29:29', smpte=True, framerate=29.97) == 666232.13   
+             
         
     def test_timecode_formatter(self):
         '''

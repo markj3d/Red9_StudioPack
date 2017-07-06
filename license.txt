@@ -30,3 +30,17 @@
     EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     =============================================================================== 
+
+
+
+
+
+    =============================================================================== 
+
+    Red9 ProPack is released on a commercial license
+    Copyright (c) Red9 Consultancy Limited
+    red9consultancy.com
+
+    All files under the .../Red9/ProPack sub-folder constitute the ProPack files
+
+    =============================================================================== 

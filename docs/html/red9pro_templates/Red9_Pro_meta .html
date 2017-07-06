@@ -397,7 +397,7 @@ over the StudioPack AnimatioUtils call for the pose blending but setup for the m
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig">
-<code class="descname">bake_rig</code><span class="sig-paren">(</span><em>selected=False</em>, <em>runFilter=True</em>, <em>deleteStatics=True</em>, <em>sampleby=1</em>, <em>ignoreInFilter=[]</em>, <em>debugView=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bake_rig</code><span class="sig-paren">(</span><em>selected=False</em>, <em>runFilter=True</em>, <em>deleteStatics=True</em>, <em>sampleby=1</em>, <em>ignoreInFilter=[]</em>, <em>debugView=False</em>, <em>sparseBake=True</em>, <em>timerange=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a generic bake call for the rig controllers - mainly used in conjunction with the Red9 Binder setup but bu no means tied to it. 
 This call will bake all animation down to the rig and remove the Binder system hooks if found. It also manages AnimLayer removal during the bake,
 removing a controller from all animation layers if it can do so and should any animLayer become empty, we delete them.</p>
@@ -412,6 +412,8 @@ removing a controller from all animation layers if it can do so and should any a
 <li><strong>sampleby</strong> &#8211; bake frame step, default=1</li>
 <li><strong>ignoreFilter</strong> &#8211; [] a list of nodes to skip the curve filter post bake if given</li>
 <li><strong>debugView</strong> &#8211; if True we allow the Maya UI to refresh each frame, else we suspend update</li>
+<li><strong>sparseBake</strong> &#8211; turns on the sparseAnimCurveBake flag in the bakeResults call, True by default</li>
+<li><strong>timerange</strong> &#8211; (start, end) optional timerange to bake, by default this uses the standard Red9 timeLineRangeGet func</li>
 </ul>
 </td>
 </tr>
@@ -624,6 +626,14 @@ range of the anim data, if none is passed in then we grab the timeline ranges</t
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
 <p>This is the Red9 Puppets master base class However with a little careful
 wiring any other external rig system can be wired too and utilise these functions.</p>
+<p>Additional intrnal vars worth noting, these are all for clients subclassing or running 
+their own internal rigs over the Pro_MetaRig networks:</p>
+<ul class="simple">
+<li>self.ik_fk_switchattr : the attribute within the rig controllers that switches the rig between fk and ik mode state</li>
+<li>self.ik_switch_val : the value of the above attr when in ik state</li>
+<li>self.fk_switch_val : the value of the above attr when in fk state</li>
+<li>self.exportBase_class : the base export class object that will be created by the addExportTag call</li>
+</ul>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.Skeleton">
 <code class="descname">Skeleton</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.Skeleton" title="Permalink to this definition">¶</a></dt>
@@ -861,6 +871,12 @@ of the pipelines.</p>
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC.isValid">
 <code class="descname">isValid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC.isValid" title="Permalink to this definition">¶</a></dt>
 <dd><p>modify the behaviour as we don&#8217;t want to be stripping SRC EXT nodes that easily</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC.grp_main">
+<code class="descname">grp_main</code><span class="sig-paren">(</span><em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC.grp_main" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the grp main group node if force=True and it doesn&#8217;t already exist create it</p>
 </dd></dl>
 
 </dd></dl>

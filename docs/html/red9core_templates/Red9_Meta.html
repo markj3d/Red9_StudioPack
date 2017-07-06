@@ -2123,7 +2123,7 @@ this allows us to modify the behaviour on a case by case basis for clients</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.timecode_addAttrs">
-<code class="descname">timecode_addAttrs</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.timecode_addAttrs" title="Permalink to this definition">¶</a></dt>
+<code class="descname">timecode_addAttrs</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em>, <em>timerange=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.timecode_addAttrs" title="Permalink to this definition">¶</a></dt>
 <dd><p>: PRO PACK : add the timecode attributes and push the given timecode 
 to the mRigs timecode node</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -2133,6 +2133,7 @@ to the mRigs timecode node</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>tc</strong> &#8211; timecode to set</li>
 <li><strong>propagate</strong> &#8211; do we just set the attrs or push the counter keys</li>
+<li><strong>timerange</strong> &#8211; If propagate then this is an optional timerange over which to set the data</li>
 </ul>
 </td>
 </tr>
@@ -2142,7 +2143,7 @@ to the mRigs timecode node</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.timecode_setTimecode">
-<code class="descname">timecode_setTimecode</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em>, <em>ui=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.timecode_setTimecode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">timecode_setTimecode</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em>, <em>ui=False</em>, <em>timerange=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.timecode_setTimecode" title="Permalink to this definition">¶</a></dt>
 <dd><p>: PRO PACK : wrap over the timecode_addAttrs but exposes the enterTimecode ui</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2152,6 +2153,7 @@ to the mRigs timecode node</p>
 <li><strong>tc</strong> &#8211; timecode to set</li>
 <li><strong>propagate</strong> &#8211; do we just set the attrs or push the counter keys, if the UI is True then this is True by default</li>
 <li><strong>ui</strong> &#8211; do we launch the Timecode UI to enter a specific timecode manually</li>
+<li><strong>timerange</strong> &#8211; If propagate then this is an optional timerange over which to set the data</li>
 </ul>
 </td>
 </tr>

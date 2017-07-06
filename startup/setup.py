@@ -1188,15 +1188,17 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
 #            return
 #    else:
 #        print 'Red9 : no version currently loaded'
-            
+    
+    # StudioPack boot loader
+    # ====================== 
 
-    #Ensure the Plug-in and Icon paths are up
+    # ensure the Plug-in and Icon paths are up
     addPluginPath()
     addIconsPath()
-    #Need to add a Mel Folder to the scripts path
+    # need to add a Mel Folder to the scripts path
     addScriptsPath(os.path.join(red9ModulePath(),'core'))
     
-    #Add the Packages folder
+    # add the Packages folder
     addPythonPackages()
     
     if not cmds.about(batch=True):
@@ -1207,7 +1209,7 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
                 log.debug('Red9 main menu Build Failed!')
                 
         if MayaUIHooks:
-            #Source Maya Hacked Mel files
+            # source Maya Hacked Mel files
             hacked=red9MayaNativePath()
             if hacked and MayaOverloads:
                 addScriptsPath(os.path.join(red9ModulePath(),'startup','maya_native'))
@@ -1223,21 +1225,30 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
 
     log.info('Red9 StudioPack Complete!')
     
-    # Rearrangement of the Boot core systems to better structure the boot sequence
+    # re-arrangement of the Boot core systems to better structure the boot sequence
     
-    # Boot main Red9.core
+    # boot main Red9.core
     cmds.evalDeferred("import Red9.core", lp=True)
 
-    # Boot the Pro_Pack
+    # ProPack boot loader
+    # =====================
     if has_pro_pack():
         cmds.evalDeferred("import Red9.pro_pack", lp=True)  # Unresolved Import
-    # Boot the Red9_Internal systems
+        
+    # Red9_Internal systems
+    # =====================
     if has_internal_systems():
         cmds.evalDeferred("import Red9_Internals", lp=True)  # Unresolved Import
-    # Boot Client Codebases
+        
+    # Client Codebases boot
+    # =====================
     if has_client_modules():
         boot_client_projects()
-        #cmds.evalDeferred('import Red9.startup.setup as r9Setup;r9Setup.boot_client_projects()', lp=True)
+        
+    # finish ProPack dependancies
+    # ===========================
+    
+
            
            
 def reload_Red9(*args):

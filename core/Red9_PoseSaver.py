@@ -1118,14 +1118,39 @@ class PosePointCloud(object):
     PosePointCloud is the technique inside the PoseSaver used to snap the pose into
     relative space. It's been added as a tool in it's own right as it's sometimes
     useful to be able to shift poses in global space.
+    
+    >>> # heres an mRig example, it will also work with any other rigs by just setting up
+    >>> # the filter settings object in the same way for any of the Red9 tools
+    >>> import Red9.core.Red9_PoseSaver as r9Pose
+    >>> import Red9.core.Red9_Meta as r9Meta
+    >>> 
+    >>> # grab our mRig node
+    >>> mrig=r9Meta.getMetaRigs()[0]
+    >>> 
+    >>> ppc=r9Pose.PosePointCloud(nodes=mrig.ctrl_main)
+    >>> ppc.settings.metaRig=True
+    >>> ppc.prioritySnapOnly=True  # for rigs you can turn this on so that ONLY those nodes in the filterPriority list get built and used
+    >>> 
+    >>> # build the cloud system
+    >>> ppc.buildOffsetCloud()   # you can also pass a root point in, used as the base pivot ( rootReference='pSphere1')
+    >>> 
+    >>> # to apply the cloud, snapping the rig into the clouds pose
+    >>> ppc.applyPosePointCloud()
+    >>> 
+    >>> # to sync the cloud to the rigs current frame, allowing you to update the clouds internal pose
+    >>> ppc.updatePosePointCloud()
+    >>> 
+    >>> # delete the ppc node
+    >>> ppc.delete()
     '''
-    def __init__(self, nodes, filterSettings=None, meshes=[], *args, **kws):
+    def __init__(self, nodes, filterSettings=None, meshes=[], prioritySnapOnly=False, *args, **kws):
         '''
         :param nodes: feed the nodes to process in as a list, if a filter is given
                       then these are the rootNodes for it
         :param filterSettings: pass in a filterSettings object to filter the given hierarchy
         :param meshes: this is really for reference, rather than make a locator, pass in a reference geo
                      which is then shapeSwapped for the PPC root node giving great reference!
+        :param prioritySnapOnly: ONLY make ppc points for the filterPriority nodes
         '''
            
         self.meshes = meshes
@@ -1138,7 +1163,7 @@ class PosePointCloud(object):
         self.posePointCloudNodes = []   # generated ppc nodes
         self.posePointRoot = None       # generated rootnode of the ppc
         self.settings = None
-        self.prioritySnapOnly=False     # ONLY make ppc points for the filterPriority nodes
+        self.prioritySnapOnly=prioritySnapOnly     # ONLY make ppc points for the filterPriority nodes
         
         self.rootReference = None   # root node used as the main pivot for the cloud
         self.isVisible = True       # Do we build the visual reference setup or not?
