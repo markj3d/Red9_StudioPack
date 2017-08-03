@@ -1949,10 +1949,10 @@ class AnimationUI(object):
                 cmds.scrollLayout(self.uiglPoseScroll, edit=True, sp='up')
           
         # Finally Bind the Popup-menu
-        self.__uiCB_PosePopup()
+        cmds.evalDeferred(self.__uiCB_PosePopup)
 
           
-    def __uiCB_PosePopup(self):
+    def __uiCB_PosePopup(self, *args):
         '''
         RMB popup menu for the Pose functions
         '''

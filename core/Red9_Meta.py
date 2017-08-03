@@ -3236,18 +3236,26 @@ class MetaRig(MetaClass):
         '''
         mNodes=[]
         mNodes.append(self)
-        mNodes.extend(self.getChildMetaNodes(walk=True))
-        mNodes.reverse()
         
+        childnodes=self.getChildMetaNodes(walk=True)
+        if childnodes:
+            mNodes.extend(childnodes)
+            mNodes.reverse()
+            
         for a in mNodes:
-            print a
-        
-        for metaChild in mNodes:
-            for child in metaChild.getChildren(walk=False):
-                metaChild.disconnectChild(child)
-            print 'deleting mNode: ', metaChild
-            delete_mNode(metaChild)
-        
+            print 'nodes to delete : ', a
+            
+        for mNode in mNodes:
+            try:
+                for child in mNode.getChildren(walk=False):
+                    mNode.disconnectChild(child)
+                    #print 'disconnecting child : ', child
+                #print 'deleting mNode: ', mNode
+                delete_mNode(mNode)
+            except:
+                #print 'deleting mNode failed - may have been removed: ', mNode
+                pass
+
     @property
     def ctrl_main(self):
         '''
