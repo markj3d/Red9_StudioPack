@@ -608,6 +608,7 @@ class SceneRestoreContext(object):
         self.dataStore['startTime'] = cmds.playbackOptions(q=True, ast=True)
         self.dataStore['endTime'] = cmds.playbackOptions(q=True, aet=True)
         self.dataStore['playSpeed'] = cmds.playbackOptions(query=True, playbackSpeed=True)
+        self.dataStore['playLoop'] = cmds.playbackOptions(query=True, loop=True)
         
         # unit management
         self.dataStore['timeUnit'] = cmds.currentUnit(q=True, fullName=True, time=True)
@@ -660,6 +661,7 @@ class SceneRestoreContext(object):
         cmds.playbackOptions(ast=self.dataStore['startTime'])
         cmds.playbackOptions(aet=self.dataStore['endTime'])
         cmds.playbackOptions(ps=self.dataStore['playSpeed'])
+        cmds.playbackOptions(loop=self.dataStore['playLoop'])
         
         #unit management
         cmds.currentUnit(time=self.dataStore['timeUnit'])
