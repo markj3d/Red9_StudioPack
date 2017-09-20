@@ -78,10 +78,13 @@ class DataMap(object):
         self.filepath=''    # path to load / save
         self.__filepath = ''
         self.filename=''  # short name of the pose
+        
         self.dataformat='config'
         self._dataformat_resolved=None
+        
         self.mayaUpAxis = r9Setup.mayaUpAxis()
         self.thumbnailRes=[128,128]
+        self.unitconversion=True  # convert linear units to correct for sceneUnit differences
         
         self.__metaPose=False
         self.metaRig=None  # filled by the code as we process
@@ -412,23 +415,45 @@ class DataMap(object):
     @r9General.Timer
     def _applyData_attrs(self, *args, **kws):
         '''
-        Load Example for attrs : 
+        Load call for dealing with attrs : 
         use self.matchedPairs for the process list of pre-matched 
         tuples of (poseDict[key], node in scene)
         '''
+        _attrs_linear=['translateX','translateY','translateZ']
+        
+        # setup unit conversions for linear attrs
+        _unitsfile=None
+        _conversion_needed=False
+        _sceneunits=cmds.currentUnit(q=True, fullName=True, linear=True) 
+        try:
+            _unitsfile=self.infoDict['sceneUnits']
+            if not _unitsfile == _sceneunits:
+                _conversion_needed=True
+        except:
+            log.debug("This PoseFile doesn't not support scene unit conversion")
+      
         for key, dest in self.matchedPairs:
             log.debug('Applying Key Block : %s' % key)
             try:
                 if not 'attrs' in self.poseDict[key]:
                     continue
                 for attr, val in self.poseDict[key]['attrs'].items():
+                    if attr in self.skipAttrs:
+                        log.debug('Skipping attr as requested : %s' % attr)
+                        continue
                     try:
                         val = eval(val)
                     except:
                         pass
-                    log.debug('node : %s : attr : %s : val %s' % (dest, attr, val))
                     try:
-                        cmds.setAttr('%s.%s' % (dest, attr), val)
+                        # only unit convert linear attrs if the file supports it and it's needed!
+                        if _conversion_needed and self.unitconversion and attr in _attrs_linear:
+                            _converted=r9Core.convertUnits_uiToInternal(r9Core.convertUnits_internalToUI(val, _unitsfile),_sceneunits)
+                            log.debug('node : %s : attr : %s : UnitConverted : val %s == %s' % (dest, attr, val, _converted))
+                            cmds.setAttr('%s.%s' % (dest, attr), _converted)
+                        else:
+                            log.debug('node : %s : attr : %s : val %s' % (dest, attr, val))
+                            cmds.setAttr('%s.%s' % (dest, attr), val)
                     except StandardError, err:
                         log.debug(err)
             except:
@@ -891,9 +916,16 @@ class PoseData(DataMap):
                     log.debug('Attr mismatch on destination : %s.%s' % (dest, attr))
                 
     @r9General.Timer
-    def _applyData(self, percent=None):
+    def _applyData_attrs_complex(self, percent=None):
         '''
         :param percent: percent of the pose to load
+        
+        This is only now used IF we're dealing with PoseBlending or
+        manipulating the data via the mirrorIndex, else we divert to 
+        running the default _applyData_attrs from the DataMap!!
+        
+        Limitations are that the DataMap call deals with unitConversion 
+        for linear attrs, this doesn't for speed
         
         '''
         mix_percent=False  # gets over float values of zero from failing
@@ -943,8 +975,22 @@ class PoseData(DataMap):
                         log.debug(err)
             except:
                 log.debug('Pose Object Key : %s : has no Attr block data' % key)
-                  
-
+                
+    @r9General.Timer
+    def _applyData(self, percent=None):
+        '''
+        apply the attrs for the pose. 
+        
+        .. note: 
+            when dealing with pose blending or mirrorInverse handling we BY-PASS the 
+            sceneUnit conversions done in the main attr handler. This is for speed as generally
+            complex adjustments such as blending in poses wouldn't be done between scenes in different Maya sceneUnits.
+        '''
+        if self.mirrorInverse or percent:
+            self._applyData_attrs_complex(percent)
+        else:
+            self._applyData_attrs()
+        
     #Main Calls ----------------------------------------
   
     #@r9General.Timer

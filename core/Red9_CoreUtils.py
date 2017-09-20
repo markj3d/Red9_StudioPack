@@ -39,7 +39,9 @@ log.setLevel(logging.INFO)
 LANGUAGE_MAP = r9Setup.LANGUAGE_MAP
 
 
-# Generic Functions --------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+# Generic Functions -----
+# -------------------------------------------------------------------------------------
 
 def nodeNameStrip(node):
     '''
@@ -298,7 +300,9 @@ def nodes_in_hierarchy(rootNode, nodes=[], nodeType=None):
     return found   
         
      
-# Filter Node Setups -------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+# Filter Node Setups ------
+# -------------------------------------------------------------------------------------
 
 class FilterNode_Settings(object):
     '''
@@ -744,8 +748,9 @@ class FilterNode(object):
                         self.settings.rigData['snapPriority']=mrig.settings.rigData['snapPriority']
                         #self.settings.printSettings()
                         #log.info('==============================================================')
-                    except:
+                    except StandardError,err:
                         log.info('mRig has FilterSettings data but is NOT a Pro_MetaRig - settings aborted')
+                        log.info(err)
                 else:
                     log.info('mRig : No specific filter data bound to this rig')
             return mrig
@@ -1532,8 +1537,9 @@ def getBlendTargetIndex(blendNode, targetName):
     else:
         return 0
     
-
-# Node Matching ----------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+# Node Matching ------
+# -------------------------------------------------------------------------------------
             
 def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
     '''
@@ -2556,8 +2562,9 @@ class TimeOffset(object):
                     mNode.timeOffset(offset, timerange=timerange, ripple=ripple)
             log.info('%i : MetaData were offset' % len(mNodes))
  
-
-# Math functions ----------------------------------------------------------------------
+# -------------------------------------------------------------------------------------
+# Math functions ----
+# -------------------------------------------------------------------------------------
 
 def floatIsEqual(a, b, tolerance=0.01, allowGimbal=True):
     '''
@@ -2657,6 +2664,46 @@ def distanceBetween(nodeA, nodeB):
     x2, y2, z2, _,_,_ = cmds.xform(nodeB,q=True,ws=True,piv=True)
     return math.sqrt(math.pow((x1-x2),2) + math.pow((y1-y2),2) + math.pow((z1-z2),2))
 
+def convertUnits_internalToUI(value, unit):
+    '''
+    convert units to Maya's internal 'cm' unit
+    for the API to use when loading linear data
+    '''  
+    if unit=='centimeter':
+        return value
+    elif unit=='meter':
+        return value * 100.0000000
+    elif unit=='inch':
+        return value * 2.540000000
+    elif unit=='foot':
+        return value * 30.480000000     
+    elif unit=='yard':
+        return value * 91.440000000      
+    elif unit=='millimeter':
+        return value * 0.100000000
+    elif unit=='km':
+        return value * 100000.000000000 
+     
+def convertUnits_uiToInternal(value, unit):
+    '''
+    convert units from Maya's internal / base 'cm' 
+    to a given unit, multiplying up to suit
+    '''  
+    if unit=='centimeter':
+        return value
+    elif unit=='meter':
+        return value * 0.010000000
+    elif unit=='inch':
+        return value * 0.393700787
+    elif unit=='foot':
+        return value * 0.032808399
+    elif unit=='yard':
+        return value * 0.010936133      
+    elif unit=='millimeter':
+        return value * 10.000000000
+    elif unit=='km':
+        return value * 0.000010000  
+        
 class MatrixOffset(object):
     
     '''
