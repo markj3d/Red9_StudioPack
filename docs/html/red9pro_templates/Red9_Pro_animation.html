@@ -177,6 +177,40 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.animation.playback_performance">
+<code class="descname">playback_performance</code><span class="sig-paren">(</span><em>iteration=3</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.playback_performance" title="Permalink to this definition">¶</a></dt>
+<dd><p>a simple performance checker to test actual framerate rather than 
+using the frameRate HUD with isn&#8217;t accurate</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.animation.parallel_eval_freeze">
+<code class="descname">parallel_eval_freeze</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>hierarchy=True</em>, <em>state=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.parallel_eval_freeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>mute the given nodes[] hierarchy from processing in the evalGraph during
+parallel evaluation &amp; playback</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; root of the hierarchies to mute</li>
+<li><strong>hierarchy</strong> &#8211; process full hierarchies of the given nodes</li>
+<li><strong>state</strong> &#8211; bool, state of the eval</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.animation.parallel_eval_unfreeze_all">
+<code class="descname">parallel_eval_unfreeze_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.parallel_eval_unfreeze_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>unfreeze all nodes in the scene so everything processes during
+parallel evaluation &amp; playback</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.animation.hik_source_code">
 <code class="descname">hik_source_code</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.hik_source_code" title="Permalink to this definition">¶</a></dt>
 <dd><p>ensure that HIK is loaded and the core code sourced</p>
@@ -283,7 +317,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000132201C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001304D588&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -455,6 +489,13 @@ r9Anim offset/start and end ranges</p>
 </tr>
 </tbody>
 </table>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># to simply read the data and get access to it prior to any processing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span> <span class="o">=</span> <span class="n">AnimMap</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span><span class="o">.</span><span class="n">r9anim</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">_readPose</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">amap</span><span class="o">.</span><span class="n">infoDict</span><span class="p">[</span><span class="s1">&#39;exporter&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -462,7 +503,8 @@ r9Anim offset/start and end ranges</p>
 <code class="descname">extractData_Audio</code><span class="sig-paren">(</span><em>manageAudio='byAll'</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.extractData_Audio" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the key IDs for the AudioNodes found in the r9Anim file, this
 passes through the manageExport code to match loop timings with the 
-r9Anim offset/start and end ranges</p>
+r9Anim offset/start and end ranges. Inorder for the audio to get into the r9Anim
+it MUST be connected to an mRig via the AudioGrp node, all managed in the Exporter</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -475,6 +517,13 @@ r9Anim offset/start and end ranges</p>
 </tr>
 </tbody>
 </table>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># to simply read the data and get access to it prior to any processing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span> <span class="o">=</span> <span class="n">AnimMap</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span><span class="o">.</span><span class="n">r9anim</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">_readPose</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">amap</span><span class="o">.</span><span class="n">infoDict</span><span class="p">[</span><span class="s1">&#39;audioGrp&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -485,7 +534,7 @@ r9Anim offset/start and end ranges</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000132A5DC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001323E1C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1012,7 +1061,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013180A48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001304D6C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1036,7 +1085,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012F58FC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

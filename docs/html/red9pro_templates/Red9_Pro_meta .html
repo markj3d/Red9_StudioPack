@@ -156,16 +156,16 @@ during the fk_to_fk_match call</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>mSystem</strong> &#8211; mSystem to wire the matchpnt too</li>
-<li><strong>ctrl_wire</strong> &#8211; attr wire connecting the controller to the mSystem, OR the controller object itself - wired to a MetaRigSubSystem</li>
-<li><strong>fk_wire</strong> &#8211; attr wire connecting the fk_jnt to the mSystem, OR object to use directly</li>
-<li><strong>matchid</strong> &#8211; denotes the matchpnts base wire name - &#8220;end&#8221;, &#8220;pole&#8221;</li>
+<li><strong>ctrl_wire</strong> &#8211; mSystem.attr wire connecting the controller to the mSystem, OR the controller object itself - wired to a MetaRigSubSystem</li>
+<li><strong>fk_wire</strong> &#8211; mSystem.attr wire connecting the fk_jnt to the mSystem, OR object to use directly</li>
+<li><strong>matchid</strong> &#8211; denotes the matchpnts base wire name - eg : &#8220;end&#8221;, &#8220;pole&#8221; creating attr wire &#8216;mSystem.SupportNode.IK_matchpnt_pole&#8217;</li>
 <li><strong>prefix</strong> &#8211; usually just the side id for the system &#8216;L&#8217;,&#8217;R&#8217;,&#8217;C&#8217;, if not given we ID this from the system mirrorSide</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>r9pmeta.add_fkik_matchpnt(self.mRig.Tail, &#8216;C_mid_spine_ik_Ctrl_1&#8217;,&#8217;C_spine_fk_Ctrl_3&#8217;, &#8216;mid&#8217;)</p>
+<p>r9pmeta.add_fkik_matchpnt(mSystem, &#8216;CTRL_Wrist&#8217;, &#8216;CTRL_FK_End&#8217;, &#8216;end&#8217;, &#8216;L&#8217;)</p>
 </dd></dl>
 
 <dl class="function">
@@ -250,6 +250,27 @@ from now on so that this data can be bound directly to the
 rig so we don&#8217;t have to use the preset config&#8217;s all the time</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.rename_attrPrefix">
+<code class="descname">rename_attrPrefix</code><span class="sig-paren">(</span><em>currentPrefix</em>, <em>newPrefix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.rename_attrPrefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>rename a current mRigs.CTRL_Prefix wires to bring them in line with this
+subclass. Case in point, we&#8217;ve converted a current mClass to a new class but the
+new one has a different self.CTRL_Prefix than the last, resulting in getChildren failing,
+this will help sort that issue out</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>currentPrefix</strong> &#8211; the current prefix we&#8217;re wanting to replace</li>
+<li><strong>newPrefix</strong> &#8211; default is None which will use this instances self.CTRL_Prefix</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.isBound">
 <code class="descname">isBound</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.isBound" title="Permalink to this definition">¶</a></dt>
@@ -267,7 +288,7 @@ the linked geo</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>state</strong> &#8211; switch state</li>
-<li><strong>query</strong> &#8211; query the current state of the renderMeshes visibility</li>
+<li><strong>query</strong> &#8211; query the current state of the renderMeshes visibility, not required in toggle or query mode</li>
 <li><strong>toggle</strong> &#8211; toggle the state of the visibility, overwriting any state passed in</li>
 </ul>
 </td>
@@ -618,6 +639,32 @@ range of the anim data, if none is passed in then we grab the timeline ranges</t
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_get_nodes">
+<code class="descname">parallel_eval_get_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_get_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>get nodes within the rig that we know to be expensive in computation
+so that we can mute these in parallel eval as required for playback speed</p>
+<p>this is used primarily when switching systems visibility off such as toggling
+the facial rig vis state. In 2016 when a hierarchy is not visibility it IS STILL
+being computed by the evalmanager. The parallel_eval_mute call is designed to
+freeze the returned nodes of this proc, thus returning that framerate back to the user.</p>
+<p>default is to just deal with the renderMeshes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_mute">
+<code class="descname">parallel_eval_mute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_mute" title="Permalink to this definition">¶</a></dt>
+<dd><p>freeze the entire facial system, to be used when the visibilty is toggled and you need
+to block all the nodes from evaluating in parallel. This is optimized in 2018 so not
+required</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_reset">
+<code class="descname">parallel_eval_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset the parallel eval state for all nodes in this rig</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -706,7 +753,7 @@ and if we have a facial rig wired, turn ON it&#8217;s renderMesh geo</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>state</strong> &#8211; switch the state of the renderMeshs</li>
+<li><strong>state</strong> &#8211; switch the state of the renderMeshs, not required in toggle or query mode</li>
 <li><strong>query</strong> &#8211; query the current state</li>
 <li><strong>toggle</strong> &#8211; toggle the state of the visibility, overwriting any state passed in</li>
 </ul>
@@ -718,7 +765,7 @@ and if we have a facial rig wired, turn ON it&#8217;s renderMesh geo</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_facial">
-<code class="descname">visibility_facial</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_facial" title="Permalink to this definition">¶</a></dt>
+<code class="descname">visibility_facial</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em>, <em>evalmanaged=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_facial" title="Permalink to this definition">¶</a></dt>
 <dd><p>if the FacialCore attr is wired to a facial rig then this will toggle
 the rigs renderMeshes_Head and the FacialCore&#8217;s renderMeshes, effectively
 switching off the body&#8217;s head geo and turning on the facialCores head.</p>
@@ -727,9 +774,11 @@ switching off the body&#8217;s head geo and turning on the facialCores head.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>state</strong> &#8211; switch state, True favours the FacialCore&#8217;s geo to be visible</li>
+<li><strong>state</strong> &#8211; switch state, True favours the FacialCore&#8217;s geo to be visible, not required in toggle or query mode</li>
 <li><strong>query</strong> &#8211; query the current state of the facial visibility</li>
 <li><strong>toggle</strong> &#8211; toggle the state of the visibility, overwriting any state passed in</li>
+<li><strong>evalmanaged</strong> &#8211; if True we also manage the frozen state of all key nodes in the rig to speed up 
+parallel eval on the hidden rig system</li>
 </ul>
 </td>
 </tr>
@@ -853,6 +902,25 @@ mrig.L_ArmSystem</li>
 </tbody>
 </table>
 </dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_fingers_selected">
+<code class="descname">get_fingers_selected</code><span class="sig-paren">(</span><em>nodes=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_fingers_selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple wrapper to return the finger markers from selected ctrls
+so we know what fingers we have controllers selected from</p>
+<p>the FingerSystem mNode directly not form the upper MetaRig node</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_fingers_chains_selected">
+<code class="descname">get_fingers_chains_selected</code><span class="sig-paren">(</span><em>nodes=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_fingers_chains_selected" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the full finger chains from the selected finger controllers</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.zero_selected_fingers">
+<code class="descname">zero_selected_fingers</code><span class="sig-paren">(</span><em>nodes=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.zero_selected_fingers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -1094,6 +1162,17 @@ such that {key:(ctrl.attr, val)}</td>
 <p>load a visemeMap back in from file</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.parallel_eval_get_nodes">
+<code class="descname">parallel_eval_get_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.parallel_eval_get_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>get nodes within the rig that we know to be expensive in computation
+so that we can mute these in parallel eval as required for playback speed</p>
+<p>this is used primarily when switching systems visibility off such as toggling
+the facial rig vis state. In 2016 when a hierarchy is not visibility it IS STILL
+being computed by the evalmanager, this way we freeze the returned nodes to
+return that framerate back to the user.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -1187,18 +1266,21 @@ wire controllers to it. These will get merged into the main rig when we Publish<
 <dt id="Red9.pro_pack.core.metadata_pro.ProMetaFacialUI">
 <em class="property">class </em><code class="descname">ProMetaFacialUI</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ProMetaFacialUI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI</span></code></a></p>
+<p>LEGACY TO BE REMOVED</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.Red9_MetaRig">
 <em class="property">class </em><code class="descname">Red9_MetaRig</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Red9_MetaRig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig</span></code></a></p>
+<p>LEGACY TO BE REMOVED</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.SRC_RigExtension">
 <em class="property">class </em><code class="descname">SRC_RigExtension</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RigExtension" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC</span></code></a></p>
+<p>LEGACY TO BE REMOVED</p>
 </dd></dl>
 
 <dl class="function">
@@ -1607,6 +1689,18 @@ be over-loaded at a client level to support any bespoke project behaviour</p>
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_fbx_reset">
 <code class="descname">path_fbx_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_fbx_reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>reset any specific fbx path thats been set by the property</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_base">
+<code class="descname">path_base</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_base" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the catenated export path for main export handler</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_base_reset">
+<code class="descname">path_base_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.path_base_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset any specific export path thats been set by the property</p>
 </dd></dl>
 
 <dl class="attribute">

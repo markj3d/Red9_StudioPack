@@ -148,7 +148,14 @@ textFields for the UI (ensuring lists are converted)</p>
 <dl class="function">
 <dt id="Red9.core.Red9_General.formatPath">
 <code class="descname">formatPath</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.formatPath" title="Permalink to this definition">¶</a></dt>
-<dd><p>take a path and format it to forward slashes with catches for the exceptions</p>
+<dd><p>take a path and format it to forward slashes with catches for the exceptions so that paths
+are always Pythonized not OS based</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.formatPath_join">
+<code class="descname">formatPath_join</code><span class="sig-paren">(</span><em>path</em>, <em>*paths</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.formatPath_join" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper over os.path.join and formatPath so it&#8217;s always returned as a valid Python Path</p>
 </dd></dl>
 
 <dl class="function">

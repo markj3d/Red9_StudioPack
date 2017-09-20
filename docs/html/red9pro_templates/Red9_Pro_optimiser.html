@@ -604,6 +604,24 @@ tweak the results into a format that contains just the base data, or all the com
 </dd></dl>
 
 <dl class="class">
+<dt id="Red9.pro_pack.core.optimiser.SceneStripper">
+<em class="property">class </em><code class="descname">SceneStripper</code><span class="sig-paren">(</span><em>src_node=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.SceneStripper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
+<p>Base Scene Clean to strip back any bloated history, usually used as a 
+compound in the HealthManager for quick access to these key optimisations</p>
+<p>Removes:</p>
+<ul class="simple">
+<li>Unknown Plugin Dependencies</li>
+<li>ALL namespaces</li>
+<li>ALL audio files</li>
+<li>unused display layers</li>
+<li>invalid MetaData</li>
+<li>invalid references</li>
+<li>turtle nodes</li>
+</ul>
+</dd></dl>
+
+<dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.All_Available_Tests">
 <em class="property">class </em><code class="descname">All_Available_Tests</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.All_Available_Tests" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>

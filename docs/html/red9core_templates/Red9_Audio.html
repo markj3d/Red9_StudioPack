@@ -382,7 +382,7 @@ same node</dd>
 <dt id="Red9.core.Red9_Audio.AudioHandler.combineAudio">
 <code class="descname">combineAudio</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.combineAudio" title="Permalink to this definition">¶</a></dt>
 <dd><p>Combine audio tracks into a single wav file. This by-passes
-the issues with Maya not playblasting multip audio tracks.</p>
+the issues with Maya not playblasting multipe audio tracks.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -458,6 +458,12 @@ in dBFS (relative to the highest possible amplitude value).</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="Red9.core.Red9_Audio.AudioNode.duration">
+<code class="descname">duration</code><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the duration of the wav from the file directly</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="Red9.core.Red9_Audio.AudioNode.startFrame">
 <code class="descname">startFrame</code><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.startFrame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Maya start frame of the sound node</p>
@@ -486,6 +492,12 @@ NOT the Maya audioNode length as it&#8217;s invalid under batch mode!</p>
 <dt id="Red9.core.Red9_Audio.AudioNode.offset">
 <code class="descname">offset</code><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.offset" title="Permalink to this definition">¶</a></dt>
 <dd><p>simply get the offset</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioNode.inspect">
+<code class="descname">inspect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.inspect" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple warp over the inspect function to bind it to this audioNode instance</p>
 </dd></dl>
 
 <dl class="method">

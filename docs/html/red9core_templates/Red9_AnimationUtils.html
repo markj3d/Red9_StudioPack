@@ -174,7 +174,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 </table>
 <dl class="data">
 <dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS">
-<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C01D048&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C01D048&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C01D048&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C01D048&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C01D048&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C01D048&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C344F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C344F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C344F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C344F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C344F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C344F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C344F28&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.</p>
@@ -259,7 +259,8 @@ ie: pointConstraint.target.targetWeight</p>
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.nodesDriven">
 <code class="descname">nodesDriven</code><span class="sig-paren">(</span><em>nodes</em>, <em>allowReferenced=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.nodesDriven" title="Permalink to this definition">¶</a></dt>
-<dd><p>return a list of those nodes that are actively constrained or connected to a pairBlend</p>
+<dd><p>return a list of those nodes that are actively constrained or connected to a pairBlend
+currently used to pre-validate nodes in the mirror class prior to running the actual mirror call</p>
 <dl class="docutils">
 <dt>param allowReferenced: if True we allow all constraints to be returned, if False any constraints </dt>
 <dd>that are referenced are skipped. This by-passes internal rig constraints and only returns
