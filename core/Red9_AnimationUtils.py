@@ -206,6 +206,7 @@ def getSettableChannels(node=None, incStatics=True):
 def nodesDriven(nodes, allowReferenced=False):
     '''
     return a list of those nodes that are actively constrained or connected to a pairBlend
+    currently used to pre-validate nodes in the mirror class prior to running the actual mirror call
     
     param allowReferenced: if True we allow all constraints to be returned, if False any constraints 
         that are referenced are skipped. This by-passes internal rig constraints and only returns
@@ -4689,7 +4690,7 @@ class MirrorHierarchy(object):
                             break
    
                 progressBar.updateProgress()
-
+        self.printMirrorDict()
                    
 class MirrorSetup(object):
 
@@ -4765,7 +4766,7 @@ class MirrorSetup(object):
         cmds.setParent('..')
         cmds.separator(h=15, style='in')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)])
-        cmds.checkBox('mirrorSaveLoadHierarchy', l=LANGUAGE_MAP._Generic_.hierarchy, v=False)
+        cmds.checkBox('mirrorSaveLoadHierarchy', l=LANGUAGE_MAP._Generic_.hierarchy, v=True)
         cmds.checkBox('mirrorClearCurrent', l=LANGUAGE_MAP._Mirror_Setup_.clear, v=True)
         cmds.setParent('..')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)])
@@ -4791,7 +4792,8 @@ class MirrorSetup(object):
         nodes=cmds.ls(sl=True,l=True)
         if nodes:
             try:
-                return r9Meta.getConnectedMetaSystemRoot(nodes[0],mInstances=r9Meta.MetaRig).masterNode
+                return [r9Meta.getConnectedMetaSystemRoot(nodes[0],mInstances=r9Meta.MetaRig).ctrl_main]
+                #return r9Meta.getConnectedMetaSystemRoot(nodes[0],mInstances=r9Meta.MetaRig).masterNode
             except:
                 return nodes
 
