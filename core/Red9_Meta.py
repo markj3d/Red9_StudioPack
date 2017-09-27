@@ -3491,7 +3491,7 @@ class MetaRig(MetaClass):
                     log.debug('Adding boundData to node : %s:%s' %(key,value))
                     MetaClass(node).addAttr(key, value=value)
                         
-    def addMetaSubSystem(self, systemType, side, attr=None, nodeName=None, mClass='MetaRigSubSystem', buildflags={}):
+    def addMetaSubSystem(self, systemType, side, attr=None, nodeName=None, mClass='MetaRigSubSystem', buildflags={}, **kws):
         '''
         Basic design of a MetaRig is that you have sub-systems hanging off an mRig
         node, managing all controllers and data for a particular system, such as an
@@ -3510,7 +3510,7 @@ class MetaRig(MetaClass):
             attr='%s_%s_System' % (side[0],systemType)
         if not nodeName:
             nodeName=attr
-        subSystem=self.addChildMetaNode(mClass, attr=attr, nodeName=nodeName)
+        subSystem=self.addChildMetaNode(mClass, attr=attr, nodeName=nodeName, **kws)
         
         #set the attrs on the newly created subSystem MetaNode
         subSystem.systemType=systemType
