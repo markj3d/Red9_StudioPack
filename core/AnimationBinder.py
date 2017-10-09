@@ -258,13 +258,22 @@ class BindNodeBase(object):
     #               raise StandardError('ParentConstraint Bind could not be made')
 
         if self.settings.bind_trans:
+
+            # Get Skip attrs
+            skipAttrs = self.get_skip_attrs(self.destinationNode, attrType='translate')
+
             try:
-                pm.pointConstraint(self.BindNode['Main'], self.destinationNode, mo=maintainOffsets)
+                pm.pointConstraint(self.BindNode['Main'], self.destinationNode, mo=maintainOffsets, skip=skipAttrs)
             except:
                 pass
+
         if self.settings.bind_rots:
+
+            # Get Skip attrs
+            skipAttrs = self.get_skip_attrs(self.destinationNode, attrType='rotate')
+
             try:
-                con = pm.orientConstraint(self.BindNode['Main'], self.destinationNode, mo=maintainOffsets)
+                con = pm.orientConstraint(self.BindNode['Main'], self.destinationNode, mo=maintainOffsets, skip=skipAttrs)
                 con.interpType.set(2)
             except:
                 pass
@@ -272,6 +281,36 @@ class BindNodeBase(object):
         #Add the BindMarkers so that we can ID these nodes and connections later
         self.add_bind_markers(self.destinationNode, self.BindNode['Root'])
 
+    def get_skip_attrs(self, node, attrType):
+        '''
+        Find any locked attributes and return as a tuple that can be passed in to constraint commands.
+
+        :return: Tuple of attributes to skip processing.
+        '''
+
+        skipAttrs = None
+        node = pm.PyNode(node)
+
+        if attrType == 'translate':
+            attrs = {'x': node.tx, 'y': node.ty, 'z': node.tz}
+
+        elif attrType == 'rotate':
+            attrs = {'x': node.rx, 'y': node.ry, 'z': node.rz}
+
+        else:
+            log.warning('Invalid attribute type!')
+
+            return skipAttrs
+
+        skipAttrs = []
+
+        for key, val in attrs.iteritems():
+            if val.isFreeToChange() == pm.Attribute.FreeToChangeState.notFreeToChange:
+                skipAttrs.append(key)
+
+        log.debug('Skipping attrs: {skipAttrs}'.format(skipAttrs=skipAttrs))
+
+        return tuple(skipAttrs)
 
     def add_binder_node(self):
         '''
