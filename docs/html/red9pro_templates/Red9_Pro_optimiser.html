@@ -601,6 +601,17 @@ tweak the results into a format that contains just the base data, or all the com
 </tr>
 </tbody>
 </table>
+<p>checks for:</p>
+<ul class="simple">
+<li>invalid references</li>
+<li>unused display layers</li>
+<li>constraint interpTypes (expects 2 = average)</li>
+<li>removes ALL namespaces</li>
+<li>invalid MetaData</li>
+<li>SRC rig controllers have keys</li>
+<li>SRC skeleton hasKeys</li>
+<li>SRC skeleton rotate tolerances</li>
+</ul>
 </dd></dl>
 
 <dl class="class">
@@ -611,7 +622,7 @@ tweak the results into a format that contains just the base data, or all the com
 compound in the HealthManager for quick access to these key optimisations</p>
 <p>Removes:</p>
 <ul class="simple">
-<li>Unknown Plugin Dependencies</li>
+<li>Unknown Plug-in Dependencies</li>
 <li>ALL namespaces</li>
 <li>ALL audio files</li>
 <li>unused display layers</li>
@@ -954,14 +965,27 @@ Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),...]</
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_characterset_test">
-<code class="descname">mRigs_characterset_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_characterset_test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mRigs_characterset_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=[]</em>, <em>emptyset=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_characterset_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>check to see if all the mRig controllers attributes that are exposed are wired to a valid characterSet</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emptyset</strong> &#8211; if given this is the name of any new chSet created for a rig, else we default to &#8216;character&#8217;</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_characterset_fix">
 <code class="descname">mRigs_characterset_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_characterset_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>fix character set membership for the failed mRig node attrs</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this now looks at each mRigs characterSet, if it already has membership to a characterSet
+then all fails will be added to that chSet.</p>
+</div>
 </dd></dl>
 
 <dl class="function">

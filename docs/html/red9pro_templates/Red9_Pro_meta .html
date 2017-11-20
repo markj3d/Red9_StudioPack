@@ -129,7 +129,7 @@ features of the codebase without having to manually build a structured network</
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; nodes to wire as controllers to the MetaRig</li>
 <li><strong>name</strong> &#8211; name of the MetaRig node generated if no mRig was passed in.</li>
-<li><strong>mRig</strong> &#8211; optional MetaRig instance to add the controls too, 
+<li><strong>mRig</strong> &#8211; optional MetaRig instance to add the controls too,
 if blank then we generate a new instance and return that</li>
 </ul>
 </td>
@@ -175,6 +175,12 @@ during the fk_to_fk_match call</p>
 <p>This is exposed for Clients wanting to patch NON Red9 Puppet based systems
 but requires each system to have mSystem.SupportNode.GRP_IK_chain, GRP_FK_chain as
 wires to denote the group directly above the Ik and Fk chains in the system.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">to run correctly each chain must have the same hierarchy order else the fk 
+match will be out of sync. Ideally this is to be run as part of a Red9 Patch 
+system and requires a little baby sitting!</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -379,38 +385,14 @@ BUT an mRig should be able to have 1 character and 1 facial tag at the same time
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.loadAnimation_postload_call">
-<code class="descname">loadAnimation_postload_call</code><span class="sig-paren">(</span><em>feedback</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.loadAnimation_postload_call" title="Permalink to this definition">¶</a></dt>
-<dd><p>Overloaded call that gets run after the mRig.loadAnimation func so we can
-deal and expand with additional functionality without padding out the main
-AnimMap filehandlers. This is responsible for dealing with the re-generation 
-and persistence of audio nodes and export loops stored in the r9Anim gathered info blocks</p>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.trax_makeclip">
+<code class="descname">trax_makeclip</code><span class="sig-paren">(</span><em>clipname=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.trax_makeclip" title="Permalink to this definition">¶</a></dt>
+<dd><p>make a TraxEditor clip from the current anim data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>feedback</strong> &#8211; the feedback data from the loadAnimations call</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.poseLoad_blended">
-<code class="descname">poseLoad_blended</code><span class="sig-paren">(</span><em>filepath</em>, <em>useFilter=True</em>, <em>matchMethod='stripPrefix'</em>, <em>percentage=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.poseLoad_blended" title="Permalink to this definition">¶</a></dt>
-<dd><p>wrapper to easily be able to dial in poses via the poseBlender slider, this is basically a wrap 
-over the StudioPack AnimatioUtils call for the pose blending but setup for the mNodes directly</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; path to the pose file to load</li>
-<li><strong>useFilter</strong> &#8211; do we load as hierarchy or selected?</li>
-<li><strong>matchmethod</strong> &#8211; hard coded at the moment</li>
-<li><strong>percentage</strong> &#8211; if not None them we pass this percentage directly into the load call, by-passing the slider ui</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>clipname</strong> &#8211; if given this is the name of the clip generated</td>
 </tr>
 </tbody>
 </table>
@@ -443,14 +425,147 @@ removing a controller from all animation layers if it can do so and should any a
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.trax_makeclip">
-<code class="descname">trax_makeclip</code><span class="sig-paren">(</span><em>clipname=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.trax_makeclip" title="Permalink to this definition">¶</a></dt>
-<dd><p>make a TraxEditor clip from the current anim data</p>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_validate">
+<code class="descname">animMap_validate</code><span class="sig-paren">(</span><em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>validate the internal animCache created by the r9Anim load and stored to 
+self.animCache. If filepath is given this will load the animCache from file
+so we can use the data outside of the loadAnimation call</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>clipname</strong> &#8211; if given this is the name of the clip generated</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; path to the r9Anim file, if not given then we use the current instance
+self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim file on this mRig</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_restore_export_data">
+<code class="descname">animMap_restore_export_data</code><span class="sig-paren">(</span><em>extractBy</em>, <em>suppress=False</em>, <em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_restore_export_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>separate r9Anim / animCache handler to process and restore the export data block in an r9Anim file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>extractBy</strong> &#8211; method by which we match up the stored exportLoops and find the ones we want to restore:</td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>False : don&#8217;t restore any exportData,</li>
+<li>[] : if you pass in a list then we take that list and match internal exportloop names to it</li>
+<li>&#8216;byName&#8217; : restore only exportLoops who name matches the r9Anim&#8217;s name</li>
+<li>&#8216;byRange&#8217;: restore exportLoops that fall within the timerange of the imported r9Anim</li>
+<li>&#8216;byRange_start&#8217; : restore exportLoops that start after the timerange of the importer r9Anim (ignore end time data)</li>
+<li>&#8216;byRange_end&#8217; : restore exportLoops that end before the timerange of the importer r9Anim (ignore start time data)</li>
+<li>&#8216;byAll&#8217; : restore ALL exportLoops in the r9Anim infoData block</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>suppress</strong> &#8211; suppress the confirm dialogs</li>
+<li><strong>filepath</strong> &#8211; if given then we read the r9Anim file from file, else we use the current self.animCache instance
+from any previous loadAnimation calls</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Red9.core.Red9_Meta</span> <span class="k">as</span> <span class="nn">r9Meta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">animMap_restore_export_data</span><span class="p">(</span><span class="n">extractBy</span><span class="o">=</span><span class="s1">&#39;byRange&#39;</span><span class="p">,</span><span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;X:/my_animation_data/walk_to_sit.r9anim&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_restore_audio_data">
+<code class="descname">animMap_restore_audio_data</code><span class="sig-paren">(</span><em>extractBy</em>, <em>suppress=False</em>, <em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_restore_audio_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>separate r9Anim / animCache handler to process and restore the audioGrp data block in an r9Anim file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>extractBy</strong> &#8211; method by which we match up the stored exportLoops and find the ones we want to restore:</td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>False : don&#8217;t restore any audioData,</li>
+<li>[] : if you pass in a list then we take that list and match internal audioNode names to it</li>
+<li>&#8216;byName&#8217; : restore only audioNodes who name matches the r9Anim&#8217;s name</li>
+<li>&#8216;byRange&#8217;: restore audioNodes that fall within the timerange of the imported r9Anim</li>
+<li>&#8216;byRange_start&#8217; : restore audioNodes that start after the timerange of the importer r9Anim (ignore end time data)</li>
+<li>&#8216;byRange_end&#8217; : restore audioNodes that end before the timerange of the importer r9Anim (ignore start time data)</li>
+<li>&#8216;byAll&#8217; : restore ALL audioNodes in the r9Anim infoData block</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>suppress</strong> &#8211; suppress the confirm dialogs</li>
+<li><strong>filepath</strong> &#8211; if given then we read the r9Anim file from file, else we use the current self.animCache instance
+from any previous loadAnimation calls</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Red9.core.Red9_Meta</span> <span class="k">as</span> <span class="nn">r9Meta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">animMap_restore_audio_data</span><span class="p">(</span><span class="n">extractBy</span><span class="o">=</span><span class="s1">&#39;byRange_start&#39;</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;X:/my_animation_data/walk_to_sit.r9anim&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_restore_talkback_data">
+<code class="descname">animMap_restore_talkback_data</code><span class="sig-paren">(</span><em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_restore_talkback_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_postprocess">
+<code class="descname">animMap_postprocess</code><span class="sig-paren">(</span><em>feedback=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_postprocess" title="Permalink to this definition">¶</a></dt>
+<dd><p>main postProcess call run internally after the mRig.loadAnimation() call
+so we can deal with, and expand additional functionality without padding out the main
+AnimMap filehandlers. This is responsible for dealing with the re-generation 
+and persistence of audio nodes and export loops stored in the r9Anim gathered info blocks</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>feedback</strong> &#8211; the feedback data from the loadAnimations call</td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>default kws: manageExport: restore the exportLoop data  # False, [list, or, specific, keys], &#8216;byName&#8217;, &#8216;byRange&#8217;, &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;byAll&#8217;</li>
+<li>default kws: manageAudio: restore the AudioGrp data # False, [list, or, specific, keys], &#8216;byName&#8217;, &#8216;byRange&#8217;, &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;byAll&#8217;</li>
+<li>default kws: suppress: suppress any warnings</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.poseLoad_blended">
+<code class="descname">poseLoad_blended</code><span class="sig-paren">(</span><em>filepath</em>, <em>useFilter=True</em>, <em>matchMethod='stripPrefix'</em>, <em>percentage=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.poseLoad_blended" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper to easily be able to dial in poses via the poseBlender slider, this is basically a wrap 
+over the StudioPack AnimatioUtils call for the pose blending but setup for the mNodes directly</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> &#8211; path to the pose file to load</li>
+<li><strong>useFilter</strong> &#8211; do we load as hierarchy or selected?</li>
+<li><strong>matchmethod</strong> &#8211; hard coded at the moment</li>
+<li><strong>percentage</strong> &#8211; if not None them we pass this percentage directly into the load call, by-passing the slider ui</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -654,15 +769,17 @@ freeze the returned nodes of this proc, thus returning that framerate back to th
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_mute">
 <code class="descname">parallel_eval_mute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_mute" title="Permalink to this definition">¶</a></dt>
-<dd><p>freeze the entire facial system, to be used when the visibilty is toggled and you need
-to block all the nodes from evaluating in parallel. This is optimized in 2018 so not
-required</p>
+<dd><p>for everything returned by the &#8220;parallel_eval_get_nodes&#8221; func set their &#8216;frozen&#8217; 
+node state to True, this prevents them from being calculated in the evalmanager during parallel eval.</p>
+<p>Why? in 2016-17 even if you make a hierarchy invisible it is STILL getting calculated per frame,
+unlike the DG eval which would optimize these hidden nodes out. This is optimized in 2018 but
+hidden nodes will still have full framerate hit as if they were visible</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_reset">
 <code class="descname">parallel_eval_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>reset the parallel eval state for all nodes in this rig</p>
+<dd><p>for everything returned by the &#8220;parallel_eval_get_nodes&#8221; func reset their frozen state so they calcualte</p>
 </dd></dl>
 
 </dd></dl>
@@ -901,6 +1018,12 @@ mrig.L_ArmSystem</li>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">by default this call depends on IK_matchpnt&#8217;s which denote the relationship between the 
+FK and IK controller, these are added in the rig build code by the &#8220;add_fkik_matchpnt&#8221; code.
+However these are easy to add to any rig wired to Meta</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -908,7 +1031,11 @@ mrig.L_ArmSystem</li>
 <code class="descname">get_fingers_selected</code><span class="sig-paren">(</span><em>nodes=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_fingers_selected" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple wrapper to return the finger markers from selected ctrls
 so we know what fingers we have controllers selected from</p>
-<p>the FingerSystem mNode directly not form the upper MetaRig node</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">that these finger calls are designed to be called from 
+the FingerSystem mNode directly not form the upper MetaRig node</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1089,8 +1216,8 @@ Designed to be overloaded for your own facial systems</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.setLipSyncChannel">
-<code class="descname">setLipSyncChannel</code><span class="sig-paren">(</span><em>chn, fromSelected=False, min=0.02, skip=['visibility'], *args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.setLipSyncChannel" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_set_channel">
+<code class="descname">viseme_map_set_channel</code><span class="sig-paren">(</span><em>chn, fromSelected=False, min=0.02, skip=['visibility'], *args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_set_channel" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;&lt; Red9 Internal LipSyncer calls Only &gt;&gt;</p>
 <p>set the selected controllers data to the visemeMap as a key pose.
 Note that we store the data as (plug,attr,val) so that it&#8217;s totally
@@ -1112,8 +1239,8 @@ generic at the core level. We convert back to dag path in the LipSyncer</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.getLipSyncChannels">
-<code class="descname">getLipSyncChannels</code><span class="sig-paren">(</span><em>asPlug=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.getLipSyncChannels" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_get_channels">
+<code class="descname">viseme_map_get_channels</code><span class="sig-paren">(</span><em>asPlug=True</em>, <em>incTargetjnts=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_get_channels" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;&lt; Red9 Internal LipSyncer calls Only &gt;&gt;</p>
 <p>the main viseme keys will form the pose to get to that shape, these
 values are then mixed up and down by the keyer based on the phoneme energy
@@ -1122,16 +1249,55 @@ and the particularly phoneme calibrate within that viseme.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>asPlug</strong> &#8211; if True return the visemeMap as it&#8217;s stored, else process it
-such that {key:(ctrl.attr, val)}</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>asPlug</strong> &#8211; if True return the visemeMap as it&#8217;s stored, else process it
+such that {key:(ctrl.attr, val)}</li>
+<li><strong>incTargetjnts</strong> &#8211; if True we dynamically add the target joints which 
+have been created to the visemeMap data</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.removeLipSyncNodes">
-<code class="descname">removeLipSyncNodes</code><span class="sig-paren">(</span><em>chn</em>, <em>nodes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.removeLipSyncNodes" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_test_channel">
+<code class="descname">viseme_map_test_channel</code><span class="sig-paren">(</span><em>channel</em>, <em>setdata=True</em>, <em>corechns=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_test_channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the viseme channels pose to the rig and return the appropriate data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>channel</strong> &#8211; visemeMap channel to load</li>
+<li><strong>setdata</strong> &#8211; load or just return the data</li>
+<li><strong>corechns</strong> &#8211; if True then the return will be active core SDK channels only
+if False we return the actual rig controllers</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_get_controllers">
+<code class="descname">viseme_map_get_controllers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_get_controllers" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list of ALL rig controllers that contribute
+to the accumulated viseme map and so are part of the lipSync</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_get_sdkchannels">
+<code class="descname">viseme_map_get_sdkchannels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_get_sdkchannels" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list of ALL the FacialCore SDK channels that are
+active during the visemeMap</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_remove_nodes">
+<code class="descname">viseme_map_remove_nodes</code><span class="sig-paren">(</span><em>chn</em>, <em>nodes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_remove_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;&lt; Red9 Internal LipSyncer calls Only &gt;&gt;</p>
 <p>remove the given controls from a visemeMap channel</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1149,15 +1315,15 @@ such that {key:(ctrl.attr, val)}</td>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.saveVisemeMap">
-<code class="descname">saveVisemeMap</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.saveVisemeMap" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_save">
+<code class="descname">viseme_map_save</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_save" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;&lt; Red9 Internal LipSyncer calls Only &gt;&gt;</p>
 <p>save the visemeMap out to file</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.loadVisemeMap">
-<code class="descname">loadVisemeMap</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.loadVisemeMap" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_load">
+<code class="descname">viseme_map_load</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_load" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;&lt; Red9 Internal LipSyncer calls Only &gt;&gt;</p>
 <p>load a visemeMap back in from file</p>
 </dd></dl>
@@ -1590,6 +1756,12 @@ logic used by the export classes.</p>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;skeletonAlias&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">skeletonAlias</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The r9Anim postLaod functions that rebuild the exportLoops rely 
+on the structure of this data so if we change it that will also need
+to be modified to reflect it</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1820,7 +1992,7 @@ under a managed node</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mover</span><span class="o">.</span><span class="n">scene_restore</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>SceneMover is a SINGLETON and there can only ever be a single instance of it, 
+<p>SceneMover is a SINGLETON and there can only ever be a single instance of it,
 when initialized we autogenerate a locator which becomes the root transform
 for the shift</p>
 <dl class="method">
@@ -1858,7 +2030,7 @@ given transforms if specified</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transforms</strong> &#8211; format: {&#8216;translate&#8217;:(0,0,0), &#8216;rotate&#8217;:(0,0,0)} if given in these are 
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transforms</strong> &#8211; format: {&#8216;translate&#8217;:(0,0,0), &#8216;rotate&#8217;:(0,0,0)} if given in these are
 the transforms used on the node after everything has been grouped up</td>
 </tr>
 </tbody>
@@ -1951,7 +2123,7 @@ connected audio node data</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.getAudioNodes">
 <code class="descname">getAudioNodes</code><span class="sig-paren">(</span><em>time=()</em>, <em>start_inRange=True</em>, <em>end_inRange=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.getAudioNodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>return an AudioNode object that fall within a given 
+<dd><p>return an AudioNode object that fall within a given
 timerange, if not timerange is given return all linked audio</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1986,18 +2158,18 @@ else we validate that testRange is fully within the baseRanges times</p>
 <em class="property">class </em><code class="descname">MetaTimeCodeHUD</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaHUDNode" title="Red9.core.Red9_Meta.MetaHUDNode"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaHUDNode</span></code></a></p>
 <p>Generate&#8217;s a HUD node connected to the main timecode attrs,
-allows us to show the actual internal timecode attrs as their 
+allows us to show the actual internal timecode attrs as their
 original SMPTE time&#8217;s</p>
 <p>Crucial things to be aware of:</p>
-<p>We construct timecode from 3 attrs on the given node: 
-timecode_ref        : the original timecode converted to milliseconds 
-timecode_count      : a linear curve that increments every frame based on the samplerate 
+<p>We construct timecode from 3 attrs on the given node:
+timecode_ref        : the original timecode converted to milliseconds
+timecode_count      : a linear curve that increments every frame based on the samplerate
 timecode_samplerate : samplerate that the linear counter was generated against</p>
 <p>SMPTE timecode is then reconstructed like so:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r9Audio</span><span class="o">.</span><span class="n">milliseconds_to_Timecode</span><span class="p">(</span><span class="n">ref</span> <span class="o">+</span> <span class="p">((</span><span class="n">count</span> <span class="o">/</span> <span class="n">samplerate</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span> 
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r9Audio</span><span class="o">.</span><span class="n">milliseconds_to_Timecode</span><span class="p">(</span><span class="n">ref</span> <span class="o">+</span> <span class="p">((</span><span class="n">count</span> <span class="o">/</span> <span class="n">samplerate</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>The easiest and expected way to use this class is directly from the Pro_MetaRig.Timecode class 
+<p>The easiest and expected way to use this class is directly from the Pro_MetaRig.Timecode class
 binding in which this HUD class is managed in a correct manner. See audio.Timecode class for
 more details.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
@@ -2007,9 +2179,9 @@ more details.</p>
 </div>
 <p>You can of course run this directly from a class instance, however, the nodes
 passed to the addMonitored call have to have the timecode attrs already bound to them</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tcHUD</span><span class="o">=</span><span class="n">r9pmeta</span><span class="o">.</span><span class="n">MetaTimeCodeHUD</span><span class="p">()</span> 
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tcHUD</span><span class="o">=</span><span class="n">r9pmeta</span><span class="o">.</span><span class="n">MetaTimeCodeHUD</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tcHUD</span><span class="o">.</span><span class="n">addMonitoredTimecodeNode</span><span class="p">(</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># node must have valid timecode attrs already</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tcHUD</span><span class="o">.</span><span class="n">drawHUD</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tcHUD</span><span class="o">.</span><span class="n">drawHUD</span><span class="p">()</span>
 </pre></div>
 </div>
 <dl class="method">

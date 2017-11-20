@@ -406,7 +406,7 @@ being from the master rig from which all others will be synced</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013156B08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001324DEC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -500,7 +500,9 @@ sample-rate set when the counter attr was generated</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.audio.Timecode.getTimecode_bounds">
 <code class="descname">getTimecode_bounds</code><span class="sig-paren">(</span><em>tol=2</em>, <em>tc_only=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.getTimecode_bounds" title="Permalink to this definition">¶</a></dt>
-<dd><p>from node bound to the class find all timecode bounds and return as a list of tuples</p>
+<dd><p>from node bound to the class find all timecode bounds and return as a list of tuples. 
+This is designed to handle discontinuous timecode, ie a scene with multiple cuts that 
+have multiple timecode slices.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -566,7 +568,7 @@ of the visual timecode on the timeslider in Maya</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.audio.Timecode.addTimecode_to_node">
 <code class="descname">addTimecode_to_node</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em>, <em>suppress=False</em>, <em>timerange=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.addTimecode_to_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>wrapper to add the timecode attrs to a node and if set 
+<dd><p>wrapper to add the timecode attrs to a node and if set
 propagate that data to the node and fill the attrs up</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -785,7 +787,7 @@ There is coverage for this in this module getMediaFileMetaData() does just that<
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013122C48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

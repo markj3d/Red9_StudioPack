@@ -57,7 +57,7 @@ def getNodesOverload(poseObj, nodes, *args):
     metaNode = poseObj.metaRig
     currentSelection = cmds.ls(sl=True, l=True)
     filteredNodes = []
-    
+
     if not issubclass(type(metaNode), r9Meta.MetaHIKControlSetNode):
         # see if we have a controller selected thats connected to an
         # appropriate subMetaSystem
@@ -78,45 +78,48 @@ def getNodesOverload(poseObj, nodes, *args):
                 msystem = metaNode.L_LegSystem
             elif result == 'R_Toes':
                 msystem = metaNode.R_LegSystem
-        else:   
+        else:
             msystem = r9Meta.getConnectedMetaNodes(cmds.ls(sl=True))[0]
 
         # from selected node, or selected system find our finger / toe subSystem
-        if not msystem.systemType.lower() in ['fingers', 'toes']:   
+        if not msystem.systemType.lower() in ['fingers', 'toes']:
             fingersystem = msystem.getChildMetaNodes(mAttrs=['systemType'])
             if fingersystem:
-                fingersystem=fingersystem[0]
+                fingersystem = fingersystem[0]
         else:
             fingersystem = msystem
         if not fingersystem or not fingersystem.systemType.lower() in ['fingers', 'toes']:
             raise IOError('no finger / toe metaSubSystems found from the selected node')
 
         print '\nFinger : PoseOverload Handler : %s >> subSystem: %s' % (metaNode, fingersystem)
-        
-        filteredNodes = fingersystem.getChildren()
-            
+
+
 #         if cmds.getAttr('%s.mirrorSide' % currentSelection[0]) == 1:
 #             print '\nFinger : PoseOverload Handler : %s >> side: Left' % metaNode
 #             filteredNodes = metaNode.L_ArmSystem.L_FingerSystem.getChildren()
 #         elif cmds.getAttr('%s.mirrorSide' % currentSelection[0]) == 2:
 #             print '\nFinger : PoseOverload Handler : %s >> side: Right' % metaNode
 #             filteredNodes = metaNode.R_ArmSystem.R_FingerSystem.getChildren()
-            
+
     # modify the actual PoseData object, changing the data to be matched on index
     # rather than using the standard name or metaMap matching
     poseObj.metaPose = False
     poseObj.matchMethod = 'mirrorIndex_ID'
     poseObj.mirrorInverse = True  # set the mirror inverse code to active to cope with mirror differences between Left and Right fingers
-    
-    return filteredNodes
+
+    if poseObj.useFilter:
+        return fingersystem.getChildren()
+
+    # selection only mode
+    return currentSelection
 
 
 
-#=================================================
+# =================================================
 # Main calls used internally in the PoseData class
-#=================================================
+# =================================================
 
-def poseGetNodesLoad(poseObj,nodes,*args):
+def poseGetNodesLoad(poseObj, nodes, *args):
     '''
     PoseLoad:
     this is an entry point used to over-load the main getNodes()
@@ -125,9 +128,9 @@ def poseGetNodesLoad(poseObj,nodes,*args):
     @param poseObj: the actual instance of the PoseData object
     @param nodes: original node list passed in from the UI 
     '''
-    return getNodesOverload(poseObj,nodes,*args)
-    
-def poseGetNodesSave(poseObj,nodes,*args):
+    return getNodesOverload(poseObj, nodes, *args)
+
+def poseGetNodesSave(poseObj, nodes, *args):
     '''
     PoseSave:
     this is an entry point used to over-load the main getNodes()
@@ -136,14 +139,14 @@ def poseGetNodesSave(poseObj,nodes,*args):
     @param poseObj: the actual instance of the PoseData object
     @param nodes: original node list passed in from the UI 
     '''
-    return getNodesOverload(poseObj,nodes,*args)
-    
+    return getNodesOverload(poseObj, nodes, *args)
+
 def posePopupAdditions(parent, ui=None):
     '''
-    This run when the Pose PopUp menu is generated, allows us to add custom menu's to the 
+    This run when the Pose PopUp menu is generated, allows us to add custom menu's to the  
     popUp and extend it's functionality as we need at a folder level!
     '''
     cmds.menuItem(divider=True)
-    cmds.menuItem(parent=parent,label='Test Finger Menu 1!', command="print('Added Test Menu 1')")
-    cmds.menuItem(parent=parent,label='Test Finger Menu 2!', command="print('Added Test Menu 2')")
+    cmds.menuItem(parent=parent, label='Test Finger Menu 1!', command="print('Added Test Menu 1')")
+    cmds.menuItem(parent=parent, label='Test Finger Menu 2!', command="print('Added Test Menu 2')")
 

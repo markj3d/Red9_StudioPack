@@ -512,7 +512,7 @@ just that if that node is a root node in the system.</li>
 <p class="first admonition-title">Note</p>
 <p class="last">this walks upstream only from the given node, so if you effectively have multiple root nodes
 in the system but wired to different parts of the network, and when walking upstream from the given
-you only get to one of ththose because of the network wiring, then that is correct.</p>
+you only get to one of those because of the network wiring, then that is correct.</p>
 </div>
 </dd></dl>
 
@@ -1533,7 +1533,7 @@ you wire up your facial system to metaData but gives us a consistent hook</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.addChestCtrl">
-<code class="descname">addChestCtrl</code><span class="sig-paren">(</span><em>node</em>, <em>side='Centre'</em>, <em>axis=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.addChestCtrl" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addChestCtrl</code><span class="sig-paren">(</span><em>node</em>, <em>side='Cent re'</em>, <em>axis=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.addChestCtrl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1921,8 +1921,8 @@ with the exceptiojn of the Main_Ctrl</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.keyChildren">
 <code class="descname">keyChildren</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.keyChildren" title="Permalink to this definition">¶</a></dt>
-<dd><p>return True if any of the rig&#8217;s controllers have existing
-animation curve/key data</p>
+<dd><p>setKey on the systems controllers with options to control what gets keyed
+via the standard getChildren <a href="#id17"><span class="problematic" id="id18">*</span></a>args which are passed in.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2000,18 +2000,18 @@ animation curve/key data</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.core.Red9_Meta.MetaRig.loadAnimation_postload_call">
-<code class="descname">loadAnimation_postload_call</code><span class="sig-paren">(</span><em>feedback</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation_postload_call" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.core.Red9_Meta.MetaRig.animMap_postprocess">
+<code class="descname">animMap_postprocess</code><span class="sig-paren">(</span><em>feedback=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.animMap_postprocess" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>: PRO_PACK :</dt>
 <dd>Added to be Overloaded at the class level!</dd>
 </dl>
-<p>call passed into the animMap class and run AFTER the r9Anim file is loaded
-on the MetaRig, this allows you to add functionality to the base load to
-extract extra data from the animMap and act upon it</p>
-<p>This allows us to act on the animMap stored on the class object and rebuld
-data from the infoDict if required. We use this to rebuild audio links, exporter
-nodes and any other data that&#8217;s requried to be restored from the gathered info</p>
+<p>Call passed into the animMap class and run AFTER the r9Anim file is loaded
+on the MetaRig, this allows you to add functionality to the base load call to
+extract extra data from the animMap and act upon it. This allows us to act on the 
+animMap stored on the class object and rebuild data from the infoDict if required. 
+We use this to rebuild audio links, exporter nodes and any other data that&#8217;s required 
+to be restored from the gathered info</p>
 <p>self.animCache.infoDict</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2021,11 +2021,26 @@ nodes and any other data that&#8217;s requried to be restored from the gathered 
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>see the following functions in the ProPack &gt; metadata_pro.Pro_MetaRig_Base class for more detailed information</p>
+<ul class="simple">
+<li>metadata_pro.Pro_MetaRig_Base.animMap_restore_export_data</li>
+<li>metadata_pro.Pro_MetaRig_Base.animMap_restore_audio_data</li>
+</ul>
+<p class="last">and all animMap_** functions as these expand</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRig.loadAnimation_postload_call">
+<code class="descname">loadAnimation_postload_call</code><span class="sig-paren">(</span><em>feedback=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation_postload_call" title="Permalink to this definition">¶</a></dt>
+<dd><p># DEPRECATED FUNCTION - replaced with self.animMap_postprocess</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.loadAnimation">
-<code class="descname">loadAnimation</code><span class="sig-paren">(</span><em>filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False, timecodeBinding=[None, None], referenceNode=None, manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, *args, **kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">loadAnimation</code><span class="sig-paren">(</span><em>filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False, timecodeBinding=[None, None], referenceNode=None, manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, merge=False, matchMethod='stripPrefix', *args, **kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>: PRO_PACK :</dt>
 <dd>Binding of the animMap format for loading animation data from
@@ -2056,46 +2071,56 @@ attrs that are stored internally as a pose are keyed.</li>
 <li><strong>blendRange</strong> &#8211; None or int : 1 is default. If an int is passed then we use this as the hold range for the data, setting a key at
 time=startFarme-blendRange to hold the current data before we load the new keys. Note that this also turns on the keyStatics
 to ensure the data is preserved</li>
+<li><strong>merge</strong> &#8211; if True we allow the data to be merged over any current keys, else we cut all keys in the load range first</li>
+<li><strong>matchMethod</strong> &#8211; internal matching method used to match nodes to the stored data</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>additional <a href="#id17"><span class="problematic" id="id18">**</span></a>KWS passed in and / or accepted in the ProPack codebase</p>
+<p>: additional <a href="#id19"><span class="problematic" id="id20">**</span></a>KWS passed in and / or accepted in the ProPack codebase :</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">KWS manageExport:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">If running the Red9Pro Exporter systems this will rebuild the export Tag data directly
-from the r9Anim file&#8217;s infoData block:</p>
-<p>False : don&#8217;t restore any exportData,
-[] : if you pass in a list then we take that list and match internal exportloop names to it
-&#8216;byName&#8217; : restore only exportLoops who name matches the r9Anim&#8217;s name
-&#8216;byRange&#8217;: restore exportLoops that fall within the timerange of the imported r9Anim
-&#8216;byRange_start&#8217; : restore exportLoops that start after the timerange of the importer r9Anim (ignore end time data)
-&#8216;byRange_end&#8217; : restore exportLoops that end before the timerange of the importer r9Anim (ignore start time data)
-&#8216;byAll&#8217; : restore ALL exportLoops in the r9Anim infoData block</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>manageExport</strong> &#8211; If running the Red9Pro Exporter systems this will rebuild the export Tag data directly
+from the r9Anim file&#8217;s infoData block:</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">KWS manageAudio:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">If running the Red9Pro Exporter systems this will rebuild the Audio Node data directly
-from the r9Anim file&#8217;s infoData block   (False, [], &#8216;byName&#8217;, &#8216;byRange&#8217;, &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;byAll&#8217;)</p>
-</td>
+</tbody>
+</table>
+<ul class="simple">
+<li>False : don&#8217;t restore any exportData,</li>
+<li>[] : if you pass in a list then we take that list and match internal exportloop names to it</li>
+<li>&#8216;byName&#8217; : restore only exportLoops who name matches the r9Anim&#8217;s name</li>
+<li>&#8216;byRange&#8217;: restore exportLoops that fall within the timerange of the imported r9Anim</li>
+<li>&#8216;byRange_start&#8217; : restore exportLoops that start after the timerange of the importer r9Anim (ignore end time data)</li>
+<li>&#8216;byRange_end&#8217; : restore exportLoops that end before the timerange of the importer r9Anim (ignore start time data)</li>
+<li>&#8216;byAll&#8217; : restore ALL exportLoops in the r9Anim infoData block</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>manageAudio</strong> &#8211; If running the Red9Pro Exporter systems this will rebuild the Audio Node data directly, taking
+the same matching flags as the manageExport kws above
+from the r9Anim file&#8217;s infoData block   (False, [], &#8216;byName&#8217;, &#8216;byRange&#8217;, &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;byAll&#8217;)</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">After the anim load the animData is stored on this instance as self.animMap which then 
-exposes all the data for further functions if needed.
-self.animCache.infoDict = gatherInfo block on the file and pose
-self.animCache.poseDict = the animation and pose data dict</p>
+<p>After the anim load the animData is stored on this instance as self.animCache which then 
+exposes all the data for further functions if needed.</p>
+<ul class="last simple">
+<li>self.animCache.infoDict = gatherInfo / general secondary data block on the file and pose.</li>
+<li>self.animCache.poseDict = the animation and pose data dict.</li>
+<li>self.animCache.skeletonDict = the pose data dict purely for the skeleton, used in compare functions.</li>
+</ul>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last"><a href="#id19"><span class="problematic" id="id20">**</span></a>kws are passed directly into BOTH the AnimMap class and the loadAnimation_postload_call
-so that we can bounce additional <a href="#id21"><span class="problematic" id="id22">**</span></a>kws into these funcs without having to specify everything,
+<p class="last"><a href="#id21"><span class="problematic" id="id22">**</span></a>kws are passed directly into BOTH the AnimMap class and the animMap_postprocess
+so that we can bounce additional <a href="#id23"><span class="problematic" id="id24">**</span></a>kws into these funcs without having to specify everything,
 this allows us to modify the behaviour on a case by case basis for clients</p>
 </div>
 </dd></dl>
@@ -2103,7 +2128,8 @@ this allows us to modify the behaviour on a case by case basis for clients</p>
 <dl class="attribute">
 <dt id="Red9.core.Red9_Meta.MetaRig.Timecode">
 <code class="descname">Timecode</code><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.Timecode" title="Permalink to this definition">¶</a></dt>
-<dd><p>: PRO_PACK : bind the Pro Timecode class to the node</p>
+<dd><p>: PRO_PACK : bind the Pro Timecode class to the node. The Timecode object is now cached 
+to the instance rather than being instantiated on ach call.</p>
 </dd></dl>
 
 <dl class="attribute">

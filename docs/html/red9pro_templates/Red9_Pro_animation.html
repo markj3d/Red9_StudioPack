@@ -92,6 +92,12 @@ requires the StudioPack codebase to run</p>
 </tbody>
 </table>
 <dl class="function">
+<dt id="Red9.pro_pack.core.animation.animationUI_raise">
+<code class="descname">animationUI_raise</code><span class="sig-paren">(</span><em>tab=2</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.animationUI_raise" title="Permalink to this definition">¶</a></dt>
+<dd><p>raise the StudioPack&#8217;s AnimationTools UI and set the current tab</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.animation.timeWithinRange">
 <code class="descname">timeWithinRange</code><span class="sig-paren">(</span><em>baseRange</em>, <em>testRange</em>, <em>mode</em>, <em>idtext=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.timeWithinRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>test for the range handling in the UI / AnimMap <a href="#id1"><span class="problematic" id="id2">**</span></a>kws</p>
@@ -134,49 +140,6 @@ requires the StudioPack codebase to run</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.animation.animMap_validate_preload">
-<code class="descname">animMap_validate_preload</code><span class="sig-paren">(</span><em>mrig</em>, <em>filepath=None</em>, <em>infoDict=None</em>, <em>match='exact'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.animMap_validate_preload" title="Permalink to this definition">¶</a></dt>
-<dd><p>generic call that raises a user prompt, used by the Animation_Load UI to validate the internal 
-AnimMap mRig type about to be loaded matches the given mRig class, if there&#8217;s a mismatch then 
-raise a confirmDialog for the user to choose whether to abort of not.</p>
-<p>this is a separate function so it can be used by multiple UI&#8217;s and not have to run through
-the AnimMap base code, verify before we hit the load calls ;)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mrig</strong> &#8211; mrig to test against</li>
-<li><strong>filepath</strong> &#8211; if given we load that r9Anim Map to extract the infoDict</li>
-<li><strong>infoDict</strong> &#8211; we may have already consumed this r9Anim file so we can pass the infoDict in directly
-to save loading that data again</li>
-<li><strong>match</strong> &#8211; not implemented yet</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>TODO: add a test to see if the infoDict has timecode, else we bail the TC flag is set and warn!!</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.core.animation.animMap_validate_presave">
-<code class="descname">animMap_validate_presave</code><span class="sig-paren">(</span><em>mrig</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.animMap_validate_presave" title="Permalink to this definition">¶</a></dt>
-<dd><p>generic call that raises a user prompt, used by the Animation_Save UI to validate that
-the mrig about to be saved is NOT on an active Binder, and therefore has no keys!</p>
-<p>this is a separate function so it can be used by multiple UI&#8217;s and not have to run through
-the AnimMap base code, verify before we hit the load calls ;)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mrig</strong> &#8211; mrig to test against</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
 <dt id="Red9.pro_pack.core.animation.playback_performance">
 <code class="descname">playback_performance</code><span class="sig-paren">(</span><em>iteration=3</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.playback_performance" title="Permalink to this definition">¶</a></dt>
 <dd><p>a simple performance checker to test actual framerate rather than 
@@ -195,12 +158,16 @@ parallel evaluation &amp; playback</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; root of the hierarchies to mute</li>
 <li><strong>hierarchy</strong> &#8211; process full hierarchies of the given nodes</li>
-<li><strong>state</strong> &#8211; bool, state of the eval</li>
+<li><strong>state</strong> &#8211; bool, state of the eval, True : frozen in parallel, False : evaluated in parallel</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">as of 2018 this is no longer needed due to Autodesk optimizations</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -208,6 +175,10 @@ parallel evaluation &amp; playback</p>
 <code class="descname">parallel_eval_unfreeze_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.parallel_eval_unfreeze_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>unfreeze all nodes in the scene so everything processes during
 parallel evaluation &amp; playback</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">as of 2018 this is no longer needed due to Autodesk optimizations</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -299,6 +270,49 @@ parallel evaluation &amp; playback</p>
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="Red9.pro_pack.core.animation.animMap_validate_preload">
+<code class="descname">animMap_validate_preload</code><span class="sig-paren">(</span><em>mrig</em>, <em>filepath=None</em>, <em>infoDict=None</em>, <em>match='exact'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.animMap_validate_preload" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic call that raises a user prompt, used by the Animation_Load UI to validate the internal 
+AnimMap mRig type about to be loaded matches the given mRig class, if there&#8217;s a mismatch then 
+raise a confirmDialog for the user to choose whether to abort of not.</p>
+<p>this is a separate function so it can be used by multiple UI&#8217;s and not have to run through
+the AnimMap base code, verify before we hit the load calls ;)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mrig</strong> &#8211; mrig to test against</li>
+<li><strong>filepath</strong> &#8211; if given we load that r9Anim Map to extract the infoDict</li>
+<li><strong>infoDict</strong> &#8211; we may have already consumed this r9Anim file so we can pass the infoDict in directly
+to save loading that data again</li>
+<li><strong>match</strong> &#8211; not implemented yet</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>TODO: add a test to see if the infoDict has timecode, else we bail the TC flag is set and warn!!</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.animation.animMap_validate_presave">
+<code class="descname">animMap_validate_presave</code><span class="sig-paren">(</span><em>mrig</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.animMap_validate_presave" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic call that raises a user prompt, used by the Animation_Save UI to validate that
+the mrig about to be saved is NOT on an active Binder, and therefore has no keys!</p>
+<p>this is a separate function so it can be used by multiple UI&#8217;s and not have to run through
+the AnimMap base code, verify before we hit the load calls ;)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mrig</strong> &#8211; mrig to test against</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="class">
 <dt id="Red9.pro_pack.core.animation.AnimationStore">
 <em class="property">class </em><code class="descname">AnimationStore</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore" title="Permalink to this definition">¶</a></dt>
@@ -317,7 +331,7 @@ parallel evaluation &amp; playback</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001304D588&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013452C88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -335,13 +349,13 @@ allowing you to load libraries of animations one after another in different spac
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9panim&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9panim</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">=</span><span class="n">r9PAnim</span><span class="o">.</span><span class="n">AnimMap</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># like the pose saver you can load in a given filterSettings object directly</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r9Setup</span><span class="o">.</span><span class="n">red9Presets</span><span class="p">(),</span><span class="s1">&#39;Red9_DevRig.cfg&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">incRoots</span><span class="o">=</span><span class="kc">True</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># OR modify it on the fly in the class</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">metaData</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nurbsCurve&#39;</span><span class="p">]</span>
@@ -351,14 +365,14 @@ allowing you to load libraries of animations one after another in different spac
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># saving</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">saveAnim</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># basic loading</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">offset</span><span class="o">=</span><span class="mi">20</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">loadAnim</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># load relative to a given startFrame</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">loadAnim</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">loadAsStored</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loadFromFrm</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># loading relative to a given node</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">loadAnim</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">loadAsStored</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loadFromFrm</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">referenceNode</span><span class="o">=</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
@@ -386,9 +400,27 @@ and audio data that are gathered in the format on save from mRig</p>
 <li>[weightedTangents, preInfinity, postInfinity, denseBaked, inttan_accumulated, outttan_accumulated]</li>
 </ul>
 </div>
-<p>We&#8217;re not passing any data in terms of nodes here, We&#8217;ll deal with
-those in the PoseSave and PoseLoad calls. Leaves this open for
-expansion</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>because this inherits from the DataMap module certain key internal vars are key to the way
+the data is loaded.</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>self.matchMethod</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">denotes how the nodes are matched to the internal data, either by base, stripPrefix, index, mirrorIndex, metaData</span><dd><p class="first last">see r9Core.matchNodeLists for ore info</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>self.prioritySnapOnly</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool - used when loading relative to a given node, limit the nodes which are adjusted in world space </span><dd><p class="first last">to a given subset denoted in the filterSwettings object</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<p>We don&#8217;t pass any data in terms of nodes into the __init__, We&#8217;ll deal with
+those in the saveAnim and loadAnim calls. Leaves this open for expansion</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -459,11 +491,13 @@ has been set as reference, basically we&#8217;re saying that the timecode at frm
 <li><strong>manageRanges</strong> &#8211; do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded</li>
 <li><strong>manageFileName</strong> &#8211; if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
 then we take the r9Anim&#8217;s filename and rename the Maya scene accordingly</li>
+<li><strong>applyPose</strong> &#8211; True by default - apply the static pose stored in the file before loading the animation data</li>
 <li><strong>keyStatics</strong> &#8211; if True then we key everything in the data at startFrame so that all non-keyed and static
 attrs that are stored internally as a pose are keyed.</li>
 <li><strong>blendRange</strong> &#8211; None or int : 1 is default. If an int is passed then we use this as the hold range for the data, setting a key at
 time=startFarme-blendRange to hold the current data before we load the new keys. Note that this also turns on the keyStatics
 to ensure the data is preserved</li>
+<li><strong>merge</strong> &#8211; if True we allow the data to be merged over any current keys, else we cut all keys in the load range first</li>
 </ul>
 </td>
 </tr>
@@ -482,13 +516,19 @@ r9Anim offset/start and end ranges</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>manageExport</strong> &#8211; byAll, byName, byRange_start, byRange_end, byRange uses the timeWithinRange call</li>
+<li><strong>manageExport</strong> &#8211; [], byAll, byName, byRange_start, byRange_end, byRange uses the timeWithinRange call
+if given a list then we use that as a search for specific ExportLoops in the data</li>
 <li><strong>sort</strong> &#8211; sort the returned data by the endFrame in each loops data</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the internal _set_loadRanges must have been run prior to this so that the
+internal startFrame and endFrame ranges have been set to process against</p>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># to simply read the data and get access to it prior to any processing</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span> <span class="o">=</span> <span class="n">AnimMap</span><span class="p">()</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span><span class="o">.</span><span class="n">r9anim</span>
@@ -510,13 +550,19 @@ it MUST be connected to an mRig via the AudioGrp node, all managed in the Export
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>manageAudio</strong> &#8211; byAll, byName, byRange_start, byRange_end, uses the timeWithinRange call</li>
+<li><strong>manageAudio</strong> &#8211; [], byAll, byName, byRange_start, byRange_end, uses the timeWithinRange call
+if given a list then we use that as a search for specific ExportLoops in the data</li>
 <li><strong>sort</strong> &#8211; sort the returned data by the endFrame in each loops data</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the internal _set_loadRanges must have been run prior to this so that the
+internal startFrame and endFrame ranges have been set to process against.</p>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># to simply read the data and get access to it prior to any processing</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span> <span class="o">=</span> <span class="n">AnimMap</span><span class="p">()</span> 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span><span class="o">.</span><span class="n">r9anim</span>
@@ -534,7 +580,7 @@ it MUST be connected to an mRig via the AudioGrp node, all managed in the Export
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001323E1C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013478B48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -932,7 +978,7 @@ set display attrs of the joints to default values</p>
 <code class="descname">fbx_to_binder</code><span class="sig-paren">(</span><em>fbxfiles</em>, <em>binderfile=None</em>, <em>usecurrentscene=False</em>, <em>bake=False</em>, <em>runFilter=True</em>, <em>useTakeData=False</em>, <em>fbx_mode='update_anim'</em>, <em>mayafile=True</em>, <em>r9anim=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main FBX &gt; Binder call, (PRO_TO_BND) loads the FBX file in, loads the binder in, and transfers the data</p>
 <dl class="docutils">
-<dt>..note::    </dt>
+<dt>..note::</dt>
 <dd>The actual maya file and r9Anim file generation flags are generally NOT used during the Pro_To_BND call, instead
 during that process we pass the output flags to the ExportManager class to deal with. This is because the exporter
 calls also manage source-control and all clkeint side specific file management. The file handling in this func is
@@ -1061,7 +1107,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001304D6C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001332A7C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1085,7 +1131,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000012F58FC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

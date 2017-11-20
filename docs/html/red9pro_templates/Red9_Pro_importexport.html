@@ -300,7 +300,8 @@ as &#8216;//depot/path/to/stuff/...ma&#8217; for example</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.exists_local">
 <code class="descname">exists_local</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.exists_local" title="Permalink to this definition">¶</a></dt>
-<dd><p>os check if the file exists locally. Issue is that P4 can say you have the file in your workspace but you may have deleted it locally</p>
+<dd><p>os check if the file exists locally. Issue is that P4 can say you have 
+the file in your workspace but you may have deleted it locally</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -331,7 +332,8 @@ rather than a file pointer.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.is_head">
 <code class="descname">is_head</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.is_head" title="Permalink to this definition">¶</a></dt>
-<dd><p>return True if you have the head revision in your workspace, this DOESN&#8217;T check if it exists locally however</p>
+<dd><p>return True if you have the head revision in your workspace,
+this DOESN&#8217;T check if it exists locally however</p>
 </dd></dl>
 
 <dl class="method">
@@ -550,8 +552,8 @@ then we mark it for add</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pymel.util.path.path</span></code></p>
 <p>Red9 file handler system, bound to OS calls directly by inheritance 
 from pm.util.path which then exposes all OS calls directly to the class instance.</p>
-<p>This also binds Perforce to the class is Perforce was found on your system, exposing
-and binding all perforce commands directly to this file object</p>
+<p>This also binds Perforce to the class is Perforce was found on your system,
+exposing and binding all perforce commands directly to this file object</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9ie&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9ie</span>
@@ -566,8 +568,8 @@ and binding all perforce commands directly to this file object</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">when dealing with P4 the P4_SourceControl class is bound to self as self.sourcecontrol,
-exposing all the calls directly.</p>
+<p class="last">when dealing with P4 the P4_SourceControl class is bound to self as 
+self.sourcecontrol, exposing all the calls directly.</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

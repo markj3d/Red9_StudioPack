@@ -165,8 +165,7 @@ I wanted to keep things simple in the base class.</p>
 <dl class="function">
 <dt id="Red9.core.Red9_Audio.audioPathLoaded">
 <code class="descname">audioPathLoaded</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.audioPathLoaded" title="Permalink to this definition">¶</a></dt>
-<dd><p>return any soundNodes in Maya that point to the given 
-audio path</p>
+<dd><p>return any soundNodes in Maya that point to the given audio path</p>
 </dd></dl>
 
 <dl class="function">
@@ -331,8 +330,8 @@ to offset by</p>
 <dt id="Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode">
 <code class="descname">bwav_sync_to_Timecode</code><span class="sig-paren">(</span><em>relativeToo=None</em>, <em>offset=0</em>, <em>timecodebase=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
-<dt>: PRO_PACK</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier"></span><dd>process either selected or all audio nodes and IF they are found 
+<dt>: PRO_PACK :</dt>
+<dd>process either selected or all audio nodes and IF they are found 
 to be BWav&#8217;s with valid timecode references, sync them in Maya such
 that their offset = Bwav&#8217;s timecode ie: sync them on the timeline to
 the bwavs internal timecode.</dd>
@@ -362,8 +361,8 @@ all the calculations and a bwav who&#8217;s timecode is &#8216;01:00:00:10&#8217
 <dt id="Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_dynamic">
 <code class="descname">bwav_sync_to_dynamic</code><span class="sig-paren">(</span><em>tc_node</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_dynamic" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
-<dt>: PRO_PACK</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier"></span><dd>like the baw_sync_to_timecode func this will sync this audio bwav node to a given timecode
+<dt>: PRO_PACK :</dt>
+<dd>like the baw_sync_to_timecode func this will sync this audio bwav node to a given timecode
 but the difference here is that that timecode is extracted dynamically from a given node,
 stamped with the Red9 timecode attrs. This also supports multiple timecode takes within the
 same node</dd>

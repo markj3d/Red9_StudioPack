@@ -17,7 +17,7 @@ class _MainMenus_(object):
     lockchannels = 'LockChannels'
     lockchannels_ann = "Manage Channel States"
     metanodeui = "MetaNodeUI"
-    metanodeui_ann="MetaNode Scene Searcher"
+    metanodeui_ann = "MetaNode Scene Searcher"
     scene_reviewer = "Scene Reviewer"
     scene_reviewer_ann = "Launch the Scene Review Reporter"
     mouse_mocap = "MouseMoCap"
@@ -27,7 +27,7 @@ class _MainMenus_(object):
     interactive_curve_filter = "Interactive Curve Filter"
     interactive_curve_filter_ann = "Interactive Curve Filter - also available in the GraphEditor>curve menu"
     mirror_setup = "MirrorSetup"
-    mirror_setup_ann="Temp UI to help setup the Mirror Markers on a rig"
+    mirror_setup_ann = "Temp UI to help setup the Mirror Markers on a rig"
     camera_tracker = 'CameraTracker'
     camera_tracker_pan = "CameraTracker > panning"
     camera_tracker_pan_ann = "Panning Camera : CameraTrack the current view with the current camera"
@@ -36,7 +36,7 @@ class _MainMenus_(object):
     camera_tracker_track_ann = "Tracking Camera : CameraTrack the current view with the current camera"
     animation_binder = "Animation Binder"
     animation_binder_ann = "Siggraph Autodesk MasterClass 2011 - Toolset"
-    
+
     red9_homepage = "Red9_HomePage"
     red9_homepage_ann = "Open Red9Consultancy HomePage"
     red9_blog = "Red9_Blog"
@@ -66,14 +66,14 @@ class _MainMenus_(object):
     systems_reload = "systems: reload()"
     systems_reload_ann = "Force a complete reload on the core of Red9"
     language = "Language"
-    
+
     # additional menu stubs
     open_in_explorer = "Red9: Open in Explorer"
     open_in_explorer_ann = "Open the folder containing the current Maya Scene"
     copy_to_clipboard = 'Red9: Copy to Clipboard'
     copy_to_clipboard_ann = 'Copy the current Maya filepath to the OS:Clipboard'
-    
-    #TimeSlider menu additions
+
+    # TimeSlider menu additions
     collapse_time = 'Red9: Collapse Time'
     collapse_time_ann = 'Collapse Time, cutting keys from a given range and rippling remaining keys. Also deals with clips, audio and supported MetaData'
     collapse_selected = 'Collapse : Selected Only'
@@ -82,7 +82,7 @@ class _MainMenus_(object):
     collapse_full_ann = 'Collapse the keys in the selected TimeRange (Red highlighted)'
     collapse_mrig = 'Collapse : Selected mRigs'
     collapse_mrig_ann = 'ONLY Applicable for Meta based mRig systems\nCollapse the keys in the selected TimeRange (Red highlighted)'
-    
+
     insert_padding = 'Red9: Insert Padding'
     pad_selected = 'Pad : Selected Only'
     pad_selected_ann = 'Insert time in the selected TimeRange (Red highlighted)'
@@ -90,7 +90,7 @@ class _MainMenus_(object):
     pad_full_scene_ann = 'Insert time in the selected TimeRange (Red highlighted)'
     pad_mrigs = 'Pad : Selected mRigs'
     pad_mrigs_ann = 'ONLY Applicable for Meta based mRig systems\nInsert time in the selected TimeRange (Red highlighted)'
-     
+
     inverse_anim = 'Red9: Reverse Animation'
     inverse_selected = 'Reverse: Selected Only'
     inverse_selected_ann = 'ONLY Applicable for Meta based mRig systems\nReverse the animation data over the selected timeRange'
@@ -101,8 +101,8 @@ class _MainMenus_(object):
     selectkeys_timerange = 'Keys : Select from Range'
     selectkeys_timerange_ann = 'Select all keys from the selected Objects within the given TimeRange or selected TimeRange(Red highlighted)'
     setrangetoo = 'Range Set to: Animated'
-    setrangetoo_ann ='Set the timerange to the extent of all animation found on the selected objects'
-    
+    setrangetoo_ann = 'Set the timerange to the extent of all animation found on the selected objects'
+
     # audio sub_menu
     sound_red9_sound = "Red9_Sound"
     sound_offset_manager = "Offset Manager"
@@ -129,8 +129,8 @@ class _MainMenus_(object):
     sound_format_soundnode_name_ann = "rename the sound nodes to their respective short file name for consistency"
     sound_inspect_wav = "Inspect Wav Format"
     sound_inspect_wav_ann = "open up the inspector and show internal details about wav formats"
-        
-    
+
+
 class _Generic_(object):
     '''
     Used by many of the UI's, general non-specific text
@@ -141,7 +141,7 @@ class _Generic_(object):
     refresh = 'Refresh'
     vimeo_menu = 'VimeoHelp'
     vimeo_help = "Open Vimeo Help File"
-    
+
     hierarchy = 'Hierarchy'
     hierarchy_ann = 'Process Hierarchy'
     name = 'Name'
@@ -150,7 +150,7 @@ class _Generic_(object):
     set = 'set'
     clear_all = 'ClearAll'
     clear = 'Clear'
-    
+
     attrs = 'attrs'
     transX = 'Translate X'
     transY = 'Translate Y'
@@ -176,17 +176,17 @@ class _Generic_(object):
     joints = 'Joints'
     locators = 'Locators'
     cameras = 'Cameras'
-    audio ='Audio'
+    audio = 'Audio'
     orient_constraint = 'OrientConstraint'
-    point_constraint ='PointConstraint'
+    point_constraint = 'PointConstraint'
     parent_constraint = 'ParentConstraint'
     ik_handles = 'IKHandles'
     transforms = 'Transforms'
-    
+
     right = 'Right'
     left = 'Left'
     centre = 'Centre'
-    
+
     debug = 'Debug'
     yes = 'Yes'
     no = 'No'
@@ -203,7 +203,7 @@ class _Generic_(object):
 class _LockChannelsUI_(object):
     title = 'LockChannels'
     user_defined = 'All User Defined Attrs'
-    user_defined_ann='These are non-standard attributes added to the nodes. These are considered per node'
+    user_defined_ann = 'These are non-standard attributes added to the nodes. These are considered per node'
     all_attrs = 'ALL Attrs'
     specific_attrs = 'Specific Attrs'
     specific_attrs_ann = 'list of specific attributes to lock, comma separated: note : RMB Menu'
@@ -227,23 +227,23 @@ class _SearchNodeUI_(object):
     title = "Node Searcher"
     complex_node_search = 'Complex Node Search'
     complex_node_search_ann = 'nodeTypeSelectors'
-    
+
     search_nodetypes = 'Specific NodeTypes'
     search_nodetypes_ann = 'Specific NodeTypes to look for - separated by ,'
     search_attributes = 'Search Attributes'
     search_attributes_ann = 'Search for specific Attributes on nodes, list separated by ","'
     search_pattern = 'Search Name Pattern'
-    search_pattern_ann='Search for specific nodeName Patterns, list separated by "," - Note this is a Python.regularExpression - ^ clamps to the start, $ clamps to the end'
-    
+    search_pattern_ann = 'Search for specific nodeName Patterns, list separated by "," - Note this is a Python.regularExpression - ^ clamps to the start, $ clamps to the end'
+
     from_selected = 'From Selected'
     from_selected_ann = 'Process Selected Hierarchies or all Scene Nodes'
     return_transforms = 'Return Transforms were applicable'
-    return_transforms_ann='Clamp the filter to only return the Transform Nodes, by-passes any shapes or nodeTypes with Transforms as parents'
+    return_transforms_ann = 'Clamp the filter to only return the Transform Nodes, by-passes any shapes or nodeTypes with Transforms as parents'
     include_roots = 'Include Roots'
     include_roots_ann = 'Include the originalRoots in the selection'
     intersection_search = 'Intersection Search - All Above Fields'
-    simple_hierarchy ='Simple Hierarchy'
-    
+    simple_hierarchy = 'Simple Hierarchy'
+
 
 # ======================================================================================
 # AnimationUtils.py Module ---
@@ -254,7 +254,7 @@ class _AnimationUI_(_SearchNodeUI_):
     tab_animlayout = 'Animation_Toolkit'
     tab_poselayout = 'PoseManager'
     tab_filterlayout = 'Hierarchy_Control'
-    
+
     vimeo_walkthrough = 'Open Vimeo > WalkThrough v1.27'
     vimeo_update = 'Open Vimeo > Update v1.40'
     vimeo_hierarchy_control = 'Open Vimeo > HierarchyControl'
@@ -263,16 +263,16 @@ class _AnimationUI_(_SearchNodeUI_):
     vimeo_mirrorsetup = 'Open Vimeo > MirrorSetups'
     vimeo_posesaver_advanced = 'Open Vimeo > PoseSaver - Advanced Topics'
     vimeo_posesaver_blending = 'Open Vimeo > PoseSaver - Blending and maintain spaces'
-    
+
     # Tab1 AnimFunctions =================================================================
-    
+
     cbox_attrs = 'ChBox Attrs'
     copy_to_many = 'CopyToMany'
-    timerange= 'TimeRange'
+    timerange = 'TimeRange'
     cbox_attrs_ann = 'Copy only those channels selected in the channelBox'
     step = 'Step'
-    
-    copy_attrs_hierarchy_ann='Copy Attributes Hierarchy : Filter Hierarchies for transforms & joints then Match NodeNames'
+
+    copy_attrs_hierarchy_ann = 'Copy Attributes Hierarchy : Filter Hierarchies for transforms & joints then Match NodeNames'
     copy_attrs = 'Copy Attributes'
     copy_attrs_ann = '''CopyAttributes : Modes: -------------------
 Default > Selected Object Pairs (Obj2 to Obj1), (Obj3 to Obj4)
@@ -280,7 +280,7 @@ Hierarchy > Uses Selection Filters on Hierarchy Tab
 CopyToMany > Copy data from First selected to all Subsequent nodes
 Note: This also handles CharacterSets and SelectionSets if selected, processing all members'''
     copy_attrs_to_many_ann = 'Copy Matching Attributes from First selected to all Subsequently selected nodes'
-    
+
     copy_keys_hierarchy_ann = 'Copy Keys Hierarchy : Filter Hierarchies for transforms & joints then Match NodeNames'
     copy_keys = 'Copy Keys'
     copy_keys_ann = '''CopyKeys : Modes: -------------------------
@@ -290,10 +290,10 @@ CopyToMany > Copy data from First selected to all Subsequent nodes
 Note: This also handles CharacterSets and SelectionSets if selected, processing all members'''
     copy_keys_to_many_ann = 'Copy Animation from First selected to all Subsequently selected nodes'
     copy_keys_timerange_ann = 'ONLY Copy Keys over PlaybackTimeRange or Selected TimeRange (highlighted in Red on the timeline)'
-    copy_keys_merge_layers= 'MergeLayers'
+    copy_keys_merge_layers = 'MergeLayers'
     copy_keys_merge_layers_ann = 'If AnimLayers are found pre-compile the anim and copy the resulting data'
     paste_method_ann = 'Paste Method Used: Default = "replace", paste method used by the copy code internally'
-    
+
     snaptransforms = 'Snap Transforms'
     snaptransforms_ann = '''Snap Selected Object Pairs (Obj2 to Obj1), (Obj4 to Obj3) or Snap Filtered Hierarchies\nNote: This also handles CharacterSets if selected, processing all members'''
     snaptransforms_timerange_ann = 'Process over PlaybackTimeRange or Selected TimeRange (in Red on the timeline)'
@@ -310,7 +310,7 @@ Note: This also handles CharacterSets and SelectionSets if selected, processing 
     pre_copykeys_ann = 'Copy all animation data for all channels prior to running the Snap over Time'
     iteration = 'Iteration'
     iteration_ann = 'This is the number of iterations over each hierarchy node during processing, if you get issues during snap then increase this'
-    
+
     step = 'Step'
     step_ann = 'Frames to advance the timeline between Processing - accepts negative values'
     tracknstabilize = 'Track or Stabilize'
@@ -319,14 +319,14 @@ Note: This also handles CharacterSets and SelectionSets if selected, processing 
 Track Object Mode : Select TWO Objects - first is source, second will track with offset
 Track Component Mode :  Select a Component (poly,vert,edge) then an Object - second will track the component with offset'''
     track_process_forward = '>>  Process Fwd  >>'
-    
+
     timeoffset = 'TimeOffset'
     offsetby = 'Offset By'
     offset = 'Offset'
     offset_ann = 'If processing at Scene Level then this will offset all appropriate: AnimCurves,Sound and Clips. If processing on selected it will deal with each node type as it finds'
-    offset_start  = 'Offset Start Frame To'
+    offset_start = 'Offset Start Frame To'
     offset_start_ann = 'If processing at Scene Level then this will offset all appropriate: AnimCurves,Sound and Clips. If processing on selected it will deal with each node type as it finds'
-  
+
     offset_hierarchy_ann = 'Offset Hierarchy'
     offset_fullscene = 'FullScene'
     offset_fullscene_ann = 'ON:Scene Level Processing: OFF:SelectedNode Processing - Offsets Animation, Sound and Clip data as appropriate'
@@ -354,21 +354,21 @@ Track Component Mode :  Select a Component (poly,vert,edge) then an Object - sec
     symmetry_animation_ann = 'Symmetry the Animation : L >> R - NOTE Layers and Trax are NOT supported yet'
     symmetry_pose = 'Symmetry Pose'
     symmetry_pose_ann = 'Symmetry the Current Pose : L >> R'
-    
-    
+
+
     # Tab2 Hierarchy =================================================================
-    
+
     hierarchy_descriptor = '''Filter Settings : A Hierarchy search pattern
 used by all the Hierarchy checkboxes on the main tabs
 Particularly relevant for complex Animation Rigs
 as it allows you to pin-point required controllers.\n
 Note that if these are all blank then hierarchy
 checkBoxes will process all children of the roots'''
-                
+
     metarig = 'MetaRig'
     metarig_ann = 'Switch to MetaRig Sub Systems'
     specific_nodetypes_ann = 'RMB QuickSelector for Common Types : Search for "Specific NodeTypes" in the hierarchy, list separated by ","'
-    
+
     nodetype_transform = 'nodeType : Transform'
     nodetype_nurbs_curves = 'nodeType : NurbsCurves'
     nodetype_nurbs_surfaces = 'nodeType : NurbsSurfaces'
@@ -378,7 +378,7 @@ checkBoxes will process all children of the roots'''
     nodetype_cameras = 'nodeType : Cameras'
     nodetype_hikeff = 'nodeType : hikIKEffector'
     nodetype_blendshape = 'nodeType : blendShape'
-   
+
     priorities_clear = 'Clear Process Priorities'
     priorities_set = 'Set Priorities from Selected'
     priorities_append = 'Append Priorities from Selected'
@@ -386,15 +386,15 @@ checkBoxes will process all children of the roots'''
     priorities_use_snap = 'Use Priority as SnapList'
     move_up = 'Move Up'
     move_down = 'Move Down'
-    
+
     presets_available = 'Available Presets:'
     presets_delete = 'DeletePreset'
     presets_opendir = 'OpenPresetDir'
-    
+
     match_method = 'MatchMethod'
     match_method_ann = 'Method used to match nodes in different hierarchies, default="stripPrefix"'
     match_base = 'base'
-    match_base_ann ='Exact shortName matching of nodes only, ignores namespaces : Fred:MainCtrl == Bert:MainCtrl'
+    match_base_ann = 'Exact shortName matching of nodes only, ignores namespaces : Fred:MainCtrl == Bert:MainCtrl'
     match_stripprefix = 'stripPrefix'
     match_stripprefix_ann = 'Allows one hierarchy to be prefixed when matching, ignores namespaces : Fred:New_MainCtrl == Bert:MainCtrl'
     match_index = 'index'
@@ -403,15 +403,15 @@ checkBoxes will process all children of the roots'''
     match_mirror_ann = 'Match nodes via their internal r9MirrorIndexes if found'
     match_metadata = 'metaData'
     match_metadata_ann = 'Match nodes based on their wiring in the MetaData framework'
-    
+
     filter_test = 'Test Filter'
     filter_test_ann = 'Test the Hierarchy Filter on the selected root node'
     filter_store = 'Store New Filter'
     filter_store_ann = 'Store this filterSetting Object'
-        
-    
+
+
     #Tab3 PoseSaver  ==================================================================================
-    
+
     pose_path = 'PosePath'
     pose_local = 'Local Poses'
     pose_local_ann = 'local mode gives you full control to save,delete and load the library'
@@ -434,24 +434,26 @@ checkBoxes will process all children of the roots'''
     pose_set_root_ann = 'Hierarchy Root Node for the Pose'
     pose_relative = 'RelativePose'
     pose_maintain_parents = 'Maintain ParentSpaces'
-    
+
     pose_rel_rotmethod = 'Rotate Method'
     pose_rel_tranmethod = 'Translate Method'
     pose_rel_methods = 'Relative Offset Methods'
     pose_rel_projected = 'projected'
     pose_rel_absolute = 'absolute'
-    
+
     pose_pp = 'Pose Point Cloud'
     pose_pp_make = 'Make PPC'
     pose_pp_make_ann = 'Make a Pose Point Cloud - have to use hierarchy for this! - optional second selected node is a reference mesh'
     pose_pp_delete = 'Delete PPC'
     pose_pp_delete_ann = 'Delete the current Pose Point Cloud'
     pose_pp_snap = 'Snap Pose'
-    pose_pp_snap_ann='Snap the RIG to the PPC pose'
+    pose_pp_snap_ann = 'Snap the RIG to the PPC pose'
     pose_pp_update = 'Update PPC'
     pose_pp_update_ann = 'Update the PPC to the RIGS current pose'
 
-
+    pose_blend_select_members = 'Select Members'
+    pose_blend_key_members = 'Key Members'
+    
     # POSE RMB Popup =============================================================
 
     pose_rmb_blender = 'PoseBlender'
@@ -463,7 +465,7 @@ checkBoxes will process all children of the roots'''
     pose_rmb_update_thumb = 'Update : Thumb Only'
     pose_rmb_add_subfolder = 'Add Subfolder'
     pose_rmb_refresh = 'Refresh List'
-    pose_rmb_openfile ='Open Pose File'
+    pose_rmb_openfile = 'Open Pose File'
     pose_rmb_opendir = 'Open Pose Directory'
     pose_rmb_compare = 'Pro : PoseCompare'
     pose_rmb_compare_skel = 'Pro : Compare against - [skeletonData]'
@@ -474,9 +476,9 @@ checkBoxes will process all children of the roots'''
     pose_rmb_grid_small = 'Grid Size: Small'
     pose_rmb_grid_med = 'Grid Size: Medium'
     pose_rmb_grid_large = 'Grid Size: Large'
-    
+
 class _Mirror_Setup_(object):
-    
+
     title = "MirrorSetup"
     side = 'MirrorSide:'
     index = 'MirrorIndex:'
@@ -495,18 +497,18 @@ class _Mirror_Setup_(object):
     save_configs = 'Save MirrorConfigs'
     save_configs_ann = 'Save the current MirrorSetups'
     load_configs = 'Load MirrorConfigs'
-    
+
 class _CameraTracker_(object):
-    
+
     title = 'CameraTracker'
     tracker_step = 'TrackerStep: '
     frames = 'frames'
     maintain_frame = 'MaintainCurrentFraming'
     pan = 'Pan'
     track = 'Track'
-    
+
 class _CurveFilters_(object):
-    
+
     title = 'interactiveCurveFilter'
     vimeo_randomize_ann = 'simple demo showing the functionality of Simplify curve and Randomizer'
     curve_resampler = 'Curve Resampler'
@@ -524,7 +526,7 @@ class _CurveFilters_(object):
     toggle_buffers = 'ToggleBuffers'
 
 class _Randomizer_(object):
-    
+
     title = 'KeyRandomizer'
     vimeo_randomizer_ann = 'simple demo showing the functionality of Simplify curve and Randomizer'
     strength_value = 'strength : value'
@@ -539,29 +541,29 @@ class _Randomizer_(object):
     toggle_buffers = 'ToggleBuffers'
 
 
-  
+
 # ======================================================================================
 # Meta.py Module ---
 # ======================================================================================
 
 
 class _MetaNodeUI_(object):
-    
+
     vimeo_dev_part1 = "Vimeo Help: Develop Conference MetaData-Part1"
-    vimeo_dev_part1_ann ='Develop Conference 2014 - MetaData in a Production Pipeline Video1'
-    vimeo_dev_part2 ="Vimeo Help: Develop Conference MetaData-Part2"
+    vimeo_dev_part1_ann = 'Develop Conference 2014 - MetaData in a Production Pipeline Video1'
+    vimeo_dev_part2 = "Vimeo Help: Develop Conference MetaData-Part2"
     vimeo_dev_part2_ann = 'Develop Conference 2014 - MetaData in a Production Pipeline Video2'
     vimeo_dev_part3 = "Vimeo Help: Develop Conference MetaData-Part3"
-    vimeo_dev_part3_ann='Develop Conference 2014 - MetaData in a Production Pipeline Video3'
+    vimeo_dev_part3_ann = 'Develop Conference 2014 - MetaData in a Production Pipeline Video3'
     vimeo_meta_part1 = "Vimeo Help: MetaData-Part1"
     vimeo_meta_part1_ann = 'Part1 goes through the main attribute handling inside Meta'
     vimeo_meta_part2 = "Vimeo Help: MetaData-Part2"
-    vimeo_meta_part2_ann='Part2 goes through the class structures and the basic factory aspect of Meta'
+    vimeo_meta_part2_ann = 'Part2 goes through the class structures and the basic factory aspect of Meta'
     vimeo_meta_part3 = "Vimeo Help: MetaData-Part3"
     vimeo_meta_part3_ann = 'Part3 shows how to add metaRig to your systems, all the connectChild and addRigCtrl calls'
     vimeo_meta_part4 = "Vimeo Help: MetaData-Part4"
     vimeo_meta_part4_ann = 'Part4 goes through subclassing Meta and using it in your own systems'
-    
+
     print_registered_nodetypes = "Print :Registered NodeTypes"
     print_registered_nodetypes_ann = 'Prints the currently registered nodeTypes from the Meta Registry'
     print_registered_metaclasses = "Print :Registered MetaClasses"
@@ -572,7 +574,7 @@ class _MetaNodeUI_(object):
     clear_cache_ann = 'Clear all currently cached nodes from the registry'
     update_to_uuids = "Upgrade mNodes to UUIDs"
     update_to_uuids_ann = 'Upgrades any current mNodes in the scene to the new UIID system for caching'
-    
+
     mtypes_filter = 'mTypes filter : '
     minstances_filter = 'mInstances filter : '
     registered_metaclasses_ann = 'Registered MetaCalsses to use as filters'
@@ -580,10 +582,10 @@ class _MetaNodeUI_(object):
     valids = 'valids'
     invalids = 'inValids'
     unregistered = 'unRegistered'
-    
+
     ui_launch_mtypes = 'UI launch with filter MetaNodes: mTypes'
     ui_launch_minstances = 'UI launch with filter MetaNodes: mInstances'
-    
+
     graph_selected = 'Graph Selected Networks'
     select_children = 'Select Children'
     select_children_ann = 'NOTE doubleClick on the UI also runs the selectChildren call"'
@@ -605,14 +607,14 @@ class _MetaNodeUI_(object):
     # confirms and other messages
     confirm_delete = 'Confirm metaNode Delete',
     confirm_delete_message = 'Confirm deletion of metaNode\nare you absolutely\n\nSURE\n\nyou meant to do this?'
-    
-    
+
+
 # ======================================================================================
 # Tools.py Module ---
 # ======================================================================================
 
 class _SceneReviewerUI_(object):
-    
+
     title = 'SceneReviewTracker'
     author = 'Author'
     date = 'Date'
@@ -622,4 +624,4 @@ class _SceneReviewerUI_(object):
     history = 'History'
     activate_live_review = 'Activate Live Review'
     disable_live_review = 'Disable Live Review'
-    
+

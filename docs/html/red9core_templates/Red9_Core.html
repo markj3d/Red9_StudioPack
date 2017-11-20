@@ -315,7 +315,7 @@ produce a hierarchy search.</p>
 <dl class="method">
 <dt id="Red9.core.Red9_CoreUtils.FilterNode_Settings.printSettings">
 <code class="descname">printSettings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode_Settings.printSettings" title="Permalink to this definition">¶</a></dt>
-<dd><p>prettyr print the filterSettings data</p>
+<dd><p>pretty print the filterSettings data</p>
 </dd></dl>
 
 <dl class="method">
@@ -603,14 +603,15 @@ will strip out SetDrivens, Clips curves etc..</li>
 <dl class="method">
 <dt id="Red9.core.Red9_CoreUtils.FilterNode.lsSearchAttributes">
 <code class="descname">lsSearchAttributes</code><span class="sig-paren">(</span><em>searchAttrs</em>, <em>nodes=None</em>, <em>incRoots=True</em>, <em>returnValues=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode.lsSearchAttributes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Search for nodes that have a given attr or any attrs from a given list[]</p>
+<dd><p>Search for nodes that have a given attr or any attrs from a given list[]
+:param searchAttrs: list or string of attributes to search for on all child nodes</p>
+<blockquote>
+<div>NOTE: new operators &#8216;NOT:&#8217; and &#8216;=&#8217;</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>searchAttrs</strong> &#8211; list or string of attributes to search for on all child nodes
-NOTE: new operators &#8216;NOT:&#8217; and &#8216;=&#8217;</li>
 <li><strong>nodes</strong> &#8211; optional - allows you to pass in a list to process if required</li>
 <li><strong>returnValues</strong> &#8211; If found return the Value of the Attrs
 along with the node - switches return type to tuple. default=False</li>
@@ -796,16 +797,16 @@ return and in what format if we have multiple blendShapes on the node?</p>
 <li><strong>nodeListB</strong> &#8211; list of nodes</li>
 <li><strong>matchMethod</strong> &#8211; <p>default &#8216;stripPrefix&#8217;</p>
 <div class="line-block">
-<div class="line">* matchMethod=&#8221;index&#8221; : No intelligent matching, just purely zip the lists 
+<div class="line">* matchMethod=&#8221;index&#8221; : no intelligent matching, just purely zip the lists 
 together in the order they were given  </div>
-<div class="line">* matchMethod=&#8221;indexReversed&#8221; : No intelligent matching, just purely zip 
+<div class="line">* matchMethod=&#8221;indexReversed&#8221; : no intelligent matching, just purely zip 
 the lists together in the reverse order they were given  </div>
-<div class="line">* matchMethod=&#8221;base&#8221; :  Match each element by exact name (shortName) such 
+<div class="line">* matchMethod=&#8221;base&#8221; :  match each element by exact name (shortName) such 
 that Spine==Spine or REF1:Spine==REF2:Spine  </div>
-<div class="line">* matchMethod=&#8221;stripPrefix&#8221; : Match each element by a relaxed naming convention 
+<div class="line">* matchMethod=&#8221;stripPrefix&#8221; : match each element by a relaxed naming convention 
 allowing for prefixes one side such that RigX_Spine == Spine</div>
-<div class="line">* matchMethod=&#8221;mirrorIndex&#8221; : Match via the nodes MirrorMarker</div>
-<div class="line">* matchMethod=&#8221;metaData&#8221; : matc the nodes based on their wiring connections to the MetaData framework</div>
+<div class="line">* matchMethod=&#8221;mirrorIndex&#8221; : match via the nodes MirrorMarker</div>
+<div class="line">* matchMethod=&#8221;metaData&#8221; : match the nodes based on their wiring connections to the MetaData framework</div>
 </div>
 </li>
 </ul>
@@ -1258,6 +1259,20 @@ else we validate that testRange is fully within the baseRanges times</p>
 <dt id="Red9.core.Red9_CoreUtils.distanceBetween">
 <code class="descname">distanceBetween</code><span class="sig-paren">(</span><em>nodeA</em>, <em>nodeB</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.distanceBetween" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple calculation to return the distance between 2 objects</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.convertUnits_internalToUI">
+<code class="descname">convertUnits_internalToUI</code><span class="sig-paren">(</span><em>value</em>, <em>unit</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.convertUnits_internalToUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert units to Maya&#8217;s internal &#8216;cm&#8217; unit
+for the API to use when loading linear data</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.convertUnits_uiToInternal">
+<code class="descname">convertUnits_uiToInternal</code><span class="sig-paren">(</span><em>value</em>, <em>unit</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.convertUnits_uiToInternal" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert units from Maya&#8217;s internal / base &#8216;cm&#8217; 
+to a given unit, multiplying up to suit</p>
 </dd></dl>
 
 <dl class="class">
