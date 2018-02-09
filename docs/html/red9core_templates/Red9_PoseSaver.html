@@ -425,6 +425,40 @@ This only checks those nodes in the snapList and only runs under relative mode.<
 </dd></dl>
 
 <dl class="class">
+<dt id="Red9.core.Red9_PoseSaver.PoseBlender">
+<em class="property">class </em><code class="descname">PoseBlender</code><span class="sig-paren">(</span><em>filepaths</em>, <em>nodes=None</em>, <em>filterSettings=None</em>, <em>useFilter=True</em>, <em>matchMethod='stripPrefix'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseBlender" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>simple wrap over the PoseLoad code to control the loading of the r9Pose through a poseBlender UI
+or a simple percent args passed into the applyPercent call. This is called by the AnimUI and is really
+only meant as an internal binding</p>
+<dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.PoseBlender.keyMembers">
+<code class="descname">keyMembers</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseBlender.keyMembers" title="Permalink to this definition">¶</a></dt>
+<dd><p>key the members of the pose data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.PoseBlender.selectMembers">
+<code class="descname">selectMembers</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseBlender.selectMembers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.PoseBlender.applyPercent">
+<code class="descname">applyPercent</code><span class="sig-paren">(</span><em>percent</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseBlender.applyPercent" title="Permalink to this definition">¶</a></dt>
+<dd><p>direct call to load a percentage of the given pose in this instance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.PoseBlender.show">
+<code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseBlender.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>main blender UI, simple but generic and allows us to dial in a percentage
+of the given pose. This is basically a wrap for the other UI&#8217;s and functions 
+that call this method so we have a single class managing the UI and functionality.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="Red9.core.Red9_PoseSaver.PosePointCloud">
 <em class="property">class </em><code class="descname">PosePointCloud</code><span class="sig-paren">(</span><em>nodes</em>, <em>filterSettings=None</em>, <em>meshes=[]</em>, <em>prioritySnapOnly=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>

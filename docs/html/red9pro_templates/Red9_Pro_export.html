@@ -120,7 +120,7 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001332AB48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001283AD48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -156,7 +156,7 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000137AC448&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -215,7 +215,7 @@ with all joints so the user can select one</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.JntSel.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013324A88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000137ADB08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -285,7 +285,7 @@ can tailor the view to different engine targets.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013324AC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000137AD548&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -444,85 +444,7 @@ than the base class level</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001335D288&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Red9.pro_pack.core.exporter.LoopProcessStatus">
-<em class="property">class </em><code class="descname">LoopProcessStatus</code><span class="sig-paren">(</span><em>loop</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.LoopProcessStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>class thats bound to the loop instance and used to track process status</p>
-<p>setup a new instance of the class only if the loop passed in the constructor
-wasn&#8217;t already hooked with a LoopProcessState node</p>
-<dl class="method">
-<dt id="Red9.pro_pack.core.exporter.LoopProcessStatus.clear">
-<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.LoopProcessStatus.clear" title="Permalink to this definition">¶</a></dt>
-<dd><p>delete this object, clearing the status of the loop thats bound</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.exporter.LoopProcessStatus.currentProcess">
-<code class="descname">currentProcess</code><a class="headerlink" href="#Red9.pro_pack.core.exporter.LoopProcessStatus.currentProcess" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.exporter.LoopProcessStatus.addProcess">
-<code class="descname">addProcess</code><span class="sig-paren">(</span><em>process</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.LoopProcessStatus.addProcess" title="Permalink to this definition">¶</a></dt>
-<dd><p>add a new process to track and set that as the current process</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>process</strong> &#8211; str, process name to add</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.exporter.LoopProcessStatus.getStatus">
-<code class="descname">getStatus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.LoopProcessStatus.getStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>get the status of this object</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.exporter.LoopProcessStatus.setFailed">
-<code class="descname">setFailed</code><span class="sig-paren">(</span><em>process=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.LoopProcessStatus.setFailed" title="Permalink to this definition">¶</a></dt>
-<dd><p>set this process objects general state to fail</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>process</strong> &#8211; if given we set the status to failed of this specific process
-else we set the self.currentProcess</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.exporter.LoopProcessStatus.setLogMessage">
-<code class="descname">setLogMessage</code><span class="sig-paren">(</span><em>message</em>, <em>process=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.LoopProcessStatus.setLogMessage" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>message</strong> &#8211; str,  message added to the log list</li>
-<li><strong>process</strong> &#8211; if given we set the status to failed of this specific process
-else we set the self.currentProcess</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.exporter.LoopProcessStatus.printStatusLog">
-<code class="descname">printStatusLog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.LoopProcessStatus.printStatusLog" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001282E588&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -566,7 +488,7 @@ else we set the self.currentProcess</li>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportManager.export_fbx">
-<code class="descname">export_fbx</code><span class="sig-paren">(</span><em>runSceneRoot=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.export_fbx" title="Permalink to this definition">¶</a></dt>
+<code class="descname">export_fbx</code><span class="sig-paren">(</span><em>runSceneRoot=False</em>, <em>mode='simple'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.export_fbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>run the fbx anim transfer export process</p>
 </dd></dl>
 

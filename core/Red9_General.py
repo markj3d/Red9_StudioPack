@@ -254,6 +254,7 @@ def keepSelection(func):
     '''
     DECORATOR: to keep scene selection as it was before a function or a method execution
     '''
+    @wraps(func)
     def wrapper(*args, **kwargs):
         currentSelection = cmds.ls(sl=True)
 
@@ -263,6 +264,18 @@ def keepSelection(func):
             cmds.select(currentSelection)
         else:
             cmds.select(cl=True)
+        return res
+    return wrapper
+
+def deleteNewNodes(func):
+    '''
+    DECORATOR: Delete all the nodes created by the function being decorated
+    '''
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        old = set(cmds.ls())
+        res = func(*args, **kwargs)
+        cmds.delete(list(set(cmds.ls()) - old))
         return res
     return wrapper
 

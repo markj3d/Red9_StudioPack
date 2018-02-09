@@ -1123,15 +1123,17 @@ def boot_client_projects():
     clients = get_client_modules()
     clientsToBoot = []
     if clients and len(clients) > 1 and not mayaIsBatch():
-        options = ['All']
+        options = ['ALL', 'NONE']
         options.extend(clients)
         result = cmds.confirmDialog(title='ProjectPicker',
                             message=("Multiple Projects Found!\r\r" +
                                      "Which Project would you like to boot?"),
                             button=options, messageAlign='center', icon='question',
                             dismissString='Cancel')
-        if result == 'All':
+        if result == 'ALL':
             clientsToBoot = clients
+        if result == 'NONE':
+            return
         elif not result == 'Cancel':
             clientsToBoot.append(result)
     else:

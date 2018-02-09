@@ -91,7 +91,7 @@ what each function is expected to return</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.registerMClassInheritanceMapping" title="Red9.core.Red9_Meta.registerMClassInheritanceMapping"><code class="xref py py-obj docutils literal"><span class="pre">registerMClassInheritanceMapping</span></code></a>()</td>
-<td></td>
+<td>build up the master global registry of all available subclasses from r9Meta.MetaClass,</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.registerMClassNodeMapping" title="Red9.core.Red9_Meta.registerMClassNodeMapping"><code class="xref py py-obj docutils literal"><span class="pre">registerMClassNodeMapping</span></code></a>([nodeTypes])</td>
 <td>Hook to allow you to extend the type of nodes included in all the getMeta searches.</td>
@@ -99,7 +99,7 @@ what each function is expected to return</p>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.isMetaNode" title="Red9.core.Red9_Meta.isMetaNode"><code class="xref py py-obj docutils literal"><span class="pre">isMetaNode</span></code></a>(node[,&nbsp;mTypes,&nbsp;checkInstance,&nbsp;...])</td>
 <td>Simple bool, Maya Node is or isn&#8217;t an mNode</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.isMetaNodeInherited" title="Red9.core.Red9_Meta.isMetaNodeInherited"><code class="xref py py-obj docutils literal"><span class="pre">isMetaNodeInherited</span></code></a>(node[,&nbsp;mInstances])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.isMetaNodeInherited" title="Red9.core.Red9_Meta.isMetaNodeInherited"><code class="xref py py-obj docutils literal"><span class="pre">isMetaNodeInherited</span></code></a>(node[,&nbsp;mInstances,&nbsp;mode])</td>
 <td>unlike isMetaNode which checks the node against a particular MetaClass,</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.getMetaNodes" title="Red9.core.Red9_Meta.getMetaNodes"><code class="xref py py-obj docutils literal"><span class="pre">getMetaNodes</span></code></a>(*args,&nbsp;**kws)</td>
@@ -155,7 +155,13 @@ what each function is expected to return</p>
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.registerMClassInheritanceMapping">
 <code class="descname">registerMClassInheritanceMapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.registerMClassInheritanceMapping" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>build up the master global registry of all available subclasses from r9Meta.MetaClass,
+this build up 2 global dicts:
+RED9_META_REGISTERY : {&#8216;className&#8217;: class pointer}
+RED9_META_INHERITANCE_MAP : {&#8216;className&#8217;: {&#8216;full&#8217;: [list of inherited class pointers]},</p>
+<blockquote>
+<div>{&#8216;short&#8217;: [list of inherited class.__names__]}}</div></blockquote>
+</dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.printSubClassRegistry">
@@ -390,11 +396,19 @@ isMetaNodeInherited which has to figure the subclass mapping</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.isMetaNodeInherited">
-<code class="descname">isMetaNodeInherited</code><span class="sig-paren">(</span><em>node</em>, <em>mInstances=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.isMetaNodeInherited" title="Permalink to this definition">¶</a></dt>
+<code class="descname">isMetaNodeInherited</code><span class="sig-paren">(</span><em>node</em>, <em>mInstances=[]</em>, <em>mode='short'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.isMetaNodeInherited" title="Permalink to this definition">¶</a></dt>
 <dd><p>unlike isMetaNode which checks the node against a particular MetaClass,
 this expands the check to see if the node is inherited from or a subclass of
-a given Meta base class, ie, part of a system
-TODO : we COULD return the instantiated metaClass object here rather than just a bool??</p>
+a given Meta base class, ie, part of a system</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this has been modified to bypass the issue of the same subclass being imported
+in a different space in the inheritance and breaking the standard issubclass()
+testing. This was an issue as r9Pro.metadata_pro for clients is imported via the .r9Co
+handlers and can break things.
+We now us a new global registry r9Meta.RED9_META_INHERITANCE_MAP which stores
+each classes inheritance in long and short form on boot.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -1228,6 +1242,7 @@ in generic meta functions.</p>
 <li><strong>nAttrs</strong> &#8211; search returned MayaNodes for given set of attrs and only return matched nodes</li>
 <li><strong>asMeta</strong> &#8211; return instantiated mNodes regardless of type</li>
 <li><strong>asMap</strong> &#8211; return the data as a map such that {mNode.plugAttr:[nodes], mNode.plugAttr:[nodes]}</li>
+<li><strong>plugsOnly</strong> &#8211; only with asMap falg, this truncates the return to [plugAttr, [nodes]]</li>
 </ul>
 </td>
 </tr>
@@ -1412,7 +1427,7 @@ by 180 to get left and right working you can still do so.</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.getChildren">
-<code class="descname">getChildren</code><span class="sig-paren">(</span><em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em>, <em>asMeta=False</em>, <em>asMap=False</em>, <em>incFacial=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getChildren" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getChildren</code><span class="sig-paren">(</span><em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em>, <em>asMeta=False</em>, <em>asMap=False</em>, <em>plugsOnly=False</em>, <em>incFacial=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getChildren" title="Permalink to this definition">¶</a></dt>
 <dd><p>Massively important bit of code, this is used by most bits of code
 to find the child controllers linked to this metaRig instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1426,6 +1441,7 @@ to find the child controllers linked to this metaRig instance.</p>
 <li><strong>nAttrs</strong> &#8211; search returned MayaNodes for given set of attrs and only return matched nodes</li>
 <li><strong>asMeta</strong> &#8211; return instantiated mNodes regardless of type</li>
 <li><strong>asMap</strong> &#8211; return the data as a map such that {mNode.plugAttr:[nodes], mNode.plugAttr:[nodes]}</li>
+<li><strong>plugsOnly</strong> &#8211; only with asMap falg, this truncates the return to {plugAttr:[nodes]}</li>
 <li><strong>incFacial</strong> &#8211; if we have a facial system linked include it&#8217;s children in the return (uses the getFacialSystem to id the facial node)</li>
 </ul>
 </td>

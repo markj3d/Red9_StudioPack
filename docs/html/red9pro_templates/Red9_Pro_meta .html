@@ -118,8 +118,8 @@ requires the StudioPack codebase to run</p>
 </tbody>
 </table>
 <dl class="function">
-<dt id="Red9.pro_pack.core.metadata_pro.wire_ControlsToNewMetaRig">
-<code class="descname">wire_ControlsToNewMetaRig</code><span class="sig-paren">(</span><em>nodes</em>, <em>name=None</em>, <em>mRig=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.wire_ControlsToNewMetaRig" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.wire_controls_to_new_metarig">
+<code class="descname">wire_controls_to_new_metarig</code><span class="sig-paren">(</span><em>nodes</em>, <em>name=None</em>, <em>mRig=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.wire_controls_to_new_metarig" title="Permalink to this definition">¶</a></dt>
 <dd><p>fast way to wire nodes to a blank MetaRig to gain some of the support
 features of the codebase without having to manually build a structured network</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -177,8 +177,8 @@ but requires each system to have mSystem.SupportNode.GRP_IK_chain, GRP_FK_chain 
 wires to denote the group directly above the Ik and Fk chains in the system.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">to run correctly each chain must have the same hierarchy order else the fk 
-match will be out of sync. Ideally this is to be run as part of a Red9 Patch 
+<p class="last">to run correctly each chain must have the same hierarchy order else the fk
+match will be out of sync. Ideally this is to be run as part of a Red9 Patch
 system and requires a little baby sitting!</p>
 </div>
 </dd></dl>
@@ -186,7 +186,7 @@ system and requires a little baby sitting!</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.metadata_pro.get_Red9ProductionRig">
 <code class="descname">get_Red9ProductionRig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.get_Red9ProductionRig" title="Permalink to this definition">¶</a></dt>
-<dd><p>wrapper to specifically return instances of the ProMeta body Rig for 
+<dd><p>wrapper to specifically return instances of the ProMeta body Rig for
 clients running our rigging systems</p>
 </dd></dl>
 
@@ -257,8 +257,8 @@ rig so we don&#8217;t have to use the preset config&#8217;s all the time</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.rename_attrPrefix">
-<code class="descname">rename_attrPrefix</code><span class="sig-paren">(</span><em>currentPrefix</em>, <em>newPrefix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.rename_attrPrefix" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.rename_attr_prefix">
+<code class="descname">rename_attr_prefix</code><span class="sig-paren">(</span><em>currentPrefix</em>, <em>newPrefix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.rename_attr_prefix" title="Permalink to this definition">¶</a></dt>
 <dd><p>rename a current mRigs.CTRL_Prefix wires to bring them in line with this
 subclass. Case in point, we&#8217;ve converted a current mClass to a new class but the
 new one has a different self.CTRL_Prefix than the last, resulting in getChildren failing,
@@ -278,8 +278,8 @@ this will help sort that issue out</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.isBound">
-<code class="descname">isBound</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.isBound" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.is_bound">
+<code class="descname">is_bound</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.is_bound" title="Permalink to this definition">¶</a></dt>
 <dd><p>check to see if this rig is on a live binder (BND file casting via the Pro_to_BND)</p>
 </dd></dl>
 
@@ -324,8 +324,8 @@ the linked GRP_Main Grp node</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_rootJnt">
-<code class="descname">get_rootJnt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_rootJnt" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_root_jnt">
+<code class="descname">get_root_jnt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_root_jnt" title="Permalink to this definition">¶</a></dt>
 <dd><p>generic wrapper for some of the healthTests. This should be a reliable and consistent
 way to get the skeletonRoot jnt back from any rig system. This is here to handle simple
 mSRC style rigs that purely have an exportTag to ID the root jnt.</p>
@@ -790,13 +790,28 @@ hidden nodes will still have full framerate hit as if they were visible</p>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
 <p>This is the Red9 Puppets master base class However with a little careful
 wiring any other external rig system can be wired too and utilise these functions.</p>
-<p>Additional intrnal vars worth noting, these are all for clients subclassing or running 
+<p>Additional internal vars worth noting, these are all for clients subclassing or running
 their own internal rigs over the Pro_MetaRig networks:</p>
-<ul class="simple">
-<li>self.ik_fk_switchattr : the attribute within the rig controllers that switches the rig between fk and ik mode state</li>
-<li>self.ik_switch_val : the value of the above attr when in ik state</li>
-<li>self.fk_switch_val : the value of the above attr when in fk state</li>
-<li>self.exportBase_class : the base export class object that will be created by the addExportTag call</li>
+<ul>
+<li><p class="first">self.ik_fk_switchattr : the attribute within the rig controllers that switches the rig between fk and ik mode state</p>
+</li>
+<li><p class="first">self.ik_switch_val : the value of the above attr when in ik state</p>
+</li>
+<li><p class="first">self.fk_switch_val : the value of the above attr when in fk state</p>
+</li>
+<li><p class="first">self._ik_chainmethod : &#8216;jnt_index&#8217; - default, straight joint hierarchy from the mSystem.SupportNode.GRP_IK_chain[0] node</p>
+</li>
+<li><dl class="first docutils">
+<dt>self._fk_chainmethod</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">* &#8216;jnt_index&#8217; - default, straight joint hierarchy from the mSystem.SupportNode.GRP_FK_chain[0] node</span><dd><ul class="first last simple">
+<li>&#8216;ctrl_index&#8217; - filtered hierarchy of nurbsCurve from the mSystem.SupportNode.GRP_FK_chain[0] node</li>
+<li>&#8216;fk_wires&#8217; - uses the mSystem&#8217;s CTRL_FK wiring to grab and return the nodes directly (FK_Start, FK_Pole, FK_End)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">self.exportBase_class : the base export class object that will be created by the addExportTag call</p>
+</li>
 </ul>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.Skeleton">
@@ -829,8 +844,8 @@ r9Anim and r9Pose files as cross-reference</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.connectFacialUI">
-<code class="descname">connectFacialUI</code><span class="sig-paren">(</span><em>facialcore=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.connectFacialUI" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.connect_facial_ui">
+<code class="descname">connect_facial_ui</code><span class="sig-paren">(</span><em>facialcore=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.connect_facial_ui" title="Permalink to this definition">¶</a></dt>
 <dd><p>connect an instance of the FacialCore to the mRig</p>
 </dd></dl>
 
@@ -855,8 +870,8 @@ r9Anim and r9Pose files as cross-reference</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.isBound">
-<code class="descname">isBound</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.isBound" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.is_bound">
+<code class="descname">is_bound</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.is_bound" title="Permalink to this definition">¶</a></dt>
 <dd><p>check to see if this rig is on a live binder</p>
 </dd></dl>
 
@@ -974,8 +989,8 @@ mrig.L_ArmSystem</li>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match">
-<code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em>, <em>ikchainmethod='jnt_index'</em>, <em>fkchainmethod='fk_wires'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the system TO FK MODE : match the fk system to that of the ik</p>
+<code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em>, <em>ik_chainmethod=None</em>, <em>fk_chainmethod=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the given systems TO FK MODE : match the fk system to that of the ik</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -986,9 +1001,11 @@ mrig.L_ArmSystem</li>
 <li><strong>time</strong> &#8211; whether to run the match over time or not</li>
 <li><strong>switch</strong> &#8211; also switch the ik_fk_blender attr to leave the system in FK mode</li>
 <li><strong>keyswitch</strong> &#8211; if switch is true, this also adds in keys to control the switch mode</li>
-<li><strong>ikmethod</strong> &#8211; method of extracting the ik jnts, currently supported:
+<li><strong>ik_chainmethod</strong> &#8211; None by default as controlled by the var self._ik_chainmethod -
+method of extracting the ik jnts, currently supported:
 * jnt_index - straight joint hierarchy from the mSystem.SupportNode.GRP_IK_chain[0] node</li>
-<li><strong>fkmethod</strong> &#8211; method of extracting the fk controls, currently supported:
+<li><strong>fk_chainmethod</strong> &#8211; None by default as controlled by the var self._fk_chainmethod
+method of extracting the fk controls, currently supported:
 * jnt_index - straight joint hierarchy from the mSystem.SupportNode.GRP_FK_chain[0] node
 * ctrl_index - filtered hierarchy of nurbsCurve controllers from the mSystem.SupportNode.GRP_FK_chain[0] node
 * fk_wires - uses the mSystem&#8217;s CTRL_FK* wiring to grab and return the nodes from the mSystem itself</li>
@@ -1002,7 +1019,7 @@ mrig.L_ArmSystem</li>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match">
 <code class="descname">ik_fk_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the system TO IK MODE : match the ik to the fk system, relies on the IK_matchpnt&#8217;s</p>
+<dd><p>Set the given systems TO IK MODE : match the ik to the fk system, relies on the IK_matchpnt&#8217;s</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1021,9 +1038,10 @@ mrig.L_ArmSystem</li>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">by default this call depends on IK_matchpnt&#8217;s which denote the relationship between the 
-FK and IK controller, these are added in the rig build code by the &#8220;add_fkik_matchpnt&#8221; code.
+FK and IK controller, these are added by using the &#8220;r9pmeta.add_fkik_matchpnt&#8221; code.
 However these are easy to add to any rig wired to Meta</p>
 </div>
+<p>#TODO: make sure the pole is now processed after everything else</p>
 </dd></dl>
 
 <dl class="method">
@@ -1034,7 +1052,7 @@ so we know what fingers we have controllers selected from</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">that these finger calls are designed to be called from 
-the FingerSystem mNode directly not form the upper MetaRig node</p>
+the FingerSystem mNode directly not from the upper MetaRig node</p>
 </div>
 </dd></dl>
 
@@ -1042,6 +1060,11 @@ the FingerSystem mNode directly not form the upper MetaRig node</p>
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_fingers_chains_selected">
 <code class="descname">get_fingers_chains_selected</code><span class="sig-paren">(</span><em>nodes=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.get_fingers_chains_selected" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the full finger chains from the selected finger controllers</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">that these finger calls are designed to be called from 
+the FingerSystem mNode directly not from the upper MetaRig node</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1089,7 +1112,7 @@ of the pipelines.</p>
 <p>SubClass of the MetaRig, designed to manage facial board style controls
 for a facial system. Just an extract class to inherit from but it means that
 all our facial logic will find custom class control boards based on being
-subclassed from this consistent base.</p>
+sub-classed from this consistent base.</p>
 <p>Additional key wires expected in a FacialRig to comply with the codebase
 these are on-top of the usual controllers connected to the system and the renderMeshes wires to the geo.</p>
 <ul class="simple">
@@ -1109,28 +1132,117 @@ these are on-top of the usual controllers connected to the system and the render
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_facemesh">
-<code class="descname">add_cam_facemesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_facemesh" title="Permalink to this definition">¶</a></dt>
-<dd><p>add and attached to the mNode a new camera constrained to the faceMesh of the system</p>
-<p>TODO: make focal length 60 ish, we don&#8217;t want fisheye on the face cam</p>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_facemesh">
+<code class="descname">get_cam_facemesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_facemesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the camera targeted to the HeadMesh and return as an mNode</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_UI">
-<code class="descname">add_cam_UI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_UI" title="Permalink to this definition">¶</a></dt>
-<dd><p>add and attached to the mNode a new camera constrained to the facialGui of the system, identified
-as self.ctrl_main</p>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_rig">
+<code class="descname">get_cam_rig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_rig" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the camera targeted to the Facial Control Board
+and return as an mNode</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.cam_states_get">
+<code class="descname">cam_states_get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.cam_states_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the base transforms used to setup the camera
+positions up when framing the modelPanels.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.cam_states_set">
+<code class="descname">cam_states_set</code><span class="sig-paren">(</span><em>mode='both'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.cam_states_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>push the current camera states to the internal attr</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_facemesh">
+<code class="descname">add_cam_facemesh</code><span class="sig-paren">(</span><em>focus=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_facemesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a new camera constrained to the &#8220;JNT_FaceRoot&#8221; in the system</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_rig">
+<code class="descname">add_cam_rig</code><span class="sig-paren">(</span><em>focus=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_rig" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a new camera parented to the &#8220;ctrl_main&#8221; node in the system</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_rig">
+<code class="descname">frame_cam_rig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_rig" title="Permalink to this definition">¶</a></dt>
+<dd><p>to overload, simple focus call to put the camera in the right place,
+should be framed to focus all controllers in the fRig system</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_mesh">
+<code class="descname">frame_cam_mesh</code><span class="sig-paren">(</span><em>imageplane=False</em>, <em>forcefit=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>to overload, simple focus call to put the camera in the right place,
+should be framed to focus on the Head meshes - &#8220;renderMeshes&#8221;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>imageplane</strong> &#8211; if True then we include the bound imagePlane in the viewFit nodes</li>
+<li><strong>forcefit</strong> &#8211; if True we over-ride / ignore any cam_states stored on the mNode itself</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.show_cam_panel_rig">
+<code class="descname">show_cam_panel_rig</code><span class="sig-paren">(</span><em>reframe=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.show_cam_panel_rig" title="Permalink to this definition">¶</a></dt>
+<dd><p>isolate the face board for the camera view and set the panel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reframe</strong> &#8211; auto reframe the camera on the facial controls</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.show_cam_panel_facemesh">
+<code class="descname">show_cam_panel_facemesh</code><span class="sig-paren">(</span><em>reframe=False</em>, <em>imageplane=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.show_cam_panel_facemesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>isolate the face board for the camera view and set the panel</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reframe</strong> &#8211; auto reframe the camera on the facial mesh / imageplace</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.delete_cam_panel_rig">
+<code class="descname">delete_cam_panel_rig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.delete_cam_panel_rig" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.delete_cam_panel_facemesh">
+<code class="descname">delete_cam_panel_facemesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.delete_cam_panel_facemesh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane">
 <code class="descname">image_plane</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the connected imageplane if found as mNodes for easy setting</p>
+<dd><p>return the connected imageplane if found as MetaClass nodes for easy setting</p>
+<p>&#64;return [mClass(imagePlane transform, mClass(imageplane shape])</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.imageplane_add">
-<code class="descname">imageplane_add</code><span class="sig-paren">(</span><em>width=20</em>, <em>height=None</em>, <em>translates=[]</em>, <em>rotates=[]</em>, <em>scales=[]</em>, <em>filepath=None</em>, <em>filetype='movie'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.imageplane_add" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_add">
+<code class="descname">image_plane_add</code><span class="sig-paren">(</span><em>width=20</em>, <em>height=None</em>, <em>translates=[]</em>, <em>rotates=[]</em>, <em>scales=[]</em>, <em>filepath=None</em>, <em>filetype='movie'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_add" title="Permalink to this definition">¶</a></dt>
 <dd><p>add in an imagine plane for roto-scoping and/or checking against a headcam. If we&#8217;ve already run this and have an
 imageplane connected these all become edit flags to manipulate it</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1153,21 +1265,40 @@ is in relation to the FaceRootJnt</li>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.imageplane_delete">
-<code class="descname">imageplane_delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.imageplane_delete" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_delete">
+<code class="descname">image_plane_delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>delete the imageplane node</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_facemesh">
-<code class="descname">get_cam_facemesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_facemesh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the camera targeted to the HeadMesh</p>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.head_instancer">
+<code class="descname">head_instancer</code><span class="sig-paren">(</span><em>offset=[[20, 0, 0], [0, 55, 0]], name='facial_instances'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.head_instancer" title="Permalink to this definition">¶</a></dt>
+<dd><p>instance the head renderMeshes and offset, useful for playblasts
+so we can have multiple angles of the facial data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>offset</strong> &#8211; [[tX, tY, tZ],[rX, rY, rZ]] offset applied to the instance grp</li>
+<li><strong>name</strong> &#8211; default = &#8216;facial_instances&#8217;, name of the top grp generated</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_UI">
-<code class="descname">get_cam_UI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_UI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the camera targeted to the Facial Control Board</p>
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.head_instancer_get">
+<code class="descname">head_instancer_get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.head_instancer_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>get all current instances of the head meshes wired to self</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.head_instancer_delete">
+<code class="descname">head_instancer_delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.head_instancer_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete all head_instancer nodes</p>
 </dd></dl>
 
 <dl class="method">
@@ -1652,8 +1783,8 @@ of each loop matches the expected internal exportLoopBase_class bound to this ex
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getExporLoops">
-<code class="descname">getExporLoops</code><span class="sig-paren">(</span><em>loopnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getExporLoops" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getExportLoops">
+<code class="descname">getExportLoops</code><span class="sig-paren">(</span><em>loopnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getExportLoops" title="Permalink to this definition">¶</a></dt>
 <dd><p>renamed func call for the getTimeRanges</p>
 </dd></dl>
 
@@ -1791,15 +1922,15 @@ rather than lots of walking logic</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.loopname_resolved">
 <code class="descname">loopname_resolved</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.loopname_resolved" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the loopname in a resolved manner, taking into account any 
+<dd><p>return the loopname in a resolved manner, taking into account any
 prefix or suffix handling set on it&#8217;s parent exportTag class</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.setLoopName">
 <code class="descname">setLoopName</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.setLoopName" title="Permalink to this definition">¶</a></dt>
-<dd><p>this is a wrapper to be used instead of setting self.loopname directly. 
-The reason is that this first goes through the resolve function to see if we need to 
+<dd><p>this is a wrapper to be used instead of setting self.loopname directly.
+The reason is that this first goes through the resolve function to see if we need to
 append/prepend the loopname with anything, ie, name == name_face. It also validates the
 string, removing invalid characters, and checks for duplicate names, managing copy_naming</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1810,14 +1941,6 @@ string, removing invalid characters, and checks for duplicate names, managing co
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.ProcessStatus">
-<code class="descname">ProcessStatus</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.ProcessStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class instance, we bind the Exporter class LoopProcessStatus to the loopNode
-so that when it&#8217;s passed into the exporters we can track it&#8217;s process status
-on this instance directly ;)</p>
 </dd></dl>
 
 <dl class="method">

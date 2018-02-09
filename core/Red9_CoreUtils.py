@@ -931,12 +931,14 @@ class FilterNode(object):
                         if parentTransform not in self.foundNodeTypes:
                             self.foundNodeTypes.insert(0, parentTransform)
                     else:
-                        self.foundNodeTypes.append(node)
+                        if node not in self.foundNodeTypes:
+                            self.foundNodeTypes.append(node)
 
             # test if the roots match the searchTypes if so add them to the end
             if self.processMode == 'Selected':
                 if incRoots:
-                    [self.foundNodeTypes.append(node) for node in self.rootNodes if cmds.nodeType(node) in nodeTypes]
+                    [self.foundNodeTypes.append(node) for node in self.rootNodes
+                        if cmds.nodeType(node) in nodeTypes and node not in self.foundNodeTypes]
                     log.debug('RootNode Matched by incRoots : %s', self.foundNodeTypes)
                 else:
                     try:
@@ -1097,13 +1099,13 @@ class FilterNode(object):
         :rtype: list[] or dict{} of nodes whos attributes include any of the given attrs[]
         :return: Nodes that have the search attr/attrs. If returnValue is given as a
             keyword then it will return a dict in the form {node,attrValue}
-            
+
         .. note::
             If the searchAttrs has an entry in the form NOT:searchAttr then this will be forcibly
             excluded from the filter. Also you can now do 'myAttr=2.33' to only pass if the attr is equal
             similarly 'NOT:myAttr=2.33' will exclude if the value is equal
             see the ..\Red9\tests\Red9_CoreUtilTests.py for live unittest examples
-            
+
         TODO: current Implementation DOES NOT allow multiple attr tests as only 1 val per key 
             in the excludeAttrs and includeAttrs is currently supported!!!!!!
         '''
@@ -1162,20 +1164,20 @@ class FilterNode(object):
                         if not type(val[1]) == float:
                             if cmds.getAttr('%s.%s' % (node, attr)) == val[1]:
                                 add = True
-                                log.debug('attr %s : value %s == %s : node %s > ADD = True' % 
+                                log.debug('attr %s : value %s == %s : node %s > ADD = True' %
                                     (attr, val[1], cmds.getAttr('%s.%s' % (node, attr)), node))
                             else:
                                 add = False
-                                log.debug('attr %s : value %s != %s : node %s > ADD = False' % 
+                                log.debug('attr %s : value %s != %s : node %s > ADD = False' %
                                     (attr, val[1], cmds.getAttr('%s.%s' % (node, attr)), node))
                         else:
                             if floatIsEqual(cmds.getAttr('%s.%s' % (node, attr)), val[1]):
                                 add = True
-                                log.debug('attr %s : Float value %f == %f : node %s > ADD = True' % 
+                                log.debug('attr %s : Float value %f == %f : node %s > ADD = True' %
                                     (attr, val[1], cmds.getAttr('%s.%s' % (node, attr)), node))
                             else:
                                 add = False
-                                log.debug('attr %s : Float value %f != %f : node %s > ADD = False' % 
+                                log.debug('attr %s : Float value %f != %f : node %s > ADD = False' %
                                     (attr, val[1], cmds.getAttr('%s.%s' % (node, attr)), node))
                     else:
                         add = True
@@ -1190,12 +1192,12 @@ class FilterNode(object):
                         if not type(val[1]) == float:
                             if cmds.getAttr('%s.%s' % (node, attr)) == val[1]:
                                 add = False
-                                log.debug('NOT: attr %s : Float value %s == %s : node %s > ADD = False' % 
+                                log.debug('NOT: attr %s : Float value %s == %s : node %s > ADD = False' %
                                     (attr, val[1], cmds.getAttr('%s.%s' % (node, attr)), node))
                         else:
                             if floatIsEqual(cmds.getAttr('%s.%s' % (node, attr)), val[1]):
                                 add = False
-                                log.debug('NOT: attr %s : Float value %f == %f : node %s > ADD = False' % 
+                                log.debug('NOT: attr %s : Float value %f == %f : node %s > ADD = False' %
                                     (attr, val[1], cmds.getAttr('%s.%s' % (node, attr)), node))
                     else:
                         add = False

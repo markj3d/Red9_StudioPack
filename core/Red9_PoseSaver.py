@@ -24,6 +24,7 @@ import Red9_CoreUtils as r9Core
 import Red9_General as r9General
 import Red9_AnimationUtils as r9Anim
 import Red9_Meta as r9Meta
+import maya.OpenMaya as OpenMaya
 
 import maya.cmds as cmds
 import os
@@ -31,7 +32,7 @@ import Red9.packages.configobj as configobj
 import time
 import getpass
 import json
-import math
+
 
 import logging
 logging.basicConfig()
@@ -272,7 +273,9 @@ class DataMap(object):
         :param node: the node we're inspecting
         :param worldspace: bool, get the transforms back in either MSpace.kWorld or MSpace.kTransform
         '''
-        import maya.OpenMaya as OpenMaya
+        import math
+
+        # import maya.OpenMaya as OpenMaya
         dagpath = OpenMaya.MDagPath()
         selList = OpenMaya.MSelectionList()
         selList.add(node)
@@ -284,15 +287,18 @@ class DataMap(object):
         else:
             _mSpace = OpenMaya.MSpace.kTransform
 
-        # trans =_MTrans.getTranslation(space)
         trans = OpenMaya.MVector(_mFntrans.rotatePivot(_mSpace))
         rots = OpenMaya.MQuaternion()
         _mFntrans.getRotation(rots, _mSpace)
+
+        # for some reason this can cause a hard Maya hang!!!!
+        # trying to track it down but if you experience it comment this one line out!
         euler = map(math.degrees, rots.asEulerRotation())
 
-        return {'translation':[trans.x, trans.y, trans.z],
-                'quaternion':[rots.x, rots.y, rots.z, rots.w],
-                'euler':euler}
+        return {'translation': [trans.x, trans.y, trans.z],
+                'quaternion': [rots.x, rots.y, rots.z, rots.w],
+                'euler': euler}
+
 
     def _collectNodeData_attrs(self, node, key):
         '''
@@ -303,6 +309,7 @@ class DataMap(object):
         if channels:
             self.poseDict[key]['attrs'] = {}
             self.poseDict[key]['attrs_kWorld'] = {}
+
             for attr in channels:
                 if attr in self.skipAttrs:
                     log.debug('Skipping attr as requested : %s' % attr)
@@ -316,7 +323,9 @@ class DataMap(object):
                         self.poseDict[key]['attrs'][attr] = cmds.getAttr('%s.%s' % (node, attr))
                 except:
                     log.debug('%s : attr is invalid in this instance' % attr)
-            self.poseDict[key]['attrs_kWorld'] = self._getTranforms(node, worldspace=True)
+
+            if cmds.nodeType(node) in ['transform', 'joint']:
+                self.poseDict[key]['attrs_kWorld'] = self._getTranforms(node, worldspace=True)
 
     def _collectNodeData(self, node, key):
         '''
@@ -363,13 +372,11 @@ class DataMap(object):
             self.poseDict[key] = {}
             self.poseDict[key]['ID'] = i  # selection order index
             self.poseDict[key]['longName'] = node  # longNode name
-
             mirrorID = getMirrorID(node)
             if mirrorID:
                 self.poseDict[key]['mirrorID'] = mirrorID  # add the mirrorIndex
             if self.metaPose:
                 self.poseDict[key]['metaData'] = getMetaDict(node)  # metaSystem the node is wired too
-
             # the above blocks are the generic info used to map the data on load
             # this call is the specific collection of data for this node required by this map type
             self._collectNodeData(node, key)
@@ -1044,7 +1051,6 @@ class PoseData(DataMap):
         # push args to object - means that any poseHandler.py file has access to them
         if filepath:
             self.filepath = filepath
-
         self.useFilter = useFilter
         if self.filepath:
             log.debug('PosePath given : %s' % self.filepath)
@@ -1480,7 +1486,6 @@ class PosePointCloud(object):
         self.ppcMeta.mClassGrp = 'PPCROOT'
 
         self.posePointRoot = cmds.ls(cmds.spaceLocator(name='posePointCloud'), sl=True, l=True)[0]
-        print self.posePointRoot
         cmds.setAttr('%s.visibility' % self.posePointRoot, self.isVisible)
 
         ppcShape = cmds.listRelatives(self.posePointRoot, type='shape', f=True)[0]

@@ -72,7 +72,7 @@
 <td>The P4_sourceControl object is bound to the r9File instance automatically if your project is set to run with Perforce.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.r9File" title="Red9.pro_pack.core.importexport.r9File"><code class="xref py py-obj docutils literal"><span class="pre">r9File</span></code></a>([path])</td>
-<td>Red9 file handler system, bound to OS calls directly by inheritance  from pm.util.path which then exposes all OS calls directly to the class instance.</td>
+<td>Red9 file handler system, bound to OS calls directly by inheritance from pm.util.path which then exposes all OS calls directly to the class instance.</td>
 </tr>
 </tbody>
 </table>
@@ -136,6 +136,8 @@ where all new created nodes are store as a list</p>
 <em class="property">class </em><code class="descname">Fbx</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>base class to handling FBX file import and export</p>
+<p><a class="reference external" href="http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&amp;id=26416130">http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&amp;id=26416130</a>
+C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.Fbx.importFbx">
 <code class="descname">importFbx</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>preset=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.importFbx" title="Permalink to this definition">¶</a></dt>
@@ -160,7 +162,7 @@ where all new created nodes are store as a list</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.Fbx.exportFbx">
-<code class="descname">exportFbx</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>selection=False</em>, <em>preset=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.exportFbx" title="Permalink to this definition">¶</a></dt>
+<code class="descname">exportFbx</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>selection=False</em>, <em>preset=None</em>, <em>bakeanim=False</em>, <em>timeranges=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.exportFbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>export selected data to fbx</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -170,11 +172,14 @@ where all new created nodes are store as a list</p>
 <li><strong>fileName</strong> &#8211; fbx file to export too</li>
 <li><strong>selection</strong> &#8211; bool, export the selected nodes or the scene</li>
 <li><strong>preset</strong> &#8211; if given use this preset rather than the internal preset of Red9</li>
+<li><strong>bakeanim</strong> &#8211; envoke the fbx bakeAnimation calls</li>
+<li><strong>timeranges</strong> &#8211; (start,end) set the timeranges specifically OR as per the current timeranges</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<p><a class="reference external" href="https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2016/ENU/Maya/files/GUID-6CCE943A-2ED4-4CEE-96D4-9CB19C28F4E0-htm.html">https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2016/ENU/Maya/files/GUID-6CCE943A-2ED4-4CEE-96D4-9CB19C28F4E0-htm.html</a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">the presets must be in the &#8220;Red9pro_packcoreFBX_presetsexport&#8221; folder to be loaded</p>
@@ -219,25 +224,19 @@ scene their anim data will be updated</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="Red9.pro_pack.core.importexport.Atom">
-<em class="property">class </em><code class="descname">Atom</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.Atom" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-</dd></dl>
-
-<dl class="class">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl">
 <em class="property">class </em><code class="descname">P4_sourceControl</code><span class="sig-paren">(</span><em>path=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>The P4_sourceControl object is bound to the r9File instance automatically if your project
 is set to run with Perforce. This is done through the /Red9_ClientCore/MyClient/resource/client.project file
 which Red9 as a consultancy service will usually setup for you.</p>
-<p>This project file and it&#8217;s subsequent binding during boot to the PROJECT_DATA object controls all 
-aspects of the project and paths used by all codebase.</p>
-<p>For Perforce this simple json dict needs the key &#8216;p4_project&#8217; set to True and P4 must be available. 
+<p>This project file and it&#8217;s subsequently bound during boot to the PROJECT_DATA object which controls all
+aspects of the project and paths used by all the codebase.</p>
+<p>To enable Perforce this simple json dict needs the key &#8216;p4_project&#8217; set to True and P4 must be available.
 On boot we test this and set the systems accordingly. If the following does not return &#8216;perforce&#8217; then
 the Perforce environment wasn&#8217;t found at boot and all P4 source control will be disabled.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">source_control</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">source_control</span>
 </pre></div>
 </div>
 <p>Perforce format reference:</p>
@@ -251,7 +250,7 @@ the Perforce environment wasn&#8217;t found at boot and all P4 source control wi
 <p>This accepts either the file pointer or depot folder path if you want to
 act on multiple files at once. Ideally folder depot path needs to end in ...
 to denote that we&#8217;re walking into that path</p>
-<p class="last">if you want to clamp to a given format in a folder you can pass the depot path 
+<p class="last">if you want to clamp to a given format in a folder you can pass the depot path
 as &#8216;//depot/path/to/stuff/...ma&#8217; for example</p>
 </div>
 <p>TODO: decouple this from Maya so it can be using in native Python (MoBu support etc)</p>
@@ -262,27 +261,95 @@ as &#8216;//depot/path/to/stuff/...ma&#8217; for example</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.p4_run">
+<code class="descname">p4_run</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.p4_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper over the run call so we handle exceptions easier</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.exception_level">
+<code class="descname">exception_level</code><span class="sig-paren">(</span><em>level=2</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.exception_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the P4 API Exception level for P4 calls
+The exception level of the P4 instance.</p>
+<p>0 : no exceptions are raised.
+1 : only errors are raised as exceptions.
+2 : warnings are also raised as exceptions.</p>
+<p>The default value is 2.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.info">
 <code class="descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.info" title="Permalink to this definition">¶</a></dt>
 <dd><p>get the general Perforce session info</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.username">
-<code class="descname">username</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.username" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the current userName from P4 info keys</p>
+<code class="descname">username</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.username" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the current &#8220;userName&#8221; from P4 info keys</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.clientroot">
-<code class="descname">clientroot</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.clientroot" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the clientRoot from P4 info keys</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.client_root">
+<code class="descname">client_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.client_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the &#8220;clientRoot&#8221; from P4 info keys</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.clientname">
-<code class="descname">clientname</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.clientname" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the clientName from P4 info keys</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.client_name">
+<code class="descname">client_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.client_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the &#8220;clientName&#8221; from P4 info keys</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.client_host">
+<code class="descname">client_host</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.client_host" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the &#8220;clientHost&#8221; from the P4 info keys</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.client_fetch">
+<code class="descname">client_fetch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.client_fetch" title="Permalink to this definition">¶</a></dt>
+<dd><p>get client details: p4.fetch_client()</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.client_set">
+<code class="descname">client_set</code><span class="sig-paren">(</span><em>client</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.client_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the P4 client on the fly</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>client</strong> &#8211; new client to set</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.clients">
+<code class="descname">clients</code><span class="sig-paren">(</span><em>full=False</em>, <em>user=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.clients" title="Permalink to this definition">¶</a></dt>
+<dd><p>return all available clients for the given user, or current user if not given</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>full</strong> &#8211; if True and no user is passed in we inspect the entire P4 database, else
+we automatically clamp to just the current user</li>
+<li><strong>user</strong> &#8211; if passed in we inspect just the given username</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.clients_local">
+<code class="descname">clients_local</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.clients_local" title="Permalink to this definition">¶</a></dt>
+<dd><p>return ONLY clients for the current user and against the current Host</p>
 </dd></dl>
 
 <dl class="method">
@@ -291,29 +358,29 @@ as &#8216;//depot/path/to/stuff/...ma&#8217; for example</p>
 <dd><p>return the current revision that you have in your workspace</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.exists">
-<code class="descname">exists</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.exists" title="Permalink to this definition">¶</a></dt>
+<code class="descname">exists</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple bool, is the file path already in P4? Checked via a simple fstat call</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.exists_local">
-<code class="descname">exists_local</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.exists_local" title="Permalink to this definition">¶</a></dt>
-<dd><p>os check if the file exists locally. Issue is that P4 can say you have 
+<code class="descname">exists_local</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.exists_local" title="Permalink to this definition">¶</a></dt>
+<dd><p>os check if the file exists locally. Issue is that P4 can say you have
 the file in your workspace but you may have deleted it locally</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.fstat">
-<code class="descname">fstat</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.fstat" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fstat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.fstat" title="Permalink to this definition">¶</a></dt>
 <dd><p>get all fstat info for the fileobject, returned as a dict</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.fstat_dir">
 <code class="descname">fstat_dir</code><span class="sig-paren">(</span><em>filetype=None</em>, <em>recursive=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.fstat_dir" title="Permalink to this definition">¶</a></dt>
-<dd><p>where the path bound in the object is just that, a depot folder path 
+<dd><p>where the path bound in the object is just that, a depot folder path
 rather than a file pointer.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -361,7 +428,7 @@ workspace yet and return False</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.have_head">
 <code class="descname">have_head</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.have_head" title="Permalink to this definition">¶</a></dt>
-<dd><p>The file you have is the Head revision AND exists locally. The issue with P4 is that 
+<dd><p>The file you have is the Head revision AND exists locally. The issue with P4 is that
 you can get the fstat to return that you have the head file in your workspace, but you may
 have deleted the local file. This validates both cases.</p>
 </dd></dl>
@@ -442,7 +509,8 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.revert_unchanged">
 <code class="descname">revert_unchanged</code><span class="sig-paren">(</span><em>changelist</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.revert_unchanged" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>revert all unchanged items in the given changelist</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.get_revision">
@@ -531,7 +599,7 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.push_file">
 <code class="descname">push_file</code><span class="sig-paren">(</span><em>changelist=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.push_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is a wrap over checkout and add, if the file already exists 
+<dd><p>This is a wrap over checkout and add, if the file already exists
 in P4 then we check it out, if it&#8217;s a new file that doesn&#8217;t exist
 then we mark it for add</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -550,17 +618,17 @@ then we mark it for add</p>
 <dt id="Red9.pro_pack.core.importexport.r9File">
 <em class="property">class </em><code class="descname">r9File</code><span class="sig-paren">(</span><em>path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pymel.util.path.path</span></code></p>
-<p>Red9 file handler system, bound to OS calls directly by inheritance 
+<p>Red9 file handler system, bound to OS calls directly by inheritance
 from pm.util.path which then exposes all OS calls directly to the class instance.</p>
 <p>This also binds Perforce to the class is Perforce was found on your system,
 exposing and binding all perforce commands directly to this file object</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9ie&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9ie</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">=</span><span class="n">r9ie</span><span class="o">.</span><span class="n">r9File</span><span class="p">(</span><span class="n">myfilepath</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">.</span><span class="n">sourcecontrol</span><span class="o">.</span><span class="n">fstat</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">.</span><span class="n">sourcecontrol</span><span class="o">.</span><span class="n">fstat</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># bescause we bind os we can also directly run os/path calls</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">.</span><span class="n">splitext</span><span class="p">()</span>
@@ -568,7 +636,7 @@ exposing and binding all perforce commands directly to this file object</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">when dealing with P4 the P4_SourceControl class is bound to self as 
+<p class="last">when dealing with P4 the P4_SourceControl class is bound to self as
 self.sourcecontrol, exposing all the calls directly.</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
