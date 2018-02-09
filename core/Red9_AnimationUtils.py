@@ -32,32 +32,32 @@ Code examples:
 
     The main AnimFunctions class is designed to run with an r9Core.FilterNode
     object that is responsible for how we process hierarchies. If one isn't passed
-    as an arg then the code simply processes the 'nodes' args in zipped pairs. 
+    as an arg then the code simply processes the 'nodes' args in zipped pairs.
     See the documentation on the r9Core.MatchedNodeInputs for more detail.
 
     All the AnimFunctions such as copyKeys, copyAttrs etc use the same base setup
 
     >>> import Red9_CoreUtils as r9Core
     >>> import maya.cmds as cmds
-    >>> 
+    >>>
     >>> #===========================
     >>> # When Processing hierarchies:
     >>> #===========================
-    >>> # The Filter_Settings object required for hierarchy processing is now bound to 
+    >>> # The Filter_Settings object required for hierarchy processing is now bound to
     >>> # the class directly so you no longer need to create a filterSettigns object directly!
     >>> # Lets set the filter to process nodes with a given attr 'myControl' who's type is 'nurbscurve'
     >>> animFunc=r9Anim.AnimFunctions()
     >>> animFunc.settings.nodeTypes ='nurbsCurve'
     >>> animFunc.settings.searchAttrs = 'myControl'
     >>> animFunc.settings.printSettings()
-    >>> 
+    >>>
     >>> # now run any of the AnimFunctions and pass in nodes which with the filter active
     >>> # as above would be the 2 root nodes of the hierarchies to filter
-    >>> 
+    >>>
     >>> animFunc.copyAttributes(cmds.ls(sl=True,l=True))
-    >>> 
+    >>>
     >>> animFunc.snapTransform(nodes=cmds.ls(sl=True), time=r9Anim.timeLineRangeGet())
-    >>> 
+    >>>
     >>> #==============================
     >>> # When processing simple objects:
     >>> #==============================
@@ -193,6 +193,8 @@ def getSettableChannels(node=None, incStatics=True):
     FIXME: BUG some Compound attrs such as constraints return invalid data for some of the
     base functions using this as they can't be simply set. Do we strip them here?
     ie: pointConstraint.target.targetWeight
+
+    #TODO: need to check the blendshape channels are settable also!
     '''
     if not node:
         node = cmds.ls(sl=True, l=True)[0]
@@ -282,9 +284,6 @@ def animLayersConfirmCheck(nodes=None, deleteMerged=True):
 def mergeAnimLayers(nodes, deleteBaked=True):
     '''
     from the given nodes find, merge and remove any animLayers found
-    
-    FOR THE LOVE OF GOD AUTODESK, fix animLayers and give us a decent api for them,
-    oh, and stop building massive mel commands on the fly based on bloody optVars!!!!
     '''
     animLayers = getAnimLayersFromGivenNodes(nodes)
     if animLayers:
@@ -1244,6 +1243,9 @@ class AnimationUI(object):
                                             bc=self.__uiCB_setPoseRootNode,
                                             cw=[(1, 180), (2, 60)])
 
+        # add the Popup menu for the selection of mRigs dynamically
+        cmds.popupMenu('_setPose_mRigs_current', postMenuCommand=self.__uiCB_fill_mRigsPopup)
+
         cmds.setParent(self.poseUILayout)
         cmds.separator(h=10, style='in')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 120), (2, 160)])
@@ -1952,6 +1954,25 @@ class AnimationUI(object):
         # Finally Bind the Popup-menu
         cmds.evalDeferred(self.__uiCB_PosePopup)
 
+    def __uiCB_fill_mRigsPopup(self, *args):
+        '''
+        Fill the Pose root mRig popup menu
+        '''
+        cmds.popupMenu('_setPose_mRigs_current', e=True, deleteAllItems=True)
+        if self.poseRootMode == 'MetaRoot':
+            # fill up the mRigs
+            cmds.menuItem(label='AUTO RESOLVED : mRigs', p='_setPose_mRigs_current',
+                          command=partial(self.__uiCB_setPoseRootNode, '****  AUTO__RESOLVED  ****'))
+            cmds.menuItem(p='_setPose_mRigs_current', divider=True)
+            #  cmds.menuItem(p='_setPose_mRigs_current', divider=True)
+            for rig in r9Meta.getMetaRigs():
+                if rig.hasAttr('exportTag') and rig.exportTag:
+                    cmds.menuItem(label='%s :: %s' % (rig.exportTag.tagID, rig.mNode), p='_setPose_mRigs_current',
+                              command=partial(self.__uiCB_setPoseRootNode, rig.mNode))
+                else:
+                    cmds.menuItem(label=rig.mNode, p='_setPose_mRigs_current',
+                              command=partial(self.__uiCB_setPoseRootNode, rig.mNode))
+
     def __uiCB_PosePopup(self, *args):
         '''
         RMB popup menu for the Pose functions
@@ -2116,10 +2137,12 @@ class AnimationUI(object):
             except ValueError, error:
                 raise ValueError(error)
 
-    def __uiCB_setPoseRootNode(self, *args):
+    def __uiCB_setPoseRootNode(self, specific=None, *args):
         '''
         This changes the mode for the Button that fills in rootPath in the poseUI
         Either fills with the given node, or fill it with the connected MetaRig
+
+        :param specific: passed in directly from the UI calls
         '''
         rootNode = cmds.ls(sl=True, l=True)
 
@@ -2127,27 +2150,35 @@ class AnimationUI(object):
             # bound to a function so it can be passed onto the MetaNoode selector UI
             cmds.textFieldButtonGrp(self.uitfgPoseRootNode, e=True, text=text)
 
-        if self.poseRootMode == 'RootNode':
-            if not rootNode:
-                raise StandardError('Warning nothing selected')
-            fillTextField(rootNode[0])
-        elif self.poseRootMode == 'MetaRoot':
-            if rootNode:
-                # metaRig=r9Meta.getConnectedMetaNodes(rootNode[0])
-                metaRig = r9Meta.getConnectedMetaSystemRoot(rootNode[0])
-                if not metaRig:
-                    raise StandardError("Warning selected node isn't connected to a MetaRig node")
-                fillTextField(metaRig.mNode)
-            else:
-                metaRigs = r9Meta.getMetaNodes(dataType='mClass')
-                if metaRigs:
-                    r9Meta.MClassNodeUI(closeOnSelect=True,
-                                        funcOnSelection=fillTextField,
-                                        mInstances=['MetaRig'],
-                                        allowMulti=False)._showUI()
+        if specific:
+            fillTextField(specific)
+            if self.poseRootMode == 'MetaRoot':
+                if specific != '****  AUTO__RESOLVED  ****':
+                    cmds.select(r9Meta.MetaClass(specific).ctrl_main)
                 else:
+                    cmds.select(cl=True)
+        else:
+            if self.poseRootMode == 'RootNode':
+                if not rootNode:
+                    raise StandardError('Warning nothing selected')
+                fillTextField(rootNode[0])
+            elif self.poseRootMode == 'MetaRoot':
+                if rootNode:
+                    # metaRig=r9Meta.getConnectedMetaNodes(rootNode[0])
+                    metaRig = r9Meta.getConnectedMetaSystemRoot(rootNode[0])
+                    if not metaRig:
+                        raise StandardError("Warning selected node isn't connected to a MetaRig node")
+                    fillTextField(metaRig.mNode)
+                else:
+                    metaRigs = r9Meta.getMetaNodes(dataType='mClass')
+                    if metaRigs:
+                        r9Meta.MClassNodeUI(closeOnSelect=True,
+                                            funcOnSelection=fillTextField,
+                                            mInstances=['MetaRig'],
+                                            allowMulti=False)._showUI()
+                    else:
+                        raise StandardError("Warning: No MetaRigs found in the Scene")
 
-                    raise StandardError("Warning: No MetaRigs found in the Scene")
         # fill the cache up for the ini file
         self.ANIM_UI_OPTVARS['AnimationUI']['poseRoot'] = cmds.textFieldButtonGrp(self.uitfgPoseRootNode, q=True, text=True)
         self.__uiCache_storeUIElements()
@@ -2156,6 +2187,7 @@ class AnimationUI(object):
         '''
         Manage the PoseRootNode method, either switch to standard rootNode or MetaNode
         '''
+
         if cmds.checkBox('uicbMetaRig', q=True, v=True):
             self.poseRootMode = 'MetaRoot'
             cmds.textFieldButtonGrp(self.uitfgPoseRootNode, e=True, bl='MetaRoot')
@@ -2168,19 +2200,24 @@ class AnimationUI(object):
         '''
         Node passed into the __PoseCalls in the UI
         '''
-        posenodes = []
-        setRoot = cmds.textFieldButtonGrp(self.uitfgPoseRootNode, q=True, text=True)
+        # posenodes = []
+        _selected = cmds.ls(sl=True, l=True)
+        _rootSet = cmds.textFieldButtonGrp(self.uitfgPoseRootNode, q=True, text=True)
         if cmds.checkBox(self.uicbPoseHierarchy, q=True, v=True):
             # hierarchy processing so we MUST pass a root in
-            if not setRoot or not cmds.objExists(setRoot):
+            if not _rootSet or not cmds.objExists(_rootSet):
+                if _rootSet == '****  AUTO__RESOLVED  ****' and self.poseRootMode == 'MetaRoot':
+                    if _selected:
+                        return r9Meta.getConnectedMetaSystemRoot(_selected)
                 raise StandardError('RootNode not Set for Hierarchy Processing')
             else:
-                return setRoot
+                return _rootSet
         else:
-            posenodes = cmds.ls(sl=True, l=True)
-        if not posenodes:
+            if _selected:
+                return _selected
+        if not _selected:
             raise StandardError('No Nodes Set or selected for Pose')
-        return posenodes
+        return _selected
 
     def __uiCB_enableRelativeSwitches(self, *args):
         '''
@@ -2425,7 +2462,7 @@ class AnimationUI(object):
             if 'poseSubPath' in AnimationUI and AnimationUI['poseSubPath']:
                 cmds.textFieldButtonGrp('uitfgPoseSubPath', edit=True, text=AnimationUI['poseSubPath'])
             if 'poseRoot' in AnimationUI and AnimationUI['poseRoot']:
-                if cmds.objExists(AnimationUI['poseRoot']):
+                if cmds.objExists(AnimationUI['poseRoot']) or AnimationUI['poseRoot'] == '****  AUTO__RESOLVED  ****':
                     cmds.textFieldButtonGrp(self.uitfgPoseRootNode, e=True, text=AnimationUI['poseRoot'])
 
             __uiCache_LoadCheckboxes()
@@ -2934,22 +2971,22 @@ class AnimationUI(object):
 
 class AnimFunctions(object):
     '''
-    Most of the main Animation Functions take a settings object which is 
-    responsible for hierarchy processing. See r9Core.FilterNode and 
+    Most of the main Animation Functions take a settings object which is
+    responsible for hierarchy processing. See r9Core.FilterNode and
     r9Core.Filter_Settings for more details. These are then passed to
     the r9Core.MatchedNodeInputs class which is designed specifically
     to process two hierarchies and filter them for matching pairs.
     What this means is that all the anim functions deal with hierarchies
     in the same manor making it very simple to extend.
-    
+
     Generic filters passed into r9Core.MatchedNodeInputs class:
         * setting.nodeTypes: list[] - search for child nodes of type (wraps cmds.listRelatives types=)
         * setting.searchAttrs: list[] - search for child nodes with Attrs of name
         * setting.searchPattern: list[] - search for nodes with a given nodeName searchPattern
         * setting.hierarchy: bool = lsHierarchy code to return all children from the given nodes
         * setting.metaRig: bool = use the MetaRig wires to build the initial Object list up
-    
-    .. note:: 
+
+    .. note::
         with all the search and hierarchy settings OFF the code performs
         a dumb copy, no matching and no Hierarchy filtering, copies using
         selected pairs obj[0]>obj[1], obj[2]>obj[3] etc
@@ -3023,7 +3060,7 @@ class AnimFunctions(object):
         '''
         Copy Keys is a Hi-Level wrapper function to copy animation data between
         filtered nodes, either in hierarchies or just selected pairs.
-    
+
         :param nodes: List of Maya nodes to process. This combines the filterSettings
             object and the MatchedNodeInputs.processMatchedPairs() call,
             making it capable of powerful hierarchy filtering and node matching methods.
@@ -3041,7 +3078,7 @@ class AnimFunctions(object):
         :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names
         :param mergeLayers: this pre-processes animLayers so that we have a single, temporary merged
             animLayer to extract a compiled version of the animData from. This gets deleted afterwards.
-        
+
         TODO: this needs to support 'skipAttrs' param like the copyAttrs does - needed for the snapTransforms calls
         '''
 
@@ -3088,7 +3125,7 @@ class AnimFunctions(object):
     # Copy Attributes
     # ===========================================================================
 
-    def copyAttrs_ToMultiHierarchy(self, nodes=None, attributes=None, skipAttrs=None, \
+    def copyAttrs_ToMultiHierarchy(self, nodes=None, attributes=None, skipAttrs=None,
                        filterSettings=None, matchMethod=None, **kws):
         '''
         This isn't the best way by far to do this, but as a quick wrapper
@@ -3114,7 +3151,7 @@ class AnimFunctions(object):
         '''
         Copy Attributes is a Hi-Level wrapper function to copy Attribute data between
         filtered nodes, either in hierarchies or just selected pairs.
-    
+
         :param nodes: List of Maya nodes to process. This combines the filterSettings
             object and the MatchedNodeInputs.processMatchedPairs() call,
             making it capable of powerful hierarchy filtering and node matching methods.
@@ -3186,14 +3223,14 @@ class AnimFunctions(object):
     # ===========================================================================
 
     # @r9General.Timer
-    def snapTransform(self, nodes=None, time=(), step=1, preCopyKeys=1, preCopyAttrs=1, filterSettings=None,
-                      iterations=1, matchMethod=None, prioritySnapOnly=False, snapRotates=True, snapTranslates=True, **kws):
+    def snapTransform(self, nodes=None, time=(), step=1, preCopyKeys=1, preCopyAttrs=1, filterSettings=None, iterations=1,
+                      matchMethod=None, prioritySnapOnly=False, snapRotates=True, snapTranslates=True, additionalCalls=[], **kws):
         '''
         Snap objects over a timeRange. This wraps the default hierarchy filters
         so it's capable of multiple hierarchy filtering and matching methods.
         The resulting node lists are snapped over time and keyed.
         :requires: SnapRuntime plugin to be available
-    
+
         :param nodes: List of Maya nodes to process. This combines the filterSettings
             object and the MatchedNodeInputs.processMatchedPairs() call,
             making it capable of powerful hierarchy filtering and node matching methods.
@@ -3216,14 +3253,16 @@ class AnimFunctions(object):
         :param prioritySnapOnly: if True ONLY snap the nodes in the filterPriority list within the filterSettings object = Super speed up!!
         :param snapTranslates: only snap the translate data
         :param snapRotates: only snap the rotate data
-    
-        .. note:: 
+        :param additionalCalls: [func, func...] additional functions to run during process... allowing you
+            to add in specific matching calls to a SnapTransforms run whilst having the time increment correctly managed for you
+
+        .. note::
             you can also pass the CopyKey kws in to the preCopy call, see copyKeys above
-    
-        .. note:: 
+
+        .. note::
             by default when using the preCopyKeys flag we run a temp merge of any animLayers
             and copy that merged animLayer data for consistency. The layers are restored afterwards
-            
+
         '''
         self.snapCacheData = {}  # TO DO - Cache the data and check after first run data is all valid
         self.nodesToSnap = []
@@ -3242,7 +3281,7 @@ class AnimFunctions(object):
         cancelled = False
 
         log.debug('snapTransform params : nodes=%s : time=%s : step=%s : preCopyKeys=%s : \
-preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : snapTransforms=%s : snapRotates=%s' \
+                preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : snapTransforms=%s : snapRotates=%s'
                    % (nodes, time, step, preCopyKeys, preCopyAttrs, filterSettings, matchMethod, prioritySnapOnly, snapTranslates, snapRotates))
 
         # build up the node pairs to process
@@ -3292,6 +3331,7 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
                                                         timeEnabled=True,
                                                         snapRotates=snapRotates,
                                                         snapTranslates=snapTranslates)
+
                                     # fill the snap cache for error checking later
                                     # self.snapCacheData[dest]=data
                                     if snapTranslates:
@@ -3299,6 +3339,11 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
                                     if snapRotates:
                                         cmds.setKeyframe(dest, at='rotate')
                                     log.debug('Snapfrm %s : %s - %s : to : %s' % (str(t), r9Core.nodeNameStrip(src), dest, src))
+
+                                if additionalCalls:
+                                    for func in additionalCalls:
+                                        log.debug('Additional Func Called : %s' % func)
+                                        func()
 
                                 processRepeat -= 1
                                 if not processRepeat:
@@ -3312,6 +3357,10 @@ preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : sna
                                             timeEnabled=False,
                                             snapRotates=snapRotates,
                                             snapTranslates=snapTranslates)
+                    if additionalCalls:
+                        for func in additionalCalls:
+                            log.debug('Additional Func Called : %s' % func)
+                            func()
                         # self.snapCacheData[dest]=data
                         log.debug('Snapped : %s - %s : to : %s' % (r9Core.nodeNameStrip(src), dest, src))
 
