@@ -1375,28 +1375,32 @@ class PosePointCloud(object):
         else:
             self.settings = r9Core.FilterNode_Settings()
 
+        if self.getCurrentInstances():
+            self.syncdatafromCurrentInstance()
+
     def __connectdataToMeta__(self):
         '''
-        on build push the data to a metaNode so it's cached in the scene incase we need to 
-        reconstruct anything at a later date. This is used extensivly in the AnimReDirect calls
+        on build push the data to a metaNode so it's cached in the scene incase we need to
+        reconstruct anything at a later date. This is used extensively in the AnimReDirect calls
         '''
         self.ppcMeta.connectChild(self.posePointRoot, 'posePointRoot')
         self.ppcMeta.addAttr('posePointCloudNodes', self.posePointCloudNodes)
+        self.ppcMeta.addAttr('baseClass', self.__class__.__name__, attrType='string')
 
     def syncdatafromCurrentInstance(self):
         '''
         pull existing data back from the metaNode
         '''
-        self.ppcMeta = self.getCurrentInstances()
-        if self.ppcMeta:
-            self.ppcMeta = self.ppcMeta[0]
+        if self.getCurrentInstances():
+            self.ppcMeta = self.getCurrentInstances()[0]
             self.posePointCloudNodes = self.ppcMeta.posePointCloudNodes
             self.posePointRoot = self.ppcMeta.posePointRoot[0]
+            self.baseClass = self.ppcMeta.baseClass
 
     def getInputNodes(self):
         '''
         handler to build up the list of nodes to generate the cloud against.
-        This uses the filterSettings and the inputNodes variables to process the 
+        This uses the filterSettings and the inputNodes variables to process the
         hierarchy and is designed for overloading if required.
         '''
         if self.settings.filterIsActive():
@@ -1587,8 +1591,8 @@ class PoseCompare(object):
     '''
     This is aimed at comparing a rigs current pose with a given one, be that a
     pose file on disc, a pose class object, or even a poseObject against another.
-    It will compare either the main [poseData].keys or the ['skeletonDict'].keys 
-    and for key in keys compare, with tolerance, the [attrs] block. 
+    It will compare either the main [poseData].keys or the ['skeletonDict'].keys
+    and for key in keys compare, with tolerance, the [attrs] block.
 
     >>> # lets do simple skeleton comparison giving it 2 rootjnts
     >>> import Red9.core.Red9_PoseSaver as r9Pose
@@ -1601,16 +1605,16 @@ class PoseCompare(object):
     >>> mPoseA.buildDataMap(test_root)
     >>> mPoseA.buildBlocks_fill()
     >>>
-    >>> mPoseA=r9Pose.PoseData()
-    >>> mPoseA.settings.nodeTypes=['joint']
-    >>> mPoseA.buildDataMap(master_root)
-    >>> mPoseA.buildBlocks_fill()   
+    >>> mPoseB=r9Pose.PoseData()
+    >>> mPoseB.settings.nodeTypes=['joint']
+    >>> mPoseB.buildDataMap(master_root)
+    >>> mPoseB.buildBlocks_fill()
     >>>
     >>> compare=r9Pose.PoseCompare(mPoseA,mPoseB)
     >>> compare.compare() #>> bool, True = same
 
     >>> ----------------------------------------------------
-    >>> # mRig manual pose testing - note that mRig has 
+    >>> # mRig manual pose testing - note that mRig has
     >>> # poseCompare wrapped as an internal function also!
     >>> ----------------------------------------------------
     >>> # build an mPose object and fill the internal poseDict
@@ -1618,19 +1622,19 @@ class PoseCompare(object):
     >>> mPoseA.metaPose=True
     >>> mPoseA.buildDataMap(cmds.ls(sl=True))
     >>> mPoseA.buildBlocks_fill()
-    >>> 
+    >>>
     >>> mPoseB=r9Pose.PoseData()
     >>> mPoseB.metaPose=True
     >>> mPoseB.buildDataMap(cmds.ls(sl=True))
     >>> mPoseB.buildBlocks_fill()
-    >>> 
+    >>>
     >>> compare=r9Pose.PoseCompare(mPoseA,mPoseB)
-    >>> 
+    >>>
     >>> #.... or ....
     >>> compare=r9Pose.PoseCompare(mPoseA,'H:/Red9PoseTests/thisPose.pose')
     >>> #.... or ....
     >>> compare=r9Pose.PoseCompare('H:/Red9PoseTests/thisPose.pose','H:/Red9PoseTests/thatPose.pose')
-    >>> 
+    >>>
     >>> compare.compare() #>> bool, True = same
     >>> compare.fails['failedAttrs']
     '''
