@@ -516,7 +516,7 @@ which is then shapeSwapped for the PPC root node giving great reference!</li>
 <dt id="Red9.core.Red9_PoseSaver.PosePointCloud.getInputNodes">
 <code class="descname">getInputNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.getInputNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>handler to build up the list of nodes to generate the cloud against.
-This uses the filterSettings and the inputNodes variables to process the 
+This uses the filterSettings and the inputNodes variables to process the
 hierarchy and is designed for overloading if required.</p>
 </dd></dl>
 
@@ -614,7 +614,7 @@ TODO: Make sure that the duplicate message link bug is covered!!</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>This is aimed at comparing a rigs current pose with a given one, be that a
 pose file on disc, a pose class object, or even a poseObject against another.
-It will compare either the main [poseData].keys or the [&#8216;skeletonDict&#8217;].keys 
+It will compare either the main [poseData].keys or the [&#8216;skeletonDict&#8217;].keys
 and for key in keys compare, with tolerance, the [attrs] block.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># lets do simple skeleton comparison giving it 2 rootjnts</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Red9.core.Red9_PoseSaver</span> <span class="k">as</span> <span class="nn">r9Pose</span>
@@ -627,17 +627,17 @@ and for key in keys compare, with tolerance, the [attrs] block.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseA</span><span class="o">.</span><span class="n">buildDataMap</span><span class="p">(</span><span class="n">test_root</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseA</span><span class="o">.</span><span class="n">buildBlocks_fill</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseA</span><span class="o">=</span><span class="n">r9Pose</span><span class="o">.</span><span class="n">PoseData</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseA</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;joint&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseA</span><span class="o">.</span><span class="n">buildDataMap</span><span class="p">(</span><span class="n">master_root</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseA</span><span class="o">.</span><span class="n">buildBlocks_fill</span><span class="p">()</span>   
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseB</span><span class="o">=</span><span class="n">r9Pose</span><span class="o">.</span><span class="n">PoseData</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseB</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;joint&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseB</span><span class="o">.</span><span class="n">buildDataMap</span><span class="p">(</span><span class="n">master_root</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseB</span><span class="o">.</span><span class="n">buildBlocks_fill</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">compare</span><span class="o">=</span><span class="n">r9Pose</span><span class="o">.</span><span class="n">PoseCompare</span><span class="p">(</span><span class="n">mPoseA</span><span class="p">,</span><span class="n">mPoseB</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">compare</span><span class="o">.</span><span class="n">compare</span><span class="p">()</span> <span class="c1">#&gt;&gt; bool, True = same</span>
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="o">----------------------------------------------------</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># mRig manual pose testing - note that mRig has </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># mRig manual pose testing - note that mRig has</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># poseCompare wrapped as an internal function also!</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="o">----------------------------------------------------</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># build an mPose object and fill the internal poseDict</span>
@@ -645,19 +645,19 @@ and for key in keys compare, with tolerance, the [attrs] block.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseA</span><span class="o">.</span><span class="n">metaPose</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseA</span><span class="o">.</span><span class="n">buildDataMap</span><span class="p">(</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseA</span><span class="o">.</span><span class="n">buildBlocks_fill</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseB</span><span class="o">=</span><span class="n">r9Pose</span><span class="o">.</span><span class="n">PoseData</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseB</span><span class="o">.</span><span class="n">metaPose</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseB</span><span class="o">.</span><span class="n">buildDataMap</span><span class="p">(</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mPoseB</span><span class="o">.</span><span class="n">buildBlocks_fill</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">compare</span><span class="o">=</span><span class="n">r9Pose</span><span class="o">.</span><span class="n">PoseCompare</span><span class="p">(</span><span class="n">mPoseA</span><span class="p">,</span><span class="n">mPoseB</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1">#.... or ....</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">compare</span><span class="o">=</span><span class="n">r9Pose</span><span class="o">.</span><span class="n">PoseCompare</span><span class="p">(</span><span class="n">mPoseA</span><span class="p">,</span><span class="s1">&#39;H:/Red9PoseTests/thisPose.pose&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1">#.... or ....</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">compare</span><span class="o">=</span><span class="n">r9Pose</span><span class="o">.</span><span class="n">PoseCompare</span><span class="p">(</span><span class="s1">&#39;H:/Red9PoseTests/thisPose.pose&#39;</span><span class="p">,</span><span class="s1">&#39;H:/Red9PoseTests/thatPose.pose&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">compare</span><span class="o">.</span><span class="n">compare</span><span class="p">()</span> <span class="c1">#&gt;&gt; bool, True = same</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">compare</span><span class="o">.</span><span class="n">fails</span><span class="p">[</span><span class="s1">&#39;failedAttrs&#39;</span><span class="p">]</span>
 </pre></div>

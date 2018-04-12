@@ -331,7 +331,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000132AA388&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000025E0A548&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -343,19 +343,19 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 <p>New base class for the Red9 Animation Format - r9Anim
 This inherits most of it&#8217;s node handling directly from the DataMap class in Red9.core.Red9_PoseSaver
 making it incredibly flexible when it comes to mapping animation data between nodes and rigs.</p>
-<p>Like the PoseSaver this is capable of loading animation data relatively against a given node, 
+<p>Like the PoseSaver this is capable of loading animation data relatively against a given node,
 allowing you to load libraries of animations one after another in different spaces to that which they were saved.</p>
 <p>Vimeo example : <a class="reference external" href="https://vimeo.com/167872211">https://vimeo.com/167872211</a></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9panim&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9panim</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">=</span><span class="n">r9PAnim</span><span class="o">.</span><span class="n">AnimMap</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># like the pose saver you can load in a given filterSettings object directly</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r9Setup</span><span class="o">.</span><span class="n">red9Presets</span><span class="p">(),</span><span class="s1">&#39;Red9_DevRig.cfg&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">incRoots</span><span class="o">=</span><span class="kc">True</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># OR modify it on the fly in the class</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">metaData</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nurbsCurve&#39;</span><span class="p">]</span>
@@ -365,14 +365,14 @@ allowing you to load libraries of animations one after another in different spac
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># saving</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">saveAnim</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># basic loading</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">offset</span><span class="o">=</span><span class="mi">20</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">loadAnim</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># load relative to a given startFrame</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">loadAnim</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">loadAsStored</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loadFromFrm</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># loading relative to a given node</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dm</span><span class="o">.</span><span class="n">loadAnim</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">loadAsStored</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loadFromFrm</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span> <span class="n">referenceNode</span><span class="o">=</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
@@ -413,7 +413,7 @@ the data is loaded.</p>
 </li>
 <li><dl class="first docutils">
 <dt>self.prioritySnapOnly</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">bool - used when loading relative to a given node, limit the nodes which are adjusted in world space </span><dd><p class="first last">to a given subset denoted in the filterSwettings object</p>
+ <span class="classifier-delimiter">:</span> <span class="classifier">bool - used when loading relative to a given node, limit the nodes which are adjusted in world space</span><dd><p class="first last">to a given subset denoted in the filterSwettings object</p>
 </dd>
 </dl>
 </li>
@@ -427,7 +427,7 @@ those in the saveAnim and loadAnim calls. Leaves this open for expansion</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>filterSettings</strong> &#8211; specify a filterSettings object, or just use the settings that are bound to the class instance</li>
-<li><strong>timerange</strong> &#8211; specify a timerange to process, else use the default Red9 behaviour</li>
+<li><strong>timerange</strong> &#8211; specify a timerange to process, else use the default Red9 behaviour r9Anim.timeLineRangeGet()</li>
 <li><strong>restoreTangents</strong> &#8211; this is an additional <a href="#id3"><span class="problematic" id="id4">**</span></a>kws and switches OFF the loading of keyframe tangents to speed the load on dense data
 IF this is set to &#8216;auto&#8217; (default) then we first test if the keydata_bases was marked as &#8216;denseData&#8217; and if so we turn OFF the Tangent
 load for any channels marked as such. The idea being that dense data doesn&#8217;t need tangents as it&#8217;s baled at key per frame.</li>
@@ -580,7 +580,7 @@ internal startFrame and endFrame ranges have been set to process against.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000025A31408&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -591,20 +591,20 @@ internal startFrame and endFrame ranges have been set to process against.</p>
 <dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_PoseSaver.html#Red9.core.Red9_PoseSaver.PosePointCloud" title="Red9.core.Red9_PoseSaver.PosePointCloud"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_PoseSaver.PosePointCloud</span></code></a></p>
 <p>This relies heavily on the PosePointCloud base class. This means we can
 hook directly into the renderMeshes variable to find the Geo for reference</p>
-<p>Utilises the AnimPointCloud to allow animation to be re-directed via guide and reference meshes. 
-This generates a spline based gyuide that you can edit to redirect animation around a scene and 
+<p>Utilises the AnimPointCloud to allow animation to be re-directed via guide and reference meshes.
+This generates a spline based gyuide that you can edit to redirect animation around a scene and
 because it uses the pointCloud setups nothing is bound to the animation data itself</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9panim&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9panim</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ppt</span><span class="o">=</span><span class="n">r9proAnim</span><span class="o">.</span><span class="n">AnimPointCloud</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="s1">&#39;MRig:Locomotion_Root_Ctrl&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ppt</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;Red9_DevRig.cfg&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ppt</span><span class="o">.</span><span class="n">time</span><span class="o">=</span><span class="n">r9Anim</span><span class="o">.</span><span class="n">timeLineRangeGet</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># build the cloud reference, select the point to use as root reference</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ppt</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># apply any offsets you may have made</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ppt</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
 </pre></div>
@@ -617,7 +617,7 @@ because it uses the pointCloud setups nothing is bound to the animation data its
 <li><strong>nodes</strong> &#8211; nodes or the root node of the hierarchy to process</li>
 <li><strong>filterSettings</strong> &#8211; specific filterSettings object to pass in, else we bind one to settings internally</li>
 <li><strong>meshes</strong> &#8211; meshes used as reference Geo when constructing the pointCloud nodes</li>
-<li><strong>time</strong> &#8211; timerange to process</li>
+<li><strong>time</strong> &#8211; timerange to process, if not given we run the r9Anim.timeLineRangeGet() to pull it from the scene</li>
 <li><strong>prioritySnapOnly</strong> &#8211; only make ppc points for the filterPriority nodes, this is default for speed</li>
 </ul>
 </td>
@@ -646,8 +646,8 @@ upgrade the sync call to include anim specific data</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimPointCloud.makeClusterControls">
 <code class="descname">makeClusterControls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.makeClusterControls" title="Permalink to this definition">¶</a></dt>
-<dd><p>if we&#8217;ve built the motionPath then this will add implicitSphere&#8217;s as 
-controllers per cv rather than animators having to drop to 
+<dd><p>if we&#8217;ve built the motionPath then this will add implicitSphere&#8217;s as
+controllers per cv rather than animators having to drop to
 component mode to edit the path cv&#8217;s directly</p>
 </dd></dl>
 
@@ -1107,7 +1107,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001311FE88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000025A40088&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1131,7 +1131,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013128BC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000025A3F9C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1681,7 +1681,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.animation.Keyerui">
-<em class="property">class </em><code class="descname">Keyerui</code><span class="sig-paren">(</span><em>uifile='D:/Red9_Core/Red9_Core_Main/Red9/pro_pack\UI\uifiles\interpolationkeyer.ui'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Keyerui</code><span class="sig-paren">(</span><em>uifile='D:/Red9_Core/Red9_Core_Main/Red9/pro_pack/UI/uifiles/interpolationkeyer.ui'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="Red9_Pro_uibase.html#Red9.pro_pack.UI.uibase.BaseUI" title="Red9.pro_pack.UI.uibase.BaseUI"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.UI.uibase.BaseUI</span></code></a></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Keyerui.setdirection">

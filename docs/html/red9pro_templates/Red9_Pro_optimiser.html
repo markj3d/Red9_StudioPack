@@ -636,10 +636,10 @@ compound in the HealthManager for quick access to these key optimisations</p>
 <dt id="Red9.pro_pack.core.optimiser.All_Available_Tests">
 <em class="property">class </em><code class="descname">All_Available_Tests</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.All_Available_Tests" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
-<p>Collection class - this will build up the internal tests to include 
-ALL currently instanced and found test functions but at the same time 
-will disable the main run buttons in the HealthManager as these are 
-NOT designed to be run as a full test set, just a collection of 
+<p>Collection class - this will build up the internal tests to include
+ALL currently instanced and found test functions but at the same time
+will disable the main run buttons in the HealthManager as these are
+NOT designed to be run as a full test set, just a collection of
 individual tests</p>
 </dd></dl>
 
@@ -1263,7 +1263,7 @@ prior to testing and save the pose to the filepath rather than running the actua
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.blends_have_targetGeo_test">
-<code class="descname">blends_have_targetGeo_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>blends=[]</em>, <em>meshcheck=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.blends_have_targetGeo_test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">blends_have_targetGeo_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>blends=[]</em>, <em>meshcheck=True</em>, <em>forcefix=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.blends_have_targetGeo_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>test that any blendshapes in the scene have respective
 original target meshes wired up to the blend node</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1274,6 +1274,10 @@ original target meshes wired up to the blend node</p>
 <li><strong>expected</strong> &#8211; whether the targets should or shouldn&#8217;t be in the scene</li>
 <li><strong>blends</strong> &#8211; specific blendShape nodes to test against, default=[]</li>
 <li><strong>meshcheck</strong> &#8211; only check blends associated to polymeshes, default=True</li>
+<li><strong>forcefix</strong> &#8211; if True then the fix will try and force the re-build, managing any
+current connections to the blend targets, disconnecting as needed and restoring afterwards.
+Ideally this should NOT be needed, but if your rig has multiple connections that are hard
+to track then this should by-pass the issues</li>
 </ul>
 </td>
 </tr>
@@ -1282,10 +1286,24 @@ original target meshes wired up to the blend node</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.blends_have_targetGeo_fix">
+<code class="descname">blends_have_targetGeo_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.blends_have_targetGeo_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>try and regenerate the original blends targets and hook them back to the
+blendShape node for editing or for export requirements</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">if the &#8220;blends_have_targetGeo_test&#8221; has the &#8220;forcefix&#8221; flag set then the fix code
+will try and manage any current connections and deformer states as well as all current
+wires to the blendshape node targets themselves. This is a hard core force fix but does restore
+all connections afterwards. If the targets are un-wired then that&#8217;s ideal but the code will cope if not</p>
+</div>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.blends_targetGeo_name_test">
 <code class="descname">blends_targetGeo_name_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>blends=[]</em>, <em>meshcheck=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.blends_targetGeo_name_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>test that any blendshapes in the scene have respective
-original target meshes that are names as per the target attrs driving them
+original target meshes that are named as per the target attrs driving them
 this its crucial for some game engine exporters</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1319,14 +1337,14 @@ a given number of blendTargets</p>
 <dt id="Red9.pro_pack.core.optimiser.blends_target_missing_indexes_test">
 <code class="descname">blends_target_missing_indexes_test</code><span class="sig-paren">(</span><em>expected=False</em>, <em>autofix=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.blends_target_missing_indexes_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>test for empty indexes on blend nodes which will corrupt any fbx output
-This is designed to warning you of possible issues that may arise further 
+This is designed to warning you of possible issues that may arise further
 down the line when outputting FBX blendshape data to Unreal</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>autofix</strong> &#8211; if True we turn on the brute force fix method which will 
-insert a copy of the base mesh into the empty index slots, therefore 
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>autofix</strong> &#8211; if True we turn on the brute force fix method which will
+insert a copy of the base mesh into the empty index slots, therefore
 by-passing the FBX export issue</td>
 </tr>
 </tbody>
@@ -1350,17 +1368,17 @@ new target for the missing index, there by fixing the FBX export issue for Unrea
 <dt id="Red9.pro_pack.core.optimiser.mesh_compare_against_OBJ_test">
 <code class="descname">mesh_compare_against_OBJ_test</code><span class="sig-paren">(</span><em>expected</em>, <em>mesh</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_compare_against_OBJ_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>compare a given mesh against an expected OBJ file generated
-by the mesh_compare_generate func above and passed in as a path.
-This is useful when building complex facial systems so you can 
-validate that your mesh returns to the actual master Mesh delivered 
-by clients. Sometimes simply turning off the skinCluster envelope 
-is not enough reassurance that the mesh matches.</p>
+by the &#8220;mesh_compare_generate&#8221; func above and passed in as a path.
+This is useful when building complex facial systems so you can
+validate that your mesh returns to the actual master Mesh delivered
+by clients. Sometimes simply turning off the skinCluster envelope
+is not enough re-assurance that the mesh matches.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; in this case a path to an obj file that we&#8217;re 
+<li><strong>expected</strong> &#8211; in this case a path to an obj file that we&#8217;re
 going to validate the given mesh against</li>
 <li><strong>mesh</strong> &#8211; mesh to compare against in scene</li>
 </ul>
@@ -1370,10 +1388,22 @@ going to validate the given mesh against</li>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This requires Diffmerge.exe, you can download from 
+<p class="last">This requires Diffmerge.exe, you can download from
 <a class="reference external" href="https://sourcegear.com/diffmerge/">https://sourcegear.com/diffmerge/</a>.
 Once downloaded drop it here Red9/pakcages/diffMerge.exe</p>
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mesh_frozen_xforms_test">
+<code class="descname">mesh_frozen_xforms_test</code><span class="sig-paren">(</span><em>expected=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_frozen_xforms_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>test mainly for riggers, check that all meshes have frozen, zero transforms</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mesh_frozen_xforms_fix">
+<code class="descname">mesh_frozen_xforms_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_frozen_xforms_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>fix method : freeze the failed meshes transforms</p>
 </dd></dl>
 
 <dl class="function">
