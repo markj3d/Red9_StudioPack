@@ -837,7 +837,7 @@ def getMetaRigs(mInstances='MetaRig', mClassGrps=['MetaRig']):
         # final try, mInstances of MetaRig
         return getMetaNodes(mInstances=mInstances)
 
-def getMetaRigs_fromSelected():
+def getMetaRigs_fromSelected(singular=False):
     '''
     light wrap over the getMetaRigs function to return a list of mRigs connected
     to the selected nodes
@@ -850,6 +850,8 @@ def getMetaRigs_fromSelected():
             rig = getConnectedMetaSystemRoot(node)
             if rig and rig in allrigs and rig not in mrigs:
                 mrigs.append(rig)
+                if singular:
+                    return rig
     return mrigs
 
 
@@ -1729,8 +1731,8 @@ class MetaClass(object):
         '''
         validate the MObject, without this Maya will crash if the pointer is no longer valid
         TODO: thinking of storing the dagPath when we fill in the mNode to start with and
-        if this test fails, ie the scene has been reloaded, then use the dagPath to refind
-        and refil the mNode property back in.... maybe??
+        if this test fails, ie the scene has been reloaded, then use the dagPath to refine
+        and refill the mNode property back in.... maybe??
         '''
         try:
             mobjHandle = object.__getattribute__(self, "_MObjectHandle")
@@ -2217,6 +2219,21 @@ class MetaClass(object):
                     cmds.setAttr('%s.%s' % (self.mNode, a), l=state)
         except StandardError, error:
             log.debug(error)
+
+    def attrBreakConnections(self, attr, source=True, dest=False):
+        '''
+        break all current connections to the given attr on the mNode
+
+        :param attr: the attr to break
+        :param source: True by default, break connections on the source side
+        :param dest: False by default, break connections on the destination side
+        '''
+        if source:
+            for con in cmds.listConnections('%s.%s' % (self.mNode, attr), p=True, s=True, d=False) or []:
+                cmds.disconnectAttr(con, '%s.%s' % (self.mNode, attr))
+        if dest:
+            for con in cmds.listConnections('%s.%s' % (self.mNode, attr), p=True, s=False, d=True) or []:
+                cmds.disconnectAttr('%s.%s' % (self.mNode, attr), con)
 
     @nodeLockManager
     def renameAttr(self, currentAttr, newName):
@@ -2810,10 +2827,10 @@ class MetaClass(object):
                 log.warning(error)
 
     @nodeLockManager
-    def __disconnectCurrentAttrPlugs(self, attr):
+    def __disconnectCurrentAttrPlugs(self, attr, deleteSourcePlug=True, deleteDestPlug=False, *args, **kws):
         '''
         from a given attr on the mNode disconnect any current connections and
-        clean up the plugs by deleting the existing attributes
+        clean up the plugs by deleting the existing attributes. Note the attr must be of type message
         '''
         currentConnects = self.__getattribute__(attr)
         if currentConnects:
@@ -2822,9 +2839,9 @@ class MetaClass(object):
             for connection in currentConnects:
                 try:
                     log.debug('Disconnecting %s.%s >> from : %s' % (self.mNode, attr, connection))
-                    self.disconnectChild(connection, attr=attr, deleteSourcePlug=True, deleteDestPlug=False)
+                    self.disconnectChild(connection, attr=attr, deleteSourcePlug=deleteSourcePlug, deleteDestPlug=deleteDestPlug)
                 except:
-                    log.warning('Failed to un-connect current message link')
+                    log.warning('Failed to disconnect current message link')
 
     @nodeLockManager
     def disconnectChild(self, node, attr=None, deleteSourcePlug=True, deleteDestPlug=True):
@@ -3084,7 +3101,11 @@ class MetaClass(object):
                                 if not asMap:
                                     children.extend(msgLinked)
                                 else:
-                                    attrMapData['%s.%s' % (node.mNode, attr)] = msgLinked
+                                    if not plugsOnly:
+                                        attrMapData['%s.%s' % (node.mNode, attr)] = msgLinked
+                                    else:
+                                        attrMapData[attr] = msgLinked
+                                    # attrMapData['%s.%s' % (node.mNode, attr)] = msgLinked
                             else:
                                 for linkedNode in msgLinked:
                                     for attr in nAttrs:
@@ -3258,9 +3279,9 @@ class MetaRig(MetaClass):
         self.filterSettings = None  # used in the settings func
 
     def __bindData__(self):
-        # self._lockState=True         # set the internal lockstate
+        # self._lockState=True        # set the internal lockstate
         self.addAttr('version', 1.0)  # internal version of the rig, used by pro and bound here as a generic version ID
-        self.addAttr('rigType', '')  # type of the rig system 'biped', 'quad' etc
+        self.addAttr('rigType', '')   # type of the rig system 'biped', 'quad' etc
         self.addAttr('scaleSystem', attrType='messageSimple')
         self.addAttr('timecode_node', attrType='messageSimple')
 
@@ -3268,12 +3289,14 @@ class MetaRig(MetaClass):
         self.addAttr('renderMeshes', attrType='message')  # used to ID all meshes that are part of this rig system
         self.addAttr('exportSkeletonRoot', attrType='messageSimple')  # used to ID the skeleton root for exporters and code
 
-    def gatherInfo(self, level=0, *args, **kws):
+    def gatherInfo(self, level=0, encode_objects=False, *args, **kws):
         '''
         gather key info on this system
+
+        :param encode_objects: if True we should encode / stringify all objects for safe json conversion
         '''
         data = {}
-        data['mClass'] = super(MetaRig, self).gatherInfo(level=level)
+        data['mClass'] = super(MetaRig, self).gatherInfo(level=level, encode_objects=encode_objects, *args, **kws)
         data['filepath'] = cmds.file(q=True, sn=True)
         if self.hasAttr('version'):
             data['version'] = self.version
@@ -3343,8 +3366,32 @@ class MetaRig(MetaClass):
         instances self.CTRL_Prefix
         '''
         if self.hasAttr('%s_Main' % self.CTRL_Prefix):
-            return getattr(self, '%s_Main' % self.CTRL_Prefix)[0]
-        log.warning('mRig has no "CTRL_Main" bound')
+            try:
+                return getattr(self, '%s_Main' % self.CTRL_Prefix)[0]
+            except:
+                log.warning('CTRL_Main was not connected')
+
+        log.info('mRig has no "CTRL_Main" bound')
+
+    @property
+    def ctrl_locomotion(self):
+        '''
+        why wrap, because when we subclass, IF we've modified the CRTL_Prefix then we
+        can't rely on the default CTRL_LocomotionRoot[0] wire, so we wrap it with the current
+        instances self.CTRL_Prefix
+
+        .. note::
+            LocomotionRoot is a controller designated as the "locomotion root" node, for games this
+            generally is the characters global motion pushed to a controller which directly controls
+            the skeleton root / reference joint
+        '''
+        if self.hasAttr('%s_LocomotionRoot' % self.CTRL_Prefix):
+            try:
+                return getattr(self, '%s_LocomotionRoot' % self.CTRL_Prefix)[0]
+            except:
+                log.warning('CTRL_LocomotionRoot was not connected')
+
+        log.info('mRig has no "CTRL_LocomotionRoot" bound')
 
     @property
     def characterSet(self):
@@ -3407,7 +3454,7 @@ class MetaRig(MetaClass):
         '''
         return self.getChildren(walk, mAttrs)
 
-    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False, plugsOnly=False, incFacial=False, **kws):
+    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False, plugsOnly=False, incFacial=False, baseBehaviour=False, **kws):
         '''
         Massively important bit of code, this is used by most bits of code
         to find the child controllers linked to this metaRig instance.
@@ -3418,8 +3465,9 @@ class MetaRig(MetaClass):
         :param nAttrs: search returned MayaNodes for given set of attrs and only return matched nodes
         :param asMeta: return instantiated mNodes regardless of type
         :param asMap: return the data as a map such that {mNode.plugAttr:[nodes], mNode.plugAttr:[nodes]}
-        :param plugsOnly: only with asMap falg, this truncates the return to {plugAttr:[nodes]}
+        :param plugsOnly: only with asMap flag, this truncates the return to {plugAttr:[nodes]}
         :param incFacial: if we have a facial system linked include it's children in the return (uses the getFacialSystem to id the facial node)
+        :param baseBehaviour: if True we revert the CTRL_Prefix logic such that the return won't be clamped to just controllers
 
         .. note::
             MetaRig getChildren has overloads adding the CTRL_Prefix to the cAttrs so that
@@ -3431,7 +3479,7 @@ class MetaRig(MetaClass):
             it will also take ALL of that functions **kws functionality in the initial search:
             source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType='mClass', skipTypes=[], skipInstances=[]
         '''
-        if not cAttrs:
+        if not cAttrs and not baseBehaviour:
             cAttrs = ['RigCtrls', '%s_*' % self.CTRL_Prefix]
             if incFacial:
                 facialSystem = self.getFacialSystem()
@@ -3717,7 +3765,9 @@ class MetaRig(MetaClass):
         '''
         if not self.MirrorClass or forceRefresh:
             self.MirrorClass = self.getMirrorData()
-        return max([int(m) for m in self.MirrorClass.mirrorDict[side].keys()])
+        if side in self.MirrorClass.mirrorDict.keys() and self.MirrorClass.mirrorDict[side]:
+            return max([int(m) for m in self.MirrorClass.mirrorDict[side].keys()])
+        return 0
 
     def getMirror_nextSlot(self, side, forceRefresh=False):
         '''
@@ -3938,7 +3988,7 @@ class MetaRig(MetaClass):
             nodes = self.getChildren(walk=True)
         return r9Anim.animRangeFromNodes(nodes, setTimeline=setTimeline)
 
-    def keyChildren(self, nodes=[], walk=True, mAttrs=None, cAttrs=[], nAttrs=[]):
+    def keyChildren(self, nodes=[], walk=True, mAttrs=None, cAttrs=[], nAttrs=[], shapes=False):
         '''
         setKey on the systems controllers with options to control what gets keyed
         via the standard getChildren *args which are passed in.
@@ -3948,10 +3998,22 @@ class MetaRig(MetaClass):
         :param mAttrs: only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)
         :param cAttrs: only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)
         :param nAttrs: search returned MayaNodes for given set of attrs and only return matched nodes
+        :param shapes: now set to false to avoid keying all exposed Arnold shape attributes! We do however respect the animators
+            set key options and if they've specifically set shapes to key, we pick that up and respect it
         '''
         if not nodes:
             nodes = self.getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=False, asMap=False)
-        cmds.setKeyframe(nodes)
+
+        try:
+            # respect the uses SetKey Options?
+            if cmds.optionVar(q='setKeyframeWhich') == 1:  # 1 = all keyable attributes
+                shapes = cmds.optionVar(q='keyShapes')
+            # new shapes flag came in in 2017
+            cmds.setKeyframe(nodes, shapes=shapes)
+        except:
+            cmds.setKeyframe(nodes)
+
+
 
     def hasKeys(self, nodes=[], walk=True, returnCtrls=False):
         '''
@@ -3963,11 +4025,11 @@ class MetaRig(MetaClass):
         if not nodes:
             nodes = self.getChildren(walk=walk)
         if not returnCtrls:
-            return r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True) or False
+            return r9Core.FilterNode.lsAnimCurves(nodes, safe=True) or False
         else:
             failed = []
             for node in nodes:
-                if r9Anim.r9Core.FilterNode.lsAnimCurves(node, safe=True):
+                if r9Core.FilterNode.lsAnimCurves(node, safe=True):
                     failed.append(node)
             return failed
 
@@ -3981,7 +4043,7 @@ class MetaRig(MetaClass):
         if not nodes:
             nodes = self.getChildren(walk=walk)
         if self.hasKeys(nodes):
-            cmds.cutKey(r9Anim.r9Core.FilterNode.lsAnimCurves(nodes, safe=True))
+            cmds.cutKey(r9Core.FilterNode.lsAnimCurves(nodes, safe=True))
         if reset:
             try:
                 self.loadZeroPose(nodes)
