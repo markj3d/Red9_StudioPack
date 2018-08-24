@@ -44,7 +44,7 @@ class evalManager_switch(OpenMayaMPx.MPxCommand):
         if argData.isFlagSet(self.kModeFlag):
             mode=argData.flagArgumentString(self.kModeFlag, 0)
         cmds.evaluationManager(mode=mode)
-        sys.stdout.write("evalManager_switch.doIt : setting mode=%s\n" % mode)
+        #sys.stdout.write("evalManager_switch.doIt : setting mode=%s\n" % mode)
         OpenMayaMPx.MPxCommand.clearResult()
         OpenMayaMPx.MPxCommand.setResult(self.undostate)
         
@@ -55,7 +55,7 @@ class evalManager_switch(OpenMayaMPx.MPxCommand):
         '''
         Build up the undo command data
         '''
-        sys.stdout.write("evalManager_switch.undoIt : mode=%s\n" % self.undostate)
+        #sys.stdout.write("evalManager_switch.undoIt : mode=%s\n" % self.undostate)
         cmds.evaluationManager(mode=self.undostate)
         
     @classmethod

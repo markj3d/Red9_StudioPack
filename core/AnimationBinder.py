@@ -640,21 +640,35 @@ def match_given_hierarchys(source, dest):
                 break
     return nameMatched
 
-def bind_skeletons(source, dest, method='connect'):
+def bind_skeletons(source, dest, method='connect', scales=False):
     '''
     From 2 given root joints search through each hierarchy for child joints, match
     them based on node name, then connect their trans/rots directly, or
     parentConstrain them. Again cmds for speed
+
+    :param source: the root node of the driving skeleton
+    :param dest: the root node of the driven skeleton
+    :param method: the method used for the connection, either 'connect' or 'constrain'
+    :param scale: do we bind the scales of the destination skel to the source??
     '''
+
     sourceJoints = cmds.listRelatives(source, ad=True, f=True, type='joint')
     destJoints = cmds.listRelatives(dest, ad=True, f=True, type='joint')
 
-    if cmds.nodeType(source) == 'joint':
-        sourceJoints.append(source)
-    if cmds.nodeType(dest) == 'joint':
-        destJoints.append(dest)
+#     if cmds.nodeType(source) == 'joint':
+#         sourceJoints.append(source)
+#     if cmds.nodeType(dest) == 'joint':
+#         destJoints.append(dest)
+
+    # parent constrain the root nodes regardless of bindType, fixes issues where
+    # we have additional rotated parent groups on the source
+    cmds.parentConstraint(source, dest)
+    if scales:
+        cmds.scaleConstraint(source, dest, mo=True)
 
     attrs = ['rotateX', 'rotateY', 'rotateZ', 'translateX', 'translateY', 'translateZ']
+    if scales:
+        attrs = attrs + ['scaleX', 'scaleY', 'scaleZ']
 
     for sJnt, dJnt in match_given_hierarchys(sourceJoints, destJoints):
         if method == 'connect':
@@ -668,6 +682,12 @@ def bind_skeletons(source, dest, method='connect'):
                 cmds.parentConstraint(sJnt, dJnt, mo=True)
             except:
                 pass
+            try:
+                if scales:
+                    cmds.scaleConstraint(sJnt, dJnt, mo=True)
+            except:
+                pass
+
 
 def make_stabilized_node(nodeName=None, centered=True):
     '''

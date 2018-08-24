@@ -44,8 +44,9 @@ def getCurrentFPS():
     '''
     returns the current frames per second as a number, rather than a useless string
     '''
-    fpsDict = {"game": 15.0, "film": 24.0, "pal": 25.0, "ntsc": 30.0, "show": 48.0, "palf": 50.0, "ntscf": 60.0}
-    return fpsDict[cmds.currentUnit(q=True, fullName=True, time=True)]
+    return r9Setup.getCurrentFPS()
+#     fpsDict = {"game": 15.0, "film": 24.0, "pal": 25.0, "ntsc": 30.0, "show": 48.0, "palf": 50.0, "ntscf": 60.0}
+#     return fpsDict[cmds.currentUnit(q=True, fullName=True, time=True)]
 
 
 def forceToString(text):
@@ -70,6 +71,17 @@ def formatPath_join(path, *paths):
     wrapper over os.path.join and formatPath so it's always returned as a valid Python Path
     '''
     return formatPath(os.path.join(path, *paths))
+
+def sceneName(short=False):
+    '''
+    Why, because if a file loaded with errors the standard cmds.file(q=True, sn=True) returns nothing
+    this will be threaded into all future calls, particularly ProPack exporter management for consistency
+    '''
+    import maya.OpenMaya as OpenMaya
+    if not short:
+        return OpenMaya.MFileIO.currentFile()
+    else:
+        return os.path.splitext(os.path.basename(OpenMaya.MFileIO.currentFile()))[0]
 
 def itersubclasses(cls, _seen=None):
     """
@@ -308,11 +320,13 @@ class AnimationContext(object):
     :param evalmanager: do we manage the evalManager in this context for Maya 2016 onwards
     :param time: do we manage the time and restore the original currentTime?
     :param undo: do we manage the undoStack, collecting everything in one chunk
+    :param autokey: base state of the autokey during this context, default=False
     """
-    def __init__(self, evalmanager=True, time=True, undo=True):
+    def __init__(self, evalmanager=True, time=True, undo=True, autokey=False):
         self.autoKeyState = None
         self.timeStore = {}
         self.evalmode = None
+        self.autokey = autokey
 
         self.manage_em = evalmanager
         self.mangage_undo = undo
@@ -327,6 +341,9 @@ class AnimationContext(object):
         self.timeStore['endTime'] = cmds.playbackOptions(q=True, aet=True)
         self.timeStore['playSpeed'] = cmds.playbackOptions(query=True, playbackSpeed=True)
 
+        # force AutoKey OFF
+        cmds.autoKeyframe(state=self.autokey)
+
         if self.mangage_undo:
             cmds.undoInfo(openChunk=True)
         else:
@@ -340,11 +357,11 @@ class AnimationContext(object):
     def __exit__(self, exc_type, exc_value, traceback):
         # Close the undo chunk, warn if any exceptions were caught:
         cmds.autoKeyframe(state=self.autoKeyState)
-        log.info('autoKeyState restored: %s' % self.autoKeyState)
+        log.debug('autoKeyState restored: %s' % self.autoKeyState)
 
         if self.manage_em and self.evalmode:
             evalManagerState(mode=self.evalmode)
-            log.info('evalManager restored: %s' % self.evalmode)
+            log.debug('evalManager restored: %s' % self.evalmode)
         if self.manage_time:
             cmds.currentTime(self.timeStore['currentTime'])
             cmds.playbackOptions(min=self.timeStore['minTime'])
@@ -352,7 +369,7 @@ class AnimationContext(object):
             cmds.playbackOptions(ast=self.timeStore['startTime'])
             cmds.playbackOptions(aet=self.timeStore['endTime'])
             cmds.playbackOptions(ps=self.timeStore['playSpeed'])
-            log.info('currentTime restored: %f' % self.timeStore['currentTime'])
+            log.debug('currentTime restored: %f' % self.timeStore['currentTime'])
         if self.mangage_undo:
             cmds.undoInfo(closeChunk=True)
         else:
@@ -380,7 +397,7 @@ class undoContext(object):
         :param initialUndo: on first process whether undo on entry to the context manager
         :param undoFuncCache: only if initialUndo = True : functions to catch in the undo stack
         :param undoDepth: only if initialUndo = True : depth of the undo stack to go to
-        
+
         .. note::
             When adding funcs to this you CAN'T call the 'dc' command on any slider with a lambda func,
             it has to call a specific func to catch in the undoStack. See Red9_AnimationUtils.FilterCurves
@@ -389,7 +406,7 @@ class undoContext(object):
         self.initialUndo = initialUndo
         self.undoFuncCache = undoFuncCache
         self.undoDepth = undoDepth
-        
+
     def undoCall(self):
         for _ in range(1, self.undoDepth + 1):
             # log.depth('undoDepth : %s' %  i)
@@ -550,7 +567,7 @@ class HIKContext(object):
 
             if self.managedHIK:
                 cmds.keyingGroup(fil="NoKeyingGroups")
-                log.info('Processing HIK Mode >> using HIKContext Manager:')
+                log.debug('Processing HIK Mode >> using HIKContext Manager:')
                 cmds.select(self.NodeList)
                 mel.eval("hikManipStart 1 1")
         except:
@@ -561,7 +578,7 @@ class HIKContext(object):
             cmds.keyingGroup(fil=self.keyingGroups)
             cmds.select(self.NodeList)
             mel.eval("hikManipStop")
-            log.info('Exit HIK Mode >> HIKContext Manager:')
+            log.debug('Exit HIK Mode >> HIKContext Manager:')
         if exc_type:
             log.exception('%s : %s' % (exc_type, exc_value))
         if self.objs:
@@ -678,7 +695,7 @@ class SceneRestoreContext(object):
         cmds.currentUnit(linear=self.dataStore['sceneUnits'])
         cmds.upAxis(axis=self.dataStore['upAxis'])
 
-        log.info('Restored PlayBack / Timeline setup')
+        log.debug('Restored PlayBack / Timeline setup')
 
         # viewport colors
         cmds.displayPref(displayGradient=self.dataStore['displayGradient'])
@@ -692,9 +709,9 @@ class SceneRestoreContext(object):
             try:
                 cmdString = data['settings'].replace('$editorName', panel)
                 mel.eval(cmdString)
-                log.info("Restored Panel Settings Data >> %s" % panel)
+                log.debug("Restored Panel Settings Data >> %s" % panel)
                 mel.eval('lookThroughModelPanel("%s","%s")' % (data['activeCam'], panel))
-                log.info("Restored Panel Active Camera Data >> %s >> cam : %s" % (panel, data['activeCam']))
+                log.debug("Restored Panel Active Camera Data >> %s >> cam : %s" % (panel, data['activeCam']))
             except:
                 log.debug("Failed to fully Restore ActiveCamera Data >> %s >> cam : %s" % (panel, data['activeCam']))
 
@@ -704,14 +721,14 @@ class SceneRestoreContext(object):
                 cmds.setAttr('%s.translate' % cam, settings[0][0][0], settings[0][0][1], settings[0][0][2])
                 cmds.setAttr('%s.rotate' % cam, settings[1][0][0], settings[1][0][1], settings[1][0][2])
                 cmds.setAttr('%s.scale' % cam, settings[2][0][0], settings[2][0][1], settings[2][0][2])
-                log.info('Restored Default Camera Transform Data : % s' % cam)
+                log.debug('Restored Default Camera Transform Data : % s' % cam)
             except:
                 log.debug("Failed to fully Restore Default Camera Transform Data : % s" % cam)
 
         # sound management
         if self.dataStore['displaySound']:
             cmds.timeControl(self.gPlayBackSlider, e=True, ds=1, sound=self.dataStore['activeSound'])
-            log.info('Restored Audio setup')
+            log.debug('Restored Audio setup')
         else:
             cmds.timeControl(self.gPlayBackSlider, e=True, ds=0)
         log.debug('Scene Restored fully')
@@ -1025,7 +1042,7 @@ def os_fileCompare(file1, file2, openDiff=False):
             return retcode
     else:
         log.warning('Diffmerge commandline was not found, compare aborted')
-        
+
 def writeJson(filepath=None, content=None):
     '''
     write json file to disk

@@ -1983,7 +1983,7 @@ class LockChannels(object):
 
     # MapFile calls
     # ----------------------------------
-    def __buildAttrStateDict(self, nodes):
+    def _buildAttrStateDict(self, nodes):
         '''
         build the internal dict thats stored and used by the save/load calls
         '''
@@ -2006,7 +2006,7 @@ class LockChannels(object):
             # Filter the selection for children including the selected roots
             nodes = FilterNode(nodes).lsHierarchy(incRoots=True, transformClamp=True)
 
-        self.__buildAttrStateDict(nodes)
+        self._buildAttrStateDict(nodes)
         if filepath:
             ConfigObj = configobj.ConfigObj(indent_type='\t')
             ConfigObj['channelMap'] = self.statusDict
@@ -2038,7 +2038,7 @@ class LockChannels(object):
         :param hierarchy: process all child nodes of the nodes passed in
         :param serializeNode: if Meta then this is used to serialize the attrMap to the node itself
 
-        .. note:: 
+        .. note::
             Here we're dealing with 2 possible sets of data, either decoded by the
             ConfigObj decoder or a JSON deserializer and there's subtle differences in the dict
             thats returned hence the decodeString() calls
@@ -2098,19 +2098,19 @@ class LockChannels(object):
         log.info('<< AttrMap Processed >>')
 
     @staticmethod
-    def processState(nodes, attrs, mode, hierarchy=False, userDefined=False):
+    def processState(nodes, attrs=None, mode=None, hierarchy=False, userDefined=False):
         '''
         Easy wrapper to manage channels that are keyable / locked
         in the channelBox.
-    
+
         :param nodes: nodes to process
         :param attrs: set() of attrs, or 'all'
         :param mode: 'lock', 'unlock', 'hide', 'unhide', 'fullkey', 'lockall'
         :param hierarchy: process all child nodes, default is now False
         :param usedDefined: process all UserDefined attributes on all nodes
-    
+
         >>> r9Core.LockChannels.processState(nodes, attrs=["sx", "sy", "sz", "v"], mode='lockall')
-        >>> 
+        >>>
         >>> # note: if attrs='all' we now set it to the following for ease:
         >>> ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "nds", "radius"]
         '''
@@ -2123,10 +2123,12 @@ class LockChannels(object):
         if hierarchy:
             # Filter the selection for children including the selected roots
             nodes = FilterNode(nodes).lsHierarchy(incRoots=True)
-
+#         if not attrs:
+#             attrs = 'all'
         if attrs == 'all':
             attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "nds", "radius", "radi"]
-
+        if attrs == 'transforms':
+            attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz"]
         if not hasattr(attrs, '__iter__'):
             attrs = set([attrs])
         if not type(attrs) == set:
@@ -2134,7 +2136,7 @@ class LockChannels(object):
 
         # print('Base attrs : ',attrs)
         attrKws = {}
-        
+
         if mode == 'lock':
             attrKws['lock'] = True
         elif mode == 'unlock':
@@ -2153,6 +2155,9 @@ class LockChannels(object):
         elif mode == 'lockall':
             attrKws['keyable'] = False
             attrKws['lock'] = True
+            # force unlock the compounds also!
+            if attrs == 'all' or attrs == 'transforms':
+                attrs.extend('translate', 'rotate', 'scale')
 
         for node in nodes:
             if userDefined:
@@ -2728,7 +2733,7 @@ class MatrixOffset(object):
 
     def setOffsetMatrix(self, inputA, inputB):
         '''
-        from 2 transform return an offsetMatrix between them 
+        from 2 transform return an offsetMatrix between them
 
         :param inputA: MayaNode A
         :param inputB: MayaNode B
@@ -2742,6 +2747,22 @@ class MatrixOffset(object):
         self.OffsetMatrix = initialMatrix.inverse() * newMatrix
         return self.OffsetMatrix
 
+    @classmethod
+    def nodesAreEquivalent(cls, inputA, inputB):
+        '''
+        do the 2 nodes passed in have an equivalant inclusiveMatrix? ie, are they
+        in the same worldSpace!
+
+        :param inputA: nodeA
+        :param inputB: nodeB
+        '''
+        DagNodeA = MatrixOffset.get_MDagPath(inputA)
+        DagNodeB = MatrixOffset.get_MDagPath(inputB)
+
+        initialMatrix = DagNodeA.inclusiveMatrix()
+        newMatrix = DagNodeB.inclusiveMatrix()
+        return initialMatrix.isEquivalent(newMatrix)
+
     def __cacheCurrentData(self, nodes):
         '''
         Return a list of tuples containing the cached state of the nodes
@@ -2749,8 +2770,6 @@ class MatrixOffset(object):
         '''
         self.CachedData = []
         for node in nodes:
-            if not cmds.objExists(node):
-                continue
             parentInverseMatrix = None
             dag = MatrixOffset.get_MDagPath(node)
             currentMatrix = dag.inclusiveMatrix()
@@ -2763,30 +2782,65 @@ class MatrixOffset(object):
             self.CachedData.append((node, dag, currentMatrix, parentInverseMatrix, (rotatePivot, scalePivot)))
         return self.CachedData
 
-    def applyOffsetMatrixToNodes(self, nodes, matrix=None):
+    def applyOffsetTransformsToNodes(self, nodes, matrix=None, inversed=False):
+        '''
+        simple move function called to shift the given nodes against the offsetMatrix
+        '''
+        objs = cmds.ls(sl=True, l=True)
+        cmds.select(nodes)
+        offsetMatrix = self.OffsetMatrix
+        if matrix:
+            offsetMatrix = matrix
+        if inversed:
+            offsetMatrix = offsetMatrix.inverse()
+
+        # simple apply offset via the standard move/rotate operators....
+        cmds.move(offsetMatrix(3, 0), offsetMatrix(3, 1), offsetMatrix(3, 2), r=True)
+
+#         mTransformMtx = OpenMaya.MTransformationMatrix(self.OffsetMatrix)
+#         eulerRot = mTransformMtx.eulerRotation()  # MEulerRotation
+#         angles = [math.degrees(angle) for angle in (eulerRot.x, eulerRot.y, eulerRot.z)]
+#         cmds.rotate(angles[0], angles[1], angles[2], r=True)
+
+        if objs:
+            cmds.select(objs)
+
+    def applyOffsetMatrixToNodes(self, nodes, matrix=None, inversed=False):
         '''
         offset all the given nodes by the given MMatrix object
 
         :param nodes: Nodes to apply the offset Matrix too
         :param matrix: Optional OpenMaya.MMatrix to transform the data by
+
+        .. note::
+            this doesn't deal with joints as for that we need to rotate by the inverse
+            of the jointOrient matrix, after the rotation matrix
         '''
         offsetMatrix = self.OffsetMatrix
         if matrix:
             offsetMatrix = matrix
         if not type(nodes) == list:
             nodes = [nodes]
+        if inversed:
+            offsetMatrix = offsetMatrix.inverse()
+        for node in nodes:
+            if not cmds.objExists(node):
+                log.warning('given node was not found! : %s' % node)
         for node, dag, initialMatrix, parentInverseMatrix, rotScal in self.__cacheCurrentData(nodes):
-            if parentInverseMatrix:
-                if not initialMatrix.isEquivalent(dag.inclusiveMatrix()):
-                    print 'Dag has already been modified by previous parent node', node
-                    continue
+            try:
+                if parentInverseMatrix:
+                    if not initialMatrix.isEquivalent(dag.inclusiveMatrix()):
+                        log.info('Dag has already been modified by previous parent node :  %s' % node)
+                        continue
+                    else:
+                        # multiply the offset by the inverse ParentMatrix to put it into the correct space
+                        OpenMaya.MFnTransform(dag).set(OpenMaya.MTransformationMatrix(initialMatrix * parentInverseMatrix * offsetMatrix.inverse()))
+                        # cmds.setAttr('%s.rotatePivot' % node, rotScal[0][0][0], rotScal[0][0][1], rotScal[0][0][2])   ?? why were we doing this ??
+                        # cmds.setAttr('%s.scalePivot' % node, rotScal[1][0][0], rotScal[1][0][1], rotScal[1][0][2])   ?? why were we doing this ??
                 else:
-                # multiply the offset by the inverse ParentMatrix to put it into the correct space
-                    OpenMaya.MFnTransform(dag).set(OpenMaya.MTransformationMatrix(initialMatrix * parentInverseMatrix * offsetMatrix.inverse()))
-                    print 'node offset : ', node
-                    cmds.setAttr('%s.rotatePivot' % node, rotScal[0][0][0], rotScal[0][0][1], rotScal[0][0][2])
-                    cmds.setAttr('%s.scalePivot' % node, rotScal[1][0][0], rotScal[1][0][1], rotScal[1][0][2])
-            else:
-                OpenMaya.MFnTransform(dag).set(OpenMaya.MTransformationMatrix(initialMatrix * offsetMatrix.inverse()))
-                cmds.setAttr('%s.rotatePivot' % node, rotScal[0][0][0], rotScal[0][0][1], rotScal[0][0][2])
-                cmds.setAttr('%s.scalePivot' % node, rotScal[1][0][0], rotScal[1][0][1], rotScal[1][0][2])
+                    OpenMaya.MFnTransform(dag).set(OpenMaya.MTransformationMatrix(initialMatrix * offsetMatrix.inverse()))
+                    # cmds.setAttr('%s.rotatePivot' % node, rotScal[0][0][0], rotScal[0][0][1], rotScal[0][0][2])   ?? why were we doing this ??
+                    # cmds.setAttr('%s.scalePivot' % node, rotScal[1][0][0], rotScal[1][0][1], rotScal[1][0][2])   ?? why were we doing this ??
+            except:
+                log.warning('Failed to apply offset Matrix too : %s' % node)
+

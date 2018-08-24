@@ -209,12 +209,66 @@ def osBuild():
     elif build == 'win32':
         return 32
 
-def getCurrentFPS():
+def getCurrentFPS(return_full_map=False):
     '''
     returns the current frames per second as a number, rather than a useless string
+
+    :param return_full_map: if True we return a dictionary of timeUnit:fps rather than the
+        current actual fps - useful for debugging
     '''
-    fpsDict = {"game": 15.0, "film": 24.0, "pal": 25.0, "ntsc": 30.0, "show": 48.0, "palf": 50.0, "ntscf": 60.0}
-    return fpsDict[cmds.currentUnit(q=True, fullName=True, time=True)]
+    fpsDict = {"game": 15.0,
+               "film": 24.0,
+               "pal": 25.0,
+               "ntsc": 30.0,
+               "show": 48.0,
+               "palf": 50.0,
+               "ntscf": 60.0}
+    if mayaVersion() >= 2017:
+        new_2017fps = {"2fps": 2.0,
+                          "3fps": 3.0,
+                          "4fps": 4.0,
+                          "5fps": 5.0,
+                          "6fps": 6.0,
+                          "8fps": 8.0,
+                          "10fps": 10.0,
+                          "12fps": 12.0,
+                          "16fps": 16.0,
+                          "20fps": 20.0,
+                          "29.97fps": 29.97,
+                          "40fps": 40.0,
+                          "75fps": 70.0,
+                          "80fps": 80.0,
+                          "100fps": 100.0,
+                          "120fps": 120.0,
+                          "125fps": 125.0,
+                          "150fps": 150.0,
+                          "200fps": 200.0,
+                          "240fps": 240.0,
+                          "250fps": 250.0,
+                          "300fps": 300.0,
+                          "375fps": 375.0,
+                          "400fps": 400.0,
+                          "500fps": 500.0,
+                          "600fps": 600.0,
+                          "750fps": 750.0,
+                          "1200fps": 1200.0,
+                          "1500fps": 1500.0,
+                          "2000fps": 2000.0,
+                          "3000fps": 3000.0,
+                          "6000fps": 6000.0}
+        fpsDict.update(new_2017fps)
+    if mayaVersion() >= 2018:
+        new_2018fps = {"23.976fps": 23.976,
+                          "29.97df": 29.97,
+                          "47.952fps": 47.952,
+                          "59.94fps": 59.94,
+                          "44100fps": 44100.0,
+                          "48000fps": 48000.0}
+        fpsDict.update(new_2018fps)
+    if not return_full_map:
+        return fpsDict[cmds.currentUnit(q=True, fullName=True, time=True)]
+    else:
+        return fpsDict
 
 
 # -----------------------------------------------------------------------------------------
@@ -334,6 +388,9 @@ def menuSetup(parent='MayaWindow'):
                       ann=LANGUAGE_MAP._MainMenus_.tracker_tighness_ann,
                       p='redNineCameraTrackItem', echoCommand=True,
                       c="from Red9.core.Red9_AnimationUtils import CameraTracker as camTrack;camTrack(fixed=False)._showUI()")
+
+        #cmds.menuItem('redNineSoundSubItem', l='Red9 Sound', sm=True, p='redNineMenuItemRoot', tearOff=True, i='red9.jpg')
+        addAudioMenu(parent='redNineMenuItemRoot', rootMenu='redNineSoundSubItem')
 
         cmds.menuItem(divider=True, p='redNineMenuItemRoot')
         cmds.menuItem('redNineAnimBndItem',
@@ -530,9 +587,12 @@ def addToMayaMenus():
         log.debug('gMainFileMenu not found >> catch for unitTesting')
 
 
-def addAudioMenu(parent=None, rootMenu='redNineTraxRoot'):
+def addAudioMenu(parent=None, rootMenu='redNineTraxRoot', prefix=''):
     '''
     Red9 Sound Menu setup
+
+    :param parent: parent UI to add the items too
+    :param rootMenu: name of the new rootMenu built
     '''
     print 'AudioMenu: given parent : ', parent
     if not parent:
@@ -552,10 +612,12 @@ def addAudioMenu(parent=None, rootMenu='redNineTraxRoot'):
             log.info('New Red9 Sound Menu added to current windows menuBar : %s' % parent)
         # parent is a menu already?
         elif cmds.menu(parent, exists=True):
-            cmds.menuItem(rootMenu, l=LANGUAGE_MAP._MainMenus_.sound_red9_sound, sm=True, p=parent, allowOptionBoxes=True)
+            cmds.menuItem(rootMenu, l=LANGUAGE_MAP._MainMenus_.sound_red9_sound, sm=True, p=parent,
+                          allowOptionBoxes=True, tearOff=True, i='sound.png')
             log.info('New Red9 Sound subMenu added to current Menu : %s' % parent)
         else:
             raise StandardError('given parent for Red9 Sound Menu is invalid %s' % parent)
+
 
     cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_offset_manager, p=rootMenu,
                   ann=LANGUAGE_MAP._MainMenus_.sound_offset_manager_ann,
@@ -631,6 +693,8 @@ def red9ButtonBGC(colour, qt=False):
         rgb = [0.15, 0.25, 0.25]
     elif colour == 6 or colour == 'yellow':
         rgb = [0.98, 0.7, 0.0]
+    elif colour == 7 or colour == 'blue':
+        rgb = [0.6, 0.6, 1.0]
     if qt:
         return [rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]
     else:
@@ -1000,14 +1064,16 @@ def has_pro_pack():
     if os.path.exists(pro_pack_path()):
         try:
             # new pro_pack call
-            import Red9.pro_pack.r9pro as r9pro
+            # import Red9.pro_pack.r9pro as r9pro
+            from Red9.pro_pack import r9pro
             status = r9pro.checkr9user()
             if status and not issubclass(type(status), str):
                 return True
             else:
                 return False
-        except:
-            # we have the pro-pack folder so assume we're running legacy build (Dambusters support)
+        except StandardError, err:
+            # we have the pro-pack folder so assume we're running legacy build
+            log.info('r9Pro.checkr9User : failed validation! : %s' % err)
             return True
     else:
         return False
@@ -1073,7 +1139,7 @@ def internal_module_path():
 
 
 # -----------------------------------------------------------------------------------------
-# CLIENT MODULES ---
+# CLIENT MODULES --- RED9 INTERNAL SUPPORT
 # -----------------------------------------------------------------------------------------
 
 
@@ -1115,7 +1181,7 @@ def clients_booted():
 
 def boot_client_projects():
     '''
-    Boot Client modules found in the Red9_ClientCore dir. This now propts
+    Boot Client modules found in the Red9_ClientCore dir. This now prompts
     if multiple client projects were found.
     '''
     global CLIENTS_BOOTED
@@ -1126,15 +1192,16 @@ def boot_client_projects():
         options = ['ALL', 'NONE']
         options.extend(clients)
         result = cmds.confirmDialog(title='ProjectPicker',
-                            message=("Multiple Projects Found!\r\r" +
-                                     "Which Project would you like to boot?"),
+                            message=("Multiple Clients Found!\r\r" +
+                                     "Which Client would you like to boot?"),
                             button=options, messageAlign='center', icon='question',
                             dismissString='Cancel')
         if result == 'ALL':
             clientsToBoot = clients
         if result == 'NONE':
             return
-        elif not result == 'Cancel':
+        elif result not in ['Cancel', 'ALL', 'NONE']:
+            print 'appending result ', result
             clientsToBoot.append(result)
     else:
         clientsToBoot = clients
@@ -1158,6 +1225,12 @@ def boot_client_projects():
                 log.debug('Unused Client Menu Removed: %s' % client)
             except:
                 pass
+    try:
+        # Finally after booting all clients required sync the actual PROJECT_DATA object to
+        # the last loaded client. We don't need to sync Perforce mounts as the project_load will do that for us
+        cmds.evalDeferred('from Red9.pro_pack import PROJECT_DATA;PROJECT_DATA.sync_project_to_settings(project=True, perforce=False)', lp=True)
+    except:
+        log.warning('PROJECT_DATA : Failed to sync last project handler')
 
 def __reload_clients__():
     '''

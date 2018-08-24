@@ -1075,18 +1075,18 @@ class PoseData(DataMap):
         '''
         Entry point for the generic PoseLoad.
 
-        :param nodes:  if given load the data to only these. If given and filter=True 
+        :param nodes:  if given load the data to only these. If given and filter=True
             this is the rootNode for the filter.
-        :param filepath: posefile to load - if not given the pose is loaded from a 
+        :param filepath: posefile to load - if not given the pose is loaded from a
             cached instance on this class.
-        :param useFilter: If the pose has an active Filter_Settings block and this 
+        :param useFilter: If the pose has an active Filter_Settings block and this
             is True then use the filter on the destination hierarchy.
-        :param relativePose: kick in the posePointCloud to align the loaded pose 
+        :param relativePose: kick in the posePointCloud to align the loaded pose
             relatively to the selected node.
         :param relativeRots: 'projected' or 'absolute' - how to calculate the offset.
         :param relativeTrans: 'projected' or 'absolute' - how to calculate the offset.
-        :param maintainSpaces: this preserves any parentSwitching mismatches between 
-            the stored pose and the current rig settings, current spaces are maintained. 
+        :param maintainSpaces: this preserves any parentSwitching mismatches between
+            the stored pose and the current rig settings, current spaces are maintained.
             This only checks those nodes in the snapList and only runs under relative mode.
         :param percent: percentage of the pose to apply, used by the poseBlender in the UIs
         '''

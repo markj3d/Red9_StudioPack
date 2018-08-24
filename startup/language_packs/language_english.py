@@ -350,10 +350,10 @@ Track Component Mode :  Select a Component (poly,vert,edge) then an Object - sec
     mirror_animation_ann = 'Mirror the Animation - NOTE Layers and Trax are NOT supported yet'
     mirror_pose = 'Mirror Pose'
     mirror_pose_ann = 'Mirror the Current Pose'
-    symmetry_animation = 'Symmetry Animation'
-    symmetry_animation_ann = 'Symmetry the Animation : L >> R - NOTE Layers and Trax are NOT supported yet'
+    symmetry_animation = 'Symmetry Anim'
+    symmetry_animation_ann = 'Symmetry the Animation : NOTE Layers and Trax are NOT supported yet'
     symmetry_pose = 'Symmetry Pose'
-    symmetry_pose_ann = 'Symmetry the Current Pose : L >> R'
+    symmetry_pose_ann = 'Symmetry the Current Pose'
 
 
     # Tab2 Hierarchy =================================================================
