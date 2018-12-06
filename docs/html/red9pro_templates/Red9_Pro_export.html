@@ -120,7 +120,7 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001283AD48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013601FC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -149,6 +149,12 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportLoopTagUI.set_specific_path">
+<code class="descname">set_specific_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI.set_specific_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the specific path for this loop</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportLoopTagUI.set_times">
 <code class="descname">set_times</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI.set_times" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the UI start and End Frames from the Red9 timerange Get calls</p>
@@ -156,7 +162,7 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000137AC448&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -215,7 +221,7 @@ with all joints so the user can select one</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.JntSel.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000137ADB08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000136252C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -285,7 +291,36 @@ can tailor the view to different engine targets.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000137AD548&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013611AC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.exporter.Export_FBX_options">
+<em class="property">class </em><code class="descname">Export_FBX_options</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwgs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_FBX_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
+<p>simple UI to edit a given ExportLoop tag</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.Export_FBX_options.pushdata">
+<code class="descname">pushdata</code><span class="sig-paren">(</span><em>close=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_FBX_options.pushdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>push the ui data back to the export_loop and refresh the parent UI</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.Export_FBX_options.pulldata">
+<code class="descname">pulldata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_FBX_options.pulldata" title="Permalink to this definition">¶</a></dt>
+<dd><p>pull the data back from the export tag and fill the UI</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.Export_FBX_options.reset_settings">
+<code class="descname">reset_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_FBX_options.reset_settings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.exporter.Export_FBX_options.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_FBX_options.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -326,10 +361,9 @@ to refresh and redraw the UI lists</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.exporter.ExportUI.closeEvent">
-<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwrds</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.closeEvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>ensure we close the tag ui if we close main</p>
-</dd></dl>
+<dt id="Red9.pro_pack.core.exporter.ExportUI.output_options_FBX">
+<code class="descname">output_options_FBX</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.output_options_FBX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.edit_exp_tag">
@@ -356,6 +390,12 @@ to refresh and redraw the UI lists</p>
 <dt id="Red9.pro_pack.core.exporter.ExportUI.paste_loops">
 <code class="descname">paste_loops</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.paste_loops" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportUI.add_export_tag">
+<code class="descname">add_export_tag</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.add_export_tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple launch of the RigManager</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.add_time_range">
@@ -442,9 +482,15 @@ than the base class level</p>
 <dd><p>main run call for the export tags</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportUI.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwgs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>ensure we close the tag ui if we close main and clear the callbacks</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001282E588&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001333F048&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -488,8 +534,24 @@ than the base class level</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportManager.export_fbx">
-<code class="descname">export_fbx</code><span class="sig-paren">(</span><em>runSceneRoot=False</em>, <em>mode='simple'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.export_fbx" title="Permalink to this definition">¶</a></dt>
+<code class="descname">export_fbx</code><span class="sig-paren">(</span><em>runSceneRoot=False</em>, <em>mode='simple'</em>, <em>respect_settings=True</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.export_fbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>run the fbx anim transfer export process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>runSceneRoot</strong> &#8211; run the sceneRoot process during the export, default = False</li>
+<li><strong>mode</strong> &#8211; &#8216;simple&#8217; or &#8216;selection&#8217; 2 different ways to produce the fbx data.
+&#8216;simple&#8217; creates a duplicate bound skeleton and exports that data, giving you just the base skeleton output.
+&#8216;selection&#8217; exports the rigs nodes directly, including the skins and blends, whilst the data included will be
+minimum, skeleton, mesh etc, it will always include the rigs upper hierarchy in the data</li>
+<li><strong>respect_settings</strong> &#8211; do we respect and use the fbx_settings from the base UI or ignore them?</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">

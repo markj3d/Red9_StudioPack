@@ -695,6 +695,10 @@ def red9ButtonBGC(colour, qt=False):
         rgb = [0.98, 0.7, 0.0]
     elif colour == 7 or colour == 'blue':
         rgb = [0.6, 0.6, 1.0]
+    elif colour == 8 or colour == 'darkgrey':
+        rgb = [0.25, 0.25, 0.25]
+    elif colour == 9 or colour == 'darkred':
+        rgb = [0.6, 0.1, 0.1]
     if qt:
         return [rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]
     else:
@@ -1003,23 +1007,27 @@ def delete_shelf(shelf_name):
             current_shelf = i
             break
 
-    # manage shelve ids
-    for i in range(current_shelf, shelfs + 1):
-        cmds.optionVar(iv=("shelfLoad%s" % str(i), cmds.optionVar(q="shelfLoad%s" % str(i + 1))))
-        cmds.optionVar(sv=("shelfName%s" % str(i), cmds.optionVar(q="shelfName%s" % str(i + 1))))
-        cmds.optionVar(sv=("shelfFile%s" % str(i), cmds.optionVar(q="shelfFile%s" % str(i + 1))))
+    try:
+        if current_shelf:
+            # manage shelve ids
+            for i in range(current_shelf, shelfs + 1):
+                cmds.optionVar(iv=("shelfLoad%s" % str(i), cmds.optionVar(q="shelfLoad%s" % str(i + 1))))
+                cmds.optionVar(sv=("shelfName%s" % str(i), cmds.optionVar(q="shelfName%s" % str(i + 1))))
+                cmds.optionVar(sv=("shelfFile%s" % str(i), cmds.optionVar(q="shelfFile%s" % str(i + 1))))
 
-    cmds.optionVar(remove="shelfLoad%s" % shelfs)
-    cmds.optionVar(remove="shelfName%s" % shelfs)
-    cmds.optionVar(remove="shelfFile%s" % shelfs)
-    cmds.optionVar(iv=("numShelves", shelfs - 1))
+        cmds.optionVar(remove="shelfLoad%s" % shelfs)
+        cmds.optionVar(remove="shelfName%s" % shelfs)
+        cmds.optionVar(remove="shelfFile%s" % shelfs)
+        cmds.optionVar(iv=("numShelves", shelfs - 1))
 
-    cmds.deleteUI(shelf_name, layout=True)
-    pref_file = os.path.join(mayaPrefs(), 'prefs', 'shelves', 'shelf_%s.mel.deleted' % shelf_name)
-    if os.path.exists(pref_file):
-        os.remove(pref_file)
-    mel.eval("shelfTabChange")
-    log.info('Shelf deleted: % s' % shelf_name)
+        cmds.deleteUI(shelf_name, layout=True)
+        pref_file = os.path.join(mayaPrefs(), 'prefs', 'shelves', 'shelf_%s.mel.deleted' % shelf_name)
+        if os.path.exists(pref_file):
+            os.remove(pref_file)
+        mel.eval("shelfTabChange")
+        log.info('Shelf deleted: % s' % shelf_name)
+    except StandardError, err:
+        log.warning('shelf management failed : %s' % err)
 
 def load_shelf(shelf_path):
     '''
@@ -1084,6 +1092,7 @@ class ProPack_UIError(Exception):
     get ProPack UI
     '''
     def __init__(self, *args):
+        log.info('ProPack_UIError raised')
         get_pro_pack()
 
 class ProPack_Error(Exception):
@@ -1226,9 +1235,11 @@ def boot_client_projects():
             except:
                 pass
     try:
+        # remove the blank placeholder project now that we have proper client projects incoming
+        cmds.evalDeferred('from Red9.pro_pack import PROJECT_DATA;PROJECT_DATA.remove_project()')
         # Finally after booting all clients required sync the actual PROJECT_DATA object to
         # the last loaded client. We don't need to sync Perforce mounts as the project_load will do that for us
-        cmds.evalDeferred('from Red9.pro_pack import PROJECT_DATA;PROJECT_DATA.sync_project_to_settings(project=True, perforce=False)', lp=True)
+        # cmds.evalDeferred('from Red9.pro_pack import PROJECT_DATA;PROJECT_DATA.sync_project_to_settings(project=True, perforce=False)', lp=True)
     except:
         log.warning('PROJECT_DATA : Failed to sync last project handler')
 
@@ -1331,9 +1342,12 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
         if has_client_modules():
             boot_client_projects()
 
-    # finish ProPack dependancies
-    # ===========================
-
+        # finish ProPack dependancies
+        # ===========================
+        # Finally after booting all clients required sync the actual PROJECT_DATA object to
+        # the last loaded client. We don't need to sync Perforce mounts as the project_load will do that for us
+        cmds.evalDeferred('from Red9.pro_pack import PROJECT_DATA;PROJECT_DATA.sync_project_to_settings(project=True, perforce=False)', lp=True)
+        cmds.evalDeferred("from Red9.pro_pack import load_ui_settings;load_ui_settings()", lp=True)
 
 def reload_Red9(*args):
     '''

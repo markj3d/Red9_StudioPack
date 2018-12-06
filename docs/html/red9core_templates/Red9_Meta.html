@@ -469,7 +469,7 @@ using the mClassGrps variable. This probably will expand as it&#8217;s tested</p
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.getMetaRigs_fromSelected">
-<code class="descname">getMetaRigs_fromSelected</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.getMetaRigs_fromSelected" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getMetaRigs_fromSelected</code><span class="sig-paren">(</span><em>singular=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.getMetaRigs_fromSelected" title="Permalink to this definition">¶</a></dt>
 <dd><p>light wrap over the getMetaRigs function to return a list of mRigs connected
 to the selected nodes</p>
 </dd></dl>
@@ -749,8 +749,8 @@ with HIK characterNode)</li>
 <code class="descname">isValidMObject</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.isValidMObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>validate the MObject, without this Maya will crash if the pointer is no longer valid
 TODO: thinking of storing the dagPath when we fill in the mNode to start with and
-if this test fails, ie the scene has been reloaded, then use the dagPath to refind
-and refil the mNode property back in.... maybe??</p>
+if this test fails, ie the scene has been reloaded, then use the dagPath to refine
+and refill the mNode property back in.... maybe??</p>
 </dd></dl>
 
 <dl class="method">
@@ -843,6 +843,25 @@ if they&#8217;re all unlocked do we return False</td>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>attr</strong> &#8211; the attr to lock, this now also takes a list of attrs</li>
 <li><strong>state</strong> &#8211; lock state</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaClass.attrBreakConnections">
+<code class="descname">attrBreakConnections</code><span class="sig-paren">(</span><em>attr</em>, <em>source=True</em>, <em>dest=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.attrBreakConnections" title="Permalink to this definition">¶</a></dt>
+<dd><p>break all current connections to the given attr on the mNode</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>attr</strong> &#8211; the attr to break</li>
+<li><strong>source</strong> &#8211; True by default, break connections on the source side</li>
+<li><strong>dest</strong> &#8211; False by default, break connections on the destination side</li>
 </ul>
 </td>
 </tr>
@@ -1124,7 +1143,7 @@ with a half run setup?</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cleanCurrent</strong> &#8211; Exposed from teh connectChild code which is basically what this is running in reverse</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cleanCurrent</strong> &#8211; Exposed from the connectChild code which is basically what this is running in reverse</td>
 </tr>
 </tbody>
 </table>
@@ -1363,8 +1382,16 @@ in a seamless manner and bind some core functionality.</p>
 </table>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.gatherInfo">
-<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>encode_objects=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>gather key info on this system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>encode_objects</strong> &#8211; if True we should encode / stringify all objects for safe json conversion</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -1388,6 +1415,20 @@ structure in-tact but useless</p>
 <dd><p>why wrap, because when we subclass, IF we&#8217;ve modified the CRTL_Prefix then we
 can&#8217;t rely on the default CTRL_Main[0] wire, so we wrap it with the current
 instances self.CTRL_Prefix</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.core.Red9_Meta.MetaRig.ctrl_locomotion">
+<code class="descname">ctrl_locomotion</code><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.ctrl_locomotion" title="Permalink to this definition">¶</a></dt>
+<dd><p>why wrap, because when we subclass, IF we&#8217;ve modified the CRTL_Prefix then we
+can&#8217;t rely on the default CTRL_LocomotionRoot[0] wire, so we wrap it with the current
+instances self.CTRL_Prefix</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">LocomotionRoot is a controller designated as the &#8220;locomotion root&#8221; node, for games this
+generally is the characters global motion pushed to a controller which directly controls
+the skeleton root / reference joint</p>
+</div>
 </dd></dl>
 
 <dl class="attribute">
@@ -1441,7 +1482,7 @@ by 180 to get left and right working you can still do so.</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.getChildren">
-<code class="descname">getChildren</code><span class="sig-paren">(</span><em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em>, <em>asMeta=False</em>, <em>asMap=False</em>, <em>plugsOnly=False</em>, <em>incFacial=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getChildren" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getChildren</code><span class="sig-paren">(</span><em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em>, <em>asMeta=False</em>, <em>asMap=False</em>, <em>plugsOnly=False</em>, <em>incFacial=False</em>, <em>baseBehaviour=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getChildren" title="Permalink to this definition">¶</a></dt>
 <dd><p>Massively important bit of code, this is used by most bits of code
 to find the child controllers linked to this metaRig instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1455,8 +1496,9 @@ to find the child controllers linked to this metaRig instance.</p>
 <li><strong>nAttrs</strong> &#8211; search returned MayaNodes for given set of attrs and only return matched nodes</li>
 <li><strong>asMeta</strong> &#8211; return instantiated mNodes regardless of type</li>
 <li><strong>asMap</strong> &#8211; return the data as a map such that {mNode.plugAttr:[nodes], mNode.plugAttr:[nodes]}</li>
-<li><strong>plugsOnly</strong> &#8211; only with asMap falg, this truncates the return to {plugAttr:[nodes]}</li>
+<li><strong>plugsOnly</strong> &#8211; only with asMap flag, this truncates the return to {plugAttr:[nodes]}</li>
 <li><strong>incFacial</strong> &#8211; if we have a facial system linked include it&#8217;s children in the return (uses the getFacialSystem to id the facial node)</li>
+<li><strong>baseBehaviour</strong> &#8211; if True we revert the CTRL_Prefix logic such that the return won&#8217;t be clamped to just controllers</li>
 </ul>
 </td>
 </tr>
@@ -1950,7 +1992,7 @@ with the exception of the Main_Ctrl</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.keyChildren">
-<code class="descname">keyChildren</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.keyChildren" title="Permalink to this definition">¶</a></dt>
+<code class="descname">keyChildren</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em>, <em>shapes=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.keyChildren" title="Permalink to this definition">¶</a></dt>
 <dd><p>setKey on the systems controllers with options to control what gets keyed
 via the standard getChildren <a href="#id17"><span class="problematic" id="id18">*</span></a>args which are passed in.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1963,6 +2005,8 @@ via the standard getChildren <a href="#id17"><span class="problematic" id="id18"
 <li><strong>mAttrs</strong> &#8211; only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)</li>
 <li><strong>cAttrs</strong> &#8211; only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)</li>
 <li><strong>nAttrs</strong> &#8211; search returned MayaNodes for given set of attrs and only return matched nodes</li>
+<li><strong>shapes</strong> &#8211; now set to false to avoid keying all exposed Arnold shape attributes! We do however respect the animators
+set key options and if they&#8217;ve specifically set shapes to key, we pick that up and respect it</li>
 </ul>
 </td>
 </tr>

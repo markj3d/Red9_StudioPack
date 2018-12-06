@@ -80,7 +80,7 @@ requires the StudioPack codebase to run</p>
 <td></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig_SRC</span></code></a>(*args,&nbsp;**kws)</td>
-<td>Class node used by the publisher systems.</td>
+<td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig_Prop</span></code></a>(*args,&nbsp;**kws)</td>
 <td></td>
@@ -109,7 +109,7 @@ requires the StudioPack codebase to run</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode" title="Red9.pro_pack.core.metadata_pro.ExportLoopNode"><code class="xref py py-obj docutils literal"><span class="pre">ExportLoopNode</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Base Export Timerange node, intended to hook to a valid ExportTag metaNode to define exact timeranges and paths etc.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.SceneMover" title="Red9.pro_pack.core.metadata_pro.SceneMover"><code class="xref py py-obj docutils literal"><span class="pre">SceneMover</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.SceneMover" title="Red9.pro_pack.core.metadata_pro.SceneMover"><code class="xref py py-obj docutils literal"><span class="pre">SceneMover</span></code></a>([compensate_node])</td>
 <td>Scene Shift Handler : to move an entire Maya scene in world space</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.AudioGroup" title="Red9.pro_pack.core.metadata_pro.AudioGroup"><code class="xref py py-obj docutils literal"><span class="pre">AudioGroup</span></code></a>(*args,&nbsp;**kws)</td>
@@ -146,7 +146,7 @@ if blank then we generate a new instance and return that</li>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.metadata_pro.add_fkik_matchpnt">
-<code class="descname">add_fkik_matchpnt</code><span class="sig-paren">(</span><em>mSystem</em>, <em>ctrl_wire</em>, <em>fk_wire</em>, <em>matchid</em>, <em>prefix=None</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.add_fkik_matchpnt" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_fkik_matchpnt</code><span class="sig-paren">(</span><em>mSystem</em>, <em>ctrl_wire</em>, <em>fk_wire</em>, <em>matchid</em>, <em>prefix=None</em>, <em>parent=None</em>, <em>target='IK'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.add_fkik_matchpnt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an ik_match_pnt node into the given mSystem, this parents a new matchpnt transform
 to the given fk_wire controller thats aligned to the IK controller requiring snapping
 during the fk_to_fk_match call</p>
@@ -162,6 +162,7 @@ nopet that this now also supports ctrl_wire attrs that are connected to the Supp
 <li><strong>matchid</strong> &#8211; denotes the matchpnts base wire name - eg : &#8220;end&#8221;, &#8220;pole&#8221; creating attr wire &#8216;mSystem.SupportNode.IK_matchpnt_pole&#8217;</li>
 <li><strong>prefix</strong> &#8211; usually just the side id for the system &#8216;L&#8217;,&#8217;R&#8217;,&#8217;C&#8217;, if not given we ID this from the system mirrorSide</li>
 <li><strong>parent</strong> &#8211; if given this becomes the parent for the matchpnt, else we parent it to the given fk_wrie node</li>
+<li><strong>target</strong> &#8211; &#8216;IK&#8217; or &#8216;FK&#8217; only IK is currently supported in the matching systems at the moment, reverses the logic of the func</li>
 </ul>
 </td>
 </tr>
@@ -275,6 +276,29 @@ functions for the main rig and facial classes that inherit from it.</p>
 <dd><p>bound filterSettings object used by the Animation Systems
 from now on so that this data can be bound directly to the
 rig so we don&#8217;t have to use the preset config&#8217;s all the time</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_connection_datamap">
+<code class="descname">get_connection_datamap</code><span class="sig-paren">(</span><em>filepath=''</em>, <em>compare=False</em>, <em>infoblock=True</em>, <em>ctrl_only=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_connection_datamap" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a datamap that holds all connected mSystems and all nodes / attrs wired to this mRig instance,
+this is for debugging enabling us to compare that we have matching connections between 2 systems.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> &#8211; if given and not compare=True then we write the datamap to this json filepath</li>
+<li><strong>compare</strong> &#8211; if True and filepath is given then we compare the current data extracted with that of
+the master file given and return a dict of mismatching data</li>
+<li><strong>infoblock</strong> &#8211; if True we run gatherInfo() on the mRig to propagate the [info] block with relevant build and meta info</li>
+<li><strong>ctrl_only</strong> &#8211; if True we ONLY collect data about CTRL_Prefix wired nodes, else we build up a
+complete map of all connections to the mRig and it&#8217;s child subsystems</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -600,7 +624,7 @@ over the StudioPack AnimatioUtils call for the pose blending but setup for the m
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.switch_attr_compensated">
-<code class="descname">switch_attr_compensated</code><span class="sig-paren">(</span><em>node</em>, <em>attr</em>, <em>val</em>, <em>nodes_to_compensate=[]</em>, <em>mSystems_to_compensate=[]</em>, <em>time=True</em>, <em>timerange=()</em>, <em>keyswitch=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.switch_attr_compensated" title="Permalink to this definition">¶</a></dt>
+<code class="descname">switch_attr_compensated</code><span class="sig-paren">(</span><em>node=None</em>, <em>attr=None</em>, <em>val=None</em>, <em>multinode=[]</em>, <em>nodes_to_compensate=[]</em>, <em>mSystems_to_compensate=[]</em>, <em>time=True</em>, <em>timerange=()</em>, <em>keyswitch=True</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>smartBakeRef=[]</em>, <em>padtime=True</em>, <em>runfilter=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.switch_attr_compensated" title="Permalink to this definition">¶</a></dt>
 <dd><p>complex func that uses the new exposure of the animPPC handlers to set an attr on a
 node / list of nodes without it affecting the world space transforms of those nodes in the &#8216;nodes_to_compensate&#8217;
 list. If this isn&#8217;t given then the entire rig will be compensated for</p>
@@ -612,14 +636,21 @@ list. If this isn&#8217;t given then the entire rig will be compensated for</p>
 <li><strong>node</strong> &#8211; the node holding the attribute we want to switch</li>
 <li><strong>attr</strong> &#8211; the attribute to switch</li>
 <li><strong>val</strong> &#8211; the new value for the attribute</li>
+<li><strong>multinode</strong> &#8211; if given this replaces the node,attr,val data with a list of tuples such that [(node, attr, val),...]
+this allows for more nodes to be processed in 1 go, allowing multiple node attr values to change and be compensated for at the same time</li>
 <li><strong>nodes_to_compensate</strong> &#8211; a list of controllers that we want to have their world xforms
 re-calculated for to compensate for the switched attr</li>
 <li><strong>mSystems_to_compensate</strong> &#8211; a list of mSystems who&#8217;s children we want to have their world xforms
-re-calculated for to compensate for the switched attr. These children are added to the nodes_to_compensate list</li>
+re-calculated for to compensate for the switched attr. These children are added to the nodes_to_compensate list if given</li>
 <li><strong>time</strong> &#8211; bool, do we compensate the nodes over time or at the curentTime only. if keyswitch=False this is turned off</li>
 <li><strong>timerange</strong> &#8211; timerange to process, if not given and time=True then we run the r9Anim.timeLineRangeGet() to resolve it
 if keyswitch=False this is turned off</li>
 <li><strong>keyswitch</strong> &#8211; do we set keys on the switch attr and the nodes_to_compensate, or just switch the data without setting any keys</li>
+<li><strong>step</strong> &#8211; frame step between compensation keys</li>
+<li><strong>smartbake</strong> &#8211; if True we look at the mSystem&#8217;s current keys and only match over those keys if time enabled</li>
+<li><strong>padtime</strong> &#8211; if True we pad the timerange processed for the &#8220;nodes_to_compensate&#8221; by 1 frame either side to allow for solid switching and
+compensation, aimed at situations like parent switching where we need solid holding keys outside of the timerange we&#8217;re processing</li>
+<li><strong>runfilter</strong> &#8211; run a quick Euler filter after the process to try and avoid any introduced gimbal</li>
 </ul>
 </td>
 </tr>
@@ -630,7 +661,7 @@ if keyswitch=False this is turned off</li>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.anim_point_cloud_create">
-<code class="descname">anim_point_cloud_create</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=True</em>, <em>timerange=()</em>, <em>rootReference=None</em>, <em>isVisible=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.anim_point_cloud_create" title="Permalink to this definition">¶</a></dt>
+<code class="descname">anim_point_cloud_create</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=True</em>, <em>timerange=()</em>, <em>rootReference=None</em>, <em>isVisible=False</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>smartBakeRef=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.anim_point_cloud_create" title="Permalink to this definition">¶</a></dt>
 <dd><p>cache the anim data to an animPPC node. This relies on there being a properly
 setup self.settings (filterSettings) cache on the mRig.mNode itself.
 See the self.settings property as to how to set this up</p>
@@ -646,6 +677,8 @@ if False it reverts to a static r9PosePPC and only caches the data at the curren
 <li><strong>timerange</strong> &#8211; time to cache, if not given and time=True then we run the r9Anim.timeLineRangeGet() to resolve it</li>
 <li><strong>rootReference</strong> &#8211; the node used for the initial pivot location and whos motion the reference curves are generated against</li>
 <li><strong>isVisible</strong> &#8211; do we build all the visual reference curves or not?</li>
+<li><strong>step</strong> &#8211; frame step between keys if time=True</li>
+<li><strong>smartbake</strong> &#8211; if True we look at the mSystem&#8217;s current keys and only match over those keys if time enabled</li>
 </ul>
 </td>
 </tr>
@@ -788,7 +821,7 @@ not yet implemented!</li>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.gatherInfo">
-<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=3</em>, <em>keys=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=3</em>, <em>keys=[]</em>, <em>encode_objects=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>collect key info on this rig system, used to pass data into the
 r9Anim and r9Pose files as cross-reference</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -945,7 +978,7 @@ their own internal rigs over the Pro_MetaRig networks:</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.gatherInfo">
-<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=3</em>, <em>keys=[]</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=3</em>, <em>keys=[]</em>, <em>encode_objects=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>collect key info on this Red9 Puppet rig system, used to pass data into the
 r9Anim and r9Pose files as cross-reference</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1113,7 +1146,7 @@ mrig.L_ArmSystem</li>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match">
-<code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em>, <em>ik_chainmethod=None</em>, <em>fk_chainmethod=None</em>, <em>timerange=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em>, <em>ik_chainmethod=None</em>, <em>fk_chainmethod=None</em>, <em>timerange=()</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>runfilter=True</em>, <em>autoclav=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the given systems TO FK MODE : match the fk system to that of the ik</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1125,9 +1158,15 @@ mrig.L_ArmSystem</li>
 <li><strong>time</strong> &#8211; bool, whether to enable the match over time or not, True by default if timerange arg is given</li>
 <li><strong>switch</strong> &#8211; also switch the ik_fk_blender attr to leave the system in FK mode</li>
 <li><strong>keyswitch</strong> &#8211; if switch is true, this also adds in keys to control the switch mode</li>
-<li><strong>ik_chainmethod</strong> &#8211; None by default as controlled by the var self._ik_chainmethod -
-method of extracting the ik jnts, currently supported:
-* jnt_index - straight joint hierarchy from the mSystem.SupportNode.GRP_IK_chain[0] node</li>
+<li><strong>ik_chainmethod</strong> &#8211; <p>None by default as controlled by the var self._ik_chainmethod
+method of extracting the ik joints, currently supported:
+* jnt_index - default - straight joint hierarchy from the mSystem.SupportNode.GRP_IK_chain[0] node
+* ctrl_index - filtered hierarchy of nurbsCurve from the mSystem.SupportNode.GRP_IK_chain[0] node
+* ik_wires - uses the internal mSystem.SupportNode.IK_** wires to directly extract the</p>
+<blockquote>
+<div>ik chain nodes. This is useful if a client has setup a broken hierarchy for the IK systems.
+These are processed in the following order [IK_toe, IK_end, IK_pole, IK_start]</div></blockquote>
+</li>
 <li><strong>fk_chainmethod</strong> &#8211; None by default as controlled by the var self._fk_chainmethod
 method of extracting the fk controls, currently supported:
 * jnt_index - straight joint hierarchy from the mSystem.SupportNode.GRP_FK_chain[0] node
@@ -1135,6 +1174,10 @@ method of extracting the fk controls, currently supported:
 * fk_wires - uses the mSystem&#8217;s CTRL_FK* wiring to grab and return the nodes from the mSystem itself</li>
 <li><strong>timerange</strong> &#8211; (start, end) if given we force the time switch on and use this as the timerange
 rather than auto finding it from the scene</li>
+<li><strong>step</strong> &#8211; frame step between keys if time=True</li>
+<li><strong>smartbake</strong> &#8211; if True we look at the mSystem&#8217;s current keys and only match over those keys if time enabled</li>
+<li><strong>runFilter</strong> &#8211; if processing over time run a EulerFilter on the resulting data, primarily added for the smartBake to reduce gimbal between steps</li>
+<li><strong>autoclav</strong> &#8211; if Red9 Puppet and we have an arm system do we compensate its data when switching to FK, baking down any autoClav data</li>
 </ul>
 </td>
 </tr>
@@ -1144,7 +1187,7 @@ rather than auto finding it from the scene</li>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match">
-<code class="descname">ik_fk_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em>, <em>timerange=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ik_fk_match</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the given systems TO IK MODE : match the ik to the fk system, relies on the IK_matchpnt&#8217;s</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1157,6 +1200,9 @@ rather than auto finding it from the scene</li>
 <li><strong>switch</strong> &#8211; also switch the ik_fk_blender attr to leave the system in IK mode</li>
 <li><strong>keyswitch</strong> &#8211; if switch is true, this also adds in keys to control the switch mode</li>
 <li><strong>timerange</strong> &#8211; if given we throw the time switch by default and use this as the time range rather than auto finding it from the scene</li>
+<li><strong>step</strong> &#8211; frame step between keys if time=True</li>
+<li><strong>smartbake</strong> &#8211; if True we look at the mSystem&#8217;s current keys and only match over those keys if time enabled</li>
+<li><strong>runFilter</strong> &#8211; if processing over time run a EulerFilter on the resulting data, primarily added for the smartBake to reduce gimbal between steps</li>
 </ul>
 </td>
 </tr>
@@ -1175,6 +1221,9 @@ else it&#8217;s hard coded to process [&#8216;toe&#8217;, &#8216;ball&#8217;, &#
 and custom rigs to denote their own process order for the matching of the ik controllers. The entries here are the
 &#8220;matchid&#8221; args passed to the &#8220;add_fkik_matchpnt&#8221; func itself when the matchpnts were made</p>
 </div>
+<p>TODO: add a way to reset a given set of controllers in the IK system before the FK&gt;IK match. If there are controllers
+in the IK system that effect the position of others and these aren&#8217;t reset before the procedure then we can
+sometimes get matching issues</p>
 </dd></dl>
 
 <dl class="method">
@@ -1207,7 +1256,7 @@ the FingerSystem mNode directly not from the upper MetaRig node</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_parent_space">
-<code class="descname">switch_parent_space</code><span class="sig-paren">(</span><em>mSystem, newspace, time=False, timerange=(), keyswitch=False, cAttrs=['CTRL_Wrist', 'CTRL_Foot', 'CTRL_Head'], *args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_parent_space" title="Permalink to this definition">¶</a></dt>
+<code class="descname">switch_parent_space</code><span class="sig-paren">(</span><em>mSystem, newspace, time=False, timerange=(), keyswitch=False, cAttrs=['CTRL_Wrist', 'CTRL_Foot', 'CTRL_Head', 'CTRL_End*'], step=1, smartbake=False, runfilter=True, *args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_parent_space" title="Permalink to this definition">¶</a></dt>
 <dd><p>switch the IK Parent space whilst compensating the Wrist / Foot (default) controllers as needed
 Only valid for the Arm and Leg systems in the Red9 Puppet or any rig wired using the template. This is
 a wrapper over the more generic &#8220;switch_attr_compensated&#8221; func in the Pro_MetaRig_Base class</p>
@@ -1224,6 +1273,8 @@ to resolve it, if keyswitch=False this is turned off</li>
 <li><strong>keyswitch</strong> &#8211; do we set keys on the switch attr and the nodes_to_compensate, or just switch the data without setting any keys</li>
 <li><strong>cAttrs</strong> &#8211; this is passed into the mSystem.getChildren(cAttrs) args to find those nodes that we need to compensate,
 this is a list of the mSytstem connections to the controllers NOT the node names or dags</li>
+<li><strong>step</strong> &#8211; frame step between keys if time=True</li>
+<li><strong>smartbake</strong> &#8211; if True we look at the mSystem&#8217;s current keys and only match over those keys if time enabled</li>
 </ul>
 </td>
 </tr>
@@ -1231,7 +1282,7 @@ this is a list of the mSytstem connections to the controllers NOT the node names
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">the parent space attr used is managed by the mRig.parentSwitchAttr arg and is expected to be of type &#8216;enum&#8217;</p>
+<p class="last">the parent space attr used is managed by the mRig.parentSwitchAttr[0] arg and is expected to be of type &#8216;enum&#8217;</p>
 </div>
 </dd></dl>
 
@@ -1266,6 +1317,18 @@ of the pipelines.</p>
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop">
 <em class="property">class </em><code class="descname">Pro_MetaRig_Prop</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_External">
+<em class="property">class </em><code class="descname">Pro_MetaRig_External</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_External" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<p>Base class for external rigs being wired to the system, unless
+being wired to simulate a Red9 Puppet wiring setup, usually with
+support from us directly</p>
+<p>This is designed to enable base ProPack users to quickly hook
+their own rigs to the systems without trying to emulate the
+Red9 Puppets complex wiring structures.</p>
 </dd></dl>
 
 <dl class="class">
@@ -1527,7 +1590,7 @@ generic at the core level. We convert back to dag path in the LipSyncer</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>chn</strong> &#8211; channel in the map to set the data for</li>
-<li><strong>fromSelected</strong> &#8211; only set the data from the selected ctrls, else set from ctrls</li>
+<li><strong>fromSelected</strong> &#8211; only set the data from the selected ctrls, else set from all ctrls</li>
 <li><strong>min</strong> &#8211; minimum attr value that&#8217;s considered as an input</li>
 <li><strong>skip</strong> &#8211; channels to ignore in any visemeMap, default=[&#8216;visibility&#8217;]</li>
 </ul>
@@ -1535,6 +1598,32 @@ generic at the core level. We convert back to dag path in the LipSyncer</p>
 </tr>
 </tbody>
 </table>
+<p>TODO: if we have a zero pose compare against that as a last resort to prevent unwanted data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_set_exclusion">
+<code class="descname">viseme_map_set_exclusion</code><span class="sig-paren">(</span><em>chns=[]</em>, <em>remove=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_set_exclusion" title="Permalink to this definition">¶</a></dt>
+<dd><p>if given we add the chns [&#8216;node.attr&#8217;, ...] to the exclusion
+list so they won&#8217;t get processed by TalkBack. If none are given
+we use the currently selected ChannelBox attrs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>chns</strong> &#8211; [&#8216;node.attr&#8217;, ...] if given these are the channels to add to the
+exclusion list, else we use the currently selected channelBox attrs</li>
+<li><strong>remove</strong> &#8211; if True we&#8217;re removing the channels from the exemption list rather than adding</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the nodes have to be wired to the mFnode as child controllers</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1553,11 +1642,19 @@ and the particularly phoneme calibrate within that viseme.</p>
 such that {key:(ctrl.attr, val)}</li>
 <li><strong>incTargetjnts</strong> &#8211; if True we dynamically add the target joints which
 have been created to the visemeMap data</li>
+<li><strong>incTargetjnts</strong> &#8211; include driven target joints in the output.... these
+are simple transfer jnts connected the system and driven 0-100 range
+so that we can output the data to Unity, see TalkBack.add_driver_jnts utility</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">it&#8217;s here that we deal with any &#8220;lipsync_exempt&#8221; channels which will get stripped
+from the return data and therefore by-pass TalkBack&#8217;s keyers</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1625,6 +1722,13 @@ active during the visemeMap</p>
 <code class="descname">viseme_map_load</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_load" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;&lt; Red9 Internal LipSyncer calls Only &gt;&gt;</p>
 <p>load a visemeMap back in from file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_validate">
+<code class="descname">viseme_map_validate</code><span class="sig-paren">(</span><em>fix=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>validate that the viseme map is still valid, channels in the rig may have changed
+which would render some of the data invalid</p>
 </dd></dl>
 
 <dl class="method">
@@ -1734,7 +1838,7 @@ this export tag</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.gatherInfo">
-<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>info block gather for the export systems</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mClass&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">super</span><span class="p">(</span><span class="n">ExportTag_Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">gatherInfo</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;tagID&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tagID</span>
@@ -1755,8 +1859,25 @@ this export tag</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getNodes">
-<code class="descname">getNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getNodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>base handling of getNodes to wrap the override handlers</p>
+<code class="descname">getNodes</code><span class="sig-paren">(</span><em>select=True</em>, <em>include_jnts=True</em>, <em>include_rendermeshes=True</em>, <em>include_skinned_meshes=True</em>, <em>include_blends=True</em>, <em>include_hik=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple wrap for the Exporter handling where we need to select everything
+required for the export, including the skeleton, skinned geo, blendshapes and their targets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>select</strong> &#8211; do we select the returned nodes?</li>
+<li><strong>include_rendermeshes</strong> &#8211; include meshes wired to the renderMeshes attr on the mRig itself</li>
+<li><strong>include_skinned_meshes</strong> &#8211; include all skinned meshes found to be connected the given skeleton hierarchies</li>
+<li><strong>include_blends</strong> &#8211; include any blendshapes and their respective targets if found in the scene</li>
+<li><strong>include_hik</strong> &#8211; include the connected HIKCharacterNode in the return / selection if bound</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>TODO: run the health checker on the blendshape target list to ensure we don&#8217;t have empty index slots</p>
 </dd></dl>
 
 <dl class="method">
@@ -1780,7 +1901,7 @@ marker attr to nodes under the hierarchy</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getSelectionOverrides">
-<code class="descname">getSelectionOverrides</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getSelectionOverrides" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getSelectionOverrides</code><span class="sig-paren">(</span><em>exportRoot=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getSelectionOverrides" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a dic of nodes that are to be either force included, or excluded
 from any processed node list</p>
 </dd></dl>
@@ -1949,7 +2070,7 @@ pverloaded at the client level where needed. This class controls the output path
 logic used by the export classes.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.gatherInfo">
-<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>gather key info on this loop node and return a dic</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># base data handling</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mClass&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">super</span><span class="p">(</span><span class="n">ExportLoopNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">gatherInfo</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
@@ -2184,7 +2305,7 @@ used for casting data between mRigs</p>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.SceneMover">
-<em class="property">class </em><code class="descname">SceneMover</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SceneMover" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">SceneMover</code><span class="sig-paren">(</span><em>compensate_node=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SceneMover" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
 <p>Scene Shift Handler : to move an entire Maya scene in world space
 under a managed node</p>
@@ -2287,7 +2408,7 @@ be linked to a character rig for export logic handling</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.gatherInfo">
-<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>gather key info on this AudioGrp node and return a dic of all
 connected audio node data</p>
 </dd></dl>

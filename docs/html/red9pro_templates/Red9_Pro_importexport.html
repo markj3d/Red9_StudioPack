@@ -253,7 +253,67 @@ to denote that we&#8217;re walking into that path</p>
 <p class="last">if you want to clamp to a given format in a folder you can pass the depot path
 as &#8216;//depot/path/to/stuff/...ma&#8217; for example</p>
 </div>
-<p>TODO: decouple this from Maya so it can be using in native Python (MoBu support etc)</p>
+<p>TODO: decouple this from Maya so it can be using in native Python (MoBu support etc)
+TODO: decouple the connection from PROJECT_DATA and use classmethods to bind to the class itself</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><em>p4_params={}</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>main p4 connect call which takes params to enable us to connect to specific servers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p4_params</strong> &#8211; dict with the P4 connection keys in, if not given P4 will connect with the defaults from your environment
+p4_params = {port&#8217;:, client:&#8217;&#8216;, user:&#8217;&#8216;, password:&#8217;&#8216;}</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.disconnect">
+<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple disconnect from the P4 server</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.connected">
+<code class="descname">connected</code><span class="sig-paren">(</span><em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>a base level valid test so that it&#8217;s only called once and managed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>force</strong> &#8211; whether we always re-test the connection or cache it&#8217;s state only once,
+this is so that if P4 was down when we booted we can force a re-test, else the fact
+that it was down on boot is cached and the connection to P4 severed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.refresh_connection">
+<code class="descname">refresh_connection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.refresh_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>refresh the last / current connection, this pulls the p4_params from the PROJECT_DATA._p4_params
+which is cached on connect so that we always restore the last connection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.connection_details">
+<code class="descname">connection_details</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.connection_details" title="Permalink to this definition">¶</a></dt>
+<dd><p>return and cache the current P4 server connection details for later use if we need to refresh the connection,
+this fills in  the PROJECT_DATA._p4_params cache</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.connection_map">
+<em class="property">classmethod </em><code class="descname">connection_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.connection_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>get a dict of available perforce server connections, this uses the .p4qt/connectionmap.xml data
+to find all recent connections</p>
+<p>TODO: verify and check this under LINUX</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.path_iswildcard">
 <code class="descname">path_iswildcard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.path_iswildcard" title="Permalink to this definition">¶</a></dt>
@@ -287,6 +347,12 @@ The exception level of the P4 instance.</p>
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.username">
 <code class="descname">username</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.username" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the current &#8220;userName&#8221; from P4 info keys</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.owner">
+<code class="descname">owner</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.owner" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the current &#8220;owner&#8221; from P4</p>
 </dd></dl>
 
 <dl class="method">

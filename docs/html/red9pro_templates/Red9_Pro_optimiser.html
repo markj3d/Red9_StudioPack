@@ -633,6 +633,19 @@ compound in the HealthManager for quick access to these key optimisations</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="Red9.pro_pack.core.optimiser.BlendShapes_HealthValidation">
+<em class="property">class </em><code class="descname">BlendShapes_HealthValidation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.BlendShapes_HealthValidation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
+<p>Base test to validate the health of all Blendshapes in the scene.</p>
+<p>This will:</p>
+<ul class="simple">
+<li>Test for missing indexes and pad to fix if found - this by-passes fbx issues on export!</li>
+<li>Test that all original target geo is in the scene and if not, it will re-generate it</li>
+<li>Test that all target geo in the scene is named as per the blendshape target channel and rename if not</li>
+</ul>
+</dd></dl>
+
+<dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.All_Available_Tests">
 <em class="property">class </em><code class="descname">All_Available_Tests</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.All_Available_Tests" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
@@ -1366,7 +1379,7 @@ new target for the missing index, there by fixing the FBX export issue for Unrea
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mesh_compare_against_OBJ_test">
-<code class="descname">mesh_compare_against_OBJ_test</code><span class="sig-paren">(</span><em>expected</em>, <em>mesh</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_compare_against_OBJ_test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mesh_compare_against_OBJ_test</code><span class="sig-paren">(</span><em>expected</em>, <em>mesh</em>, <em>opendiff=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_compare_against_OBJ_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>compare a given mesh against an expected OBJ file generated
 by the &#8220;mesh_compare_generate&#8221; func above and passed in as a path.
 This is useful when building complex facial systems so you can
@@ -1381,6 +1394,7 @@ is not enough re-assurance that the mesh matches.</p>
 <li><strong>expected</strong> &#8211; in this case a path to an obj file that we&#8217;re
 going to validate the given mesh against</li>
 <li><strong>mesh</strong> &#8211; mesh to compare against in scene</li>
+<li><strong>opendiff</strong> &#8211; if True open diffMerge and show the difference in the file structure</li>
 </ul>
 </td>
 </tr>
@@ -1390,7 +1404,7 @@ going to validate the given mesh against</li>
 <p class="first admonition-title">Note</p>
 <p class="last">This requires Diffmerge.exe, you can download from
 <a class="reference external" href="https://sourcegear.com/diffmerge/">https://sourcegear.com/diffmerge/</a>.
-Once downloaded drop it here Red9/pakcages/diffMerge.exe</p>
+Once downloaded drop it here Red9/packages/diffMerge.exe</p>
 </div>
 </dd></dl>
 
@@ -1402,7 +1416,7 @@ Once downloaded drop it here Red9/pakcages/diffMerge.exe</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mesh_frozen_xforms_fix">
-<code class="descname">mesh_frozen_xforms_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_frozen_xforms_fix" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mesh_frozen_xforms_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_frozen_xforms_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>fix method : freeze the failed meshes transforms</p>
 </dd></dl>
 
@@ -1422,7 +1436,7 @@ Once downloaded drop it here Red9/pakcages/diffMerge.exe</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.texture_path_under_rootfolder_test">
 <code class="descname">texture_path_under_rootfolder_test</code><span class="sig-paren">(</span><em>expected=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.texture_path_under_rootfolder_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>test to see if the texture paths for all file nodes are under 
+<dd><p>test to see if the texture paths for all file nodes are under
 the correct rootfolder path</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

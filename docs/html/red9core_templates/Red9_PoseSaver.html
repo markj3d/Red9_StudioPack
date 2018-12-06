@@ -401,18 +401,18 @@ class instance.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; if given load the data to only these. If given and filter=True 
+<li><strong>nodes</strong> &#8211; if given load the data to only these. If given and filter=True
 this is the rootNode for the filter.</li>
-<li><strong>filepath</strong> &#8211; posefile to load - if not given the pose is loaded from a 
+<li><strong>filepath</strong> &#8211; posefile to load - if not given the pose is loaded from a
 cached instance on this class.</li>
-<li><strong>useFilter</strong> &#8211; If the pose has an active Filter_Settings block and this 
+<li><strong>useFilter</strong> &#8211; If the pose has an active Filter_Settings block and this
 is True then use the filter on the destination hierarchy.</li>
-<li><strong>relativePose</strong> &#8211; kick in the posePointCloud to align the loaded pose 
+<li><strong>relativePose</strong> &#8211; kick in the posePointCloud to align the loaded pose
 relatively to the selected node.</li>
 <li><strong>relativeRots</strong> &#8211; &#8216;projected&#8217; or &#8216;absolute&#8217; - how to calculate the offset.</li>
 <li><strong>relativeTrans</strong> &#8211; &#8216;projected&#8217; or &#8216;absolute&#8217; - how to calculate the offset.</li>
-<li><strong>maintainSpaces</strong> &#8211; this preserves any parentSwitching mismatches between 
-the stored pose and the current rig settings, current spaces are maintained. 
+<li><strong>maintainSpaces</strong> &#8211; this preserves any parentSwitching mismatches between
+the stored pose and the current rig settings, current spaces are maintained.
 This only checks those nodes in the snapList and only runs under relative mode.</li>
 <li><strong>percent</strong> &#8211; percentage of the pose to apply, used by the poseBlender in the UIs</li>
 </ul>

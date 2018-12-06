@@ -128,7 +128,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.timeLineRangeGet" title="Red9.core.Red9_AnimationUtils.timeLineRangeGet"><code class="xref py py-obj docutils literal"><span class="pre">timeLineRangeGet</span></code></a>([always])</td>
 <td>Return the current PlaybackTimeline OR if a range is selected in the TimeLine, (Highlighted in Red) return that instead.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.timeLineRangeProcess" title="Red9.core.Red9_AnimationUtils.timeLineRangeProcess"><code class="xref py py-obj docutils literal"><span class="pre">timeLineRangeProcess</span></code></a>(start,&nbsp;end,&nbsp;step[,&nbsp;incEnds])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.timeLineRangeProcess" title="Red9.core.Red9_AnimationUtils.timeLineRangeProcess"><code class="xref py py-obj docutils literal"><span class="pre">timeLineRangeProcess</span></code></a>(start,&nbsp;end[,&nbsp;step,&nbsp;...])</td>
 <td>Simple wrapper function to take a given framerange and return a list[] containing the actual keys required for processing.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.mergeAnimLayers" title="Red9.core.Red9_AnimationUtils.mergeAnimLayers"><code class="xref py py-obj docutils literal"><span class="pre">mergeAnimLayers</span></code></a>(nodes[,&nbsp;deleteBaked])</td>
@@ -174,7 +174,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 </table>
 <dl class="data">
 <dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS">
-<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BE83B38&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BE83B38&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BE83B38&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BE83B38&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BE83B38&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BE83B38&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BE83B38&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.</p>
@@ -259,14 +259,22 @@ ie: pointConstraint.target.targetWeight</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.nodesDriven">
-<code class="descname">nodesDriven</code><span class="sig-paren">(</span><em>nodes</em>, <em>allowReferenced=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.nodesDriven" title="Permalink to this definition">¶</a></dt>
+<code class="descname">nodesDriven</code><span class="sig-paren">(</span><em>nodes</em>, <em>allowReferenced=False</em>, <em>skipLocked=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.nodesDriven" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a list of those nodes that are actively constrained or connected to a pairBlend
 currently used to pre-validate nodes in the mirror class prior to running the actual mirror call</p>
-<dl class="docutils">
-<dt>param allowReferenced: if True we allow all constraints to be returned, if False any constraints </dt>
-<dd>that are referenced are skipped. This by-passes internal rig constraints and only returns
-constraints made in the main scene.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>allowReferenced</strong> &#8211; if True we allow all constraints to be returned, if False any constraints
+that are referenced are skipped. This by-passes internal rig constraints and only returns
+constraints made in the main scene.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Parm skipLocked:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if True we ignore the relevant channels that are constrained if the attrs themselves aren&#8217;t keyable</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -349,11 +357,28 @@ TimeLine, (Highlighted in Red) return that instead.</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.timeLineRangeProcess">
-<code class="descname">timeLineRangeProcess</code><span class="sig-paren">(</span><em>start</em>, <em>end</em>, <em>step</em>, <em>incEnds=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.timeLineRangeProcess" title="Permalink to this definition">¶</a></dt>
+<code class="descname">timeLineRangeProcess</code><span class="sig-paren">(</span><em>start</em>, <em>end</em>, <em>step=1</em>, <em>incEnds=True</em>, <em>nodes=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.timeLineRangeProcess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple wrapper function to take a given framerange and return
 a list[] containing the actual keys required for processing.
 This manages whether the step is negative, if so it reverses the
-times. Basically just a wrapper to the python range function.</p>
+times. When nodes are not given this is basically just a wrapper to the 
+python range function, if nodes are given then we inspect and return the 
+current keys between the start and end given, ignoring step except to reverse the data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>start</strong> &#8211; start frame</li>
+<li><strong>end</strong> &#8211; end frame</li>
+<li><strong>step</strong> &#8211; step between frame</li>
+<li><strong>inEnds</strong> &#8211; when processing without nodes do we include the end frame in the return or exclude it</li>
+<li><strong>nodes</strong> &#8211; inspect the nodes given for keyframes and use that data for the times returned</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -582,7 +607,7 @@ used if an attributes list is passed</li>
 
 <dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.AnimFunctions.snapTransform">
-<code class="descname">snapTransform</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>time=()</em>, <em>step=1</em>, <em>preCopyKeys=1</em>, <em>preCopyAttrs=1</em>, <em>filterSettings=None</em>, <em>iterations=1</em>, <em>matchMethod=None</em>, <em>prioritySnapOnly=False</em>, <em>snapRotates=True</em>, <em>snapTranslates=True</em>, <em>additionalCalls=[]</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.snapTransform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">snapTransform</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>time=()</em>, <em>step=1</em>, <em>preCopyKeys=1</em>, <em>preCopyAttrs=1</em>, <em>filterSettings=None</em>, <em>iterations=1</em>, <em>matchMethod=None</em>, <em>prioritySnapOnly=False</em>, <em>snapRotates=True</em>, <em>snapTranslates=True</em>, <em>additionalCalls=[]</em>, <em>cutkeys=False</em>, <em>smartbake=False</em>, <em>smartBakeRef=[]</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.snapTransform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Snap objects over a timeRange. This wraps the default hierarchy filters
 so it&#8217;s capable of multiple hierarchy filtering and matching methods.
 The resulting node lists are snapped over time and keyed.
@@ -616,6 +641,11 @@ all channel Values on all nodes will have their data taken across</li>
 <li><strong>snapRotates</strong> &#8211; only snap the rotate data</li>
 <li><strong>additionalCalls</strong> &#8211; [func, func...] additional functions to run during process... allowing you
 to add in specific matching calls to a SnapTransforms run whilst having the time increment correctly managed for you</li>
+<li><strong>cutkeys</strong> &#8211; when passing time do we clear current keys first, needed ideally if we&#8217;re running with a step greater than 1</li>
+<li><strong>smartbake</strong> &#8211; if True we ignore the step and find all current keyTimes on the nodes about to be processed, these key times
+are then respected during the process</li>
+<li><strong>smartBakeRef</strong> &#8211; smartBake=True if given, used as reference nodes to extract keytimes from, else we look at all nodes about to be
+processed which isn&#8217;t always what we want. If we still find no keytimes we revert to base range times with step given</li>
 </ul>
 </td>
 </tr>
@@ -708,7 +738,7 @@ making it capable of powerful hierarchy filtering and node matching methods.</li
 see docs on the FilterNode_Settings class&#8217;
 Note that this is also now bound to the class instance and if not passed in
 we use this classes instance of filterSettings cls.settings</li>
-<li><strong>attributes</strong> &#8211; Only copy the given attributes[]</li>
+<li><strong>attributes</strong> &#8211; Only process the given attributes[]</li>
 <li><strong>bindMethod</strong> &#8211; method of binding the data</li>
 <li><strong>matchMethod</strong> &#8211; arg passed to the match code, sets matchMethod used to match 2 node names</li>
 </ul>
@@ -1097,9 +1127,9 @@ inversing the required animCurves</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; optional specific listy of nodes to process, else we run the filterSetting code 
+<li><strong>nodes</strong> &#8211; optional specific list of nodes to process, else we run the filterSetting code 
 on the initial nodes past to the class</li>
-<li><strong>mode</strong> &#8211; &#8216;Anim&#8217; ot &#8216;Pose&#8217; process as a single pose or an animation</li>
+<li><strong>mode</strong> &#8211; &#8216;Anim&#8217; or &#8216;Pose&#8217; process as a single pose or an animation</li>
 </ul>
 </td>
 </tr>
@@ -1118,7 +1148,7 @@ are no keys.</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.MirrorHierarchy.loadMirrorSetups">
-<code class="descname">loadMirrorSetups</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>nodes=None</em>, <em>clearCurrent=True</em>, <em>matchMethod='stripPrefix'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy.loadMirrorSetups" title="Permalink to this definition">¶</a></dt>
+<code class="descname">loadMirrorSetups</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>nodes=None</em>, <em>clearCurrent=True</em>, <em>matchMethod='base'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy.loadMirrorSetups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a Mirror Map to the nodes</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1174,7 +1204,7 @@ frame the currently selected objects per frame, or rather per frameStep.</p>
 </tbody>
 </table>
 <dl class="docutils">
-<dt>TODO:: </dt>
+<dt>TODO::</dt>
 <dd>add option for cloning the camera rather than using the current directly</dd>
 </dl>
 </dd></dl>

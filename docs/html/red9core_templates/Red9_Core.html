@@ -952,7 +952,7 @@ thats returned hence the decodeString() calls</p>
 
 <dl class="staticmethod">
 <dt id="Red9.core.Red9_CoreUtils.LockChannels.processState">
-<em class="property">static </em><code class="descclassname">LockChannels.</code><code class="descname">processState</code><span class="sig-paren">(</span><em>nodes</em>, <em>attrs</em>, <em>mode</em>, <em>hierarchy=False</em>, <em>userDefined=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.LockChannels.processState" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descclassname">LockChannels.</code><code class="descname">processState</code><span class="sig-paren">(</span><em>nodes</em>, <em>attrs=None</em>, <em>mode=None</em>, <em>hierarchy=False</em>, <em>userDefined=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.LockChannels.processState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Easy wrapper to manage channels that are keyable / locked
 in the channelBox.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -971,7 +971,7 @@ in the channelBox.</p>
 </tbody>
 </table>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r9Core</span><span class="o">.</span><span class="n">LockChannels</span><span class="o">.</span><span class="n">processState</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sx&quot;</span><span class="p">,</span> <span class="s2">&quot;sy&quot;</span><span class="p">,</span> <span class="s2">&quot;sz&quot;</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lockall&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># note: if attrs=&#39;all&#39; we now set it to the following for ease:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="s2">&quot;tx&quot;</span><span class="p">,</span> <span class="s2">&quot;ty&quot;</span><span class="p">,</span> <span class="s2">&quot;tz&quot;</span><span class="p">,</span> <span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="s2">&quot;ry&quot;</span><span class="p">,</span> <span class="s2">&quot;rz&quot;</span><span class="p">,</span> <span class="s2">&quot;sx&quot;</span><span class="p">,</span> <span class="s2">&quot;sy&quot;</span><span class="p">,</span> <span class="s2">&quot;sz&quot;</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;nds&quot;</span><span class="p">,</span> <span class="s2">&quot;radius&quot;</span><span class="p">]</span>
 </pre></div>
@@ -1309,9 +1309,34 @@ apply that as an offset matrix to a given list of nodes.</p>
 </table>
 </dd></dl>
 
+<dl class="classmethod">
+<dt id="Red9.core.Red9_CoreUtils.MatrixOffset.nodesAreEquivalent">
+<em class="property">classmethod </em><code class="descname">nodesAreEquivalent</code><span class="sig-paren">(</span><em>inputA</em>, <em>inputB</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.MatrixOffset.nodesAreEquivalent" title="Permalink to this definition">¶</a></dt>
+<dd><p>do the 2 nodes passed in have an equivalant inclusiveMatrix? ie, are they
+in the same worldSpace!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>inputA</strong> &#8211; nodeA</li>
+<li><strong>inputB</strong> &#8211; nodeB</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_CoreUtils.MatrixOffset.applyOffsetTransformsToNodes">
+<code class="descname">applyOffsetTransformsToNodes</code><span class="sig-paren">(</span><em>nodes</em>, <em>matrix=None</em>, <em>inversed=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.MatrixOffset.applyOffsetTransformsToNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple move function called to shift the given nodes against the offsetMatrix</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="Red9.core.Red9_CoreUtils.MatrixOffset.applyOffsetMatrixToNodes">
-<code class="descname">applyOffsetMatrixToNodes</code><span class="sig-paren">(</span><em>nodes</em>, <em>matrix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.MatrixOffset.applyOffsetMatrixToNodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">applyOffsetMatrixToNodes</code><span class="sig-paren">(</span><em>nodes</em>, <em>matrix=None</em>, <em>inversed=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.MatrixOffset.applyOffsetMatrixToNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>offset all the given nodes by the given MMatrix object</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1325,6 +1350,11 @@ apply that as an offset matrix to a given list of nodes.</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this doesn&#8217;t deal with joints as for that we need to rotate by the inverse
+of the jointOrient matrix, after the rotation matrix</p>
+</div>
 </dd></dl>
 
 </dd></dl>

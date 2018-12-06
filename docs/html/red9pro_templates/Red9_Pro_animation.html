@@ -331,7 +331,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000025E0A548&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013290D08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -580,7 +580,7 @@ internal startFrame and endFrame ranges have been set to process against.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000025A31408&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001335ABC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -592,7 +592,7 @@ internal startFrame and endFrame ranges have been set to process against.</p>
 <p>This relies heavily on the PosePointCloud base class. This means we can
 hook directly into the renderMeshes variable to find the Geo for reference</p>
 <p>Utilises the AnimPointCloud to allow animation to be re-directed via guide and reference meshes.
-This generates a spline based gyuide that you can edit to redirect animation around a scene and
+This generates a spline based guide that you can edit to redirect animation around a scene and
 because it uses the pointCloud setups nothing is bound to the animation data itself</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9panim&#39;</span><span class="p">)</span>
@@ -635,6 +635,9 @@ because it uses the pointCloud setups nothing is bound to the animation data its
 <li>self.pathAllowHeightVariant=True : allow the path to track height variants</li>
 <li>self.motionFollowScale=10       : simple scale of the follow object on the path</li>
 <li>self.fractionMode=True          : whether to use the fractionMode on the motionPath built</li>
+<li>self.step=1                     : frame step between compensation keys</li>
+<li>self.smartbake=False            : sparse keyed based on the keys currently on nodes being cached</li>
+<li>self.smartBakeRef=[]            : optional separate nodes to use for the smartBake key extraction process</li>
 </ul>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimPointCloud.syncdatafromCurrentInstance">
@@ -716,7 +719,8 @@ modified reference building code to deal with the animation setup</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimPointCloud.snapPosePntstoNodes">
 <code class="descname">snapPosePntstoNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.snapPosePntstoNodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>snap each pntCloud point to their respective Maya nodes over time.
+<dd><p>&lt;&lt; Time enabled function &gt;&gt;
+snap each pntCloud point to their respective Maya nodes over time.
 This call is used in the UI to &#8216;ReSync&#8217; the anim cloud if you&#8217;ve 
 modified the tracking point and need to sync the cloud to the modified track point</p>
 </dd></dl>
@@ -724,7 +728,8 @@ modified the tracking point and need to sync the cloud to the modified track poi
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimPointCloud.snapNodestoPosePnts">
 <code class="descname">snapNodestoPosePnts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.snapNodestoPosePnts" title="Permalink to this definition">¶</a></dt>
-<dd><p>snap each MAYA node to it&#8217;s respective pntCloud point over time.</p>
+<dd><p>&lt;&lt; Time enabled function &gt;&gt;
+snap each MAYA node to it&#8217;s respective pntCloud point over time.</p>
 </dd></dl>
 
 <dl class="method">
@@ -859,15 +864,15 @@ the internal start and end frames setup during the transfer</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Red9.pro_pack.core.animation.Anim_Transfer.scenebasename">
-<code class="descname">scenebasename</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.scenebasename" title="Permalink to this definition">¶</a></dt>
-<dd><p>base name of the Maya scene less the extension</p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.scenename">
 <code class="descname">scenename</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.scenename" title="Permalink to this definition">¶</a></dt>
 <dd><p>current Maya sceneName</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.scenebasename">
+<code class="descname">scenebasename</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.scenebasename" title="Permalink to this definition">¶</a></dt>
+<dd><p>base name of the Maya scene less the extension</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -883,17 +888,21 @@ the internal start and end frames setup during the transfer</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.rigs_to_fbx">
-<code class="descname">rigs_to_fbx</code><span class="sig-paren">(</span><em>mayafiles</em>, <em>prefix=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.rigs_to_fbx" title="Permalink to this definition">¶</a></dt>
+<code class="descname">rigs_to_fbx</code><span class="sig-paren">(</span><em>mayafiles</em>, <em>prefix=''</em>, <em>bindscales=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.rigs_to_fbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>wrap over multiple files for processing, also allows us to subclass
 this and wrap in any further management required at the client level.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>mayafiles</strong> &#8211; maya files to convert to fbx</li>
 <li><strong>prefix</strong> &#8211; simple prefix added to the scenename on output</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">;param bindscales:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">do we bind scales during the process or ignore them?</p>
 </td>
 </tr>
 </tbody>
@@ -902,7 +911,7 @@ this and wrap in any further management required at the client level.</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.rig_to_fbx">
-<code class="descname">rig_to_fbx</code><span class="sig-paren">(</span><em>startFrame=None</em>, <em>endFrame=None</em>, <em>filepath=None</em>, <em>prefix=''</em>, <em>export=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.rig_to_fbx" title="Permalink to this definition">¶</a></dt>
+<code class="descname">rig_to_fbx</code><span class="sig-paren">(</span><em>startFrame=None</em>, <em>endFrame=None</em>, <em>filepath=None</em>, <em>prefix=''</em>, <em>export=True</em>, <em>debug=False</em>, <em>bindscales=True</em>, <em>method='connect'</em>, <em>export_skl=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.rig_to_fbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>from a given Red9 Puppet Rig output a clean FBX skeleton anim via a bound duplicated skeleton method</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -914,6 +923,10 @@ this and wrap in any further management required at the client level.</p>
 <li><strong>filepath</strong> &#8211; filepath to write to</li>
 <li><strong>prefix</strong> &#8211; simple prefix added to the scenename on output</li>
 <li><strong>export</strong> &#8211; the main export call to fbx, if this is False then we just prep the file for export, without calling the FBX output</li>
+<li><strong>debug</strong> &#8211; run all the binding process but not the fbx exporter or the cleanups</li>
+<li><strong>bindscales</strong> &#8211; do we bind scales during the process or ignore them?</li>
+<li><strong>method</strong> &#8211; method used to bind the base skeletons together : &#8216;connect&#8217; or &#8216;constrain&#8217;</li>
+<li><strong>export_skl</strong> &#8211; if given this is the root of the skeleton to process, else we use the self.mrig.exportSkeletonRoot wire</li>
 </ul>
 </td>
 </tr>
@@ -1107,7 +1120,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000025A40088&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1131,7 +1144,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000025A3F9C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013625E08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

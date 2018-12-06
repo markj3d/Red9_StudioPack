@@ -109,7 +109,7 @@ This includes most of the context managers and decorators.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.AnimationContext" title="Red9.core.Red9_General.AnimationContext"><code class="xref py py-obj docutils literal"><span class="pre">AnimationContext</span></code></a>([evalmanager,&nbsp;time,&nbsp;undo])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.AnimationContext" title="Red9.core.Red9_General.AnimationContext"><code class="xref py py-obj docutils literal"><span class="pre">AnimationContext</span></code></a>([evalmanager,&nbsp;time,&nbsp;undo,&nbsp;...])</td>
 <td>CONTEXT MANAGER : Simple Context Manager for restoring Animation settings</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.undoContext" title="Red9.core.Red9_General.undoContext"><code class="xref py py-obj docutils literal"><span class="pre">undoContext</span></code></a>([initialUndo,&nbsp;undoFuncCache,&nbsp;...])</td>
@@ -159,6 +159,13 @@ are always Pythonized not OS based</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_General.sceneName">
+<code class="descname">sceneName</code><span class="sig-paren">(</span><em>short=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.sceneName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Why, because if a file loaded with errors the standard cmds.file(q=True, sn=True) returns nothing
+this will be threaded into all future calls, particularly ProPack exporter management for consistency</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_General.itersubclasses">
 <code class="descname">itersubclasses</code><span class="sig-paren">(</span><em>cls</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.itersubclasses" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference external" href="http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/">http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/</a>
@@ -193,14 +200,14 @@ clipboard then pull it back afterwards.</p>
 <dl class="function">
 <dt id="Red9.core.Red9_General.runProfile">
 <code class="descname">runProfile</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.runProfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>DECORATOR : run the profiler - only ever used when debugging /optimizing 
+<dd><p>DECORATOR : run the profiler - only ever used when debugging /optimizing
 function call speeds.visualize the data using &#8216;runsnakerun&#8217; to view the profiles and debug</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_General.evalManager_DG">
 <code class="descname">evalManager_DG</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.evalManager_DG" title="Permalink to this definition">¶</a></dt>
-<dd><p>DECORATOR : simple decorator to call the evalManager_switch plugin 
+<dd><p>DECORATOR : simple decorator to call the evalManager_switch plugin
 and run the enclosed function in DG eval mode NOT parallel.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -224,13 +231,13 @@ The plugin call is registered back in the undoStack, cmds.evalmanager call is no
 <dl class="function">
 <dt id="Red9.core.Red9_General.evalManagerState">
 <code class="descname">evalManagerState</code><span class="sig-paren">(</span><em>mode='off'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.evalManagerState" title="Permalink to this definition">¶</a></dt>
-<dd><p>wrapper function for the evalManager so that it&#8217;s switching is recorded in 
+<dd><p>wrapper function for the evalManager so that it&#8217;s switching is recorded in
 the undo stack via the Red9.evalManager_switch plugin</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.core.Red9_General.AnimationContext">
-<em class="property">class </em><code class="descname">AnimationContext</code><span class="sig-paren">(</span><em>evalmanager=True</em>, <em>time=True</em>, <em>undo=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.AnimationContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">AnimationContext</code><span class="sig-paren">(</span><em>evalmanager=True</em>, <em>time=True</em>, <em>undo=True</em>, <em>autokey=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.AnimationContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>CONTEXT MANAGER : Simple Context Manager for restoring Animation settings</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -241,6 +248,7 @@ the undo stack via the Red9.evalManager_switch plugin</p>
 <li><strong>evalmanager</strong> &#8211; do we manage the evalManager in this context for Maya 2016 onwards</li>
 <li><strong>time</strong> &#8211; do we manage the time and restore the original currentTime?</li>
 <li><strong>undo</strong> &#8211; do we manage the undoStack, collecting everything in one chunk</li>
+<li><strong>autokey</strong> &#8211; base state of the autokey during this context, default=False</li>
 </ul>
 </td>
 </tr>
@@ -256,7 +264,7 @@ the undo stack via the Red9.evalManager_switch plugin</p>
 <p>If initialUndo is True then the context manager will manage what to do on entry with
 the undoStack. The idea is that if True the code will look at the last functions in the
 undoQueue and if any of those mantch those in the undoFuncCache, it&#8217;ll undo them to the
-depth given. 
+depth given.
 WHY?????? This is specifically designed for things like floatFliders where you&#8217;ve
 set a function to act on the &#8216;dc&#8217; flag, (drag command) by passing that func through this
 each drag will only go into the stack once, enabling you to drag as much as you want
@@ -308,9 +316,9 @@ code for a live example of this setup.</p>
 </tbody>
 </table>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#Example of using this in code</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">progressBar</span><span class="o">=</span><span class="n">r9General</span><span class="o">.</span><span class="n">ProgressBarContext</span><span class="p">(</span><span class="n">maxValue</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1">#now do your code but increment and check the progress state</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">progressBar</span><span class="p">:</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span>
@@ -379,7 +387,7 @@ to do it</p>
 <p>CONTEXT MANAGER : Simple Context Manager for restoring Scene Global settings</p>
 <p>Basically we store the state of all the modelPanels and timeLine
 setups. Think of it like this, you export a scene, file -new, then re-import it
-but you&#8217;ve now lost all the scenes UI and setups. This is capable of returning 
+but you&#8217;ve now lost all the scenes UI and setups. This is capable of returning
 the UI to the previous state. Maybe this could be a tool in it&#8217;s own write?</p>
 <dl class="docutils">
 <dt>Things stored:</dt>
@@ -392,11 +400,11 @@ the UI to the previous state. Maybe this could be a tool in it&#8217;s own write
 </dd>
 </dl>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.core.Red9_General</span> <span class="k">import</span> <span class="n">SceneRestoreContext</span> <span class="k">as</span> <span class="n">sceneStore</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">sceneStore</span><span class="p">:</span>    
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">sceneStore</span><span class="p">:</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#do something to modify the scene setup</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">cmds</span><span class="o">.</span><span class="n">currentTime</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#out of the context manager the scene will be restored as it was </span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#out of the context manager the scene will be restored as it was</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1">#before the code entered the context. (with sceneStore:)</span>
 </pre></div>
 </div>
@@ -526,7 +534,7 @@ differences then the code returns 0</p>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This is a stub function that requires Diffmerge.exe, you can download from 
+<p class="last">This is a stub function that requires Diffmerge.exe, you can download from
 <a class="reference external" href="https://sourcegear.com/diffmerge/">https://sourcegear.com/diffmerge/</a>.
 Once downloaded drop it here Red9/pakcages/diffMerge.exe</p>
 </div>
