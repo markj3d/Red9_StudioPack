@@ -460,6 +460,8 @@ class DataMap(object):
         Load call for dealing with attrs : 
         use self.matchedPairs for the process list of pre-matched 
         tuples of (poseDict[key], node in scene)
+
+        fix: 07/11/18: added the clamp=True to the set calls so we set values to max/min if the input value is out of range
         '''
         _attrs_linear = ['translateX', 'translateY', 'translateZ']
 
@@ -492,10 +494,10 @@ class DataMap(object):
                         if _conversion_needed and self.unitconversion and attr in _attrs_linear:
                             _converted = r9Core.convertUnits_uiToInternal(r9Core.convertUnits_internalToUI(val, _unitsfile), _sceneunits)
                             log.debug('node : %s : attr : %s : UnitConverted : val %s == %s' % (dest, attr, val, _converted))
-                            cmds.setAttr('%s.%s' % (dest, attr), _converted)
+                            cmds.setAttr('%s.%s' % (dest, attr), _converted, c=True)
                         else:
                             log.debug('node : %s : attr : %s : val %s' % (dest, attr, val))
-                            cmds.setAttr('%s.%s' % (dest, attr), val)
+                            cmds.setAttr('%s.%s' % (dest, attr), val, c=True)
                     except StandardError, err:
                         log.debug(err)
             except:
@@ -525,7 +527,7 @@ class DataMap(object):
         # write to ConfigObject
         # =========================
         if self.dataformat == 'config':
-            ConfigObj = configobj.ConfigObj(indent_type='\t')
+            ConfigObj = configobj.ConfigObj(indent_type='\t', encoding='utf-8')
             ConfigObj['info'] = self.infoDict
             ConfigObj['filterNode_settings'] = self.settings.__dict__
             ConfigObj['poseData'] = self.poseDict
@@ -581,7 +583,7 @@ class DataMap(object):
                 if self._dataformat_resolved == 'config' or self.dataformat == 'config':
                     # for key, val in configobj.ConfigObj(filename)['filterNode_settings'].items():
                     #    self.settings.__dict__[key]=decodeString(val)
-                    self.poseDict = configobj.ConfigObj(filename)['poseData']
+                    self.poseDict = configobj.ConfigObj(filename, encoding='utf-8')['poseData']
                     if 'info' in configobj.ConfigObj(filename):
                         self.infoDict = configobj.ConfigObj(filename)['info']
                     if 'skeletonDict' in configobj.ConfigObj(filename):
@@ -910,7 +912,7 @@ class PoseData(DataMap):
 
         fn = r9Core.FilterNode(rootJnt)
         fn.settings.nodeTypes = 'joint'
-        fn.settings.incRoots = False
+        fn.settings.incRoots = True
         skeleton = fn.processFilter()
         parentNode = cmds.listRelatives(rootJnt, p=True, f=True)
 
@@ -1364,7 +1366,7 @@ class PosePointCloud(object):
 
         self.rootReference = None  # root node used as the main pivot for the cloud
         self.isVisible = True  # Do we build the visual reference setup or not?
-
+        self.mRig = None
         self.ppcMeta = None  # MetaNode to cache the data
 
         if filterSettings:
@@ -1420,10 +1422,10 @@ class PosePointCloud(object):
         # auto logic for MetaRig - go find the renderMeshes wired to the systems
         if self.settings.metaRig:
             if not self.meshes:
-                mRig = r9Meta.getConnectedMetaSystemRoot(self.inputNodes)
+                self.mRig = r9Meta.getConnectedMetaSystemRoot(self.inputNodes)
             else:
-                mRig = r9Meta.getMetaRigs()[0]
-            self.meshes = mRig.renderMeshes
+                self.mRig = r9Meta.getMetaRigs()[0]
+            self.meshes = self.mRig.renderMeshes
 
         if self.inputNodes:
             self.inputNodes.reverse()  # for the snapping operations
@@ -1538,8 +1540,7 @@ class PosePointCloud(object):
         for i, mesh in enumerate(self.meshes):
             dupMesh = cmds.duplicate(mesh, rc=True, n=self.refMesh + str(i + currentCount))[0]
             dupShape = cmds.listRelatives(dupMesh, type='shape')[0]
-            r9Core.LockChannels().processState(dupMesh, ['tx', 'ty', 'tz', 'rx', 'ry', 'rz', 'sx', 'sy', 'sz'],
-                                               mode='fullkey', hierarchy=False)
+            r9Core.LockChannels().processState(dupMesh, 'all', mode='fullkey', hierarchy=False)
             try:
                 if selectable:
                     # turn on the overrides so the duplicate geo can be selected
