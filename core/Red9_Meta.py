@@ -2810,7 +2810,7 @@ class MetaClass(object):
         :param attr: Name for the message attribute on the PARENT!
         :param srcAttr: If given this becomes the attr on the node which connects it
                         to the parent. If NOT given this attr is set to parents shortName
-        :param cleanCurrent: Exposed from teh connectChild code which is basically what this is running in reverse
+        :param cleanCurrent: Exposed from the connectChild code which is basically what this is running in reverse
 
         TODO: Modify so if a metaClass is passed in use it's addAttr cmd so the new
         attr is registered in the class given
@@ -3172,8 +3172,8 @@ class MetaClass(object):
                 return mNodes
             elif mTypes:
                 continue
-            if not mTypes:  # if not mTypes passed bail the loop and return the first connection
-                return mNodes
+            #if not mTypes:  # if not mTypes passed bail the loop and return the first connection
+            #    return mNodes
         return mNodes
 
     def getNodeConnetionAttr(self, node):
@@ -4013,8 +4013,6 @@ class MetaRig(MetaClass):
         except:
             cmds.setKeyframe(nodes)
 
-
-
     def hasKeys(self, nodes=[], walk=True, returnCtrls=False):
         '''
         return True if any of the rig's controllers have existing
@@ -4128,7 +4126,7 @@ class MetaRig(MetaClass):
         log.warning('DEPRECATED Warning: "mRig.loadAnimation_postload_call" - Please use "mRig.animMap_postload_call" instead')
 
     def loadAnimation(self, filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False, timecodeBinding=[None, None],
-                      referenceNode=None, manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, merge=False, matchMethod='stripPrefix', *args, **kws):
+                      referenceNode=None, manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, merge=False, matchMethod='stripPrefix', smartbake=False, *args, **kws):
         '''
         : PRO_PACK :
             Binding of the animMap format for loading animation data from
@@ -4156,6 +4154,7 @@ class MetaRig(MetaClass):
             to ensure the data is preserved
         :param merge: if True we allow the data to be merged over any current keys, else we cut all keys in the load range first
         :param matchMethod: internal matching method used to match nodes to the stored data
+        :param smartbake: only valid if we're loading with a referenceNode, this tries to respect current keys when doing the processing rather than frame baking
 
         : additional **KWS passed in and / or accepted in the ProPack codebase :
 
@@ -4215,6 +4214,7 @@ class MetaRig(MetaClass):
                                                keyStatics=keyStatics,
                                                blendRange=blendRange,
                                                merge=merge,
+                                               smartbake=smartbake,
                                                **kws)
                 # =========================================================
                 # pass the feedback to the postload code to handle, this is

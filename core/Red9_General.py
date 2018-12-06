@@ -219,7 +219,7 @@ def Timer(func):
 
 def runProfile(func):
     '''
-    DECORATOR : run the profiler - only ever used when debugging /optimizing 
+    DECORATOR : run the profiler - only ever used when debugging /optimizing
     function call speeds.visualize the data using 'runsnakerun' to view the profiles and debug
     '''
     import cProfile
@@ -238,10 +238,10 @@ def runProfile(func):
 
 def evalManager_DG(func):
     '''
-    DECORATOR : simple decorator to call the evalManager_switch plugin 
-    and run the enclosed function in DG eval mode NOT parallel. 
+    DECORATOR : simple decorator to call the evalManager_switch plugin
+    and run the enclosed function in DG eval mode NOT parallel.
 
-    .. note:: 
+    .. note::
         Parallel EM mode is slow at evaluating time, DG is up to 3 times faster!
         The plugin call is registered back in the undoStack, cmds.evalmanager call is not
     '''
@@ -293,7 +293,7 @@ def deleteNewNodes(func):
 
 def evalManagerState(mode='off'):
     '''
-    wrapper function for the evalManager so that it's switching is recorded in 
+    wrapper function for the evalManager so that it's switching is recorded in
     the undo stack via the Red9.evalManager_switch plugin
     '''
     if r9Setup.mayaVersion() >= 2016:
@@ -388,11 +388,11 @@ class undoContext(object):
         If initialUndo is True then the context manager will manage what to do on entry with
         the undoStack. The idea is that if True the code will look at the last functions in the
         undoQueue and if any of those mantch those in the undoFuncCache, it'll undo them to the
-        depth given. 
+        depth given.
         WHY?????? This is specifically designed for things like floatFliders where you've
         set a function to act on the 'dc' flag, (drag command) by passing that func through this
         each drag will only go into the stack once, enabling you to drag as much as you want
-        and return to the initial state, pre ALL drags, in one chunk. 
+        and return to the initial state, pre ALL drags, in one chunk.
 
         :param initialUndo: on first process whether undo on entry to the context manager
         :param undoFuncCache: only if initialUndo = True : functions to catch in the undo stack
@@ -437,9 +437,9 @@ class ProgressBarContext(object):
     :param title: only valid if ismain=False, used as the progressUI window title
 
     >>> #Example of using this in code
-    >>> 
+    >>>
     >>> progressBar=r9General.ProgressBarContext(maxValue=1000, step=1)
-    >>> 
+    >>>
     >>> #now do your code but increment and check the progress state
     >>> with progressBar:
     >>>     for i in range(1,1000,1):
@@ -502,7 +502,7 @@ class ProgressBarContext(object):
     def getProgress(self):
         if not self.disable:
             if self.ismain:
-                return cmds.progressBar(self._gMainProgressBar, q=True, progress=True) or  0
+                return cmds.progressBar(self._gMainProgressBar, q=True, progress=True) or 0
             else:
                 return cmds.progressWindow(q=True, progress=True) or 0
 
@@ -592,7 +592,7 @@ class SceneRestoreContext(object):
 
     Basically we store the state of all the modelPanels and timeLine
     setups. Think of it like this, you export a scene, file -new, then re-import it
-    but you've now lost all the scenes UI and setups. This is capable of returning 
+    but you've now lost all the scenes UI and setups. This is capable of returning
     the UI to the previous state. Maybe this could be a tool in it's own write?
 
     Things stored:
@@ -602,11 +602,11 @@ class SceneRestoreContext(object):
         * active sound and sound displays
 
     >>> from Red9.core.Red9_General import SceneRestoreContext as sceneStore
-    >>> with sceneStore:    
+    >>> with sceneStore:
     >>>     #do something to modify the scene setup
     >>>     cmds.currentTime(100)
-    >>> 
-    >>> #out of the context manager the scene will be restored as it was 
+    >>>
+    >>> #out of the context manager the scene will be restored as it was
     >>> #before the code entered the context. (with sceneStore:)
     """
     def __init__(self):
@@ -1013,7 +1013,7 @@ def os_fileCompare(file1, file2, openDiff=False):
 
     .. note::
 
-        This is a stub function that requires Diffmerge.exe, you can download from 
+        This is a stub function that requires Diffmerge.exe, you can download from
         https://sourcegear.com/diffmerge/.
         Once downloaded drop it here Red9/pakcages/diffMerge.exe
     '''
@@ -1106,4 +1106,3 @@ class abcIndex(object):
             self.__Iterate()
             temp = ''.join([x for x in self.__iterator.next()])
         return '%s' % temp
-    

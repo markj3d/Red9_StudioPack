@@ -38,7 +38,7 @@
 # import maya.mel as mel
 import maya.cmds as cmds
 import pymel.core as pm
-# import Red9_AnimationUtils as r9Anim
+import Red9_AnimationUtils as r9Anim
 import Red9.startup.setup as r9Setup
 import Red9.core.Red9_General as r9General
 
@@ -112,7 +112,7 @@ class Bindsettings(object):
     @property
     def align_to_source_rots(self):
         return self.__align_to_source_rots
-    
+
     @align_to_source_rots.setter
     def align_to_source_rots(self, value):
         if value:
@@ -529,10 +529,10 @@ class AnimBinderUI(object):
         cmds.separator(h=10, style="none")
         cmds.button(label="Link Skeleton Hierarchies - Direct Connect", al="center",
                     ann="Select Root joints of the source and destination skeletons to be connected - connect via attrs",
-                    c=lambda x: bind_skeletons(cmds.ls(sl=True)[0], cmds.ls(sl=True)[1], method='connect'))
+                    c=lambda x: bind_skeletons(cmds.ls(sl=True)[0], cmds.ls(sl=True)[1], method='connect', verbose=True))
         cmds.button(label="Link Skeleton Hierarchies - Constraints", al="center",
                     ann="Select Root joints of the source and destination skeletons to be connected - connect via parentConstraints",
-                    c=lambda x: bind_skeletons(cmds.ls(sl=True)[0], cmds.ls(sl=True)[1], method='constrain'))
+                    c=lambda x: bind_skeletons(cmds.ls(sl=True)[0], cmds.ls(sl=True)[1], method='constrain', verbose=True))
         cmds.separator(h=10, style="none")
         cmds.button(label="MakeStabilizer", al="center",
                     ann="Select the nodes you want to extract the motion data from",
@@ -543,7 +543,7 @@ class AnimBinderUI(object):
                                  c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
         cmds.showWindow(self.win)
         cmds.window(self.win, e=True, h=400)
- 
+
     @classmethod
     def Show(cls):
         cls()._UI()
@@ -640,7 +640,7 @@ def match_given_hierarchys(source, dest):
                 break
     return nameMatched
 
-def bind_skeletons(source, dest, method='connect', scales=False):
+def bind_skeletons(source, dest, method='connect', scales=False, verbose=False):
     '''
     From 2 given root joints search through each hierarchy for child joints, match
     them based on node name, then connect their trans/rots directly, or
@@ -655,10 +655,16 @@ def bind_skeletons(source, dest, method='connect', scales=False):
     sourceJoints = cmds.listRelatives(source, ad=True, f=True, type='joint')
     destJoints = cmds.listRelatives(dest, ad=True, f=True, type='joint')
 
-#     if cmds.nodeType(source) == 'joint':
-#         sourceJoints.append(source)
-#     if cmds.nodeType(dest) == 'joint':
-#         destJoints.append(dest)
+    if verbose:
+        result = cmds.confirmDialog(title='Bind Skeletons SCALES',
+                            message=("Would you also like to process the SCALE channels within the bind?"),
+                            button=['Yes', 'No'],
+                            messageAlign='center', icon='question',
+                            dismissString='Cancel')
+        if result == 'Yes':
+            scales = True
+        else:
+            scales = False
 
     # parent constrain the root nodes regardless of bindType, fixes issues where
     # we have additional rotated parent groups on the source
@@ -678,15 +684,26 @@ def bind_skeletons(source, dest, method='connect', scales=False):
                 except:
                     pass
         elif method == 'constrain':
+            # need to see if the channels are open if not, change this binding code
             try:
                 cmds.parentConstraint(sJnt, dJnt, mo=True)
             except:
-                pass
-            try:
-                if scales:
+                chns = r9Anim.getSettableChannels(dJnt)
+                if all(['translateX' in chns, 'translateY' in chns, 'translateZ' in chns]):
+                    cmds.pointConstraint(sJnt, dJnt, mo=True)
+                elif all(['rotateX' in chns, 'rotateY' in chns, 'rotateZ' in chns]):
+                    cmds.orientConstraint(sJnt, dJnt, mo=True)
+                else:
+                    log.info('Failed to Bind joints: %s >> %s' % (sJnt, dJnt))
+
+            # if we have incoming scale connections then run the scaleConstraint
+            if scales:  # and cmds.listConnections('%s.sx' % sJnt):
+                try:
                     cmds.scaleConstraint(sJnt, dJnt, mo=True)
-            except:
-                pass
+                    # turn off the compensation so that the rig can still be scaled correctly by the MasterNode
+                    # cmds.setAttr('%s.segmentScaleCompensate' % dJnt, 0)
+                except:
+                    print 'failed : scales ', dJnt
 
 
 def make_stabilized_node(nodeName=None, centered=True):

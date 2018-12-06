@@ -591,7 +591,7 @@ class AudioNode(object):
             return cmds.getAttr('%s.filename' % self.audioNode)
         else:
             return self.__path
-        
+
     @path.setter
     def path(self, path):
         self.__path = path
@@ -603,7 +603,7 @@ class AudioNode(object):
     @property
     def audioNode(self):
         return self.__audioNode
-    
+
     @audioNode.setter
     def audioNode(self, node):
         if node and cmds.objExists(node):
