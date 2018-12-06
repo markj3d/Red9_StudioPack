@@ -132,12 +132,12 @@ def stringReplace(text, replace_dict):
     with the associated value, return the modified text.
     Only whole words are replaced.
     Note that replacement is case sensitive, but attached
-    quotes and punctuation marks are neutral. 
+    quotes and punctuation marks are neutral.
 
-    :param replace_dict: 
+    :param replace_dict:
     '''
     rc = re.compile(r"[A-Za-z_]\w*")
-    
+
     def translate(match):
         word = match.group(0)
         return replace_dict.get(word, word)
@@ -212,13 +212,13 @@ def decodeString(val):
     return val
 
 
-def validateString(strText, fix=False, illegals=['-', '#', '!', ' ']):
+def validateString(strText, fix=False, illegals=['-', '#', '!', ' ', '@']):
     '''
     Function to validate that a string has no illegal characters
 
     :param strText: text to validate
     :param fix: if True then we replace illegals with '_'
-    :param illegals: now allow you to pass in what you consider illegals, default=['-', '#', '!', ' ']
+    :param illegals: now allow you to pass in what you consider illegals, default=['-', '#', '!', ' ', '@']
     '''
     # numerics=['1','2','3','4','5','6','7','8','9','0']
     # illegals=['-', '#', '!', ' ']
@@ -741,7 +741,10 @@ class FilterNode(object):
                         log.info('mRig : setting.filterPriority pulled directly from mNodes data')
                         # log.info('==============================================================')
                         self.settings.filterPriority = mrig.settings.filterPriority
-                        self.settings.rigData['snapPriority'] = mrig.settings.rigData['snapPriority']
+                        if 'snapPriority' in mrig.settings.rigData:
+                            self.settings.rigData['snapPriority'] = mrig.settings.rigData['snapPriority']
+                        else:
+                            self.settings.rigData['snapPriority'] = True
                         # self.settings.printSettings()
                         # log.info('==============================================================')
                     except StandardError, err:
@@ -961,55 +964,55 @@ class FilterNode(object):
         Filter for Meshes : from a start node find all mesh nodes in the hierarchy
         '''
         return self.lsSearchNodeTypes('mesh')
-    
+
     def lsTransforms(self):
         '''
         Filter for Transforms : from a start node find all transform nodes in the hierarchy
         '''
         return self.lsSearchNodeTypes('transform')
-    
+
     def lsJoints(self):
         '''
         Filter for Joints : from a start node find all Joints nodes in the hierarchy
         '''
         return self.lsSearchNodeTypes('joint')
-    
+
     def lsLocators(self):
         '''
         Filter for Locators : from a start node find all Locators nodes in the hierarchy
         '''
         return self.lsSearchNodeTypes('locator')
-    
+
     def lsIkData(self):
         '''
         Filter for IKData : from a start node find all ikHandle & ikEffector nodes in the hierarchy
         '''
         return self.lsSearchNodeTypes(['ikHandle', 'ikEffector'])
-    
+
     def lsNurbsCurve(self):
         '''
         Filter for NurbsCurve : from a start node find all NurbsCurve nodes in the hierarchy
         '''
         return self.lsSearchNodeTypes('nurbsCurve')
-    
+
     def lsConstraintsAll(self):
         '''
         Filter for All Constraint Nodes : from a start node find all Constraint nodes in the hierarchy
         '''
         return self.lsSearchNodeTypes(['orientConstraint', 'pointConstraint', 'parentConstraint'])
-    
+
     def lsOrientConstraint(self):
         '''
         Filter for OrientConstraint : from a start node find all OrientConstraint nodes in the hierarchy
         '''
         return self.lsSearchNodeTypes('orientConstraint')
-    
+
     def lsPointConstraint(self):
         '''
         Filter for PointConstraint : from a start node find all PointConstraint nodes in the hierarchy
         '''
         return self.lsSearchNodeTypes('pointConstraint')
-    
+
     def lsParentConstraint(self):
         '''
         Filter for ParentConstraint : from a start node find all ParentConstraint nodes in the hierarchy
@@ -1018,7 +1021,7 @@ class FilterNode(object):
 
     @staticmethod
     # @r9General.Timer
-    def lsAnimCurves(nodes=None, safe=False):
+    def lsAnimCurves(nodes=None, safe=False, allow_ref=False):
         '''
         Search for animationCurves. If no nodes are passed in to process then this
         is a simple one liner, BUT if you pass in a selection of nodes to process
@@ -1031,6 +1034,7 @@ class FilterNode(object):
         :param nodes: optional given node list, return animData in the nodes history
         :param safe: optional 'bool', only return animCurves which are safe to modify, this
                      will strip out SetDrivens, Clips curves etc..
+        :param allow_ref: if False and "safe" we remove all references animCurves, else we leave them in the return
         '''
         animCurves = []
         treeDepth = 2
@@ -1061,7 +1065,7 @@ class FilterNode(object):
             safeCurves = list(animCurves)
             for animCurve in animCurves:
                 # ignore referenced animCurves
-                if cmds.referenceQuery(animCurve, inr=True):
+                if not allow_ref and cmds.referenceQuery(animCurve, inr=True):
                     safeCurves.remove(animCurve)
                     continue
                 # ignore setDrivens : animCurve have input connections
@@ -1547,15 +1551,15 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
 
     :param nodeListA: list of nodes
     :param nodeListB: list of nodes
-    :param matchMethod: default 'stripPrefix' 
+    :param matchMethod: default 'stripPrefix'
 
-        | * matchMethod="index" : no intelligent matching, just purely zip the lists 
-            together in the order they were given  
-        | * matchMethod="indexReversed" : no intelligent matching, just purely zip 
-            the lists together in the reverse order they were given  
-        | * matchMethod="base" :  match each element by exact name (shortName) such 
-            that Spine==Spine or REF1:Spine==REF2:Spine  
-        | * matchMethod="stripPrefix" : match each element by a relaxed naming convention 
+        | * matchMethod="index" : no intelligent matching, just purely zip the lists
+            together in the order they were given
+        | * matchMethod="indexReversed" : no intelligent matching, just purely zip
+            the lists together in the reverse order they were given
+        | * matchMethod="base" :  match each element by exact name (shortName) such
+            that Spine==Spine or REF1:Spine==REF2:Spine
+        | * matchMethod="stripPrefix" : match each element by a relaxed naming convention
             allowing for prefixes one side such that RigX_Spine == Spine
         | * matchMethod="mirrorIndex" : match via the nodes MirrorMarker
         | * matchMethod="metaData" : match the nodes based on their wiring connections to the MetaData framework
@@ -1680,8 +1684,8 @@ class MatchedNodeInputs(object):
 
     :param nodes: root nodes to start the filtering process from
     :param matchMethod: Method of matching each nodePair based on nodeName
-    :param filterSettings: This is a FilterSettings_Node object used to pass all 
-        the filter types into the FilterNode code within. Internally the following 
+    :param filterSettings: This is a FilterSettings_Node object used to pass all
+        the filter types into the FilterNode code within. Internally the following
         is true:
 
         | settings.nodeTypes: list[] - search nodes of type
@@ -1690,14 +1694,14 @@ class MatchedNodeInputs(object):
         | settings.hierarchy: bool - process all children from the roots
         | settings.incRoots: bool - include the original root nodes in the filter
 
-    :return: list of matched pairs [(a1,b2),[(a2,b2)]  
+    :return: list of matched pairs [(a1,b2),[(a2,b2)]
 
-    .. note:: 
+    .. note::
         with all the search and hierarchy keywords OFF the code performs
         a Dumb zip, no matching and no Hierarchy filtering, just zip the given nodes
         into selected pairs obj[0]>obj[1], obj[2]>obj[3] etc
     '''
-    
+
     def __init__(self, nodes=None, filterSettings=None, matchMethod='stripPrefix'):
 
         self.MatchedPairs = []  # Main Result Tuple of Pairs
@@ -2123,18 +2127,17 @@ class LockChannels(object):
         if hierarchy:
             # Filter the selection for children including the selected roots
             nodes = FilterNode(nodes).lsHierarchy(incRoots=True)
-#         if not attrs:
-#             attrs = 'all'
+        _attrs = attrs
         if attrs == 'all':
-            attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "nds", "radius", "radi"]
+            _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "nds", "radius", "radi"]
         if attrs == 'transforms':
-            attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz"]
-        if not hasattr(attrs, '__iter__'):
-            attrs = set([attrs])
-        if not type(attrs) == set:
-            attrs = set(attrs)
+            _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz"]
 
-        # print('Base attrs : ',attrs)
+        if not hasattr(_attrs, '__iter__'):
+            _attrs = set([_attrs])
+        if not type(_attrs) == set:
+            _attrs = set(_attrs)
+
         attrKws = {}
 
         if mode == 'lock':
@@ -2152,21 +2155,21 @@ class LockChannels(object):
         elif mode == 'fullkey':
             attrKws['keyable'] = True
             attrKws['lock'] = False
+			# force unlock the compounds also!
+            if attrs == 'all' or attrs == 'transforms':
+                _attrs = _attrs | set(['translate', 'rotate', 'scale'])
         elif mode == 'lockall':
             attrKws['keyable'] = False
             attrKws['lock'] = True
-            # force unlock the compounds also!
-            if attrs == 'all' or attrs == 'transforms':
-                attrs.extend('translate', 'rotate', 'scale')
 
         for node in nodes:
             if userDefined:
                 userDef = cmds.listAttr(node, ud=True, se=True)
                 if userDef:
                     userDefAttrs = set(userDef)
-            for attr in (attrs | userDefAttrs):
+            for attr in (_attrs | userDefAttrs):
                 try:
-                    # log.debug('node: %s.%s' % (node,attr))
+                    log.debug('node: %s.%s' % (node,attr))
                     '''
                     If you pass in .tx but you've already locked the compound .translate then
                     the unlock will fail as it's parent compound is locked... do we fix this?
@@ -2178,6 +2181,7 @@ class LockChannels(object):
                             childAttrs = cmds.listAttr(attrString, multi=True)
                             childAttrs.remove(attr)
                             log.debug('compoundAttr handler for node: %s.%s' % (node, attr))
+                            cmds.setAttr(attrString, **attrKws)
                             for childattr in childAttrs:
                                 cmds.setAttr('%s.%s' % (node, childattr), **attrKws)
                         else:
@@ -2314,13 +2318,14 @@ class TimeOffset(object):
 
         log.debug('TimeOffset Scene : offset=%s, timelines=%s' % 
                   (offset, str(timelines)))
-        cls.animCurves(offset, timerange=timerange, ripple=ripple)
-        cls.sound(offset, mode='Scene', timerange=timerange, ripple=ripple)
-        cls.animClips(offset, mode='Scene', timerange=timerange, ripple=ripple)
-        if timelines:
-            cls.timelines(offset)
-        cls.metaNodes(offset, timerange=timerange, ripple=ripple)
-        print('Scene Offset Successfully')
+        with r9General.undoContext():
+            cls.animCurves(offset, timerange=timerange, ripple=ripple)
+            cls.sound(offset, mode='Scene', timerange=timerange, ripple=ripple)
+            cls.animClips(offset, mode='Scene', timerange=timerange, ripple=ripple)
+            if timelines:
+                cls.timelines(offset)
+            cls.metaNodes(offset, timerange=timerange, ripple=ripple)
+            print('Scene Offset Successfully')
 
     @classmethod
     def fromSelected(cls, offset, nodes=None, filterSettings=None, flocking=False,
@@ -2351,7 +2356,7 @@ class TimeOffset(object):
             offset = offset - timerange[0]
             log.info('New Offset calculated based on given Start Frm and timerange : %s' % offset)
 
-        log.debug('TimeOffset from Selected : offset=%s, flocking=%i, randomize=%i, timerange=%s, ripple:%s' % 
+        log.debug('TimeOffset from Selected : offset=%s, flocking=%i, randomize=%i, timerange=%s, ripple:%s' %
                   (offset, flocking, randomize, str(timerange), ripple))
 
         if not nodes:
@@ -2362,7 +2367,11 @@ class TimeOffset(object):
             else:
                 basenodes = nodes
 
+        # deal with mNodes / mRigs
+        # ======================================
         filtered = []
+        mNodes = []  # all connected mNodes for the given rigs so we can timeOffset these correctly
+
         # New mrig section so that we can process rigs as entire entities for all the calls
         if mRigs:
             _mrigs = []
@@ -2372,42 +2381,47 @@ class TimeOffset(object):
                     _mrigs.append(mrig)
             if _mrigs:
                 for rig in _mrigs:
+                    mNodes.extend(mrig.getChildMetaNodes(walk=True))
                     filtered.extend(rig.getChildren())
 
+        # process everything
+        # ======================================
         elif filterSettings:
             filtered = FilterNode(basenodes, filterSettings).processFilter()
 
         if filtered:
-            if flocking or randomize:
-                cachedOffset = 0  # Cached last flocking value
-                increment = 0
-                for node in filtered:
-                    if randomize and not flocking:
-                        increment = random.uniform(0, offset)
-                    if flocking and not randomize:
-                        increment = cachedOffset + offset
-                        cachedOffset += offset
-                    if flocking and randomize:
-                        rand = random.uniform(0, offset)
-                        increment = cachedOffset + rand
-                        cachedOffset += rand
-                    cls.animCurves(increment, node,
+            with r9General.undoContext():
+                if flocking or randomize:
+                    cachedOffset = 0  # Cached last flocking value
+                    increment = 0
+                    for node in filtered:
+                        if randomize and not flocking:
+                            increment = random.uniform(0, offset)
+                        if flocking and not randomize:
+                            increment = cachedOffset + offset
+                            cachedOffset += offset
+                        if flocking and randomize:
+                            rand = random.uniform(0, offset)
+                            increment = cachedOffset + rand
+                            cachedOffset += rand
+                        cls.animCurves(increment, node,
+                                       timerange=timerange,
+                                       ripple=ripple)
+                        log.debug('animData randon/flock modified offset : %f on node: %s' % (increment, nodeNameStrip(node)))
+                else:
+                    cls.animCurves(offset, nodes=filtered,
                                    timerange=timerange,
                                    ripple=ripple)
-                    log.debug('animData randon/flock modified offset : %f on node: %s' % (increment, nodeNameStrip(node)))
-            else:
-                cls.animCurves(offset, nodes=filtered,
-                               timerange=timerange,
-                               ripple=ripple)
-                cls.sound(offset, mode='Selected',
-                                audioNodes=FilterNode().lsSearchNodeTypes('audio', filtered),
-                                timerange=timerange,
-                                ripple=ripple)
-                cls.animClips(offset, mode='Selected',
-                                clips=FilterNode().lsSearchNodeTypes('animClip', filtered),
-                                timerange=timerange,
-                                ripple=ripple)
-            log.info('Selected Nodes Offset Successfully')
+                    cls.sound(offset, mode='Selected',
+                                    audioNodes=FilterNode().lsSearchNodeTypes('audio', filtered),
+                                    timerange=timerange,
+                                    ripple=ripple)
+                    cls.animClips(offset, mode='Selected',
+                                    clips=FilterNode().lsSearchNodeTypes('animClip', filtered),
+                                    timerange=timerange,
+                                    ripple=ripple)
+                    cls.metaNodes(offset, timerange=timerange, ripple=ripple, mNodes=mNodes)
+                log.info('Selected Nodes Offset Successfully')
         else:
             raise StandardError('Nothing selected or returned from the Hierarchy filter to offset')
 
@@ -2543,9 +2557,9 @@ class TimeOffset(object):
 
     @staticmethod
     @r9General.Timer
-    def metaNodes(offset, timerange=None, ripple=True):
+    def metaNodes(offset, timerange=None, ripple=True, mNodes=None):
         '''
-        Offset special handling for MetaNodes. Inspect the metaNode and see if 
+        Offset special handling for MetaNodes. Inspect the metaNode and see if
         the 'timeOffset' method has been implemented and if so, call it.
 
         .. note::
@@ -2554,18 +2568,18 @@ class TimeOffset(object):
 
         :param offset: amount to offset the sounds nodes by
         :param timerange: optional timerange to process (outer bounds only)
-        :param ripple: when shifting nodes ripple the offset to clips after the range, 
+        :param ripple: when shifting nodes ripple the offset to clips after the range,
             if ripple=False we only shift clips that starts in tghe bounds of the timerange
         '''
-
-        mNodes = r9Meta.getMetaNodes()
+        if not mNodes:
+            mNodes = r9Meta.getMetaNodes()
         if mNodes:
             log.debug('MetaData Offset ============================')
             for mNode in mNodes:
                 if 'timeOffset' in dir(mNode) and callable(getattr(mNode, 'timeOffset')):
                     mNode.timeOffset(offset, timerange=timerange, ripple=ripple)
             log.info('%i : MetaData were offset' % len(mNodes))
- 
+
 # -------------------------------------------------------------------------------------
 # Math functions ----
 # -------------------------------------------------------------------------------------
@@ -2574,10 +2588,10 @@ def floatIsEqual(a, b, tolerance=0.01, allowGimbal=True):
     '''
     compare 2 floats with tolerance.
 
-    :param a: value 1 
-    :param b: value 2 
-    :param tolerance: compare with this tolerance default=0.001 
-    :param allowGimbal: allow values differences to be divisible by 180 compensate for gimbal flips 
+    :param a: value 1
+    :param b: value 2
+    :param tolerance: compare with this tolerance default=0.001
+    :param allowGimbal: allow values differences to be divisible by 180 compensate for gimbal flips
 
     '''
     if abs(a - b) < tolerance:
@@ -2690,7 +2704,7 @@ def convertUnits_internalToUI(value, unit):
 
 def convertUnits_uiToInternal(value, unit):
     '''
-    convert units from Maya's internal / base 'cm' 
+    convert units from Maya's internal / base 'cm'
     to a given unit, multiplying up to suit
     '''
     if unit == 'centimeter':
