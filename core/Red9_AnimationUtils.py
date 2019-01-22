@@ -4936,9 +4936,11 @@ class MirrorSetup(object):
 
     def _showUI(self):
 
+        space = 10
+        size = (285, 490)
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        window = cmds.window(self.win, title=LANGUAGE_MAP._Mirror_Setup_.title, s=False, widthHeight=(280, 410))
+        window = cmds.window(self.win, title=LANGUAGE_MAP._Mirror_Setup_.title, s=False, widthHeight=size)
         cmds.menuBarLayout()
         cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
         cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help,
@@ -4946,23 +4948,30 @@ class MirrorSetup(object):
         cmds.menuItem(divider=True)
         cmds.menuItem(l=LANGUAGE_MAP._Generic_.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
         cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
-        cmds.separator(h=15, style='none')
-        cmds.text(l=LANGUAGE_MAP._Mirror_Setup_.side)
-        cmds.rowColumnLayout(nc=3, columnWidth=[(1, 90), (2, 90), (3, 90)])
+
+        # mirror side
+        cmds.separator(h=20, style='none')
+        cmds.text(l=LANGUAGE_MAP._Mirror_Setup_.side, fn='boldLabelFont')
+        cmds.separator(h=5, style='none')
+        cmds.rowColumnLayout(nc=3, columnWidth=[(1, 90), (2, 90), (3, 90)], columnSpacing=[(1, space)])
         self.uircbMirrorSide = cmds.radioCollection('mirrorSide')
         cmds.radioButton('Right', label=LANGUAGE_MAP._Generic_.right, cc=self.__uicb_setupIndex)
         cmds.radioButton('Centre', label=LANGUAGE_MAP._Generic_.centre, cc=self.__uicb_setupIndex)
         cmds.radioButton('Left', label=LANGUAGE_MAP._Generic_.left, cc=self.__uicb_setupIndex)
         cmds.setParent('..')
-        cmds.separator(h=15, style='in')
+
+        # mirror index
+        cmds.separator(h=20, style='in')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 110), (2, 60)])
-        cmds.text(label=LANGUAGE_MAP._Mirror_Setup_.index)
+        cmds.text(label=LANGUAGE_MAP._Mirror_Setup_.index, fn='boldLabelFont')
         cmds.intField('ifg_mirrorIndex', v=1, min=1, w=50)
         cmds.setParent('..')
-        cmds.separator(h=15, style='in')
-        cmds.text(l=LANGUAGE_MAP._Mirror_Setup_.axis)
+
+        # Mirror axis
+        cmds.separator(h=20, style='in')
+        cmds.text(l=LANGUAGE_MAP._Mirror_Setup_.axis, fn='boldLabelFont')
         cmds.separator(h=5, style='none')
-        cmds.rowColumnLayout(nc=2, columnWidth=[(1, 130), (2, 130)])
+        cmds.rowColumnLayout(nc=2, columnWidth=[(1, 130), (2, 130)], columnSpacing=[(1, space)])
         cmds.checkBox('default', l=LANGUAGE_MAP._Mirror_Setup_.default_axis, v=True,
                       onc=lambda x: self.__uicb_setDefaults('default'),
                       ofc=lambda x: self.__uicb_setDefaults('custom'))
@@ -4973,15 +4982,29 @@ class MirrorSetup(object):
         cmds.setParent('..')
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(ann=LANGUAGE_MAP._Generic_.attrs, numberOfColumns=3,
-                                 columnWidth=[(1, 90), (2, 90), (3, 90)])
-        cmds.checkBox('translateX', l=LANGUAGE_MAP._Generic_.transX, v=False)
-        cmds.checkBox('translateY', l=LANGUAGE_MAP._Generic_.transY, v=False)
-        cmds.checkBox('translateZ', l=LANGUAGE_MAP._Generic_.transZ, v=False)
-        cmds.checkBox('rotateX', l=LANGUAGE_MAP._Generic_.rotX, v=False)
-        cmds.checkBox('rotateY', l=LANGUAGE_MAP._Generic_.rotY, v=False)
-        cmds.checkBox('rotateZ', l=LANGUAGE_MAP._Generic_.rotZ, v=False)
+                                 columnWidth=[(1, 90), (2, 90), (3, 90)], columnSpacing=[(1, space)])
+        cmds.checkBox('translateX', l='Trans X' , v=False)  # LANGUAGE_MAP._Generic_.transX
+        cmds.checkBox('translateY', l='Trans Y', v=False)  # LANGUAGE_MAP._Generic_.transY
+        cmds.checkBox('translateZ', l='Trans Z', v=False)  # LANGUAGE_MAP._Generic_.transZ
+        cmds.checkBox('rotateX', l='Rot X', v=False)  # LANGUAGE_MAP._Generic_.rotX
+        cmds.checkBox('rotateY', l='Rot Y', v=False)  # LANGUAGE_MAP._Generic_.rotY
+        cmds.checkBox('rotateZ', l='Rot Z', v=False)  # LANGUAGE_MAP._Generic_.rotZ
         cmds.setParent('..')
-        cmds.separator(h=15, style='in')
+
+        cmds.separator(h=5, style='none')
+        cmds.text(l='   '+LANGUAGE_MAP._Mirror_Setup_.custom_axis, al='left')
+        cmds.separator(h=5, style='none')
+        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 200), (2, 50)], columnSpacing=[(1, space)])
+        cmds.textField('customAxis', ann=LANGUAGE_MAP._Mirror_Setup_.custom_axis_ann, text="")
+        cmds.popupMenu()
+        cmds.menuItem(label=LANGUAGE_MAP._Mirror_Setup_.grab_channel_box, command=self.__get_channelbox_attrs)
+        cmds.button(label=LANGUAGE_MAP._Mirror_Setup_.channelbox,
+                    ann=LANGUAGE_MAP._Mirror_Setup_.custom_axis_ann,
+                    command=self.__get_channelbox_attrs)
+        cmds.setParent('..')
+
+        # commands
+        cmds.separator(h=20, style='in')
         cmds.button(label=LANGUAGE_MAP._Mirror_Setup_.refresh, bgc=r9Setup.red9ButtonBGC(1),
                      command=lambda *args: (self.__uicb_getMirrorIDsFromNode()))
         cmds.separator(h=15, style='none')
@@ -4995,11 +5018,12 @@ class MirrorSetup(object):
         cmds.button(label=LANGUAGE_MAP._Mirror_Setup_.delete, bgc=r9Setup.red9ButtonBGC(1),
                      command=lambda *args: (self.__deleteMarkers()))
         cmds.setParent('..')
-        cmds.separator(h=15, style='in')
-        cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)])
+        cmds.separator(h=20, style='in')
+        cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)], columnSpacing=[(1, space)])
         cmds.checkBox('mirrorSaveLoadHierarchy', l=LANGUAGE_MAP._Generic_.hierarchy, v=True)
         cmds.checkBox('mirrorClearCurrent', l=LANGUAGE_MAP._Mirror_Setup_.clear, v=True)
         cmds.setParent('..')
+        cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 135), (2, 135)])
         cmds.button(label=LANGUAGE_MAP._Mirror_Setup_.save_configs, bgc=r9Setup.red9ButtonBGC(1),
                      ann=LANGUAGE_MAP._Mirror_Setup_.save_configs_ann,
@@ -5012,7 +5036,7 @@ class MirrorSetup(object):
                              c=r9Setup.red9ContactInfo, h=22, w=200)
         cmds.showWindow(window)
         self.__uicb_setDefaults('default')
-        cmds.window(self.win, e=True, widthHeight=(280, 410))
+        cmds.window(self.win, e=True, widthHeight=size)
         cmds.radioCollection('mirrorSide', e=True, select='Centre')
         self.__uicb_setupIndex()
 
@@ -5049,6 +5073,16 @@ class MirrorSetup(object):
                 log.debug('No MetaRig systems found to debug index lists from')
                 cmds.intField('ifg_mirrorIndex', e=True, v=1)
 
+    def __get_channelbox_attrs(self, *args):
+        '''
+        pull the selected channel box attrs back to the custom txt field
+        '''
+        attrs = getChannelBoxSelection()
+        if attrs:
+            cmds.textField('customAxis', e=True, text=','.join(attrs))
+        else:
+            log.warning('No attributes currently selected in the ChannelBox')
+
     def __uicb_getMirrorIDsFromNode(self):
         '''
         set the flags based on the given nodes mirror setup
@@ -5057,6 +5091,7 @@ class MirrorSetup(object):
         axis = None
         index = self.mirrorClass.getMirrorIndex(node)
         side = self.mirrorClass.getMirrorSide(node)
+        cmds.textField('customAxis', e=True, text='')
         cmds.checkBox('setDirectCopy', e=True, v=False)
         cmds.checkBox('default', e=True, v=False)
 
@@ -5073,19 +5108,27 @@ class MirrorSetup(object):
                 return
         if axis:
             self.__uicb_setDefaults('custom')
-            for a in axis:
+            for a in list(axis):
+                print 'MirroAxis : ', a
                 if a == 'translateX':
                     cmds.checkBox('translateX', e=True, v=True)
+                    axis.remove(a)
                 elif a == 'translateY':
                     cmds.checkBox('translateY', e=True, v=True)
+                    axis.remove(a)
                 elif a == 'translateZ':
                     cmds.checkBox('translateZ', e=True, v=True)
+                    axis.remove(a)
                 elif a == 'rotateX':
                     cmds.checkBox('rotateX', e=True, v=True)
+                    axis.remove(a)
                 elif a == 'rotateY':
                     cmds.checkBox('rotateY', e=True, v=True)
+                    axis.remove(a)
                 elif a == 'rotateZ':
                     cmds.checkBox('rotateZ', e=True, v=True)
+                    axis.remove(a)
+            cmds.textField('customAxis', e=True, text=','.join(axis))
         else:
             cmds.checkBox('default', e=True, v=True)
             self.__uicb_setDefaults('default')
@@ -5116,6 +5159,7 @@ class MirrorSetup(object):
         # now set
         if mode == 'default':
             cmds.checkBox('setDirectCopy', e=True, v=False)
+            cmds.textField('customAxis', e=True, text='')
             for axis in self.mirrorClass.defaultMirrorAxis:
                 if axis == 'translateX':
                     cmds.checkBox('translateX', e=True, v=True)
@@ -5134,12 +5178,14 @@ class MirrorSetup(object):
         '''
         note this is a string
         '''
-        if cmds.checkBox('default', q=True, v=True):
-            return None
-        elif cmds.checkBox('setDirectCopy', q=True, v=True):
-            return 'None'
+        if not cmds.textField('customAxis', q=True, text=True):
+            if cmds.checkBox('default', q=True, v=True):
+                return None
+            elif cmds.checkBox('setDirectCopy', q=True, v=True):
+                return 'None'
         else:
             axis = []
+            custom = []
             if cmds.checkBox('translateX', q=True, v=True):
                 axis.append('translateX')
             if cmds.checkBox('translateY', q=True, v=True):
@@ -5152,8 +5198,11 @@ class MirrorSetup(object):
                 axis.append('rotateY')
             if cmds.checkBox('rotateZ', q=True, v=True):
                 axis.append('rotateZ')
-            if axis:
-                return ','.join(axis)
+            if cmds.textField('customAxis', q=True, text=True):
+                for attr in cmds.textField('customAxis', q=True, text=True).split(','):
+                    custom.append(attr.strip())
+            if axis or custom:
+                return ','.join(list(set(axis + custom)))
             else:
                 return 'None'
 

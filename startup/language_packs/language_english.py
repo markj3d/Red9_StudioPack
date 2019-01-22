@@ -493,10 +493,14 @@ class _Mirror_Setup_(object):
     print_debugs = 'Print Mirror Debugs'
     print_debugs_ann = 'print out the hierarchies current setup in the scriptEditor'
     delete = 'Delete from Selected'
-    clear = 'clear all Existing'
+    clear = 'Clear all Existing'
     save_configs = 'Save MirrorConfigs'
     save_configs_ann = 'Save the current MirrorSetups'
     load_configs = 'Load MirrorConfigs'
+    custom_axis = 'Custom Axis:'
+    custom_axis_ann = ' add custom attributes to include in the axis calculations, this is a comma separated string of attributes'
+    grab_channel_box = 'Grab selected attrs from ChannelBox'
+    channelbox = 'ChnBox'
 
 class _CameraTracker_(object):
 
