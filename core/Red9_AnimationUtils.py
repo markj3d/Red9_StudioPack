@@ -96,6 +96,7 @@ log.setLevel(logging.INFO)
 
 # global var so that the animUI is exposed to anything as a global object
 global RED_ANIMATION_UI
+RED_ANIMATION_UI = None
 
 global RED_ANIMATION_UI_OPENCALLBACKS
 RED_ANIMATION_UI_OPENCALLBACKS = []
@@ -1650,6 +1651,13 @@ class AnimationUI(object):
                     and r9Core.decodeString(self.filterSettings.rigData['snapPriority']):
                 cmds.checkBox(self.uicbSnapPriorityOnly, e=True, v=True)
 
+        # manage the MatchMethod setting
+        if self.filterSettings.metaRig:
+            # self.matchMethod = 'metaData'
+            cmds.optionMenu('om_MatchMethod', e=True, v='metaData')
+        else:
+            cmds.optionMenu('om_MatchMethod', e=True, v='stripPrefix')
+
         # need to run the callback on the PoseRootUI setup
         self.__uiCB_managePoseRootMethod()
         self.filterSettings.printSettings()
@@ -2626,6 +2634,7 @@ class AnimationUI(object):
         '''
         Internal UI call for CopyAttrs
         '''
+        # print 'MatchMethod : ', self.matchMethod
         if not len(cmds.ls(sl=True, l=True)) >= 2:
             log.warning('Please Select at least 2 nodes to Process!!')
             return
@@ -3181,9 +3190,9 @@ class AnimFunctions(object):
         if not matchMethod:
             matchMethod = self.matchMethod
 
-#         log.debug('CopyKey params : \n \
-# \tnodes=%s \t\n:time=%s \t\n: pasteKey=%s \t\n: attributes=%s \t\n: filterSettings=%s \t\n: matchMethod=%s \t\n: mergeLayers=%s \t\n: timeOffset=%s' \
-#                    % (nodes, time, pasteKey, attributes, filterSettings, matchMethod, mergeLayers, timeOffset))
+        log.debug('CopyKey params : \n \
+ \tnodes=%s \t\n:time=%s \t\n: pasteKey=%s \t\n: attributes=%s \t\n: filterSettings=%s \t\n: matchMethod=%s \t\n: mergeLayers=%s \t\n: timeOffset=%s' \
+                    % (nodes, time, pasteKey, attributes, filterSettings, matchMethod, mergeLayers, timeOffset))
 
         # Build up the node pairs to process
         nodeList = r9Core.processMatchedNodes(nodes,
@@ -3199,6 +3208,8 @@ class AnimFunctions(object):
                 with r9General.HIKContext([d for _, d in nodeList]):
                     for src, dest in nodeList:
                         try:
+                            log.debug('copyKeys : %s > %s' % (r9Core.nodeNameStrip(dest),
+                                                                    r9Core.nodeNameStrip(src)))
                             if attributes:
                                 # copy only specific attributes
                                 for attr in attributes:
@@ -3404,12 +3415,12 @@ class AnimFunctions(object):
                     for src, dest in nodeList.MatchedPairs:
                         if re.search(pNode, r9Core.nodeNameStrip(dest)):
                             self.nodesToSnap.append((src, dest))
-                skipAttrs = []  # reset as we need to now copy all attrs
+                skipAttrs = []  # reset as we need to now copy all attrs (mainly for sub nodes that aren't snapped)
             else:
                 self.nodesToSnap = nodeList.MatchedPairs
 
             # smartbake handling - accumulate key data per node
-            if smartbake:
+            if smartbake and time:
                 cutkeys = True
                 if not _smartBakeRef:
                     for node in self.nodesToSnap:
@@ -3493,6 +3504,7 @@ class AnimFunctions(object):
                                             timeEnabled=False,
                                             snapRotates=snapRotates,
                                             snapTranslates=snapTranslates)
+                        log.debug('Snapfrm : %s - %s : to : %s' % (r9Core.nodeNameStrip(src), dest, src))
                     if additionalCalls:
                         for func in additionalCalls:
                             log.debug('Additional Func Called : %s' % func)
@@ -3791,7 +3803,7 @@ class curveModifierContext(object):
     NOTE that this is optimized to run with a floatSlider and used in both interactive
     Randomizer and FilterCurves
     """
-    def __init__(self, initialUndo=False, undoFuncCache=[], undoDepth=1, processBlanks=False, reselectKeys=True):
+    def __init__(self, initialUndo=False, undoFuncCache=[], undoDepth=1, processBlanks=False, reselectKeys=True, manageCache=True):
         '''
         :param initialUndo: on first process whether undo on entry to the context manager
         :param undoFuncCache: functions to catch in the undo stack
@@ -3800,12 +3812,18 @@ class curveModifierContext(object):
             this a match and run the undo. Why, this is because it's bloody hard to get QT to register
             calls to the undo stack and that was blocking some of the ProPack functionality
         :param reselectKeys: if keys were selected on entry we reselect them based on their original timerange
+        :param manageCache: Maya 2019 and above, manage the cache mode, stopping the fill mode from being 'syncAsync',
+            this means that the cache is only filled on exit, if at all
         '''
         self.initialUndo = initialUndo
         self.undoFuncCache = undoFuncCache + ['curveModifierContext']
         self.undoDepth = undoDepth
         self.processBlanks = processBlanks
         self.reselectKeys = reselectKeys
+
+#         self.cacheMode = None
+#         if manageCache and r9Setup.mayaVersion() >= 2019:
+#             self.cacheMode = cmds.cacheEvaluator(query=True, cacheFillMode=True)
 
     def undoCall(self):
         for _ in range(1, self.undoDepth + 1):
@@ -3827,6 +3845,10 @@ class curveModifierContext(object):
             self.undoCall()
         cmds.undoInfo(openChunk=True, chunkName='curveModifierContext')  # enter and create a named chunk
 
+#         # manage the 2019 cache so we're not always filling it up on context drag
+#         if self.cacheMode:
+#             cmds.cacheEvaluator(cacheFillMode='syncOnly')
+
         self.range = None
         self.keysSelected = cmds.keyframe(q=True, n=True, sl=True)
 
@@ -3836,6 +3858,11 @@ class curveModifierContext(object):
     def __exit__(self, exc_type, exc_value, traceback):
         if self.reselectKeys and self.keysSelected and self.range:
             cmds.selectKey(self.keysSelected, t=(self.range[0], self.range[-1]))
+
+#         if self.cacheMode:
+#             cmds.cacheEvaluator(cacheFillMode=self.cacheMode)
+#             print 'Cache Restored'
+
         cmds.undoInfo(closeChunk=True, chunkName='curveModifierContext')
         if exc_type:
             log.exception('%s : %s' % (exc_type, exc_value))

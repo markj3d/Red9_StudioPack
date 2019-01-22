@@ -1568,6 +1568,7 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
     '''
     infoPrint = ""
     matchedData = []
+    unmatched = []
     # print 'MatchMethod : ', matchedData
     # take a copy of B as we modify the data here
     hierarchyB = list(nodeListB)
@@ -1588,46 +1589,64 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix'):
                 indexA = getMirrorID(nodeA)
             if matchMethod == 'metaData':
                 metaDictA = getMetaDict(nodeA)
-            for nodeB in hierarchyB:
-                # strip the path off for the compare
-                # strippedA = nodeNameStrip(nodeA)
-                strippedB = nodeNameStrip(nodeB)
+            matched = False
 
-                # BaseMatch is a direct compare ONLY
-                if matchMethod == 'base':
+            # BaseMatch is a direct compare ONLY
+            # note that for 'stripPrefix' method we now FIRST do a base name
+            # test to match like for like if we can if successfull we don't
+            # progress to the stripPrefix block itself
+            if matchMethod == 'base' or matchMethod == 'stripPrefix':
+                for nodeB in hierarchyB:
+                    strippedB = nodeNameStrip(nodeB)
                     if strippedA.upper() == strippedB.upper():
                         infoPrint += '\nMatch Method : %s : %s == %s' % \
                                 (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
                         matchedData.append((nodeA, nodeB))
                         hierarchyB.remove(nodeB)
+                        matched = True
                         break
 
-                # Compare allowing for prefixing which is stripped off
-                elif matchMethod == 'stripPrefix':
-                    if strippedA.upper().endswith(strippedB.upper()) \
-                        or strippedB.upper().endswith(strippedA.upper()):
-                        infoPrint += '\nMatch Method : %s : %s == %s' % \
-                                (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
-                        matchedData.append((nodeA, nodeB))
-                        hierarchyB.remove(nodeB)
-                        break
+            if not matchMethod == 'base':
+                for nodeB in hierarchyB:
+                    # strip the path off for the compare
+                    # strippedA = nodeNameStrip(nodeA)
+                    strippedB = nodeNameStrip(nodeB)
 
-                # Compare using the nodes internal mirrorIndex if found
-                elif matchMethod == 'mirrorIndex':
-                    if indexA and indexA == getMirrorID(nodeB):
-                        infoPrint += '\nMatch Method : %s : %s == %s' % \
-                                (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
-                        matchedData.append((nodeA, nodeB))
-                        hierarchyB.remove(nodeB)
-                        break
+                    # Compare allowing for prefixing which is stripped off
+                    if matchMethod == 'stripPrefix' and not matched:
+                        if strippedA.upper().endswith(strippedB.upper()) \
+                            or strippedB.upper().endswith(strippedA.upper()):
+                            infoPrint += '\nMatch Method : %s : %s == %s' % \
+                                    (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
+                            matchedData.append((nodeA, nodeB))
+                            hierarchyB.remove(nodeB)
+                            matched = True
+                            break
 
-                elif matchMethod == 'metaData':
-                    if metaDictA and metaDictA == getMetaDict(nodeB):
-                        infoPrint += '\nMatch Method : %s : %s == %s' % \
-                                (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
-                        matchedData.append((nodeA, nodeB))
-                        hierarchyB.remove(nodeB)
-                        break
+                    # Compare using the nodes internal mirrorIndex if found
+                    elif matchMethod == 'mirrorIndex':
+                        if indexA and indexA == getMirrorID(nodeB):
+                            infoPrint += '\nMatch Method : %s : %s == %s' % \
+                                    (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
+                            matchedData.append((nodeA, nodeB))
+                            hierarchyB.remove(nodeB)
+                            matched = True
+                            break
+
+                    elif matchMethod == 'metaData':
+                        if metaDictA and metaDictA == getMetaDict(nodeB):
+                            infoPrint += '\nMatch Method : %s : %s == %s' % \
+                                    (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
+                            matchedData.append((nodeA, nodeB))
+                            hierarchyB.remove(nodeB)
+                            matched = True
+                            break
+            if not matched:
+                unmatched.append(nodeA)
+
+        if unmatched:
+            for node in unmatched:
+                log.warning('\n!! Unresolved Matched Node !! : Match Method : %s : %s' % (matchMethod, node.split('|')[-1]))
 
     log.debug('\nMatched Log : \n%s' % infoPrint)
     infoPrint = None
@@ -2291,13 +2310,13 @@ class TimeOffset(object):
     A class for dealing with time manipulation inside Maya.
 
     >>> offset=100
-    >>> 
+    >>>
     >>> #build a filterSettings object up, in this case we're loading a current one.
     >>> flt=r9Core.FilterNode_Settings()
     >>> flt.read(os.path.join(r9Setup.red9Presets(),'Red9_DevRig.cfg'))
     >>> flt.incRoots=True
     >>> flt.printSettings()
-    >>> 
+    >>>
     >>> r9Core.TimeOffset().fromSelected(offset, filterSettings=flt, flocking=False, randomize=False)
 
     '''
@@ -2310,13 +2329,13 @@ class TimeOffset(object):
         :param timelines: offset the playback timelines
         :param timerange: only offset times within a given timerange
         :param ripple: manage the upper range of data and ripple them with the offset
-        :param startfrm: this turns the offset arg into a new target start frame fopr the animation, 
+        :param startfrm: this turns the offset arg into a new target start frame for the animation,
             calculating the offset for you such that timerange[0] starts at the offset frm value, only works if timerange is passed in
         '''
         if timerange and startfrm:
             offset = offset - timerange[0]
 
-        log.debug('TimeOffset Scene : offset=%s, timelines=%s' % 
+        log.debug('TimeOffset Scene : offset=%s, timelines=%s' %
                   (offset, str(timelines)))
         with r9General.undoContext():
             cls.animCurves(offset, timerange=timerange, ripple=ripple)
@@ -2339,11 +2358,11 @@ class TimeOffset(object):
         :param randomize: whether to add a random factor to each successive nodes offset
         :param timerange: only offset times within a given timerange
         :param ripple: manage the upper range of data and ripple them with the offset
-        :param mRigs: if True then the nodes used be resolved via mRig.getChildren but for all 
+        :param mRigs: if True then the nodes used be resolved via mRig.getChildren but for all
             mRigs wired to the given nodes
-        :param startfrm: this turns the offset arg into a new target start frame fopr the animation, 
+        :param startfrm: this turns the offset arg into a new target start frame for the animation,
             calculating the offset for you such that timerange[0] starts at the offset frm value, only works if timerange is passed in
-        :param filterSettings: this is a FilterSettings_Node object used to pass all 
+        :param filterSettings: this is a FilterSettings_Node object used to pass all
             the filter types into the FilterNode code. Internally the following is true:
 
             | settings.nodeTypes: list[] - search nodes of type
@@ -2356,8 +2375,8 @@ class TimeOffset(object):
             offset = offset - timerange[0]
             log.info('New Offset calculated based on given Start Frm and timerange : %s' % offset)
 
-        log.debug('TimeOffset from Selected : offset=%s, flocking=%i, randomize=%i, timerange=%s, ripple:%s' %
-                  (offset, flocking, randomize, str(timerange), ripple))
+        log.debug('TimeOffset from Selected : offset=%s, flocking=%i, randomize=%i, timerange=%s, ripple:%s, startfrm=%s' %
+                  (offset, flocking, randomize, str(timerange), ripple, startfrm))
 
         if not nodes:
             basenodes = cmds.ls(sl=True, l=True)

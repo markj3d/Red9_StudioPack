@@ -63,6 +63,7 @@ installedVersion = False
   2016 EXT2     .  2016  .  201650  .  2.7      4.8.6  .  2016.5  . 2016-03-02 . 2016 binary incompatible
   2017          .  2017  .  201700  .  2.7      5.6.1  .  2017    . 2016-05-15
   2018          .  2018  .  201800  .  2.7      5.6.1  .  2018    . 2017-06-26
+  2019          .  2019  .  201900  .  2.7      5.6.1  .  2019    . 2019-01-15
 
 ------------------------------------------------------------------------------------------
 '''
@@ -1074,7 +1075,7 @@ def has_pro_pack():
             # new pro_pack call
             # import Red9.pro_pack.r9pro as r9pro
             from Red9.pro_pack import r9pro
-            status = r9pro.checkr9user()
+            status = r9pro.r9pl.checkr9user()
             if status and not issubclass(type(status), str):
                 return True
             else:

@@ -1110,7 +1110,7 @@ class PoseData(DataMap):
 
         self.useFilter = useFilter  # used in the getNodes call
         self.maintainSpaces = maintainSpaces
-        self.mayaUpAxis = r9Setup.mayaUpAxis()
+        # self.mayaUpAxis = r9Setup.mayaUpAxis()  # already at the root level of the DataMap
 
         try:
             self._pre_load()
@@ -1133,8 +1133,10 @@ class PoseData(DataMap):
                     reference = objs[0]
                     self.PosePointCloud = PosePointCloud(self.nodesToLoad)
                     self.PosePointCloud.buildOffsetCloud(reference, raw=True)
-                    resetCache = [cmds.getAttr('%s.translate' % self.PosePointCloud.posePointRoot),
-                                cmds.getAttr('%s.rotate' % self.PosePointCloud.posePointRoot)]
+#                     resetCache = [cmds.getAttr('%s.translate' % self.PosePointCloud.posePointRoot),
+#                                 cmds.getAttr('%s.rotate' % self.PosePointCloud.posePointRoot)]
+                    pptRoot = r9Meta.MetaClass(self.PosePointCloud.posePointRoot)
+                    resetCache = [pptRoot.translate, pptRoot.rotate]
 
                     if self.maintainSpaces:
                         if self.metaRig:
@@ -1152,37 +1154,35 @@ class PoseData(DataMap):
 
                     if self.relativeRots == 'projected':
                         if self.mayaUpAxis == 'y':
-                            cmds.setAttr('%s.rx' % self.PosePointCloud.posePointRoot, 0)
-                            cmds.setAttr('%s.rz' % self.PosePointCloud.posePointRoot, 0)
-                        elif self.mayaUpAxis == 'z':  # fucking Z!!!!!!
-                            cmds.setAttr('%s.rx' % self.PosePointCloud.posePointRoot, 0)
-                            cmds.setAttr('%s.ry' % self.PosePointCloud.posePointRoot, 0)
+                            pptRoot.rx = 0
+                            pptRoot.rz = 0
+                        elif self.mayaUpAxis == 'z':
+                            pptRoot.rx = 0
+                            pptRoot.ry = 0
 
+                    # push data to the cloud
+                    # ======================
                     self.PosePointCloud.snapPosePntstoNodes()
 
+                    # absolute relative
                     if not self.relativeTrans == 'projected':
-                        cmds.setAttr('%s.translate' % self.PosePointCloud.posePointRoot,
-                                     resetCache[0][0][0],
-                                     resetCache[0][0][1],
-                                     resetCache[0][0][2])
+                        pptRoot.translate = resetCache[0]
                     if not self.relativeRots == 'projected':
-                        cmds.setAttr('%s.rotate' % self.PosePointCloud.posePointRoot,
-                                     resetCache[1][0][0],
-                                     resetCache[1][0][1],
-                                     resetCache[1][0][2])
+                        pptRoot.rotate = resetCache[1]
 
+                    # projected relative
                     if self.relativeRots == 'projected':
                         if self.mayaUpAxis == 'y':
-                            cmds.setAttr('%s.ry' % self.PosePointCloud.posePointRoot, resetCache[1][0][1])
+                            pptRoot.ry = resetCache[1][1]
                         elif self.mayaUpAxis == 'z':  # fucking Z!!!!!!
-                            cmds.setAttr('%s.rz' % self.PosePointCloud.posePointRoot, resetCache[1][0][2])
+                            pptRoot.rz = resetCache[1][2]
                     if self.relativeTrans == 'projected':
                         if self.mayaUpAxis == 'y':
-                            cmds.setAttr('%s.tx' % self.PosePointCloud.posePointRoot, resetCache[0][0][0])
-                            cmds.setAttr('%s.tz' % self.PosePointCloud.posePointRoot, resetCache[0][0][2])
+                            pptRoot.tx = resetCache[0][0]
+                            pptRoot.tz = resetCache[0][2]
                         elif self.mayaUpAxis == 'z':  # fucking Z!!!!!!
-                            cmds.setAttr('%s.tx' % self.PosePointCloud.posePointRoot, resetCache[0][0][0])
-                            cmds.setAttr('%s.ty' % self.PosePointCloud.posePointRoot, resetCache[0][0][1])
+                            pptRoot.tx = resetCache[0][0]
+                            pptRoot.ty = resetCache[0][1]
 
                     # if maintainSpaces then restore the original parentSwitch attr values
                     # BEFORE pushing the point cloud data back to the rig
@@ -1191,6 +1191,8 @@ class PoseData(DataMap):
                             log.debug('Resetting parentSwitches : %s.%s = %f' % (r9Core.nodeNameStrip(child), attr, value))
                             cmds.setAttr('%s.%s' % (child, attr), value)
 
+                    # pull data back from the cloud
+                    # =============================
                     self.PosePointCloud.snapNodestoPosePnts()
                     self.PosePointCloud.delete()
                     cmds.select(reference)
@@ -1512,10 +1514,17 @@ class PosePointCloud(object):
 
             # reset the PPTCloudRoot to projected ground plane
             if projectedRots:
-                cmds.setAttr('%s.rx' % self.posePointRoot, 0)
-                cmds.setAttr('%s.rz' % self.posePointRoot, 0)
+                if self.mayaUpAxis == 'y':
+                    cmds.setAttr('%s.rx' % self.posePointRoot, 0)
+                    cmds.setAttr('%s.rz' % self.posePointRoot, 0)
+                elif self.mayaUpAxis == 'z':  # maya Z up
+                    cmds.setAttr('%s.rx' % self.posePointRoot, 0)
+                    cmds.setAttr('%s.ry' % self.posePointRoot, 0)
             if projectedTrans:
-                cmds.setAttr('%s.ty' % self.posePointRoot, 0)
+                if self.mayaUpAxis == 'y':
+                    cmds.setAttr('%s.ty' % self.posePointRoot, 0)
+                elif self.mayaUpAxis == 'z':  # maya Z up
+                    cmds.setAttr('%s.tz' % self.posePointRoot, 0)
 
         for node in self.inputNodes:
             pnt = cmds.spaceLocator(name='pp_%s' % r9Core.nodeNameStrip(node))[0]
