@@ -174,7 +174,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 </table>
 <dl class="data">
 <dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS">
-<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000B339630&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BEBF208&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BEBF208&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BEBF208&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BEBF208&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BEBF208&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BEBF208&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BEBF208&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BEBF208&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BEBF208&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.</p>
@@ -644,7 +644,7 @@ to add in specific matching calls to a SnapTransforms run whilst having the time
 <li><strong>cutkeys</strong> &#8211; when passing time do we clear current keys first, needed ideally if we&#8217;re running with a step greater than 1</li>
 <li><strong>smartbake</strong> &#8211; if True we ignore the step and find all current keyTimes on the nodes about to be processed, these key times
 are then respected during the process</li>
-<li><strong>smartBakeRef</strong> &#8211; smartBake=True if given, used as reference nodes to extract keytimes from, else we look at all nodes about to be
+<li><strong>smartBakeRef</strong> &#8211; smartbake=True if given, used as reference nodes to extract keytimes from, else we look at all nodes about to be
 processed which isn&#8217;t always what we want. If we still find no keytimes we revert to base range times with step given</li>
 </ul>
 </td>
@@ -790,7 +790,7 @@ this out from the time ranges given</li>
 
 <dl class="class">
 <dt id="Red9.core.Red9_AnimationUtils.curveModifierContext">
-<em class="property">class </em><code class="descname">curveModifierContext</code><span class="sig-paren">(</span><em>initialUndo=False</em>, <em>undoFuncCache=[]</em>, <em>undoDepth=1</em>, <em>processBlanks=False</em>, <em>reselectKeys=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.curveModifierContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">curveModifierContext</code><span class="sig-paren">(</span><em>initialUndo=False</em>, <em>undoFuncCache=[]</em>, <em>undoDepth=1</em>, <em>processBlanks=False</em>, <em>reselectKeys=True</em>, <em>manageCache=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.curveModifierContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Simple Context Manager to allow modifications to animCurves in the
 graphEditor interactively by simply managing the undo stack and making
@@ -809,6 +809,8 @@ Randomizer and FilterCurves</p>
 this a match and run the undo. Why, this is because it&#8217;s bloody hard to get QT to register
 calls to the undo stack and that was blocking some of the ProPack functionality</li>
 <li><strong>reselectKeys</strong> &#8211; if keys were selected on entry we reselect them based on their original timerange</li>
+<li><strong>manageCache</strong> &#8211; Maya 2019 and above, manage the cache mode, stopping the fill mode from being &#8216;syncAsync&#8217;,
+this means that the cache is only filled on exit, if at all</li>
 </ul>
 </td>
 </tr>

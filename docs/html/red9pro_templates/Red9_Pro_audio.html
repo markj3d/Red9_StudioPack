@@ -109,7 +109,7 @@ requires the StudioPack codebase to run</p>
 <td>a class designed to extract Timecode from a BWav&#8217;s header data and</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.audio.AudioGRP_Manager" title="Red9.pro_pack.core.audio.AudioGRP_Manager"><code class="xref py py-obj docutils literal"><span class="pre">AudioGRP_Manager</span></code></a>([parent])</td>
-<td>simple UI to edit a given ExportLoop tag</td>
+<td>simple UI to connect Audio Group data</td>
 </tr>
 </tbody>
 </table>
@@ -406,7 +406,7 @@ being from the master rig from which all others will be synced</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000025AF6048&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000138CA388&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -500,15 +500,15 @@ sample-rate set when the counter attr was generated</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.audio.Timecode.getTimecode_bounds">
 <code class="descname">getTimecode_bounds</code><span class="sig-paren">(</span><em>tol=2</em>, <em>tc_only=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.getTimecode_bounds" title="Permalink to this definition">¶</a></dt>
-<dd><p>from node bound to the class find all timecode bounds and return as a list of tuples. 
-This is designed to handle discontinuous timecode, ie a scene with multiple cuts that 
+<dd><p>from node bound to the class find all timecode bounds and return as a list of tuples.
+This is designed to handle discontinuous timecode, ie a scene with multiple cuts that
 have multiple timecode slices.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>tol</strong> &#8211; key gradient thats allowed, usually count attr is a linear counter of val 1 but 
+<li><strong>tol</strong> &#8211; key gradient thats allowed, usually count attr is a linear counter of val 1 but
 default for this is 2 to give us a margin of error</li>
 <li><strong>tc_only</strong> &#8211; if True we only return the found bounds as timecode data [(startTC, endTC)....]
 else the return includes the frame times [(startFrm, endFrm, startTC, endTC)]</li>
@@ -567,7 +567,7 @@ of the visual timecode on the timeslider in Maya</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.audio.Timecode.addTimecode_to_node">
-<code class="descname">addTimecode_to_node</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em>, <em>suppress=False</em>, <em>timerange=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.addTimecode_to_node" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addTimecode_to_node</code><span class="sig-paren">(</span><em>tc=''</em>, <em>propagate=False</em>, <em>suppress=False</em>, <em>timerange=[]</em>, <em>set_from_currentTime=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.addTimecode_to_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>wrapper to add the timecode attrs to a node and if set
 propagate that data to the node and fill the attrs up</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -579,6 +579,10 @@ propagate that data to the node and fill the attrs up</p>
 <li><strong>propagate</strong> &#8211; push the timecode given onto the node and bake the count attr against the current fps</li>
 <li><strong>suppress</strong> &#8211; confirmDialog warnings supression</li>
 <li><strong>timerange</strong> &#8211; If propagate then this is an optional timerange over which to set the data</li>
+<li><strong>set_from_currentTime</strong> &#8211; if True we use the currentTime / currentFrame in the initial calculations
+else we use the startTime, either given (timerange[0]) or the current timeslider start. If you&#8217;re
+setting multiple bounds of timecode with this it&#8217;s expecting you to be at the startFrame,
+setting this to False will do this for you.</li>
 </ul>
 </td>
 </tr>
@@ -766,7 +770,7 @@ There is coverage for this in this module getMediaFileMetaData() does just that<
 <dt id="Red9.pro_pack.core.audio.AudioGRP_Manager">
 <em class="property">class </em><code class="descname">AudioGRP_Manager</code><span class="sig-paren">(</span><em>parent=None</em>, <em>*args</em>, <em>**kwgs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
-<p>simple UI to edit a given ExportLoop tag</p>
+<p>simple UI to connect Audio Group data</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.AudioGRP_Manager.selected_expTag">
 <code class="descname">selected_expTag</code><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.selected_expTag" title="Permalink to this definition">¶</a></dt>
@@ -787,7 +791,7 @@ There is coverage for this in this module getMediaFileMetaData() does just that<
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000025F81848&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000138C7A88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

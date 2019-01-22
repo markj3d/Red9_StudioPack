@@ -162,7 +162,7 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.Fbx.exportFbx">
-<code class="descname">exportFbx</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>selection=False</em>, <em>preset=None</em>, <em>bakeanim=False</em>, <em>timeranges=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.exportFbx" title="Permalink to this definition">¶</a></dt>
+<code class="descname">exportFbx</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>selection=False</em>, <em>preset=None</em>, <em>bakeanim=False</em>, <em>geoflags=False</em>, <em>timeranges=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.exportFbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>export selected data to fbx</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -172,7 +172,7 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 <li><strong>fileName</strong> &#8211; fbx file to export too</li>
 <li><strong>selection</strong> &#8211; bool, export the selected nodes or the scene</li>
 <li><strong>preset</strong> &#8211; if given use this preset rather than the internal preset of Red9</li>
-<li><strong>bakeanim</strong> &#8211; envoke the fbx bakeAnimation calls</li>
+<li><strong>bakeanim</strong> &#8211; envoke the fbx bakeAnimation calls, designed for the export of skeleton data mainly, not SRC data</li>
 <li><strong>timeranges</strong> &#8211; (start,end) set the timeranges specifically OR as per the current timeranges</li>
 </ul>
 </td>
@@ -221,6 +221,13 @@ scene their anim data will be updated</p>
 <dd><p>get take info from the fbx data internals</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.importexport.manage_p4_exception_level">
+<code class="descname">manage_p4_exception_level</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.manage_p4_exception_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>DECORATOR : forces the P4 exception level to 3 so that errors are raised,
+enabling the code to catch and deal with them!</p>
 </dd></dl>
 
 <dl class="class">
@@ -310,7 +317,7 @@ this fills in  the PROJECT_DATA._p4_params cache</p>
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.connection_map">
 <em class="property">classmethod </em><code class="descname">connection_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.connection_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>get a dict of available perforce server connections, this uses the .p4qt/connectionmap.xml data
-to find all recent connections</p>
+to find all recent connections, similar to the recent connection list shown in the Perforce Helix clientUI</p>
 <p>TODO: verify and check this under LINUX</p>
 </dd></dl>
 
@@ -345,7 +352,7 @@ The exception level of the P4 instance.</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.username">
-<code class="descname">username</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.username" title="Permalink to this definition">¶</a></dt>
+<code class="descname">username</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.username" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the current &#8220;userName&#8221; from P4 info keys</p>
 </dd></dl>
 
@@ -395,7 +402,7 @@ The exception level of the P4 instance.</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.clients">
-<code class="descname">clients</code><span class="sig-paren">(</span><em>full=False</em>, <em>user=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.clients" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clients</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.clients" title="Permalink to this definition">¶</a></dt>
 <dd><p>return all available clients for the given user, or current user if not given</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -445,7 +452,7 @@ the file in your workspace but you may have deleted it locally</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.fstat_dir">
-<code class="descname">fstat_dir</code><span class="sig-paren">(</span><em>filetype=None</em>, <em>recursive=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.fstat_dir" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fstat_dir</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.fstat_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>where the path bound in the object is just that, a depot folder path
 rather than a file pointer.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -525,7 +532,7 @@ have deleted the local file. This validates both cases.</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.sync">
-<code class="descname">sync</code><span class="sig-paren">(</span><em>force=False</em>, <em>exists=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.sync" title="Permalink to this definition">¶</a></dt>
+<code class="descname">sync</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.sync" title="Permalink to this definition">¶</a></dt>
 <dd><p>sync the file to headRevision of this fileobject</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -539,11 +546,16 @@ have deleted the local file. This validates both cases.</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">if exception_level=0 the except handler will not get called
+and therefore things don&#8217;t act as expected</p>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.checkout">
-<code class="descname">checkout</code><span class="sig-paren">(</span><em>changelist=None</em>, <em>force=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.checkout" title="Permalink to this definition">¶</a></dt>
+<code class="descname">checkout</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.checkout" title="Permalink to this definition">¶</a></dt>
 <dd><p>checkout the fileobject in P4</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -568,7 +580,7 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.revert">
-<code class="descname">revert</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.revert" title="Permalink to this definition">¶</a></dt>
+<code class="descname">revert</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.revert" title="Permalink to this definition">¶</a></dt>
 <dd><p>revert this fileobject</p>
 </dd></dl>
 
@@ -622,7 +634,7 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.add">
-<code class="descname">add</code><span class="sig-paren">(</span><em>changelist=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.add" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>add this fileobject into Perforce</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -636,7 +648,7 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.delete">
-<code class="descname">delete</code><span class="sig-paren">(</span><em>changelist=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.delete" title="Permalink to this definition">¶</a></dt>
+<code class="descname">delete</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>mark the fileobject for delete from P4</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

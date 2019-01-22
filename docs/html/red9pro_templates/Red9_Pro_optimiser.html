@@ -677,7 +677,8 @@ individual tests</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.maya_timeUnits_fix">
 <code class="descname">maya_timeUnits_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.maya_timeUnits_fix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>TODO: this should adjust the exportLoop timings also</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.maya_sceneUnits_test">
@@ -729,8 +730,16 @@ individual tests</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.maya_version_required_test">
 <code class="descname">maya_version_required_test</code><span class="sig-paren">(</span><em>expected=2016.0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.maya_version_required_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Maya Target Version: make sure that the target version of Maya 
-matches the given, this is a float so 2015.0, 2016.0, 2016.5. 
+<dd><p>Maya Target Version: make sure that the target version of Maya
+matches the given, this is a float so 2015.0, 2016.0, 2016.5.
+Uses the r9Setup.mayaVersion() call to get the data</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.maya_version_lowest_base_test">
+<code class="descname">maya_version_lowest_base_test</code><span class="sig-paren">(</span><em>expected=2016.0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.maya_version_lowest_base_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maya Target Lowest Base: make sure that the target version of Maya
+is equal, or above the given, this is a float so 2015.0, 2016.0, 2016.5.
 Uses the r9Setup.mayaVersion() call to get the data</p>
 </dd></dl>
 
@@ -1079,7 +1088,32 @@ bound to it internally</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_filterssettings_fix">
 <code class="descname">mRigs_filterssettings_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_filterssettings_fix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bind the given fiklterSettings preset config file internally to the mRig</p>
+<dd><p>Bind the given filterSettings preset config file internally to the mRig</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.exportLoopNode_framerate_test">
+<code class="descname">exportLoopNode_framerate_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>loops=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.exportLoopNode_framerate_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic ExportLoopNode check to make sure that framerate changes are
+reflected in the export ranges</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expected</strong> &#8211; this gets filled by the currentFramerate</li>
+<li><strong>loops</strong> &#8211; given exportLoops to test, if None then we find all instances of ExportLoopNodes in the scene</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.exportLoopNode_framerate_fix">
+<code class="descname">exportLoopNode_framerate_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.exportLoopNode_framerate_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bind the given filterSettings preset config file internally to the mRig</p>
 </dd></dl>
 
 <dl class="function">
@@ -1228,7 +1262,7 @@ results_failed={shortname:(longname1, longname2, ...)}</p>
 <li>jnt.overrideDisplayType = 0</li>
 <li>jnt.drawStyle = 0</li>
 </ul>
-<p>if any of the folowing settings aren&#8217;t met the jnt fails. This is to return the entire
+<p>if any of the following settings aren&#8217;t met the jnt fails. This is to return the entire
 skeleton back to default draw states prior to the Red9 Puppet build
 as that needs full control over these over-rides during the build process</p>
 <p>Running the fix method will reset the attrs back to default</p>
@@ -1272,6 +1306,32 @@ prior to testing and save the pose to the filepath rather than running the actua
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_bindPose_test">
+<code class="descname">skeleton_bindPose_test</code><span class="sig-paren">(</span><em>expected=1</em>, <em>skeleton_roots=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_bindPose_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if we have multiple bindPoses in the scene, if they all relate to the same skeleton hierarchy
+we fail the test. Conversely if we have multiple skeletons in the scene we also bail the test</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expected</strong> &#8211; max number of bindPoses any skeleton root can have, default = 1</li>
+<li><strong>skeleton_roots</strong> &#8211; if given we only test the given skeletons hierarchy for bindPoses, else we find
+all bindPose nodes and all associated skeleton hierarchies, and test them all for multiple bindPoses</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_bindPose_fix">
+<code class="descname">skeleton_bindPose_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_bindPose_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>if the test failed this deletes all current bindPoses on the failed skeleton roots then creates a single new one</p>
 </dd></dl>
 
 <dl class="function">
@@ -1590,7 +1650,9 @@ the failed namespaces into the root &#8221;:&#8221; space before removing the th
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.unknownPlugins_test">
 <code class="descname">unknownPlugins_test</code><span class="sig-paren">(</span><em>expected=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.unknownPlugins_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>test to find unKnown/dead plug-in nodes in the scene and remove them</p>
+<dd><p>test to find unknown/dead plug-in nodes in the scene and remove them
+These are nodes from other plug-ins</p>
+<p>good reference: <a class="reference external" href="https://mayastation.typepad.com/maya-station/2015/04/how-to-prevent-maya-writing-a-requires-command-for-a-plug-in.html">https://mayastation.typepad.com/maya-station/2015/04/how-to-prevent-maya-writing-a-requires-command-for-a-plug-in.html</a></p>
 </dd></dl>
 
 <dl class="function">
@@ -1629,7 +1691,9 @@ the failed namespaces into the root &#8221;:&#8221; space before removing the th
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.turtle_nodes_delete">
 <code class="descname">turtle_nodes_delete</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.turtle_nodes_delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove Turtle nodes from the scene</p>
+<dd><p>Remove Turtle nodes from the scene, note that from Maya 2017 we have a
+specific call in the ilrUserInterface.mel for this that doens&#8217;t cause a
+user prompt so we&#8217;re hooking to that</p>
 </dd></dl>
 
 <dl class="function">

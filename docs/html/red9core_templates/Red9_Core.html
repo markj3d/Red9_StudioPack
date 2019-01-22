@@ -223,7 +223,7 @@ it back to it&#8217;s original state so we pass it through this</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.validateString">
-<code class="descname">validateString</code><span class="sig-paren">(</span><em>strText, fix=False, illegals=['-', '#', '!', ' ']</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.validateString" title="Permalink to this definition">¶</a></dt>
+<code class="descname">validateString</code><span class="sig-paren">(</span><em>strText, fix=False, illegals=['-', '#', '!', ' ', '&#64;']</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.validateString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to validate that a string has no illegal characters</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -232,7 +232,7 @@ it back to it&#8217;s original state so we pass it through this</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>strText</strong> &#8211; text to validate</li>
 <li><strong>fix</strong> &#8211; if True then we replace illegals with &#8216;_&#8217;</li>
-<li><strong>illegals</strong> &#8211; now allow you to pass in what you consider illegals, default=[&#8216;-&#8216;, &#8216;#&#8217;, &#8216;!&#8217;, &#8216; &#8216;]</li>
+<li><strong>illegals</strong> &#8211; now allow you to pass in what you consider illegals, default=[&#8216;-&#8216;, &#8216;#&#8217;, &#8216;!&#8217;, &#8216; &#8216;, &#8216;&#64;&#8217;]</li>
 </ul>
 </td>
 </tr>
@@ -577,7 +577,7 @@ clamp that and prevent mesh transforms being returned? Is this even reasonable??
 
 <dl class="staticmethod">
 <dt id="Red9.core.Red9_CoreUtils.FilterNode.lsAnimCurves">
-<em class="property">static </em><code class="descname">lsAnimCurves</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>safe=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode.lsAnimCurves" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">lsAnimCurves</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>safe=False</em>, <em>allow_ref=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode.lsAnimCurves" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for animationCurves. If no nodes are passed in to process then this
 is a simple one liner, BUT if you pass in a selection of nodes to process
 then it&#8217;s a lot harder. This code has to traverse the history and connection
@@ -593,6 +593,7 @@ eg: setDrivens etc will need post filtering from the returns in many cases</p>
 <li><strong>nodes</strong> &#8211; optional given node list, return animData in the nodes history</li>
 <li><strong>safe</strong> &#8211; optional &#8216;bool&#8217;, only return animCurves which are safe to modify, this
 will strip out SetDrivens, Clips curves etc..</li>
+<li><strong>allow_ref</strong> &#8211; if False and &#8220;safe&#8221; we remove all references animCurves, else we leave them in the return</li>
 </ul>
 </td>
 </tr>
@@ -797,13 +798,13 @@ return and in what format if we have multiple blendShapes on the node?</p>
 <li><strong>nodeListB</strong> &#8211; list of nodes</li>
 <li><strong>matchMethod</strong> &#8211; <p>default &#8216;stripPrefix&#8217;</p>
 <div class="line-block">
-<div class="line">* matchMethod=&#8221;index&#8221; : no intelligent matching, just purely zip the lists 
-together in the order they were given  </div>
-<div class="line">* matchMethod=&#8221;indexReversed&#8221; : no intelligent matching, just purely zip 
-the lists together in the reverse order they were given  </div>
-<div class="line">* matchMethod=&#8221;base&#8221; :  match each element by exact name (shortName) such 
-that Spine==Spine or REF1:Spine==REF2:Spine  </div>
-<div class="line">* matchMethod=&#8221;stripPrefix&#8221; : match each element by a relaxed naming convention 
+<div class="line">* matchMethod=&#8221;index&#8221; : no intelligent matching, just purely zip the lists
+together in the order they were given</div>
+<div class="line">* matchMethod=&#8221;indexReversed&#8221; : no intelligent matching, just purely zip
+the lists together in the reverse order they were given</div>
+<div class="line">* matchMethod=&#8221;base&#8221; :  match each element by exact name (shortName) such
+that Spine==Spine or REF1:Spine==REF2:Spine</div>
+<div class="line">* matchMethod=&#8221;stripPrefix&#8221; : match each element by a relaxed naming convention
 allowing for prefixes one side such that RigX_Spine == Spine</div>
 <div class="line">* matchMethod=&#8221;mirrorIndex&#8221; : match via the nodes MirrorMarker</div>
 <div class="line">* matchMethod=&#8221;metaData&#8221; : match the nodes based on their wiring connections to the MetaData framework</div>
@@ -861,8 +862,8 @@ functions that work on carefully managed matched pairs of nodes.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>nodes</strong> &#8211; root nodes to start the filtering process from</li>
 <li><strong>matchMethod</strong> &#8211; Method of matching each nodePair based on nodeName</li>
-<li><strong>filterSettings</strong> &#8211; <p>This is a FilterSettings_Node object used to pass all 
-the filter types into the FilterNode code within. Internally the following 
+<li><strong>filterSettings</strong> &#8211; <p>This is a FilterSettings_Node object used to pass all
+the filter types into the FilterNode code within. Internally the following
 is true:</p>
 <div class="line-block">
 <div class="line">settings.nodeTypes: list[] - search nodes of type</div>
@@ -1174,7 +1175,7 @@ if ripple=False we only shift clips that starts in tghe bounds of the timerange<
 <dl class="staticmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.metaNodes">
 <em class="property">static </em><code class="descname">metaNodes</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.metaNodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Offset special handling for MetaNodes. Inspect the metaNode and see if 
+<dd><p>Offset special handling for MetaNodes. Inspect the metaNode and see if
 the &#8216;timeOffset&#8217; method has been implemented and if so, call it.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -1188,7 +1189,7 @@ to handle in it&#8217;s internal implementation</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>offset</strong> &#8211; amount to offset the sounds nodes by</li>
 <li><strong>timerange</strong> &#8211; optional timerange to process (outer bounds only)</li>
-<li><strong>ripple</strong> &#8211; when shifting nodes ripple the offset to clips after the range, 
+<li><strong>ripple</strong> &#8211; when shifting nodes ripple the offset to clips after the range,
 if ripple=False we only shift clips that starts in tghe bounds of the timerange</li>
 </ul>
 </td>
@@ -1271,7 +1272,7 @@ for the API to use when loading linear data</p>
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.convertUnits_uiToInternal">
 <code class="descname">convertUnits_uiToInternal</code><span class="sig-paren">(</span><em>value</em>, <em>unit</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.convertUnits_uiToInternal" title="Permalink to this definition">¶</a></dt>
-<dd><p>convert units from Maya&#8217;s internal / base &#8216;cm&#8217; 
+<dd><p>convert units from Maya&#8217;s internal / base &#8216;cm&#8217;
 to a given unit, multiplying up to suit</p>
 </dd></dl>
 

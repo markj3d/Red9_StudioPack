@@ -86,8 +86,8 @@ requires the StudioPack codebase to run</p>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.animation.Anim_Transfer" title="Red9.pro_pack.core.animation.Anim_Transfer"><code class="xref py py-obj docutils literal"><span class="pre">Anim_Transfer</span></code></a>([mrig])</td>
 <td>main animation transfer class for bouncing data to and from fbx to the Red9 Rig</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.animation.LimbMatchingUI" title="Red9.pro_pack.core.animation.LimbMatchingUI"><code class="xref py py-obj docutils literal"><span class="pre">LimbMatchingUI</span></code></a>([parent])</td>
-<td>Basic UI for the FK/IK matching used by metaData</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">LimbMatchingUI</span></code></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -273,8 +273,8 @@ parallel evaluation &amp; playback</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.animation.animMap_validate_preload">
 <code class="descname">animMap_validate_preload</code><span class="sig-paren">(</span><em>mrig</em>, <em>filepath=None</em>, <em>infoDict=None</em>, <em>match='exact'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.animMap_validate_preload" title="Permalink to this definition">¶</a></dt>
-<dd><p>generic call that raises a user prompt, used by the Animation_Load UI to validate the internal 
-AnimMap mRig type about to be loaded matches the given mRig class, if there&#8217;s a mismatch then 
+<dd><p>generic call that raises a user prompt, used by the Animation_Load UI to validate the internal
+AnimMap mRig type about to be loaded matches the given mRig class, if there&#8217;s a mismatch then
 raise a confirmDialog for the user to choose whether to abort of not.</p>
 <p>this is a separate function so it can be used by multiple UI&#8217;s and not have to run through
 the AnimMap base code, verify before we hit the load calls ;)</p>
@@ -314,6 +314,17 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="Red9.pro_pack.core.animation.AnimationStore_PreLoad">
+<em class="property">class </em><code class="descname">AnimationStore_PreLoad</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore_PreLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001397A9C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="Red9.pro_pack.core.animation.AnimationStore">
 <em class="property">class </em><code class="descname">AnimationStore</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
@@ -331,7 +342,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013290D08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001397AEC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -468,7 +479,7 @@ It will however temporarily flatten animCurves to capture the collapsed effect o
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimMap.loadAnim">
 <code class="descname">loadAnim</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.loadAnim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load a given r9Anim file, this is the same system as the r9Pose file system, 
+<dd><p>Load a given r9Anim file, this is the same system as the r9Pose file system,
 all the base handling comes from the r9Pose.DataMap base class</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -477,17 +488,19 @@ all the base handling comes from the r9Pose.DataMap base class</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; if given load the data to only these. If given and filter=True this is the rootNode for the filter.</li>
 <li><strong>filepath</strong> &#8211; file to load - if not given the pose is loaded from a cached instance on this class.</li>
-<li><strong>useFilter</strong> &#8211; If the pose has an active Filter_Settings block and this is True then 
+<li><strong>useFilter</strong> &#8211; If the pose has an active Filter_Settings block and this is True then
 use the filter on the destination hierarchy.</li>
 <li><strong>loadAsStored</strong> &#8211; load the anim data from the original time</li>
-<li><strong>loadFromFrm</strong> &#8211; if not loadAsStored, load the animation data from a given frame by comparing the 
+<li><strong>loadFromFrm</strong> &#8211; if not loadAsStored, load the animation data from a given frame by comparing the
 internal startFrm stored in the animMap with the given frame</li>
-<li><strong>loadFromTimecode</strong> &#8211; load against a given SMPTE timecode / frm binding, calculating the offset of 
-the data to load against a given timecode reference. IF timecodeBinding isn&#8217;t set then we gather the reference timecode from 
+<li><strong>loadFromTimecode</strong> &#8211; load against a given SMPTE timecode / frm binding, calculating the offset of
+the data to load against a given timecode reference. IF timecodeBinding isn&#8217;t set then we gather the reference timecode from
 the mRig&#8217;s internal data, else we use the timecode binding supplied</li>
-<li><strong>timecodeBinding</strong> &#8211; (frm, str(&#8216;00:00:00:00&#8217;))  Tuple where the first arg is the frame at which the second arg&#8217;s SMPTE timecode 
+<li><strong>timecodeBinding</strong> &#8211; (frm, str(&#8216;00:00:00:00&#8217;))  Tuple where the first arg is the frame at which the second arg&#8217;s SMPTE timecode
 has been set as reference, basically we&#8217;re saying that the timecode at frm is x</li>
 <li><strong>referenceNode</strong> &#8211; reference node used as the offset Node for relative loading</li>
+<li><strong>relativeRots</strong> &#8211; &#8216;projected&#8217; or &#8216;absolute&#8217; - how to calculate the offset, default=&#8217;projected&#8217;</li>
+<li><strong>relativeTrans</strong> &#8211; &#8216;projected&#8217; or &#8216;absolute&#8217; - how to calculate the offset, default=&#8217;projected&#8217;</li>
 <li><strong>manageRanges</strong> &#8211; do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded</li>
 <li><strong>manageFileName</strong> &#8211; if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
 then we take the r9Anim&#8217;s filename and rename the Maya scene accordingly</li>
@@ -498,6 +511,7 @@ attrs that are stored internally as a pose are keyed.</li>
 time=startFarme-blendRange to hold the current data before we load the new keys. Note that this also turns on the keyStatics
 to ensure the data is preserved</li>
 <li><strong>merge</strong> &#8211; if True we allow the data to be merged over any current keys, else we cut all keys in the load range first</li>
+<li><strong>smartbake</strong> &#8211; only valid if we&#8217;re loading with a referenceNode, this tries to respect current keys when doing the processing rather than frame baking</li>
 </ul>
 </td>
 </tr>
@@ -509,7 +523,7 @@ to ensure the data is preserved</li>
 <dt id="Red9.pro_pack.core.animation.AnimMap.extractData_Export">
 <code class="descname">extractData_Export</code><span class="sig-paren">(</span><em>manageExport='byAll'</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.extractData_Export" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the key IDs for the exportLoops found in the r9Anim file, this
-passes through the manageExport code to match loop timings with the 
+passes through the manageExport code to match loop timings with the
 r9Anim offset/start and end ranges</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -530,7 +544,7 @@ if given a list then we use that as a search for specific ExportLoops in the dat
 internal startFrame and endFrame ranges have been set to process against</p>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># to simply read the data and get access to it prior to any processing</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span> <span class="o">=</span> <span class="n">AnimMap</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span> <span class="o">=</span> <span class="n">AnimMap</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span><span class="o">.</span><span class="n">r9anim</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">_readPose</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">amap</span><span class="o">.</span><span class="n">infoDict</span><span class="p">[</span><span class="s1">&#39;exporter&#39;</span><span class="p">]</span>
@@ -542,8 +556,8 @@ internal startFrame and endFrame ranges have been set to process against</p>
 <dt id="Red9.pro_pack.core.animation.AnimMap.extractData_Audio">
 <code class="descname">extractData_Audio</code><span class="sig-paren">(</span><em>manageAudio='byAll'</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.extractData_Audio" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the key IDs for the AudioNodes found in the r9Anim file, this
-passes through the manageExport code to match loop timings with the 
-r9Anim offset/start and end ranges. Inorder for the audio to get into the r9Anim
+passes through the manageExport code to match loop timings with the
+r9Anim offset/start and end ranges. In-order for the audio to get into the r9Anim
 it MUST be connected to an mRig via the AudioGrp node, all managed in the Exporter</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -564,12 +578,18 @@ if given a list then we use that as a search for specific ExportLoops in the dat
 internal startFrame and endFrame ranges have been set to process against.</p>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># to simply read the data and get access to it prior to any processing</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span> <span class="o">=</span> <span class="n">AnimMap</span><span class="p">()</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span> <span class="o">=</span> <span class="n">AnimMap</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span><span class="o">.</span><span class="n">r9anim</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">_readPose</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">amap</span><span class="o">.</span><span class="n">infoDict</span><span class="p">[</span><span class="s1">&#39;audioGrp&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimMap.extractData_ImagePlanes">
+<code class="descname">extractData_ImagePlanes</code><span class="sig-paren">(</span><em>manageImagePlanes='byAll'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.extractData_ImagePlanes" title="Permalink to this definition">¶</a></dt>
+<dd><p>extra the imagePlane data if found, this is only relevant for FacialUI sub-classes</p>
 </dd></dl>
 
 </dd></dl>
@@ -580,7 +600,7 @@ internal startFrame and endFrame ranges have been set to process against.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001335ABC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000136B5B48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -663,7 +683,8 @@ component mode to edit the path cv&#8217;s directly</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimPointCloud.loadClusterPose">
 <code class="descname">loadClusterPose</code><span class="sig-paren">(</span><em>percent=100</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.loadClusterPose" title="Permalink to this definition">¶</a></dt>
-<dd><p>load a stored cluster control pose</p>
+<dd><p>load a stored cluster control pose, only valid if we&#8217;ve built the
+cluster control setup</p>
 </dd></dl>
 
 <dl class="method">
@@ -685,7 +706,7 @@ component mode to edit the path cv&#8217;s directly</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mode</strong> &#8211; &#8216;flat&#8217; &#8216;start&#8217; &#8216;end&#8217; where: 
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mode</strong> &#8211; &#8216;flat&#8217; &#8216;start&#8217; &#8216;end&#8217; where:
 flat = the grouping is flat under the HandleControls group, all cv controls are independant of eachother
 start = the cv controls are grouped under eachother such that cv1 is the parent of cv2, cv 2 is the parent of cv3 etc
 end = the cv controls are grouped under eachother such that cv1 is the child of cv2, cv 2 is the child of cv3 etc</td>
@@ -696,16 +717,16 @@ end = the cv controls are grouped under eachother such that cv1 is the child of 
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimPointCloud.straightenCurve">
-<code class="descname">straightenCurve</code><span class="sig-paren">(</span><em>blendV</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.straightenCurve" title="Permalink to this definition">¶</a></dt>
+<code class="descname">straightenCurve</code><span class="sig-paren">(</span><em>blendV</em>, <em>skipstart=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.straightenCurve" title="Permalink to this definition">¶</a></dt>
 <dd><p>blend the rotateY values such that when in a chain, the curve is straightened out</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimPointCloud.generateAnimationReference">
 <code class="descname">generateAnimationReference</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.generateAnimationReference" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is the main call to generate the reference spline track to represent the 
-animation over time and add reference meshes for start and end frames. 
-If buildHandles flags are set this will also generate the motionPath and the 
+<dd><p>This is the main call to generate the reference spline track to represent the
+animation over time and add reference meshes for start and end frames.
+If buildHandles flags are set this will also generate the motionPath and the
 control handles / cluster grouping setup. This is the core of the redirect setup!</p>
 </dd></dl>
 
@@ -721,7 +742,7 @@ modified reference building code to deal with the animation setup</p>
 <code class="descname">snapPosePntstoNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.snapPosePntstoNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;&lt; Time enabled function &gt;&gt;
 snap each pntCloud point to their respective Maya nodes over time.
-This call is used in the UI to &#8216;ReSync&#8217; the anim cloud if you&#8217;ve 
+This call is used in the UI to &#8216;ReSync&#8217; the anim cloud if you&#8217;ve
 modified the tracking point and need to sync the cloud to the modified track point</p>
 </dd></dl>
 
@@ -730,6 +751,25 @@ modified the tracking point and need to sync the cloud to the modified track poi
 <code class="descname">snapNodestoPosePnts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.snapNodestoPosePnts" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;&lt; Time enabled function &gt;&gt;
 snap each MAYA node to it&#8217;s respective pntCloud point over time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.is_live">
+<code class="descname">is_live</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.is_live" title="Permalink to this definition">¶</a></dt>
+<dd><p>are we already in love mode, basically are the ppt_Nodes the targets for the ctrls in the rig?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.delete_live">
+<code class="descname">delete_live</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.delete_live" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the pairblend nodes added when we went live</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimPointCloud.make_live">
+<code class="descname">make_live</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.make_live" title="Permalink to this definition">¶</a></dt>
+<dd><p>test setup where we bind the controllers back to the cloud,
+making the re-direct live but generating pairblends</p>
 </dd></dl>
 
 <dl class="method">
@@ -1002,8 +1042,8 @@ base level only, generating the files as per the fbx filepath.</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fbxfiles</strong> &#8211; list of fbx files to transfer. Note that we generally run this on singular file basis and let 
-the Pro_to_BND deal with the file outputs at the client level, allows us to modify the export management 
+<li><strong>fbxfiles</strong> &#8211; list of fbx files to transfer. Note that we generally run this on singular file basis and let
+the Pro_to_BND deal with the file outputs at the client level, allows us to modify the export management
 on a case by case basis and overload as required</li>
 <li><strong>binderfile</strong> &#8211; BND binder file to use in the transfer</li>
 <li><strong>usecurrentscene</strong> &#8211; if true use the current scene, which then expects a binder file to be already loaded</li>
@@ -1014,6 +1054,50 @@ on a case by case basis and overload as required</li>
 &#8216;update_anim&#8217; : uses the FBX file import&#8217;s UpdateAnimation Only flags - issue here is that if the fbx file has namespaces then the update fails
 &#8216;reference_copy&#8217; : uses a reference technique, we reference the fbx file in, then copy the anim data directly using the r9Animfuncs to by-pass FBX import limitations
 &#8216;connect_hik&#8217; : references the fbx in then inspects the loaded data for a hik character, if found the code plugs this into the source of our BND hik node</li>
+<li><strong>mayafile</strong> &#8211; save the resulting Maya files out. This is a flag so that if this func is being called as part of another process
+we can choose if we want the Maya file or Not, in the ProToBnd the maya file is managed by the exporter wrap directly and this is not called</li>
+<li><strong>r9anim</strong> &#8211; export r9Anim filed out. In the ProToBnd the r9Anim file is managed by the exporter wrap directly and this is not called</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Anim_Transfer.rig_to_binder">
+<code class="descname">rig_to_binder</code><span class="sig-paren">(</span><em>animfiles</em>, <em>binderfile=None</em>, <em>usecurrentscene=False</em>, <em>output_dir=None</em>, <em>bake=False</em>, <em>runFilter=True</em>, <em>xfer_mode='connect_hik'</em>, <em>run_func=None</em>, <em>mayafile=True</em>, <em>r9anim=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.rig_to_binder" title="Permalink to this definition">¶</a></dt>
+<dd><p><a href="#id5"><span class="problematic" id="id6">**</span></a>**  TESTING <a href="#id7"><span class="problematic" id="id8">**</span></a>** TESTING <a href="#id9"><span class="problematic" id="id10">**</span></a>** TESTING <a href="#id11"><span class="problematic" id="id12">**</span></a><a href="#id13"><span class="problematic" id="id14">**</span></a></p>
+<p>Main Maya Animation File &gt; Binder call, (PRO_TO_BND) for animation data on the Red9 Puppet.
+This requires a properly published Red9 BiPedal Puppet rig and an associated BND binder file</p>
+<p>this loads the binder file, references the Maya anim file, and transfers the data either via HIK plugs (default)
+or by copyAnim calls. This also transfers all exportLoops across and all AudioGrp data</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The actual maya file and r9Anim file generation flags are generally NOT used during the Pro_To_BND call, instead
+during that process we pass the output flags to the ExportManager class to deal with. This is because the exporter
+calls also manage source-control and all client side specific file management. The file handling in this func is
+base level only, generating the files as per the input filepath.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mayafiles</strong> &#8211; [] list of animation files to transfer. Note that we generally run this on singular file basis and let
+the Pro_to_BND deal with the file outputs at the client level, allows us to modify the export management
+on a case by case basis and overload as required</li>
+<li><strong>binderfile</strong> &#8211; correctly setup Red9_Puppet_BND binder file to use in the transfer</li>
+<li><strong>usecurrentscene</strong> &#8211; if true use the currently loaded scene, which then expects a binder file to be already loaded</li>
+<li><strong>output_dir</strong> &#8211; if given we re-direct the outputs to a new folder, remember we&#8217;re loading maya files so we need to do something
+to stop the process over-writing the input files. if not given we append the scene name with &#8220;_converted&#8221;</li>
+<li><strong>bake</strong> &#8211; do we bake the results to the Red9 Puppet and clean-up after our-selves? if r9anim is True then this is forced on</li>
+<li><strong>runFilter</strong> &#8211; do we run the curve filter on the baked animation to try and optimise the results, removing static data etc</li>
+<li><strong>xfer_mode</strong> &#8211; transfer mode used to push the animation data over to the bnd skeleton from the incoming PuppetRig animation file
+&#8216;reference_copy&#8217; : uses a reference technique, we reference the anim file in, then copy the anim data directly using the r9Animfuncs
+&#8216;connect_hik&#8217; : references the anim in then inspects the loaded data for a hik character, if found the code plugs this into the source of our BND hik node</li>
+<li><strong>run_func</strong> &#8211; callable, if given we run this function after the bind is done and before the bake is hit, allowing for specific modifications if required,
+note that the func is passed the instance of the Transfer class object run_func(self)</li>
 <li><strong>mayafile</strong> &#8211; save the resulting Maya files out. This is a flag so that if this func is being called as part of another process
 we can choose if we want the Maya file or Not, in the ProToBnd the maya file is managed by the exporter wrap directly and this is not called</li>
 <li><strong>r9anim</strong> &#8211; export r9Anim filed out. In the ProToBnd the r9Anim file is managed by the exporter wrap directly and this is not called</li>
@@ -1121,30 +1205,6 @@ Closes it every time, because the batch can kill maya outright.</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
 <code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Red9.pro_pack.core.animation.LimbMatchingUI">
-<em class="property">class </em><code class="descname">LimbMatchingUI</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
-<p>Basic UI for the FK/IK matching used by metaData</p>
-<dl class="method">
-<dt id="Red9.pro_pack.core.animation.LimbMatchingUI.match_fk_ik">
-<code class="descname">match_fk_ik</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.match_fk_ik" title="Permalink to this definition">¶</a></dt>
-<dd><p>switch to IK mode</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.animation.LimbMatchingUI.match_ik_fk">
-<code class="descname">match_ik_fk</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.match_ik_fk" title="Permalink to this definition">¶</a></dt>
-<dd><p>switch to FK mode</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013625E08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.LimbMatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1694,11 +1754,16 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.animation.Keyerui">
-<em class="property">class </em><code class="descname">Keyerui</code><span class="sig-paren">(</span><em>uifile='D:/Red9_Core/Red9_Core_Main/Red9/pro_pack/UI/uifiles/interpolationkeyer.ui'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="Red9_Pro_uibase.html#Red9.pro_pack.UI.uibase.BaseUI" title="Red9.pro_pack.UI.uibase.BaseUI"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.UI.uibase.BaseUI</span></code></a></p>
+<em class="property">class </em><code class="descname">Keyerui</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Keyerui.setdirection">
 <code class="descname">setdirection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.setdirection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.Keyerui.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

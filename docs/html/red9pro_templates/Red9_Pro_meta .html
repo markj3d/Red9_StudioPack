@@ -279,6 +279,20 @@ rig so we don&#8217;t have to use the preset config&#8217;s all the time</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_systems">
+<code class="descname">get_systems</code><span class="sig-paren">(</span><em>systems</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if the mRig includes the given systems, and if so, return
+those mNode</p>
+<p>&#64;param systems: simple key to the systems you&#8217;re looking for</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.has_systems">
+<code class="descname">has_systems</code><span class="sig-paren">(</span><em>systems</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.has_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>similar to the get_subsystems method but returns a bool</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_connection_datamap">
 <code class="descname">get_connection_datamap</code><span class="sig-paren">(</span><em>filepath=''</em>, <em>compare=False</em>, <em>infoblock=True</em>, <em>ctrl_only=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_connection_datamap" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a datamap that holds all connected mSystems and all nodes / attrs wired to this mRig instance,
@@ -577,7 +591,20 @@ from any previous loadAnimation calls</li>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_restore_talkback_data">
 <code class="descname">animMap_restore_talkback_data</code><span class="sig-paren">(</span><em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_restore_talkback_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>simply parse the r9Anim file and load the animCache dict that will include the
+TalkBack data under the audio keys. This will only pull the first audioNode&#8217;s data
+if there are multiple audioNodes under the audioGrp</p>
+<p>animCache.infoDict[&#8216;audioGrp&#8217;][&#8216;audioNodes&#8217;][audio][&#8216;talkback&#8217;]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_restore_imageplane_data">
+<code class="descname">animMap_restore_imageplane_data</code><span class="sig-paren">(</span><em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_restore_imageplane_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>simply parse the r9Anim file and load the animCache dict that will include the
+imageplane data under the facialUI keys. This will only be valid when called from
+Pro_MetaRig_FacialUI class objects, or inherited sub-classes</p>
+<p>animCache.infoDict[&#8216;facialUI&#8217;][&#8216;imageplanes&#8217;]</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_postprocess">
@@ -597,6 +624,7 @@ and persistence of audio nodes and export loops stored in the r9Anim gathered in
 <ul class="simple">
 <li>default kws: manageExport: restore the exportLoop data  # False, [list, or, specific, keys], &#8216;byName&#8217;, &#8216;byRange&#8217;, &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;byAll&#8217;</li>
 <li>default kws: manageAudio: restore the AudioGrp data # False, [list, or, specific, keys], &#8216;byName&#8217;, &#8216;byRange&#8217;, &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;byAll&#8217;</li>
+<li>default kws: manageImagePlanes: restore the ImagePlane data, simple bool</li>
 <li>default kws: suppress: suppress any warnings</li>
 </ul>
 </dd></dl>
@@ -795,8 +823,22 @@ managed by the apply call by default</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyFacial">
+<code class="descname">copyFacial</code><span class="sig-paren">(</span><em>mRig</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyFacial" title="Permalink to this definition">¶</a></dt>
+<dd><p>copy any linked facial data between any connected facial mRig nodes
+bound to the given mRig.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Because the facial controls are wired to different attr prefixes they don&#8217;t, by default,
+copy over as facial is treated as an isolated mrig is it&#8217;s own right. IF self in this instance
+is already a FacialRig then you&#8217;d just use the standard copyAnimation call, you wouldn&#8217;t need
+this extra layer of management</p>
+</div>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyData_to_rig">
-<code class="descname">copyData_to_rig</code><span class="sig-paren">(</span><em>mRig</em>, <em>animation=True</em>, <em>exportData=True</em>, <em>audioGrp=True</em>, <em>refEdits=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyData_to_rig" title="Permalink to this definition">¶</a></dt>
+<code class="descname">copyData_to_rig</code><span class="sig-paren">(</span><em>mRig</em>, <em>animation=True</em>, <em>exportData=True</em>, <em>audioGrp=True</em>, <em>refEdits=True</em>, <em>facialRig=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.copyData_to_rig" title="Permalink to this definition">¶</a></dt>
 <dd><p>cast all animation data on this mRig over to the given mRig. This is a full on sync of
 systems, capable of casting the animation data, all export data, connected audio nodes
 and referenceEdits (this is coming soon)</p>
@@ -809,7 +851,9 @@ and referenceEdits (this is coming soon)</p>
 <li><strong>animation</strong> &#8211; copy the animation data from self to the given mRig</li>
 <li><strong>exportData</strong> &#8211; copy the exportData data from self to the given mRig</li>
 <li><strong>audioGrp</strong> &#8211; copy the audioGrp data from self to the given mRig</li>
-<li><strong>refEdits</strong> &#8211; copy the refEdits data from self to the given mRig,
+<li><strong>facialRig</strong> &#8211; if self is a subclass of Pro_MetaRig and has a FacialCore (facial mRig) connected
+then copy the data between the facial systems also</li>
+<li><strong>refEdits</strong> &#8211; copy the refEdits data from self to the given mRig
 not yet implemented!</li>
 </ul>
 </td>
@@ -895,7 +939,7 @@ then the skeletonRoot is found from the exportSkeletonRoot wire to the mRig</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timerange</strong> &#8211; we need to process the Timecode against a start and end time to get the 
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timerange</strong> &#8211; we need to process the Timecode against a start and end time to get the
 range of the anim data, if none is passed in then we grab the timeline ranges</td>
 </tr>
 </tbody>
@@ -1357,6 +1401,20 @@ these are on-top of the usual controllers connected to the system and the render
 <dd><p>simple wrap to load the zeroPose if found</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.ctrl_locomotion">
+<code class="descname">ctrl_locomotion</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.ctrl_locomotion" title="Permalink to this definition">¶</a></dt>
+<dd><p>this ensures that the facial rig returns it&#8217;s parent BodyRig&#8217;s locomotion ctrl
+which is required for some of the exporter behaviour. This forces there to  be
+a consistent return for all data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.gatherInfo">
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=3</em>, <em>keys=[]</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>info block gather for the facialcore channel values</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_facemesh">
 <code class="descname">get_cam_facemesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_cam_facemesh" title="Permalink to this definition">¶</a></dt>
@@ -1404,7 +1462,7 @@ should be framed to focus all controllers in the fRig system</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_mesh">
-<code class="descname">frame_cam_mesh</code><span class="sig-paren">(</span><em>imageplane=False</em>, <em>forcefit=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_mesh" title="Permalink to this definition">¶</a></dt>
+<code class="descname">frame_cam_mesh</code><span class="sig-paren">(</span><em>imageplane=True</em>, <em>forcefit=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_mesh" title="Permalink to this definition">¶</a></dt>
 <dd><p>to overload, simple focus call to put the camera in the right place,
 should be framed to focus on the Head meshes - &#8220;renderMeshes&#8221;</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1412,7 +1470,7 @@ should be framed to focus on the Head meshes - &#8220;renderMeshes&#8221;</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>imageplane</strong> &#8211; if True then we include the bound imagePlane in the viewFit nodes</li>
+<li><strong>imageplane</strong> &#8211; if True then we include the bound imagePlane/ planes in the viewFit nodes</li>
 <li><strong>forcefit</strong> &#8211; if True we over-ride / ignore any cam_states stored on the mNode itself</li>
 </ul>
 </td>
@@ -1466,13 +1524,12 @@ should be framed to focus on the Head meshes - &#8220;renderMeshes&#8221;</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane">
 <code class="descname">image_plane</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the connected imageplane if found as MetaClass nodes for easy setting</p>
-<p>&#64;return [mClass(imagePlane transform, mClass(imageplane shape])</p>
+<dd><p>return connected imageplanes if found as ImagePlane MetaClass nodes for easy setting</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_add">
-<code class="descname">image_plane_add</code><span class="sig-paren">(</span><em>width=20</em>, <em>height=None</em>, <em>translates=[]</em>, <em>rotates=[]</em>, <em>scales=[]</em>, <em>filepath=None</em>, <em>filetype='movie'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_add" title="Permalink to this definition">¶</a></dt>
+<code class="descname">image_plane_add</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>filetype='image'</em>, <em>frameoffset=0</em>, <em>width=None</em>, <em>height=20</em>, <em>translates=[]</em>, <em>rotates=[]</em>, <em>scales=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_add" title="Permalink to this definition">¶</a></dt>
 <dd><p>add in an imagine plane for roto-scoping and/or checking against a headcam. If we&#8217;ve already run this and have an
 imageplane connected these all become edit flags to manipulate it</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1480,13 +1537,39 @@ imageplane connected these all become edit flags to manipulate it</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>width</strong> &#8211; initial width of the imageplane, this also controls how far offset to the left the imageplane
-is in relation to the FaceRootJnt</li>
-<li><strong>height</strong> &#8211; initial height of the imageplane, default=None as this is then calculated against the aspect ratio</li>
+<li><strong>filepath</strong> &#8211; filepath to the image or movie we&#8217;re binding</li>
+<li><strong>filetype</strong> &#8211; [&#8216;image&#8217;,&#8217;texture&#8217;,&#8217;movie&#8217;]</li>
+<li><strong>frameoffset</strong> &#8211; the offset applied to any image sequence</li>
+<li><strong>width</strong> &#8211; width of the imageplane</li>
+<li><strong>height</strong> &#8211; initial height of the imageplane, default=20 as width is then calculated against the aspect ratio</li>
 <li><strong>translates</strong> &#8211; if given these are the translate values applied to the imageplane&#8217;s transform after create</li>
 <li><strong>rotates</strong> &#8211; if given these are the rotate values applied to the imageplane&#8217;s transform after create</li>
 <li><strong>scales</strong> &#8211; if given these are the scales values applied to the imageplane&#8217;s transform after create</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_edit">
+<code class="descname">image_plane_edit</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>filetype=None</em>, <em>frameoffset=None</em>, <em>width=None</em>, <em>height=20</em>, <em>translates=[]</em>, <em>rotates=[]</em>, <em>scales=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_edit" title="Permalink to this definition">¶</a></dt>
+<dd><p>add in an imagine plane for roto-scoping and/or checking against a headcam. If we&#8217;ve already run this and have an
+imageplane connected these all become edit flags to manipulate it</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> &#8211; filepath to the image or movie we&#8217;re binding</li>
 <li><strong>filetype</strong> &#8211; [&#8216;image&#8217;,&#8217;texture&#8217;,&#8217;movie&#8217;]</li>
+<li><strong>frameoffset</strong> &#8211; the offset applied to any image sequence</li>
+<li><strong>width</strong> &#8211; width of the imageplane</li>
+<li><strong>height</strong> &#8211; initial height of the imageplane, default=20 as width is then calculated against the aspect ratio</li>
+<li><strong>translates</strong> &#8211; if given these are the translate values applied to the imageplane&#8217;s transform after create</li>
+<li><strong>rotates</strong> &#8211; if given these are the rotate values applied to the imageplane&#8217;s transform after create</li>
+<li><strong>scales</strong> &#8211; if given these are the scales values applied to the imageplane&#8217;s transform after create</li>
 </ul>
 </td>
 </tr>
@@ -1496,8 +1579,14 @@ is in relation to the FaceRootJnt</li>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_delete">
-<code class="descname">image_plane_delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_delete" title="Permalink to this definition">¶</a></dt>
+<code class="descname">image_plane_delete</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>delete the imageplane node</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_connect">
+<code class="descname">image_plane_connect</code><span class="sig-paren">(</span><em>imageplane=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>connect a current imagePlane to the mNode for management</p>
 </dd></dl>
 
 <dl class="method">
@@ -1517,7 +1606,7 @@ so we can have multiple angles of the facial data.</p>
 </tr>
 </tbody>
 </table>
-<p>#TODO get the bounding box width of the main head and use that for the offset!</p>
+<p>TODO: get the bounding box width of the main head and use that for the offset!</p>
 </dd></dl>
 
 <dl class="method">
@@ -1907,16 +1996,16 @@ from any processed node list</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.setSelectionOverride">
-<code class="descname">setSelectionOverride</code><span class="sig-paren">(</span><em>nodes</em>, <em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.setSelectionOverride" title="Permalink to this definition">¶</a></dt>
-<dd><p>change the state of the override marker on the given nodes</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.removeSelectionOverrides">
 <code class="descname">removeSelectionOverrides</code><span class="sig-paren">(</span><em>nodes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.removeSelectionOverrides" title="Permalink to this definition">¶</a></dt>
 <dd><p>remove any override marker on the given nodes, if no nodes are passed
 we delete ALL overrides under the full hierarchy from the exportRoot</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.setSelectionOverride">
+<code class="descname">setSelectionOverride</code><span class="sig-paren">(</span><em>nodes</em>, <em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.setSelectionOverride" title="Permalink to this definition">¶</a></dt>
+<dd><p>change the state of the override marker on the given nodes</p>
 </dd></dl>
 
 <dl class="method">
@@ -1988,6 +2077,12 @@ of each loop matches the expected internal exportLoopBase_class bound to this ex
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getExportLoops">
 <code class="descname">getExportLoops</code><span class="sig-paren">(</span><em>loopnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getExportLoops" title="Permalink to this definition">¶</a></dt>
 <dd><p>renamed func call for the getTimeRanges</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.set_maya_timeranges">
+<code class="descname">set_maya_timeranges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.set_maya_timeranges" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the Maya timeline to reflect the extent of the export loops</p>
 </dd></dl>
 
 <dl class="method">
@@ -2277,7 +2372,7 @@ flag</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>offset</strong> &#8211; offset the timerange data for this instance</li>
-<li><strong>timerange</strong> &#8211; unused at the moment</li>
+<li><strong>timerange</strong> &#8211; used to check if we need to offset both start and end frames or just one</li>
 <li><strong>ripple</strong> &#8211; unused at the moment</li>
 </ul>
 </td>
@@ -2389,6 +2484,106 @@ the transforms used on the node after everything has been grouped up</td>
 </dd></dl>
 
 <dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane">
+<em class="property">class </em><code class="descname">ImagePlane</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
+<p>base classs to manage and setup ImagePlanes within Maya, instanciated as a MetaNode
+for better back-end management and exposure of the base attributes directly on the class</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.gatherInfo">
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=1</em>, <em>keys=[]</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>info block gather for the facialcore channel values</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.consumeInfo">
+<code class="descname">consumeInfo</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.consumeInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the data gathered reset all the vars to self from this data.
+Allows us to record the data and reconstruct it in a consistent manner</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> &#8211; data to consume in a form of a correctly formatted dict,
+generated by the gatherInfo call itself</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.aspect">
+<code class="descname">aspect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.aspect" title="Permalink to this definition">¶</a></dt>
+<dd><p>the current image aspect ratio</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.imagesize">
+<code class="descname">imagesize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.imagesize" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the width / height of the loaded image</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.set_width">
+<code class="descname">set_width</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.set_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maya&#8217;s imageplane handling is riddled with AETemplate callbacks triggering
+a change in the width based on the height, this mimics this to a degree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.set_height">
+<code class="descname">set_height</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.set_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maya&#8217;s imageplane handling is riddled with AETemplate callbacks triggering
+a change in the width based on the height, this mimics this to a degree.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.set_filepath">
+<code class="descname">set_filepath</code><span class="sig-paren">(</span><em>filepath</em>, <em>filetype=None</em>, <em>frameoffset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.set_filepath" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the Imageplane up based on the AETemplate backend!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> &#8211; filepath to the image or movie to load up</li>
+<li><strong>filetype</strong> &#8211; specific filetype of the data, else we work it out from the file extension
+[.avi, .mov, .mp4] = &#8220;movie&#8221;, else we assign to &#8220;image&#8221;</li>
+<li><strong>frameoffset</strong> &#8211; if given this is the offfset applied to the loaded sequence</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.parent_translate">
+<code class="descname">parent_translate</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.parent_translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>translate of the parent transform of the imageplane node</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.parent_rotate">
+<code class="descname">parent_rotate</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.parent_rotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>rotate of the parent transform of the imageplane node</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.parent_scale">
+<code class="descname">parent_scale</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.parent_scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>scale of the parent transform of the imageplane node</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete the imageplane node and make sure we cleanup it&#8217;s parent transform</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.AudioGroup">
 <em class="property">class </em><code class="descname">AudioGroup</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
@@ -2411,6 +2606,7 @@ be linked to a character rig for export logic handling</p>
 <code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>gather key info on this AudioGrp node and return a dic of all
 connected audio node data</p>
+<p>TODO: bail if non-ascii character found as it will fail the anim writer</p>
 </dd></dl>
 
 <dl class="method">

@@ -1520,7 +1520,7 @@ source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType=&
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.selectChildren">
-<code class="descname">selectChildren</code><span class="sig-paren">(</span><em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.selectChildren" title="Permalink to this definition">¶</a></dt>
+<code class="descname">selectChildren</code><span class="sig-paren">(</span><em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em>, <em>add=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.selectChildren" title="Permalink to this definition">¶</a></dt>
 <dd><p>light wrap over the getChildren so we can more carefully manage it in some of the pro proc bindings</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1531,6 +1531,7 @@ source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType=&
 <li><strong>mAttrs</strong> &#8211; only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)</li>
 <li><strong>cAttrs</strong> &#8211; only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)</li>
 <li><strong>nAttrs</strong> &#8211; search returned MayaNodes for given set of attrs and only return matched nodes</li>
+<li><strong>add</strong> &#8211; if True add to the current selection (also works with the &#8220;shift&#8221; modifier</li>
 </ul>
 </td>
 </tr>
@@ -2114,7 +2115,7 @@ to be restored from the gathered info</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.loadAnimation">
-<code class="descname">loadAnimation</code><span class="sig-paren">(</span><em>filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False, timecodeBinding=[None, None], referenceNode=None, manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, merge=False, matchMethod='stripPrefix', *args, **kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">loadAnimation</code><span class="sig-paren">(</span><em>filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False, timecodeBinding=[None, None], referenceNode=None, relativeRots='projected', relativeTrans='projected', manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, merge=False, matchMethod='metaData', smartbake=False, *args, **kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>: PRO_PACK :</dt>
 <dd>Binding of the animMap format for loading animation data from
@@ -2137,6 +2138,8 @@ the mRig&#8217;s internal data, else we use the timecode binding supplied</li>
 <li><strong>timecodeBinding</strong> &#8211; (frm, str(&#8216;00:00:00:00&#8217;))  Tuple where the first arg is the frame at which the second arg&#8217;s SMPTE timecode
 has been set as reference, basically we&#8217;re saying that the timecode at frm is x</li>
 <li><strong>referenceNode</strong> &#8211; load relative to the given node</li>
+<li><strong>relativeRots</strong> &#8211; &#8216;projected&#8217; or &#8216;absolute&#8217; - how to calculate the offset, default=&#8217;projected&#8217;</li>
+<li><strong>relativeTrans</strong> &#8211; &#8216;projected&#8217; or &#8216;absolute&#8217; - how to calculate the offset, default=&#8217;projected&#8217;</li>
 <li><strong>manageRanges</strong> &#8211; valid values : 0=leave,  1=extend, 2=set the timeranges according to the anim data loaded</li>
 <li><strong>manageFileName</strong> &#8211; if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
 then we take the r9Anim&#8217;s filename and rename the Maya scene accordingly</li>
@@ -2147,6 +2150,7 @@ time=startFarme-blendRange to hold the current data before we load the new keys.
 to ensure the data is preserved</li>
 <li><strong>merge</strong> &#8211; if True we allow the data to be merged over any current keys, else we cut all keys in the load range first</li>
 <li><strong>matchMethod</strong> &#8211; internal matching method used to match nodes to the stored data</li>
+<li><strong>smartbake</strong> &#8211; only valid if we&#8217;re loading with a referenceNode, this tries to respect current keys when doing the processing rather than frame baking</li>
 </ul>
 </td>
 </tr>
@@ -2190,6 +2194,21 @@ exposes all the data for further functions if needed.</p>
 <li>self.animCache.poseDict = the animation and pose data dict.</li>
 <li>self.animCache.skeletonDict = the pose data dict purely for the skeleton, used in compare functions.</li>
 </ul>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>manageImagePlanes</strong> &#8211; if we&#8217;re dealing with a sub-class of the Pro_MetaRig_FacialUI the restore the ImagePlane data,
+this is a simple bool. This creates the imageplane, binds it to the facial UI, offsets it, loads the imagedata, sets the
+width/height and frameoffset.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">because imagePlanes in Maya are so heavily bound to AETemplate callbacks you need to flick over to the attribute editor
+to correctly initialize any image sequence</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
