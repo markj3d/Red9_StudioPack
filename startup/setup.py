@@ -1291,8 +1291,9 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
     # ======================
 
     # ensure the Plug-in and Icon paths are up
-    addPluginPath()
     addIconsPath()
+    addPluginPath()
+
     # need to add a Mel Folder to the scripts path
     addScriptsPath(os.path.join(red9ModulePath(), 'core'))
 

@@ -605,6 +605,15 @@ class AnimationLayerContext(object):
 class AnimationUI(object):
 
     def __init__(self, dockUI=True):
+
+        # WARNING HACK ALERT!
+        # ====================
+        # ensue we add the red9 icons path. This is set during the boot sequence BUT because
+        # workspaces come up BEFORE we get access to the boot sequence we end up with an
+        # AnimUI with no icons. This fixes that
+        r9Setup.addIconsPath()
+        # END ================
+
         self.buttonBgc = r9Setup.red9ButtonBGC(1)
         self.win = 'Red9AnimToolsWin'
         self.dockCnt = 'Red9AnimToolsDoc'
@@ -683,10 +692,14 @@ class AnimationUI(object):
         # Maya 2017 we switch from dockControl to workspaceControl
         # ========================================================
         if r9Setup.mayaVersion() >= 2017:
+            # seriously, delete it so that we force it to refresh and update the global RED_ANIMATION_UI?
+            if cmds.workspaceControl(animUI.workspaceCnt, q=True, exists=True):
+                cmds.workspaceControl(animUI.workspaceCnt, e=True, close=True)
+
             # if the workspace exists just show it, else bind the ui to it
             if not cmds.workspaceControl(animUI.workspaceCnt, q=True, exists=True):
                 element = mel.eval('getUIComponentDockControl("Channel Box / Layer Editor", false);')  # get the channelBox element control
-                windowcall = 'import Red9.core.Red9_AnimationUtils as r9Anim;animUI=r9Anim.AnimationUI();animUI._showUI()'
+                windowcall = 'import Red9.core.Red9_AnimationUtils as r9Anim;animUI=r9Anim.AnimationUI();animUI._showUI();'
                 cmds.workspaceControl(animUI.workspaceCnt, label="Red9_Animation",
                                       uiScript=windowcall,  # animUI._showUI,
                                       tabToControl=(element, -1),
@@ -699,7 +712,7 @@ class AnimationUI(object):
             else:
                 print 'Workspace Red9 already exists, calling open'
             cmds.workspaceControl(animUI.workspaceCnt, e=True, vis=True)
-            cmds.workspaceControl(animUI.workspaceCnt, e=True, r=True)  # raise it
+            cmds.workspaceControl(animUI.workspaceCnt, e=True, r=True, rs=True)  # raise it
             if not animUI.dock:
                 cmds.workspaceControl(animUI.workspaceCnt, e=True, fl=True)
         else:
@@ -810,6 +823,12 @@ class AnimationUI(object):
 
 
     def _showUI(self, *args):
+        '''
+        PRIVATE FUNCTION, DO NOT CALL FROM CODE
+        '''
+        # Ensure this is recast, we've had issues with workspace control management!!
+        global RED_ANIMATION_UI
+        RED_ANIMATION_UI = self
 
         if not r9Setup.mayaVersion() >= 2017:
             # 2017 introduces workspaces and we're going to use those instead of dockControls
@@ -862,7 +881,7 @@ class AnimationUI(object):
         # ====================
         # CopyAttributes
         # ====================
-        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.copy_attrs, cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.copy_attrs, cll=True)  # , borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         cmds.button(label=LANGUAGE_MAP._AnimationUI_.copy_attrs, bgc=self.buttonBgc,
                     ann=LANGUAGE_MAP._AnimationUI_.copy_attrs_ann,
@@ -883,7 +902,7 @@ class AnimationUI(object):
         # CopyKeys
         # ====================
         cmds.separator(h=10, st='in')
-        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.copy_keys, cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.copy_keys, cll=True)  # , borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         cmds.button(label=LANGUAGE_MAP._AnimationUI_.copy_keys, bgc=self.buttonBgc,
                     ann=LANGUAGE_MAP._AnimationUI_.copy_keys_ann,
@@ -933,7 +952,7 @@ class AnimationUI(object):
         # SnapTransforms
         # ====================
         cmds.separator(h=10, st='in')
-        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.snaptransforms, cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.snaptransforms, cll=True)  # , borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         cmds.button(label=LANGUAGE_MAP._AnimationUI_.snaptransforms, bgc=self.buttonBgc,
                      ann=LANGUAGE_MAP._AnimationUI_.snaptransforms_ann,
@@ -974,7 +993,7 @@ class AnimationUI(object):
         # Stabilizer
         # ====================
         cmds.separator(h=10, st='in')
-        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.tracknstabilize, cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.tracknstabilize, cll=True)  # , borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         # cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)])
         cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 100), (2, 55), (3, 55), (4, 100)], columnSpacing=[(1, 10), (3, 5)])
@@ -1003,7 +1022,7 @@ class AnimationUI(object):
         # TimeOffset
         # ====================
         cmds.separator(h=10, st='in')
-        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.timeoffset, cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.timeoffset, cll=True)  # , borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         # cmds.rowColumnLayout(numberOfColumns=4, columnWidth=[(1, 100), (2, 55), (3, 55), (4, 100)], columnSpacing=[(1, 10), (3, 5)])
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)], rowSpacing=[(1, 5), (2, 5)])
@@ -1065,7 +1084,7 @@ class AnimationUI(object):
         # Mirror Controls
         # ====================
         cmds.separator(h=10, st='in')
-        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.mirror_controls, cll=True, borderStyle='etchedOut')
+        cmds.frameLayout(label=LANGUAGE_MAP._AnimationUI_.mirror_controls, cll=True)  # , borderStyle='etchedOut')
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=3, st='none')
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)])
@@ -1398,14 +1417,16 @@ class AnimationUI(object):
                                      floating=False,
                                      allowedArea=['right', 'left'],
                                      width=350)
+
+                    cmds.evalDeferred("cmds.dockControl('%s', e=True, r=True)" % self.dockCnt)  # for fuck sake Maya, raise the dock yourself!!
                 except:
                     # Dock failed, opening standard Window
                     cmds.showWindow(animwindow)
-                    cmds.window(self.win, edit=True, widthHeight=(355, 720))
+                    cmds.window(self.win, edit=True, widthHeight=(360, 780))
                     self.dock = False
             else:
                 cmds.showWindow(animwindow)
-                cmds.window(self.win, edit=True, widthHeight=(355, 720))
+                cmds.window(self.win, edit=True, widthHeight=(360, 780))
 
         # set the initial Interface up
         self.__uiPresetsUpdate()
@@ -1531,9 +1552,9 @@ class AnimationUI(object):
         if height > 440:
             cmds.scrollLayout(self.uiglPoseScroll, e=True, h=max(height - 430, 200))
 
-            print 'width self.MainLayout:', cmds.scrollLayout(self.MainLayout, q=True, w=True)
-            print 'width self.form:', cmds.formLayout(self.form, q=True, w=True)
-            print 'width poseScroll:', cmds.scrollLayout(self.uiglPoseScroll, q=True, w=True)
+            log.debug('width self.MainLayout: %s' % cmds.scrollLayout(self.MainLayout, q=True, w=True))
+            log.debug('width self.form: %s' % cmds.formLayout(self.form, q=True, w=True))
+            log.debug('width poseScroll: %s' % cmds.scrollLayout(self.uiglPoseScroll, q=True, w=True))
 
     def __uiCB_setCopyKeyPasteMethod(self, *args):
         self.ANIM_UI_OPTVARS['AnimationUI']['keyPasteMethod'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
