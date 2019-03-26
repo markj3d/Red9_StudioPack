@@ -39,8 +39,8 @@ class _MainMenus_(object):
 
     red9_homepage = "Red9_HomePage"
     red9_homepage_ann = "Open Red9Consultancy HomePage"
-    red9_blog = "Red9_Blog"
-    red9_blog_ann = "Open Red9Blog"
+    red9_blog = "Red9_News : Latest Tools!"
+    red9_blog_ann = "Open Red9 News Feed"
     red9_vimeo = "Red9_Vimeo Channel"
     red9_vimeo_ann = "Open Red9Vimeo Channel"
     red9_facebook = "Red9_Facebook"

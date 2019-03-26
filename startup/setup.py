@@ -28,7 +28,7 @@ log.setLevel(logging.INFO)
 
 
 __author__ = 'Mark Jackson'
-__buildVersionID__ = 2.5
+__buildVersionID__ = 2.75
 installedVersion = False
 
 
@@ -835,7 +835,8 @@ def red9_blog(*args):
     open up the Red9 Blog
     '''
     import Red9.core.Red9_General as r9General  # lazy load
-    r9General.os_OpenFile('http://red9-consultancy.blogspot.com/')
+    # r9General.os_OpenFile('http://red9-consultancy.blogspot.com/')
+    r9General.os_OpenFile('http://red9consultancy.com/news/')  
 
 def red9_website_home(*args):
     '''
@@ -898,16 +899,32 @@ def get_pro_pack(*args):
     redProWin = 'Red9ProPack'
     if cmds.window(redProWin, exists=True):
         cmds.deleteUI(redProWin, window=True)
-    redProWin = cmds.window(redProWin, title="Red9 ProPack", s=False)
-    cmds.columnLayout()
-    cmds.paneLayout()
+    redProWin = cmds.window(redProWin, title="Red9 ProPack", s=True)
+    cmds.columnLayout(adj=True)
+    #cmds.paneLayout()
+    cmds.rowColumnLayout(nc=1, cw=(1, 300), cs=(1,50))
     cmds.image(image='Red9_ProPack_logo.png')
     cmds.setParent('..')
-    cmds.rowColumnLayout(nc=1, cw=(1, 250))
+    
+    cmds.columnLayout(adj=True)
+    #cmds.rowColumnLayout(nc=1, cw=(1, 300))
     cmds.text(l="Red9 ProPack : Not yet Installed!\n", fn='boldLabelFont')
-    cmds.button(label='Get Me ProPack!', h=40, c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('http://red9consultancy.com/')")
+    cmds.text(l='Red9 ProPack is our commercially available pipeline for Maya\n'
+              'that vastly expands on the foundations of the StudioPack.\n'
+              'Already in full production with many AAA Game & Film studios\n'
+              'ProPack truly is a fully fledged pipeline off the shelf!\n\n'
+              'Available in multi-seat Floating or Nodelocked licenses\n'
+              'Please check-out our Web-site for more details!')
+    cmds.separator(h=50, style='none')
+    
+    
+    cmds.button(label='Latest ProPack News!', h=40,
+                c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('http://red9consultancy.com/category/tools/red9-propack/')")
+    cmds.separator(h=5, style='none')
+    cmds.button(label='Get Me ProPack!', h=40,
+                c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('http://red9consultancy.com/')")
     cmds.showWindow(redProWin)
-    cmds.window(redProWin, e=True, widthHeight=(250, 350))
+    cmds.window(redProWin, e=True, widthHeight=(350, 550))
 
 # -----------------------------------------------------------------------------------------
 # BOOT FUNCTIONS ---
