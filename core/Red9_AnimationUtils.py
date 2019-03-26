@@ -5233,28 +5233,28 @@ class MirrorSetup(object):
                 return None
             elif cmds.checkBox('setDirectCopy', q=True, v=True):
                 return 'None'
+
+        axis = []
+        custom = []
+        if cmds.checkBox('translateX', q=True, v=True):
+            axis.append('translateX')
+        if cmds.checkBox('translateY', q=True, v=True):
+            axis.append('translateY')
+        if cmds.checkBox('translateZ', q=True, v=True):
+            axis.append('translateZ')
+        if cmds.checkBox('rotateX', q=True, v=True):
+            axis.append('rotateX')
+        if cmds.checkBox('rotateY', q=True, v=True):
+            axis.append('rotateY')
+        if cmds.checkBox('rotateZ', q=True, v=True):
+            axis.append('rotateZ')
+        if cmds.textField('customAxis', q=True, text=True):
+            for attr in cmds.textField('customAxis', q=True, text=True).split(','):
+                custom.append(attr.strip())
+        if axis or custom:
+            return ','.join(list(set(axis + custom)))
         else:
-            axis = []
-            custom = []
-            if cmds.checkBox('translateX', q=True, v=True):
-                axis.append('translateX')
-            if cmds.checkBox('translateY', q=True, v=True):
-                axis.append('translateY')
-            if cmds.checkBox('translateZ', q=True, v=True):
-                axis.append('translateZ')
-            if cmds.checkBox('rotateX', q=True, v=True):
-                axis.append('rotateX')
-            if cmds.checkBox('rotateY', q=True, v=True):
-                axis.append('rotateY')
-            if cmds.checkBox('rotateZ', q=True, v=True):
-                axis.append('rotateZ')
-            if cmds.textField('customAxis', q=True, text=True):
-                for attr in cmds.textField('customAxis', q=True, text=True).split(','):
-                    custom.append(attr.strip())
-            if axis or custom:
-                return ','.join(list(set(axis + custom)))
-            else:
-                return 'None'
+            return 'None'
 
     def __setMirrorIDs(self):
         nodes = cmds.ls(sl=True)
