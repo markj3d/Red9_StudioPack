@@ -466,7 +466,7 @@ BUT an mRig should be able to have 1 character and 1 facial tag at the same time
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig">
 <code class="descname">bake_rig</code><span class="sig-paren">(</span><em>selected=False</em>, <em>runFilter=True</em>, <em>deleteStatics=True</em>, <em>sampleby=1</em>, <em>ignoreInFilter=[]</em>, <em>debugView=False</em>, <em>sparseBake=True</em>, <em>timerange=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is a generic bake call for the rig controllers - mainly used in conjunction with the Red9 Binder setup but bu no means tied to it.
+<dd><p>This is a generic bake call for the rig controllers - mainly used in conjunction with the Red9 Binder setup but by no means tied to it.
 This call will bake all animation down to the rig and remove the Binder system hooks if found. It also manages AnimLayer removal during the bake,
 removing a controller from all animation layers if it can do so and should any animLayer become empty, we delete them.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1529,7 +1529,7 @@ should be framed to focus on the Head meshes - &#8220;renderMeshes&#8221;</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_add">
-<code class="descname">image_plane_add</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>filetype='image'</em>, <em>frameoffset=0</em>, <em>width=None</em>, <em>height=20</em>, <em>translates=[]</em>, <em>rotates=[]</em>, <em>scales=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_add" title="Permalink to this definition">¶</a></dt>
+<code class="descname">image_plane_add</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>filetype=None</em>, <em>frameoffset=0</em>, <em>width=None</em>, <em>height=20</em>, <em>translates=[]</em>, <em>rotates=[]</em>, <em>scales=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_add" title="Permalink to this definition">¶</a></dt>
 <dd><p>add in an imagine plane for roto-scoping and/or checking against a headcam. If we&#8217;ve already run this and have an
 imageplane connected these all become edit flags to manipulate it</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1538,7 +1538,7 @@ imageplane connected these all become edit flags to manipulate it</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>filepath</strong> &#8211; filepath to the image or movie we&#8217;re binding</li>
-<li><strong>filetype</strong> &#8211; [&#8216;image&#8217;,&#8217;texture&#8217;,&#8217;movie&#8217;]</li>
+<li><strong>filetype</strong> &#8211; [&#8216;image&#8217;,&#8217;texture&#8217;,&#8217;movie&#8217;] if not given we work it out from the file extension</li>
 <li><strong>frameoffset</strong> &#8211; the offset applied to any image sequence</li>
 <li><strong>width</strong> &#8211; width of the imageplane</li>
 <li><strong>height</strong> &#8211; initial height of the imageplane, default=20 as width is then calculated against the aspect ratio</li>
@@ -2241,6 +2241,23 @@ string, removing invalid characters, and checks for duplicate names, managing co
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.set_colour">
+<code class="descname">set_colour</code><span class="sig-paren">(</span><em>colour</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.set_colour" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the colour, making sure that we always push 4 values and the last one is the alpha.
+if any of the values are -1 then these are ignored when used</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>colour</strong> &#8211; colour used in the UI to colour each widget [r, g, b] all ints although we
+do carefully manage the data being set here to force it to a list of ints  any values
+of -1 means that the data is empty or unused</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.getExportFile">
 <code class="descname">getExportFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.getExportFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>get the full file name, this is built from running the
@@ -2379,6 +2396,12 @@ flag</p>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the timerange now also includes bounds that are equal to the loopnodes start and end frame,
+originally we clamped it so the timerange had to be wider. We also now handle timerange=(10, None)
+which will force the endFrame to always offset regardless, same with the start.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -2489,6 +2512,7 @@ the transforms used on the node after everything has been grouped up</td>
 <dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
 <p>base classs to manage and setup ImagePlanes within Maya, instanciated as a MetaNode
 for better back-end management and exposure of the base attributes directly on the class</p>
+<p># TODO: force the AETemplate callbakcs to create the expression bindings for time</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.gatherInfo">
 <code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=1</em>, <em>keys=[]</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.gatherInfo" title="Permalink to this definition">¶</a></dt>
@@ -2506,6 +2530,25 @@ Allows us to record the data and reconstruct it in a consistent manner</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> &#8211; data to consume in a form of a correctly formatted dict,
 generated by the gatherInfo call itself</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.timeOffset">
+<code class="descname">timeOffset</code><span class="sig-paren">(</span><em>offset</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.timeOffset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Offset the timerange data, generic call used by all the systems to manage mNodes and time</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>offset</strong> &#8211; offset the timerange data for this instance</li>
+<li><strong>timerange</strong> &#8211; used to check if we need to offset both start and end frames or just one</li>
+<li><strong>ripple</strong> &#8211; unused at the moment</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -2606,7 +2649,6 @@ be linked to a character rig for export logic handling</p>
 <code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>gather key info on this AudioGrp node and return a dic of all
 connected audio node data</p>
-<p>TODO: bail if non-ascii character found as it will fail the anim writer</p>
 </dd></dl>
 
 <dl class="method">

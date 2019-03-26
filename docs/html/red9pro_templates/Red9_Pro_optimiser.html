@@ -656,6 +656,18 @@ NOT designed to be run as a full test set, just a collection of
 individual tests</p>
 </dd></dl>
 
+<dl class="class">
+<dt id="Red9.pro_pack.core.optimiser.SceneGeo_HealthValidation">
+<em class="property">class </em><code class="descname">SceneGeo_HealthValidation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.SceneGeo_HealthValidation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
+<p>Base test to validate the health of all geometry in the scene.</p>
+<p>This will:</p>
+<ul class="simple">
+<li>Test for missing geometry!</li>
+<li>Test that all geometry in the scene is named as expected</li>
+</ul>
+</dd></dl>
+
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.get_metaRigs">
 <code class="descname">get_metaRigs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.get_metaRigs" title="Permalink to this definition">¶</a></dt>
@@ -738,6 +750,14 @@ Uses the r9Setup.mayaVersion() call to get the data</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.maya_version_lowest_base_test">
 <code class="descname">maya_version_lowest_base_test</code><span class="sig-paren">(</span><em>expected=2016.0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.maya_version_lowest_base_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maya Target Lowest Base: make sure that the target version of Maya
+is equal, or above the given, this is a float so 2015.0, 2016.0, 2016.5.
+Uses the r9Setup.mayaVersion() call to get the data</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.maya_version_highest_base_test">
+<code class="descname">maya_version_highest_base_test</code><span class="sig-paren">(</span><em>expected=2016.0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.maya_version_highest_base_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Maya Target Lowest Base: make sure that the target version of Maya
 is equal, or above the given, this is a float so 2015.0, 2016.0, 2016.5.
 Uses the r9Setup.mayaVersion() call to get the data</p>
@@ -1114,6 +1134,128 @@ reflected in the export ranges</p>
 <dt id="Red9.pro_pack.core.optimiser.exportLoopNode_framerate_fix">
 <code class="descname">exportLoopNode_framerate_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.exportLoopNode_framerate_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bind the given filterSettings preset config file internally to the mRig</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.get_scene_geo_data">
+<code class="descname">get_scene_geo_data</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>write=False</em>, <em>selected=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.get_scene_geo_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a scene geometry info with data about all the geometries in the scene, number of vertex, edges, faces,
+names &amp; transforms if write set to true it will write a .sgfi file in the same location and name of the maya file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> &#8211; optional filepath of the scene geometry info file</li>
+<li><strong>write</strong> &#8211; bool to enable or disable write functionality</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.scene_geo_vertex_position_change_test">
+<code class="descname">scene_geo_vertex_position_change_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>filepath=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.scene_geo_vertex_position_change_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>this test compares the vertex positions of mesh geometry in the scene against pre-saved sgfi file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; filepath of the sgfi file we&#8217;re going to test against</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.scene_geo_vertex_position_change_select">
+<code class="descname">scene_geo_vertex_position_change_select</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.scene_geo_vertex_position_change_select" title="Permalink to this definition">¶</a></dt>
+<dd><p>select all vertices that changed positions</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.scene_geo_history_test">
+<code class="descname">scene_geo_history_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>filepath=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.scene_geo_history_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>this test compares the names of  mesh geometry in the scene against pre-saved sgfi file, first querying the file
+geometries in the scene and then tring to match using vertex counts</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; filepath of the sgfi file we&#8217;re going to test against</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.scene_geo_history_fix">
+<code class="descname">scene_geo_history_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.scene_geo_history_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete the history on the failed nodes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.scene_geo_rename_selected_test">
+<code class="descname">scene_geo_rename_selected_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>filepath=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.scene_geo_rename_selected_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>this test compares the names of  mesh geometry in the scene against pre-saved sgfi file, first querying the file
+geometries in the scene and then tries to match using components counts to match names</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; filepath of the sgfi file we&#8217;re going to test against</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.scene_geo_rename_test">
+<code class="descname">scene_geo_rename_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>filepath=''</em>, <em>selected=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.scene_geo_rename_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>this test compares the names of  mesh geometry in the scene against pre-saved sgfi file, first querying the file
+geometries in the scene and then tries to match using components counts to match names</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; filepath of the sgfi file we&#8217;re going to test against</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.scene_geo_rename_fix">
+<code class="descname">scene_geo_rename_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.scene_geo_rename_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename failed nodes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.scene_geo_freeze_transforms_test">
+<code class="descname">scene_geo_freeze_transforms_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>filepath=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.scene_geo_freeze_transforms_test" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>expected</strong> &#8211; </li>
+<li><strong>filepath</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.scene_geo_freeze_transforms_fix">
+<code class="descname">scene_geo_freeze_transforms_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.scene_geo_freeze_transforms_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>freeze transform on the failed nodes</p>
 </dd></dl>
 
 <dl class="function">

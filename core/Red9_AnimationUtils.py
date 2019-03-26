@@ -94,6 +94,10 @@ logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
+def logging_is_debug():
+    if log.level == 10:
+        return True
+
 # global var so that the animUI is exposed to anything as a global object
 global RED_ANIMATION_UI
 RED_ANIMATION_UI = None
@@ -2431,6 +2435,7 @@ class AnimationUI(object):
         if rootNode and cmds.objExists(rootNode):
             self.__uiPresetFillFilter()  # fill the filterSettings Object
             pose = r9Pose.PoseData(self.filterSettings)
+            pose.matchMethod = cmds.optionMenu('om_MatchMethod', q=True, v=True)
             pose._readPose(self.getPosePath())
             nodes = pose.matchInternalPoseObjects(rootNode)
             if nodes:
@@ -2952,7 +2957,15 @@ class AnimationUI(object):
                                            meshes=meshes)
             self.ppc.prioritySnapOnly = cmds.checkBox(self.uicbSnapPriorityOnly, q=True, v=True)
             self.ppc.buildOffsetCloud(rootReference)
-        elif func == 'delete':
+        if not hasattr(self, 'ppc') or not self.ppc:
+            current = r9Pose.PosePointCloud.getCurrentInstances()
+            if current:
+                self.ppc = r9Pose.PosePointCloud(self.__uiCB_getPoseInputNodes(),
+                                           self.filterSettings,
+                                           meshes=meshes)
+                self.ppc.syncdatafromCurrentInstance()
+
+        if func == 'delete':
             self.ppc.delete()
         elif func == 'snap':
             self.ppc.applyPosePointCloud()
@@ -3211,7 +3224,8 @@ class AnimFunctions(object):
         if not matchMethod:
             matchMethod = self.matchMethod
 
-        log.debug('CopyKey params : \n \
+        if logging_is_debug():
+            log.debug('CopyKey params : \n \
  \tnodes=%s \t\n:time=%s \t\n: pasteKey=%s \t\n: attributes=%s \t\n: filterSettings=%s \t\n: matchMethod=%s \t\n: mergeLayers=%s \t\n: timeOffset=%s' \
                     % (nodes, time, pasteKey, attributes, filterSettings, matchMethod, mergeLayers, timeOffset))
 
@@ -3229,7 +3243,8 @@ class AnimFunctions(object):
                 with r9General.HIKContext([d for _, d in nodeList]):
                     for src, dest in nodeList:
                         try:
-                            log.debug('copyKeys : %s > %s' % (r9Core.nodeNameStrip(dest),
+                            if logging_is_debug():
+                                log.debug('copyKeys : %s > %s' % (r9Core.nodeNameStrip(dest),
                                                                     r9Core.nodeNameStrip(src)))
                             if attributes:
                                 # copy only specific attributes
@@ -3326,16 +3341,18 @@ class AnimFunctions(object):
                             for attr in attrs:
                                 if cmds.attributeQuery(attr, node=dest, exists=True):
                                     try:
-                                        log.debug('copyAttr : %s.%s > %s.%s' % (r9Core.nodeNameStrip(dest),
-                                                                        r9Core.nodeNameStrip(attr),
-                                                                        r9Core.nodeNameStrip(src),
-                                                                        r9Core.nodeNameStrip(attr)))
+                                        if logging_is_debug():
+                                            log.debug('copyAttr : %s.%s > %s.%s' % (r9Core.nodeNameStrip(dest),
+                                                                            r9Core.nodeNameStrip(attr),
+                                                                            r9Core.nodeNameStrip(src),
+                                                                            r9Core.nodeNameStrip(attr)))
                                         cmds.setAttr('%s.%s' % (dest, attr), cmds.getAttr('%s.%s' % (src, attr)))
                                     except:
-                                        log.debug('failed to copyAttr : %s.%s > %s.%s' % (r9Core.nodeNameStrip(dest),
-                                                                        r9Core.nodeNameStrip(attr),
-                                                                        r9Core.nodeNameStrip(src),
-                                                                        r9Core.nodeNameStrip(attr)))
+                                        if logging_is_debug():
+                                            log.debug('failed to copyAttr : %s.%s > %s.%s' % (r9Core.nodeNameStrip(dest),
+                                                                            r9Core.nodeNameStrip(attr),
+                                                                            r9Core.nodeNameStrip(src),
+                                                                            r9Core.nodeNameStrip(attr)))
                     except:
                         pass
         else:
@@ -3419,9 +3436,10 @@ class AnimFunctions(object):
             raise StandardError(error)
         cancelled = False
 
-        log.debug('snapTransform params : nodes=%s : time=%s : step=%s : preCopyKeys=%s : \
-                preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : snapTransforms=%s : snapRotates=%s'
-                   % (nodes, time, step, preCopyKeys, preCopyAttrs, filterSettings, matchMethod, prioritySnapOnly, snapTranslates, snapRotates))
+        if logging_is_debug():
+            log.debug('snapTransform params : nodes=%s : time=%s : step=%s : preCopyKeys=%s : \
+                    preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : snapTransforms=%s : snapRotates=%s'
+                       % (nodes, time, step, preCopyKeys, preCopyAttrs, filterSettings, matchMethod, prioritySnapOnly, snapTranslates, snapRotates))
 
         # build up the node pairs to process
         nodeList = r9Core.processMatchedNodes(nodes, filterSettings, matchMethod=matchMethod)
@@ -3495,7 +3513,8 @@ class AnimFunctions(object):
 
                                     # verify the src node has a key at the given accumulated keytime (if smartbake)
                                     if _smartBake_nodekeys and src in _smartBake_nodekeys.keys() and t not in _smartBake_nodekeys[src]:
-                                        log.debug('skipping time : %s : node : %s' % (t, r9Core.nodeNameStrip(src)))
+                                        if logging_is_debug():
+                                            log.debug('skipping time : %s : node : %s' % (t, r9Core.nodeNameStrip(src)))
                                     else:
                                         cmds.SnapTransforms(source=src, destination=dest,
                                                             timeEnabled=True,
@@ -3507,7 +3526,9 @@ class AnimFunctions(object):
                                             cmds.setKeyframe(dest, at='translate')
                                         if snapRotates:
                                             cmds.setKeyframe(dest, at='rotate')
-                                        log.debug('Snapfrm %s : %s - %s : to : %s' % (str(t), r9Core.nodeNameStrip(src), dest, src))
+
+                                        if logging_is_debug():
+                                            log.debug('Snapfrm %s : %s - %s : to : %s' % (str(t), r9Core.nodeNameStrip(src), dest, src))
 
                                 if additionalCalls:
                                     for func in additionalCalls:
@@ -3525,13 +3546,15 @@ class AnimFunctions(object):
                                             timeEnabled=False,
                                             snapRotates=snapRotates,
                                             snapTranslates=snapTranslates)
-                        log.debug('Snapfrm : %s - %s : to : %s' % (r9Core.nodeNameStrip(src), dest, src))
+                        if logging_is_debug():
+                            log.debug('Snapfrm : %s - %s : to : %s' % (r9Core.nodeNameStrip(src), dest, src))
                     if additionalCalls:
                         for func in additionalCalls:
                             log.debug('Additional Func Called : %s' % func)
                             func()
                         # self.snapCacheData[dest]=data
-                        log.debug('Snapped : %s - %s : to : %s' % (r9Core.nodeNameStrip(src), dest, src))
+                        if logging_is_debug():
+                            log.debug('Snapped : %s - %s : to : %s' % (r9Core.nodeNameStrip(src), dest, src))
 
             if cancelled and preCopyKeys:
                 cmds.undo()
@@ -3702,8 +3725,9 @@ class AnimFunctions(object):
         if not matchMethod:
             matchMethod = self.matchMethod
 
-        log.debug('bindNodes params : nodes=%s : attributes=%s : filterSettings=%s : matchMethod=%s'
-                   % (nodes, attributes, filterSettings, matchMethod))
+        if logging_is_debug():
+            log.debug('bindNodes params : nodes=%s : attributes=%s : filterSettings=%s : matchMethod=%s'
+                       % (nodes, attributes, filterSettings, matchMethod))
 
         # Build up the node pairs to process
         nodeList = r9Core.processMatchedNodes(nodes,
@@ -4481,7 +4505,8 @@ class MirrorHierarchy(object):
             constrained = nodesDriven(nodes, skipLocked=True)
             if constrained:
                 result = cmds.confirmDialog(title='Pre Mirror Validations',
-                                            message='Some nodes about to be mirrored are currently Driven by constraints or pairBlends, are you sure you want to continue?\n\n' \
+                                            message='Some nodes about to be mirrored are currently Driven by constraints or pairBlends, '\
+                                                    'are you sure you want to continue?\n\n'\
                                                     'we recommend baking the nodes down before continuing',
                                             button=['Continue', 'Cancel'],
                                             defaultButton='OK',
@@ -4669,8 +4694,9 @@ class MirrorHierarchy(object):
                 side = self.getMirrorSide(node)
                 index = self.getMirrorIndex(node)
                 axis = self.getMirrorAxis(node)
-                log.debug('Side : %s Index : %s>> node %s' %
-                          (side, index, r9Core.nodeNameStrip(node)))
+                if logging_is_debug():
+                    log.debug('Side : %s Index : %s>> node %s' %
+                              (side, index, r9Core.nodeNameStrip(node)))
                 # self.mirrorDict[side][str(index)]=node #NOTE index is cast to string!
                 if str(index) in self.mirrorDict[side]:
                     log.warning('Mirror index ( %s : %i ) already assigned : currently node : %s,  duplicate node : %s' %
@@ -4798,11 +4824,12 @@ class MirrorHierarchy(object):
                                 (masterAxis, index, r9Core.nodeNameStrip(masterSide['node'])))
                 else:
                     slaveData = self.mirrorDict[slaveAxis][index]
-                    log.debug('SymmetricalPairs : %s >> %s' % (r9Core.nodeNameStrip(masterSide['node']), \
-                                         r9Core.nodeNameStrip(slaveData['node'])))
+                    if logging_is_debug():
+                        log.debug('SymmetricalPairs : %s >> %s' % (r9Core.nodeNameStrip(masterSide['node']), \
+                                             r9Core.nodeNameStrip(slaveData['node'])))
                     transferCall([masterSide['node'], slaveData['node']], **self.kws)
-
-                    log.debug('Symmetrical Axis Inversion: %s' % ','.join(slaveData['axis']))
+                    if logging_is_debug():
+                        log.debug('Symmetrical Axis Inversion: %s' % ','.join(slaveData['axis']))
                     if slaveData['axis']:
                         inverseCall(slaveData['node'], slaveData['axis'])
 
@@ -4844,12 +4871,14 @@ class MirrorHierarchy(object):
                     log.warning('No matching Index Key found for Left mirrorIndex : %s >> %s' % (index, r9Core.nodeNameStrip(leftData['node'])))
                 else:
                     rightData = self.mirrorDict['Right'][index]
-                    log.debug('SwitchingPairs : %s >> %s' % (r9Core.nodeNameStrip(leftData['node']), \
-                                         r9Core.nodeNameStrip(rightData['node'])))
+                    if logging_is_debug():
+                        log.debug('SwitchingPairs : %s >> %s' % (r9Core.nodeNameStrip(leftData['node']), \
+                                             r9Core.nodeNameStrip(rightData['node'])))
                     self.switchPairData(leftData['node'], rightData['node'], mode=mode)
 
-                    log.debug('Axis Inversions: left: %s' % ','.join(leftData['axis']))
-                    log.debug('Axis Inversions: right: %s' % ','.join(rightData['axis']))
+                    if logging_is_debug():
+                        log.debug('Axis Inversions: left: %s' % ','.join(leftData['axis']))
+                        log.debug('Axis Inversions: right: %s' % ','.join(rightData['axis']))
                     if leftData['axis']:
                         inverseCall(leftData['node'], leftData['axis'])
                     if rightData['axis']:
@@ -5280,7 +5309,7 @@ class CameraTracker():
         self.fixed = fixed
 
     @staticmethod
-    def cameraTrackView(start=None, end=None, step=None, fixed=True, keepOffset=False):
+    def cameraTrackView(start=None, end=None, step=None, fixed=True, keepOffset=False, cam=None):
         '''
         CameraTracker is a simple wrap over the internal viewFit call but this manages the data
         over time. Works by taking the current camera, in the current 3dView, and fitting it to
@@ -5291,13 +5320,16 @@ class CameraTracker():
         :param step: frame step to increment between fit
         :param fixed: switch between tracking or panning framing fit
         :param keepOffset: keep the current camera offset rather than doing a full viewFit
+        :param cam: if given use this camera else we use the current modelEditors camera
 
         TODO::
             add option for cloning the camera rather than using the current directly
         '''
         if not cmds.ls(sl=True):
             raise StandardError('Nothing selected to Track!')
-        cam = cmds.modelEditor(cmds.playblast(ae=True).split('|')[-1], q=True, camera=True)
+        if not cam:
+            cam = cmds.modelEditor(cmds.playblast(ae=True).split('|')[-1], q=True, camera=True)
+
         cmds.cutKey(cam, cl=True, t=(), f=())
 
         if not start:

@@ -72,6 +72,8 @@ class _MainMenus_(object):
     open_in_explorer_ann = "Open the folder containing the current Maya Scene"
     copy_to_clipboard = 'Red9: Copy to Clipboard'
     copy_to_clipboard_ann = 'Copy the current Maya filepath to the OS:Clipboard'
+    open_r9anim = 'Red9 PRO: Import r9Anim Direct'
+    open_r9anim_ann = 'Import an r9Anim file direct IF it has internal reference file pointers (mRig Only)'
 
     # TimeSlider menu additions
     collapse_time = 'Red9: Collapse Time'

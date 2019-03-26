@@ -96,7 +96,7 @@ what each function is expected to return</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.registerMClassNodeMapping" title="Red9.core.Red9_Meta.registerMClassNodeMapping"><code class="xref py py-obj docutils literal"><span class="pre">registerMClassNodeMapping</span></code></a>([nodeTypes])</td>
 <td>Hook to allow you to extend the type of nodes included in all the getMeta searches.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.isMetaNode" title="Red9.core.Red9_Meta.isMetaNode"><code class="xref py py-obj docutils literal"><span class="pre">isMetaNode</span></code></a>(node[,&nbsp;mTypes,&nbsp;checkInstance,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.isMetaNode" title="Red9.core.Red9_Meta.isMetaNode"><code class="xref py py-obj docutils literal"><span class="pre">isMetaNode</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Simple bool, Maya Node is or isn&#8217;t an mNode</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.isMetaNodeInherited" title="Red9.core.Red9_Meta.isMetaNodeInherited"><code class="xref py py-obj docutils literal"><span class="pre">isMetaNodeInherited</span></code></a>(node[,&nbsp;mInstances,&nbsp;mode])</td>
@@ -152,6 +152,11 @@ what each function is expected to return</p>
 </tr>
 </tbody>
 </table>
+<dl class="function">
+<dt id="Red9.core.Red9_Meta.logging_is_debug">
+<code class="descname">logging_is_debug</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.logging_is_debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.registerMClassInheritanceMapping">
 <code class="descname">registerMClassInheritanceMapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.registerMClassInheritanceMapping" title="Permalink to this definition">¶</a></dt>
@@ -371,7 +376,7 @@ require change access rights to the &#8216;network&#8217; node itself.</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.isMetaNode">
-<code class="descname">isMetaNode</code><span class="sig-paren">(</span><em>node</em>, <em>mTypes=[]</em>, <em>checkInstance=True</em>, <em>returnMClass=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.isMetaNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">isMetaNode</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.isMetaNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple bool, Maya Node is or isn&#8217;t an mNode</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2032,7 +2037,7 @@ animation curve/key data</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.cutKeys">
-<code class="descname">cutKeys</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>reset=True</em>, <em>walk=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.cutKeys" title="Permalink to this definition">¶</a></dt>
+<code class="descname">cutKeys</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>reset=True</em>, <em>walk=True</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.cutKeys" title="Permalink to this definition">¶</a></dt>
 <dd><p>cut all animation keys from the rig and reset</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

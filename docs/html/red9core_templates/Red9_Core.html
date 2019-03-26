@@ -77,7 +77,7 @@ time the tools process a hierarchy it&#8217;s these classes that deal with it.</
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.stringReplace" title="Red9.core.Red9_CoreUtils.stringReplace"><code class="xref py py-obj docutils literal"><span class="pre">stringReplace</span></code></a>(text,&nbsp;replace_dict)</td>
 <td>Replace words in a text that match a key in replace_dict with the associated value, return the modified text.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Red9.core.Red9_CoreUtils.matchNodeLists"><code class="xref py py-obj docutils literal"><span class="pre">matchNodeLists</span></code></a>(nodeListA,&nbsp;nodeListB[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Red9.core.Red9_CoreUtils.matchNodeLists"><code class="xref py py-obj docutils literal"><span class="pre">matchNodeLists</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Matches 2 given NODE LISTS by node name via various methods.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh" title="Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh"><code class="xref py py-obj docutils literal"><span class="pre">getBlendTargetsFromMesh</span></code></a>(node[,&nbsp;asList,&nbsp;...])</td>
@@ -127,6 +127,11 @@ time the tools process a hierarchy it&#8217;s these classes that deal with it.</
 </tr>
 </tbody>
 </table>
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.logging_is_debug">
+<code class="descname">logging_is_debug</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.logging_is_debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.nodeNameStrip">
 <code class="descname">nodeNameStrip</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.nodeNameStrip" title="Permalink to this definition">¶</a></dt>
@@ -787,7 +792,7 @@ return and in what format if we have multiple blendShapes on the node?</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.matchNodeLists">
-<code class="descname">matchNodeLists</code><span class="sig-paren">(</span><em>nodeListA</em>, <em>nodeListB</em>, <em>matchMethod='stripPrefix'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Permalink to this definition">¶</a></dt>
+<code class="descname">matchNodeLists</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Matches 2 given NODE LISTS by node name via various methods.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -796,6 +801,7 @@ return and in what format if we have multiple blendShapes on the node?</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>nodeListA</strong> &#8211; list of nodes</li>
 <li><strong>nodeListB</strong> &#8211; list of nodes</li>
+<li><strong>returnfails</strong> &#8211; if True we return [matchedData, unmatched] so that we can pass the unmatched list for further processing</li>
 <li><strong>matchMethod</strong> &#8211; <p>default &#8216;stripPrefix&#8217;</p>
 <div class="line-block">
 <div class="line">* matchMethod=&#8221;index&#8221; : no intelligent matching, just purely zip the lists
@@ -851,7 +857,7 @@ node to all subsequent nodes [(ObjA,ObjB),(ObjA,ObjC),(ObjA,ObjD) ....</li>
 
 <dl class="class">
 <dt id="Red9.core.Red9_CoreUtils.MatchedNodeInputs">
-<em class="property">class </em><code class="descname">MatchedNodeInputs</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>filterSettings=None</em>, <em>matchMethod='stripPrefix'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.MatchedNodeInputs" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">MatchedNodeInputs</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>filterSettings=None</em>, <em>matchMethod='stripPrefix'</em>, <em>returnfails=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.MatchedNodeInputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Class to process and match input nodes for most of the Hierarchy/Anim
 functions that work on carefully managed matched pairs of nodes.</p>
@@ -1031,13 +1037,13 @@ animation curves on the selected object by shifting keys</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>A class for dealing with time manipulation inside Maya.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">offset</span><span class="o">=</span><span class="mi">100</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1">#build a filterSettings object up, in this case we&#39;re loading a current one.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span><span class="o">=</span><span class="n">r9Core</span><span class="o">.</span><span class="n">FilterNode_Settings</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r9Setup</span><span class="o">.</span><span class="n">red9Presets</span><span class="p">(),</span><span class="s1">&#39;Red9_DevRig.cfg&#39;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span><span class="o">.</span><span class="n">incRoots</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span><span class="o">.</span><span class="n">printSettings</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9Core</span><span class="o">.</span><span class="n">TimeOffset</span><span class="p">()</span><span class="o">.</span><span class="n">fromSelected</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">filterSettings</span><span class="o">=</span><span class="n">flt</span><span class="p">,</span> <span class="n">flocking</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">randomize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1054,7 +1060,7 @@ animation curves on the selected object by shifting keys</p>
 <li><strong>timelines</strong> &#8211; offset the playback timelines</li>
 <li><strong>timerange</strong> &#8211; only offset times within a given timerange</li>
 <li><strong>ripple</strong> &#8211; manage the upper range of data and ripple them with the offset</li>
-<li><strong>startfrm</strong> &#8211; this turns the offset arg into a new target start frame fopr the animation, 
+<li><strong>startfrm</strong> &#8211; this turns the offset arg into a new target start frame for the animation,
 calculating the offset for you such that timerange[0] starts at the offset frm value, only works if timerange is passed in</li>
 </ul>
 </td>
@@ -1078,11 +1084,11 @@ calculating the offset for you such that timerange[0] starts at the offset frm v
 <li><strong>randomize</strong> &#8211; whether to add a random factor to each successive nodes offset</li>
 <li><strong>timerange</strong> &#8211; only offset times within a given timerange</li>
 <li><strong>ripple</strong> &#8211; manage the upper range of data and ripple them with the offset</li>
-<li><strong>mRigs</strong> &#8211; if True then the nodes used be resolved via mRig.getChildren but for all 
+<li><strong>mRigs</strong> &#8211; if True then the nodes to be used are resolved via mRig.getChildren but for all
 mRigs wired to the given nodes</li>
-<li><strong>startfrm</strong> &#8211; this turns the offset arg into a new target start frame fopr the animation, 
+<li><strong>startfrm</strong> &#8211; this turns the offset arg into a new target start frame for the animation,
 calculating the offset for you such that timerange[0] starts at the offset frm value, only works if timerange is passed in</li>
-<li><strong>filterSettings</strong> &#8211; <p>this is a FilterSettings_Node object used to pass all 
+<li><strong>filterSettings</strong> &#8211; <p>this is a FilterSettings_Node object used to pass all
 the filter types into the FilterNode code. Internally the following is true:</p>
 <div class="line-block">
 <div class="line">settings.nodeTypes: list[] - search nodes of type</div>

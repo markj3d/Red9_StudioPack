@@ -23,7 +23,7 @@ import Red9.core.Red9_AnimationUtils as r9Anim
 import Red9.startup.setup as r9Setup
 import maya.cmds as cmds
 import os
-r9Setup.start(Menu=False)
+# r9Setup.start(Menu=False)
 
 # force the upAxis, just in case
 r9Setup.mayaUpAxis('y')

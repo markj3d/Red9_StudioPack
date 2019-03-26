@@ -1,6 +1,32 @@
+[info]
+	Ctrl_Main = |World_Ctrl
+	metaRigNodeID = RED_Rig
+	upAxis = y
+	metaPose = True
+	filepath = X:/Red9_Core_Main/Red9/tests/testFiles/MetaRig_anim_jump.mb
+	currentTime = 392.0
+	CTRL_Prefix = CTRL
+	timecode_node = ,
+	author = Red9
+	skeletonRootJnt = |Character1_Pelvis
+	metaRigNode = RED_Rig
+	version = 1.0
+	exportSkeletonRoot = |Character1_Pelvis,
+	date = Fri Feb 08 11:35:41 2019
+	timeUnit = ntscf
+	rigType = None
+	sceneUnits = centimeter
+	[[mClass]]
+		mClass = MetaRig
+		mClassGrp = MetaRig
+		mNode = RED_Rig
+		mNodeID = RED_Rig
+		lockState = True
+		mSystemRoot = True
 [filterNode_settings]
 	hierarchy = False
-	filterPriority = COG__Ctrl, Hips_Ctrl, Chest_Ctrl, R_Wrist_Ctrl, L_Wrist_Ctrl, L_Foot_Ctrl, R_Foot_Ctrl, L_Knee_Ctrl, R_Knee_Ctrl
+	filter_priority = ,
+	filterPriority = COG_Ctr, L_Foot_Ctr, R_Foot_Ctr, R_Wrist_Ctr, L_Wrist_Ctr, L_Arm_PoleVector_Ctr, R_Arm_PoleVector_Ctr, R_Leg_PoleVector_Ctr, L_Leg_PoleVector_Ctr, Locomotion_Ctr
 	incRoots = True
 	searchPattern = ,
 	metaClass = ,
@@ -10,15 +36,16 @@
 	infoBlock = ""
 	transformClamp = True
 	[[rigData]]
-		snapPriority = False
+		snapPriority = True
 [poseData]
 	[[R_Foot_Ctrl]]
 		mirrorID = Right_4
-		ID = 18
 		longName = |World_Ctrl|R_Foot_grp|R_Foot_Ctrl
-		[[[metaData]]]
-			metaNodeID = R_LegSystem
-			metaAttr = CTRL_R_Foot
+		ID = 23
+		[[[attrs_kWorld]]]
+			translation = -14.8236996531, 10.0409400039, -5.65993295942
+			quaternion = 0.0180736911531, -0.100462892222, -0.0018252724111, 0.994774958146
+			euler = 2.12460419359, -11.5258462337, -0.424703981343
 		[[[attrs]]]
 			translateX = -5.91369694466
 			translateY = 1.14994015801
@@ -26,13 +53,17 @@
 			rotateX = 4.97035329508e-15
 			rotateY = -11.5335625555
 			rotateZ = -2.20049826457e-14
-	[[R_Knee_Ctrl]]
-		mirrorID = Right_5
-		ID = 16
-		longName = |World_Ctrl|R_Knee_Ctrl
 		[[[metaData]]]
 			metaNodeID = R_LegSystem
-			metaAttr = CTRL_R_Knee
+			metaAttr = CTRL_R_Foot
+	[[R_Knee_Ctrl]]
+		mirrorID = Right_5
+		longName = |World_Ctrl|R_Knee_Ctrl
+		ID = 1
+		[[[attrs_kWorld]]]
+			translation = -13.2955200481, 50.9367291033, 8.43311070057
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 		[[[attrs]]]
 			translateX = -4.13628760251
 			translateY = 2.08537450331
@@ -40,53 +71,68 @@
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[metaData]]]
+			metaNodeID = R_LegSystem
+			metaAttr = CTRL_R_Knee
 	[[Character1_RightHandIndex1]]
 		mirrorID = None_None
-		ID = 7
 		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandIndex1
-		[[[metaData]]]
-			metaNodeID = R_Fingers_System
-			metaAttr = CTRL_IndexRoot
+		ID = 12
+		[[[attrs_kWorld]]]
+			translation = -66.7881965635, 114.803454597, 16.5419910404
+			quaternion = -0.941854219565, -0.286834866949, 0.171051777615, -0.0371170791605
+			euler = -178.278735919, 20.0905390334, 34.1803972299
 		[[[attrs]]]
 			rotateX = 0.0
 			rotateY = -0.000609234863999
 			rotateZ = 0.0
 			radius = 1.0
 			visibility = True
-	[[L_Knee_Ctrl]]
-		mirrorID = Left_5
-		ID = 17
-		longName = |World_Ctrl|L_Knee_Ctrl
-		[[[metaData]]]
-			metaNodeID = L_LegSystem
-			metaAttr = CTRL_L_Knee
-		[[[attrs]]]
-			translateX = 4.08129707788
-			translateY = 1.96790188338
-			translateZ = -0.962599515546
-			rotateX = 0.0
-			rotateY = 0.0
-			rotateZ = 0.0
-	[[Character1_RightHandRing1]]
-		mirrorID = None_None
-		ID = 9
-		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandRing1
 		[[[metaData]]]
 			metaNodeID = R_Fingers_System
-			metaAttr = CTRL_RingRoot
+			metaAttr = CTRL_IndexRoot
+	[[Character1_RightHandMiddle1]]
+		mirrorID = None_None
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandMiddle1
+		ID = 13
+		[[[attrs_kWorld]]]
+			translation = -67.5973189487, 114.696342349, 14.5121147725
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 		[[[attrs]]]
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
 			radius = 1.0
 			visibility = True
+		[[[metaData]]]
+			metaNodeID = R_Fingers_System
+			metaAttr = CTRL_MiddleRoot
+	[[Character1_RightHandRing1]]
+		mirrorID = None_None
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandRing1
+		ID = 14
+		[[[attrs_kWorld]]]
+			translation = -68.2268516615, 114.198799316, 12.5682134456
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
+		[[[attrs]]]
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+			visibility = True
+		[[[metaData]]]
+			metaNodeID = R_Fingers_System
+			metaAttr = CTRL_RingRoot
 	[[L_Foot_Ctrl]]
 		mirrorID = Left_4
-		ID = 19
 		longName = |World_Ctrl|L_Foot_grp|L_Foot_Ctrl
-		[[[metaData]]]
-			metaNodeID = L_LegSystem
-			metaAttr = CTRL_L_Foot
+		ID = 24
+		[[[attrs_kWorld]]]
+			translation = 14.828084441, 9.92302754567, -5.65036276023
+			quaternion = 0.0180047675937, 0.132762406452, 0.00241211010721, 0.990981409262
+			euler = 2.1577635949, 15.2507173875, 0.567835136955
 		[[[attrs]]]
 			translateX = 5.91808363995
 			translateY = 1.03246910721
@@ -94,39 +140,51 @@
 			rotateX = -2.27077224699e-13
 			rotateY = 15.2610342544
 			rotateZ = 2.18301569203e-12
+		[[[metaData]]]
+			metaNodeID = L_LegSystem
+			metaAttr = CTRL_L_Foot
 	[[Character1_RightHandThumb1]]
 		mirrorID = None_None
-		ID = 6
 		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandThumb1
+		ID = 11
+		[[[attrs_kWorld]]]
+			translation = -62.5169263438, 116.468802195, 15.7384125943
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
+		[[[attrs]]]
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+			radius = 1.0
+			visibility = True
 		[[[metaData]]]
 			metaNodeID = R_Fingers_System
 			metaAttr = CTRL_ThumbRoot
+	[[Character1_LeftHandThumb1]]
+		mirrorID = None_None
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandThumb1
+		ID = 16
+		[[[attrs_kWorld]]]
+			translation = 62.287503261, 115.590203367, 15.3326447441
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 		[[[attrs]]]
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
 			radius = 1.0
 			visibility = True
-	[[Character1_LeftHandThumb1]]
-		mirrorID = None_None
-		ID = 11
-		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandThumb1
 		[[[metaData]]]
 			metaNodeID = L_Fingers_System
 			metaAttr = CTRL_ThumbRoot
-		[[[attrs]]]
-			rotateX = 0.0
-			rotateY = 0.0
-			rotateZ = 0.0
-			radius = 1.0
-			visibility = True
 	[[Head_Ctrl]]
 		mirrorID = Centre_5
-		ID = 5
 		longName = |World_Ctrl|COG__Ctrl|Chest_Ctrl|Head_grp|Head_Ctrl
-		[[[metaData]]]
-			metaNodeID = SpineSystem
-			metaAttr = CTRL_Head
+		ID = 9
+		[[[attrs_kWorld]]]
+			translation = 0.0, 153.867548666, -1.46073928225
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = 0.0
@@ -134,13 +192,17 @@
 			rotateX = 2.39317686651e-15
 			rotateY = -2.53439190375e-20
 			rotateZ = -1.61666477994e-17
-	[[COG__Ctrl]]
-		mirrorID = Centre_2
-		ID = 24
-		longName = |World_Ctrl|COG__Ctrl
 		[[[metaData]]]
 			metaNodeID = SpineSystem
-			metaAttr = CTRL_Root
+			metaAttr = CTRL_Head
+	[[COG__Ctrl]]
+		mirrorID = Centre_2
+		longName = |World_Ctrl|COG__Ctrl
+		ID = 6
+		[[[attrs_kWorld]]]
+			translation = 1.42099873535e-14, 100.787287825, 1.36832852215
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 		[[[attrs]]]
 			translateX = 1.42099873535e-14
 			translateY = 0.787287824712
@@ -148,37 +210,49 @@
 			rotateX = -2.48484626006e-17
 			rotateY = -4.67266510658e-18
 			rotateZ = -2.48450502356e-17
+		[[[metaData]]]
+			metaNodeID = SpineSystem
+			metaAttr = CTRL_Root
 	[[Character1_LeftHandRing1]]
 		mirrorID = None_None
-		ID = 14
 		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandRing1
-		[[[metaData]]]
-			metaNodeID = L_Fingers_System
-			metaAttr = CTRL_RingRoot
+		ID = 19
+		[[[attrs_kWorld]]]
+			translation = 67.2929183008, 112.706522834, 11.532969185
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 		[[[attrs]]]
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
 			radius = 1.0
 			visibility = True
+		[[[metaData]]]
+			metaNodeID = L_Fingers_System
+			metaAttr = CTRL_RingRoot
 	[[L_Clav_Ctrl]]
 		mirrorID = Left_3
-		ID = 2
 		longName = |World_Ctrl|COG__Ctrl|Chest_Ctrl|L_Clav_Ctrl
-		[[[metaData]]]
-			metaNodeID = L_ArmSystem
-			metaAttr = CTRL_L_Clav
+		ID = 3
+		[[[attrs_kWorld]]]
+			translation = 7.00000047684, 146.588546753, -1.46073928225
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 		[[[attrs]]]
 			rotateX = 7.1636409157e-08
 			rotateY = 6.71769077218e-09
 			rotateZ = 1.88363491126e-07
-	[[L_Wrist_Ctrl]]
-		mirrorID = Left_1
-		ID = 20
-		longName = |World_Ctrl|L_Wrist_Ctrl
 		[[[metaData]]]
 			metaNodeID = L_ArmSystem
-			metaAttr = CTRL_L_Wrist
+			metaAttr = CTRL_L_Clav
+	[[L_Wrist_Ctrl]]
+		mirrorID = Left_1
+		longName = |World_Ctrl|L_Wrist_Ctrl
+		ID = 21
+		[[[attrs_kWorld]]]
+			translation = 60.7927545561, 118.701347723, 10.2360883373
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 		[[[attrs]]]
 			translateX = -12.2136664167
 			translateY = -26.5468820605
@@ -186,26 +260,34 @@
 			rotateX = -6.39010511309
 			rotateY = -12.3788226096
 			rotateZ = -44.3332957319
+		[[[metaData]]]
+			metaNodeID = L_ArmSystem
+			metaAttr = CTRL_L_Wrist
 	[[Character1_LeftHandMiddle1]]
 		mirrorID = None_None
-		ID = 13
 		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandMiddle1
-		[[[metaData]]]
-			metaNodeID = L_Fingers_System
-			metaAttr = CTRL_MiddleRoot
+		ID = 18
+		[[[attrs_kWorld]]]
+			translation = 66.8734233992, 113.084251065, 13.5587928374
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 		[[[attrs]]]
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
 			radius = 1.0
 			visibility = True
+		[[[metaData]]]
+			metaNodeID = L_Fingers_System
+			metaAttr = CTRL_MiddleRoot
 	[[Hips_Ctrl]]
 		mirrorID = Centre_3
-		ID = 23
 		longName = |World_Ctrl|COG__Ctrl|Hips_Ctrl
-		[[[metaData]]]
-			metaNodeID = SpineSystem
-			metaAttr = CTRL_Hips
+		ID = 7
+		[[[attrs_kWorld]]]
+			translation = 1.42108547152e-14, 100.787287825, 1.36832852215
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 		[[[attrs]]]
 			translateX = 8.67361737988e-19
 			translateY = -1.42108547152e-14
@@ -213,13 +295,17 @@
 			rotateX = 1.27602708821e-08
 			rotateY = -9.97297800579e-15
 			rotateZ = -2.5168124466e-14
+		[[[metaData]]]
+			metaNodeID = SpineSystem
+			metaAttr = CTRL_Hips
 	[[R_Wrist_Ctrl]]
 		mirrorID = Right_1
-		ID = 21
 		longName = |World_Ctrl|R_Wrist_Ctrl
-		[[[metaData]]]
-			metaNodeID = R_ArmSystem
-			metaAttr = CTRL_R_Wrist
+		ID = 22
+		[[[attrs_kWorld]]]
+			translation = -60.8390839628, 118.727838756, 10.2357447685
+			quaternion = -0.0323664144048, 0.17023085953, 0.286285004513, 0.942345353824
+			euler = 2.22186624783, 19.8381642051, 34.1862046004
 		[[[attrs]]]
 			translateX = 13.1428018184
 			translateY = -26.5203910279
@@ -227,26 +313,34 @@
 			rotateX = -9.11808707871
 			rotateY = 17.8285249029
 			rotateZ = 32.3644859668
+		[[[metaData]]]
+			metaNodeID = R_ArmSystem
+			metaAttr = CTRL_R_Wrist
 	[[Character1_RightHandPinky1]]
 		mirrorID = None_None
-		ID = 10
 		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandPinky1
-		[[[metaData]]]
-			metaNodeID = R_Fingers_System
-			metaAttr = CTRL_PinkyRoot
+		ID = 15
+		[[[attrs_kWorld]]]
+			translation = -68.3453857116, 113.342611881, 10.9514991111
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 		[[[attrs]]]
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
 			radius = 1.0
 			visibility = True
+		[[[metaData]]]
+			metaNodeID = R_Fingers_System
+			metaAttr = CTRL_PinkyRoot
 	[[Chest_Ctrl]]
 		mirrorID = Centre_4
-		ID = 22
 		longName = |World_Ctrl|COG__Ctrl|Chest_Ctrl
-		[[[metaData]]]
-			metaNodeID = SpineSystem
-			metaAttr = CTRL_Chest
+		ID = 8
+		[[[attrs_kWorld]]]
+			translation = 1.38777878e-17, 132.333328247, -1.46073928225
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 		[[[attrs]]]
 			translateX = -1.41961095657e-14
 			translateY = -0.787287824712
@@ -254,26 +348,34 @@
 			rotateX = -5.96353244471e-16
 			rotateY = -2.91188477917e-19
 			rotateZ = 6.30908368821e-18
+		[[[metaData]]]
+			metaNodeID = SpineSystem
+			metaAttr = CTRL_Chest
 	[[Character1_LeftHandIndex1]]
 		mirrorID = None_None
-		ID = 12
 		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandIndex1
-		[[[metaData]]]
-			metaNodeID = L_Fingers_System
-			metaAttr = CTRL_IndexRoot
+		ID = 17
+		[[[attrs_kWorld]]]
+			translation = 66.2093018875, 113.102953146, 15.6433220903
+			quaternion = -0.0107012676948, -0.120603128784, -0.380084320823, 0.916993062821
+			euler = 4.2452275402, -13.2569954736, -45.5205736844
 		[[[attrs]]]
 			rotateX = 0.0
 			rotateY = -0.000609234863999
 			rotateZ = 0.0
 			radius = 1.0
 			visibility = True
+		[[[metaData]]]
+			metaNodeID = L_Fingers_System
+			metaAttr = CTRL_IndexRoot
 	[[World_Ctrl]]
 		mirrorID = Centre_1
-		ID = 0
 		longName = |World_Ctrl
-		[[[metaData]]]
-			metaNodeID = RED_Rig
-			metaAttr = CTRL_Main
+		ID = 0
+		[[[attrs_kWorld]]]
+			translation = -0.207486455286, 0.801877137578, 0.0
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = 0.0
@@ -282,13 +384,17 @@
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[metaData]]]
+			metaNodeID = RED_Rig
+			metaAttr = CTRL_Main
 	[[L_Elbow_Ctrl]]
 		mirrorID = Left_2
-		ID = 1
 		longName = |World_Ctrl|COG__Ctrl|L_Elbow_Ctrl
-		[[[metaData]]]
-			metaNodeID = L_ArmSystem
-			metaAttr = CTRL_L_Elbow
+		ID = 2
+		[[[attrs_kWorld]]]
+			translation = 40.8501969595, 130.985738031, -7.34758607885
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 		[[[attrs]]]
 			translateX = -1.36817304055
 			translateY = -14.8491394761
@@ -296,37 +402,50 @@
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
-	[[Character1_RightHandMiddle1]]
-		mirrorID = None_None
-		ID = 8
-		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandMiddle1
 		[[[metaData]]]
-			metaNodeID = R_Fingers_System
-			metaAttr = CTRL_MiddleRoot
+			metaNodeID = L_ArmSystem
+			metaAttr = CTRL_L_Elbow
+	[[L_Knee_Ctrl]]
+		mirrorID = Left_5
+		longName = |World_Ctrl|L_Knee_Ctrl
+		ID = 10
+		[[[attrs_kWorld]]]
+			translation = 13.2996670779, 50.8192564834, 8.43743577688
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 		[[[attrs]]]
+			translateX = 4.08129707788
+			translateY = 1.96790188338
+			translateZ = -0.962599515546
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
-			radius = 1.0
-			visibility = True
+		[[[metaData]]]
+			metaNodeID = L_LegSystem
+			metaAttr = CTRL_L_Knee
 	[[R_Clav_Ctrl]]
 		mirrorID = Right_3
-		ID = 4
 		longName = |World_Ctrl|COG__Ctrl|Chest_Ctrl|R_Clav_Ctrl
-		[[[metaData]]]
-			metaNodeID = R_ArmSystem
-			metaAttr = CTRL_R_Clav
+		ID = 5
+		[[[attrs_kWorld]]]
+			translation = -6.99999952316, 146.588546753, -1.46073928225
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 		[[[attrs]]]
 			rotateX = 2.81232469116e-08
 			rotateY = -2.45125347462e-09
 			rotateZ = -7.4917240356e-08
-	[[R_Elbow_Ctrl]]
-		mirrorID = Right_2
-		ID = 3
-		longName = |World_Ctrl|COG__Ctrl|R_Elbow_Ctrl
 		[[[metaData]]]
 			metaNodeID = R_ArmSystem
-			metaAttr = CTRL_R_Elbow
+			metaAttr = CTRL_R_Clav
+	[[R_Elbow_Ctrl]]
+		mirrorID = Right_2
+		longName = |World_Ctrl|COG__Ctrl|R_Elbow_Ctrl
+		ID = 4
+		[[[attrs_kWorld]]]
+			translation = -40.9045996402, 130.993647562, -8.1038335902
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 		[[[attrs]]]
 			translateX = 1.25463280538
 			translateY = -14.8412299458
@@ -334,514 +453,1016 @@
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[metaData]]]
+			metaNodeID = R_ArmSystem
+			metaAttr = CTRL_R_Elbow
 	[[Character1_LeftHandPinky1]]
 		mirrorID = None_None
-		ID = 15
 		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandPinky1
-		[[[metaData]]]
-			metaNodeID = L_Fingers_System
-			metaAttr = CTRL_PinkyRoot
+		ID = 20
+		[[[attrs_kWorld]]]
+			translation = 67.1618416724, 112.033026956, 9.83296633504
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 		[[[attrs]]]
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
 			radius = 1.0
 			visibility = True
-[info]
-	metaRigNodeID = RED_Rig
-	metaPose = True
-	author = mark.jackson
-	skeletonRootJnt = |Character1_Pelvis
-	metaRigNode = RED_Rig
-	version = 1.0
-	date = Fri Jun 26 17:52:31 2015
-	rigType = None
+		[[[metaData]]]
+			metaNodeID = L_Fingers_System
+			metaAttr = CTRL_PinkyRoot
 [skeletonDict]
 	[[Character1_RightHandIndex4]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandIndex1|Character1_RightHandIndex2|Character1_RightHandIndex3|Character1_RightHandIndex4
 		[[[attrs]]]
 			translateX = -1.95703119176
 			translateY = -2.84217094304e-14
 			translateZ = -0.0681992068582
+			jointOrientY = 0.000609235549391
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = -0.000609234835004
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -73.5575323759, 110.195228302, 19.8647830801
+			quaternion = -0.941854219566, -0.286834866949, 0.171051777607, -0.0371170791582
+			euler = -178.278735919, 20.0905390324, 34.1803972299
+	[[Character1_Pelvis]]
+		longName = |Character1_Pelvis
+		[[[attrs]]]
+			translateX = 1.42108547152e-14
+			translateY = 100.787287825
+			translateZ = 1.36832852215
+			jointOrientY = -0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
+			rotateX = 0.0
+			rotateY = 0.0
+			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 1.42108547152e-14, 100.787287825, 1.36832852215
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 	[[Character1_RightHandIndex1]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandIndex1
 		[[[attrs]]]
 			translateX = -8.85182672461
 			translateY = 0.604063836079
 			translateZ = 3.34671175316
+			jointOrientY = -0.617814726059
+			jointOrientX = -168.522761458
+			jointOrientZ = -7.10077007439
 			rotateX = 0.0
 			rotateY = -0.000609234863999
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -66.7881965635, 114.803454597, 16.5419910404
+			quaternion = -0.941854219565, -0.286834866949, 0.171051777615, -0.0371170791605
+			euler = -178.278735919, 20.0905390334, 34.1803972299
 	[[Character1_RightHandIndex2]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandIndex1|Character1_RightHandIndex2
 		[[[attrs]]]
 			translateX = -4.2227325715
 			translateY = 0.0
 			translateZ = -0.147155134128
+			jointOrientY = 0.000609235549391
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = -0.000609234835004
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -70.0246989728, 112.600205175, 18.1306573477
+			quaternion = -0.941854219566, -0.286834866949, 0.171051777609, -0.0371170791588
+			euler = -178.278735919, 20.0905390327, 34.1803972299
 	[[Character1_RightHandIndex3]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandIndex1|Character1_RightHandIndex2|Character1_RightHandIndex3
 		[[[attrs]]]
 			translateX = -2.65233161521
 			translateY = 2.84217094304e-14
 			translateZ = -0.092431819426
+			jointOrientY = 0.000609234352924
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = -0.000609234835004
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -72.0575708906, 111.21632727, 19.1285135438
+			quaternion = -0.941854219565, -0.286834866949, 0.171051777613, -0.03711707916
+			euler = -178.278735919, 20.0905390331, 34.1803972299
 	[[Character1_RightHandRing1]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandRing1
 		[[[attrs]]]
 			translateX = -8.75202779744
 			translateY = 1.62456313829
 			translateZ = -0.797546312127
+			jointOrientY = -0.617814726059
+			jointOrientX = -168.522761458
+			jointOrientZ = -7.10077007439
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -68.2268516615, 114.198799316, 12.5682134456
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_LeftShoulder]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder
 		[[[attrs]]]
 			translateX = 7.00000214577
 			translateY = 14.2552219046
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 7.00000047684, 147.209230597, -1.53227655054
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 	[[Character1_RightHandRing3]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandRing1|Character1_RightHandRing2|Character1_RightHandRing3
 		[[[attrs]]]
 			translateX = -2.30453054944
 			translateY = 0.0
 			translateZ = -8.881784197e-16
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -73.5428508794, 110.588710792, 14.9184896481
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_RightHandRing2]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandRing1|Character1_RightHandRing2
 		[[[attrs]]]
 			translateX = -4.53772108188
 			translateY = 0.0
 			translateZ = -8.881784197e-16
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -71.7523755712, 111.804620369, 14.1268959447
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_RightFoot]]
+		longName = |Character1_Pelvis|Character1_RightUpLeg|Character1_RightLeg|Character1_RightFoot
 		[[[attrs]]]
 			translateX = 9.5367454378e-07
 			translateY = -40.7009698632
 			translateZ = -5.42101086243e-20
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = -5.51812295659
 			rotateY = -4.32826998835
 			rotateZ = 4.84648004076
+		[[[attrs_kWorld]]]
+			translation = -15.3429707737, 9.60530476441, -3.12932438619
+			quaternion = 0.0180736911531, -0.100462892222, -0.0018252724111, 0.994774958146
+			euler = 2.12460419359, -11.5258462337, -0.424703981343
 	[[Character1_RightHandThumb1]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandThumb1
 		[[[attrs]]]
 			translateX = -4.56041188916
 			translateY = -1.07869490247
 			translateZ = 3.99088742831
+			jointOrientY = -0.617814726059
+			jointOrientX = -168.522761458
+			jointOrientZ = -7.10077007439
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -62.5169263438, 116.468802195, 15.7384125943
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_LeftHandThumb1]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandThumb1
 		[[[attrs]]]
 			translateX = 4.34876354903
 			translateY = -0.798507880809
 			translateZ = 4.28243500768
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 62.287503261, 115.590203367, 15.3326447441
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftHandThumb2]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandThumb1|Character1_LeftHandThumb2
 		[[[attrs]]]
 			translateX = 2.51258910002
 			translateY = -0.536087163946
 			translateZ = 0.70745437323
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 63.4752566694, 113.542901581, 16.5568910319
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftHandThumb3]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandThumb1|Character1_LeftHandThumb2|Character1_LeftHandThumb3
 		[[[attrs]]]
 			translateX = 2.54313720301
 			translateY = -1.52587927289e-05
 			translateZ = 9.53674543691e-06
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 65.2096220596, 111.776710535, 17.1400630747
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftHandThumb4]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandThumb1|Character1_LeftHandThumb2|Character1_LeftHandThumb3|Character1_LeftHandThumb4
 		[[[attrs]]]
 			translateX = 2.66674868268
 			translateY = 2.84217094304e-14
 			translateZ = -8.10623362213e-06
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 67.0283028976, 109.924681537, 17.7515642983
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftArm]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm
 		[[[attrs]]]
 			translateX = 10.7072526711
 			translateY = 0.000137329134304
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 176.450629926
 			rotateY = -1.84755881293
 			rotateZ = -34.1862286395
+		[[[attrs_kWorld]]]
+			translation = 17.7072505951, 147.209367926, -1.53227655054
+			quaternion = 0.955098946308, -0.294223529105, 0.00630131675766, 0.0343338184452
+			euler = 176.450629926, -1.84755881293, -34.1862286395
 	[[Character1_RightForeArm]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm
 		[[[attrs]]]
 			translateX = -27.3056057228
 			translateY = -5.68434188608e-14
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 7.30100291131e-17
 			rotateY = 21.5948160116
 			rotateZ = -0.00399478869909
+		[[[attrs_kWorld]]]
+			translation = -40.3106178213, 131.925285567, -0.496601178717
+			quaternion = -0.0873901011768, 0.188519709822, 0.28186008234, 0.93668467651
+			euler = -3.59748925648, 23.7302157827, 32.7383307507
 	[[Character1_RightHandThumb3]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandThumb1|Character1_RightHandThumb2|Character1_RightHandThumb3
 		[[[attrs]]]
 			translateX = -2.54309060632
 			translateY = 0.0
 			translateZ = -1.0000002387e-05
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -65.93558437, 113.473889379, 18.1240092806
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_RightHandThumb2]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandThumb1|Character1_RightHandThumb2
 		[[[attrs]]]
 			translateX = -2.51260059905
 			translateY = 0.536000127792
 			translateZ = -0.707450168669
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -63.9597659095, 114.815665626, 17.2504621085
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_RightHandThumb4]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandThumb1|Character1_RightHandThumb2|Character1_RightHandThumb3|Character1_RightHandThumb4
 		[[[attrs]]]
 			translateX = -2.6667506358
 			translateY = 0.0
 			translateZ = 1.0000002387e-05
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -68.0074849149, 112.066864633, 19.0400142253
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_LeftHand]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand
 		[[[attrs]]]
 			translateX = 26.6971499198
 			translateY = 0.0
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = -177.162966175
 			rotateY = -11.0656112842
 			rotateZ = 11.9515042953
+		[[[attrs_kWorld]]]
+			translation = 60.7927340215, 118.701362635, 10.2360827949
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_RightToeBase]]
+		longName = |Character1_Pelvis|Character1_RightUpLeg|Character1_RightLeg|Character1_RightFoot|Character1_RightToeBase
 		[[[attrs]]]
 			translateX = -0.00108528163082
 			translateY = -6.26231867369
 			translateZ = 12.9547518622
+			jointOrientY = 1.4622811973e-06
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -17.934231453, 2.88604607684, 9.32776452799
+			quaternion = 0.0180736911764, -0.100462879528, -0.00182527218047, 0.994774959428
+			euler = 2.12460418253, -11.5258447724, -0.424703926017
 	[[Character1_RightShoulder]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder
 		[[[attrs]]]
 			translateX = -7.00000119209
 			translateY = 14.2552219046
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -6.99999952316, 147.209230597, -1.53227655054
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 	[[Character1_LeftForeArm]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm
 		[[[attrs]]]
 			translateX = 27.3054741157
 			translateY = 0.0
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = -7.5631201245e-17
 			rotateY = 22.2669956816
 			rotateZ = -0.00121444264036
+		[[[attrs_kWorld]]]
+			translation = 40.2830184675, 131.874822964, -0.651937449617
+			quaternion = 0.93591029856, -0.28204656893, 0.190608416791, 0.0904990466906
+			euler = 176.114131404, -24.0688834033, -32.7127716801
 	[[Character1_LeftFoot]]
+		longName = |Character1_Pelvis|Character1_LeftUpLeg|Character1_LeftLeg|Character1_LeftFoot
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = -40.7009698632
 			translateZ = 0.0
-			rotateX = -4.3613162753
-			rotateY = 8.67141213845
-			rotateZ = -5.18366013767
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
+			rotateX = -4.36131631281
+			rotateY = 8.6714125472
+			rotateZ = -5.18366017093
+		[[[attrs_kWorld]]]
+			translation = 15.5117126371, 9.48857175546, -3.1588820084
+			quaternion = 0.0180047675937, 0.132762406452, 0.00241211010721, 0.990981409262
+			euler = 2.1577635949, 15.2507173875, 0.567835136955
 	[[Character1_RightArm]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm
 		[[[attrs]]]
 			translateX = -10.7072784203
 			translateY = 0.00042724619567
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = -3.29519437729
 			rotateY = 2.17369574443
 			rotateZ = 34.0665439709
+		[[[attrs_kWorld]]]
+			translation = -17.7072753906, 147.209657843, -1.53227655054
+			quaternion = -0.0330397969974, 0.0097076752493, 0.293274649768, 0.955407825307
+			euler = -3.29519437729, 2.17369574443, 34.0665439709
 	[[Character1_RightLeg]]
+		longName = |Character1_Pelvis|Character1_RightUpLeg|Character1_RightLeg
 		[[[attrs]]]
 			translateX = -2.86102363134e-06
 			translateY = -44.8786499211
 			translateZ = 0.000439024111154
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 9.69790459082
 			rotateY = 4.35423430736e-06
 			rotateZ = -1.78338248582e-05
+		[[[attrs_kWorld]]]
+			translation = -12.7114380154, 49.8165896436, 2.58869638965
+			quaternion = 0.068376080537, -0.0600367532129, -0.0366092540027, 0.99517840732
+			euler = 8.12993592698, -6.57410415377, -4.68124487306
 	[[Character1_Spine]]
+		longName = |Character1_Pelvis|Character1_Spine
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = 7.00000166893
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = -6.5746477619
-			rotateY = -2.3386204005e-14
-			rotateZ = 3.58342120142e-14
+			rotateY = 2.0432731042e-07
+			rotateZ = -2.35498268599e-08
+		[[[attrs_kWorld]]]
+			translation = 1.42108547152e-14, 107.787287825, 1.36832852215
+			quaternion = -0.0573431523953, 0.0, 0.0, 0.998354527647
+			euler = -6.5746477619, 0.0, 0.0
 	[[Character1_LeftHandMiddle4]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandMiddle1|Character1_LeftHandMiddle2|Character1_LeftHandMiddle3|Character1_LeftHandMiddle4
 		[[[attrs]]]
 			translateX = 2.00563097134
 			translateY = -2.84217094304e-14
 			translateZ = 0.000123620062737
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 73.4436083642, 106.393525941, 15.7685620581
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftHandRing1]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandRing1
 		[[[attrs]]]
 			translateX = 8.89376280159
 			translateY = 0.379913420657
 			translateZ = -0.793159077921
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 67.2929183008, 112.706522834, 11.532969185
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftHandMiddle1]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandMiddle1
 		[[[attrs]]]
 			translateX = 8.80988521812
 			translateY = 0.500885129186
 			translateZ = 1.30468471162
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 66.8734233992, 113.084251065, 13.5587928374
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftHandMiddle2]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandMiddle1|Character1_LeftHandMiddle2
 		[[[attrs]]]
 			translateX = 4.86325189191
 			translateY = 2.84217094304e-14
 			translateZ = 0.000302434039696
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 70.1900174461, 109.706808925, 14.6742731374
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftHandMiddle3]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandMiddle1|Character1_LeftHandMiddle2|Character1_LeftHandMiddle3
 		[[[attrs]]]
 			translateX = 2.76523656016
 			translateY = 2.84217094304e-14
 			translateZ = 0.000171780627198
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 72.0758270868, 107.786401184, 15.3085331167
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftUpLeg]]
+		longName = |Character1_Pelvis|Character1_LeftUpLeg
 		[[[attrs]]]
 			translateX = 8.9100029254
 			translateY = -6.27000576735
 			translateZ = 0.0
-			rotateX = -0.433370485864
-			rotateY = 6.03580912734
-			rotateZ = 4.76118793469
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
+			rotateX = -0.433370488182
+			rotateY = 6.03580871656
+			rotateZ = 4.76118791264
+		[[[attrs_kWorld]]]
+			translation = 8.91000080109, 94.5172835523, 1.36832852215
+			quaternion = -0.00596019569461, 0.0524453314215, 0.0416782814277, 0.997735878946
+			euler = -0.433370488182, 6.03580871656, 4.76118791264
 	[[Character1_RightHandPinky3]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandPinky1|Character1_RightHandPinky2|Character1_RightHandPinky3
 		[[[attrs]]]
 			translateX = -1.97450047076
 			translateY = 0.0
 			translateZ = -6.66133814775e-16
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -72.2445076897, 110.694722946, 12.675354443
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_RightHandPinky2]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandPinky1|Character1_RightHandPinky2
 		[[[attrs]]]
 			translateX = -3.04408072577
 			translateY = 0.0
 			translateZ = -1.22124532709e-15
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -70.7104449975, 111.736503032, 11.9971242757
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_RightHandPinky1]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandPinky1
 		[[[attrs]]]
 			translateX = -8.76355085219
 			translateY = 1.28192360573
 			translateZ = -2.59847370015
+			jointOrientY = -0.617814726059
+			jointOrientX = -168.522761458
+			jointOrientZ = -7.10077007439
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -68.3453857116, 113.342611881, 10.9514991111
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_LeftHandIndex1]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandIndex1
 		[[[attrs]]]
 			translateX = 8.82197781133
 			translateY = 0.199722337657
 			translateZ = 3.47167026321
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = -0.000609234863999
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 66.2093018875, 113.102953146, 15.6433220903
+			quaternion = -0.0107012676948, -0.120603128784, -0.380084320823, 0.916993062821
+			euler = 4.2452275402, -13.2569954736, -45.5205736844
 	[[Character1_LeftHandIndex2]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandIndex1|Character1_LeftHandIndex2
 		[[[attrs]]]
 			translateX = 4.22275800362
 			translateY = -1.52587926721e-05
 			translateZ = 0.147154049339
+			jointOrientY = 0.000609234835004
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = -0.000609234835004
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 69.0577826195, 110.186666502, 16.7545199536
+			quaternion = -0.0107012676948, -0.120603128784, -0.380084320823, 0.916993062821
+			euler = 4.2452275402, -13.2569954736, -45.5205736844
 	[[Character1_LeftHandIndex3]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandIndex1|Character1_LeftHandIndex2|Character1_LeftHandIndex3
 		[[[attrs]]]
 			translateX = 2.65233010638
 			translateY = -1.52587927573e-05
 			translateZ = 0.0924279217792
+			jointOrientY = 0.000609234835004
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = -0.000609234835004
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 70.8469200764, 108.354931903, 17.4524669967
+			quaternion = -0.0107012676948, -0.120603128784, -0.380084320823, 0.916993062821
+			euler = 4.2452275402, -13.2569954736, -45.5205736844
 	[[Character1_LeftHandIndex4]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandIndex1|Character1_LeftHandIndex2|Character1_LeftHandIndex3|Character1_LeftHandIndex4
 		[[[attrs]]]
 			translateX = 1.95703244175
 			translateY = -1.52587926721e-05
 			translateZ = 0.0681981532937
+			jointOrientY = 0.000609234835004
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = -0.000609234835004
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 72.167039584, 107.003376297, 17.9674495867
+			quaternion = -0.0107012676948, -0.120603128784, -0.380084320823, 0.916993062821
+			euler = 4.2452275402, -13.2569954736, -45.5205736844
 	[[Character1_Spine2]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = 25.333334287
 			translateZ = 2.22044604925e-16
+			jointOrientY = -0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 6.5746477619
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 1.42108547152e-14, 132.954012091, -1.53227655054
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 	[[Character1_Neck]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_Neck
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = 12.6666747729
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.298507377056
-			rotateY = -2.55985622085e-14
-			rotateZ = 5.91655602854e-14
+			rotateY = 2.05677165895e-07
+			rotateZ = 1.0716339828e-09
+		[[[attrs_kWorld]]]
+			translation = 1.42108547152e-14, 145.620683844, -1.53227655054
+			quaternion = 0.0026049653394, 0.0, 0.0, 0.999996607072
+			euler = 0.298507377056, -0.0, 0.0
 	[[Character1_Head]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_Neck|Character1_Head
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = 14.0
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = -0.298507377056
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 1.42108547152e-14, 159.620490502, -1.4593377859
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 	[[Character1_RightHandPinky4]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandPinky1|Character1_RightHandPinky2|Character1_RightHandPinky3|Character1_RightHandPinky4
 		[[[attrs]]]
 			translateX = -1.66661039735
 			translateY = 0.0
 			translateZ = -1.00000023895e-06
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -73.5393588567, 109.815391076, 13.2478269842
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_Head_top]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_Neck|Character1_Head|Character1_Head_top
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = 18.0
 			translateZ = 4.4408926279e-16
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 1.42108547152e-14, 177.620486211, -1.4593377859
+			quaternion = 0.0, 0.0, 0.0, 1.0
+			euler = 0.0, -0.0, 0.0
 	[[Character1_RightHand]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand
 		[[[attrs]]]
 			translateX = -26.6969935172
 			translateY = 0.0
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = -7.0583739474
 			rotateY = -2.24446025116
 			rotateZ = 8.11059994783
+		[[[attrs_kWorld]]]
+			translation = -60.8681102105, 118.708180491, 10.2470836206
+			quaternion = -0.123405666298, 0.154477754415, 0.358965495261, 0.912168536033
+			euler = -7.06394669984, 21.7412905636, 41.6040255771
 	[[Character1_LeftHandPinky4]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandPinky1|Character1_LeftHandPinky2|Character1_LeftHandPinky3|Character1_LeftHandPinky4
 		[[[attrs]]]
 			translateX = 1.66661111512
 			translateY = 1.52587927005e-05
 			translateZ = 9.53674544224e-07
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 71.7211116624, 107.390284203, 11.3659521259
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_RightHandMiddle4]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandMiddle1|Character1_RightHandMiddle2|Character1_RightHandMiddle3|Character1_RightHandMiddle4
 		[[[attrs]]]
 			translateX = -2.00563247818
 			translateY = 0.0
 			translateZ = -0.000130000030995
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -75.0822315657, 109.613325621, 17.8219404121
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_LeftToeBase]]
+		longName = |Character1_Pelvis|Character1_LeftUpLeg|Character1_LeftLeg|Character1_LeftFoot|Character1_LeftToeBase
 		[[[attrs]]]
 			translateX = 8.58307089402e-06
 			translateY = -6.26231867369
 			translateZ = 12.9547235858
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 18.9216237412, 2.77639848588, 9.10328076537
+			quaternion = 0.0180047675937, 0.132762406452, 0.00241211010721, 0.990981409262
+			euler = 2.1577635949, 15.2507173875, 0.567835136955
 	[[Character1_RightHandMiddle1]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandMiddle1
 		[[[attrs]]]
 			translateX = -8.7279734115
 			translateY = 1.32041196423
 			translateZ = 1.28320557945
+			jointOrientY = -0.617814726059
+			jointOrientX = -168.522761458
+			jointOrientZ = -7.10077007439
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -67.5973189487, 114.696342349, 14.5121147725
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_RightHandMiddle2]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandMiddle1|Character1_RightHandMiddle2
 		[[[attrs]]]
 			translateX = -4.86324115949
 			translateY = 0.0
 			translateZ = -0.000300000071527
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -71.375661214, 112.130463876, 16.1828932663
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_RightHandMiddle3]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandMiddle1|Character1_RightHandMiddle2|Character1_RightHandMiddle3
 		[[[attrs]]]
 			translateX = -2.76523065928
 			translateY = 0.0
 			translateZ = -0.000170000040532
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -73.52402038, 110.671509639, 17.1328945347
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446
 	[[Character1_LeftHandRing4]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandRing1|Character1_LeftHandRing2|Character1_LeftHandRing3|Character1_LeftHandRing4
 		[[[attrs]]]
 			translateX = 1.92334793171
 			translateY = 0.0
 			translateZ = -8.34465226029e-07
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 73.2709384158, 106.6188843, 13.543005995
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftLeg]]
+		longName = |Character1_Pelvis|Character1_LeftUpLeg|Character1_LeftLeg
 		[[[attrs]]]
 			translateX = 0.0
 			translateY = -44.8786499211
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 7.33650443663
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 12.6705167243, 49.7977483589, 1.70589396064
+			quaternion = 0.0578865084428, 0.0550044319694, 0.0382374736926, 0.996073069714
+			euler = 6.90313394844, 6.03580871656, 4.76118791264
 	[[Character1_LeftHandRing3]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandRing1|Character1_LeftHandRing2|Character1_LeftHandRing3
 		[[[attrs]]]
 			translateX = 2.30452783216
 			translateY = 0.0
 			translateZ = -1.19209317861e-07
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 71.9592463155, 107.954628713, 13.1019660893
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftHandRing2]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandRing1|Character1_LeftHandRing2
 		[[[attrs]]]
 			translateX = 4.53775895542
 			translateY = 2.84217094304e-14
 			translateZ = 5.96046589862e-08
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 70.3875958919, 109.555098362, 12.573517562
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_RightUpLeg]]
+		longName = |Character1_Pelvis|Character1_RightUpLeg
 		[[[attrs]]]
 			translateX = -8.9100029254
 			translateY = -6.27000576735
 			translateZ = 0.0
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = -1.56797073207
 			rotateY = -6.57410801839
 			rotateZ = -4.68122680798
+		[[[attrs_kWorld]]]
+			translation = -8.91000080109, 94.5172835523, 1.36832852215
+			quaternion = -0.0159902773032, -0.0567273664927, -0.0415529321791, 0.997396446129
+			euler = -1.56797073207, -6.57410801839, -4.68122680798
 	[[Character1_LeftHandPinky3]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandPinky1|Character1_LeftHandPinky2|Character1_LeftHandPinky3
 		[[[attrs]]]
 			translateX = 1.97450303423
 			translateY = 3.05175854294e-05
 			translateZ = -2.38418635945e-07
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 70.5844995891, 108.54771663, 10.983781411
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftHandPinky2]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandPinky1|Character1_LeftHandPinky2
 		[[[attrs]]]
 			translateX = 3.04409862616
 			translateY = 4.5776378073e-05
 			translateZ = -4.4408920985e-16
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 69.2378993184, 109.918965949, 10.5310084097
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_LeftHandPinky1]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_LeftShoulder|Character1_LeftArm|Character1_LeftForeArm|Character1_LeftHand|Character1_LeftHandPinky1
 		[[[attrs]]]
 			translateX = 8.88228056008
 			translateY = -0.31303413225
 			translateZ = -2.49035703906
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = 67.1618416724, 112.033026956, 9.83296633504
+			quaternion = -0.010699246947, -0.120598253518, -0.380084377712, 0.916993704004
+			euler = 4.24521691528, -13.2563879103, -45.5205273509
 	[[Character1_RightHandRing4]]
+		longName = |Character1_Pelvis|Character1_Spine|Character1_Spine2|Character1_RightShoulder|Character1_RightArm|Character1_RightForeArm|Character1_RightHand|Character1_RightHandRing1|Character1_RightHandRing2|Character1_RightHandRing3|Character1_RightHandRing4
 		[[[attrs]]]
 			translateX = -1.92335045856
 			translateY = 2.84217094304e-14
 			translateZ = -8.881784197e-16
+			jointOrientY = 0.0
+			jointOrientX = 0.0
+			jointOrientZ = 0.0
 			rotateX = 0.0
 			rotateY = 0.0
 			rotateZ = 0.0
+		[[[attrs_kWorld]]]
+			translation = -75.0371732288, 109.573918324, 15.5791500645
+			quaternion = -0.941855128961, -0.286835064281, 0.171046770172, -0.0371155541803
+			euler = -178.278742612, 20.0899300734, 34.1803777446

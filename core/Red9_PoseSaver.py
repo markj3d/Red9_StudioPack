@@ -77,6 +77,8 @@ class DataMap(object):
         self.poseDict = {}
         self.infoDict = {}
         self.skeletonDict = {}
+        self.settings_internal = None  # filterSettings object synced from the internal file block
+
         self.file_ext = ''  # extension the file will be saved as
         self.filepath = ''  # path to load / save
         self.__filepath = ''
@@ -88,6 +90,7 @@ class DataMap(object):
         self.mayaUpAxis = r9Setup.mayaUpAxis()
         self.thumbnailRes = [128, 128]
         self.unitconversion = True  # convert linear units to correct for sceneUnit differences
+        self.world_space = False
 
         self.__metaPose = False
         self.metaRig = None  # filled by the code as we process
@@ -335,7 +338,7 @@ class DataMap(object):
         '''
         self._collectNodeData_attrs(node, key)
 
-    def _buildBlock_info(self):
+    def _buildBlock_info(self, nodes=None):
         '''
         Generic Info block for the data file, this could do with expanding
         '''
@@ -347,6 +350,7 @@ class DataMap(object):
         self.infoDict['upAxis'] = cmds.upAxis(q=True, axis=True)
         self.infoDict['metaPose'] = self.metaPose
         self.infoDict['filepath'] = cmds.file(q=True, sn=True)
+
         if self.metaRig:
             self.infoDict['metaRigNode'] = self.metaRig.mNode
             self.infoDict['metaRigNodeID'] = self.metaRig.mNodeID
@@ -355,6 +359,15 @@ class DataMap(object):
             if self.metaRig.hasAttr('rigType'):
                 self.infoDict['rigType'] = self.metaRig.rigType
             self.infoDict.update(self.metaRig.gatherInfo())
+
+#         else:
+#             # this is dealt with in the gatherInfo call from mRig
+#             if cmds.referenceQuery(nodes[0], inr=True):
+#                 _root = r9Meta.MetaClass(nodes[0])
+#                 self.infoDict['namespace'] = _root.nameSpace()
+#                 self.infoDict['namespace_full'] = _root.nameSpaceFull()
+#                 self.infoDict['referenced_rigPath'] = _root.referencePath()
+#                 self.infoDict['referenced_grp'] = _root.referenceGroup()
         if self.rootJnt:
             self.infoDict['skeletonRootJnt'] = self.rootJnt
 
@@ -390,7 +403,7 @@ class DataMap(object):
         if not nodes:
             nodes = self.nodesToStore
         self.poseDict = {}
-        self._buildBlock_info()
+        self._buildBlock_info(nodes)
         self._buildBlock_poseDict(nodes)
 
     def buildDataMap(self, nodes):
@@ -447,8 +460,6 @@ class DataMap(object):
             raise IOError('No Matching Nodes found to store the pose data from')
 
         return self.nodesToStore
-        # removed from this func so we can just process the node data
-        # self.buildBlocks_fill(nodesToStore)
 
     # --------------------------------------------------------------------------------
     # Data Mapping - Apply ---
@@ -457,8 +468,8 @@ class DataMap(object):
     @r9General.Timer
     def _applyData_attrs(self, *args, **kws):
         '''
-        Load call for dealing with attrs : 
-        use self.matchedPairs for the process list of pre-matched 
+        Load call for dealing with attrs :
+        use self.matchedPairs for the process list of pre-matched
         tuples of (poseDict[key], node in scene)
 
         fix: 07/11/18: added the clamp=True to the set calls so we set values to max/min if the input value is out of range
@@ -502,6 +513,70 @@ class DataMap(object):
                         log.debug(err)
             except:
                 log.debug('Pose Object Key : %s : has no Attr block data' % key)
+
+    @r9General.Timer
+    def _applyData_kWorld_attrs(self, worldspace=True, *args, **kws):
+        '''
+        added : 11/03/19 TESTING
+
+        Load call for dealing with attrs in kWorld space. Still need to
+        deal with hierarchy when we load now we're dealing in world space as
+        parent / child behaviour will get screwed if not loaded in the correct order
+
+        '''
+        # setup unit conversions for linear attrs
+        _unitsfile = None
+        _conversion_needed = False
+        _sceneunits = cmds.currentUnit(q=True, fullName=True, linear=True)
+        try:
+            _unitsfile = self.infoDict['sceneUnits']
+            if not _unitsfile == _sceneunits:
+                _conversion_needed = True
+        except:
+            log.debug("This PoseFile doesn't not support scene unit conversion")
+
+        if worldspace:
+            _mSpace = OpenMaya.MSpace.kWorld
+        else:
+            _mSpace = OpenMaya.MSpace.kTransform
+
+        for key, dest in self.matchedPairs:
+            log.debug('Applying Key Block : %s' % key)
+            try:
+                if 'attrs_kWorld' not in self.poseDict[key]:
+                    continue
+                try:
+                    dagpath = OpenMaya.MDagPath()
+                    selList = OpenMaya.MSelectionList()
+                    selList.add(dest)
+                    selList.getDagPath(0, dagpath)
+                    _mFntrans = OpenMaya.MFnTransform(dagpath)
+
+                    tran_data = []
+                    rot_data = self.poseDict[key]['attrs_kWorld']['quaternion']
+                    rot_data = [eval(rot_data[0]), eval(rot_data[1]), eval(rot_data[2]), eval(rot_data[3])]
+
+                    for attr in self.poseDict[key]['attrs_kWorld']['translation']:
+                        if _conversion_needed and self.unitconversion:
+                            # only unit convert linear attrs if the file supports it and it's needed!
+                            _converted = r9Core.convertUnits_uiToInternal(r9Core.convertUnits_internalToUI(attr, _unitsfile), _sceneunits)
+                            log.debug('node : %s : UnitConverted : val %s == %s' % (dest, attr, _converted))
+                            tran_data.append(eval(attr))
+                        else:
+                            log.debug('node : %s : val %s' % (dest, attr))
+                            tran_data.append(eval(attr))
+
+                    trans = OpenMaya.MVector(tran_data[0], tran_data[1], tran_data[2])
+                    rots = OpenMaya.MQuaternion(rot_data[0], rot_data[1], rot_data[2], rot_data[3])
+
+                    _mFntrans.setRotation(rots, _mSpace)
+                    _mFntrans.setTranslation(trans, _mSpace)
+
+                except StandardError, err:
+                    log.debug(err)
+            except:
+                log.debug('Pose Object Key : %s : has no Attr block data' % key)
+
 
     def _applyData(self, *args, **kws):
         '''
@@ -562,7 +637,7 @@ class DataMap(object):
         if filename:
             if os.path.exists(filename):
                 # =========================
-                # write to JSON format
+                # read JSON format
                 # =========================
                 if self.dataformat == 'json':
                     try:
@@ -578,16 +653,20 @@ class DataMap(object):
                         self._dataformat_resolved = 'config'
                         log.info('JSON : DataMap format failed to load, reverting to legacy ConfigObj')
                 # =========================
-                # write to ConfigObject
+                # read ConfigObject
                 # =========================
                 if self._dataformat_resolved == 'config' or self.dataformat == 'config':
                     # for key, val in configobj.ConfigObj(filename)['filterNode_settings'].items():
                     #    self.settings.__dict__[key]=decodeString(val)
-                    self.poseDict = configobj.ConfigObj(filename, encoding='utf-8')['poseData']
-                    if 'info' in configobj.ConfigObj(filename):
-                        self.infoDict = configobj.ConfigObj(filename)['info']
-                    if 'skeletonDict' in configobj.ConfigObj(filename):
-                        self.skeletonDict = configobj.ConfigObj(filename)['skeletonDict']
+                    data = configobj.ConfigObj(filename, encoding='utf-8')
+                    self.poseDict = data['poseData']
+                    if 'info' in data:
+                        self.infoDict = data['info']
+                    if 'skeletonDict' in data:
+                        self.skeletonDict = data['skeletonDict']
+                    if 'filterNode_settings' in data:
+                        self.settings_internal = r9Core.FilterNode_Settings()
+                        self.settings_internal.setByDict(data['filterNode_settings'])
                     self._dataformat_resolved = 'config'
             else:
                 raise StandardError('Given filepath doesnt not exist : %s' % filename)
@@ -640,34 +719,59 @@ class DataMap(object):
 
         # build the master list of matched nodes that we're going to apply data to
         # Note: this is built up from matching keys in the poseDict to the given nodes
-        self.matchedPairs = self._matchNodesToPoseData(self.nodesToLoad)
+        self.matchedPairs, unmatched = self._matchNodesToPoseData(self.nodesToLoad, returnfails=True)
+
+        # added 14/02/19: if the metaData mNodeID has been changed between rigs then the proper
+        # metaData match will fail as it's based on mNodeID and mAttr matches for all nodes.
+        # if this happens then regress the testing back to stripPrefix for all failed nodes
+        if self.matchMethod == 'metaData' and unmatched:
+            log.info('Regressing matchMethod from "metaData" to "stripPrefix" for failed matches within the mNode ConnectionMap')
+            rematched = self._matchNodesToPoseData(unmatched, matchMethod='stripPrefix')
+            if rematched:
+                self.matchedPairs.extend(rematched)
 
         return self.nodesToLoad
 
     @r9General.Timer
-    def _matchNodesToPoseData(self, nodes):
+    def _matchNodesToPoseData(self, nodes, matchMethod=None, returnfails=False):
         '''
         Main filter to extract matching data pairs prior to processing
         return : tuple such that :  (poseDict[key], destinationNode)
         NOTE: I've changed this so that matchMethod is now an internal PoseData attr
 
         :param nodes: nodes to try and match from the poseDict
+        :param matchMethod: if given this over-rides self.matchMethod so you can do additional checks without mutating the class var
+        :param returnfails: if True we return [matchedData, unmatched] so that we can pass the unmatched list for further processing
         '''
         matchedPairs = []
+        unmatched = []
         log.info('using matchMethod : %s' % self.matchMethod)
-        if self.matchMethod == 'stripPrefix' or self.matchMethod == 'base':
-            log.info('matchMethodStandard : %s' % self.matchMethod)
-            matchedPairs = r9Core.matchNodeLists([key for key in self.poseDict.keys()], nodes, matchMethod=self.matchMethod)
-        if self.matchMethod == 'index':
+
+        if not matchMethod:
+            matchMethod = self.matchMethod
+
+        # standard match method logic
+        if matchMethod == 'stripPrefix' or matchMethod == 'base':
+            log.info('matchMethodStandard : %s' % matchMethod)
+            matchedPairs = r9Core.matchNodeLists([key for key in self.poseDict.keys()], nodes, matchMethod=matchMethod)
+
+        # pose data specific logic
+        if matchMethod == 'index':
             for i, node in enumerate(nodes):
+                matched = False
                 for key in self.poseDict.keys():
                     if int(self.poseDict[key]['ID']) == i:
                         matchedPairs.append((key, node))
                         log.debug('poseKey : %s %s >> matchedSource : %s %i' % (key, self.poseDict[key]['ID'], node, i))
+                        matched = True
                         break
-        if self.matchMethod == 'mirrorIndex':
+                if not matched:
+                    unmatched.append(node)
+
+        if matchMethod == 'mirrorIndex':
             getMirrorID = r9Anim.MirrorHierarchy().getMirrorCompiledID
             for node in nodes:
+                matched = False
                 mirrorID = getMirrorID(node)
                 if not mirrorID:
                     continue
@@ -677,11 +781,16 @@ class DataMap(object):
                         if poseID == mirrorID:
                             matchedPairs.append((key, node))
                             log.debug('poseKey : %s %s >> matched MirrorIndex : %s' % (key, node, self.poseDict[key]['mirrorID']))
+                            matched = True
                             break
+                if not matched:
+                    unmatched.append(node)
+
         # unlike 'mirrorIndex' this matches JUST the ID's, the above matches SIDE_ID
-        if self.matchMethod == 'mirrorIndex_ID':
+        if matchMethod == 'mirrorIndex_ID':
             getMirrorID = r9Anim.MirrorHierarchy().getMirrorIndex
             for node in nodes:
+                matched = False
                 mirrorID = getMirrorID(node)
                 if not mirrorID:
                     continue
@@ -692,14 +801,21 @@ class DataMap(object):
                             if int(poseID) == mirrorID:
                                 matchedPairs.append((key, node))
                                 log.debug('poseKey : %s %s >> matched MirrorIndex : %s' % (key, node, self.poseDict[key]['mirrorID']))
+                                matched = True
                                 break
                         else:
                             log.debug('poseKey SKIPPED : %s:%s : as incorrect MirrorIDs' % (key, self.poseDict[key]['mirrorID']))
+                if not matched:
+                        unmatched.append(node)
 
-        if self.matchMethod == 'metaData':
+        if matchMethod == 'metaData':
+            if not self.metaRig:
+                self.setMetaRig(nodes[0])
             getMetaDict = self.metaRig.getNodeConnectionMetaDataMap  # optimisation
+
             poseKeys = dict(self.poseDict)  # optimisation
             for node in nodes:
+                matched = False
                 try:
                     metaDict = getMetaDict(node)
                     for key in poseKeys:
@@ -707,11 +823,17 @@ class DataMap(object):
                             matchedPairs.append((key, node))
                             log.debug('poseKey : %s %s >> matched MetaData : %s' % (key, node, poseKeys[key]['metaData']))
                             poseKeys.pop(key)
+                            matched = True
                             break
                 except:
                     log.info('FAILURE to load MetaData pose blocks - Reverting to Name')
                     matchedPairs = r9Core.matchNodeLists([key for key in self.poseDict.keys()], nodes)
-        return matchedPairs
+                if not matched:
+                        unmatched.append(node)
+        if returnfails:
+            return matchedPairs, unmatched
+        else:
+            return matchedPairs
 
     def matchInternalPoseObjects(self, nodes=None, fromFilter=True):
         '''
@@ -939,7 +1061,7 @@ class PoseData(DataMap):
         if not nodes:
             nodes = self.nodesToStore
         self.poseDict = {}
-        self._buildBlock_info()
+        self._buildBlock_info(nodes)
         self._buildBlock_poseDict(nodes)
         self._buildBlock_skeletonData(self.rootJnt)
 
@@ -1024,7 +1146,7 @@ class PoseData(DataMap):
     @r9General.Timer
     def _applyData(self, percent=None):
         '''
-        apply the attrs for the pose. 
+        apply the attrs for the pose.
 
         .. note: 
             when dealing with pose blending or mirrorInverse handling we BY-PASS the 
@@ -1035,6 +1157,9 @@ class PoseData(DataMap):
             self._applyData_attrs_complex(percent)
         else:
             self._applyData_attrs()
+
+        if self.world_space:
+            self._applyData_kWorld_attrs(worldspace=True)
 
     # Main Calls ----------------------------------------
 
@@ -1457,16 +1582,22 @@ class PosePointCloud(object):
         snap each pntCloud point to their respective Maya nodes
         '''
         for pnt, node in self.posePointCloudNodes:
-            log.debug('snapping PPT : %s' % pnt)
-            r9Anim.AnimFunctions.snap([node, pnt])
+            try:
+                log.debug('snapping PPT : %s' % pnt)
+                r9Anim.AnimFunctions.snap([node, pnt])
+            except:
+                log.debug('FAILED : snapping PPT : %s' % pnt)
 
     def snapNodestoPosePnts(self):
         '''
         snap each MAYA node to it's respective pntCloud point
         '''
         for pnt, node in self.posePointCloudNodes:
-            log.debug('snapping Ctrl : %s > %s : %s' % (r9Core.nodeNameStrip(node), pnt, node))
-            r9Anim.AnimFunctions.snap([pnt, node])
+            try:
+                log.debug('snapping Ctrl : %s > %s : %s' % (r9Core.nodeNameStrip(node), pnt, node))
+                r9Anim.AnimFunctions.snap([pnt, node])
+            except:
+                log.debug('FAILED : snapping PPT : %s' % pnt)
 
     def generateVisualReference(self):
         '''

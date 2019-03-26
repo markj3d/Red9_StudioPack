@@ -24,11 +24,11 @@ import Red9.core.Red9_CoreUtils as r9Core
 import Red9.core.Red9_PoseSaver as r9Pose
 
 import Red9.startup.setup as r9Setup
-r9Setup.start(Menu=False)
+# r9Setup.start(Menu=False, loadclients=['Testing'])  # this gets called by the Maya boot sequence anyway!!!!
 
-# force the upAxis, just in case
+# force the units, just in case
 r9Setup.mayaUpAxis('y')
-
+cmds.currentUnit(time='ntscf')
 
 red9MetaRigConfig = os.path.join(r9Setup.red9Presets(), 'Red9_MetaRig_unitTest.cfg')
 
@@ -44,6 +44,7 @@ class Test_MetaRig():
         cmds.file(os.path.join(r9Setup.red9ModulePath(), 'tests', 'testFiles', 'MetaRig_anim_jump.mb'), open=True, f=True)
         self.mRig = r9Meta.getMetaNodes(mTypes=r9Meta.MetaRig)[0]
         self.poseFolder = getPoseFolder()
+        cmds.currentUnit(time='ntscf')
 
     def teardown(self):
         pass
@@ -129,6 +130,7 @@ class Test_PoseDataMeta():
         filterNode = r9Core.FilterNode_Settings()
         filterNode.read(red9MetaRigConfig)
         self.poseData = r9Pose.PoseData(filterNode)
+        cmds.currentUnit(time='ntscf')
 
     def test_metaRigHandlers(self):
         '''
@@ -214,6 +216,7 @@ class Test_PoseData_loaders():
         cmds.file(os.path.join(r9Setup.red9ModulePath(), 'tests', 'testFiles', 'MetaRig_anim_jump.mb'), open=True, f=True)
         self.rootNode = '|World_Ctrl'
         self.poseFolder = getPoseFolder()
+        cmds.currentUnit(time='ntscf')
 
         # make our PoseData object with the unitTest config loaded
         filterNode = r9Core.FilterNode_Settings()

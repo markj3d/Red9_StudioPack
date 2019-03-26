@@ -471,6 +471,16 @@ class ProgressBarContext(object):
             else:
                 return cmds.progressWindow(query=True, isCancelled=True)
 
+    def isCancelled(self):
+        '''
+        fixed naming but previous left for legacy calls
+        '''
+        if not self.disable:
+            if self.ismain:
+                return cmds.progressBar(self._gMainProgressBar, query=True, isCancelled=True)
+            else:
+                return cmds.progressWindow(query=True, isCancelled=True)
+
     def setText(self, text):
         if not self.disable:
             if self.ismain:
@@ -693,7 +703,8 @@ class SceneRestoreContext(object):
         # unit management
         cmds.currentUnit(time=self.dataStore['timeUnit'])
         cmds.currentUnit(linear=self.dataStore['sceneUnits'])
-        cmds.upAxis(axis=self.dataStore['upAxis'])
+        if not cmds.upAxis(axis=True, q=True) == self.dataStore['upAxis']:
+            cmds.upAxis(axis=self.dataStore['upAxis'])
 
         log.debug('Restored PlayBack / Timeline setup')
 

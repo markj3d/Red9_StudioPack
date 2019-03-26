@@ -316,7 +316,7 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.UI.uibase.ListModel.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000C59D508&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ListModel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000BB22908&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ListModel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -357,7 +357,7 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.UI.uibase.R9_float_slider_widget.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000C59D548&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000BB22948&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -373,7 +373,7 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.UI.uibase.R9_float_slider_window.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000C59D588&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_window.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000BB22988&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_window.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -387,12 +387,15 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.UI.uibase.addaction">
-<code class="descname">addaction</code><span class="sig-paren">(</span><em>addTo</em>, <em>text=None</em>, <em>cmd=None</em>, <em>separator=False</em>, <em>enabled=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.addaction" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addaction</code><span class="sig-paren">(</span><em>addTo</em>, <em>text=None</em>, <em>cmd=None</em>, <em>separator=False</em>, <em>enabled=True</em>, <em>tooltip=''</em>, <em>showtips=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.addaction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add QAction to a given widget
-:param addTo: QAction to add action to
+:param addTo: QAction to add action to (menu)
 :param text: string : name of the QAction
 :param cmd: command for that QAction will execute
 :param separator: boolean : True to add a separator
+:param enabled: is the action enabled
+:param tooltip: bind a tooltip to the action
+:param showtips: if True we bind the hovered signal in the action to the tooltip and show it
 :return: QAction object</p>
 </dd></dl>
 

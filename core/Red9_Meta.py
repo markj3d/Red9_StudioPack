@@ -55,6 +55,10 @@ logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
+def logging_is_debug():
+    if log.level == 10:
+        return True
+
 # Language map is used for all UI's as a text mapping for languages
 LANGUAGE_MAP = r9Setup.LANGUAGE_MAP
 
@@ -324,24 +328,24 @@ def registerMClassNodeCache(mNode):
         try:
             UUID = mNode.UUID
             if not UUID:
-                log.debug('CACHE : generating fresh UUID')
+                # log.debug('CACHE : generating fresh UUID')
                 UUID = mNode.setUUID()
             elif UUID in RED9_META_NODECACHE.keys():
-                log.debug('CACHE : UUID is already registered in cache')
+                # log.debug('CACHE : UUID is already registered in cache')
                 if not mNode == RED9_META_NODECACHE[UUID]:
-                    log.debug('CACHE : %s : UUID is registered to a different node : modifying UUID: %s' % (UUID, mNode.mNode))
+                    # log.debug('CACHE : %s : UUID is registered to a different node : modifying UUID: %s' % (UUID, mNode.mNode))
                     UUID = mNode.setUUID()
         except StandardError, err:
             log.debug('CACHE : Failed to set UUID for mNode : %s' % mNode.mNode)
     else:
-        log.debug('CACHE : UUID attr not bound to this node, must be an older system')
+        # log.debug('CACHE : UUID attr not bound to this node, must be an older system')
         if RED9_META_NODECACHE or mNode.mNode not in RED9_META_NODECACHE.keys():
-            log.debug('CACHE : Adding to MetaNode Cache : %s' % mNode.mNode)
+            # log.debug('CACHE : Adding to MetaNode Cache : %s' % mNode.mNode)
             RED9_META_NODECACHE[mNode.mNode] = mNode
             return
 
     if RED9_META_NODECACHE or UUID not in RED9_META_NODECACHE.keys():
-        log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
+        # log.debug('CACHE : Adding to MetaNode UUID Cache : %s > %s' % (mNode.mNode, UUID))
         RED9_META_NODECACHE[UUID] = mNode
 
     mNode._lastUUID = UUID
@@ -389,12 +393,12 @@ def getMetaFromCache(mNode):
             try:
                 if RED9_META_NODECACHE[UUID].isValidMObject():
                     if not RED9_META_NODECACHE[UUID]._MObject == getMObject(mNode):
-                        log.debug('CACHE : %s : UUID is already registered but to a different node : %s' % (UUID, mNode))
+                        # log.debug('CACHE : %s : UUID is already registered but to a different node : %s' % (UUID, mNode))
                         return
-                    log.debug('CACHE : %s Returning mNode from UUID cache! = %s' % (mNode, UUID))
+                    # log.debug('CACHE : %s Returning mNode from UUID cache! = %s' % (mNode, UUID))
                     return RED9_META_NODECACHE[UUID]
                 else:
-                    log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
+                    # log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
                     cleanCache()
             except:
                 log.debug('CACHE : inspection failure')
@@ -403,13 +407,13 @@ def getMetaFromCache(mNode):
             try:
                 if RED9_META_NODECACHE[mNode].isValidMObject():
                     if not RED9_META_NODECACHE[mNode]._MObject == getMObject(mNode):
-                        log.debug('CACHE : %s : ID is already registered but MObjects are different, node may have been renamed' % mNode)
+                        # log.debug('CACHE : %s : ID is already registered but MObjects are different, node may have been renamed' % mNode)
                         return
                     # print 'namebased returned from cache ', mNode
-                    log.debug('CACHE : %s Returning mNode from nameBased cache!' % mNode)
+                    # log.debug('CACHE : %s Returning mNode from nameBased cache!' % mNode)
                     return RED9_META_NODECACHE[mNode]
                 else:
-                    log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
+                    # log.debug('%s being Removed from the cache due to invalid MObject' % mNode)
                     cleanCache()
             except:
                 log.debug('CACHE : inspection failure')
@@ -475,7 +479,8 @@ def removeFromCache(mNodes):
         if v and v in mNodes:
             try:
                 RED9_META_NODECACHE.pop(k)
-                log.debug('CACHE : %s being Removed from the cache >> %s' % (r9Core.nodeNameStrip(k),
+                if logging_is_debug():
+                    log.debug('CACHE : %s being Removed from the cache >> %s' % (r9Core.nodeNameStrip(k),
                                                                              r9Core.nodeNameStrip(v.mNode)))
             except:
                 log.debug('CACHE : Failed to remove %s from cache')
@@ -632,6 +637,7 @@ def attributeDataType(val):
         return 'complex'
 
 # @pymelHandler
+@r9General.Timer
 def isMetaNode(node, mTypes=[], checkInstance=True, returnMClass=False):
     '''
     Simple bool, Maya Node is or isn't an mNode
@@ -731,19 +737,19 @@ def isMetaNodeInherited(node, mInstances=[], mode='short'):
                 # FULL CLASS INHERITANCE : test the full inheritance mapping
                 # log.debug('testing class inheritance: %s > %s' % (inst, mClass))
                 if RED9_META_REGISTERY[inst] in RED9_META_INHERITANCE_MAP[mClass]['full']:
-                    log.debug('MetaNode %s is of subclass >> %s' % (mClass, inst))
+                    #log.debug('MetaNode %s is of subclass >> %s' % (mClass, inst))
                     return True
             elif mode == 'short':
                 # SHORT CLASS NAME : test ONLY the short class name, regardless of where the class was imported or how
                 # log.debug('testing class inheritance: %s > %s' % (inst, mClass))
                 if inst in RED9_META_INHERITANCE_MAP[mClass]['short']:
-                    log.debug('MetaNode %s is of subclass >> %s' % (mClass, inst))
+                    #log.debug('MetaNode %s is of subclass >> %s' % (mClass, inst))
                     return True
             else:
                 # original issubclass test
                 # log.debug('testing class inheritance: %s > %s' % (inst, mClass))
                 if issubclass(RED9_META_REGISTERY[mClass], RED9_META_REGISTERY[inst]):
-                    log.debug('MetaNode %s is of subclass >> %s' % (mClass, inst))
+                    #log.debug('MetaNode %s is of subclass >> %s' % (mClass, inst))
                     return True
     return False
 
@@ -758,7 +764,7 @@ def isMetaNodeClassGrp(node, mClassGrps=[]):
     if not hasattr(mClassGrps, '__iter__'):
         mClassGrps = [mClassGrps]
     for grp in mClassGrps:
-        log.debug('mGroup testing: %s' % node)
+        #log.debug('mGroup testing: %s' % node)
         try:
             if cmds.getAttr('%s.mClassGrp' % node) == grp:
                 return True
@@ -901,14 +907,14 @@ def getConnectedMetaNodes(nodes, source=True, destination=True, mTypes=[], mInst
     # if mTypes and not type(mTypes)==list:mTypes=[mTypes]
     for nType in nTypes:
     # for nType in getMClassNodeTypes():
-        cons = cmds.listConnections(nodes, type=nType, s=source, d=destination, c=True)
+        cons = cmds.listConnections(nodes, type=nType, s=source, d=destination, c=True, shapes=True)  # modified 07/02/19 for imageplane support
         if cons:
             # NOTE we're only interested in connected nodes via message linked attrs
             for plug, node in zip(cons[::2], cons[1::2]):
                 if cmds.getAttr(plug, type=True) == 'message':
                     if node not in connections:
                         connections.append(node)
-                        log.debug(node)
+                        # log.debug(node)
     if not connections:
         return mNodes
 
@@ -924,11 +930,13 @@ def getConnectedMetaNodes(nodes, source=True, destination=True, mTypes=[], mInst
                 # mNodes.append(node)
         if skipTypes:
             if isMetaNode(node, mTypes=skipTypes):
-                log.debug('skipping node mType found >> %s = %s' % (node, getMClassDataFromNode(node)))
+                if logging_is_debug():
+                    log.debug('skipping node mType found >> %s = %s' % (node, getMClassDataFromNode(node)))
                 addNode = False
         if skipInstances:
             if isMetaNodeInherited(node, skipInstances):
-                log.debug('skipping node mInstance found >> %s = %s' % (node, getMClassDataFromNode(node)))
+                if logging_is_debug():
+                    log.debug('skipping node mInstance found >> %s = %s' % (node, getMClassDataFromNode(node)))
                 addNode = False
         if addNode:
             mNodes.append(node)
@@ -1583,24 +1591,25 @@ class MetaClass(object):
 
             if mNode:
                 cacheInstance = getMetaFromCache(mNode)  # Do Not run __new__ if the node is in the Cache
-                log.debug('### MetaClass.cached being set in the __new__ ###')
+                # log.debug('### MetaClass.cached being set in the __new__ ###')
                 if cacheInstance:
                     MetaClass.cached = True
                     return cacheInstance
 
             if issubclass(type(mNode), MetaClass):
-                log.debug('NodePassed is already an instanciated MetaNode!!')
+                # log.debug('NodePassed is already an instanciated MetaNode!!')
                 MetaClass.cached = True
                 return mNode
 
             mClass = isMetaNode(mNode, checkInstance=False, returnMClass=True)
 
         if mClass:
-            log.debug("mClass derived from MayaNode Attr : %s" % mClass)
+            # log.debug("mClass derived from MayaNode Attr : %s" % mClass)
             if mClass in RED9_META_REGISTERY:
                 _registeredMClass = RED9_META_REGISTERY[mClass]
                 try:
-                    log.debug('### Instantiating existing mClass : %s >> %s ###' % (mClass, _registeredMClass))
+                    if logging_is_debug():
+                        log.debug('### Instantiating existing mClass : %s >> %s ###' % (mClass, _registeredMClass))
                     return super(cls.__class__, cls).__new__(_registeredMClass, *args, **kws)
                 except:
                     log.debug('Failed to initialize mClass : %s' % _registeredMClass)
@@ -1636,8 +1645,8 @@ class MetaClass(object):
         if node and MetaClass.cached:
             log.debug('CACHE : Aborting __init__ on pre-cached MetaClass Object')
             return
-
-        log.debug('Meta__init__ main args :: node=%s, name=%s, nodeType=%s' % (node, name, nodeType))
+        if logging_is_debug():
+            log.debug('Meta__init__ main args :: node=%s, name=%s, nodeType=%s' % (node, name, nodeType))
         # data that will not get pushed to the Maya node
         object.__setattr__(self, '_MObject', '')
         object.__setattr__(self, '_MObjectHandle', '')
@@ -1654,7 +1663,8 @@ class MetaClass(object):
             # no MayaNode passed in so make a fresh network node (default)
             if not nodeType == 'network' and nodeType not in RED9_META_NODETYPE_REGISTERY:
                 # raise IOError('nodeType : "%s" : is NOT yet registered in the "RED9_META_NODETYPE_REGISTERY", please use r9Meta.registerMClassNodeMapping(nodeTypes=["%s"]) to do so before making this node' % (nodeType, nodeType))
-                log.debug('nodeType : "%s" : is NOT yet registered in the "RED9_META_NODETYPE_REGISTERY", please use r9Meta.registerMClassNodeMapping(nodeTypes=["%s"]) to do so before making this node' % (nodeType, nodeType))
+                if logging_is_debug():
+                    log.debug('nodeType : "%s" : is NOT yet registered in the "RED9_META_NODETYPE_REGISTERY", please use r9Meta.registerMClassNodeMapping(nodeTypes=["%s"]) to do so before making this node' % (nodeType, nodeType))
                 if not name:
                     name = nodeType
             if not name:
@@ -1901,7 +1911,8 @@ class MetaClass(object):
             # if this fails we have a dead node more than likely
             try:
                 RED9_META_NODECACHE.pop(object.__getattribute__(self, "_lastUUID"))
-                log.debug("Dead mNode %s removed from cache..." % object.__getattribute__(self, "_lastDagPath"))
+                if logging_is_debug():
+                    log.debug("Dead mNode %s removed from cache..." % object.__getattribute__(self, "_lastDagPath"))
             except:
                 pass
             try:
@@ -1917,7 +1928,8 @@ class MetaClass(object):
         if not self._MObjectHandle.isValid():
             try:
                 RED9_META_NODECACHE.pop(object.__getattribute__(self, "_lastUUID"))
-                log.debug("Dead mNode %s removed from cache..." % object.__getattribute__(self, "_lastDagPath"))
+                if logging_is_debug():
+                    log.debug("Dead mNode %s removed from cache..." % object.__getattribute__(self, "_lastDagPath"))
             except:
                 pass
             return False
@@ -1958,7 +1970,8 @@ class MetaClass(object):
         '''
         newUUID = generateUUID()
         self.UUID = newUUID
-        log.debug('setting new UUID : %s on %s' % (newUUID, self.mNode))
+        if logging_is_debug():
+            log.debug('setting new UUID : %s on %s' % (newUUID, self.mNode))
         return newUUID
 
     def getUUID(self):
@@ -1992,6 +2005,7 @@ class MetaClass(object):
         if cmds.attributeQuery(attr, node=self.mNode, multi=True) == False:
             if attributeDataType(value) == 'complex':
                 raise ValueError("You can't connect multiple nodes to a singluar message plug via __setattr__")
+
             log.debug('set singular message attribute connection:  %s' % value)
             self.connectChild(value, attr, cleanCurrent=True, force=force)
         else:
@@ -2033,10 +2047,12 @@ class MetaClass(object):
                     if attrType == 'string':
                         if valueType == 'string' or valueType == 'unicode':
                             cmds.setAttr(attrString, value, type='string')
-                            log.debug("setAttr : %s : type : 'string' to value : %s" % (attr, value))
+                            if logging_is_debug():
+                                log.debug("setAttr : %s : type : 'string' to value : %s" % (attr, value))
                             # return  # why was this returned here, by-passing the attr lock handling?
                         elif valueType == 'complex':
-                            log.debug("setAttr : %s : type : 'complex_string' to value : %s" % (attr, self.__serializeComplex(value)))
+                            if logging_is_debug():
+                                log.debug("setAttr : %s : type : 'complex_string' to value : %s" % (attr, self.__serializeComplex(value)))
                             cmds.setAttr(attrString, self.__serializeComplex(value), type='string')
                             # return  # why was this returned here, by-passing the attr lock handling?
 
@@ -2058,7 +2074,8 @@ class MetaClass(object):
                         except StandardError, error:
                             log.debug('failed to setAttr %s - might be connected' % attrString)
                             raise StandardError(error)
-                    log.debug("setAttr : %s : type : '%s' to value : %s" % (attr, attrType, value))
+                    if logging_is_debug():
+                        log.debug("setAttr : %s : type : '%s' to value : %s" % (attr, attrType, value))
                 if locked:
                     self.attrSetLocked(attr, True)
             else:
@@ -2088,7 +2105,8 @@ class MetaClass(object):
 #                     return msgLinks[0]  # MetaClass(msgLinks[0])
             return msgLinks
         else:
-            log.debug('nothing connected to msgLink %s.%s' % (self.mNode, attr))
+            if logging_is_debug():
+                log.debug('nothing connected to msgLink %s.%s' % (self.mNode, attr))
             return []
 
     def __getattribute__(self, attr):
@@ -2104,7 +2122,8 @@ class MetaClass(object):
             data = object.__getattribute__(self, attr)
             objectattr = True
         except:
-            log.debug('%s : attr not yet seen - function call probably generated by Maya directly' % attr)
+            if logging_is_debug():
+                log.debug('%s : attr not yet seen - function call probably generated by Maya directly' % attr)
 
         if data:
             if type(data) == types.MethodType:
@@ -2186,7 +2205,8 @@ class MetaClass(object):
     @nodeLockManager
     def __delattr__(self, attr):
         try:
-            log.debug('attribute delete  : %s , %s' % (self, attr))
+            if logging_is_debug():
+                log.debug('attribute delete  : %s , %s' % (self, attr))
             object.__delattr__(self, attr)
             if self.hasAttr(attr):
                 cmds.setAttr('%s.%s' % (self.mNode, attr), l=False)
@@ -2352,12 +2372,14 @@ class MetaClass(object):
                 if kws:
                     if addkwsToEdit:
                         cmds.addAttr('%s.%s' % (self.mNode, attr), e=True, **addkwsToEdit)
-                        log.debug('addAttr Edit flags run : %s = %s' % (attr, addkwsToEdit))
+                        if logging_is_debug():
+                            log.debug('addAttr Edit flags run : %s = %s' % (attr, addkwsToEdit))
                     if setKwsToEdit:
                         try:
                             if not self.isReferenced():
                                 cmds.setAttr('%s.%s' % (self.mNode, attr), **setKwsToEdit)
-                                log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
+                                if logging_is_debug():
+                                    log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
                         except:
                             log.debug("mNode is referenced and the setEditFlags are therefore invalid (lock, keyable, channelBox)")
             except:
@@ -2372,7 +2394,8 @@ class MetaClass(object):
                 if not attrType:
                     attrType = attributeDataType(value)
                 DataTypeKws[attrType].update(addkwsToEdit)  # merge in **kws, allows you to pass in all the standard addAttr kws
-                log.debug('addAttr : %s : valueType : %s > dataType kws: %s' % (attr, attrType, DataTypeKws[attrType]))
+                if logging_is_debug():
+                    log.debug('addAttr : %s : valueType : %s > dataType kws: %s' % (attr, attrType, DataTypeKws[attrType]))
                 cmds.addAttr(self.mNode, **DataTypeKws[attrType])
 
                 if attrType == 'double3' or attrType == 'float3':
@@ -2408,7 +2431,8 @@ class MetaClass(object):
                 # allow the addAttr to set any secondarty kws via the setAttr calls
                 if setKwsToEdit:
                     cmds.setAttr('%s.%s' % (self.mNode, attr), **setKwsToEdit)
-                    log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
+                    if logging_is_debug():
+                        log.debug('setAttr Edit flags run : %s = %s' % (attr, setKwsToEdit))
 
                 added = True
             except StandardError, error:
@@ -2475,9 +2499,11 @@ class MetaClass(object):
                     try:
                         child = MetaClass(child)
                         child.renameAttr(attr, name)
-                        log.debug('Renamed Child attr to match new mNode name : %s.%s' % (child.mNode, attr))
+                        if logging_is_debug():
+                            log.debug('Renamed Child attr to match new mNode name : %s.%s' % (child.mNode, attr))
                     except:
-                        log.debug('Failed to rename attr : %s on node : %s' % (attr, child.mNode))
+                        if logging_is_debug():
+                            log.debug('Failed to rename attr : %s on node : %s' % (attr, child.mNode))
 
     def delete(self):
         '''
@@ -2729,9 +2755,11 @@ class MetaClass(object):
                     try:
                         if ismeta or allowIncest:
                             if ismeta:
-                                log.debug('connecting MetaData nodes via indexes :  %s.%s >> %s.%s' % (self.mNode, attr, node, srcAttr))
+                                if logging_is_debug():
+                                    log.debug('connecting MetaData nodes via indexes :  %s.%s >> %s.%s' % (self.mNode, attr, node, srcAttr))
                             elif allowIncest:
-                                log.debug('connecting Standard Maya nodes via indexes : %s.%s >> %s.%s' % (self.mNode, attr, node, srcAttr))
+                                if logging_is_debug():
+                                    log.debug('connecting Standard Maya nodes via indexes : %s.%s >> %s.%s' % (self.mNode, attr, node, srcAttr))
                             if not srcSimple:
                                 cmds.connectAttr('%s.%s[%i]' % (self.mNode, attr, self._getNextArrayIndex(self.mNode, attr)),
                                          '%s.%s[%i]' % (node, srcAttr, self._getNextArrayIndex(node, srcAttr)), f=force)
@@ -2739,7 +2767,8 @@ class MetaClass(object):
                                 cmds.connectAttr('%s.%s[%i]' % (self.mNode, attr, self._getNextArrayIndex(self.mNode, attr)),
                                          '%s.%s' % (node, srcAttr), f=force)
                         else:
-                            log.debug('connecting %s.%s >> %s.%s' % (self.mNode, attr, node, srcAttr))
+                            if logging_is_debug():
+                                log.debug('connecting %s.%s >> %s.%s' % (self.mNode, attr, node, srcAttr))
                             cmds.connectAttr('%s.%s' % (self.mNode, attr), '%s.%s' % (node, srcAttr), f=force)
                     except:
                         # If the add was originally a messageSimple, then this exception is a
@@ -2866,7 +2895,8 @@ class MetaClass(object):
                 currentConnects = [currentConnects]
             for connection in currentConnects:
                 try:
-                    log.debug('Disconnecting %s.%s >> from : %s' % (self.mNode, attr, connection))
+                    if logging_is_debug():
+                        log.debug('Disconnecting %s.%s >> from : %s' % (self.mNode, attr, connection))
                     self.disconnectChild(connection, attr=attr, deleteSourcePlug=deleteSourcePlug, deleteDestPlug=deleteDestPlug)
                 except:
                     log.warning('Failed to disconnect current message link')
@@ -2914,11 +2944,13 @@ class MetaClass(object):
             raise StandardError('%s is not connected to the mNode %s' % (node, self.mNode))
 
         for sPlug, dPlug in zip(cons[0::2], cons[1::2]):
-            log.debug('attr Connection inspected : %s << %s' % (sPlug, dPlug))
+            if logging_is_debug():
+                log.debug('attr Connection inspected : %s << %s' % (sPlug, dPlug))
             # print 'searchCon : ', searchConnection
             # print 'dPlug : ', dPlug
             if (attr and searchConnection == dPlug.split('[')[0]) or (not attr and searchConnection in dPlug):
-                log.debug('Disconnecting %s >> %s as %s found in dPlug' % (dPlug, sPlug, searchConnection))
+                if logging_is_debug():
+                    log.debug('Disconnecting %s >> %s as %s found in dPlug' % (dPlug, sPlug, searchConnection))
                 cmds.disconnectAttr(dPlug, sPlug)
                 returnData.append((dPlug, sPlug))
 
@@ -2928,8 +2960,9 @@ class MetaClass(object):
                 attr = sPlug.split('[')[0]  # split any multi-indexing from the plug ie node.attr[0]
                 if cmds.listConnections(attr):
                     allowDelete = False
-                    log.debug('sourceAttr connections remaining: %s' %
-                              ','.join(cmds.listConnections(attr)))
+                    if logging_is_debug():
+                        log.debug('sourceAttr connections remaining: %s' %
+                                  ','.join(cmds.listConnections(attr)))
                 if allowDelete:
                     log.debug('Deleting deleteSourcePlug Attr %s' % (attr))
                     if sPlugMeta:
@@ -2947,10 +2980,12 @@ class MetaClass(object):
                 attr = dPlug.split('[')[0]  # split any multi-indexing from the plug ie node.attr[0]
                 if cmds.listConnections(attr):
                     allowDelete = False
-                    log.debug('sourceAttr connections remaining: %s' %
-                              ','.join(cmds.listConnections(attr)))
+                    if logging_is_debug():
+                        log.debug('sourceAttr connections remaining: %s' %
+                                  ','.join(cmds.listConnections(attr)))
                 if allowDelete:
-                    log.debug('Deleting deleteDestPlug Attr %s' % (attr))
+                    if logging_is_debug():
+                        log.debug('Deleting deleteDestPlug Attr %s' % (attr))
                     delattr(self, attr.split('.')[-1])
                     # cmds.deleteAttr(attr)
                 else:
@@ -3117,7 +3152,8 @@ class MetaClass(object):
         if walk:
             childMetaNodes.extend([node for node in self.getChildMetaNodes(walk=True, mAttrs=mAttrs, **kws)])
         for node in childMetaNodes:
-            log.debug('MetaNode getChildren : %s >> %s' % (type(node), node.mNode))
+            if logging_is_debug():
+                log.debug('MetaNode getChildren : %s >> %s' % (type(node), node.mNode))
             attrs = cmds.listAttr(node.mNode, ud=True, st=cAttrs)
             if attrs:
                 for attr in attrs:
@@ -3153,7 +3189,8 @@ class MetaClass(object):
                                             break
                                             break
             else:
-                log.debug('no matching attrs : %s found on node %s' % (cAttrs, node))
+                if logging_is_debug():
+                    log.debug('no matching attrs : %s found on node %s' % (cAttrs, node))
         if self._forceAsMeta or asMeta and not asMap:
             return [MetaClass(node) for node in children]
         if asMap:
@@ -3187,7 +3224,8 @@ class MetaClass(object):
         if not connections:
             return connections
 
-        log.debug('%s : connectionMap : %s' % (node.split('|')[-1].split(':')[-1], connections[1::2]))
+        if logging_is_debug():  # debug
+            log.debug('%s : connectionMap : %s' % (node.split('|')[-1].split(':')[-1], connections[1::2]))
 
         for con in connections[1::2]:
             data = con.split('.')  # attr
@@ -3215,7 +3253,7 @@ class MetaClass(object):
             This will be depricated soon and replaced by getNodeConnections which is
             more flexible as it returns and filters all plugs between self and the given node.
         '''
-        log.debug('getNodeConnetionAttr will be depricated soon!!!!')
+        log.info('getNodeConnetionAttr will be depricated soon!!!!')
         for con in cmds.listConnections(node, s=True, d=False, p=True) or []:
             if self.mNode in con.split('.')[0]:
                 return con.split('.')[1]
@@ -3473,7 +3511,8 @@ class MetaRig(MetaClass):
         if boundData:
             if issubclass(type(boundData), dict):
                 for key, value in boundData.iteritems():
-                    log.debug('Adding boundData to node : %s:%s' % (key, value))
+                    if logging_is_debug():
+                        log.debug('Adding boundData to node : %s:%s' % (key, value))
                     MetaClass(node).addAttr(key, value=value)
 
     def getRigCtrls(self, walk=False, mAttrs=None):
@@ -3655,7 +3694,8 @@ class MetaRig(MetaClass):
         if boundData:
             if issubclass(type(boundData), dict):
                 for key, value in boundData.iteritems():
-                    log.debug('Adding boundData to node : %s:%s' % (key, value))
+                    if logging_is_debug():
+                        log.debug('Adding boundData to node : %s:%s' % (key, value))
                     MetaClass(node).addAttr(key, value=value)
 
     def addMetaSubSystem(self, systemType, side, attr=None, nodeName=None, mClass='MetaRigSubSystem', buildflags={}):
@@ -4060,13 +4100,23 @@ class MetaRig(MetaClass):
                     failed.append(node)
             return failed
 
-    def cutKeys(self, nodes=[], reset=True, walk=True):
+    def cutKeys(self, nodes=[], reset=True, walk=True, verbose=False):
         '''
         cut all animation keys from the rig and reset
 
         :param nodes: if passed in only cutKeys on given nodes
         :param reset: if true reset the rig after key removal
         '''
+        if verbose:
+            results = cmds.confirmDialog(title='CutKeys',
+                               button=['Confirm', 'Abort'],
+                               message='Confirm Key Deletion',
+                               defaultButton='Close',
+                               icon='question',
+                               cancelButton='Close',
+                               dismissString='Close')
+            if results == 'Abort':
+                return
         if not nodes:
             nodes = self.getChildren(walk=walk)
         if self.hasKeys(nodes):
@@ -4428,7 +4478,8 @@ class MetaRigSupport(MetaClass):
         if boundData:
             if issubclass(type(boundData), dict):
                 for key, value in boundData.iteritems():
-                    log.debug('Adding boundData to node : %s:%s' % (key, value))
+                    if logging_is_debug():
+                        log.debug('Adding boundData to node : %s:%s' % (key, value))
                     MetaClass(node).addAttr(key, value=value)
 
 
@@ -4499,7 +4550,8 @@ class MetaFacialRigSupport(MetaClass):
         if boundData:
             if issubclass(type(boundData), dict):
                 for key, value in boundData.iteritems():
-                    log.debug('Adding boundData to node : %s:%s' % (key, value))
+                    if logging_is_debug():
+                        log.debug('Adding boundData to node : %s:%s' % (key, value))
                     MetaClass(node).addAttr(key, value=value)
 
 

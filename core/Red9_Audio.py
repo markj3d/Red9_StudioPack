@@ -462,7 +462,7 @@ class AudioHandler(object):
     def combineAudio(self, filepath):
         '''
         Combine audio tracks into a single wav file. This by-passes
-        the issues with Maya not playblasting multipe audio tracks.
+        the issues with Maya not playblasting multiple audio tracks.
 
         :param filepath: filepath to store the combined audioTrack
         TODO: Deal with offset start and end data + silence
@@ -601,6 +601,10 @@ class AudioNode(object):
             log.debug('Setting BWAV internal path : %s' % self.pro_bwav)
 
     @property
+    def name(self):
+        return os.path.basename(self.path)
+
+    @property
     def audioNode(self):
         return self.__audioNode
 
@@ -638,7 +642,7 @@ class AudioNode(object):
     # pyDub inspect calls ---
     # ---------------------------------------------------------------------------------
     # https://github.com/jiaaro/pydub/blob/master/API.markdown
-    
+
     @property
     def sampleRate(self):
         '''
@@ -954,12 +958,14 @@ class AudioNode(object):
             duration = frames / float(rate)
             return (duration) * r9General.getCurrentFPS()
 
-    def setTimeline(self):
+    def setTimeline(self, full=False):
         '''
         Set the Maya timeline to the duration of the sound
         '''
         if self.isLoaded:
             cmds.playbackOptions(min=int(self.startFrame), max=int(self.endFrame))
+            if full:
+                cmds.playbackOptions(ast=int(self.startFrame), aet=int(self.endFrame))
 
     def mute(self, state=True):
         '''

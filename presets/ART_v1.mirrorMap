@@ -1,0 +1,272 @@
+[mirror]
+	[[Right]]
+		[[[24]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|index_finger_fk_ctrl_1_r_grp|index_finger_fk_ctrl_1_r_driven_grp|index_finger_fk_ctrl_1_r|index_finger_fk_ctrl_2_r_grp|index_finger_fk_ctrl_2_r_driven_grp|index_finger_fk_ctrl_2_r
+			axisAttr = True
+			axis = ,
+		[[[25]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|index_finger_fk_ctrl_1_r_grp|index_finger_fk_ctrl_1_r_driven_grp|index_finger_fk_ctrl_1_r|index_finger_fk_ctrl_2_r_grp|index_finger_fk_ctrl_2_r_driven_grp|index_finger_fk_ctrl_2_r|index_finger_fk_ctrl_3_r_grp|index_finger_fk_ctrl_3_r_driven_grp|index_finger_fk_ctrl_3_r
+			axisAttr = True
+			axis = ,
+		[[[26]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|middle_finger_fk_ctrl_1_r_grp|middle_finger_fk_ctrl_1_r_driven_grp|middle_finger_fk_ctrl_1_r
+			axisAttr = True
+			axis = ,
+		[[[27]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|middle_finger_fk_ctrl_1_r_grp|middle_finger_fk_ctrl_1_r_driven_grp|middle_finger_fk_ctrl_1_r|middle_finger_fk_ctrl_2_r_grp|middle_finger_fk_ctrl_2_r_driven_grp|middle_finger_fk_ctrl_2_r
+			axisAttr = True
+			axis = ,
+		[[[20]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|thumb_finger_fk_ctrl_1_r_grp|thumb_finger_fk_ctrl_1_r_driven_grp|thumb_finger_fk_ctrl_1_r
+			axisAttr = True
+			axis = ,
+		[[[21]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|thumb_finger_fk_ctrl_1_r_grp|thumb_finger_fk_ctrl_1_r_driven_grp|thumb_finger_fk_ctrl_1_r|thumb_finger_fk_ctrl_2_r_grp|thumb_finger_fk_ctrl_2_r_driven_grp|thumb_finger_fk_ctrl_2_r
+			axisAttr = True
+			axis = ,
+		[[[22]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|thumb_finger_fk_ctrl_1_r_grp|thumb_finger_fk_ctrl_1_r_driven_grp|thumb_finger_fk_ctrl_1_r|thumb_finger_fk_ctrl_2_r_grp|thumb_finger_fk_ctrl_2_r_driven_grp|thumb_finger_fk_ctrl_2_r|thumb_finger_fk_ctrl_3_r_grp|thumb_finger_fk_ctrl_3_r_driven_grp|thumb_finger_fk_ctrl_3_r
+			axisAttr = True
+			axis = ,
+		[[[23]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|index_finger_fk_ctrl_1_r_grp|index_finger_fk_ctrl_1_r_driven_grp|index_finger_fk_ctrl_1_r
+			axisAttr = True
+			axis = ,
+		[[[28]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|middle_finger_fk_ctrl_1_r_grp|middle_finger_fk_ctrl_1_r_driven_grp|middle_finger_fk_ctrl_1_r|middle_finger_fk_ctrl_2_r_grp|middle_finger_fk_ctrl_2_r_driven_grp|middle_finger_fk_ctrl_2_r|middle_finger_fk_ctrl_3_r_grp|middle_finger_fk_ctrl_3_r_driven_grp|middle_finger_fk_ctrl_3_r
+			axisAttr = True
+			axis = ,
+		[[[29]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|ring_finger_fk_ctrl_1_r_grp|ring_finger_fk_ctrl_1_r_driven_grp|ring_finger_fk_ctrl_1_r
+			axisAttr = True
+			axis = ,
+		[[[1]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|ik_wrist_r_anim_space_switcher_follow|ik_wrist_r_anim_space_switcher|ik_wrist_r_anim_grp|ik_wrist_r_anim
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[2]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|ik_elbow_r_anim_space_switcher_follow|ik_elbow_r_anim_space_switcher|ik_elbow_r_anim_grp|ik_elbow_r_anim
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[5]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|ik_wrist_r_anim_space_switcher_follow|ik_wrist_r_anim_space_switcher|ik_wrist_r_anim_grp|ik_wrist_r_anim|r_global_ik_anim_space_switcher_follow|r_global_ik_anim_space_switcher|r_global_ik_anim_grp|r_global_ik_anim
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[4]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|arm_rig_master_grp_r|auto_clav_world_grp_r|clavicle_r_anim_grp|clavicle_r_anim
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[7]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|arm_rig_master_grp_r|fk_orient_master_loc_r|fk_arm_r_anim_grp|fk_arm_r_anim|fk_elbow_r_anim_grp|fk_elbow_r_anim
+			axisAttr = True
+			axis = ,
+		[[[6]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|arm_rig_master_grp_r|fk_orient_master_loc_r|fk_arm_r_anim_grp|fk_arm_r_anim
+			axisAttr = True
+			axis = ,
+		[[[8]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|arm_rig_master_grp_r|fk_orient_master_loc_r|fk_arm_r_anim_grp|fk_arm_r_anim|fk_elbow_r_anim_grp|fk_elbow_r_anim|fk_wrist_r_anim_grp|fk_wrist_r_anim
+			axisAttr = True
+			axis = ,
+		[[[11]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_r|ik_leg_grp_r|ik_knee_anim_grp_r|ik_knee_anim_r
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[10]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_r|ik_leg_grp_r|ik_foot_anim_r_space_switcher_follow|ik_foot_anim_r_space_switcher|ik_foot_anim_grp_r|ik_foot_anim_r
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[13]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_r|leg_joints_grp_r|fk_thigh_r_orient_grp|fk_thigh_r_anim_grp|fk_thigh_r_anim
+			axisAttr = True
+			axis = ,
+		[[[15]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_r|leg_joints_grp_r|fk_thigh_r_orient_grp|fk_thigh_r_anim_grp|fk_thigh_r_anim|fk_calf_r_anim_grp|fk_calf_r_anim|fk_foot_r_anim_grp|fk_foot_r_anim
+			axisAttr = True
+			axis = ,
+		[[[14]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_r|leg_joints_grp_r|fk_thigh_r_orient_grp|fk_thigh_r_anim_grp|fk_thigh_r_anim|fk_calf_r_anim_grp|fk_calf_r_anim
+			axisAttr = True
+			axis = ,
+		[[[17]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_r|ik_leg_grp_r|ik_foot_anim_r_space_switcher_follow|ik_foot_anim_r_space_switcher|ik_foot_anim_grp_r|ik_foot_anim_r|master_foot_ball_pivot_r_grp|master_foot_ball_pivot_r|toe_tip_ctrl_r_grp|toe_tip_ctrl_r
+			axisAttr = True
+			axis = ,
+		[[[16]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_r|ik_leg_grp_r|ik_foot_anim_r_space_switcher_follow|ik_foot_anim_r_space_switcher|ik_foot_anim_grp_r|ik_foot_anim_r|master_foot_ball_pivot_r_grp|master_foot_ball_pivot_r|heel_ctrl_r_grp|heel_ctrl_r
+			axisAttr = True
+			axis = ,
+		[[[33]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|pinky_finger_fk_ctrl_1_r_grp|pinky_finger_fk_ctrl_1_r_driven_grp|pinky_finger_fk_ctrl_1_r|pinky_finger_fk_ctrl_2_r_grp|pinky_finger_fk_ctrl_2_r_driven_grp|pinky_finger_fk_ctrl_2_r
+			axisAttr = True
+			axis = ,
+		[[[32]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|pinky_finger_fk_ctrl_1_r_grp|pinky_finger_fk_ctrl_1_r_driven_grp|pinky_finger_fk_ctrl_1_r
+			axisAttr = True
+			axis = ,
+		[[[31]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|ring_finger_fk_ctrl_1_r_grp|ring_finger_fk_ctrl_1_r_driven_grp|ring_finger_fk_ctrl_1_r|ring_finger_fk_ctrl_2_r_grp|ring_finger_fk_ctrl_2_r_driven_grp|ring_finger_fk_ctrl_2_r|ring_finger_fk_ctrl_3_r_grp|ring_finger_fk_ctrl_3_r_driven_grp|ring_finger_fk_ctrl_3_r
+			axisAttr = True
+			axis = ,
+		[[[30]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|ring_finger_fk_ctrl_1_r_grp|ring_finger_fk_ctrl_1_r_driven_grp|ring_finger_fk_ctrl_1_r|ring_finger_fk_ctrl_2_r_grp|ring_finger_fk_ctrl_2_r_driven_grp|ring_finger_fk_ctrl_2_r
+			axisAttr = True
+			axis = ,
+		[[[34]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_r|hand_driven_grp_master_r|hand_driven_grp_r|fk_finger_controls_r_grp|pinky_finger_fk_ctrl_1_r_grp|pinky_finger_fk_ctrl_1_r_driven_grp|pinky_finger_fk_ctrl_1_r|pinky_finger_fk_ctrl_2_r_grp|pinky_finger_fk_ctrl_2_r_driven_grp|pinky_finger_fk_ctrl_2_r|pinky_finger_fk_ctrl_3_r_grp|pinky_finger_fk_ctrl_3_r_driven_grp|pinky_finger_fk_ctrl_3_r
+			axisAttr = True
+			axis = ,
+		[[[18]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_r|ik_leg_grp_r|ik_foot_anim_r_space_switcher_follow|ik_foot_anim_r_space_switcher|ik_foot_anim_grp_r|ik_foot_anim_r|master_foot_ball_pivot_r_grp|master_foot_ball_pivot_r|ik_foot_toe_tip_pivot_r_grp|ik_foot_toe_tip_pivot_r|ik_foot_inside_pivot_r_grp|ik_foot_inside_pivot_r|ik_foot_outside_pivot_r_grp|ik_foot_outside_pivot_r|ik_foot_heel_pivot_r_grp|ik_foot_heel_pivot_r|ik_foot_toe_pivot_r_grp|ik_foot_toe_pivot_r|toe_wiggle_ctrl_r_grp|toe_wiggle_ctrl_r
+			axisAttr = True
+			axis = ,
+	[[Left]]
+		[[[24]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|index_finger_fk_ctrl_1_l_grp|index_finger_fk_ctrl_1_l_driven_grp|index_finger_fk_ctrl_1_l|index_finger_fk_ctrl_2_l_grp|index_finger_fk_ctrl_2_l_driven_grp|index_finger_fk_ctrl_2_l
+			axisAttr = True
+			axis = ,
+		[[[25]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|index_finger_fk_ctrl_1_l_grp|index_finger_fk_ctrl_1_l_driven_grp|index_finger_fk_ctrl_1_l|index_finger_fk_ctrl_2_l_grp|index_finger_fk_ctrl_2_l_driven_grp|index_finger_fk_ctrl_2_l|index_finger_fk_ctrl_3_l_grp|index_finger_fk_ctrl_3_l_driven_grp|index_finger_fk_ctrl_3_l
+			axisAttr = True
+			axis = ,
+		[[[26]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|middle_finger_fk_ctrl_1_l_grp|middle_finger_fk_ctrl_1_l_driven_grp|middle_finger_fk_ctrl_1_l
+			axisAttr = True
+			axis = ,
+		[[[27]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|middle_finger_fk_ctrl_1_l_grp|middle_finger_fk_ctrl_1_l_driven_grp|middle_finger_fk_ctrl_1_l|middle_finger_fk_ctrl_2_l_grp|middle_finger_fk_ctrl_2_l_driven_grp|middle_finger_fk_ctrl_2_l
+			axisAttr = True
+			axis = ,
+		[[[20]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|thumb_finger_fk_ctrl_1_l_grp|thumb_finger_fk_ctrl_1_l_driven_grp|thumb_finger_fk_ctrl_1_l
+			axisAttr = True
+			axis = ,
+		[[[21]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|thumb_finger_fk_ctrl_1_l_grp|thumb_finger_fk_ctrl_1_l_driven_grp|thumb_finger_fk_ctrl_1_l|thumb_finger_fk_ctrl_2_l_grp|thumb_finger_fk_ctrl_2_l_driven_grp|thumb_finger_fk_ctrl_2_l
+			axisAttr = True
+			axis = ,
+		[[[22]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|thumb_finger_fk_ctrl_1_l_grp|thumb_finger_fk_ctrl_1_l_driven_grp|thumb_finger_fk_ctrl_1_l|thumb_finger_fk_ctrl_2_l_grp|thumb_finger_fk_ctrl_2_l_driven_grp|thumb_finger_fk_ctrl_2_l|thumb_finger_fk_ctrl_3_l_grp|thumb_finger_fk_ctrl_3_l_driven_grp|thumb_finger_fk_ctrl_3_l
+			axisAttr = True
+			axis = ,
+		[[[23]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|index_finger_fk_ctrl_1_l_grp|index_finger_fk_ctrl_1_l_driven_grp|index_finger_fk_ctrl_1_l
+			axisAttr = True
+			axis = ,
+		[[[28]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|middle_finger_fk_ctrl_1_l_grp|middle_finger_fk_ctrl_1_l_driven_grp|middle_finger_fk_ctrl_1_l|middle_finger_fk_ctrl_2_l_grp|middle_finger_fk_ctrl_2_l_driven_grp|middle_finger_fk_ctrl_2_l|middle_finger_fk_ctrl_3_l_grp|middle_finger_fk_ctrl_3_l_driven_grp|middle_finger_fk_ctrl_3_l
+			axisAttr = True
+			axis = ,
+		[[[29]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|ring_finger_fk_ctrl_1_l_grp|ring_finger_fk_ctrl_1_l_driven_grp|ring_finger_fk_ctrl_1_l
+			axisAttr = True
+			axis = ,
+		[[[1]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|ik_wrist_l_anim_space_switcher_follow|ik_wrist_l_anim_space_switcher|ik_wrist_l_anim_grp|ik_wrist_l_anim
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[2]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|ik_elbow_l_anim_space_switcher_follow|ik_elbow_l_anim_space_switcher|ik_elbow_l_anim_grp|ik_elbow_l_anim
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[5]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|ik_wrist_l_anim_space_switcher_follow|ik_wrist_l_anim_space_switcher|ik_wrist_l_anim_grp|ik_wrist_l_anim|l_global_ik_anim_space_switcher_follow|l_global_ik_anim_space_switcher|l_global_ik_anim_grp|l_global_ik_anim
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[4]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|arm_rig_master_grp_l|auto_clav_world_grp_l|clavicle_l_anim_grp|clavicle_l_anim
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[7]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|arm_rig_master_grp_l|fk_orient_master_loc_l|fk_arm_l_anim_grp|fk_arm_l_anim|fk_elbow_l_anim_grp|fk_elbow_l_anim
+			axisAttr = True
+			axis = ,
+		[[[6]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|arm_rig_master_grp_l|fk_orient_master_loc_l|fk_arm_l_anim_grp|fk_arm_l_anim
+			axisAttr = True
+			axis = ,
+		[[[8]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|arm_sys_grp|arm_rig_master_grp_l|fk_orient_master_loc_l|fk_arm_l_anim_grp|fk_arm_l_anim|fk_elbow_l_anim_grp|fk_elbow_l_anim|fk_wrist_l_anim_grp|fk_wrist_l_anim
+			axisAttr = True
+			axis = ,
+		[[[11]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_l|ik_leg_grp_l|ik_knee_anim_grp_l|ik_knee_anim_l
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[10]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_l|ik_leg_grp_l|ik_foot_anim_l_space_switcher_follow|ik_foot_anim_l_space_switcher|ik_foot_anim_grp_l|ik_foot_anim_l
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[13]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_l|leg_joints_grp_l|fk_thigh_l_orient_grp|fk_thigh_l_anim_grp|fk_thigh_l_anim
+			axisAttr = True
+			axis = ,
+		[[[15]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_l|leg_joints_grp_l|fk_thigh_l_orient_grp|fk_thigh_l_anim_grp|fk_thigh_l_anim|fk_calf_l_anim_grp|fk_calf_l_anim|fk_foot_l_anim_grp|fk_foot_l_anim
+			axisAttr = True
+			axis = ,
+		[[[14]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_l|leg_joints_grp_l|fk_thigh_l_orient_grp|fk_thigh_l_anim_grp|fk_thigh_l_anim|fk_calf_l_anim_grp|fk_calf_l_anim
+			axisAttr = True
+			axis = ,
+		[[[17]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_l|ik_leg_grp_l|ik_foot_anim_l_space_switcher_follow|ik_foot_anim_l_space_switcher|ik_foot_anim_grp_l|ik_foot_anim_l|master_foot_ball_pivot_l_grp|master_foot_ball_pivot_l|toe_tip_ctrl_l_grp|toe_tip_ctrl_l
+			axisAttr = True
+			axis = ,
+		[[[16]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_l|ik_leg_grp_l|ik_foot_anim_l_space_switcher_follow|ik_foot_anim_l_space_switcher|ik_foot_anim_grp_l|ik_foot_anim_l|master_foot_ball_pivot_l_grp|master_foot_ball_pivot_l|heel_ctrl_l_grp|heel_ctrl_l
+			axisAttr = True
+			axis = ,
+		[[[33]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|pinky_finger_fk_ctrl_1_l_grp|pinky_finger_fk_ctrl_1_l_driven_grp|pinky_finger_fk_ctrl_1_l|pinky_finger_fk_ctrl_2_l_grp|pinky_finger_fk_ctrl_2_l_driven_grp|pinky_finger_fk_ctrl_2_l
+			axisAttr = True
+			axis = ,
+		[[[32]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|pinky_finger_fk_ctrl_1_l_grp|pinky_finger_fk_ctrl_1_l_driven_grp|pinky_finger_fk_ctrl_1_l
+			axisAttr = True
+			axis = ,
+		[[[31]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|ring_finger_fk_ctrl_1_l_grp|ring_finger_fk_ctrl_1_l_driven_grp|ring_finger_fk_ctrl_1_l|ring_finger_fk_ctrl_2_l_grp|ring_finger_fk_ctrl_2_l_driven_grp|ring_finger_fk_ctrl_2_l|ring_finger_fk_ctrl_3_l_grp|ring_finger_fk_ctrl_3_l_driven_grp|ring_finger_fk_ctrl_3_l
+			axisAttr = True
+			axis = ,
+		[[[30]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|ring_finger_fk_ctrl_1_l_grp|ring_finger_fk_ctrl_1_l_driven_grp|ring_finger_fk_ctrl_1_l|ring_finger_fk_ctrl_2_l_grp|ring_finger_fk_ctrl_2_l_driven_grp|ring_finger_fk_ctrl_2_l
+			axisAttr = True
+			axis = ,
+		[[[34]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|finger_sys_grp_l|hand_driven_grp_master_l|hand_driven_grp_l|fk_finger_controls_l_grp|pinky_finger_fk_ctrl_1_l_grp|pinky_finger_fk_ctrl_1_l_driven_grp|pinky_finger_fk_ctrl_1_l|pinky_finger_fk_ctrl_2_l_grp|pinky_finger_fk_ctrl_2_l_driven_grp|pinky_finger_fk_ctrl_2_l|pinky_finger_fk_ctrl_3_l_grp|pinky_finger_fk_ctrl_3_l_driven_grp|pinky_finger_fk_ctrl_3_l
+			axisAttr = True
+			axis = ,
+		[[[18]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|leg_sys_grp|leg_group_l|ik_leg_grp_l|ik_foot_anim_l_space_switcher_follow|ik_foot_anim_l_space_switcher|ik_foot_anim_grp_l|ik_foot_anim_l|master_foot_ball_pivot_l_grp|master_foot_ball_pivot_l|ik_foot_toe_tip_pivot_l_grp|ik_foot_toe_tip_pivot_l|ik_foot_inside_pivot_l_grp|ik_foot_inside_pivot_l|ik_foot_outside_pivot_l_grp|ik_foot_outside_pivot_l|ik_foot_heel_pivot_l_grp|ik_foot_heel_pivot_l|ik_foot_toe_pivot_l_grp|ik_foot_toe_pivot_l|toe_wiggle_ctrl_l_grp|toe_wiggle_ctrl_l
+			axisAttr = True
+			axis = ,
+	[[Centre]]
+		[[[15]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|neck_01_fk_anim_grp|neck_fk_orient_master|neck_01_fk_anim
+			axisAttr = True
+			axis = translateZ, rotateX, rotateY
+		[[[17]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|neck_01_fk_anim_grp|neck_fk_orient_master|neck_01_fk_anim|head_fk_orient_master|head_fk_anim_grp|head_fk_anim
+			axisAttr = True
+			axis = translateZ, rotateX, rotateY
+		[[[1]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim
+			axisAttr = False
+			axis = translateX, rotateY, rotateZ
+		[[[3]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|body_grp|body_anim_space_switcher_follow|body_anim_space_switcher|body_anim_grp|body_anim
+			axisAttr = True
+			axis = translateZ, rotateX, rotateY
+		[[[5]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|body_grp|body_anim_space_switcher_follow|body_anim_space_switcher|body_anim_grp|body_anim|chest_ik_anim_space_switcher_follow|chest_ik_anim_space_switcher|chest_ik_anim_grp|chest_ik_anim_driver_grp|chest_ik_anim
+			axisAttr = True
+			axis = translateZ, rotateX, rotateY
+		[[[4]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|body_grp|body_anim_space_switcher_follow|body_anim_space_switcher|body_anim_grp|body_anim|auto_hip_world|hip_anim
+			axisAttr = True
+			axis = translateZ, rotateX, rotateY
+		[[[6]]]
+			node = |rig_grp|master_anim_space_switcher_follow|master_anim_space_switcher|master_anim|offset_anim|ctrl_rig|body_grp|body_anim_space_switcher_follow|body_anim_space_switcher|body_anim_grp|body_anim|mid_ik_anim_grp|mid_ik_anim_translate_driver_grp|mid_ik_anim_driver_grp|mid_ik_anim
+			axisAttr = True
+			axis = translateZ, rotateX, rotateY
