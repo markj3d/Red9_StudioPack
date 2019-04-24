@@ -1411,7 +1411,7 @@ class PoseBlender(object):
         # cmds.text('    Blending Pose :  "%s"' % self.poseNode.filename, fn='boldLabelFont', h=20)
         cmds.separator(h=10, style='in')
         cmds.rowColumnLayout(numberOfColumns=3,
-                             columnWidth=[(1, 350), (2, 120), (3, 120)],
+                             columnWidth=[(1, 460), (2, 110), (3, 110)],
                              columnSpacing=[(2, 5), (3, 5)])
 
         for filepath in self.filepaths:
@@ -1424,7 +1424,7 @@ class PoseBlender(object):
                                 minValue=0.0,
                                 maxValue=100.0,
                                 value=0,
-                                columnWidth3=[140, 60, 200],
+                                columnWidth3=[200, 60, 200],
                                 dc=partial(self._blendPose, filepath, name),
                                 cc=partial(self._closeChunk))
 

@@ -44,6 +44,7 @@ import os
 import uuid
 import types
 import inspect
+import traceback
 
 import Red9.startup.setup as r9Setup
 import Red9_General as r9General
@@ -1955,7 +1956,7 @@ class MetaClass(object):
             attrs = self.listAttrsOfType(Type='message')
         else:
             attrs = cmds.listAttr(self.mNode)
-
+            # attrs = self.listAttrsOfType(Type='none')
         for attr in attrs:
             try:
                 # we only want to fill the __dict__ we don't want the overhead
@@ -4148,7 +4149,9 @@ class MetaRig(MetaClass):
         :param filepath: r9Anim file to load
         :param incRoots: do we include the root node in the load, in metaRig case this is ctrl_main
         :param useFilter: do we process all children of this rig or just selected
-        :param timerange: specify a timerange to store, else store all
+        :param timerange: specify a timerange to store, If no timerange is passed
+            then it will use the current timeLine PlaybackRange, OR if you have a
+            highlighted range of time selected (in red) it'll use this instead.
         :param storeThumbnail: this will be an avi but currently it's a pose thumbnail
         :param force: allow force write on a read only file
         :param userInfoData: user information used by the AnimStore UI only
@@ -4744,10 +4747,104 @@ class MetaHIKControlSetNode(MetaRig):
 class MetaHIKPropertiesNode(MetaClass):
     '''
     Casting HIK Properties to a Meta class for easy managing
+
+    ** PRO PACK BASED SETUP FOR THE REMAPPING HANDLERS **
     '''
     def __init__(self, *args, **kws):
         super(MetaHIKPropertiesNode, self).__init__(*args, **kws)
 
+        try:
+            # try the pro_pack first as this is tested more
+            from Red9 import pro_pack as r9pro
+            self._resetfile = r9General.formatPath_join(r9pro.red9ProResourcePath(), 'HIK_default.hikproperties')
+        except:
+            # included in StudioPack for consistency of the codebase
+            self._resetfile = r9General.formatPath_join(r9Setup.red9ModulePath(), 'presets', 'resource_files', 'HIK_default.hikproperties')
+
+    def get_mapping(self):
+        '''
+        get the current mapping state and return a dict {attr:val, ...}
+        '''
+        data = {}
+        for attr in sorted(cmds.listAttr(self.mNode)):
+            if attr == 'message':  # skip the default message wire back to the HIK Character node
+                continue
+            data[attr] = getattr(self, attr)
+        return data
+
+    def get_non_default_values(self):
+        '''
+        return values that differ from the default values and have therefore been set by the user
+        '''
+        changes = {}
+        defaults = r9General.readJson(self._resetfile)
+        current = self.get_mapping()
+        for key, val in current.items():
+            if not val == defaults[key]:
+                changes[key] = [defaults[key], val]
+        return changes
+
+    def reset_defaults(self):
+        '''
+        reset the default mapping property states
+        '''
+        if not os.path.exists(self._resetfile):
+            log.warning('__hik_default__.hikproperties : reset file not found in systems!')
+            return
+        self.load_mapping(self._resetfile, changes_only=True, verbose=True)
+
+    def save_mapping(self, filepath):
+        '''
+        save the current mapping to file
+
+        :param filepath: filepath to store the mapping out too
+        '''
+        filepath = os.path.splitext(filepath)[0] + '.hikproperties'
+        try:
+            r9General.writeJson(filepath, self.get_mapping())
+        except:
+            log.warning(traceback.format_exc())
+        log.info('HIK Properties Saved: %s' % filepath)
+
+    def load_mapping(self, filepath, changes_only=True, verbose=True):
+        '''
+        load a previous mapping back from file
+
+        :param filepath: filepath to load the mapping from
+        :param changes_only: only set those attrs that have changed (limits errors)
+        :param verbose: report back all data set, changed or failed
+        '''
+        dataTypes = [float, int, bool]  # data types we're going to handle
+
+        status = {'failed': {}, 'set': {}, 'changed': {}}
+        if not os.path.exists(filepath):
+            raise IOError('Filepath not found! %s' % filepath)
+
+        for key, val in r9General.readJson(filepath).items():
+            try:
+                if type(val) in dataTypes:
+                    if changes_only:
+                        current = getattr(self, key)
+                        if not current == val:
+                            setattr(self, key, val)
+                            status['changed'][key] = (current, val)
+                    else:
+                        setattr(self, key, val)
+                        status['set'][key] = val
+            except:
+                status['failed'][key] = (val, traceback.format_exc())
+        if verbose:
+            for attr, val in sorted(status['set'].items()):
+                log.info('Set HIKProperty : %s : %s' % (attr, val))
+
+            for attr, val in sorted(status['changed'].items()):
+                log.info('Changed HIKProperty : %s : from %s >  %s' % (attr, val[0], val[1]))
+
+            for attr, val in status['failed'].items():
+                log.info('Failed to set HIKProperty : %s : %s' % (attr, val[0]))
+                log.debug(val[1])
+
+        return status
 
 
 # EXPERIMENTAL CALLS ==========================================================

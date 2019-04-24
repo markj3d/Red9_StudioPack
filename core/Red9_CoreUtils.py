@@ -313,6 +313,38 @@ def nodes_in_hierarchy(rootNode, nodes=[], nodeType=None):
                     found.append(m)
     return found
 
+def nodes_are_constrained(src, target):
+    '''
+    :param src: the node that would be the driver of the constraint
+    :param target: the node we think is being driven
+
+    return any constraints between the source and target object if found.
+    This checks the target for child constraints, then checks the target list
+    for those constraints to see if the src is in the list, if so it's added to the return
+    '''
+    found = []
+    src = cmds.ls(src, l=True)[0]
+    cons = cmds.listRelatives(target, type='parentConstraint', f=True)
+    if cons:
+        for con in cons:
+            if src in [cmds.ls(node, l=True)[0] for node in cmds.parentConstraint(con, q=True, tl=True)]:
+                found.append(con)
+    cons = cmds.listRelatives(target, type='orientConstraint', f=True)
+    if cons:
+        for con in cons:
+            if src in [cmds.ls(node, l=True)[0] for node in cmds.orientConstraint(con, q=True, tl=True)]:
+                found.append(con)
+    cons = cmds.listRelatives(target, type='pointConstraint', f=True)
+    if cons:
+        for con in cons:
+            if src in [cmds.ls(node, l=True)[0] for node in cmds.pointConstraint(con, q=True, tl=True)]:
+                found.append(con)
+    cons = cmds.listRelatives(target, type='scaleConstraint', f=True)
+    if cons:
+        for con in cons:
+            if src in [cmds.ls(node, l=True)[0] for node in cmds.scaleConstraint(con, q=True, tl=True)]:
+                found.append(con)
+    return found
 
 # -------------------------------------------------------------------------------------
 # Filter Node Setups ------
@@ -2497,8 +2529,8 @@ class TimeOffset(object):
 
         :param offset: amount to offset the curves
         :param nodes: nodes to offset if given
-        :param timerange: if timerange given [start,end] then we cut the keys in that 
-            range before shifting associated keys. Now we could just use the 
+        :param timerange: if timerange given [start,end] then we cut the keys in that
+            range before shifting associated keys. Now we could just use the
             keyframe(option='insert') BUT this has a MAJOR crash bug!
         :param ripple: manage the upper range of keys and ripple them with the offset
         '''
@@ -2537,8 +2569,9 @@ class TimeOffset(object):
                         cmds.keyframe(curve, edit=True, r=True, timeChange=offset)
                     log.debug('offsetting: %s' % curve)
                     moved += 1
-                except:
+                except StandardError, err:
                     log.info('Failed to offset curves fully : %s' % curve)
+                    log.debug(err)
             log.info('%i : AnimCurves were offset' % moved)
 
     @staticmethod
@@ -2561,7 +2594,7 @@ class TimeOffset(object):
         :param mode: either process entire scene or selected
         :param audioNodes: optional, given nodes to process
         :param timerange: optional timerange to process (outer bounds only)
-        :param ripple: when shifting nodes ripple the offset to sounds after the range, 
+        :param ripple: when shifting nodes ripple the offset to sounds after the range,
             if ripple=False we only shift audio that starts in tghe bounds of the timerange
         '''
         if mode == 'Scene':
@@ -2595,7 +2628,7 @@ class TimeOffset(object):
         :param mode: either process entire scene or selected
         :param clips: optional, given clips to offset
         :param timerange: optional timerange to process (outer bounds only)
-        :param ripple: when shifting nodes ripple the offset to clips after the range, 
+        :param ripple: when shifting nodes ripple the offset to clips after the range,
             if ripple=False we only shift clips that starts in tghe bounds of the timerange
         '''
         if mode == 'Scene':

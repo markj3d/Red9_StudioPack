@@ -1324,10 +1324,14 @@ class AnimationUI(object):
         self.posePopupGrid = cmds.popupMenu('posePopupGrid')
 
         cmds.setParent(self.poseUILayout)
-        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 162), (2, 162)])
+        # cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 162), (2, 162)])
+        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 108), (2, 108), (3, 108)])
         cmds.button('loadPoseButton', label=LANGUAGE_MAP._AnimationUI_.pose_load, bgc=self.buttonBgc,
                      ann=LANGUAGE_MAP._AnimationUI_.pose_load_ann,
                      command=partial(self.__uiCall, 'PoseLoad'))
+        cmds.button('blendPoseButton', label=LANGUAGE_MAP._AnimationUI_.pose_blend, bgc=self.buttonBgc,
+                     ann=LANGUAGE_MAP._AnimationUI_.pose_blend_ann,
+                     command=partial(self.__uiCall, 'PoseBlender'))
         cmds.button('savePoseButton', label=LANGUAGE_MAP._AnimationUI_.pose_save, bgc=self.buttonBgc,
                      ann=LANGUAGE_MAP._AnimationUI_.pose_save_ann,
                      command=partial(self.__uiCall, 'PoseSave'))

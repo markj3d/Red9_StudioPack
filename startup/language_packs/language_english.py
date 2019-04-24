@@ -431,6 +431,8 @@ checkBoxes will process all children of the roots'''
     pose_load_ann = 'Load Pose data for the given Hierarchy or Selections'
     pose_save = 'Save Pose'
     pose_save_ann = 'Save Pose data for the given Hierarchy or Selections'
+    pose_blend = 'Blend Pose'
+    pose_blend_ann = 'blend the selected pose with the current objects transforms'
     pose_hierarchy_ann = "Hierarchy: if OFF during Load then the pose will load to the selected nodes IF they're in the pose file"
     pose_set_root = 'SetRootNode'
     pose_set_root_ann = 'Hierarchy Root Node for the Pose'
