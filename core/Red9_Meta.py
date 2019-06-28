@@ -152,6 +152,29 @@ def getMClassMetaRegistry():
     '''
     return RED9_META_REGISTERY
 
+def create_mNode_from_gatherInfo(data):
+    '''
+    a simple wrapper to re-construct the correct mNode from a dict() built by
+    the MetaClass.gatherInfo_mNode() call. This is primarily aimed at the new
+    load_connection_datamap call in ProPack to rebuild entire networks from a
+    map file without having to write complex macros to rebuild a system and
+    all it's wiring.
+    '''
+    if data['mClass'] in RED9_META_REGISTERY:
+        mNode = RED9_META_REGISTERY[data['mClass']](node=None,
+                                            name=data['mNode'],
+                                            nodeType=data['nodeType'],
+                                            autofill='False')
+        mNode.mClassGrp = data['mClassGrp']
+        mNode.mSystemRoot = data['mSystemRoot']
+
+        # custom attrs handled by the base class as defaults
+        if 'systemType' in data and mNode.hasAttr('systemType'):
+            mNode.systemType = data['systemType']
+        if 'mirrorSide' in data and mNode.hasAttr('mirrorSide'):
+            mNode.mirrorSide = data['mirrorSide']
+        return mNode
+
 def getMClassInstances(mInstances):
     '''
     return a list of Registered metaClasses that are subclassed from the given
@@ -322,10 +345,17 @@ def registerMClassNodeCache(mNode):
     global RED9_META_NODECACHE
     version = r9Setup.mayaVersion()
 
+    # Maya 2016 onwards UUID management  ---------
     if version >= 2016:
         UUID = cmds.ls(mNode.mNode, uuid=True)[0]
+        if UUID in RED9_META_NODECACHE.keys():
+            # log.debug('CACHE : UUID is already registered in cache')
+            if not mNode == RED9_META_NODECACHE[UUID]:
+                log.debug('CACHE : %s : UUID is registered to a different node : modifying UUID: %s' % (UUID, mNode.mNode))
+                UUID = mNode.setUUID()
+
+    # Maya 2015 and below only -------------------
     elif mNode.hasAttr('UUID'):
-        # 2015 and below only -------------------
         try:
             UUID = mNode.UUID
             if not UUID:
@@ -334,10 +364,11 @@ def registerMClassNodeCache(mNode):
             elif UUID in RED9_META_NODECACHE.keys():
                 # log.debug('CACHE : UUID is already registered in cache')
                 if not mNode == RED9_META_NODECACHE[UUID]:
-                    # log.debug('CACHE : %s : UUID is registered to a different node : modifying UUID: %s' % (UUID, mNode.mNode))
+                    log.debug('CACHE : %s : UUID is registered to a different node : modifying UUID: %s' % (UUID, mNode.mNode))
                     UUID = mNode.setUUID()
         except StandardError, err:
             log.debug('CACHE : Failed to set UUID for mNode : %s' % mNode.mNode)
+
     else:
         # log.debug('CACHE : UUID attr not bound to this node, must be an older system')
         if RED9_META_NODECACHE or mNode.mNode not in RED9_META_NODECACHE.keys():
@@ -390,11 +421,13 @@ def getMetaFromCache(mNode):
             UUID = cmds.getAttr('%s.UUID' % mNode)  # if this fails we bail to the mNode name block
         else:
             UUID = cmds.ls(mNode, uuid=True)[0]
+
         if UUID in RED9_META_NODECACHE.keys():
             try:
                 if RED9_META_NODECACHE[UUID].isValidMObject():
                     if not RED9_META_NODECACHE[UUID]._MObject == getMObject(mNode):
-                        # log.debug('CACHE : %s : UUID is already registered but to a different node : %s' % (UUID, mNode))
+                        log.debug('CACHE ABORTED : %s : UUID is already registered but to a different node : %s' % (UUID, mNode))
+                        mNode.setUUID()
                         return
                     # log.debug('CACHE : %s Returning mNode from UUID cache! = %s' % (mNode, UUID))
                     return RED9_META_NODECACHE[UUID]
@@ -1727,8 +1760,9 @@ class MetaClass(object):
         added initially for the imagePlane support for ProPack
 
         :return [node, management]: where node is the name of the node created and management
-            is a bool which controls the binding of the base attrs, if False we DON'T bind up the mNodeID, mClass attrs,
-            instead we rely on the nodeType.lower() being a key in the Registery as a class (ie, ImagePlane in ProPack )
+            is a bool which controls the binding of the base attrs, if False we DON'T bind up
+            the mNodeID, mClass attrs, instead we rely on the nodeType.lower() being a key in
+            the Registery as a class (ie, ImagePlane in ProPack )
 
         :param nodeType: type of node to create
         :param name: name of the new node
@@ -1969,8 +2003,17 @@ class MetaClass(object):
         '''
         unique UUID used by the caching system
         '''
-        newUUID = generateUUID()
-        self.UUID = newUUID
+        if r9Setup.mayaVersion() >= 2016:
+            mfn = OpenMaya.MFnDependencyNode(self._MObject)
+            uuid = OpenMaya.MUuid()
+            uuid.generate()
+            mfn.setUuid(uuid)
+            newUUID = uuid.asString()
+            self.UUID = newUUID
+        else:
+            newUUID = generateUUID()
+            self.UUID = newUUID
+
         if logging_is_debug():
             log.debug('setting new UUID : %s on %s' % (newUUID, self.mNode))
         return newUUID
@@ -2533,13 +2576,40 @@ class MetaClass(object):
 
         :param level: added here for the more robust checking that the rigging systems need
         '''
+        return self.gatherInfo_mNode()
+#         data = {}
+#         data['mNode'] = self.mNode
+#         data['mNodeID'] = self.mNodeID
+#         data['mClass'] = self.mClass
+#         data['mClassGrp'] = self.mClassGrp
+#         data['mSystemRoot'] = self.mSystemRoot
+#         data['lockState'] = self.lockState
+#         return data
+
+    def gatherInfo_mNode(self):
+        '''
+        this is now split like this because some times, when sub-classing, we still want to get
+        back to this very low level gather call. In ProPack we overload gatherInfo() repeatedly
+        but in certain instances, we still want to return just this base info for the mNode.
+        This now keeps the info here very dynamic for all child classes no matter how deep they are!
+        '''
         data = {}
         data['mNode'] = self.mNode
         data['mNodeID'] = self.mNodeID
         data['mClass'] = self.mClass
+        data['mClassInheritance'] = str(self.__class__)
         data['mClassGrp'] = self.mClassGrp
         data['mSystemRoot'] = self.mSystemRoot
         data['lockState'] = self.lockState
+        data['nodeType'] = cmds.nodeType(self.mNode)
+
+        # simple attr management for some of the mRig base classes
+        # added here so that we don't have to subclass these simple additions
+        # although really that needs doing in future
+        if self.hasAttr('systemType'):
+            data['systemType'] = self.systemType
+        if self.hasAttr('mirrorSide'):
+            data['mirrorSide'] = self.mirrorSide
         return data
 
     @property
@@ -3259,23 +3329,36 @@ class MetaClass(object):
             if self.mNode in con.split('.')[0]:
                 return con.split('.')[1]
 
-    def getNodeConnections(self, node, filters=[]):
+    def getNodeConnections(self, node, filters=[], bothplugs=False):
         '''
         really light wrapper, designed to return all connections
         between a given node and the mNode
 
         :param node: node to test connection attr for
         :param filters: filter string to match for the returns
+        :param bothplugsL if True we return a list of tuples
         '''
         cons = []
-        for con in cmds.listConnections(node, s=True, d=False, p=True) or []:
-            if self.mNode in con.split('.')[0]:
-                if filters:
-                    for flt in filters:
-                        if flt in con.split('.')[1]:
-                            cons.append(con.split('.')[1])
-                else:
-                    cons.append(con.split('.')[1])
+        if not bothplugs:
+            for attr in cmds.listConnections(node, s=True, d=False, p=True) or []:
+                if self.mNode in attr.split('.')[0]:
+                    if filters:
+                        for flt in filters:
+                            if flt in attr.split('.')[1]:
+                                cons.append(attr.split('.')[1])
+                    else:
+                        cons.append(attr.split('.')[1])
+        else:
+            plugs = cmds.listConnections(node, s=True, d=False, c=True, p=True) or []
+            if plugs:
+                for srcattr, attr in zip(plugs[0::2], plugs[1::2]):
+                    if self.mNode in attr.split('.')[0]:
+                        if filters:
+                            for flt in filters:
+                                if flt in attr.split('.')[1]:
+                                    cons.append([attr.split('.')[1], srcattr.split('.')[1]])
+                        else:
+                            cons.append([attr.split('.')[1], srcattr.split('.')[1]])
         return cons
 
 
@@ -3478,14 +3561,15 @@ class MetaRig(MetaClass):
         '''
         self.connectChildren(nodes, 'RigCtrls')
 
-    def addRigCtrl(self, node, ctrType, mirrorData=None, boundData=None):
+    def addRigCtrl(self, node, ctrType=None, mirrorData=None, boundData=None, namereplace=[]):
         '''
         Add a single CTRL of managed type as a child of this mRig.
 
         :param node: Maya node to add
-        :param ctrType: Attr name to assign this too
+        :param ctrType: Attr name to assign this too, if not given we take the short nodename
         :param mirrorData: {side:'Left', slot:int, axis:'translateX,rotateY,rotateZ'..}
         :param boundData: {} any additional attrData, set on the given node as attrs
+        :param namereplace: [] if given we apply node.replace(namereplace[0], namereplace[1]) before making the wire
 
         .. note::
             | mirrorData[slot] must NOT == 0 as it'll be handled as not set by the core.
@@ -3498,6 +3582,11 @@ class MetaRig(MetaClass):
 
         if isinstance(node, list):
             raise StandardError('node must be a single Maya Object')
+
+        if not ctrType:
+            ctrType = r9Core.nodeNameStrip(node)
+        if namereplace:
+            ctrType.replace(namereplace[0], namereplace[1])
 
         self.connectChild(node, '%s_%s' % (self.CTRL_Prefix, ctrType))
         if mirrorData:
@@ -3858,6 +3947,18 @@ class MetaRig(MetaClass):
         if not self.MirrorClass:
             self.MirrorClass = self.getMirrorData()
         self.MirrorClass.mirrorData(nodes, mode)
+
+    def mirror_delete_all_markers(self, nodes=[]):
+        '''
+        delete all mirror markers from the rig
+        '''
+        if not nodes:
+            nodes = self.getChildren(walk=True)
+        if nodes:
+            if not self.MirrorClass:
+                self.MirrorClass = self.getMirrorData()
+            for node in nodes:
+                self.MirrorClass.deleteMirrorIDs(node)
 
     # ---------------------------------------------------------------------------------
     # Utilities ----
@@ -4750,13 +4851,139 @@ class MetaHIKPropertiesNode(MetaClass):
 
     ** PRO PACK BASED SETUP FOR THE REMAPPING HANDLERS **
     '''
+
+    # these are all measurements specific to the skeleton when completed
+    # if loading generic mapping data on different skeletons we need to skip these
+    floor_contact = ['FootBottomToAnkle',
+                      'FootBackToAnkle',
+                      'FootMiddleToAnkle',
+                      'FootFrontToMiddle',
+                      'FootInToAnkle',
+                      'FootOutToAnkle',
+                      'HandBottomToWrist',
+                      'HandBackToWrist',
+                      'HandMiddleToWrist',
+                      'HandFrontToMiddle',
+                      'HandInToWrist',
+                      'HandOutToWrist']
+
+    tips_finger_toes = ['LeftHandThumbTip',
+                        'LeftHandIndexTip',
+                        'LeftHandMiddleTip',
+                        'LeftHandRingTip',
+                        'LeftHandPinkyTip',
+                        'LeftHandExtraFingerTip',
+                        'RightHandThumbTip',
+                        'RightHandIndexTip',
+                        'RightHandMiddleTip',
+                        'RightHandRingTip',
+                        'RightHandPinkyTip',
+                        'RightHandExtraFingerTip',
+                        'LeftFootThumbTip',
+                        'LeftFootIndexTip',
+                        'LeftFootMiddleTip',
+                        'LeftFootRingTip',
+                        'LeftFootPinkyTip',
+                        'LeftFootExtraFingerTip',
+                        'RightFootThumbTip',
+                        'RightFootIndexTip',
+                        'RightFootMiddleTip',
+                        'RightFootRingTip',
+                        'RightFootPinkyTip',
+                        'RightFootExtraFingerTip']
+
+    # roll pitch properties, think it might be better to just search for 'Roll' and 'Pitch' !!!!!!
+    roll_pitch = ['RollExtractionMode',
+
+                    # 2016 and previous HIK roll system
+                    'LeftForeArmRollEx',
+                    'LeftArmRollEx',
+                    'RightForeArmRollEx',
+                    'RightArmRollEx',
+                    'rightShoulderRoll',
+                    'LeftLegRollEx',
+                    'LeftUpLegRollEx',
+                    'RightLegRollEx',
+                    'RightUpLegRollEx',
+
+                    'LeftArmRoll', 'LeftArmRollMode',
+                    'LeftForeArmRoll', 'LeftForeArmRollMode',
+                    'LeftLegRoll', 'LeftLegRollMode',
+                    'LeftUpLegRoll', 'LeftUpLegRollMode',
+                    'RightArmRoll', 'RightArmRollMode',
+                    'RightForeArmRoll', 'RightForeArmRollMode',
+                    'RightLegRoll', 'RightLegRollMode',
+                    'RightUpLegRoll', 'RightUpLegRollMode',
+
+                    # 2017 onwards, new roll setup
+                    'LeftLegFullRollExtraction', 'LeftLegFullRollExtractionMode',
+                    'ParamLeafLeftUpLegRoll1', 'ParamLeafLeftUpLegRoll1Mode',
+                    'ParamLeafLeftUpLegRoll2', 'ParamLeafLeftUpLegRoll2Mode',
+                    'ParamLeafLeftUpLegRoll3', 'ParamLeafLeftUpLegRoll3Mode',
+                    'ParamLeafLeftUpLegRoll4', 'ParamLeafLeftUpLegRoll4Mode',
+                    'ParamLeafLeftUpLegRoll5', 'ParamLeafLeftUpLegRoll5Mode',
+                    'leftHipRoll',
+                    'ParamLeafLeftLegRoll1', 'ParamLeafLeftLegRoll1Mode',
+                    'ParamLeafLeftLegRoll2', 'ParamLeafLeftLegRoll2Mode',
+                    'ParamLeafLeftLegRoll3', 'ParamLeafLeftLegRoll3Mode',
+                    'ParamLeafLeftLegRoll4', 'ParamLeafLeftLegRoll4Mode',
+                    'ParamLeafLeftLegRoll5', 'ParamLeafLeftLegRoll5Mode',
+                    'leftKneeRoll',
+                    'LeftKneeKillPitch',
+
+                    'RightLegFullRollExtraction', 'RightLegFullRollExtractionMode',
+                    'ParamLeafRightUpLegRoll1', 'ParamLeafRightUpLegRoll1Mode',
+                    'ParamLeafRightUpLegRoll2', 'ParamLeafRightUpLegRoll2Mode',
+                    'ParamLeafRightUpLegRoll3', 'ParamLeafRightUpLegRoll3Mode',
+                    'ParamLeafRightUpLegRoll4', 'ParamLeafRightUpLegRoll4Mode',
+                    'ParamLeafRightUpLegRoll5', 'ParamLeafRightUpLegRoll5Mode',
+                    'rightHipRoll',
+                    'ParamLeafRightLegRoll1', 'ParamLeafRightLegRoll1Mode',
+                    'ParamLeafRightLegRoll2', 'ParamLeafRightLegRoll2Mode',
+                    'ParamLeafRightLegRoll3', 'ParamLeafRightLegRoll3Mode',
+                    'ParamLeafRightLegRoll4', 'ParamLeafRightLegRoll4Mode',
+                    'ParamLeafRightLegRoll5', 'ParamLeafRightLegRoll5Mode',
+                    'rightKneeRoll',
+                    'RightKneeKillPitch',
+
+                    'LeftArmFullRollExtraction', 'LeftArmFullRollExtractionMode',
+                    'ParamLeafLeftArmRoll1', 'ParamLeafLeftArmRoll1Mode',
+                    'ParamLeafLeftArmRoll2', 'ParamLeafLeftArmRoll2Mode',
+                    'ParamLeafLeftArmRoll3', 'ParamLeafLeftArmRoll3Mode',
+                    'ParamLeafLeftArmRoll4', 'ParamLeafLeftArmRoll4Mode',
+                    'ParamLeafLeftArmRoll5', 'ParamLeafLeftArmRoll5Mode',
+                    'leftShoulderRoll',
+                    'ParamLeafLeftForeArmRoll1', 'ParamLeafLeftForeArmRoll1Mode',
+                    'ParamLeafLeftForeArmRoll2', 'ParamLeafLeftForeArmRoll2Mode',
+                    'ParamLeafLeftForeArmRoll3', 'ParamLeafLeftForeArmRoll3Mode',
+                    'ParamLeafLeftForeArmRoll4', 'ParamLeafLeftForeArmRoll4Mode',
+                    'ParamLeafLeftForeArmRoll5', 'ParamLeafLeftForeArmRoll5Mode',
+                    'leftElbowRoll',
+                    'LeftElbowKillPitch',
+
+                    'RightArmFullRollExtraction', 'RightArmFullRollExtractionMode',
+                    'ParamLeafRightArmRoll1', 'ParamLeafRightArmRoll1Mode',
+                    'ParamLeafRightArmRoll2', 'ParamLeafRightArmRoll2Mode',
+                    'ParamLeafRightArmRoll3', 'ParamLeafRightArmRoll3Mode',
+                    'ParamLeafRightArmRoll4', 'ParamLeafRightArmRoll4Mode',
+                    'ParamLeafRightArmRoll5', 'ParamLeafRightArmRoll5Mode',
+                    'rightShoulderRoll',
+                    'ParamLeafRightForeArmRoll1', 'ParamLeafRightForeArmRoll1Mode',
+                    'ParamLeafRightForeArmRoll2', 'ParamLeafRightForeArmRoll2Mode',
+                    'ParamLeafRightForeArmRoll3', 'ParamLeafRightForeArmRoll3Mode',
+                    'ParamLeafRightForeArmRoll4', 'ParamLeafRightForeArmRoll4Mode',
+                    'ParamLeafRightForeArmRoll5', 'ParamLeafRightForeArmRoll5Mode',
+                    'RightElbowKillPitch']
+
+    measurements = floor_contact + tips_finger_toes
+
     def __init__(self, *args, **kws):
         super(MetaHIKPropertiesNode, self).__init__(*args, **kws)
 
         try:
             # try the pro_pack first as this is tested more
             from Red9 import pro_pack as r9pro
-            self._resetfile = r9General.formatPath_join(r9pro.red9ProResourcePath(), 'HIK_default.hikproperties')
+            self._resetfile = r9General.formatPath_join(r9pro.red9ProResourcePath(), 'hik_presets', 'HIK_default.hikproperties')
         except:
             # included in StudioPack for consistency of the codebase
             self._resetfile = r9General.formatPath_join(r9Setup.red9ModulePath(), 'presets', 'resource_files', 'HIK_default.hikproperties')
@@ -4789,31 +5016,44 @@ class MetaHIKPropertiesNode(MetaClass):
         reset the default mapping property states
         '''
         if not os.path.exists(self._resetfile):
-            log.warning('__hik_default__.hikproperties : reset file not found in systems!')
+            log.warning('HIK_default.hikproperties : reset file not found in systems!')
             return
         self.load_mapping(self._resetfile, changes_only=True, verbose=True)
 
-    def save_mapping(self, filepath):
+    def save_mapping(self, filepath, skip_measurements=True, skip_rolls=True):
         '''
         save the current mapping to file
 
         :param filepath: filepath to store the mapping out too
+        :param skip_measurements: if true (defulat) we do not store those attrs that are skeleton specific
+            only those which control the remapping
         '''
         filepath = os.path.splitext(filepath)[0] + '.hikproperties'
         try:
-            r9General.writeJson(filepath, self.get_mapping())
+            data = self.get_mapping()
+            if skip_measurements or skip_rolls:
+                for key in data.keys():
+                    if key in self.measurements:
+                        data.pop(key)
+                    if key in self.roll_pitch:
+                        data.pop(key)
+
+            r9General.writeJson(filepath, data)
         except:
             log.warning(traceback.format_exc())
         log.info('HIK Properties Saved: %s' % filepath)
 
-    def load_mapping(self, filepath, changes_only=True, verbose=True):
+    def load_mapping(self, filepath, changes_only=True, verbose=True, skip_measurements=True, skip_rolls=True):
         '''
         load a previous mapping back from file
 
         :param filepath: filepath to load the mapping from
         :param changes_only: only set those attrs that have changed (limits errors)
         :param verbose: report back all data set, changed or failed
+        :param skip_measurements: if true (defulat) we do not store those attrs that are skeleton specific
+            only those which control the remapping
         '''
+
         dataTypes = [float, int, bool]  # data types we're going to handle
 
         status = {'failed': {}, 'set': {}, 'changed': {}}
@@ -4823,6 +5063,12 @@ class MetaHIKPropertiesNode(MetaClass):
         for key, val in r9General.readJson(filepath).items():
             try:
                 if type(val) in dataTypes:
+                    if skip_measurements and key in self.measurements:
+                        continue
+                    if skip_rolls and key in self.roll_pitch:
+                        continue
+
+                    # only load data that's different from the default config
                     if changes_only:
                         current = getattr(self, key)
                         if not current == val:
