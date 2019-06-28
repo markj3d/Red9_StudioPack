@@ -277,6 +277,7 @@ class DataMap(object):
         :param worldspace: bool, get the transforms back in either MSpace.kWorld or MSpace.kTransform
         '''
         import math
+        euler = []
 
         # import maya.OpenMaya as OpenMaya
         dagpath = OpenMaya.MDagPath()
@@ -296,7 +297,12 @@ class DataMap(object):
 
         # for some reason this can cause a hard Maya hang!!!!
         # trying to track it down but if you experience it comment this one line out!
-        euler = map(math.degrees, rots.asEulerRotation())
+#         euler = map(math.degrees, rots.asEulerRotation())
+
+        _eulers = rots.asEulerRotation()
+        euler = [math.degrees(_eulers[0]),
+                 math.degrees(_eulers[1]),
+                 math.degrees(_eulers[2])]
 
         return {'translation': [trans.x, trans.y, trans.z],
                 'quaternion': [rots.x, rots.y, rots.z, rots.w],
