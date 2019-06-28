@@ -1099,7 +1099,7 @@ def has_pro_pack():
             # new pro_pack call
             # import Red9.pro_pack.r9pro as r9pro
             from Red9.pro_pack import r9pro
-            status = r9pro.r9pl.checkr9user()
+            status = r9pro.GLOBALS.status
             if status and not issubclass(type(status), str):
                 return True
             else:
