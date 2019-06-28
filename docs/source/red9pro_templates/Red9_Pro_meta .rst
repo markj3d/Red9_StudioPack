@@ -21,16 +21,18 @@ pipeline when running the Red9 Puppet rig.
       Pro_MetaRig
       Pro_MetaRig_SRC
       Pro_MetaRig_Prop
+	  Pro_MetaRig_External
       Pro_MetaRig_FacialUI
-      SRC_RiggingUI
       ExportTag_Base
       ExportTag_Character
       ExportTag_Facial
       ExportTag_Prop
       ExportTag_Environment
       ExportLoopNode
+	  ImagePlane
       SceneMover
       AudioGroup
+	  MetaTimeCodeHUD
       
 
     

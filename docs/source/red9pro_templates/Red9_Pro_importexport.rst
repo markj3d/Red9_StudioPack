@@ -14,7 +14,9 @@ ProPack importexport module manages files and sourcecontrol
 
    .. autosummary::
    	  
-      P4_sourceControl
+      MayaFile
+	  Fbx
+	  P4_sourceControl
       r9File
 
 

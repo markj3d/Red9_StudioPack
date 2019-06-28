@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Pro_Pack : General &#8212; Red9 2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <link rel="next" title="Pro_Pack : ImportExport" href="Red9_Pro_importexport.html" />
+    <link rel="prev" title="Pro_Pack : Exporter" href="Red9_Pro_export.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_importexport.html" title="Pro_Pack : ImportExport"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_export.html" title="Pro_Pack : Exporter"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pro-pack-general">
+<h1>Pro_Pack : General<a class="headerlink" href="#pro-pack-general" title="Permalink to this headline">¶</a></h1>
+<p>ProPack general module for non-specific classes / functions</p>
+<span class="target" id="module-Red9.pro_pack.core.general"></span><p class="rubric">Main Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.general.PlayblastTask" title="Red9.pro_pack.core.general.PlayblastTask"><code class="xref py py-obj docutils literal"><span class="pre">PlayblastTask</span></code></a>(*args,&nbsp;**kws)</td>
+<td>class to handler for playblast calls</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.general.BatchLogger" title="Red9.pro_pack.core.general.BatchLogger"><code class="xref py py-obj docutils literal"><span class="pre">BatchLogger</span></code></a>([batch_files,&nbsp;func,&nbsp;log_name,&nbsp;...])</td>
+<td>Logging class for batch processes</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="Red9.pro_pack.core.general.ascii_sanitizer">
+<code class="descname">ascii_sanitizer</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.ascii_sanitizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a given line of ascii text sanitise it back into standard text, replacing all
+custom text (utf-8) such as ,   .... This only creates a value ascii string
+by ignoring ascii encode errors</p>
+<p>:param text</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.general.force_to_unicode">
+<code class="descname">force_to_unicode</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.force_to_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>regardless of the encoding of the text passed in, force it to unicode for passing around,
+this was originally added to manage non-valid ascii characters in filepaths</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.general.filedata_manage">
+<code class="descname">filedata_manage</code><span class="sig-paren">(</span><em>add={}</em>, <em>remove=[]</em>, <em>ontimenode=False</em>, <em>onfile=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.filedata_manage" title="Permalink to this definition">¶</a></dt>
+<dd><p>manage custom data stored to the maya file header,
+if not args are passed we print back the current fileInfo data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>add</strong> &#8211; dict of data to add, must be simple key,value</li>
+<li><strong>remove</strong> &#8211; simple list of keys to remove from the data set</li>
+<li><strong>ontimenode</strong> &#8211; if True will stamp the data in the scene time node</li>
+<li><strong>onfile</strong> &#8211; if True will stamp the data in the maya file header</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.general.filedata_get">
+<code class="descname">filedata_get</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>ontimenode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.filedata_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the file data block from a given Maya Ascii file
+and return as a dict for easy use without having to load the actual file ;)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.general.timenodedata_get">
+<code class="descname">timenodedata_get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.timenodedata_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the file data block from file time node
+and return as a dict for easy use</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.general.PlayblastTask">
+<em class="property">class </em><code class="descname">PlayblastTask</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.PlayblastTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>class to handler for playblast calls</p>
+<p>Main Playblast call within Red9</p>
+<p>internal vars:</p>
+<ul class="simple">
+<li>self.filepath : the output path for the movie</li>
+<li>self.batchMode : render the movie offscreen and turn off the player</li>
+</ul>
+<ul class="simple">
+<li>self.playblast_settings__cam : camera shape to render from if given else we resolve it</li>
+<li>self.playblast_settings__cam_mrig : do we track individual mrigs or the scene in general?</li>
+<li>self.playblast_settings__cam_track : do we auto-track the scene contents from the resolved camera</li>
+<li>self.playblast_settings__cam_track_panning : if we&#8217;re tracking do we use a fixed panning camera or a full track</li>
+<li>self.playblast_settings__compile_audio : compile all audio into a single temporary file to ensure all audio is rendered</li>
+</ul>
+<ul class="simple">
+<li>self.playblast_settings__respect_current : use the standard Maya playblast settings rather than any of the below</li>
+<li>self.playblast_settings__width : movie width</li>
+<li>self.playblast_settings__height : movie height</li>
+<li>self.playblast_settings__format : movie format, &#8216;qt&#8217; or &#8216;avi&#8217;, default=&#8217;qt&#8217;</li>
+<li>self.playblast_settings__compression : compression used, default=&#8217;H.264&#8217;</li>
+<li>self.playblast_settings__quality : render quality</li>
+</ul>
+<ul class="simple">
+<li>self.playblast_settings__show_polys : show polys</li>
+<li>self.playblast_settings__show_nurbscurves show nurbsCurves</li>
+<li>self.playblast_settings__show_imagePlane : show imageplanes</li>
+<li>self.playblast_settings__isolate : isolate mRig renderMeshes if given</li>
+</ul>
+<ul class="simple">
+<li>self.playblast_settings__displayTextures = True</li>
+<li>self.playblast_settings__displayAppearance = &#8216;smoothShaded&#8217;</li>
+<li>self.playblast_settings__xray = False</li>
+<li>self.playblast_settings__jointXray = False</li>
+<li>self.playblast_settings__wireframeOnShaded = True</li>
+</ul>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.general.PlayblastTask.FRAME_SIZES">
+<code class="descname">FRAME_SIZES</code><em class="property"> = [[640, 480], [1024, 768], [1280, 720], [1280, 1024], [1920, 1080]]</em><a class="headerlink" href="#Red9.pro_pack.core.general.PlayblastTask.FRAME_SIZES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.general.PlayblastTask.FORMATS">
+<code class="descname">FORMATS</code><em class="property"> = {'qt': {'comp': 'H.264', 'ext': '.mov'}, 'avi': {'comp': 'none', 'ext': '.avi'}}</em><a class="headerlink" href="#Red9.pro_pack.core.general.PlayblastTask.FORMATS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.general.PlayblastTask.run_task">
+<code class="descname">run_task</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.PlayblastTask.run_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>main run func</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.general.BatchLogger">
+<em class="property">class </em><code class="descname">BatchLogger</code><span class="sig-paren">(</span><em>batch_files=None</em>, <em>func=None</em>, <em>log_name=None</em>, <em>log_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.BatchLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Logging class for batch processes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>batch_files</strong> &#8211; list of files to be process</li>
+<li><strong>func</strong> &#8211; string batch function to be use</li>
+<li><strong>log_name</strong> &#8211; string name for log file, &#8220;%Y-%m-%d-%H_%M_%S&#8221; will be append at the end of the name</li>
+<li><strong>log_file</strong> &#8211; string path to log file to be use, if set, it will override log_log_name attr</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Red9.pro_pack.core.general.BatchLogger.write_log">
+<code class="descname">write_log</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.BatchLogger.write_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>write log_file in HD</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.general.BatchLogger.fail_files">
+<code class="descname">fail_files</code><a class="headerlink" href="#Red9.pro_pack.core.general.BatchLogger.fail_files" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of files that fail the batch posses</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.general.BatchLogger.done_files">
+<code class="descname">done_files</code><a class="headerlink" href="#Red9.pro_pack.core.general.BatchLogger.done_files" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of files that done successful in the batch posses</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.general.BatchLogger.missing_files">
+<code class="descname">missing_files</code><a class="headerlink" href="#Red9.pro_pack.core.general.BatchLogger.missing_files" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of files that are not fail and are not done files that have not gone true the  batch posses</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.general.BatchLogger.log_fail">
+<code class="descname">log_fail</code><span class="sig-paren">(</span><em>file_path=None</em>, <em>**data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.BatchLogger.log_fail" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a fail entry in the log_file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>file_path</strong> &#8211; string file path that has been process if not set it will use self.current_file_path</li>
+<li><strong>data</strong> &#8211; <a href="#id1"><span class="problematic" id="id2">**</span></a>kwrds to be added to the log EX. info=&#8217;extra information about the file&#8217;, process_time=5.345</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bool True if logged successfully False if logging fail</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.general.BatchLogger.log_done">
+<code class="descname">log_done</code><span class="sig-paren">(</span><em>file_path=None</em>, <em>**data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.BatchLogger.log_done" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a done entry in the log_file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>file_path</strong> &#8211; string file path that has been process if not set it will use self.current_file_path</li>
+<li><strong>data</strong> &#8211; <a href="#id3"><span class="problematic" id="id4">**</span></a>kwrds to be added to the log EX. info=&#8217;extra information about the file&#8217;, process_time=5.345</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bool True if logged successfully False if logging fail</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.general.BatchLogger.remove_log">
+<code class="descname">remove_log</code><span class="sig-paren">(</span><em>status</em>, <em>file_path</em>, <em>write=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.BatchLogger.remove_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.general.BatchLogger.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>files=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.BatchLogger.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run self.func in guiven files, if not given files it will run all files in self.batch_files
+:param files: list of files to be process
+:return: bool True if run successful, false if not</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Red9_Pro_export.html"
+                        title="previous chapter">Pro_Pack : Exporter</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Red9_Pro_importexport.html"
+                        title="next chapter">Pro_Pack : ImportExport</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/red9pro_templates/Red9_Pro_general.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_importexport.html" title="Pro_Pack : ImportExport"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_export.html" title="Pro_Pack : Exporter"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>

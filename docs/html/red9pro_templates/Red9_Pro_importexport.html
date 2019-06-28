@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
     <link rel="next" title="Pro_Pack : MetaData" href="Red9_Pro_meta .html" />
-    <link rel="prev" title="Pro_Pack : Exporter" href="Red9_Pro_export.html" /> 
+    <link rel="prev" title="Pro_Pack : General" href="Red9_Pro_general.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -41,7 +41,7 @@
           <a href="Red9_Pro_meta .html" title="Pro_Pack : MetaData"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_export.html" title="Pro_Pack : Exporter"
+          <a href="Red9_Pro_general.html" title="Pro_Pack : General"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
       </ul>
@@ -68,6 +68,12 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.MayaFile" title="Red9.pro_pack.core.importexport.MayaFile"><code class="xref py py-obj docutils literal"><span class="pre">MayaFile</span></code></a>([filePath])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.Fbx" title="Red9.pro_pack.core.importexport.Fbx"><code class="xref py py-obj docutils literal"><span class="pre">Fbx</span></code></a>()</td>
+<td>base class to handling FBX file import and export</td>
+</tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.P4_sourceControl" title="Red9.pro_pack.core.importexport.P4_sourceControl"><code class="xref py py-obj docutils literal"><span class="pre">P4_sourceControl</span></code></a>([path])</td>
 <td>The P4_sourceControl object is bound to the r9File instance automatically if your project is set to run with Perforce.</td>
 </tr>
@@ -129,6 +135,22 @@ where all new created nodes are store as a list</p>
 <code class="descname">reference</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.MayaFile.reference" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.MayaFile.replace_reference">
+<code class="descname">replace_reference</code><span class="sig-paren">(</span><em>new_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.MayaFile.replace_reference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace reference paths in maya file to a new guiven file path</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_path</strong> &#8211; string new path to be use for reference</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">bool True or false</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -156,8 +178,14 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">the presets must be in the &#8220;Red9pro_packcoreFBX_presetsimport&#8221; folder to be loaded</p>
+<p class="last">the presets must be in the &#8220;Red9/pro_pack/core/FBX_presets/import&#8221; folder to be loaded</p>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.Fbx.referenceFBX">
+<code class="descname">referenceFBX</code><span class="sig-paren">(</span><em>fileName</em>, <em>namespace</em>, <em>groupname</em>, <em>preset=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.referenceFBX" title="Permalink to this definition">¶</a></dt>
+<dd><p>reference wrapper for FBX handling</p>
 </dd></dl>
 
 <dl class="method">
@@ -182,7 +210,7 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 <p><a class="reference external" href="https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2016/ENU/Maya/files/GUID-6CCE943A-2ED4-4CEE-96D4-9CB19C28F4E0-htm.html">https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2016/ENU/Maya/files/GUID-6CCE943A-2ED4-4CEE-96D4-9CB19C28F4E0-htm.html</a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">the presets must be in the &#8220;Red9pro_packcoreFBX_presetsexport&#8221; folder to be loaded</p>
+<p class="last">the presets must be in the &#8220;Red9/pro_pack/core/FBX_presets/export&#8221; folder to be loaded</p>
 </div>
 </dd></dl>
 
@@ -215,9 +243,9 @@ scene their anim data will be updated</p>
 </table>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="Red9.pro_pack.core.importexport.Fbx.getTakeInfo">
-<code class="descname">getTakeInfo</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>index=1</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.getTakeInfo" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">getTakeInfo</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>index=1</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.getTakeInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>get take info from the fbx data internals</p>
 </dd></dl>
 
@@ -325,6 +353,20 @@ to find all recent connections, similar to the recent connection list shown in t
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.path_iswildcard">
 <code class="descname">path_iswildcard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.path_iswildcard" title="Permalink to this definition">¶</a></dt>
 <dd><p>check if our given path var is a dir or a single file object, ie endsWith &#8216;...&#8217; or &#8216;*&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.handle_exceptions">
+<code class="descname">handle_exceptions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.handle_exceptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>specific exception to manage the P4 binding, if any of these are
+raised we bail the P4 connection in the PROJECT.SOURCE_CONTROL object</p>
+<p>current specific Perforce exceptions handled to raise a bailed=True:</p>
+<ul class="simple">
+<li>&#8216;TCP receive failed&#8217;</li>
+<li>&#8216;Partner exited unexpectedly&#8217;</li>
+<li>&#8216;Your session has expired, please login again&#8217;</li>
+<li>&#8220;has not been enabled by &#8216;p4 protect&#8217;&#8221;</li>
+</ul>
 </dd></dl>
 
 <dl class="method">
@@ -707,7 +749,7 @@ exposing and binding all perforce commands directly to this file object</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">=</span><span class="n">r9ie</span><span class="o">.</span><span class="n">r9File</span><span class="p">(</span><span class="n">myfilepath</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">.</span><span class="n">sourcecontrol</span><span class="o">.</span><span class="n">fstat</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># bescause we bind os we can also directly run os/path calls</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># because we bind &quot;os&quot; we can also directly run os/path calls</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">.</span><span class="n">splitext</span><span class="p">()</span>
 </pre></div>
@@ -829,8 +871,8 @@ allow you, in one go, to push a file into the repository.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="Red9_Pro_export.html"
-                        title="previous chapter">Pro_Pack : Exporter</a></p>
+  <p class="topless"><a href="Red9_Pro_general.html"
+                        title="previous chapter">Pro_Pack : General</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="Red9_Pro_meta .html"
                         title="next chapter">Pro_Pack : MetaData</a></p>
@@ -868,7 +910,7 @@ allow you, in one go, to push a file into the repository.</p>
           <a href="Red9_Pro_meta .html" title="Pro_Pack : MetaData"
              >next</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_export.html" title="Pro_Pack : Exporter"
+          <a href="Red9_Pro_general.html" title="Pro_Pack : General"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
       </ul>

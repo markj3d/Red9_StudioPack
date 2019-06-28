@@ -160,14 +160,14 @@ in the given priority list are moved to the front of the list.</p>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>Known issue, if Regex=True and you have 2 similar str&#8217;s in the priority list then there&#8217;s 
+<p>Known issue, if Regex=True and you have 2 similar str&#8217;s in the priority list then there&#8217;s
 a chance that matching may be erractic...</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">priorityList</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;upperLip&#39;</span><span class="p">,</span><span class="s1">&#39;l_upperLip&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;|my|dag|path|jaw&#39;</span><span class="p">,</span><span class="o">|</span><span class="n">my</span><span class="o">|</span><span class="n">dag</span><span class="o">|</span><span class="n">path</span><span class="o">|</span><span class="n">l_upperLip</span><span class="s1">&#39;,&#39;</span><span class="o">|</span><span class="n">my</span><span class="o">|</span><span class="n">dag</span><span class="o">|</span><span class="n">path</span><span class="o">|</span><span class="n">upperLip</span><span class="s1">&#39;,&#39;</span><span class="o">|</span><span class="n">my</span><span class="o">|</span><span class="n">dag</span><span class="o">|</span><span class="n">path</span><span class="o">|</span><span class="n">lowerLip</span><span class="s1">&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">returns</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;|my|dag|path|l_upperLip&#39;</span><span class="p">,</span><span class="s1">&#39;|my|dag|path|upperLip&#39;</span><span class="p">,</span><span class="o">|</span><span class="n">my</span><span class="o">|</span><span class="n">dag</span><span class="o">|</span><span class="n">path</span><span class="o">|</span><span class="n">jaw</span><span class="p">,</span><span class="s1">&#39;|my|dag|path|lowerLip]</span>
 </pre></div>
 </div>
-<p class="last">as in regex &#8216;l_upperLip&#8217;==&#8217;upperLip&#8217; as well as &#8216;upperLip&#8217;==&#8217;upperLip&#8217; 
+<p class="last">as in regex &#8216;l_upperLip&#8217;==&#8217;upperLip&#8217; as well as &#8216;upperLip&#8217;==&#8217;upperLip&#8217;
 really in regex you&#8217;d need to be more specific:  priorityList=[&#8216;^upperLip&#8217;,&#8217;l_upperLip&#8217;]</p>
 </div>
 </dd></dl>
@@ -181,7 +181,7 @@ really in regex you&#8217;d need to be more specific:  priorityList=[&#8216;^upp
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># standard gives us:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="s1">&#39;Joint_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_10&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_11&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_12&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_2&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_9&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># sortNumerically gives us:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sortNumerically</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="s1">&#39;Joint_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_2&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_9&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_10&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_11&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_12&#39;</span><span class="p">]</span>
@@ -285,6 +285,26 @@ the given hierarchy and return the matches</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.nodes_are_constrained">
+<code class="descname">nodes_are_constrained</code><span class="sig-paren">(</span><em>src</em>, <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.nodes_are_constrained" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>src</strong> &#8211; the node that would be the driver of the constraint</li>
+<li><strong>target</strong> &#8211; the node we think is being driven</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>return any constraints between the source and target object if found.
+This checks the target for child constraints, then checks the target list
+for those constraints to see if the src is in the list, if so it&#8217;s added to the return</p>
 </dd></dl>
 
 <dl class="class">
@@ -1117,8 +1137,8 @@ a number of aggressive searches to find all linked animation data.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>offset</strong> &#8211; amount to offset the curves</li>
 <li><strong>nodes</strong> &#8211; nodes to offset if given</li>
-<li><strong>timerange</strong> &#8211; if timerange given [start,end] then we cut the keys in that 
-range before shifting associated keys. Now we could just use the 
+<li><strong>timerange</strong> &#8211; if timerange given [start,end] then we cut the keys in that
+range before shifting associated keys. Now we could just use the
 keyframe(option=&#8217;insert&#8217;) BUT this has a MAJOR crash bug!</li>
 <li><strong>ripple</strong> &#8211; manage the upper range of keys and ripple them with the offset</li>
 </ul>
@@ -1147,7 +1167,7 @@ keyframe(option=&#8217;insert&#8217;) BUT this has a MAJOR crash bug!</li>
 <li><strong>mode</strong> &#8211; either process entire scene or selected</li>
 <li><strong>audioNodes</strong> &#8211; optional, given nodes to process</li>
 <li><strong>timerange</strong> &#8211; optional timerange to process (outer bounds only)</li>
-<li><strong>ripple</strong> &#8211; when shifting nodes ripple the offset to sounds after the range, 
+<li><strong>ripple</strong> &#8211; when shifting nodes ripple the offset to sounds after the range,
 if ripple=False we only shift audio that starts in tghe bounds of the timerange</li>
 </ul>
 </td>
@@ -1169,7 +1189,7 @@ if ripple=False we only shift audio that starts in tghe bounds of the timerange<
 <li><strong>mode</strong> &#8211; either process entire scene or selected</li>
 <li><strong>clips</strong> &#8211; optional, given clips to offset</li>
 <li><strong>timerange</strong> &#8211; optional timerange to process (outer bounds only)</li>
-<li><strong>ripple</strong> &#8211; when shifting nodes ripple the offset to clips after the range, 
+<li><strong>ripple</strong> &#8211; when shifting nodes ripple the offset to clips after the range,
 if ripple=False we only shift clips that starts in tghe bounds of the timerange</li>
 </ul>
 </td>

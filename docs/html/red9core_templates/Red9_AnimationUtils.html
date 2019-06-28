@@ -113,7 +113,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getChannelBoxSelection" title="Red9.core.Red9_AnimationUtils.getChannelBoxSelection"><code class="xref py py-obj docutils literal"><span class="pre">getChannelBoxSelection</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getChannelBoxSelection" title="Red9.core.Red9_AnimationUtils.getChannelBoxSelection"><code class="xref py py-obj docutils literal"><span class="pre">getChannelBoxSelection</span></code></a>([longNames])</td>
 <td>return a list of attributes selected in the ChannelBox</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getChannelBoxAttrs" title="Red9.core.Red9_AnimationUtils.getChannelBoxAttrs"><code class="xref py py-obj docutils literal"><span class="pre">getChannelBoxAttrs</span></code></a>([node,&nbsp;asDict,&nbsp;incLocked])</td>
@@ -179,7 +179,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 
 <dl class="data">
 <dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS">
-<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA8B358&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA8B358&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA8B358&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA8B358&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA8B358&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA8B358&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA8B358&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA8B358&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BA8B358&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C9A4F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C9A4F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C9A4F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C9A4F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C9A4F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C9A4F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C9A4F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C9A4F28&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C9A4F28&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.</p>
@@ -207,8 +207,16 @@ they will show up in the RMB popup as such: Fingers_poseHandler.py will show as 
 
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.getChannelBoxSelection">
-<code class="descname">getChannelBoxSelection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getChannelBoxSelection" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getChannelBoxSelection</code><span class="sig-paren">(</span><em>longNames=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getChannelBoxSelection" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a list of attributes selected in the ChannelBox</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>longNames</strong> &#8211; return the longNames of the attrs selected, else we default to Maya&#8217;s short attr names</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1191,7 +1199,7 @@ are no keys.</p>
 <em class="property">class </em><code class="descname">CameraTracker</code><span class="sig-paren">(</span><em>fixed=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.CameraTracker" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="staticmethod">
 <dt id="Red9.core.Red9_AnimationUtils.CameraTracker.cameraTrackView">
-<em class="property">static </em><code class="descname">cameraTrackView</code><span class="sig-paren">(</span><em>start=None</em>, <em>end=None</em>, <em>step=None</em>, <em>fixed=True</em>, <em>keepOffset=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.CameraTracker.cameraTrackView" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">cameraTrackView</code><span class="sig-paren">(</span><em>start=None</em>, <em>end=None</em>, <em>step=None</em>, <em>fixed=True</em>, <em>keepOffset=False</em>, <em>cam=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.CameraTracker.cameraTrackView" title="Permalink to this definition">¶</a></dt>
 <dd><p>CameraTracker is a simple wrap over the internal viewFit call but this manages the data
 over time. Works by taking the current camera, in the current 3dView, and fitting it to
 frame the currently selected objects per frame, or rather per frameStep.</p>
@@ -1205,6 +1213,7 @@ frame the currently selected objects per frame, or rather per frameStep.</p>
 <li><strong>step</strong> &#8211; frame step to increment between fit</li>
 <li><strong>fixed</strong> &#8211; switch between tracking or panning framing fit</li>
 <li><strong>keepOffset</strong> &#8211; keep the current camera offset rather than doing a full viewFit</li>
+<li><strong>cam</strong> &#8211; if given use this camera else we use the current modelEditors camera</li>
 </ul>
 </td>
 </tr>

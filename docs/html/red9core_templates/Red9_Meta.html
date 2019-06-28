@@ -180,6 +180,16 @@ RED9_META_INHERITANCE_MAP : {&#8216;className&#8217;: {&#8216;full&#8217;: [list
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_Meta.create_mNode_from_gatherInfo">
+<code class="descname">create_mNode_from_gatherInfo</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.create_mNode_from_gatherInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>a simple wrapper to re-construct the correct mNode from a dict() built by
+the MetaClass.gatherInfo_mNode() call. This is primarily aimed at the new
+load_connection_datamap call in ProPack to rebuild entire networks from a
+map file without having to write complex macros to rebuild a system and
+all it&#8217;s wiring.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_Meta.getMClassInstances">
 <code class="descname">getMClassInstances</code><span class="sig-paren">(</span><em>mInstances</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.getMClassInstances" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a list of Registered metaClasses that are subclassed from the given
@@ -994,6 +1004,15 @@ r9Aninm format in Pro to collect key info on the system being saved against</p>
 </table>
 </dd></dl>
 
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaClass.gatherInfo_mNode">
+<code class="descname">gatherInfo_mNode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.gatherInfo_mNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>this is now split like this because some times, when sub-classing, we still want to get
+back to this very low level gather call. In ProPack we overload gatherInfo() repeatedly
+but in certain instances, we still want to return just this base info for the mNode.
+This now keeps the info here very dynamic for all child classes no matter how deep they are!</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="Red9.core.Red9_Meta.MetaClass.userinfo">
 <code class="descname">userinfo</code><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.userinfo" title="Permalink to this definition">¶</a></dt>
@@ -1344,7 +1363,7 @@ more flexible as it returns and filters all plugs between self and the given nod
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.getNodeConnections">
-<code class="descname">getNodeConnections</code><span class="sig-paren">(</span><em>node</em>, <em>filters=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.getNodeConnections" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getNodeConnections</code><span class="sig-paren">(</span><em>node</em>, <em>filters=[]</em>, <em>bothplugs=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.getNodeConnections" title="Permalink to this definition">¶</a></dt>
 <dd><p>really light wrapper, designed to return all connections
 between a given node and the mNode</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1359,6 +1378,7 @@ between a given node and the mNode</p>
 </tr>
 </tbody>
 </table>
+<p>:param bothplugsL if True we return a list of tuples</p>
 </dd></dl>
 
 </dd></dl>
@@ -1452,7 +1472,7 @@ so don&#8217;t have the search capability that the funct below gives</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.addRigCtrl">
-<code class="descname">addRigCtrl</code><span class="sig-paren">(</span><em>node</em>, <em>ctrType</em>, <em>mirrorData=None</em>, <em>boundData=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.addRigCtrl" title="Permalink to this definition">¶</a></dt>
+<code class="descname">addRigCtrl</code><span class="sig-paren">(</span><em>node</em>, <em>ctrType=None</em>, <em>mirrorData=None</em>, <em>boundData=None</em>, <em>namereplace=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.addRigCtrl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a single CTRL of managed type as a child of this mRig.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1460,9 +1480,10 @@ so don&#8217;t have the search capability that the funct below gives</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>node</strong> &#8211; Maya node to add</li>
-<li><strong>ctrType</strong> &#8211; Attr name to assign this too</li>
+<li><strong>ctrType</strong> &#8211; Attr name to assign this too, if not given we take the short nodename</li>
 <li><strong>mirrorData</strong> &#8211; {side:&#8217;Left&#8217;, slot:int, axis:&#8217;translateX,rotateY,rotateZ&#8217;..}</li>
 <li><strong>boundData</strong> &#8211; {} any additional attrData, set on the given node as attrs</li>
+<li><strong>namereplace</strong> &#8211; [] if given we apply node.replace(namereplace[0], namereplace[1]) before making the wire</li>
 </ul>
 </td>
 </tr>
@@ -1830,6 +1851,12 @@ based on their mirror side data</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRig.mirror_delete_all_markers">
+<code class="descname">mirror_delete_all_markers</code><span class="sig-paren">(</span><em>nodes=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.mirror_delete_all_markers" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete all mirror markers from the rig</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.poseCacheStore">
 <code class="descname">poseCacheStore</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.poseCacheStore" title="Permalink to this definition">¶</a></dt>
 <dd><p>intended as a cached pose for this mRig, if an attr is given then
@@ -2068,7 +2095,9 @@ animation curve/key data</p>
 <li><strong>filepath</strong> &#8211; r9Anim file to load</li>
 <li><strong>incRoots</strong> &#8211; do we include the root node in the load, in metaRig case this is ctrl_main</li>
 <li><strong>useFilter</strong> &#8211; do we process all children of this rig or just selected</li>
-<li><strong>timerange</strong> &#8211; specify a timerange to store, else store all</li>
+<li><strong>timerange</strong> &#8211; specify a timerange to store, If no timerange is passed
+then it will use the current timeLine PlaybackRange, OR if you have a
+highlighted range of time selected (in red) it&#8217;ll use this instead.</li>
 <li><strong>storeThumbnail</strong> &#8211; this will be an avi but currently it&#8217;s a pose thumbnail</li>
 <li><strong>force</strong> &#8211; allow force write on a read only file</li>
 <li><strong>userInfoData</strong> &#8211; user information used by the AnimStore UI only</li>
@@ -2489,6 +2518,85 @@ and useful for management in the systems</p>
 <em class="property">class </em><code class="descname">MetaHIKPropertiesNode</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKPropertiesNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
 <p>Casting HIK Properties to a Meta class for easy managing</p>
+<p>** PRO PACK BASED SETUP FOR THE REMAPPING HANDLERS **</p>
+<dl class="attribute">
+<dt id="Red9.core.Red9_Meta.MetaHIKPropertiesNode.floor_contact">
+<code class="descname">floor_contact</code><em class="property"> = ['FootBottomToAnkle', 'FootBackToAnkle', 'FootMiddleToAnkle', 'FootFrontToMiddle', 'FootInToAnkle', 'FootOutToAnkle', 'HandBottomToWrist', 'HandBackToWrist', 'HandMiddleToWrist', 'HandFrontToMiddle', 'HandInToWrist', 'HandOutToWrist']</em><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKPropertiesNode.floor_contact" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.core.Red9_Meta.MetaHIKPropertiesNode.tips_finger_toes">
+<code class="descname">tips_finger_toes</code><em class="property"> = ['LeftHandThumbTip', 'LeftHandIndexTip', 'LeftHandMiddleTip', 'LeftHandRingTip', 'LeftHandPinkyTip', 'LeftHandExtraFingerTip', 'RightHandThumbTip', 'RightHandIndexTip', 'RightHandMiddleTip', 'RightHandRingTip', 'RightHandPinkyTip', 'RightHandExtraFingerTip', 'LeftFootThumbTip', 'LeftFootIndexTip', 'LeftFootMiddleTip', 'LeftFootRingTip', 'LeftFootPinkyTip', 'LeftFootExtraFingerTip', 'RightFootThumbTip', 'RightFootIndexTip', 'RightFootMiddleTip', 'RightFootRingTip', 'RightFootPinkyTip', 'RightFootExtraFingerTip']</em><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKPropertiesNode.tips_finger_toes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.core.Red9_Meta.MetaHIKPropertiesNode.roll_pitch">
+<code class="descname">roll_pitch</code><em class="property"> = ['RollExtractionMode', 'LeftForeArmRollEx', 'LeftArmRollEx', 'RightForeArmRollEx', 'RightArmRollEx', 'rightShoulderRoll', 'LeftLegRollEx', 'LeftUpLegRollEx', 'RightLegRollEx', 'RightUpLegRollEx', 'LeftArmRoll', 'LeftArmRollMode', 'LeftForeArmRoll', 'LeftForeArmRollMode', 'LeftLegRoll', 'LeftLegRollMode', 'LeftUpLegRoll', 'LeftUpLegRollMode', 'RightArmRoll', 'RightArmRollMode', 'RightForeArmRoll', 'RightForeArmRollMode', 'RightLegRoll', 'RightLegRollMode', 'RightUpLegRoll', 'RightUpLegRollMode', 'LeftLegFullRollExtraction', 'LeftLegFullRollExtractionMode', 'ParamLeafLeftUpLegRoll1', 'ParamLeafLeftUpLegRoll1Mode', 'ParamLeafLeftUpLegRoll2', 'ParamLeafLeftUpLegRoll2Mode', 'ParamLeafLeftUpLegRoll3', 'ParamLeafLeftUpLegRoll3Mode', 'ParamLeafLeftUpLegRoll4', 'ParamLeafLeftUpLegRoll4Mode', 'ParamLeafLeftUpLegRoll5', 'ParamLeafLeftUpLegRoll5Mode', 'leftHipRoll', 'ParamLeafLeftLegRoll1', 'ParamLeafLeftLegRoll1Mode', 'ParamLeafLeftLegRoll2', 'ParamLeafLeftLegRoll2Mode', 'ParamLeafLeftLegRoll3', 'ParamLeafLeftLegRoll3Mode', 'ParamLeafLeftLegRoll4', 'ParamLeafLeftLegRoll4Mode', 'ParamLeafLeftLegRoll5', 'ParamLeafLeftLegRoll5Mode', 'leftKneeRoll', 'LeftKneeKillPitch', 'RightLegFullRollExtraction', 'RightLegFullRollExtractionMode', 'ParamLeafRightUpLegRoll1', 'ParamLeafRightUpLegRoll1Mode', 'ParamLeafRightUpLegRoll2', 'ParamLeafRightUpLegRoll2Mode', 'ParamLeafRightUpLegRoll3', 'ParamLeafRightUpLegRoll3Mode', 'ParamLeafRightUpLegRoll4', 'ParamLeafRightUpLegRoll4Mode', 'ParamLeafRightUpLegRoll5', 'ParamLeafRightUpLegRoll5Mode', 'rightHipRoll', 'ParamLeafRightLegRoll1', 'ParamLeafRightLegRoll1Mode', 'ParamLeafRightLegRoll2', 'ParamLeafRightLegRoll2Mode', 'ParamLeafRightLegRoll3', 'ParamLeafRightLegRoll3Mode', 'ParamLeafRightLegRoll4', 'ParamLeafRightLegRoll4Mode', 'ParamLeafRightLegRoll5', 'ParamLeafRightLegRoll5Mode', 'rightKneeRoll', 'RightKneeKillPitch', 'LeftArmFullRollExtraction', 'LeftArmFullRollExtractionMode', 'ParamLeafLeftArmRoll1', 'ParamLeafLeftArmRoll1Mode', 'ParamLeafLeftArmRoll2', 'ParamLeafLeftArmRoll2Mode', 'ParamLeafLeftArmRoll3', 'ParamLeafLeftArmRoll3Mode', 'ParamLeafLeftArmRoll4', 'ParamLeafLeftArmRoll4Mode', 'ParamLeafLeftArmRoll5', 'ParamLeafLeftArmRoll5Mode', 'leftShoulderRoll', 'ParamLeafLeftForeArmRoll1', 'ParamLeafLeftForeArmRoll1Mode', 'ParamLeafLeftForeArmRoll2', 'ParamLeafLeftForeArmRoll2Mode', 'ParamLeafLeftForeArmRoll3', 'ParamLeafLeftForeArmRoll3Mode', 'ParamLeafLeftForeArmRoll4', 'ParamLeafLeftForeArmRoll4Mode', 'ParamLeafLeftForeArmRoll5', 'ParamLeafLeftForeArmRoll5Mode', 'leftElbowRoll', 'LeftElbowKillPitch', 'RightArmFullRollExtraction', 'RightArmFullRollExtractionMode', 'ParamLeafRightArmRoll1', 'ParamLeafRightArmRoll1Mode', 'ParamLeafRightArmRoll2', 'ParamLeafRightArmRoll2Mode', 'ParamLeafRightArmRoll3', 'ParamLeafRightArmRoll3Mode', 'ParamLeafRightArmRoll4', 'ParamLeafRightArmRoll4Mode', 'ParamLeafRightArmRoll5', 'ParamLeafRightArmRoll5Mode', 'rightShoulderRoll', 'ParamLeafRightForeArmRoll1', 'ParamLeafRightForeArmRoll1Mode', 'ParamLeafRightForeArmRoll2', 'ParamLeafRightForeArmRoll2Mode', 'ParamLeafRightForeArmRoll3', 'ParamLeafRightForeArmRoll3Mode', 'ParamLeafRightForeArmRoll4', 'ParamLeafRightForeArmRoll4Mode', 'ParamLeafRightForeArmRoll5', 'ParamLeafRightForeArmRoll5Mode', 'RightElbowKillPitch']</em><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKPropertiesNode.roll_pitch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.core.Red9_Meta.MetaHIKPropertiesNode.measurements">
+<code class="descname">measurements</code><em class="property"> = ['FootBottomToAnkle', 'FootBackToAnkle', 'FootMiddleToAnkle', 'FootFrontToMiddle', 'FootInToAnkle', 'FootOutToAnkle', 'HandBottomToWrist', 'HandBackToWrist', 'HandMiddleToWrist', 'HandFrontToMiddle', 'HandInToWrist', 'HandOutToWrist', 'LeftHandThumbTip', 'LeftHandIndexTip', 'LeftHandMiddleTip', 'LeftHandRingTip', 'LeftHandPinkyTip', 'LeftHandExtraFingerTip', 'RightHandThumbTip', 'RightHandIndexTip', 'RightHandMiddleTip', 'RightHandRingTip', 'RightHandPinkyTip', 'RightHandExtraFingerTip', 'LeftFootThumbTip', 'LeftFootIndexTip', 'LeftFootMiddleTip', 'LeftFootRingTip', 'LeftFootPinkyTip', 'LeftFootExtraFingerTip', 'RightFootThumbTip', 'RightFootIndexTip', 'RightFootMiddleTip', 'RightFootRingTip', 'RightFootPinkyTip', 'RightFootExtraFingerTip']</em><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKPropertiesNode.measurements" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaHIKPropertiesNode.get_mapping">
+<code class="descname">get_mapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKPropertiesNode.get_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the current mapping state and return a dict {attr:val, ...}</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaHIKPropertiesNode.get_non_default_values">
+<code class="descname">get_non_default_values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKPropertiesNode.get_non_default_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>return values that differ from the default values and have therefore been set by the user</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaHIKPropertiesNode.reset_defaults">
+<code class="descname">reset_defaults</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKPropertiesNode.reset_defaults" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset the default mapping property states</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaHIKPropertiesNode.save_mapping">
+<code class="descname">save_mapping</code><span class="sig-paren">(</span><em>filepath</em>, <em>skip_measurements=True</em>, <em>skip_rolls=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKPropertiesNode.save_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>save the current mapping to file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> &#8211; filepath to store the mapping out too</li>
+<li><strong>skip_measurements</strong> &#8211; if true (defulat) we do not store those attrs that are skeleton specific
+only those which control the remapping</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaHIKPropertiesNode.load_mapping">
+<code class="descname">load_mapping</code><span class="sig-paren">(</span><em>filepath</em>, <em>changes_only=True</em>, <em>verbose=True</em>, <em>skip_measurements=True</em>, <em>skip_rolls=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKPropertiesNode.load_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a previous mapping back from file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> &#8211; filepath to load the mapping from</li>
+<li><strong>changes_only</strong> &#8211; only set those attrs that have changed (limits errors)</li>
+<li><strong>verbose</strong> &#8211; report back all data set, changed or failed</li>
+<li><strong>skip_measurements</strong> &#8211; if true (defulat) we do not store those attrs that are skeleton specific
+only those which control the remapping</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="function">

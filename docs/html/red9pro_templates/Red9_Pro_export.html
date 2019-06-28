@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
-    <link rel="next" title="Pro_Pack : ImportExport" href="Red9_Pro_importexport.html" />
+    <link rel="next" title="Pro_Pack : General" href="Red9_Pro_general.html" />
     <link rel="prev" title="Pro_Pack : Audio" href="Red9_Pro_audio.html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_importexport.html" title="Pro_Pack : ImportExport"
+          <a href="Red9_Pro_general.html" title="Pro_Pack : General"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="Red9_Pro_audio.html" title="Pro_Pack : Audio"
@@ -97,7 +97,7 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.exporter.ExportTagUI">
-<em class="property">class </em><code class="descname">ExportTagUI</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwgs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportTagUI" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">ExportTagUI</code><span class="sig-paren">(</span><em>parent=None</em>, <em>*args</em>, <em>**kwgs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportTagUI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <p>simple UI to edit a given ExportLoop tag</p>
 <dl class="method">
@@ -120,14 +120,14 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000138D9AC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000137BE0C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.exporter.ExportLoopTagUI">
-<em class="property">class </em><code class="descname">ExportLoopTagUI</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwgs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">ExportLoopTagUI</code><span class="sig-paren">(</span><em>parent=None</em>, <em>*args</em>, <em>**kwgs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <p>simple UI to edit a given ExportLoop tag</p>
 <dl class="method">
@@ -162,7 +162,7 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000138DC708&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000137BE048&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoopTagUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -196,10 +196,9 @@ with all joints so the user can select one</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.exporter.JntSel.set_joints_list">
-<code class="descname">set_joints_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.set_joints_list" title="Permalink to this definition">¶</a></dt>
-<dd><p>set the list widget up</p>
-</dd></dl>
+<dt id="Red9.pro_pack.core.exporter.JntSel.set_tree_view">
+<code class="descname">set_tree_view</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.set_tree_view" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.JntSel.select_current_items">
@@ -221,14 +220,14 @@ with all joints so the user can select one</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.JntSel.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013903DC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000137BE9C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.JntSel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget">
-<em class="property">class </em><code class="descname">ExportLoop_Widget</code><span class="sig-paren">(</span><em>name</em>, <em>loop</em>, <em>item=None</em>, <em>exportui=None</em>, <em>engine='unreal'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">ExportLoop_Widget</code><span class="sig-paren">(</span><em>name</em>, <em>loop</em>, <em>item=None</em>, <em>exportui=None</em>, <em>engine='unreal'</em>, <em>pathicon_show=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QWidget</span></code></p>
 <p>Bespoke QT Widget to handle the LoopData display and management</p>
 <dl class="method">
@@ -297,14 +296,14 @@ can tailor the view to different engine targets.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000137BE288&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportLoop_Widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.exporter.Export_FBX_options">
-<em class="property">class </em><code class="descname">Export_FBX_options</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwgs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_FBX_options" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Export_FBX_options</code><span class="sig-paren">(</span><em>parent=None</em>, <em>*args</em>, <em>**kwgs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_FBX_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <p>simple UI to edit a given ExportLoop tag</p>
 <dl class="method">
@@ -326,7 +325,36 @@ can tailor the view to different engine targets.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.Export_FBX_options.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000133E7788&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_FBX_options.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001391B188&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_FBX_options.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.exporter.Export_Playblast_options">
+<em class="property">class </em><code class="descname">Export_Playblast_options</code><span class="sig-paren">(</span><em>parent=None</em>, <em>*args</em>, <em>**kwgs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_Playblast_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
+<p>simple UI to edit a given ExportLoop tag</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.Export_Playblast_options.pushdata">
+<code class="descname">pushdata</code><span class="sig-paren">(</span><em>close=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_Playblast_options.pushdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>push the ui data back to the export_loop and refresh the parent UI</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.Export_Playblast_options.pulldata">
+<code class="descname">pulldata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_Playblast_options.pulldata" title="Permalink to this definition">¶</a></dt>
+<dd><p>pull the data back from the export tag and fill the UI</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.Export_Playblast_options.reset_settings">
+<code class="descname">reset_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_Playblast_options.reset_settings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.exporter.Export_Playblast_options.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000139440C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_Playblast_options.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -369,6 +397,12 @@ to refresh and redraw the UI lists</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.output_options_FBX">
 <code class="descname">output_options_FBX</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.output_options_FBX" title="Permalink to this definition">¶</a></dt>
+<dd><p>main FBX settings UI</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportUI.output_options_playblast">
+<code class="descname">output_options_playblast</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.output_options_playblast" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -386,6 +420,12 @@ to refresh and redraw the UI lists</p>
 <dt id="Red9.pro_pack.core.exporter.ExportUI.set_time_active">
 <code class="descname">set_time_active</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.set_time_active" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportUI.set_specific_path">
+<code class="descname">set_specific_path</code><span class="sig-paren">(</span><em>mode='loop'</em>, <em>reset=False</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.set_specific_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the exportPath attr on the mNodes</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.offset_ranges">
@@ -501,7 +541,7 @@ than the base class level</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001340A588&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000137CAE88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -567,6 +607,12 @@ minimum, skeleton, mesh etc, it will always include the rigs upper hierarchy in 
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportManager.export_playblast">
+<code class="descname">export_playblast</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.export_playblast" title="Permalink to this definition">¶</a></dt>
+<dd><p>export the mRig data to r9Anim format files</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportManager.save_mayafile">
 <code class="descname">save_mayafile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.save_mayafile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checkout and Save the MayaFile so that during the export we ensure the Maya file is checked out and saved</p>
@@ -599,8 +645,8 @@ managing the progressBarQT escape and file loading</p>
   <p class="topless"><a href="Red9_Pro_audio.html"
                         title="previous chapter">Pro_Pack : Audio</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="Red9_Pro_importexport.html"
-                        title="next chapter">Pro_Pack : ImportExport</a></p>
+  <p class="topless"><a href="Red9_Pro_general.html"
+                        title="next chapter">Pro_Pack : General</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -632,7 +678,7 @@ managing the progressBarQT escape and file loading</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_importexport.html" title="Pro_Pack : ImportExport"
+          <a href="Red9_Pro_general.html" title="Pro_Pack : General"
              >next</a> |</li>
         <li class="right" >
           <a href="Red9_Pro_audio.html" title="Pro_Pack : Audio"

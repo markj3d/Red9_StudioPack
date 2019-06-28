@@ -1179,7 +1179,7 @@ names &amp; transforms if write set to true it will write a .sgfi file in the sa
 <dt id="Red9.pro_pack.core.optimiser.scene_geo_history_test">
 <code class="descname">scene_geo_history_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>filepath=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.scene_geo_history_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>this test compares the names of  mesh geometry in the scene against pre-saved sgfi file, first querying the file
-geometries in the scene and then tring to match using vertex counts</p>
+geometries in the scene and then trying to match using vertex counts</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1430,7 +1430,7 @@ as that needs full control over these over-rides during the build process</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.skeleton_pose_compare_test">
-<code class="descname">skeleton_pose_compare_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>filepath=''</em>, <em>rootjnt=''</em>, <em>savebase=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_pose_compare_test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">skeleton_pose_compare_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>filepath=''</em>, <em>rootjnt=''</em>, <em>src_rootjnt=''</em>, <em>savebase=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_pose_compare_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>this test compares the given skeleton with a pre-saved r9Pose file, comparing the joint
 hierarchy, joint naming, transforms and orients to validate one skeleton against another</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1443,6 +1443,7 @@ hierarchy, joint naming, transforms and orients to validate one skeleton against
 <li><strong>rootjnt</strong> &#8211; the roor joint of the skeleton we want to test against the given pose file</li>
 <li><strong>savebase</strong> &#8211; when setting up this test we need a pose file to test against, this allows us to run it
 prior to testing and save the pose to the filepath rather than running the actual test</li>
+<li><strong>srcjnt</strong> &#8211; source skeleton to compare against if the filepath wasn&#8217;t given</li>
 </ul>
 </td>
 </tr>
