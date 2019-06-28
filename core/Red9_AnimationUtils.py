@@ -145,11 +145,16 @@ def checkRunTimeCmds():
     except:
         raise StandardError('SnapRuntime Plug-in not found')
 
-def getChannelBoxSelection():
+def getChannelBoxSelection(longNames=False):
     '''
     return a list of attributes selected in the ChannelBox
+
+    :param longNames: return the longNames of the attrs selected, else we default to Maya's short attr names
     '''
-    return cmds.channelBox('mainChannelBox', q=True, selectedMainAttributes=True)
+    attrs = cmds.channelBox('mainChannelBox', q=True, selectedMainAttributes=True)
+    if longNames:
+        attrs = [cmds.attributeQuery(a, n=cmds.ls(sl=True, l=True)[0], ln=1) for a in attrs]
+    return attrs
 
 def getNodeAttrStatus(node=None, asDict=True, incLocked=True):
     '''
@@ -1951,7 +1956,7 @@ class AnimationUI(object):
 
         dirs = [subdir for subdir in os.listdir(basePath) if os.path.isdir(os.path.join(basePath, subdir))]
         if not dirs:
-            raise StandardError('Folder has no subFolders for pose scanning')
+            log.warning('Folder has no subFolders for pose scanning')
         for subdir in dirs:
             cmds.textScrollList(self.uitslPoseSubFolders, edit=True,
                                             append='/%s' % subdir,
@@ -2021,8 +2026,8 @@ class AnimationUI(object):
             # Project mode and folder contains NO poses so switch to subFolders
             if not self.poses and self.posePathMode == 'projectPoseMode':
                 log.warning('No Poses found in Root Project directory, switching to subFolder pickers')
-                self.__uiCB_switchSubFolders()
-                return
+#                 self.__uiCB_switchSubFolders()
+#                 return
         log.debug('searchFilter  : %s : rebuildFileList : %s' % (searchFilter, rebuildFileList))
 
         # TextScroll Layout
@@ -5345,9 +5350,9 @@ class CameraTracker():
                 step = cmds.optionVar(q='red9_cameraTrackStep')
             else:
                 step = 10
-        if not keepOffset:
-            if cmds.optionVar(exists='red9_cameraTrackKeepOffset'):
-                keepOffset = cmds.optionVar(q='red9_cameraTrackKeepOffset')
+#         if not keepOffset:
+#             if cmds.optionVar(exists='red9_cameraTrackKeepOffset'):
+#                 keepOffset = cmds.optionVar(q='red9_cameraTrackKeepOffset')
 
         if fixed:
             if keepOffset:
@@ -5431,7 +5436,7 @@ class CameraTracker():
 
     def __runTracker(self, *args):
         self.__storePrefs()
-        self.cameraTrackView(fixed=self.fixed)
+        self.cameraTrackView(fixed=self.fixed, keepOffset=cmds.checkBox('CBMaintainCurrent', q=True, v=True))
 
 
 class ReconnectAnimData(object):
