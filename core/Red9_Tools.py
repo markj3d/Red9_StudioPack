@@ -18,6 +18,7 @@ import os
 
 import Red9.startup.setup as r9Setup
 import Red9_Meta as r9Meta
+import Red9_CoreUtils as r9Core
 import Red9_AnimationUtils as r9Anim
 
 import logging
@@ -74,7 +75,7 @@ class SceneReviewerUI(object):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
         window = cmds.window(self.win, title=self.win, s=True, widthHeight=(450, 700))
-        cmds.scrollLayout('reviewScrollLayout', rc=lambda *args:self.resizeTextScrollers())
+        cmds.scrollLayout('reviewScrollLayout', rc=lambda *args:self._resizeTextScrollers())
         cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
         cmds.textFieldGrp('author', l=LANGUAGE_MAP._SceneReviewerUI_.author, ed=False, text=author)
         cmds.textFieldGrp('date', l=LANGUAGE_MAP._SceneReviewerUI_.date, ed=False, text=date)
@@ -140,13 +141,24 @@ class SceneReviewerUI(object):
             cmds.button('setReviewActive', e=True, bgc=r9Setup.red9ButtonBGC(1))
             cmds.button('setReviewInActive', e=True, bgc=r9Setup.red9ButtonBGC(2))
 
-    def resizeTextScrollers(self):
-        width = cmds.scrollLayout('reviewScrollLayout', q=True, w=True) - 20
+    def _resizeTextScrollers(self):
+        width = cmds.scrollLayout('reviewScrollLayout', q=True, w=True)
         height = cmds.scrollLayout('reviewScrollLayout', q=True, h=True)
-        cmds.scrollField('comment', e=True, h=(height / 2) - 120)
-        cmds.scrollField('comment', e=True, w=width)
-        cmds.scrollField('history', e=True, h=(height / 2) - 120)
-        cmds.scrollField('history', e=True, w=width)
+        if not r9Setup.maya_screen_mapping()[0]:
+            width = width - 20
+            cmds.scrollField('comment', e=True, h=(height / 2) - 120)
+            cmds.scrollField('comment', e=True, w=width)
+            cmds.scrollField('history', e=True, h=(height / 2) - 120)
+            cmds.scrollField('history', e=True, w=width)
+        else:
+            # using the same dynamic remapping values to recalculate width and height for 4k
+            height = (r9Core._ui_scaling_factors(height=height) / 2) - 40
+            width = r9Core._ui_scaling_factors(width=width) - 15
+            cmds.scrollField('comment', e=True, h=height)
+            cmds.scrollField('comment', e=True, w=width)
+            cmds.scrollField('history', e=True, h=height)
+            cmds.scrollField('history', e=True, w=width)
+
         cmds.rowColumnLayout('SceneNodeActivatorRC', e=True, columnWidth=[(1, (width / 2) - 1), (2, (width / 2) - 1)])
 
 

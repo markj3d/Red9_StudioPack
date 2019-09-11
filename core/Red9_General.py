@@ -987,6 +987,8 @@ def os_listFiles(folder, filters=[], byDate=False, fullPath=False):
     :param byData: sort the list by modified date, newest first!
     :param fullPath: return either the fully matched path or just the files that match
     '''
+    if not os.path.isdir(folder):
+        folder = os.path.dirname(folder)
     files = os.listdir(folder)
     filtered = []
     if filters:

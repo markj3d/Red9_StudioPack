@@ -1230,7 +1230,7 @@ class MClassNodeUI(object):
         cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.update_to_uuids,
                       ann=LANGUAGE_MAP._MetaNodeUI_.update_to_uuids_ann,
                       c=upgrade_toLatestBindings)
-        cmds.scrollLayout('slMetaNodeScroll', rc=lambda *args: self.fitTextScrollFucker())
+        cmds.scrollLayout('slMetaNodeScroll', rc=lambda *args: self.__uicb_fitTextScroll())
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=5, style='none')
 
@@ -1326,12 +1326,22 @@ class MClassNodeUI(object):
             cmds.checkBox('cb_filter_mTypes', e=True, v=False)
         self.fillScroll(*args)
 
-    def fitTextScrollFucker(self):
+    def __uicb_fitTextScroll(self):
         '''
-        bodge to resize tghe textScroll as the default Maya control is SHITE!
+        bodge to resize the textScroll
         '''
-        cmds.textScrollList('slMetaNodeList', e=True, h=int(cmds.scrollLayout('slMetaNodeScroll', q=True, h=True)) - 170)
-        cmds.textScrollList('slMetaNodeList', e=True, w=int(cmds.scrollLayout('slMetaNodeScroll', q=True, w=True)) - 20)
+        if not r9Setup.maya_screen_mapping()[0]:
+            cmds.textScrollList('slMetaNodeList', e=True, h=int(cmds.scrollLayout('slMetaNodeScroll', q=True, h=True)) - 170)
+            cmds.textScrollList('slMetaNodeList', e=True, w=int(cmds.scrollLayout('slMetaNodeScroll', q=True, w=True)) - 10)
+        else:
+            # using the same dynamic remapping values to recalculate width and height for 4k
+            height = cmds.scrollLayout('slMetaNodeScroll', q=True, h=True)
+            mapped = r9Core._ui_scaling_factors(height=height) 
+            cmds.textScrollList('slMetaNodeList', e=True, h=mapped)
+            
+            width = cmds.scrollLayout('slMetaNodeScroll', q=True, w=True)
+            mapped = r9Core._ui_scaling_factors(width=width) - 10
+            cmds.textScrollList('slMetaNodeList', e=True, w=mapped)      
 
     def graphNetwork(self, *args):
         if r9Setup.mayaVersion() < 2013:
@@ -5447,7 +5457,8 @@ def metaData_sceneCleanups(*args):
     Registered on SceneOpen and SceneNew callbacks so that the MetaData Cache is cleared and
     any registered HUD is killed off
     '''
-    hardKillMetaHUD()
+    if not r9Setup.mayaIsBatch():
+        hardKillMetaHUD()
     resetCacheOnSceneNew()
 
 

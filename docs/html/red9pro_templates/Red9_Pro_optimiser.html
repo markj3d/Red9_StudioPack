@@ -1487,7 +1487,8 @@ original target meshes wired up to the blend node</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; whether the targets should or shouldn&#8217;t be in the scene</li>
+<li><strong>expected</strong> &#8211; whether the targets should or shouldn&#8217;t be in the scene. If they&#8217;re found and
+expected=False then the fix method will now try and delete them.</li>
 <li><strong>blends</strong> &#8211; specific blendShape nodes to test against, default=[]</li>
 <li><strong>meshcheck</strong> &#8211; only check blends associated to polymeshes, default=True</li>
 <li><strong>forcefix</strong> &#8211; if True then the fix will try and force the re-build, managing any

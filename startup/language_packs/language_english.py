@@ -86,7 +86,7 @@ class _MainMenus_(object):
     collapse_mrig_ann = 'ONLY Applicable for Meta based mRig systems\nCollapse the keys in the selected TimeRange (Red highlighted)'
 
     insert_padding = 'Red9: Insert Padding'
-    pad_selected = 'Pad : Selected Only'
+    pad_selected = 'Pad : Selected Objects Only'
     pad_selected_ann = 'Insert time in the selected TimeRange (Red highlighted)'
     pad_full_scene = 'Pad : Full Scene'
     pad_full_scene_ann = 'Insert time in the selected TimeRange (Red highlighted)'
@@ -94,7 +94,7 @@ class _MainMenus_(object):
     pad_mrigs_ann = 'ONLY Applicable for Meta based mRig systems\nInsert time in the selected TimeRange (Red highlighted)'
 
     inverse_anim = 'Red9: Reverse Animation'
-    inverse_selected = 'Reverse: Selected Only'
+    inverse_selected = 'Reverse: Selected Objects Only'
     inverse_selected_ann = 'ONLY Applicable for Meta based mRig systems\nReverse the animation data over the selected timeRange'
     inverse_mrigs = 'Reverse: Selected mRigs'
     inverse_mrigs_ann = 'ONLY Applicable for Meta based mRig systems\nReverse the animation data over the selected timeRange for the entire mRig'

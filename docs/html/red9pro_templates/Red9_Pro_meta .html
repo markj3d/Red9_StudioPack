@@ -1433,6 +1433,12 @@ of the pipelines.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle">
+<em class="property">class </em><code class="descname">Pro_MetaRig_Vehicle</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_External">
 <em class="property">class </em><code class="descname">Pro_MetaRig_External</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_External" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
@@ -2239,6 +2245,13 @@ this to manage who in the scene is talking what lines of dialog</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Vehicle">
+<em class="property">class </em><code class="descname">ExportTag_Vehicle</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Vehicle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
+<p>Export subclass for props</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Environment">
 <em class="property">class </em><code class="descname">ExportTag_Environment</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Environment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
@@ -2804,6 +2817,25 @@ else we validate that testRange is fully within the baseRanges times</p>
 <dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.isConnected">
 <code class="descname">isConnected</code><span class="sig-paren">(</span><em>audio</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.isConnected" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.timeOffset">
+<code class="descname">timeOffset</code><span class="sig-paren">(</span><em>offset</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.timeOffset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Offset the audio node offset data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>offset</strong> &#8211; offset the timerange data for this instance</li>
+<li><strong>timerange</strong> &#8211; used to check if we need to offset both start and end frames or just one</li>
+<li><strong>ripple</strong> &#8211; unused at the moment</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 

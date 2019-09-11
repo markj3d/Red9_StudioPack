@@ -773,6 +773,16 @@ class AudioNode(object):
         '''
         inspect_wav(multi=False, audioNodes=[self.audioNode])
 
+    def to_mono(self, output):
+        '''
+        convert a stereo file to mono
+        '''
+        if not output:
+            output = self.path
+        audioseg = audio_segment.AudioSegment.from_wav(self.path)
+        audioseg = audioseg.set_channels(1)
+        audioseg.export(output, format="wav")
+
     # ---------------------------------------------------------------------------------
     # PRO_PACK : BWAV support ---
     # ---------------------------------------------------------------------------------

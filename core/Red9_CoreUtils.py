@@ -2392,9 +2392,17 @@ class TimeOffset(object):
     >>> flt.incRoots=True
     >>> flt.printSettings()
     >>>
-    >>> r9Core.TimeOffset().fromSelected(offset, filterSettings=flt, flocking=False, randomize=False)
+    >>> r9Core.TimeOffset.fromSelected(offset, filterSettings=flt, flocking=False, randomize=False)
 
     '''
+
+    # list of nodes processed by the systems so we no longer run the risk of offsetting a node twice!
+    _processed = {'animcurves': [],
+                  'sound': [],
+                  'animclips': [],
+                  'mnodes': [],
+                  'mnode_internals': []}
+
     @classmethod
     def fullScene(cls, offset, timelines=False, timerange=None, ripple=True, startfrm=False):
         '''
@@ -2412,14 +2420,18 @@ class TimeOffset(object):
 
         log.debug('TimeOffset Scene : offset=%s, timelines=%s' %
                   (offset, str(timelines)))
+        cls._processed = {}  # clear the cache
+
         with r9General.undoContext():
-            cls.animCurves(offset, timerange=timerange, ripple=ripple)
-            cls.sound(offset, mode='Scene', timerange=timerange, ripple=ripple)
-            cls.animClips(offset, mode='Scene', timerange=timerange, ripple=ripple)
+            cls._processed['mnodes'], cls._processed['mnode_internals'] = cls.metaNodes(offset, timerange=timerange, ripple=ripple)
+            cls._processed['animcurves'] = cls.animCurves(offset, timerange=timerange, ripple=ripple)
+            cls._processed['sound'] = cls.sound(offset, mode='Scene', timerange=timerange, ripple=ripple)
+            cls._processed['animclips'] = cls.animClips(offset, mode='Scene', timerange=timerange, ripple=ripple)
             if timelines:
                 cls.timelines(offset)
-            cls.metaNodes(offset, timerange=timerange, ripple=ripple)
-            print('Scene Offset Successfully')
+
+        print('Scene Offset Successfully')
+        return cls._processed
 
     @classmethod
     def fromSelected(cls, offset, nodes=None, filterSettings=None, flocking=False,
@@ -2460,6 +2472,7 @@ class TimeOffset(object):
                 basenodes = [nodes]
             else:
                 basenodes = nodes
+        cls._processed = {}  # clear the cache
 
         # deal with mNodes / mRigs
         # ======================================
@@ -2474,14 +2487,24 @@ class TimeOffset(object):
                 if mrig and mrig not in _mrigs:
                     _mrigs.append(mrig)
             if _mrigs:
+                mNodes.extend(_mrigs)
                 for rig in _mrigs:
-                    mNodes.extend(mrig.getChildMetaNodes(walk=True))
+                    mNodes.extend(rig.getChildMetaNodes(walk=True))
                     filtered.extend(rig.getChildren())
+
+#             # call getChildren on each mNode rather than the mRig
+#             # as this will ensure that child mRig systems with different
+#             # CTRL_Prefix data will also get processed correctly!
+#             mNodes = list(set(mNodes))
+#             for mnode in mNodes:
+#                 filtered.extend(mnode.getChildren())
 
         # process everything
         # ======================================
         elif filterSettings:
             filtered = FilterNode(basenodes, filterSettings).processFilter()
+        else:
+            filtered = basenodes
 
         if filtered:
             with r9General.undoContext():
@@ -2498,31 +2521,35 @@ class TimeOffset(object):
                             rand = random.uniform(0, offset)
                             increment = cachedOffset + rand
                             cachedOffset += rand
-                        cls.animCurves(increment, node,
-                                       timerange=timerange,
-                                       ripple=ripple)
+                        cls._processed['animcurves'] = cls.animCurves(increment, node,
+                                                                      timerange=timerange,
+                                                                      ripple=ripple)
                         if logging_is_debug():
                             log.debug('animData randon/flock modified offset : %f on node: %s' % (increment, nodeNameStrip(node)))
                 else:
-                    cls.animCurves(offset, nodes=filtered,
-                                   timerange=timerange,
-                                   ripple=ripple)
-                    cls.sound(offset, mode='Selected',
-                                    audioNodes=FilterNode().lsSearchNodeTypes('audio', filtered),
-                                    timerange=timerange,
-                                    ripple=ripple)
-                    cls.animClips(offset, mode='Selected',
-                                    clips=FilterNode().lsSearchNodeTypes('animClip', filtered),
-                                    timerange=timerange,
-                                    ripple=ripple)
-                    cls.metaNodes(offset, timerange=timerange, ripple=ripple, mNodes=mNodes)
+                    cls._processed['mnodes'], cls._processed['mnode_internals'] = cls.metaNodes(offset, mNodes=mNodes,
+                                                                                                timerange=timerange,
+                                                                                                ripple=ripple)
+
+                    cls._processed['animcurves'] = cls.animCurves(offset, nodes=filtered, timerange=timerange, ripple=ripple)
+
+                    cls._processed['sound'] = cls.sound(offset, mode='Selected',
+                                                    audioNodes=FilterNode().lsSearchNodeTypes('audio', filtered),
+                                                    timerange=timerange,
+                                                    ripple=ripple)
+
+                    cls._processed['animclips'] = cls.animClips(offset, mode='Selected',
+                                                                clips=FilterNode().lsSearchNodeTypes('animClip', filtered),
+                                                                timerange=timerange,
+                                                                ripple=ripple)
                 log.info('Selected Nodes Offset Successfully')
+
+                return cls._processed
         else:
             raise StandardError('Nothing selected or returned from the Hierarchy filter to offset')
 
-    @staticmethod
-    @r9General.Timer
-    def animCurves(offset, nodes=None, timerange=None, ripple=True):
+    @classmethod
+    def animCurves(cls, offset, nodes=None, timerange=None, ripple=True):
         '''
         Shift Animation curves. If nodes are fed in to process then we do
         a number of aggressive searches to find all linked animation data.
@@ -2535,12 +2562,11 @@ class TimeOffset(object):
         :param ripple: manage the upper range of keys and ripple them with the offset
         '''
         safeCurves = FilterNode.lsAnimCurves(nodes, safe=True)
+        curves_moved = []
 
         if safeCurves:
             log.debug('AnimCurve Offset = %s ============================' % offset)
             # log.debug(''.join([('offset: %s\n' % curve) for curve in safeCurves]))
-            moved = 0
-
             if timerange:
                 rippleRange = (timerange[0], 1000000000)
                 if offset > 0:
@@ -2553,6 +2579,13 @@ class TimeOffset(object):
                 log.debug('Cutting time range : %s>%s' % (cutTimeBlock[0], cutTimeBlock[1]))
 
             for curve in safeCurves:
+                # bail if already processed
+                if 'animcurves' in cls._processed and curve in cls._processed['animcurves']:
+                    log.debug('skipping already processed animcurve : %s' % curve)
+                    continue
+                if 'mnode_internals' in cls._processed and curve in cls._processed['mnode_internals']:
+                    log.debug('skipping already processed animcurve : %s' % curve)
+                    continue
                 try:
                     if timerange:
                         try:
@@ -2568,11 +2601,12 @@ class TimeOffset(object):
                     else:
                         cmds.keyframe(curve, edit=True, r=True, timeChange=offset)
                     log.debug('offsetting: %s' % curve)
-                    moved += 1
+                    curves_moved.append(curve)
                 except StandardError, err:
                     log.info('Failed to offset curves fully : %s' % curve)
                     log.debug(err)
-            log.info('%i : AnimCurves were offset' % moved)
+            log.info('%i : AnimCurves were offset' % len(curves_moved))
+        return curves_moved
 
     @staticmethod
     def timelines(offset):
@@ -2585,8 +2619,8 @@ class TimeOffset(object):
                              min=cmds.playbackOptions(q=True, min=True) + offset,
                              max=cmds.playbackOptions(q=True, max=True) + offset)
 
-    @staticmethod
-    def sound(offset, mode='Scene', audioNodes=None, timerange=None, ripple=True):
+    @classmethod
+    def sound(cls, offset, mode='Scene', audioNodes=None, timerange=None, ripple=True):
         '''
         Offset Audio nodes.
 
@@ -2595,15 +2629,23 @@ class TimeOffset(object):
         :param audioNodes: optional, given nodes to process
         :param timerange: optional timerange to process (outer bounds only)
         :param ripple: when shifting nodes ripple the offset to sounds after the range,
-            if ripple=False we only shift audio that starts in tghe bounds of the timerange
+            if ripple=False we only shift audio that starts in the bounds of the timerange
         '''
+        sounds_offset = []
         if mode == 'Scene':
             audioNodes = cmds.ls(type='audio')
         if audioNodes:
-            nodesOffset = 0
             log.debug('AudioNodes Offset ============================')
             for sound in audioNodes:
                 try:
+                    # bail if already processed
+                    if 'sound' in cls._processed and sound in cls._processed['sound']:
+                        log.debug('skipping already processed sound : %s' % sound)
+                        continue
+                    if 'mnode_internals' in cls._processed and sound in cls._processed['mnode_internals']:
+                        log.debug('skipping already processed sound : %s' % sound)
+                        continue
+
                     audioNode = r9Audio.AudioNode(sound)
                     if timerange:
                         if not audioNode.startFrame > timerange[0]:
@@ -2613,14 +2655,15 @@ class TimeOffset(object):
                             log.info('Skipping Sound : %s > sound starts after the timerange ends' % sound)
                             continue
                     audioNode.offsetTime(offset)
-                    nodesOffset += 1
+                    sounds_offset.append(sound)
                     log.debug('offset : %s' % sound)
                 except:
                     log.debug('Failed to offset audio node %s' % sound)
-            log.info('%i : SoundNodes were offset' % nodesOffset)
+            log.info('%i : SoundNodes were offset' % len(sounds_offset))
+        return sounds_offset
 
-    @staticmethod
-    def animClips(offset, mode='Scene', clips=None, timerange=None, ripple=True):
+    @classmethod
+    def animClips(cls, offset, mode='Scene', clips=None, timerange=None, ripple=True):
         '''
         Offset Trax Clips
 
@@ -2631,12 +2674,21 @@ class TimeOffset(object):
         :param ripple: when shifting nodes ripple the offset to clips after the range,
             if ripple=False we only shift clips that starts in tghe bounds of the timerange
         '''
+        clips_moved = []
         if mode == 'Scene':
             clips = cmds.ls(type='animClip')
         if clips:
             log.debug('Clips Offset ============================')
             for clip in clips:
                 try:
+                    # bail if already processed
+                    if 'animclips' in cls._processed and clip in cls._processed['animclips']:
+                        log.debug('skipping already processed animclip : %s' % clip)
+                        continue
+                    if 'mnode_internals' in cls._processed and clip in cls._processed['mnode_internals']:
+                        log.debug('skipping already processed animclip : %s' % clip)
+                        continue
+
                     startFrame = cmds.getAttr('%s.startFrame' % clip)
                     if timerange:
                         if not startFrame > timerange[0]:
@@ -2646,42 +2698,51 @@ class TimeOffset(object):
                             log.info('Skipping Clip : %s > clip starts after the timerange begins' % clip)
                             continue
                     cmds.setAttr('%s.startFrame' % clip, startFrame + offset)
+                    clips_moved.append(clip)
                     log.debug('offset : %s' % clip)
                 except:
                     pass
-            log.info('%i : AnimClips were offset' % len(clips))
+            log.info('%i : AnimClips were offset' % len(clips_moved))
+        return clips_moved
 
-    @staticmethod
-    @r9General.Timer
-    def metaNodes(offset, timerange=None, ripple=True, mNodes=None):
+    @classmethod
+    def metaNodes(cls, offset, timerange=None, ripple=True, mNodes=None):
         '''
         Offset special handling for MetaNodes. Inspect the metaNode and see if
         the 'timeOffset' method has been implemented and if so, call it.
-
-        .. note::
-            ONLY runs in Scene mode and timerange and ripple are down to the metaNode
-            to handle in it's internal implementation
 
         :param offset: amount to offset the sounds nodes by
         :param timerange: optional timerange to process (outer bounds only)
         :param ripple: when shifting nodes ripple the offset to clips after the range,
             if ripple=False we only shift clips that starts in tghe bounds of the timerange
+
+        .. note::
+            each timeOffset function implemented within a MetaClass must now return ALL Maya nodes (dag path)
+            that were processed by it (other than itself) so that these can be flagged as processed and
+            removed from the standard nodeType handlers in the TimeOffset class
         '''
-        nodesoffset = []
+        mNodes_offset = []
+        mNodes_internal_offset = []  # nodes OTHER than the mNode itself that the function offset
         if not mNodes:
             mNodes = r9Meta.getMetaNodes()
         if mNodes:
             log.debug('MetaData Offset ============================')
             for mNode in mNodes:
+                # bail if already processed
+                if 'mnode' in cls._processed and mNode.mNode in cls._processed['mnode']:
+                    log.debug('skipping already processed mNode : %s' % mNode)
+                    continue
+
                 if 'timeOffset' in dir(mNode) and callable(getattr(mNode, 'timeOffset')):
-                    mNode.timeOffset(offset, timerange=timerange, ripple=ripple)
-                    nodesoffset.append(mNode)
-            if nodesoffset:
+                    mNodes_internal_offset.extend(mNode.timeOffset(offset, timerange=timerange, ripple=ripple) or [])
+                    mNodes_offset.append(mNode.mNode)  # set to cache as dag path to make sure we cover duplicate systems
+            if mNodes_offset:
                 log.info('================================')
                 log.info('timeOffset generic mClass called')
                 log.info('================================')
-            for i, node in enumerate(nodesoffset):
+            for i, node in enumerate(mNodes_offset):
                 log.info('%i : MetaData %s.timeOffset : called %s ' % (i, node.__class__.__name__, node))
+        return mNodes_offset, mNodes_internal_offset
 
 # -------------------------------------------------------------------------------------
 # Math functions ----
@@ -2736,6 +2797,32 @@ def valueToMappedRange(value, currentMin, currentMax, givenMin, givenMax):
     valueScaled = float(value - currentMin) / float(currentSpan)
     # Convert the 0-1 range into a value in the right range.
     return givenMin + (valueScaled * givenSpan)
+
+def _ui_scaling_factors(width=False, height=False):
+    '''
+    this is a bodge really, but needed to remap the UI scales to 4k setups in some of the core StudioPack UI's
+    '''
+    _width = width
+    _height = height
+    
+    is_4k, _, _, ppi = r9Setup.maya_screen_mapping()
+    if is_4k:
+        # base size mapping setups
+        if width:
+            _width = max(valueToMappedRange(width, 500, 7673, 333, 5115), 100)
+        if height:
+            _height = max(valueToMappedRange(height, 355, 2021, 65, 1175), 100)
+
+        # now multiply by the dpi, based on 144.0dpi being default
+        _width = _width * (144.0 / ppi)
+        _height = _height * (144.0 / ppi)
+
+    if width and height:
+        return _width, _height
+    elif width:
+        return _width
+    elif height:
+        return _height
 
 def timeIsInRange(baseRange=(), testRange=(), start_inRange=True, end_inRange=True):
     '''

@@ -1064,7 +1064,7 @@ animation curves on the selected object by shifting keys</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span><span class="o">.</span><span class="n">incRoots</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span><span class="o">.</span><span class="n">printSettings</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r9Core</span><span class="o">.</span><span class="n">TimeOffset</span><span class="p">()</span><span class="o">.</span><span class="n">fromSelected</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">filterSettings</span><span class="o">=</span><span class="n">flt</span><span class="p">,</span> <span class="n">flocking</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">randomize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9Core</span><span class="o">.</span><span class="n">TimeOffset</span><span class="o">.</span><span class="n">fromSelected</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="n">filterSettings</span><span class="o">=</span><span class="n">flt</span><span class="p">,</span> <span class="n">flocking</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">randomize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="classmethod">
@@ -1125,9 +1125,9 @@ the filter types into the FilterNode code. Internally the following is true:</p>
 </table>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="classmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.animCurves">
-<em class="property">static </em><code class="descname">animCurves</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.animCurves" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">animCurves</code><span class="sig-paren">(</span><em>offset</em>, <em>nodes=None</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.animCurves" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shift Animation curves. If nodes are fed in to process then we do
 a number of aggressive searches to find all linked animation data.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1154,9 +1154,9 @@ keyframe(option=&#8217;insert&#8217;) BUT this has a MAJOR crash bug!</li>
 <dd><p>Shift the main playback timelines and CurrentFrame</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="classmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.sound">
-<em class="property">static </em><code class="descname">sound</code><span class="sig-paren">(</span><em>offset</em>, <em>mode='Scene'</em>, <em>audioNodes=None</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.sound" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">sound</code><span class="sig-paren">(</span><em>offset</em>, <em>mode='Scene'</em>, <em>audioNodes=None</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.sound" title="Permalink to this definition">¶</a></dt>
 <dd><p>Offset Audio nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1168,7 +1168,7 @@ keyframe(option=&#8217;insert&#8217;) BUT this has a MAJOR crash bug!</li>
 <li><strong>audioNodes</strong> &#8211; optional, given nodes to process</li>
 <li><strong>timerange</strong> &#8211; optional timerange to process (outer bounds only)</li>
 <li><strong>ripple</strong> &#8211; when shifting nodes ripple the offset to sounds after the range,
-if ripple=False we only shift audio that starts in tghe bounds of the timerange</li>
+if ripple=False we only shift audio that starts in the bounds of the timerange</li>
 </ul>
 </td>
 </tr>
@@ -1176,9 +1176,9 @@ if ripple=False we only shift audio that starts in tghe bounds of the timerange<
 </table>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="classmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.animClips">
-<em class="property">static </em><code class="descname">animClips</code><span class="sig-paren">(</span><em>offset</em>, <em>mode='Scene'</em>, <em>clips=None</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.animClips" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">animClips</code><span class="sig-paren">(</span><em>offset</em>, <em>mode='Scene'</em>, <em>clips=None</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.animClips" title="Permalink to this definition">¶</a></dt>
 <dd><p>Offset Trax Clips</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1198,16 +1198,11 @@ if ripple=False we only shift clips that starts in tghe bounds of the timerange<
 </table>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="classmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.metaNodes">
-<em class="property">static </em><code class="descname">metaNodes</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.metaNodes" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">metaNodes</code><span class="sig-paren">(</span><em>offset</em>, <em>timerange=None</em>, <em>ripple=True</em>, <em>mNodes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.metaNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Offset special handling for MetaNodes. Inspect the metaNode and see if
 the &#8216;timeOffset&#8217; method has been implemented and if so, call it.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">ONLY runs in Scene mode and timerange and ripple are down to the metaNode
-to handle in it&#8217;s internal implementation</p>
-</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1222,6 +1217,12 @@ if ripple=False we only shift clips that starts in tghe bounds of the timerange<
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">each timeOffset function implemented within a MetaClass must now return ALL Maya nodes (dag path)
+that were processed by it (other than itself) so that these can be flagged as processed and
+removed from the standard nodeType handlers in the TimeOffset class</p>
+</div>
 </dd></dl>
 
 </dd></dl>

@@ -39,6 +39,7 @@
 import maya.cmds as cmds
 import pymel.core as pm
 import Red9_AnimationUtils as r9Anim
+import Red9_CoreUtils as r9Core
 import Red9.startup.setup as r9Setup
 import Red9.core.Red9_General as r9General
 
@@ -456,7 +457,7 @@ class AnimBinderUI(object):
     def _UI(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        cmds.window(self.win, title=self.win, menuBar=True, sizeable=False, widthHeight=(300, 380))
+        cmds.window(self.win, title=self.win, menuBar=True, sizeable=True, widthHeight=(300, 380))
 
         cmds.menu(label='Help')
         cmds.menuItem(label='Watch MasterClass Video', c=lambda x: self._contactDetails(opentype='vimeo'))
@@ -640,7 +641,7 @@ def match_given_hierarchys(source, dest):
                 break
     return nameMatched
 
-def bind_skeletons(source, dest, method='connect', scales=False, verbose=False):
+def bind_skeletons(source, dest, method='connect', scales=False, verbose=False, unlock=False):
     '''
     From 2 given root joints search through each hierarchy for child joints, match
     them based on node name, then connect their trans/rots directly, or
@@ -650,6 +651,7 @@ def bind_skeletons(source, dest, method='connect', scales=False, verbose=False):
     :param dest: the root node of the driven skeleton
     :param method: the method used for the connection, either 'connect' or 'constrain'
     :param scale: do we bind the scales of the destination skel to the source??
+    :param unlock: if True force unlock the required transform attrs on the destination skeleton first
     '''
 
     sourceJoints = cmds.listRelatives(source, ad=True, f=True, type='joint')
@@ -672,9 +674,12 @@ def bind_skeletons(source, dest, method='connect', scales=False, verbose=False):
     if scales:
         cmds.scaleConstraint(source, dest, mo=True)
 
+    # attrs to 'connect' and also to ensure are unlocked
     attrs = ['rotateX', 'rotateY', 'rotateZ', 'translateX', 'translateY', 'translateZ']
     if scales:
-        attrs = attrs + ['scaleX', 'scaleY', 'scaleZ']
+        attrs = attrs + ['scaleX', 'scaleY', 'scaleZ', 'inverseScale']
+    if unlock:
+        r9Core.LockChannels().processState(dest, attrs=attrs, mode='fullkey', hierarchy=True)
 
     for sJnt, dJnt in match_given_hierarchys(sourceJoints, destJoints):
         if method == 'connect':

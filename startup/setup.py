@@ -36,7 +36,7 @@ installedVersion = False
  Maya Version Mapping History:
  ====================================
 
- Release         -version    -api     python    -qt       prefs      -d    extra info
+ Release         -version    -api     python    -qt       prefs      -d            extra info
  -----------------------------------------------------------------------------------------
 
   2008          .  2008  .  ??????  .  2.5.1     na    .  2008    . 2007-09-01
@@ -115,6 +115,73 @@ def mayaFullSpecs():
     print 'OS build: ', osBuild()
 
     print MAYA_INTERNAL_DATA
+
+def maya_QT_mainWindow():
+    '''
+    return the main "MayaWindow" QT widget
+    '''
+    import maya.OpenMayaUI as omui
+    mayaWindow = omui.MQtUtil.mainWindow()
+    try:
+        try:
+            from PySide2 import QtWidgets
+            import shiboken2
+            return shiboken2.wrapInstance(long(mayaWindow), QtWidgets.QWidget)
+        except:
+            from PySide import QtGui
+            import shiboken
+            return shiboken.wrapInstance(long(mayaWindow), QtGui.QWidget)
+    except:
+        log.warning('failed to return Maya main QT Widget')
+
+def maya_QT_QApplication():
+    '''
+    return the QApplication instance of Maya
+    '''
+    try:
+        from PySide2 import QtWidgets
+        return QtWidgets.QApplication.instance()
+    except:
+        from PySide import QtGui
+        return QtGui.QApplication.instance()
+ 
+def maya_appplication_size():
+    '''
+    return the current Maya QT Application screen sizes
+    '''
+    mayasize = maya_QT_mainWindow().size()
+    return mayasize.width(), mayasize.height()
+
+def maya_screen_mapping():
+    '''
+    return the maya applications screen size mapping data.
+    If we're running in 4k, the screen width, the screen height,
+    as well as the pixel per inch (ppi) used by some of the ui scaling code
+
+    full 4k 150% scaling : (True, 3840, 2097, 144.0ppi)
+    full 4k 100% scaling : (True, 3840, 2097, 96.0ppi)
+
+    return: (bool(is4k), width, height, ppi)
+    
+    ..note::
+        actual ppi return is only supported in PySide2 (2017 omnwards)
+    '''
+    screen_size = maya_appplication_size()
+    try:
+        screens = maya_QT_QApplication().screens()
+        ppi = screens[0].logicalDotsPerInch()
+    except:
+        try:
+            widget = maya_QT_mainWindow()
+            ppi = widget.logicalDpiX()
+        except:
+            ppi = 96.0
+
+    # are we running in 4K?
+    if screen_size[0] > 3800 and screen_size[1] > 2050:
+        return True, screen_size[0], screen_size[1], ppi
+    else:
+        return False, screen_size[0], screen_size[1], ppi
 
 def mayaVersion():
     '''
@@ -1392,7 +1459,8 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
         # Finally after booting all clients required sync the actual PROJECT_DATA object to
         # the last loaded client. We don't need to sync Perforce mounts as the project_load will do that for us
         cmds.evalDeferred('from Red9.pro_pack import PROJECT_DATA;PROJECT_DATA.sync_project_to_settings(project=True, perforce=False)', lp=True)
-        cmds.evalDeferred("from Red9.pro_pack import load_ui_settings;load_ui_settings()", lp=True)
+        if not mayaIsBatch():
+            cmds.evalDeferred("from Red9.pro_pack import load_ui_settings;load_ui_settings()", lp=True)
 
 def reload_Red9(*args):
     '''

@@ -63,7 +63,29 @@ maintained. It&#8217;s also a fully dot completable dict method</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9data</span>
 </pre></div>
 </div>
-<span class="target" id="module-Red9.pro_pack.core.r9data"></span><p>Optmizer module for dealing with the health of a scene</p>
+<span class="target" id="module-Red9.pro_pack.core.r9data"></span><p>R9data module for dealing with dynamic, dot complete / accessible dictionaries.
+Once you&#8217;ve made an R9dict if will, by default, be a dynamic entry to a json file (if path was supplied on instansiation)
+This is used for most of the settings files you&#8217;ll see our toolsets using to store preferences as any changes in the UIs
+just set a value within the settings object, that change to the attr in turn triggers a write to disc.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9data&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9data</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># create a new dict (this is optional)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">newdata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;test&#39;</span><span class="p">:{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span><span class="mi">6</span><span class="p">},</span><span class="s1">&#39;new&#39;</span><span class="p">:{</span><span class="s1">&#39;rotate&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">]},</span><span class="s1">&#39;mystuff&#39;</span><span class="p">:</span><span class="s1">&#39;hello&#39;</span><span class="p">}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># make the file object and initialize the dict. If we pass in no initial value / dict then an empty dict is created, linked to the path given</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">r9Data</span><span class="o">.</span><span class="n">R9dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">newdata</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">r&quot;C:\Users\Red9\Documents\maya\R9_PRO\prefs\exporter2.r9settings&quot;</span><span class="p">,</span> <span class="n">write</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># we can also ensure that the dict has a specific set of keys. Usually done to ensure that things are synced, if a new tool needs a</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># new pref to be stored we just add that new key here and it will propagate to all settings already written</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">ensurekeys</span><span class="p">([(</span><span class="s1">&#39;newkey5&#39;</span><span class="p">,</span> <span class="mi">55</span><span class="p">)])</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># access some data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">mystuff</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">mystuff</span><span class="o">=</span><span class="s1">&#39;newvalue&#39;</span>
+</pre></div>
+</div>
 <p class="rubric">Main Classes</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -95,16 +117,13 @@ maintained. It&#8217;s also a fully dot completable dict method</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>value</strong> &#8211; expects a {} to be dotdictify</li>
 <li><strong>path</strong> &#8211; location to a JSON file to be dotdictify and interactively store value changes</li>
+<li><strong>write</strong> &#8211; create the json file / write it on initialization and make the dict dynamic, all changes made to it
+will envoke a write back to disc if the path was setup in the first place</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.r9data.R9dict.marker">
-<code class="descname">marker</code><em class="property"> = &lt;object object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.marker" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="Red9.pro_pack.core.r9data.R9dict.dict_to_r9dict">
 <code class="descname">dict_to_r9dict</code><span class="sig-paren">(</span><em>data</em>, <em>r9dict</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.dict_to_r9dict" title="Permalink to this definition">¶</a></dt>
@@ -125,34 +144,34 @@ maintained. It&#8217;s also a fully dot completable dict method</p>
 <code class="descname">getrootdata</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.getrootdata" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.r9data.R9dict.writable">
-<code class="descname">writable</code><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.writable" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="method">
 <dt id="Red9.pro_pack.core.r9data.R9dict.set_write_state">
 <code class="descname">set_write_state</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.set_write_state" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.r9data.R9dict.filepath">
-<code class="descname">filepath</code><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.filepath" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>update=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>write value changes to disc if a path was declare on creation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.r9data.R9dict.get_filepath">
+<code class="descname">get_filepath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.get_filepath" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the self.r9filepath attr from the root of the dictionary, regardless of the dept</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">return the filepath of the dict if given on creation</td>
 </tr>
 </tbody>
 </table>
-<p>of the dictionary key from where it is call if not self.r9filepath return None</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.r9data.R9dict.set_filepath">
 <code class="descname">set_filepath</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.set_filepath" title="Permalink to this definition">¶</a></dt>
-<dd><p>inset filepat in self.__dict[&#8216;filepath&#8217;]__
+<dd><p>set the filepath in self.__dict__[&#8216;__filepath&#8217;], this will writhe the dict to given file path
 :param filepath: string: file path</p>
 </dd></dl>
 
@@ -170,15 +189,9 @@ maintained. It&#8217;s also a fully dot completable dict method</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.r9data.R9dict.write">
-<code class="descname">write</code><span class="sig-paren">(</span><em>update=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>write value changes if a path has been declare on creation</p>
-</dd></dl>
-
-<dl class="method">
 <dt id="Red9.pro_pack.core.r9data.R9dict.ensurekeys">
 <code class="descname">ensurekeys</code><span class="sig-paren">(</span><em>keys</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.r9data.R9dict.ensurekeys" title="Permalink to this definition">¶</a></dt>
-<dd><p>ensures that given list of keys exist in the dictionary,
+<dd><p>ensures that a given list of keys exist in the dictionary,
 if files already exist it will preserve original values if not
 it will assign None value</p>
 <table class="docutils field-list" frame="void" rules="none">

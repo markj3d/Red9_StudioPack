@@ -316,7 +316,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000136C0208&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -339,7 +339,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001391C388&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -680,7 +680,7 @@ Red9 ExportUI &gt; Settings data, store in the R9PRO&gt;settings object files</p
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001393B8C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013426A48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1293,6 +1293,31 @@ the initial BND file reload for each fbx processed</p>
 
 </dd></dl>
 
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.animation.fbx_to_bnd_ui_class">
+<code class="descname">fbx_to_bnd_ui_class</code><a class="headerlink" href="#Red9.pro_pack.core.animation.fbx_to_bnd_ui_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>from Red9.pro_pack import r9pro
+r9pro.r9import(&#8216;r9panim&#8217;)
+import r9panim</p>
+<p>self = r9panim.Fbx_To_Bnd_ui()
+self.fbxfiles = [&#8216;Q:/Demos/MoCap_Library/Generic_Data/FBX_compatible/walk.fbx&#8217;]
+self.show()</p>
+<dl class="docutils">
+<dt>r9panim.Anim_Transfer().fbx_to_binder(self.fbxfiles,</dt>
+<dd>binderfile=self.settings.binder,
+usecurrentscene=self.settings.usecurrentscene,
+bake=self.settings.bake,
+runFilter=self.settings.runfilter,
+useTakeData=True,  # switch to look at the internal fbx&#8217;s take data to set the ranges up
+fbx_mode=self.settings.fbx_mode,
+mayafile=False,
+r9anim=False,
+import_bnd=self.settings.import_bnd,
+hikmapping=None)</dd>
+</dl>
+<p>alias of <code class="xref py py-class docutils literal"><span class="pre">Ui_mw_fbx_to_bnd</span></code></p>
+</dd></dl>
+
 <dl class="class">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui">
 <em class="property">class </em><code class="descname">Fbx_To_Bnd_ui</code><span class="sig-paren">(</span><em>fbxfiles=None</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui" title="Permalink to this definition">¶</a></dt>
@@ -1372,7 +1397,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001393D5C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001343B508&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1936,7 +1961,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Keyerui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001381DE48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001343B808&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

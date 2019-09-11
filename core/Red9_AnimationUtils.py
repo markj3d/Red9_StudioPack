@@ -625,12 +625,15 @@ class AnimationUI(object):
 
         self.buttonBgc = r9Setup.red9ButtonBGC(1)
         self.win = 'Red9AnimToolsWin'
+        self.initial_winsize = (355, 790)
+        self.initial_workspace_width = 355
         self.dockCnt = 'Red9AnimToolsDoc'
         self.workspaceCnt = 'Red9AnimToolsWorkspace'
         self.label = LANGUAGE_MAP._AnimationUI_.title
         self.internalConfigPath = False
         self.dock = dockUI
         self.uiBoot = True
+
 
         # take generic filterSettings Object
         self.filterSettings = r9Core.FilterNode_Settings()
@@ -665,7 +668,13 @@ class AnimationUI(object):
         self.ANIM_UI_OPTVARS = dict()
         self.__uiCache_readUIElements()
 
-
+        # deal with screen resolution and scaling
+        scaling_ppi = r9Setup.maya_screen_mapping()[3]
+        if not scaling_ppi == 96.0:  # 100%
+            factor = (scaling_ppi / 96.0)
+            self.initial_workspace_width = self.initial_workspace_width * factor
+            self.initial_winsize = (self.initial_winsize[0] * factor, self.initial_winsize[1] * factor)
+    
     @classmethod
     def show(cls):
         '''
@@ -705,16 +714,18 @@ class AnimationUI(object):
             if cmds.workspaceControl(animUI.workspaceCnt, q=True, exists=True):
                 cmds.workspaceControl(animUI.workspaceCnt, e=True, close=True)
 
+            print 'animUI.initial_workspace_width, ' ,animUI.initial_workspace_width,
             # if the workspace exists just show it, else bind the ui to it
             if not cmds.workspaceControl(animUI.workspaceCnt, q=True, exists=True):
+                # note here, workspace wiodth controls are a joke uptill 2018, and even then, the width isn't reliable
                 element = mel.eval('getUIComponentDockControl("Channel Box / Layer Editor", false);')  # get the channelBox element control
                 windowcall = 'import Red9.core.Red9_AnimationUtils as r9Anim;animUI=r9Anim.AnimationUI();animUI._showUI();'
                 cmds.workspaceControl(animUI.workspaceCnt, label="Red9_Animation",
                                       uiScript=windowcall,  # animUI._showUI,
                                       tabToControl=(element, -1),
-                                      initialWidth=355,
-                                      initialHeight=720,
-                                      minimumWidth=355,
+                                      initialWidth=355,  # animUI.initial_workspace_width,  # this SHOULD work but fails to control minimum correctly
+                                      initialHeight=animUI.initial_winsize[1],
+                                      minimumWidth=animUI.initial_workspace_width,  # True
                                       widthProperty='fixed',
                                       retain=False,
                                       loadImmediately=False)
@@ -745,6 +756,7 @@ class AnimationUI(object):
         Must see if there's a way of binding to the class object as you'd expect :(
         '''
         self.uitabMain = 'uitabMain'
+        self.uiformMain = 'uiformMain'
 
         # CopyAttributes
         # ====================
@@ -874,13 +886,17 @@ class AnimationUI(object):
         cmds.menu(l=LANGUAGE_MAP._Generic_.tools)
         cmds.menuItem(l=LANGUAGE_MAP._Generic_.reset,
                       c=self.__uiCache_resetDefaults)
+
         self.MainLayout = cmds.scrollLayout('red9MainScroller', rc=self.__uiCB_resizeMainScroller)
-        self.form = cmds.formLayout()
+        self.form = cmds.formLayout(self.uiformMain, nd=100, parent=self.MainLayout)
         self.tabs = cmds.tabLayout(self.uitabMain, innerMarginWidth=5, innerMarginHeight=5)
+
+
         cmds.formLayout(self.form, edit=True, attachForm=((self.tabs, 'top', 0),
                                                           (self.tabs, 'left', 0),
                                                           (self.tabs, 'bottom', 0),
                                                           (self.tabs, 'right', 0)))
+
 
         # TAB1: ####################################################################
 
@@ -1318,7 +1334,7 @@ class AnimationUI(object):
                                                height=350, vis=False)
         self.posePopupText = cmds.popupMenu()
 
-        cmds.scrollLayout(self.uiglPoseScroll,
+        cmds.scrollLayout(self.uiglPoseScroll, parent=self.poseUILayout,
                                                 cr=True,
                                                 height=350,
                                                 hst=16,
@@ -1410,9 +1426,14 @@ class AnimationUI(object):
         # ====================
         if not r9Setup.mayaVersion() == 2009:
             cmds.setParent(self.MainLayout)
+ 
         cmds.separator(h=10, style='none')
-        self.r9strap = cmds.iconTextButton('r9strap', style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                             c=lambda * args: (r9Setup.red9ContactInfo()), h=22, w=340)
+        self.r9strap = cmds.iconTextButton('r9strap',
+                                           style='iconOnly',
+                                           parent=self.MainLayout,
+                                           bgc=(0.7, 0, 0),
+                                           image1='Rocket9_buttonStrap2.bmp',
+                                           c=lambda * args: (r9Setup.red9ContactInfo()), h=22, w=340)
 
         # needed for 2009
         cmds.scrollLayout(self.uiglPoseScroll, e=True, h=330)
@@ -1429,17 +1450,17 @@ class AnimationUI(object):
                                      content=animwindow,
                                      floating=False,
                                      allowedArea=['right', 'left'],
-                                     width=350)
+                                     width=self.initial_winsize[0])
 
-                    cmds.evalDeferred("cmds.dockControl('%s', e=True, r=True)" % self.dockCnt)  # for fuck sake Maya, raise the dock yourself!!
+                    cmds.evalDeferred("cmds.dockControl('%s', e=True, r=True)" % self.dockCnt)
                 except:
                     # Dock failed, opening standard Window
                     cmds.showWindow(animwindow)
-                    cmds.window(self.win, edit=True, widthHeight=(360, 780))
+                    cmds.window(self.win, edit=True, widthHeight=self.initial_winsize)
                     self.dock = False
             else:
                 cmds.showWindow(animwindow)
-                cmds.window(self.win, edit=True, widthHeight=(360, 780))
+                cmds.window(self.win, edit=True, widthHeight=self.initial_winsize)
 
         # set the initial Interface up
         self.__uiPresetsUpdate()
@@ -1541,33 +1562,52 @@ class AnimationUI(object):
         cmds.textFieldGrp('uitfgSpecificNodeTypes', e=True, text=','.join(nodeTypes))
 
     def __uiCB_resizeMainScroller(self, *args):
-        if not r9Setup.mayaVersion() >= 2017:
-            if self.dock:
-                # if not cmds.dockControl(self.dockCnt, query=True, floating=True):
-                width = cmds.dockControl(self.dockCnt, q=True, w=True)
-                height = cmds.dockControl(self.dockCnt, q=True, h=True)
-                print 'width self.dockCnt:', cmds.dockControl(self.dockCnt, q=True, w=True)
+        '''
+        TESTING: fix for 4k as this used to force the UI into a wrong, un-managable size
+        '''
+        base_width = 350
+        base_height = 440
+        
+        # grab the control sizes, unfortuunately Maya over the last few releases has
+        # controlled docking in different ways 2016 was dockcontrol, 2017 are workspaces
+        # hence all the different size calls below!
+        if cmds.window(self.win, exists=True):
+            newSize = cmds.window(self.win, q=True, wh=True)
+            width = newSize[0]
+            height = newSize[1]
+        else:
+            try:  # 2017 and up
+                width = cmds.workspaceControl(self.workspaceCnt, q=True, width=True)
+                height = cmds.workspaceControl(self.workspaceCnt, q=True, height=True)
+            except: # 2016 undocked docked controls don't give back size data correctly
+                width = cmds.scrollLayout(self.MainLayout, q=True, width=True)
+                height = cmds.scrollLayout(self.MainLayout, q=True, height=True)
+
+        # standard resolution 1980 * 1080 
+        if not r9Setup.maya_screen_mapping()[0]:
+            if width>base_width:
+                cmds.formLayout(self.form, edit=True, w=max(width, base_width) - 10)
             else:
-                newSize = cmds.window(self.win, q=True, wh=True)
-                width = newSize[0]
-                height = newSize[1]
-        else:
-            width = cmds.workspaceControl(self.workspaceCnt, q=True, width=True)
-            height = cmds.workspaceControl(self.workspaceCnt, q=True, height=True)
+                cmds.scrollLayout(self.MainLayout, e=True, w=base_width)
+            if height > base_height:
+                cmds.scrollLayout(self.uiglPoseScroll, e=True, h=max(height - 430, 200))      
 
-        if width > 350:
-            # cmds.scrollLayout(self.MainLayout, e=True, w=width) #new?
-            cmds.formLayout(self.form, edit=True, w=width - 10)
-            # cmds.iconTextButton(self.r9strap, e=True, w=width-10)
-        else:
-            cmds.scrollLayout(self.MainLayout, e=True, w=350)
-
-        if height > 440:
-            cmds.scrollLayout(self.uiglPoseScroll, e=True, h=max(height - 430, 200))
-
-            log.debug('width self.MainLayout: %s' % cmds.scrollLayout(self.MainLayout, q=True, w=True))
-            log.debug('width self.form: %s' % cmds.formLayout(self.form, q=True, w=True))
-            log.debug('width poseScroll: %s' % cmds.scrollLayout(self.uiglPoseScroll, q=True, w=True))
+        # 4k resolution
+        else:       
+            mapped = r9Core._ui_scaling_factors(width=width)
+            if width>base_width:
+                cmds.formLayout(self.form, edit=True, w=max(mapped, base_width) - 10)    
+            else:
+                cmds.scrollLayout(self.MainLayout, e=True, w=base_width)
+            if height > base_height:
+                mapped = r9Core._ui_scaling_factors(height=height) - 250
+                cmds.scrollLayout(self.uiglPoseScroll, e=True, h=max(mapped, 200))
+                
+        #print  '\nworkspace : ', cmds.workspaceControl(self.workspaceCnt, q=True, width=True)
+        #print '\ndock : ', cmds.dockControl(self.dockCnt, q=True, w=True)
+#         print  'main : ', cmds.scrollLayout(self.MainLayout, q=True, width=True)
+#         print 'form : ', cmds.formLayout(self.form, q=True, w=True)
+#         print 'pose scroller : ', cmds.scrollLayout(self.uiglPoseScroll, q=True, width=True)
 
     def __uiCB_setCopyKeyPasteMethod(self, *args):
         self.ANIM_UI_OPTVARS['AnimationUI']['keyPasteMethod'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
@@ -2224,7 +2264,8 @@ class AnimationUI(object):
     def __uiCB_gridResize(self, *args):
         if r9Setup.mayaVersion() >= 2010:
             cells = int(cmds.scrollLayout(self.uiglPoseScroll, q=True, w=True) / cmds.gridLayout(self.uiglPoses, q=True, cw=True))
-            cmds.gridLayout(self.uiglPoses, e=True, nc=cells)
+            if cells > 1:
+                cmds.gridLayout(self.uiglPoses, e=True, nc=cells)
         else:
             log.debug('this call FAILS in 2009???')
 

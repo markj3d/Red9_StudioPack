@@ -13,6 +13,8 @@ Command= SnapTransforms(flags)
 flags:  -s / -source
         -d / -destination
         -te/ -timeEnabled
+        -st / -snapTranslates
+        -sr / -snapRotates
 
 TODO: add flags for just rotate or translate processing
 '''
