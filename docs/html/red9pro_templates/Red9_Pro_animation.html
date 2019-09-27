@@ -179,6 +179,14 @@ parallel evaluation &amp; playback</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.animation.get_valid_filter_preset">
+<code class="descname">get_valid_filter_preset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.get_valid_filter_preset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the currently set preset from the red9config file, this is generated
+from the AnimationUI. If the last selected preset no longer exists on disc
+then we default to the PROJECT_DATA.data.pose_basePreset var</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.animation.hik_source_code">
 <code class="descname">hik_source_code</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.hik_source_code" title="Permalink to this definition">¶</a></dt>
 <dd><p>ensure that HIK is loaded and the core code sourced</p>
@@ -316,7 +324,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013A57288&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -339,7 +347,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013A4AB48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -523,14 +531,15 @@ to ensure the data is preserved</li>
 <code class="descname">extractData_Export</code><span class="sig-paren">(</span><em>manageExport='byAll'</em>, <em>sort=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.extractData_Export" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the key IDs for the exportLoops found in the r9Anim file, this
 passes through the manageExport code to match loop timings with the
-r9Anim offset/start and end ranges</p>
+r9Anim offset/start and end ranges. This data is then handled by the Pro_MetaRig_Base class
+as it&#8217;s only restorable to Pro_MetaRig systems.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>manageExport</strong> &#8211; [], byAll, byName, byRange_start, byRange_end, byRange uses the timeWithinRange call
-if given a list then we use that as a search for specific ExportLoops in the data</li>
+<li><strong>manageExport</strong> &#8211; [], byAll, byName, byRange_start, byRange_end, byRange uses the timeWithinRange call.
+if given a list then we use these entries as a search for specific ExportLoops in the data</li>
 <li><strong>sort</strong> &#8211; sort the returned data by the endFrame in each loops data</li>
 </ul>
 </td>
@@ -544,9 +553,10 @@ internal startFrame and endFrame ranges have been set to process against</p>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># to simply read the data and get access to it prior to any processing</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span> <span class="o">=</span> <span class="n">AnimMap</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span><span class="o">.</span><span class="n">r9anim</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">_readPose</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">_readPose</span><span class="p">()</span>  <span class="c1"># simple file parse</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">amap</span><span class="o">.</span><span class="n">infoDict</span><span class="p">[</span><span class="s1">&#39;exporter&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">extractData_Export</span><span class="p">()</span>  <span class="c1"># returns the extracted export data that matches the params</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -557,17 +567,32 @@ internal startFrame and endFrame ranges have been set to process against</p>
 <dd><p>Extract the key IDs for the AudioNodes found in the r9Anim file, this
 passes through the manageExport code to match loop timings with the
 r9Anim offset/start and end ranges. In-order for the audio to get into the r9Anim
-it MUST be connected to an mRig via the AudioGrp node, all managed in the Exporter</p>
+it MUST be connected to an mRig via the AudioGrp node, all managed in the Exporter.
+This data is then handled by the Pro_MetaRig_Base class as it&#8217;s only restorable
+to Pro_MetaRig systems.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>manageAudio</strong> &#8211; [], byAll, byName, byRange_start, byRange_end, uses the timeWithinRange call
-if given a list then we use that as a search for specific ExportLoops in the data</li>
-<li><strong>sort</strong> &#8211; sort the returned data by the endFrame in each loops data</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>manageAudio</strong> &#8211; [], byAll, byName, byRange_start, byRange_end, uses the timeWithinRange call.
+if given a list then we use these entries as a search for specific AudioNodes in the data.</td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li>False : don&#8217;t restore any audioData,</li>
+<li>[] : if you pass in a list then we take that list and match internal audioNode names to it</li>
+<li>&#8216;byName&#8217; : restore only audioNodes who name matches the r9Anim&#8217;s name</li>
+<li>&#8216;byRange&#8217;: restore audioNodes that fall within the timerange of the imported r9Anim</li>
+<li>&#8216;byRange_start&#8217; : restore audioNodes that start after the timerange of the importer r9Anim (ignore end time data)</li>
+<li>&#8216;byRange_end&#8217; : restore audioNodes that end before the timerange of the importer r9Anim (ignore start time data)</li>
+<li>&#8216;byAll&#8217; : restore ALL audioNodes in the r9Anim infoData block</li>
 </ul>
-</td>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sort</strong> &#8211; sort the returned data by the endFrame in each loops data</td>
 </tr>
 </tbody>
 </table>
@@ -578,24 +603,35 @@ internal startFrame and endFrame ranges have been set to process against.</p>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># to simply read the data and get access to it prior to any processing</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span> <span class="o">=</span> <span class="n">AnimMap</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span><span class="o">.</span><span class="n">r9anim</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">_readPose</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">amap</span><span class="o">.</span><span class="n">infoDict</span><span class="p">[</span><span class="s1">&#39;audioGrp&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">_readPose</span><span class="p">()</span>  <span class="c1"># simple file parse</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">amap</span><span class="o">.</span><span class="n">infoDict</span><span class="p">[</span><span class="s1">&#39;audioGrp&#39;</span><span class="p">]</span>  <span class="c1"># the actual data from the file itself</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">amap</span><span class="o">.</span><span class="n">extractData_Audio</span><span class="p">()</span>  <span class="c1"># returns the extracted audio data that matches the params</span>
 </pre></div>
 </div>
+<dl class="docutils">
+<dt>TODO: modify the filepath handlers to look for the given file in the workspace or the current</dt>
+<dd>r9anim path if os.path/exists(path) fails on the actual path extracted here</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimMap.extractData_ImagePlanes">
 <code class="descname">extractData_ImagePlanes</code><span class="sig-paren">(</span><em>manageImagePlanes='byAll'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.extractData_ImagePlanes" title="Permalink to this definition">¶</a></dt>
-<dd><p>extract the imagePlane data if found, this is only relevant for FacialUI sub-classes</p>
+<dd><p>extract the imagePlane data if found, this is only relevant for FacialUI sub-classes.
+This data is then handled by the Pro_MetaRig_Base class as it&#8217;s only restorable
+to Pro_MetaRig systems.</p>
+<dl class="docutils">
+<dt>TODO: modify the filepath handlers to look for the given file in the workspace or the current</dt>
+<dd>r9anim path if os.path/exists(path) fails on the actual path extracted here</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimMap.extractData_referenced_rig">
 <code class="descname">extractData_referenced_rig</code><span class="sig-paren">(</span><em>load=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.extractData_referenced_rig" title="Permalink to this definition">¶</a></dt>
 <dd><p>extra the mrig referenced in the data if found, this is used as a buffer
-&amp; consistent method for grabbing the info dict data</p>
+&amp; consistent method for grabbing the info dict data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -606,6 +642,10 @@ that was loaded. If False then we just restore the ref information [refpath, nam
 </tr>
 </tbody>
 </table>
+<dl class="docutils">
+<dt>TODO: modify the filepath handlers to look for the given file in the workspace or the current</dt>
+<dd>r9anim path if os.path/exists(path) fails on the actual path extracted here</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -680,7 +720,7 @@ Red9 ExportUI &gt; Settings data, store in the R9PRO&gt;settings object files</p
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013426A48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013A4A748&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1397,7 +1437,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001343B508&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013A4A588&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1961,7 +2001,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Keyerui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001343B808&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013A4A388&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

@@ -1,7 +1,7 @@
 Red9_Meta
 =========
 
-Red9 Meta is a full metaData API that deals with Maya nodes in a more seemless manor. I've
+Red9 Meta is a full metaData API that deals with Maya nodes in a more seamless manor. I've
 tried to do as much documentation as I can both in terms of commenting the code and doing
 examples and Vimeo demos. 
 
@@ -34,6 +34,8 @@ There are also some basic examples in the Red9 Package itself found under the ex
    	  isMetaNode
    	  isMetaNodeInherited
       getMetaNodes
+      getMetaRigs
+      getMetaRigs_fromSelected
       getConnectedMetaNodes
       getConnectedMetaSystemRoot
 
@@ -50,6 +52,7 @@ There are also some basic examples in the Red9 Package itself found under the ex
       MetaFacialRigSupport
       MetaHIKCharacterNode
       MetaHIKControlSetNode
+      MetaHIKPropertiesNode
       MetaHUDNode
       MetaTimeCodeHUD
     

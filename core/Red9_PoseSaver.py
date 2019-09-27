@@ -83,6 +83,7 @@ class DataMap(object):
         self.filepath = ''  # path to load / save
         self.__filepath = ''
         self.filename = ''  # short name of the pose
+        self._read_mute = False  # a back-door to prevent the _readPose() call happening, allowing us to modify cached data safely
 
         self.dataformat = 'config'
         self._dataformat_resolved = None
@@ -633,11 +634,15 @@ class DataMap(object):
             self._dataformat_resolved = 'json'
 
     @r9General.Timer
-    def _readPose(self, filename=None):
+    def _readPose(self, filename=None, force=False):
         '''
         Read the pose file and build up the internal poseDict
-        TODO: do we allow the data to be filled from the pose filter thats stored???????
+        
+        :param filename: path to the file to read
+        :param force: fore the read, ignoring the internal _read_mute var
         '''
+        if self._read_mute and not force:
+            return
         if not filename:
             filename = self.filepath
         if filename:
@@ -718,7 +723,7 @@ class DataMap(object):
 
         if self.filepath:
             self._readPose(self.filepath)
-            log.info('Pose Read Successfully from : %s' % self.filepath)
+            log.debug('Pose Read Successfully from : %s' % self.filepath)
 
         # fill the skip list, these attrs will be totally ignored by the code
         self.skipAttrs = self.getSkippedAttrs(nodes[0])
@@ -751,14 +756,14 @@ class DataMap(object):
         '''
         matchedPairs = []
         unmatched = []
-        log.info('using matchMethod : %s' % self.matchMethod)
+        log.debug('using matchMethod : %s' % self.matchMethod)
 
         if not matchMethod:
             matchMethod = self.matchMethod
 
         # standard match method logic
         if matchMethod == 'stripPrefix' or matchMethod == 'base':
-            log.info('matchMethodStandard : %s' % matchMethod)
+            log.debug('matchMethodStandard : %s' % matchMethod)
             matchedPairs = r9Core.matchNodeLists([key for key in self.poseDict.keys()], nodes, matchMethod=matchMethod)
 
         # pose data specific logic

@@ -83,6 +83,18 @@
 </tbody>
 </table>
 <dl class="function">
+<dt id="Red9.pro_pack.core.importexport.resolve_path">
+<code class="descname">resolve_path</code><span class="sig-paren">(</span><em>path</em>, <em>path_hints=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.resolve_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a given path make sure it exists, if it doesn&#8217;t, relax the rules and
+try and find it in the project structure or in the same folder as the current Maya scene</p>
+<p>order of resolve:</p>
+<p>1: file exists as given
+2: path_hint param inspected for filename existence
+3: file found in Maya workspace mounts, currently support scenes, images, sounds, movies
+4: file found in the same folder as the current Maya scene</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.importexport.getNewNodes">
 <code class="descname">getNewNodes</code><span class="sig-paren">(</span><em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.getNewNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>decorator function to get new nodes after a method has been run

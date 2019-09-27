@@ -28,7 +28,7 @@ log.setLevel(logging.INFO)
 
 
 __author__ = 'Mark Jackson'
-__buildVersionID__ = 2.75
+__buildVersionID__ = 3.0
 installedVersion = False
 
 
@@ -36,34 +36,34 @@ installedVersion = False
  Maya Version Mapping History:
  ====================================
 
- Release         -version    -api     python    -qt       prefs      -d            extra info
+ Release         -version    -api     python pyside  -qt   prefs folder    -d         extra info
  -----------------------------------------------------------------------------------------
 
-  2008          .  2008  .  ??????  .  2.5.1     na    .  2008    . 2007-09-01
-  2009          .  2009  .  ??????  .  2.5.1     na    .  2009    . 2008-10-01
-  2010          .  2010  .  201000  .  2.6.1     na    .  2010    . 2009-08-01
-  2011 Hotfix2  .  2011  .  201102  .  2.6.4    4.5.3  .  2011    .
-  2011 SAP      .  2011  .  201104  .  2.6.4    4.5.3  .  2011.5  . 2010-09-29
+  2008          .  2008  .  ??????  .  2.5.1  na      na   .  2008     . 2007-09-01
+  2009          .  2009  .  ??????  .  2.5.1  na      na   .  2009     . 2008-10-01
+  2010          .  2010  .  201000  .  2.6.1  na      na   .  2010     . 2009-08-01
+  2011 Hotfix2  .  2011  .  201102  .  2.6.4  na    4.5.3  .  2011     .
+  2011 SAP      .  2011  .  201104  .  2.6.4  na    4.5.3  .  2011.5   . 2010-09-29 
 
-  2012          .  2012  .  201200  .  2.6.4    4.7.1  .  2012    . 2011-04-01
-  2012 SP1      .  2012  .  ??????  .  2.6.4    4.7.1  .  2012    .
-  2012 SAP1     .  2012  .  ??????  .  2.6.4    4.7.1  .  2012    . 2012-01-26
-  2012 SP2      .  2012  .  201217  .  2.6.4    4.7.1  .  2012    .
+  2012          .  2012  .  201200  .  2.6.4  na    4.7.1  .  2012     . 2011-04-01
+  2012 SP1      .  2012  .  ??????  .  2.6.4  na    4.7.1  .  2012     .
+  2012 SAP1     .  2012  .  ??????  .  2.6.4  na    4.7.1  .  2012     . 2012-01-26
+  2012 SP2      .  2012  .  201217  .  2.6.4  na    4.7.1  .  2012     .
 
-  2013 SP1      .  2013  .  201301  .  2.6.4    4.7.1  .  2013    . 2012-07-00
-  2013 SP2      .  2013  .  201303  .  2.6.4    4.7.1  .  2013    . 2013-01-00
-  2013 EXT      .  2013  .  201350? .  2.6.4    4.7.1  .  2013.5  . 2012-09-25  . 2013 binary incompatible
-  2013 EXT2     .  2013  .  201355  .  2.6.4    4.7.1  .  2013.5  . 2013-01-22  . 2013 binary incompatible
+  2013 SP1      .  2013  .  201301  .  2.6.4  na    4.7.1  .  2013     . 2012-07-00
+  2013 SP2      .  2013  .  201303  .  2.6.4  na    4.7.1  .  2013     . 2013-01-00
+  2013 EXT      .  2013  .  201350? .  2.6.4  na    4.7.1  .  2013.5   . 2012-09-25  . 2013 binary incompatible
+  2013 EXT2     .  2013  .  201355  .  2.6.4  na    4.7.1  .  2013.5   . 2013-01-22  . 2013 binary incompatible
 
-  2014          .  2014  .  201400  .  2.6.4    4.8.2  .  2014-x64   . 2013-03-01
-  2015          .  2015  .  201500  .  2.7      4.8.5  .  2015-x64   . 2014-04-15
-  2015 SP6      .  2015  .  201516  .  2.7      4.8.5  .  2015-x64   . 2015-03-26
-  2016          .  2016  .  201600  .  2.7      4.8.6  .  2016    . 2015-04-15
-  2016 EXT1 SP6 .  2016  .  201614  .  2.7      4.8.6  .  2016    . 2016-03-18
-  2016 EXT2     .  2016  .  201650  .  2.7      4.8.6  .  2016.5  . 2016-03-02 . 2016 binary incompatible
-  2017          .  2017  .  201700  .  2.7      5.6.1  .  2017    . 2016-05-15
-  2018          .  2018  .  201800  .  2.7      5.6.1  .  2018    . 2017-06-26
-  2019          .  2019  .  201900  .  2.7      5.6.1  .  2019    . 2019-01-15
+  2014          .  2014  .  201400  .  2.6.4  1     4.8.2  .  2014-x64 . 2013-03-01
+  2015          .  2015  .  201500  .  2.7    1     4.8.5  .  2015-x64 . 2014-04-15
+  2015 SP6      .  2015  .  201516  .  2.7    1     4.8.5  .  2015-x64 . 2015-03-26
+  2016          .  2016  .  201600  .  2.7    1     4.8.6  .  2016     . 2015-04-15
+  2016 EXT1 SP6 .  2016  .  201614  .  2.7    1     4.8.6  .  2016     . 2016-03-18
+  2016 EXT2     .  2016  .  201650  .  2.7    1     4.8.6  .  2016.5   . 2016-03-02 . 2016 binary incompatible
+  2017          .  2017  .  201700  .  2.7    2     5.6.1  .  2017     . 2016-05-15
+  2018          .  2018  .  201800  .  2.7    2     5.6.1  .  2018     . 2017-06-26
+  2019          .  2019  .  201900  .  2.7    2     5.6.1  .  2019     . 2019-01-15
 
 ------------------------------------------------------------------------------------------
 '''
@@ -156,32 +156,32 @@ def maya_screen_mapping():
     '''
     return the maya applications screen size mapping data.
     If we're running in 4k, the screen width, the screen height,
-    as well as the pixel per inch (ppi) used by some of the ui scaling code
+    as well as the dot / pixels per inch (ppi) used by some of the ui scaling code
 
-    full 4k 150% scaling : (True, 3840, 2097, 144.0ppi)
-    full 4k 100% scaling : (True, 3840, 2097, 96.0ppi)
+    full 4k 150% scaling : (True, 3840, 2097, 144.0dpi)
+    full 4k 100% scaling : (True, 3840, 2097, 96.0dpi)
 
-    return: (bool(is4k), width, height, ppi)
+    return: (bool(is4k), width, height, dpi)
     
     ..note::
-        actual ppi return is only supported in PySide2 (2017 omnwards)
+        actual dpi return is only supported in PySide2 (2017 omnwards)
     '''
     screen_size = maya_appplication_size()
     try:
         screens = maya_QT_QApplication().screens()
-        ppi = screens[0].logicalDotsPerInch()
+        dpi = screens[0].logicalDotsPerInch()
     except:
         try:
             widget = maya_QT_mainWindow()
-            ppi = widget.logicalDpiX()
+            dpi = widget.logicalDpiX()
         except:
-            ppi = 96.0
+            dpi = 96.0
 
     # are we running in 4K?
     if screen_size[0] > 3800 and screen_size[1] > 2050:
-        return True, screen_size[0], screen_size[1], ppi
+        return True, screen_size[0], screen_size[1], dpi
     else:
-        return False, screen_size[0], screen_size[1], ppi
+        return False, screen_size[0], screen_size[1], dpi
 
 def mayaVersion():
     '''
@@ -488,14 +488,20 @@ def menuSetup(parent='MayaWindow'):
                       ann=LANGUAGE_MAP._MainMenus_.red9_facebook_ann,
                       p='redNineMenuItemRoot', echoCommand=True, i='facebook_30.png',
                       c="Red9.setup.red9_facebook()")
+        cmds.menuItem('redNineTwitterItem',
+                      l=LANGUAGE_MAP._MainMenus_.red9_twitter,
+                      ann=LANGUAGE_MAP._MainMenus_.red9_twitter_ann,
+                      p='redNineMenuItemRoot', echoCommand=True, i='twitter_30.png',
+                      c="Red9.setup.red9_twitter()")        
+        cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.red9_details, i='info_30.png',
+                      c='Red9.setup.red9ContactInfo()', p='redNineMenuItemRoot')
+        cmds.menuItem(divider=True, p='redNineMenuItemRoot')
+        
         cmds.menuItem('redNineAPIDocItem',
                       l=LANGUAGE_MAP._MainMenus_.red9_api_docs,
                       ann=LANGUAGE_MAP._MainMenus_.red9_api_docs_ann,
                       p='redNineMenuItemRoot', echoCommand=True, i='api_30.png',
                       c="Red9.setup.red9_apidocs()")
-        cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.red9_details, i='info_30.png',
-                      c='Red9.setup.red9ContactInfo()', p='redNineMenuItemRoot')
-        cmds.menuItem(divider=True, p='redNineMenuItemRoot')
 
         cmds.menuItem('redNineDebuggerItem', l=LANGUAGE_MAP._MainMenus_.red9_debugger, sm=True, i='bug_30.png', p='redNineMenuItemRoot')
         cmds.menuItem('redNineLostAnimItem', p='redNineDebuggerItem',
@@ -890,46 +896,39 @@ def red9MayaNativePath():
         log.info('Red9MayaHacked Folder not found for this build of Maya : %s' % path)
 
 def red9_help(*args):
-    '''
-    open up the Red9 help docs
-    '''
+    ''' open up the Red9 help docs '''
     import Red9.core.Red9_General as r9General  # lazy load
     helpFile = os.path.join(red9ModulePath(), 'docs', r'Red9-StudioTools Help.pdf')
     r9General.os_OpenFile(helpFile)
 
 def red9_blog(*args):
-    '''
-    open up the Red9 Blog
-    '''
+    ''' open up the Red9 Blog '''
     import Red9.core.Red9_General as r9General  # lazy load
     # r9General.os_OpenFile('http://red9-consultancy.blogspot.com/')
     r9General.os_OpenFile('http://red9consultancy.com/news/')  
 
 def red9_website_home(*args):
-    '''
-    open up the Red9 Consultancy homepage
-    '''
+    ''' open up the Red9 Consultancy homepage '''
     import Red9.core.Red9_General as r9General  # lazy load
     r9General.os_OpenFile('http://red9consultancy.com/')
 
 def red9_facebook(*args):
-    '''
-    open up the Red9 Facebook Page
-    '''
+    ''' open up the Red9 Facebook Page '''
     import Red9.core.Red9_General as r9General  # lazy load
     r9General.os_OpenFile('http://www.facebook.com/Red9StudioPack/')
 
+def red9_twitter(*args):
+    ''' Open up the Red9 Twitter feed '''
+    import Red9.core.Red9_General as r9General  # lazy load
+    r9General.os_OpenFile('https://twitter.com/Red9_Anim')
+
 def red9_vimeo(*args):
-    '''
-    open up the Red9 Vimeo Channel
-    '''
+    ''' open up the Red9 Vimeo Channel '''
     import Red9.core.Red9_General as r9General  # lazy load
     r9General.os_OpenFile('https://vimeo.com/user9491246')
 
 def red9_apidocs(*args):
-    '''
-    open up the Red9 Vimeo Channel
-    '''
+    ''' open up the Red9 Vimeo Channel '''
     import Red9.core.Red9_General as r9General  # lazy load
     apidocs = os.path.join(red9ModulePath(), 'docs', 'html', 'index.html')
     r9General.os_OpenFile(apidocs)
@@ -1321,7 +1320,7 @@ def boot_client_projects(batchclients=[]):
             if result == 'NONE':
                 return
             elif result not in ['Cancel', 'ALL', 'NONE']:
-                print 'appending result ', result
+                print 'Appending Client selection ', result
                 clientsToBoot.append(result)
         else:
             clientsToBoot = clients
@@ -1458,7 +1457,10 @@ def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindo
         # ===========================
         # Finally after booting all clients required sync the actual PROJECT_DATA object to
         # the last loaded client. We don't need to sync Perforce mounts as the project_load will do that for us
-        cmds.evalDeferred('from Red9.pro_pack import PROJECT_DATA;PROJECT_DATA.sync_project_to_settings(project=True, perforce=False)', lp=True)
+        try:
+            cmds.evalDeferred('from Red9.pro_pack import PROJECT_DATA;PROJECT_DATA.sync_project_to_settings(project=True, perforce=False)', lp=True)
+        except:
+            log.debug('Failed to load last Project settings')
         if not mayaIsBatch():
             cmds.evalDeferred("from Red9.pro_pack import load_ui_settings;load_ui_settings()", lp=True)
 

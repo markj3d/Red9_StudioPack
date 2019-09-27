@@ -567,6 +567,7 @@ class AnimationLayerContext(object):
         if self.restoreOnExit:
             self.deleteBaked = False
         self.animLayers = []
+        self.layerCache = {}
         # log.debug('Context Manager : mergeLayers : %s, restoreOnExit : %s' % (self.mergeLayers, self.restoreOnExit))
 
     def __enter__(self):
@@ -579,18 +580,21 @@ class AnimationLayerContext(object):
         if self.animLayers:
             if self.mergeLayers:
                 try:
-                    layerCache = {}
                     for layer in self.animLayers:
-                        layerCache[layer] = {'mute':cmds.animLayer(layer, q=True, mute=True),
-                                           'locked':cmds.animLayer(layer, q=True, lock=True)}
+                        self.layerCache[layer] = {'mute':cmds.animLayer(layer, q=True, mute=True),
+                                                  'locked':cmds.animLayer(layer, q=True, lock=True)}
+                        # force unlock all layers before the merge  : 25/09/19 bug on restoration with baseLayer locked
+                        cmds.animLayer(layer, edit=True, lock=False)
+
                     mergeAnimLayers(self.srcNodes, deleteBaked=self.deleteBaked)
+
                     if self.restoreOnExit:
-                        # return the original mute and lock states and select the new
-                        # mergedLayer ready for the rest of the copy code to deal with
-                        for layer, cache in layerCache.items():
-                            for layer, cache in layerCache.items():
-                                cmds.animLayer(layer, edit=True, mute=cache['mute'])
-                                cmds.animLayer(layer, edit=True, mute=cache['locked'])
+#                         # return the original mute and lock states and select the new
+#                         # mergedLayer ready for the rest of the copy code to deal with
+#                         for layer, cache in self.layerCache.items():
+#                             for layer, cache in self.layerCache.items():
+#                                 cmds.animLayer(layer, edit=True, mute=cache['mute'])
+#                                 cmds.animLayer(layer, edit=True, lock=cache['locked'])
                         mel.eval("source buildSetAnimLayerMenu")
                         mel.eval('selectLayer("Merged_Layer")')
                 except:
@@ -599,11 +603,17 @@ class AnimationLayerContext(object):
                 log.warning('SrcNodes have animLayers, results may be erratic unless Baked!')
 
     def __exit__(self, exc_type, exc_value, traceback):
-        # close the undo chunk, warn if any exceptions were caught:
         cmds.optionVar(iv=('animLayerSelectionKey', self.keymode))
         if self.mergeLayers and self.restoreOnExit:
             if self.animLayers and cmds.animLayer('Merged_Layer', query=True, exists=True):
                 cmds.delete('Merged_Layer')
+
+            # return the original mute and lock states and select the new
+            # mergedLayer ready for the rest of the copy code to deal with
+            for layer, cache in self.layerCache.items():
+                for layer, cache in self.layerCache.items():
+                    cmds.animLayer(layer, edit=True, mute=cache['mute'])
+                    cmds.animLayer(layer, edit=True, lock=cache['locked'])
         if exc_type:
             log.exception('%s : %s' % (exc_type, exc_value))
 
@@ -669,9 +679,9 @@ class AnimationUI(object):
         self.__uiCache_readUIElements()
 
         # deal with screen resolution and scaling
-        scaling_ppi = r9Setup.maya_screen_mapping()[3]
-        if not scaling_ppi == 96.0:  # 100%
-            factor = (scaling_ppi / 96.0)
+        scaling_dpi = r9Setup.maya_screen_mapping()[3]
+        if not scaling_dpi == 96.0:  # 100% which is what the UIs were setup under (1080p)
+            factor = (scaling_dpi / 96.0)
             self.initial_workspace_width = self.initial_workspace_width * factor
             self.initial_winsize = (self.initial_winsize[0] * factor, self.initial_winsize[1] * factor)
     
@@ -714,7 +724,7 @@ class AnimationUI(object):
             if cmds.workspaceControl(animUI.workspaceCnt, q=True, exists=True):
                 cmds.workspaceControl(animUI.workspaceCnt, e=True, close=True)
 
-            print 'animUI.initial_workspace_width, ' ,animUI.initial_workspace_width,
+
             # if the workspace exists just show it, else bind the ui to it
             if not cmds.workspaceControl(animUI.workspaceCnt, q=True, exists=True):
                 # note here, workspace wiodth controls are a joke uptill 2018, and even then, the width isn't reliable
@@ -836,11 +846,13 @@ class AnimationUI(object):
         self.uiglPoses = 'uiglPoses'
         self.uicbPoseHierarchy = 'uicbPoseHierarchy'
         self.uitfgPoseRootNode = 'uitfgPoseRootNode'
+        self.uitfgPoseMRootGrab = 'uitfgPoseMRootGrab'
         self.uicbPoseRelative = 'uicbPoseRelative'
         self.uicbPoseSpace = 'uicbPoseSpace'
         self.uiflPoseRelativeFrame = 'PoseRelativeFrame'
         self.uircbPoseRotMethod = 'relativeRotate'
         self.uircbPoseTranMethod = 'relativeTranslate'
+
 
 
     def _showUI(self, *args):
@@ -1358,7 +1370,8 @@ class AnimationUI(object):
                      command=partial(self.__uiCall, 'PoseSave'))
         cmds.setParent(self.poseUILayout)
         cmds.separator(h=10, style='in')
-        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 80), (2, 250)])
+
+        cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 70), (2, 240), (3, 15)], columnSpacing=[(3, 4)])
         cmds.checkBox(self.uicbPoseHierarchy,
                                             l=LANGUAGE_MAP._Generic_.hierarchy, al='left', en=True, v=False,
                                             ann=LANGUAGE_MAP._AnimationUI_.pose_hierarchy_ann,
@@ -1370,8 +1383,11 @@ class AnimationUI(object):
                                             bc=self.__uiCB_setPoseRootNode,
                                             cw=[(1, 180), (2, 60)])
 
+        # new simple grab button that replaces the hidden RMB popup action
+        cmds.button(self.uitfgPoseMRootGrab, label='*', command=self.__uiCB_fill_mRigsPopup)
+
         # add the Popup menu for the selection of mRigs dynamically
-        cmds.popupMenu('_setPose_mRigs_current', postMenuCommand=self.__uiCB_fill_mRigsPopup)
+        cmds.popupMenu('_setPose_mRigs_current', button=1, postMenuCommand=self.__uiCB_fill_mRigsPopup)
 
         cmds.setParent(self.poseUILayout)
         cmds.separator(h=10, style='in')
@@ -2358,9 +2374,11 @@ class AnimationUI(object):
         if cmds.checkBox('uicbMetaRig', q=True, v=True):
             self.poseRootMode = 'MetaRoot'
             cmds.textFieldButtonGrp(self.uitfgPoseRootNode, e=True, bl='MetaRoot')
+            cmds.button(self.uitfgPoseMRootGrab, e=True, en=True)
         else:
             self.poseRootMode = 'RootNode'
             cmds.textFieldButtonGrp(self.uitfgPoseRootNode, e=True, bl='SetRoot')
+            cmds.button(self.uitfgPoseMRootGrab, e=True, en=False)
         self.__uiCache_storeUIElements()
 
     def __uiCB_getPoseInputNodes(self):
@@ -2613,8 +2631,11 @@ class AnimationUI(object):
                 except:
                     log.debug('given basePreset not found')
             if 'filterNode_preset' in AnimationUI and AnimationUI['filterNode_preset']:
-                cmds.textScrollList(self.uitslPresets, e=True, si=AnimationUI['filterNode_preset'])
-                self.__uiPresetSelection(Read=True)  # ##not sure on this yet????
+                try:
+                    cmds.textScrollList(self.uitslPresets, e=True, si=AnimationUI['filterNode_preset'])
+                    self.__uiPresetSelection(Read=True)  # ##not sure on this yet????
+                except:
+                    log.warning('Failed to load cached preset : %s' % AnimationUI['filterNode_preset'])
             if 'keyPasteMethod' in AnimationUI and AnimationUI['keyPasteMethod']:
                 cmds.optionMenu('om_PasteMethod', e=True, v=AnimationUI['keyPasteMethod'])
             if 'matchMethod' in AnimationUI and AnimationUI['matchMethod']:

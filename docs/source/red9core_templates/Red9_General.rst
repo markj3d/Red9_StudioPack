@@ -27,7 +27,12 @@ This includes most of the context managers and decorators.
 		
 		os_OpenFileDirectory
 		os_OpenFile
-
+		formatPath
+		formatPath_join
+		sceneName
+		
+		writeJson
+		readJson
     
    .. rubric:: Context Managers / decorators
 

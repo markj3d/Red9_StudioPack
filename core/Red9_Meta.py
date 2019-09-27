@@ -1235,9 +1235,14 @@ class MClassNodeUI(object):
         cmds.separator(h=5, style='none')
 
         # Build the class options to filter by
-        cmds.rowColumnLayout('rc_useMetaFilterUI', numberOfColumns=3,
-                             columnWidth=[(1, 120), (2, 120), (3, 200)],
-                             columnSpacing=[(1, 10), (2, 10), (3, 20)])
+        try:
+            cmds.rowColumnLayout('rc_useMetaFilterUI', numberOfColumns=3, adj=2,  # maya 2018 upwards has a new adj flag for rowColumns
+                                 columnWidth=[(1, 120), (2, 120), (3, 200)],
+                                 columnSpacing=[(1, 10), (2, 10), (3, 20)])
+        except:
+            cmds.rowColumnLayout('rc_useMetaFilterUI', numberOfColumns=3,
+                                 columnWidth=[(1, 120), (2, 120), (3, 200)],
+                                 columnSpacing=[(1, 10), (2, 10), (3, 20)])
         cmds.checkBox('cb_filter_mTypes', label=LANGUAGE_MAP._MetaNodeUI_.mtypes_filter, v=False,
                       cc=partial(self.__uicb_setfilterMode, 'mTypes'))
         cmds.checkBox('cb_filter_mInstances', label=LANGUAGE_MAP._MetaNodeUI_.minstances_filter, v=False,
@@ -1250,9 +1255,14 @@ class MClassNodeUI(object):
         cmds.setParent('..')
 
         cmds.separator(h=10, style='in')
-        cmds.rowColumnLayout(numberOfColumns=4,
-                             columnWidth=[(1, 70), (2, 80), (3, 280), (4, 30)],
-                             columnSpacing=[(1, 10), (2, 10)])
+        try:
+            cmds.rowColumnLayout(numberOfColumns=4, adj=2,   # maya 2018 upwards has a new adj flag for rowColumns
+                                columnWidth=[(1, 80), (2, 85), (3, 280), (4, 30)],
+                                columnSpacing=[(1, 10), (2, 10)])
+        except:
+            cmds.rowColumnLayout(numberOfColumns=4,
+                                columnWidth=[(1, 80), (2, 85), (3, 280), (4, 30)],
+                                columnSpacing=[(1, 10), (2, 10)])
         cmds.checkBox('cb_shortname', label=LANGUAGE_MAP._MetaNodeUI_.shortname, v=False, cc=self.__filterResults)
         cmds.checkBox('cb_stripNS', label=LANGUAGE_MAP._MetaNodeUI_.stripnamespace, v=False, cc=self.__filterResults)
         try:
@@ -4318,9 +4328,9 @@ class MetaRig(MetaClass):
         self.animMap_postprocess(feedback=None, *args, **kws)
         log.warning('DEPRECATED Warning: "mRig.loadAnimation_postload_call" - Please use "mRig.animMap_postload_call" instead')
 
-    def loadAnimation(self, filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False,
-                      timecodeBinding=[None, None], referenceNode=None, relativeRots='projected', relativeTrans='projected',
-                      manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, merge=False, matchMethod='metaData', smartbake=False, *args, **kws):
+    def loadAnimation(self, filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False, timecodeBinding=[None, None], 
+                      referenceNode=None, relativeRots='projected', relativeTrans='projected', manageRanges=1, manageFileName=True,
+                      keyStatics=False, blendRange=0, merge=False, matchMethod='metaData', smartbake=False, loadInternalRig=False, *args, **kws):
         '''
         : PRO_PACK :
             Binding of the animMap format for loading animation data from
@@ -4351,6 +4361,8 @@ class MetaRig(MetaClass):
         :param merge: if True we allow the data to be merged over any current keys, else we cut all keys in the load range first
         :param matchMethod: internal matching method used to match nodes to the stored data
         :param smartbake: only valid if we're loading with a referenceNode, this tries to respect current keys when doing the processing rather than frame baking
+        :param loadInternalRig: If True and the r9Anim was created from a rig that was referenced then re-create that reference and load the r9Anim data onto
+            the resulting nodes. This is used in the Direct Load calls as the prime way to import the rigs prior to loading
 
         : additional **KWS passed in and / or accepted in the ProPack codebase :
 
@@ -4395,9 +4407,13 @@ class MetaRig(MetaClass):
             r9pro.r9import('r9panim')
             from r9panim import AnimMap
             feedback = None
+            if 'ANIMMAP' in kws: 
+                self.animCache = kws['ANIMMAP']
+                self.animCache._read_mute = True  # stop DatMap reading the r9Anim file again and use the cached data
+            else:
+                self.animCache = AnimMap(**kws)  # **kws so we can pass back the filterSettings from the UI call in pro
+                self.animCache.filepath = filepath  # no file so use the animcahe object data as given, this turns off the read call
 
-            self.animCache = AnimMap(**kws)  # **kws so we can pass back the filterSettings from the UI call in pro
-            self.animCache.filepath = filepath
             self.animCache.metaPose = True
             self.animCache.settings.incRoots = incRoots
             self.animCache.matchMethod = matchMethod
@@ -4421,6 +4437,7 @@ class MetaRig(MetaClass):
                                                blendRange=blendRange,
                                                merge=merge,
                                                smartbake=smartbake,
+                                               loadInternalRig=loadInternalRig,
                                                **kws)
                 # =========================================================
                 # pass the feedback to the postload code to handle, this is

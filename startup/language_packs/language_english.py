@@ -45,6 +45,8 @@ class _MainMenus_(object):
     red9_vimeo_ann = "Open Red9Vimeo Channel"
     red9_facebook = "Red9_Facebook"
     red9_facebook_ann = "Open Red9Facebook page"
+    red9_twitter = "Red9_Twitter"
+    red9_twitter_ann = "Open Red9Twitter Feed"
     red9_api_docs = "Red9_API Docs"
     red9_api_docs_ann = "Open Red9 API code reference page"
     red9_details = "Red9_Details"

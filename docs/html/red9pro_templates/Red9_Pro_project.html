@@ -58,24 +58,33 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
 </pre></div>
 </div>
-<p>ProPack Project object is bound on boot to pro_pack itself and is used to manage data against a clients or projects own
+<p>Red9 ProPack Project object (python object) is bound on boot to pro_pack itself and is used to manage data against a clients or projects own
 project file. The project file itself is a simple Json formatted file usually found under the client resource folder here:</p>
 <p>/Red9_ClientCore/xxxx/resource/xxx.project</p>
+<p>If your build doens&#8217;t have the Red9_ClientCore modules then you&#8217;ll find an empty project file here:</p>
+<p>Red9/pro_pack/resources/empty.project</p>
+<p>The code that adds and physically binds new project files to the systems is as follows. These lines must be added to your __init__ or
+somewhere thats parsed on boot so they&#8217;re bound to the PROJECT_DATA object. You can add as many of these as are required
+for your studios setups. Each additional project added will show up in the ProjectManager UI in Maya for you to switch between on the fly.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">add_project</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_resources</span><span class="p">(),</span> <span class="s1">&#39;my_new_game.project&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
 <p>The PROJECT_DATA object generated is used anywhere in the Red9 codebase where a path is required which may be specific to a project,
 or folder mount, allowing us to tailor setups to a clients needs without modifying the underlying codebase at all. The project file
 is JSON formatted and bound to the PROJECT_DATA on load, this means that anything in that .project file will be exposed as an attribute
 directly on the PROJECT_DATA.data object.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># for example</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">fps</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">p4_root</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">fps</span>  <span class="c1"># project frame rate</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">p4_root</span>  <span class="c1"># projects p4_root path which is dynamically found</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># theres also a pretty print function</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Note that PROJECT also manages any initial P4 bindings and therefore exposes some of the root paths directly on the Project object.
-Because of this many of the base paths we may setup in the .project file maybe pre-fixed with p4_root+</p>
+Because of this many of the base paths we may setup in the .project file maybe prefixed with p4_root+</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;pose_projectpath&quot;</span><span class="p">:</span> <span class="s2">&quot;p4_root+/Data/Animations_Source/Characters/Human/_projectposes/red9/&quot;</span><span class="p">,</span>
 </pre></div>
 </div>
@@ -135,7 +144,7 @@ exposed as direct attributes under the data object</p>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">ALL PATHS COMING FROM THIS MUST BE PYTHONIZED NOT OS!!!!!!!</p>
+<p class="last">ALL PATHS COMING FROM THIS MUST BE PYTHONIZED NOT OS!!!!!!!  on windows &#8216;/&#8217; not &#8216;&#8217;</p>
 </div>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.project.ProjectBase.p4_root">

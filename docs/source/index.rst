@@ -38,6 +38,7 @@ Red9 StudioPack Modules
 
 https://github.com/markj3d/Red9_StudioPack
 
+* Red9_Setup	: Red9 main setup manager
 * Red9_AnimationUtils : all animation functions for dealing with data flow, key management, mirroring and time 
 * Red9_Audio	: Audio tools for managing sound nodes, includes a full audio compiler for mixing multiple wav together
 * Red9_CoreUtils : backbone of the systems, filtering, processing and managing nodes on mass

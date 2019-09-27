@@ -14,12 +14,16 @@ to Mirroring animation data.
    
       getChannelBoxSelection
       getChannelBoxAttrs
+      getNodeAttrStatus
       getSettableChannels
       getAnimLayersFromGivenNodes
+      nodesDriven
       timeLineRangeGet
       timeLineRangeProcess
+      animRangeFromNodes
       mergeAnimLayers
 	  eulerSelected
+	  
 
     
    .. rubric:: Core Classes

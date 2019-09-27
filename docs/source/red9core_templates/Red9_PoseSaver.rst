@@ -19,6 +19,7 @@ or even poseFileA==poseFileB
       DataMap
       PoseData
       PosePointCloud
+      PoseBlender
       PoseCompare
 
    

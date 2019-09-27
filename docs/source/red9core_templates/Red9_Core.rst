@@ -20,7 +20,8 @@ time the tools process a hierarchy it's these classes that deal with it.
       stringReplace
       matchNodeLists
       getBlendTargetsFromMesh
-      
+      processMatchedNodes
+      matchNodeLists
       timeOffset_addPadding
       timeOffset_collapse
       
@@ -39,6 +40,7 @@ time the tools process a hierarchy it's these classes that deal with it.
       MatchedNodeInputs
       LockChannels
       TimeOffset
+      MatrixOffset
    
    
 

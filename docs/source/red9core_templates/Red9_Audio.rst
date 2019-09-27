@@ -24,7 +24,7 @@ a 'compile' flag in the playblast command but it's never worked.
       frame_to_milliseconds
       combineAudio
       inspect_wav
-      getMediaFileMetaData
+      audioPathLoaded
       
    .. rubric:: Main Classes
 

@@ -349,12 +349,15 @@ this is for debugging enabling us to compare that we have matching connections b
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; if given and not compare=True then we write the datamap to this json filepath</li>
+<li><strong>filepath</strong> &#8211; if given and not compare=True then we write the datamap to this json filepath. 
+The existence of the filepath also forces the encode_objects flags on in all of the gatherInfo() calls
+ensuring that the data is suitable to file out to json</li>
 <li><strong>compare</strong> &#8211; if True and filepath is given then we compare the current data extracted with that of
 the master file given and return a dict of mismatching data</li>
 <li><strong>infoblock</strong> &#8211; if True we run gatherInfo() on the mRig to propagate the [info] block with relevant build and meta info</li>
-<li><strong>ctrl_only</strong> &#8211; if True we ONLY collect data about CTRL_Prefix wired nodes, else we build up a
-complete map of all connections to the mRig and it&#8217;s child subsystems</li>
+<li><strong>ctrl_only</strong> &#8211; if True (default) we ONLY collect data about CTRL_Prefix wired nodes, else we build up a
+complete map of all connections to the mRig and it&#8217;s child subsystems. Note that when doing a compare against a file
+written by the RigManager this should be set to False!!</li>
 <li><strong>mInstances</strong> &#8211; if given only examine mNode&#8217;s inherited from these mInstances</li>
 </ul>
 </td>
@@ -590,8 +593,8 @@ self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim 
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>suppress</strong> &#8211; suppress the confirm dialogs</li>
-<li><strong>filepath</strong> &#8211; if given then we read the r9Anim file from file, else we use the current self.animCache instance
-from any previous loadAnimation calls</li>
+<li><strong>filepath</strong> &#8211; path to the r9Anim file, if not given then we use the current instance
+self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim file on this mRig</li>
 </ul>
 </td>
 </tr>
@@ -631,8 +634,8 @@ from any previous loadAnimation calls</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>suppress</strong> &#8211; suppress the confirm dialogs</li>
-<li><strong>filepath</strong> &#8211; if given then we read the r9Anim file from file, else we use the current self.animCache instance
-from any previous loadAnimation calls</li>
+<li><strong>filepath</strong> &#8211; path to the r9Anim file, if not given then we use the current instance
+self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim file on this mRig</li>
 </ul>
 </td>
 </tr>
@@ -652,6 +655,15 @@ from any previous loadAnimation calls</li>
 TalkBack data under the audio keys. This will only pull the first audioNode&#8217;s data
 if there are multiple audioNodes under the audioGrp</p>
 <p>animCache.infoDict[&#8216;audioGrp&#8217;][&#8216;audioNodes&#8217;][audio][&#8216;talkback&#8217;]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; path to the r9Anim file, if not given then we use the current instance
+self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim file on this mRig</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -957,7 +969,7 @@ r9Anim and r9Pose files as cross-reference</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_exportData">
-<code class="descname">info_exportData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_exportData" title="Permalink to this definition">¶</a></dt>
+<code class="descname">info_exportData</code><span class="sig-paren">(</span><em>encode_objects=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_exportData" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a dict of all info on the exporter networks including the loops / export paths &amp; roots</p>
 </dd></dl>
 
@@ -996,7 +1008,7 @@ then the skeletonRoot is found from the exportSkeletonRoot wire to the mRig</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_audioGrp">
-<code class="descname">info_audioGrp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_audioGrp" title="Permalink to this definition">¶</a></dt>
+<code class="descname">info_audioGrp</code><span class="sig-paren">(</span><em>encode_objects=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_audioGrp" title="Permalink to this definition">¶</a></dt>
 <dd><p>return all audioGRP info connected to this rig system including connected audioNodes</p>
 </dd></dl>
 
@@ -1486,7 +1498,7 @@ a consistent return for all data</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.gatherInfo">
-<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=3</em>, <em>keys=[]</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=3</em>, <em>keys=[]</em>, <em>encode_objects=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>info block gather for the facialcore channel values</p>
 </dd></dl>
 
@@ -1539,14 +1551,22 @@ positions up when framing the modelPanels.</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_rig">
-<code class="descname">frame_cam_rig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_rig" title="Permalink to this definition">¶</a></dt>
+<code class="descname">frame_cam_rig</code><span class="sig-paren">(</span><em>camera=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_rig" title="Permalink to this definition">¶</a></dt>
 <dd><p>to overload, simple focus call to put the camera in the right place,
 should be framed to focus all controllers in the fRig system</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>camera</strong> &#8211; if given we frame this camera, else we frame the actual UI camera from the facial systems</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_mesh">
-<code class="descname">frame_cam_mesh</code><span class="sig-paren">(</span><em>imageplane=True</em>, <em>forcefit=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_mesh" title="Permalink to this definition">¶</a></dt>
+<code class="descname">frame_cam_mesh</code><span class="sig-paren">(</span><em>imageplane=True</em>, <em>forcefit=False</em>, <em>camera=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_mesh" title="Permalink to this definition">¶</a></dt>
 <dd><p>to overload, simple focus call to put the camera in the right place,
 should be framed to focus on the Head meshes - &#8220;renderMeshes&#8221;</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1556,6 +1576,7 @@ should be framed to focus on the Head meshes - &#8220;renderMeshes&#8221;</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>imageplane</strong> &#8211; if True then we include the bound imagePlane/ planes in the viewFit nodes</li>
 <li><strong>forcefit</strong> &#8211; if True we over-ride / ignore any cam_states stored on the mNode itself</li>
+<li><strong>camera</strong> &#8211; if given we frame this camera, else we frame the actual UI camera from the facial systems</li>
 </ul>
 </td>
 </tr>
@@ -2015,7 +2036,7 @@ this export tag</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.gatherInfo">
-<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>encode_objects=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>info block gather for the export systems</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mClass&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">super</span><span class="p">(</span><span class="n">ExportTag_Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">gatherInfo</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;tagID&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tagID</span>
@@ -2107,7 +2128,8 @@ we delete ALL overrides under the full hierarchy from the exportRoot</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.addTimeRange">
 <code class="descname">addTimeRange</code><span class="sig-paren">(</span><em>times=()</em>, <em>loopname=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.addTimeRange" title="Permalink to this definition">¶</a></dt>
-<dd><p>add a new timerange node to the tag</p>
+<dd><p>add a new timerange node to this ExportTag, these are the actual
+mNodes that our exporters use to trigger each individual output</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2173,6 +2195,20 @@ of each loop matches the expected internal exportLoopBase_class bound to this ex
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getExportLoops">
 <code class="descname">getExportLoops</code><span class="sig-paren">(</span><em>loopnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getExportLoops" title="Permalink to this definition">¶</a></dt>
 <dd><p>renamed func call for the getTimeRanges</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.delete_export_loops">
+<code class="descname">delete_export_loops</code><span class="sig-paren">(</span><em>loopnames=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.delete_export_loops" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete export loops that match the filter, or delete all</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loopnames</strong> &#8211; names passed into the search for deletion, if empty we delete all export loops connected</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -2618,7 +2654,7 @@ for better back-end management and exposure of the base attributes directly on t
 <p># TODO: force the AETemplate callbakcs to create the expression bindings for time</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.gatherInfo">
-<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=1</em>, <em>keys=[]</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=1</em>, <em>keys=[]</em>, <em>encode_objects=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>info block gather for the facialcore channel values</p>
 </dd></dl>
 
@@ -2750,7 +2786,7 @@ be linked to a character rig for export logic handling</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.gatherInfo">
-<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.gatherInfo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>encode_objects=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>gather key info on this AudioGrp node and return a dic of all
 connected audio node data</p>
 </dd></dl>
