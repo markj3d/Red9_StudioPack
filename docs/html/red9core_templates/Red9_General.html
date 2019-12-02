@@ -100,6 +100,21 @@ This includes most of the context managers and decorators.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.os_OpenFile" title="Red9.core.Red9_General.os_OpenFile"><code class="xref py py-obj docutils literal"><span class="pre">os_OpenFile</span></code></a>(filePath,&nbsp;*args)</td>
 <td>open the given file in the default program for this OS</td>
 </tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.formatPath" title="Red9.core.Red9_General.formatPath"><code class="xref py py-obj docutils literal"><span class="pre">formatPath</span></code></a>(path)</td>
+<td>take a path and format it to forward slashes with catches for the exceptions so that paths</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.formatPath_join" title="Red9.core.Red9_General.formatPath_join"><code class="xref py py-obj docutils literal"><span class="pre">formatPath_join</span></code></a>(path,&nbsp;*paths)</td>
+<td>wrapper over os.path.join and formatPath so it&#8217;s always returned as a valid Python Path</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.sceneName" title="Red9.core.Red9_General.sceneName"><code class="xref py py-obj docutils literal"><span class="pre">sceneName</span></code></a>([short])</td>
+<td>Why, because if a file loaded with errors the standard cmds.file(q=True, sn=True) returns nothing</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.writeJson" title="Red9.core.Red9_General.writeJson"><code class="xref py py-obj docutils literal"><span class="pre">writeJson</span></code></a>([filepath,&nbsp;content])</td>
+<td>write json file to disk</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.readJson" title="Red9.core.Red9_General.readJson"><code class="xref py py-obj docutils literal"><span class="pre">readJson</span></code></a>([filepath])</td>
+<td>file pat to drive where to read the file</td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Context Managers / decorators</p>

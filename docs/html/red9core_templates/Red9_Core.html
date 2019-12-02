@@ -83,6 +83,12 @@ time the tools process a hierarchy it&#8217;s these classes that deal with it.</
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh" title="Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh"><code class="xref py py-obj docutils literal"><span class="pre">getBlendTargetsFromMesh</span></code></a>(node[,&nbsp;asList,&nbsp;...])</td>
 <td>quick func to return the blendshape targets found from a give mesh&#8217;s connected blendshape&#8217;s</td>
 </tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.processMatchedNodes" title="Red9.core.Red9_CoreUtils.processMatchedNodes"><code class="xref py py-obj docutils literal"><span class="pre">processMatchedNodes</span></code></a>([nodes,&nbsp;filterSettings,&nbsp;...])</td>
+<td>HUGELY IMPORTANT CALL FOR ALL ANIMATION FUNCTIONS</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Red9.core.Red9_CoreUtils.matchNodeLists"><code class="xref py py-obj docutils literal"><span class="pre">matchNodeLists</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Matches 2 given NODE LISTS by node name via various methods.</td>
+</tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.timeOffset_addPadding" title="Red9.core.Red9_CoreUtils.timeOffset_addPadding"><code class="xref py py-obj docutils literal"><span class="pre">timeOffset_addPadding</span></code></a>([pad,&nbsp;padfrom,&nbsp;scene,&nbsp;...])</td>
 <td>simple wrap of the timeoffset class which will add padding into the</td>
 </tr>
@@ -124,6 +130,9 @@ time the tools process a hierarchy it&#8217;s these classes that deal with it.</
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.TimeOffset" title="Red9.core.Red9_CoreUtils.TimeOffset"><code class="xref py py-obj docutils literal"><span class="pre">TimeOffset</span></code></a></td>
 <td>A class for dealing with time manipulation inside Maya.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.MatrixOffset" title="Red9.core.Red9_CoreUtils.MatrixOffset"><code class="xref py py-obj docutils literal"><span class="pre">MatrixOffset</span></code></a>()</td>
+<td>Given 2 transforms calculate the difference as a Matrix and apply that as an offset matrix to a given list of nodes.</td>
 </tr>
 </tbody>
 </table>

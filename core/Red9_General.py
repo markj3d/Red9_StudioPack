@@ -322,11 +322,12 @@ class AnimationContext(object):
     :param undo: do we manage the undoStack, collecting everything in one chunk
     :param autokey: base state of the autokey during this context, default=False
     """
-    def __init__(self, evalmanager=True, time=True, undo=True, autokey=False):
+    def __init__(self, evalmanager=True, time=True, undo=True, autokey=False, suppress_exceptions=True):
         self.autoKeyState = None
         self.timeStore = {}
         self.evalmode = None
         self.autokey = autokey
+        self.suppress_exceptions = suppress_exceptions
 
         self.manage_em = evalmanager
         self.mangage_undo = undo
@@ -374,10 +375,12 @@ class AnimationContext(object):
             cmds.undoInfo(closeChunk=True)
         else:
             cmds.undoInfo(swf=True)
-        if exc_type:
+        if not exc_type == None and self.suppress_exceptions:
             log.exception('%s : %s' % (exc_type, exc_value))
-        # If this was false, it would re-raise the exception when complete
-        return True
+        # If we're suppressing exceptions, return True, otherwise return
+        # according to if an exception is being handled or not
+        # https://stackoverflow.com/questions/43946416/return-value-of-exit
+        return self.suppress_exceptions or exc_type == None
 
 class undoContext(object):
     """
@@ -749,30 +752,34 @@ class SceneRestoreContext(object):
 # General ---
 # ---------------------------------------------------------------------------------
 
-def thumbNailScreen(filepath, width, height, mode='api'):
+def thumbNailScreen(filepath, width, height, mode='api', modelPanel=None):
     path = '%s.bmp' % os.path.splitext(filepath)[0]
     if mode == 'api':
-        thumbnailApiFromView(path, width, height)
+        thumbnailApiFromView(path, width, height, modelPanel=modelPanel)
         log.debug('API Thumb > path : %s' % path)
     else:
-        thumbnailFromPlayBlast(path, width, height)
+        thumbnailFromPlayBlast(path, width, height, modelPanel=modelPanel)
         log.debug('Playblast Thumb > path : %s' % path)
 
-def thumbnailFromPlayBlast(filepath, width, height):
+def thumbnailFromPlayBlast(filepath, width, height, modelPanel=None):
     '''
     Generate a ThumbNail of the screen
     Note: 'cf' flag is broken in 2012
+
     :param filepath: path to Thumbnail
     :param width: width of capture
     :param height: height of capture
+    :param modePanel: modelPanel to grab the image from, default=None, works it out internally
     '''
     filepath = os.path.splitext(filepath)[0]
     filename = os.path.basename(filepath)
     filedir = os.path.dirname(filepath)
 
     # get modelPanel and camera
-    win = cmds.playblast(activeEditor=True).split('|')[-1]
-    cam = cmds.modelPanel(win, q=True, camera=True)
+    if not modelPanel or not cmds.modelPanel(modelPanel, exists=True):
+        modelPanel = cmds.playblast(activeEditor=True).split('|')[-1]
+
+    cam = cmds.modelPanel(modelPanel, q=True, camera=True)
     if not cmds.nodeType(cam) == 'camera':
         cam = cmds.listRelatives(cam)[0]
 
@@ -810,14 +817,25 @@ def thumbnailFromPlayBlast(filepath, width, height):
     except:
         pass
 
-def thumbnailApiFromView(filename, width, height, compression='bmp', modelPanel='modelPanel4'):
+def thumbnailApiFromView(filename, width, height, modelPanel=None, compression='bmp'):
     '''
-    grab the thumbnail direct from the buffer?
-    TODO: not yet figured out how you crop the data here?
+    grab the thumbnail direct from the buffer. This viewport capture method
+    is apparently flagged as obsolete in the Maya API so this might need some investigation
+    in the future!
+
+    :param filename: path to store the image too
+    :param width: width of the image to capture
+    :param height: height of the image to capture
+    :param modelPanel: panel to capture
+    :param compression: base format for the image, default is 'bmp'
     '''
     import maya.OpenMaya as OpenMaya
     import maya.OpenMayaUI as OpenMayaUI
 
+    # get modelPanel: always proved a reliable way to get the active modelPanel
+    if not modelPanel or not cmds.modelPanel(modelPanel, exists=True):
+        modelPanel = cmds.playblast(activeEditor=True).split('|')[-1]
+    
     # Grab the last active 3d viewport
     view = None
     if modelPanel is None:
@@ -829,13 +847,27 @@ def thumbnailApiFromView(filename, width, height, compression='bmp', modelPanel=
         except:
             # in case the given modelPanel doesn't exist!!
             view = OpenMayaUI.M3dView.active3dView()
+    view.refresh(False, True)  # refresh the current view only
 
-    # read the color buffer from the view, and save the MImage to disk
+    # read the colour buffer from the view, and save the MImage to disk
+
+    # BUG fix: 28/11/19 : in Viewport2 the image is stored as float and the default format
+    # of MImage is BGRA so we're now converting
+    # https://around-the-corner.typepad.com/adn/2016/05/get-image-from-m3dviewreadcolorbuffer-in-viewport-2.html
+    # http://discourse.techart.online/t/maya-python-super-weird-behaviour-of-m3dview/5649/4
     image = OpenMaya.MImage()
-    view.readColorBuffer(image, True)
+    if view.getRendererName() == view.kViewport2Renderer:
+        image.create(view.portWidth(), view.portHeight(), 4, OpenMaya.MImage.kFloat)
+        view.readColorBuffer(image, True)
+        image.convertPixelFormat(OpenMaya.MImage.kByte)
+    else:
+        view.readColorBuffer(image, True)
     image.resize(width, height, True)
-    image.writeToFile(filename, compression)
-    log.info('API Thumbname call path : %s' % filename)
+    try:
+        image.writeToFile(filename, compression)
+    except StandardError, err:
+        log.debug(err)
+    log.info('API Thumbnail call path : %s' % filename)
 
 
 def getModifier():

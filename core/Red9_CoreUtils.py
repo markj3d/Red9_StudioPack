@@ -529,18 +529,21 @@ class FilterNode_UI(object):
         # Make a single filterNode instance
         self._filterNode = FilterNode()
         self._filterNode.settings.transformClamp = True
+        self.win = 'NodeSearch'
+        self.cbNodeTypes = []  # checkBox store for nodeTypes
 
     @classmethod
     def show(cls):
         cls()._showUI()
 
-    def _showUI(self):
-        self.win = 'NodeSearch'
-        self.cbNodeTypes = []  # checkBox store for nodeTypes
-
+    def close(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        window = cmds.window(self.win, title=LANGUAGE_MAP._SearchNodeUI_.title, widthHeight=(400, 400))
+
+    def _showUI(self):
+        self.close()
+
+        window = cmds.window(self.win, title=LANGUAGE_MAP._SearchNodeUI_.title)  # , widthHeight=(400, 400))
         cmds.menuBarLayout()
         cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
         cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help,
@@ -622,8 +625,9 @@ class FilterNode_UI(object):
         cmds.separator(h=15, style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                              c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.separator(h=15, style='none')
         cmds.showWindow(window)
-        cmds.window(self.win, e=True, widthHeight=(400, 400))
+        #cmds.window(self.win, e=True, widthHeight=(400, 400))
 
     def __uiCall(self, mode):
         if mode == 'intersection':
@@ -1155,8 +1159,9 @@ class FilterNode(object):
             similarly 'NOT:myAttr=2.33' will exclude if the value is equal
             see the ..\Red9\tests\Red9_CoreUtilTests.py for live unittest examples
 
-        TODO: current Implementation DOES NOT allow multiple attr tests as only 1 val per key 
-            in the excludeAttrs and includeAttrs is currently supported!!!!!!
+        .. note::
+            current Implementation DOES NOT allow multiple attr tests as only 1 val per key 
+            in the excludeAttrs and includeAttrs is currently supported!!
         '''
 
         self.foundAttributes = []
@@ -1544,10 +1549,6 @@ def getBlendTargetsFromMesh(node, asList=True, returnAll=False, levels=4, indexe
     '''
     quick func to return the blendshape targets found from a give mesh's connected blendshape's
 
-    TODO: missing index's used to be an issue if you'd deleted a target Maya would leave the 
-    index free resulting in blank targets, doesn't seem to do that now?? Also what do we 
-    return and in what format if we have multiple blendShapes on the node?
-
     :param node: node to inspect for blendShapes, or the blendshape itself
     :param asList: return as a straight list of target names or a dict of data
     :param returnAll: if multiple blendshapes are found do we return all, or just the first
@@ -1870,10 +1871,13 @@ class LockChannels(object):
         def show(cls):
             cls()._showUI()
 
-        def _showUI(self):
+        def close(self):
             if cmds.window(self.win, exists=True):
                 cmds.deleteUI(self.win, window=True)
-            window = cmds.window(self.win, title=LANGUAGE_MAP._LockChannelsUI_.title, s=False, widthHeight=(260, 410))
+
+        def _showUI(self):
+            self.close()
+            window = cmds.window(self.win, title=LANGUAGE_MAP._LockChannelsUI_.title, s=False)  #, widthHeight=(260, 410))
             cmds.menuBarLayout()
             cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
             cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help,
@@ -1989,9 +1993,9 @@ class LockChannels(object):
             cmds.separator(h=15, style='none')
             cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                                  c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
-
+            cmds.separator(h=15, style='none')
             cmds.showWindow(window)
-            cmds.window(self.win, e=True, widthHeight=(260, 410))
+            #cmds.window(self.win, e=True, widthHeight=(260, 410))
 
         def __uicheckboxCallbacksAttr(self, mode, attrs):
             if not isinstance(attrs, list):
@@ -2401,7 +2405,13 @@ class TimeOffset(object):
                   'sound': [],
                   'animclips': [],
                   'mnodes': [],
+                  'image_planes': [],
                   'mnode_internals': []}
+    
+    def __init__(self, cache_object=None):
+        if cache_object:
+            self._processed=cache_object
+            print 'consuming current cached object'
 
     @classmethod
     def fullScene(cls, offset, timelines=False, timerange=None, ripple=True, startfrm=False):
@@ -2435,7 +2445,7 @@ class TimeOffset(object):
 
     @classmethod
     def fromSelected(cls, offset, nodes=None, filterSettings=None, flocking=False,
-                     randomize=False, timerange=None, ripple=True, mRigs=False, startfrm=False):
+                     randomize=False, timerange=None, ripple=True, mRigs=False, startfrm=False, currentSystem=False):
         '''
         Process the current selection list and offset as appropriate.
 
@@ -2451,6 +2461,11 @@ class TimeOffset(object):
             calculating the offset for you such that timerange[0] starts at the offset frm value, only works if timerange is passed in
         :param filterSettings: this is a FilterSettings_Node object used to pass all
             the filter types into the FilterNode code. Internally the following is true:
+        :param currentSystem: mRigs flag only: if True we check for the mSystemRoot attr (bool) on mNodes and if set,
+            we skip the node and all childnodes from that node. Why?? The mSystsmRoot attr is a marker to denote the
+            root of a given mRig system, by respecting this we clamp searches to the current system and prevent
+            walking into the connected child sub-system. Primarily used in ProPack to stop facial nodes being
+            returned and processed as part of the connected body rig.
 
             | settings.nodeTypes: list[] - search nodes of type
             | settings.searchAttrs: list[] - search nodes with Attrs of name
@@ -2458,6 +2473,7 @@ class TimeOffset(object):
             | settings.hierarchy: bool - process all children from the roots
             | settings.incRoots: bool - include the original root nodes in the filter
         '''
+#         currentSystem = True
         if timerange and startfrm:
             offset = offset - timerange[0]
             log.info('New Offset calculated based on given Start Frm and timerange : %s' % offset)
@@ -2483,21 +2499,28 @@ class TimeOffset(object):
         if mRigs:
             _mrigs = []
             for node in basenodes:
+                # get directly connected mSystemRoots to the given node
                 mrig = r9Meta.getConnectedMetaSystemRoot(node)
                 if mrig and mrig not in _mrigs:
                     _mrigs.append(mrig)
+                    if not currentSystem:
+                        # PRO_PACK : extend those to child mRigs (facial connected to body as child)
+                        _child_mrigs = mrig.getChildSystemRoots()
+#                         _child_mrigs = mrig.getChildMetaNodes(walk=True, mInstances=['Pro_MetaRig','Pro_MetaRig_FacialUI'])
+                        if _child_mrigs:
+                            _mrigs.extend(_child_mrigs)
+
+            # ensure a clean list
+            _mrigs = list(set(_mrigs))
+
             if _mrigs:
                 mNodes.extend(_mrigs)
                 for rig in _mrigs:
-                    mNodes.extend(rig.getChildMetaNodes(walk=True))
+                    _children = rig.getChildMetaNodes(walk=True, currentSystem=currentSystem)
+                    for _child in _children:
+                        if not _child in mNodes:
+                            mNodes.append(_child)
                     filtered.extend(rig.getChildren())
-
-#             # call getChildren on each mNode rather than the mRig
-#             # as this will ensure that child mRig systems with different
-#             # CTRL_Prefix data will also get processed correctly!
-#             mNodes = list(set(mNodes))
-#             for mnode in mNodes:
-#                 filtered.extend(mnode.getChildren())
 
         # process everything
         # ======================================
@@ -2714,7 +2737,7 @@ class TimeOffset(object):
         :param offset: amount to offset the sounds nodes by
         :param timerange: optional timerange to process (outer bounds only)
         :param ripple: when shifting nodes ripple the offset to clips after the range,
-            if ripple=False we only shift clips that starts in tghe bounds of the timerange
+            if ripple=False we only shift clips that starts in the bounds of the timerange
 
         .. note::
             each timeOffset function implemented within a MetaClass must now return ALL Maya nodes (dag path)
@@ -2727,15 +2750,16 @@ class TimeOffset(object):
             mNodes = r9Meta.getMetaNodes()
         if mNodes:
             log.debug('MetaData Offset ============================')
-            for mNode in mNodes:
+            for mNode in set(mNodes):
                 # bail if already processed
                 if 'mnode' in cls._processed and mNode.mNode in cls._processed['mnode']:
                     log.debug('skipping already processed mNode : %s' % mNode)
                     continue
 
                 if 'timeOffset' in dir(mNode) and callable(getattr(mNode, 'timeOffset')):
-                    mNodes_internal_offset.extend(mNode.timeOffset(offset, timerange=timerange, ripple=ripple) or [])
+                    mNodes_internal_offset.extend(mNode.timeOffset(offset, timerange=timerange, ripple=ripple, cache_object=cls._processed) or [])
                     mNodes_offset.append(mNode.mNode)  # set to cache as dag path to make sure we cover duplicate systems
+                log.debug('offset mnode : %s' % mNode)
             if mNodes_offset:
                 log.info('================================')
                 log.info('timeOffset generic mClass called')
@@ -2798,31 +2822,48 @@ def valueToMappedRange(value, currentMin, currentMax, givenMin, givenMax):
     # Convert the 0-1 range into a value in the right range.
     return givenMin + (valueScaled * givenSpan)
 
-def _ui_scaling_factors(width=False, height=False):
-    '''
-    this is a bodge really, but needed to remap the UI scales to 4k setups in some of the core StudioPack UI's
-    '''
-    _width = width
-    _height = height
-    
-    is_4k, _, _, ppi = r9Setup.maya_screen_mapping()
-    if is_4k:
-        # base size mapping setups
-        if width:
-            _width = max(valueToMappedRange(width, 500, 7673, 333, 5115), 100)
-        if height:
-            _height = max(valueToMappedRange(height, 355, 2021, 65, 1175), 100)
+# def ui_dpi_scaling_factors(width=False, height=False, factor=False):
+#     '''
+#     this is a bodge really, but needed to remap the UI scales to 4k setups in some of
+#     the core StudioPack UI's. This basically uses a scaling factor based on the DPI of
+#     the screen setups. This is also used in ProPack to control some of the widget sizes
+#     so we can consistently scale icon widgets as expected.
+#     '''   
+#     is_4k, _, _, ppi = r9Setup.maya_screen_mapping()
+# 
+#     _factor = 1
+# 
+#     if int(ppi) > 290: # 300% resolution scaling
+#         _factor = 2.15
+#     elif int(ppi) >= 240: # 250% resolution scaling
+#         _factor = 2.05
+#     elif int(ppi) >= 140:  # 150% resolution scaling
+#         _factor = 1.5
+# 
+#     if factor:
+#         return _factor
+# 
+#     _width = width * _factor
+#     _height = height * _factor
+# 
+#     if width and height:
+#         return _width, _height
+#     elif width:
+#         return _width
+#     elif height:
+#         return _height
+# 
+# #    if is_4k:
+#         # base size mapping setups
+# #        if width:
+# #            _width = max(valueToMappedRange(width, 500, 7673, 333, 5115), 100)
+# #        if height:
+# #           _height = max(valueToMappedRange(height, 355, 2021, 65, 1175), 100)
+# 
+# #        # now multiply by the dpi, based on 144.0dpi being default
+# #        _width = _width * (144.0 / ppi)
+# #        _height = _height * (144.0 / ppi)
 
-        # now multiply by the dpi, based on 144.0dpi being default
-        _width = _width * (144.0 / ppi)
-        _height = _height * (144.0 / ppi)
-
-    if width and height:
-        return _width, _height
-    elif width:
-        return _width
-    elif height:
-        return _height
 
 def timeIsInRange(baseRange=(), testRange=(), start_inRange=True, end_inRange=True):
     '''

@@ -324,7 +324,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013A57288&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013EA9B88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -347,7 +347,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013A4AB48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013EAC308&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -519,6 +519,8 @@ time=startFarme-blendRange to hold the current data before we load the new keys.
 to ensure the data is preserved</li>
 <li><strong>merge</strong> &#8211; if True we allow the data to be merged over any current keys, else we cut all keys in the load range first</li>
 <li><strong>smartbake</strong> &#8211; only valid if we&#8217;re loading with a referenceNode, this tries to respect current keys when doing the processing rather than frame baking</li>
+<li><strong>loadInternalRig</strong> &#8211; If True and the r9Anim was created from a rig that was referenced then re-create that reference and load the r9Anim data onto
+the resulting nodes. This is used in the Direct Load calls as the prime way to import the rigs prior to loading</li>
 </ul>
 </td>
 </tr>
@@ -720,7 +722,7 @@ Red9 ExportUI &gt; Settings data, store in the R9PRO&gt;settings object files</p
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013A4A748&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013EAC448&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1437,7 +1439,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013A4A588&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013EAC7C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Fbx_To_Bnd_ui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2001,7 +2003,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Keyerui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013A4A388&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013EAC9C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2011,11 +2013,6 @@ Closes it every time, because the batch can kill maya outright.</p>
 <em class="property">class </em><code class="descname">Track_locomotion</code><span class="sig-paren">(</span><em>mrig=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>utility class use to create animation on locomotion ctrl</p>
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.animation.Track_locomotion.mrigs">
-<code class="descname">mrigs</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion.mrigs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Track_locomotion.mrig">
 <code class="descname">mrig</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion.mrig" title="Permalink to this definition">¶</a></dt>
@@ -2031,34 +2028,36 @@ Closes it every time, because the batch can kill maya outright.</p>
 <code class="descname">cog_ctrl</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion.cog_ctrl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.animation.Track_locomotion.start_frame">
-<code class="descname">start_frame</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion.start_frame" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.animation.Track_locomotion.end_frame">
-<code class="descname">end_frame</code><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion.end_frame" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.Track_locomotion.set_timeranges">
+<code class="descname">set_timeranges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion.set_timeranges" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Track_locomotion.delete_locmotion_animation">
 <code class="descname">delete_locmotion_animation</code><span class="sig-paren">(</span><em>attributes=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion.delete_locmotion_animation" title="Permalink to this definition">¶</a></dt>
 <dd><p>delete animation on locomotion ctrl if attributes are pass it will delete just given attributes if no attributes
-given, all animation will be deleted
-:param attributes: list of attributes to be deleted</p>
+given, all animation will be deleted</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attributes</strong> &#8211; list of attributes to be deleted</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Track_locomotion.track_to_cog">
-<code class="descname">track_to_cog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion.track_to_cog" title="Permalink to this definition">¶</a></dt>
-<dd><p>track COG ctrl animation on locomotion ctrl</p>
+<code class="descname">track_to_cog</code><span class="sig-paren">(</span><em>translates=True</em>, <em>rotates=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion.track_to_cog" title="Permalink to this definition">¶</a></dt>
+<dd><p>track COG ctrl animation to the locomotion ctrl</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Track_locomotion.project_cog_translation">
 <code class="descname">project_cog_translation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion.project_cog_translation" title="Permalink to this definition">¶</a></dt>
-<dd><p>projects COG translations to locomotion ctrl maintaining locomotion ctrl in the ground</p>
+<dd><p>projects the COG translations to the ground plane and extracts the directional vector for the rotates</p>
 </dd></dl>
 
 <dl class="method">
@@ -2082,13 +2081,14 @@ given, all animation will be deleted
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Track_locomotion.track_cog_maintaining_offset">
 <code class="descname">track_cog_maintaining_offset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion.track_cog_maintaining_offset" title="Permalink to this definition">¶</a></dt>
-<dd><p>create locomotion ctrl animation, tracking COG maintaining offset between COG and locomotion ctrl</p>
+<dd><p>create locomotion ctrl animation, tracking COG but maintaining the current
+offset between COG and locomotion ctrl</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Track_locomotion.static">
 <code class="descname">static</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Track_locomotion.static" title="Permalink to this definition">¶</a></dt>
-<dd><p>create locomotion ctrl animation, projects just the first frame of COG</p>
+<dd><p>simple projected extraction without any key management and on the current frame only</p>
 </dd></dl>
 
 </dd></dl>

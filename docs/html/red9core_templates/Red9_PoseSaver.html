@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
-    <link rel="next" title="Red9_Tools" href="Red9_Tools.html" />
+    <link rel="next" title="Red9_Setup" href="Red9_Setup.html" />
     <link rel="prev" title="Red9_Meta" href="Red9_Meta.html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Red9_Tools.html" title="Red9_Tools"
+          <a href="Red9_Setup.html" title="Red9_Setup"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="Red9_Meta.html" title="Red9_Meta"
@@ -84,7 +84,10 @@ ALL NODES must have unique names or you may get unexpected  results!</p>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PosePointCloud" title="Red9.core.Red9_PoseSaver.PosePointCloud"><code class="xref py py-obj docutils literal"><span class="pre">PosePointCloud</span></code></a>(nodes[,&nbsp;filterSettings,&nbsp;...])</td>
 <td>PosePointCloud is the technique inside the PoseSaver used to snap the pose into relative space.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PoseCompare" title="Red9.core.Red9_PoseSaver.PoseCompare"><code class="xref py py-obj docutils literal"><span class="pre">PoseCompare</span></code></a>(currentPose,&nbsp;referencePose[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PoseBlender" title="Red9.core.Red9_PoseSaver.PoseBlender"><code class="xref py py-obj docutils literal"><span class="pre">PoseBlender</span></code></a>(filepaths[,&nbsp;nodes,&nbsp;...])</td>
+<td>simple wrap over the PoseLoad code to control the loading of the r9Pose through a poseBlender UI</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_PoseSaver.PoseCompare" title="Red9.core.Red9_PoseSaver.PoseCompare"><code class="xref py py-obj docutils literal"><span class="pre">PoseCompare</span></code></a>(currentPose,&nbsp;referencePose[,&nbsp;...])</td>
 <td>This is aimed at comparing a rigs current pose with a given one, be that a pose file on disc, a pose class object, or even a poseObject against another.</td>
 </tr>
 </tbody>
@@ -748,8 +751,8 @@ the systems if needed. If it is then it gets run between the load and save calls
   <p class="topless"><a href="Red9_Meta.html"
                         title="previous chapter">Red9_Meta</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="Red9_Tools.html"
-                        title="next chapter">Red9_Tools</a></p>
+  <p class="topless"><a href="Red9_Setup.html"
+                        title="next chapter">Red9_Setup</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -781,7 +784,7 @@ the systems if needed. If it is then it gets run between the load and save calls
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="Red9_Tools.html" title="Red9_Tools"
+          <a href="Red9_Setup.html" title="Red9_Setup"
              >next</a> |</li>
         <li class="right" >
           <a href="Red9_Meta.html" title="Red9_Meta"

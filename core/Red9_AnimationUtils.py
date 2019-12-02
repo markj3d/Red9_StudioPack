@@ -649,7 +649,7 @@ class AnimationUI(object):
         self.filterSettings = r9Core.FilterNode_Settings()
         self.filterSettings.transformClamp = True
         self.presetDir = r9Setup.red9Presets()  # os.path.join(r9Setup.red9ModulePath(), 'presets')
-        self.basePreset = ''
+        self.basePreset = 'Default.cfg' # this is only ever run once, after which the data is pushed to the settings file
 
         # Pose Management variables
         self.posePath = None  # working variable
@@ -681,9 +681,9 @@ class AnimationUI(object):
         # deal with screen resolution and scaling
         scaling_dpi = r9Setup.maya_screen_mapping()[3]
         if not scaling_dpi == 96.0:  # 100% which is what the UIs were setup under (1080p)
-            factor = (scaling_dpi / 96.0)
+            factor = r9Setup.maya_dpi_scaling_factor()
             self.initial_workspace_width = self.initial_workspace_width * factor
-            self.initial_winsize = (self.initial_winsize[0] * factor, self.initial_winsize[1] * factor)
+            self.initial_winsize = [self.initial_winsize[0] * factor, self.initial_winsize[1] * factor]
     
     @classmethod
     def show(cls):
@@ -695,6 +695,7 @@ class AnimationUI(object):
 
         animUI = cls()
         animUI.uiBoot = True
+        animUI.close()  # close any previous instances
 
         if 'ui_docked' in animUI.ANIM_UI_OPTVARS['AnimationUI']:
             animUI.dock = eval(animUI.ANIM_UI_OPTVARS['AnimationUI']['ui_docked'])
@@ -706,15 +707,16 @@ class AnimationUI(object):
                 print 'Switching dockState : False'
                 animUI.dock = False
 
-        RED_ANIMATION_UI = animUI
-        if RED_ANIMATION_UI_OPENCALLBACKS:
-            for func in RED_ANIMATION_UI_OPENCALLBACKS:
-                if callable(func):
-                    try:
-                        log.debug('calling RED_ANIMATION_UI_OPENCALLBACKS')
-                        func(animUI)
-                    except:
-                        log.warning('RED_ANIMATION_UI_OPENCALLBACKS failed')
+#         RED_ANIMATION_UI = animUI
+#         if RED_ANIMATION_UI_OPENCALLBACKS:
+#             for func in RED_ANIMATION_UI_OPENCALLBACKS:
+#                 if callable(func):
+#                     try:
+#                         print 'calling RED_ANIMATION_UI_OPENCALLBACKS'
+#                         log.debug('calling RED_ANIMATION_UI_OPENCALLBACKS')
+#                         func(animUI)
+#                     except:
+#                         log.warning('RED_ANIMATION_UI_OPENCALLBACKS failed')
 
         # ========================================================
         # Maya 2017 we switch from dockControl to workspaceControl
@@ -724,10 +726,8 @@ class AnimationUI(object):
             if cmds.workspaceControl(animUI.workspaceCnt, q=True, exists=True):
                 cmds.workspaceControl(animUI.workspaceCnt, e=True, close=True)
 
-
             # if the workspace exists just show it, else bind the ui to it
             if not cmds.workspaceControl(animUI.workspaceCnt, q=True, exists=True):
-                # note here, workspace wiodth controls are a joke uptill 2018, and even then, the width isn't reliable
                 element = mel.eval('getUIComponentDockControl("Channel Box / Layer Editor", false);')  # get the channelBox element control
                 windowcall = 'import Red9.core.Red9_AnimationUtils as r9Anim;animUI=r9Anim.AnimationUI();animUI._showUI();'
                 cmds.workspaceControl(animUI.workspaceCnt, label="Red9_Animation",
@@ -740,7 +740,7 @@ class AnimationUI(object):
                                       retain=False,
                                       loadImmediately=False)
             else:
-                print 'Workspace Red9 already exists, calling open'
+                log.debug('Workspace Red9 already exists, calling open')
             cmds.workspaceControl(animUI.workspaceCnt, e=True, vis=True)
             cmds.workspaceControl(animUI.workspaceCnt, e=True, r=True, rs=True)  # raise it
             if not animUI.dock:
@@ -749,6 +749,21 @@ class AnimationUI(object):
             animUI._showUI()
             animUI.ANIM_UI_OPTVARS['AnimationUI']['ui_docked'] = animUI.dock
             animUI.__uiCache_storeUIElements()
+
+        # load the anim ui callbacks after the load sequence seeing as we can't
+        # pass in the animUI class directly to the workspace control
+
+        # RED_ANIMATION_UI is a global so we can pick the animUI class backup after the workspace call!!
+        if RED_ANIMATION_UI_OPENCALLBACKS:
+            for func in RED_ANIMATION_UI_OPENCALLBACKS:
+                if callable(func):
+                    try:
+                        print 'calling RED_ANIMATION_UI_OPENCALLBACKS'
+                        log.debug('calling RED_ANIMATION_UI_OPENCALLBACKS')
+                        func(RED_ANIMATION_UI)
+                    except:
+                        log.warning('RED_ANIMATION_UI_OPENCALLBACKS failed')
+            RED_ANIMATION_UI.__uiCache_loadUIElements()
 
         animUI.uiBoot = False
 
@@ -853,7 +868,20 @@ class AnimationUI(object):
         self.uircbPoseRotMethod = 'relativeRotate'
         self.uircbPoseTranMethod = 'relativeTranslate'
 
-
+    def close(self):
+        if r9Setup.mayaVersion() >= 2017:
+            if cmds.workspaceControl(self.workspaceCnt, q=True, exists=True):
+                cmds.workspaceControl(self.workspaceCnt, e=True, close=True)
+        else:
+            # 2017 introduces workspaces and we use those instead of dockControls
+            try:
+                # Maya2011 dockControl introduced
+                if cmds.dockControl(self.dockCnt, exists=True):
+                    cmds.deleteUI(self.dockCnt, control=True)
+            except:
+                self.dock = False
+        if cmds.window(self.win, exists=True):
+            cmds.deleteUI(self.win, window=True)
 
     def _showUI(self, *args):
         '''
@@ -864,15 +892,6 @@ class AnimationUI(object):
         RED_ANIMATION_UI = self
 
         if not r9Setup.mayaVersion() >= 2017:
-            # 2017 introduces workspaces and we're going to use those instead of dockControls
-            try:
-                # Maya2011 dockControl introduced
-                if cmds.dockControl(self.dockCnt, exists=True):
-                    cmds.deleteUI(self.dockCnt, control=True)
-            except:
-                self.dock = False
-            if cmds.window(self.win, exists=True):
-                cmds.deleteUI(self.win, window=True)
             animwindow = cmds.window(self.win, title=self.label)
 
         cmds.menuBarLayout()
@@ -899,7 +918,7 @@ class AnimationUI(object):
         cmds.menuItem(l=LANGUAGE_MAP._Generic_.reset,
                       c=self.__uiCache_resetDefaults)
 
-        self.MainLayout = cmds.scrollLayout('red9MainScroller', rc=self.__uiCB_resizeMainScroller)
+        self.MainLayout = cmds.scrollLayout('red9MainScroller', rc=self.__uiCB_resizeMainScroller, cr=True)
         self.form = cmds.formLayout(self.uiformMain, nd=100, parent=self.MainLayout)
         self.tabs = cmds.tabLayout(self.uitabMain, innerMarginWidth=5, innerMarginHeight=5)
 
@@ -1283,7 +1302,7 @@ class AnimationUI(object):
                                             text="",
                                             bl=LANGUAGE_MAP._AnimationUI_.pose_path,
                                             bc=lambda *x: self.__uiCB_setPosePath(fileDialog=True),
-                                            cc=lambda *x: self.__uiCB_setPosePath(fileDialog=False),
+                                            cc=lambda *x: self.__uiCB_setPosePath(path=None, fileDialog=False),
                                             cw=[(1, 260), (2, 40)])
 
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 120), (2, 120)], columnSpacing=[(1, 10)])
@@ -1593,37 +1612,16 @@ class AnimationUI(object):
             height = newSize[1]
         else:
             try:  # 2017 and up
-                width = cmds.workspaceControl(self.workspaceCnt, q=True, width=True)
+#                width = cmds.workspaceControl(self.workspaceCnt, q=True, width=True)
                 height = cmds.workspaceControl(self.workspaceCnt, q=True, height=True)
             except: # 2016 undocked docked controls don't give back size data correctly
-                width = cmds.scrollLayout(self.MainLayout, q=True, width=True)
+#                width = cmds.scrollLayout(self.MainLayout, q=True, width=True)
                 height = cmds.scrollLayout(self.MainLayout, q=True, height=True)
 
-        # standard resolution 1980 * 1080 
-        if not r9Setup.maya_screen_mapping()[0]:
-            if width>base_width:
-                cmds.formLayout(self.form, edit=True, w=max(width, base_width) - 10)
-            else:
-                cmds.scrollLayout(self.MainLayout, e=True, w=base_width)
-            if height > base_height:
-                cmds.scrollLayout(self.uiglPoseScroll, e=True, h=max(height - 430, 200))      
-
-        # 4k resolution
-        else:       
-            mapped = r9Core._ui_scaling_factors(width=width)
-            if width>base_width:
-                cmds.formLayout(self.form, edit=True, w=max(mapped, base_width) - 10)    
-            else:
-                cmds.scrollLayout(self.MainLayout, e=True, w=base_width)
-            if height > base_height:
-                mapped = r9Core._ui_scaling_factors(height=height) - 250
-                cmds.scrollLayout(self.uiglPoseScroll, e=True, h=max(mapped, 200))
-                
-        #print  '\nworkspace : ', cmds.workspaceControl(self.workspaceCnt, q=True, width=True)
-        #print '\ndock : ', cmds.dockControl(self.dockCnt, q=True, w=True)
-#         print  'main : ', cmds.scrollLayout(self.MainLayout, q=True, width=True)
-#         print 'form : ', cmds.formLayout(self.form, q=True, w=True)
-#         print 'pose scroller : ', cmds.scrollLayout(self.uiglPoseScroll, q=True, width=True)
+        if height > base_height:
+            mapped = (height / r9Setup.maya_dpi_scaling_factor()) - 430
+            cmds.scrollLayout(self.uiglPoseScroll, e=True, h=max(mapped, 200))
+        return
 
     def __uiCB_setCopyKeyPasteMethod(self, *args):
         self.ANIM_UI_OPTVARS['AnimationUI']['keyPasteMethod'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
@@ -1701,15 +1699,27 @@ class AnimationUI(object):
         path = os.path.normpath(self.presetDir)
         subprocess.Popen('explorer "%s"' % path)
 
-    def __uiPresetSelection(self, Read=True):
+    def __uiPresetSelection(self, Read=True, store_change=True):
         '''
         Fill the UI from on config preset file selected in the UI
+        
+        :param Read: pull the settings back from the presets
+        :param store_change: save the changed state of the preset back to the settings config
+        
+        note that the ONLY way to now add the "filerNode_preset" into the ANIM_UI_OPTVARS is to
+        manually interact with the presets in the UI, store_change=True by default which injects the key
         '''
         if Read:
             preset = cmds.textScrollList(self.uitslPresets, q=True, si=True)[0]
             self.filterSettings.read(os.path.join(self.presetDir, preset))
             # fill the cache up for the ini file
-            self.ANIM_UI_OPTVARS['AnimationUI']['filterNode_preset'] = preset
+            try:
+                # we only store the change from the UI, this allows the basePreset to
+                #be loaded but NOT stored
+                if store_change:
+                    self.ANIM_UI_OPTVARS['AnimationUI']['filterNode_preset'] = preset
+            except:
+                pass
             log.info('preset loaded : %s' % preset)
 
         # JUST reset the UI elements
@@ -1941,7 +1951,7 @@ class AnimationUI(object):
             return
         self.__uiCB_fillPoses(rebuildFileList=True)
 
-    def __uiCB_setPosePath(self, path=None, fileDialog=False):
+    def __uiCB_setPosePath(self, path=None, fileDialog=False, *args):
         '''
         Manage the PosePath textfield and build the PosePath
         '''
@@ -1954,7 +1964,6 @@ class AnimationUI(object):
                                                 text=True))[0]
                 else:
                     print 'Sorry Maya2009 and Maya2010 support is being dropped'
-
                     def setPosePath(fileName, fileType):
                         self.posePath = fileName
                     cmds.fileBrowserDialog(m=4, fc=setPosePath, ft='image', an='setPoseFolder', om='Import')
@@ -1962,7 +1971,14 @@ class AnimationUI(object):
                 log.warning('No Folder Selected or Given')
         else:
             if not path:
-                self.posePath = cmds.textFieldButtonGrp(self.uitfgPosePath, q=True, text=True)
+                path=cmds.textFieldButtonGrp(self.uitfgPosePath, q=True, text=True)
+                if os.path.exists(path):
+                    self.posePath = path
+                else:
+                    # bug catch 05/11/19 - if we don't validate the path we end up crashing Maya
+                    # further into the pose fill code
+                    log.warning('Given Pose Path not found!')
+                    return
             else:
                 self.posePath = path
 
@@ -2625,17 +2641,22 @@ class AnimationUI(object):
             AnimationUI = self.ANIM_UI_OPTVARS['AnimationUI']
 
             if self.basePreset:
-                try:
-                    cmds.textScrollList(self.uitslPresets, e=True, si=self.basePreset)
-                    self.__uiPresetSelection(Read=True)
-                except:
-                    log.debug('given basePreset not found')
+                # we have a basePreset but we don't yet have the "fileNode_preset" key in our
+                # config as there's been no manual interaction with the presets ui. hence (store_change=False)
+                if not 'filterNode_preset' in AnimationUI or not AnimationUI['filterNode_preset']:
+                    try:
+                        cmds.textScrollList(self.uitslPresets, e=True, si=self.basePreset)
+                        self.__uiPresetSelection(Read=True, store_change=False)
+                    except:
+                        log.debug('given basePreset not found')
+            # we already have the filerNode_preset in the config so we can write it (store_change=True)
             if 'filterNode_preset' in AnimationUI and AnimationUI['filterNode_preset']:
                 try:
                     cmds.textScrollList(self.uitslPresets, e=True, si=AnimationUI['filterNode_preset'])
-                    self.__uiPresetSelection(Read=True)  # ##not sure on this yet????
+                    self.__uiPresetSelection(Read=True, store_change=True)  # ##not sure on this yet????
                 except:
                     log.warning('Failed to load cached preset : %s' % AnimationUI['filterNode_preset'])
+
             if 'keyPasteMethod' in AnimationUI and AnimationUI['keyPasteMethod']:
                 cmds.optionMenu('om_PasteMethod', e=True, v=AnimationUI['keyPasteMethod'])
             if 'matchMethod' in AnimationUI and AnimationUI['matchMethod']:
@@ -2701,8 +2722,22 @@ class AnimationUI(object):
     def __uiCache_resetDefaults(self, *args):
         log.debug('Red9 AnimUI : reset from "__red9animreset__" called')
         defaultConfig = os.path.join(self.presetDir, '__red9animreset__')
+        # delete the current config file
+        if os.path.exists(self.ui_optVarConfig):
+            os.remove(self.ui_optVarConfig)
+        # load the reset config from presets
         if os.path.exists(defaultConfig):
+            __constants = dict(self.ANIM_UI_OPTVARS['AnimationUI'])
             self.ANIM_UI_OPTVARS['AnimationUI'] = configobj.ConfigObj(defaultConfig)['AnimationUI']
+
+            # inject the path data back rather than just blank them off??
+#             if 'posePathMode' in __constants and __constants['posePathMode']:
+#                 self.ANIM_UI_OPTVARS['posePathMode'] = __constants['posePathMode']
+            if 'posePathLocal' in __constants and __constants['posePathLocal']:
+                self.ANIM_UI_OPTVARS['posePathLocal'] = __constants['posePathLocal']
+            if 'posePathProject' in __constants and __constants['posePathProject']:
+                self.ANIM_UI_OPTVARS['posePathProject']  = __constants['posePathProject']
+
             self.__uiCache_loadUIElements()
 
 
@@ -4022,7 +4057,7 @@ class RandomizeKeys(object):
 
             if cmds.window(self.win, exists=True):
                 cmds.deleteUI(self.win, window=True)
-            cmds.window(self.win, title=LANGUAGE_MAP._Randomizer_.title, s=True, widthHeight=(320, 280))
+            cmds.window(self.win, title=LANGUAGE_MAP._Randomizer_.title)  # , s=True, widthHeight=(320, 280))
             cmds.menuBarLayout()
             cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
             cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help,
@@ -4085,13 +4120,14 @@ class RandomizeKeys(object):
             cmds.separator(h=15, style='none')
             cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                                  c=r9Setup.red9ContactInfo, h=22, w=200)
+            cmds.separator(h=15, style='none')
             cmds.showWindow(self.win)
             cmds.window('KeyRandomizerOptions', e=True, widthHeight=(320, 280))
             self.__uicb_interactiveMode(False)
             self.__loadPrefsToUI()
 
             # set close event to restore stabndard GraphEditor curve status
-            cmds.scriptJob(runOnce=True, uiDeleted=[self.win, lambda *x:animCurveDrawStyle(style='full', forceBuffer=False,
+            cmds.scriptJob(runOnce=True, uiDeleted=[self.win, lambda *x: animCurveDrawStyle(style='full', forceBuffer=False,
                                                                                       showBufferCurves=self.showBufferCurves,
                                                                                       displayTangents=self.displayTangents,
                                                                                       displayActiveKeyTangents=self.displayActiveKeyTangents)])
@@ -4290,9 +4326,12 @@ class FilterCurves(object):
     def show(cls):
         cls()._showUI()
 
-    def _showUI(self):
+    def close(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
+
+    def _showUI(self):
+        self.close()
         cmds.window(self.win, title=self.win)
         cmds.menuBarLayout()
         cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
@@ -4378,6 +4417,7 @@ class FilterCurves(object):
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                                  c=r9Setup.red9ContactInfo,
                                  h=22, w=220)
+        cmds.separator(h=20, style="none")
         cmds.showWindow(self.win)
         cmds.window(self.win, e=True, widthHeight=(410, 300))
 
@@ -4506,7 +4546,6 @@ class MirrorHierarchy(object):
     >>> for src, dest in zip(srcNodes, destNodes):
     >>>     mirror.copyMirrorIDs(src,dest)
 
-    TODO: We need to do a UI for managing these marker attrs and the Index lists
     TODO: allow the mirror block to include an offset so that if you need to inverse AND offset 
         by 180 to get left and right working you can still do so.
     '''
@@ -5055,20 +5094,23 @@ class MirrorSetup(object):
     def show(cls):
         cls()._showUI()
 
-    def _showUI(self):
-
-        space = 10
-        size = (285, 490)
+    def close(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        window = cmds.window(self.win, title=LANGUAGE_MAP._Mirror_Setup_.title, s=False, widthHeight=size)
+
+    def _showUI(self):
+        self.close()
+
+        space = 10
+        size = (275, 490)
+        window = cmds.window(self.win, title=LANGUAGE_MAP._Mirror_Setup_.title, s=True)  # , widthHeight=size)
         cmds.menuBarLayout()
         cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
         cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help,
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/57882801')")
         cmds.menuItem(divider=True)
         cmds.menuItem(l=LANGUAGE_MAP._Generic_.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
-        cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
+        cmds.columnLayout(adjustableColumn=False, columnAttach=('both', 5), cw=size[0])
 
         # mirror side
         cmds.separator(h=20, style='none')
@@ -5154,10 +5196,11 @@ class MirrorSetup(object):
         cmds.setParent('..')
         cmds.separator(h=15, style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                             c=r9Setup.red9ContactInfo, h=22, w=200)
+                             c=r9Setup.red9ContactInfo, h=22, w=180)
+        cmds.separator(h=15, style='none')
         cmds.showWindow(window)
         self.__uicb_setDefaults('default')
-        cmds.window(self.win, e=True, widthHeight=size)
+        #cmds.window(self.win, e=True, widthHeight=size)
         cmds.radioCollection('mirrorSide', e=True, select='Centre')
         self.__uicb_setupIndex()
 
@@ -5393,8 +5436,7 @@ class CameraTracker():
         :param keepOffset: keep the current camera offset rather than doing a full viewFit
         :param cam: if given use this camera else we use the current modelEditors camera
 
-        TODO::
-            add option for cloning the camera rather than using the current directly
+        TODO: add option for cloning the camera rather than using the current directly
         '''
         if not cmds.ls(sl=True):
             raise StandardError('Nothing selected to Track!')
@@ -5450,9 +5492,12 @@ class CameraTracker():
     def show(cls):
         cls()._showUI()
 
-    def _showUI(self):
+    def close(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
+
+    def _showUI(self):
+        self.close()
         cmds.window(self.win, title=LANGUAGE_MAP._CameraTracker_.title, widthHeight=(263, 180))
         cmds.menuBarLayout()
         cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
@@ -5480,6 +5525,7 @@ class CameraTracker():
         cmds.separator(h=15, style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                              c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.separator(h=15, style='none')
         cmds.showWindow(self.win)
         cmds.window(self.win, e=True, widthHeight=(263, 180))
         self.__loadPrefsToUI()
@@ -5514,9 +5560,12 @@ class ReconnectAnimData(object):
     def show(cls):
         cls()._showUI()
 
-    def _showUI(self):
+    def close(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
+ 
+    def _showUI(self):
+        self.close()
         cmds.window(self.win, title=self.win, widthHeight=(300, 220))
 
         cmds.menuBarLayout()

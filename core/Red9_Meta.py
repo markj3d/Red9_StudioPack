@@ -671,7 +671,7 @@ def attributeDataType(val):
         return 'complex'
 
 # @pymelHandler
-@r9General.Timer
+# @r9General.Timer
 def isMetaNode(node, mTypes=[], checkInstance=True, returnMClass=False):
     '''
     Simple bool, Maya Node is or isn't an mNode
@@ -806,7 +806,7 @@ def isMetaNodeClassGrp(node, mClassGrps=[]):
             log.debug('mNode has no MClassGrp attr, must be a legacy system and needs updating!! %s' % node)
 
 @r9General.Timer
-def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType='mClass', nTypes=None, mSystemRoot=False, **kws):
+def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType='mClass', nTypes=None, mSystemRoot=False, byname=[], **kws):
     '''
     Get all mClass nodes in scene and return as mClass objects if possible
     :param mTypes: only return meta nodes of a given type
@@ -819,12 +819,19 @@ def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType=
     :param dataType: default='mClass' return the nodes already instantiated to
                 the correct class object. If not then return the Maya node itself
     :param nTypes: only inspect nodes of a given Type
+    :param byname: [] a specific list of node names to search for
     '''
     mNodes = []
     if not nTypes:
-        nodes = cmds.ls(type=getMClassNodeTypes(), l=True)
+        if byname:
+            nodes = cmds.ls(byname, type=getMClassNodeTypes(), l=True)
+        else:
+            nodes = cmds.ls(type=getMClassNodeTypes(), l=True)
     else:
-        nodes = cmds.ls(type=nTypes, l=True)
+        if byname:
+            nodes = cmds.ls(byname, type=nTypes, l=True)
+        else:
+            nodes = cmds.ls(type=nTypes, l=True)
     if not nodes:
         return mNodes
     for node in nodes:
@@ -941,7 +948,7 @@ def getConnectedMetaNodes(nodes, source=True, destination=True, mTypes=[], mInst
     # if mTypes and not type(mTypes)==list:mTypes=[mTypes]
     for nType in nTypes:
     # for nType in getMClassNodeTypes():
-        cons = cmds.listConnections(nodes, type=nType, s=source, d=destination, c=True, shapes=True)  # modified 07/02/19 for imageplane support
+        cons = cmds.listConnections(nodes, type=nType, s=source, d=destination, c=True, shapes=True)  # modified 07/02/19 shapes flag for imageplane support
         if cons:
             # NOTE we're only interested in connected nodes via message linked attrs
             for plug, node in zip(cons[::2], cons[1::2]):
@@ -1182,9 +1189,12 @@ class MClassNodeUI(object):
     def show(cls):
         cls()._showUI()
 
-    def _showUI(self):
+    def close(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
+
+    def _showUI(self):
+        self.close()
         window = cmds.window(self.win, title=self.win)
         cmds.menuBarLayout()
         cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
@@ -1230,7 +1240,7 @@ class MClassNodeUI(object):
         cmds.menuItem(l=LANGUAGE_MAP._MetaNodeUI_.update_to_uuids,
                       ann=LANGUAGE_MAP._MetaNodeUI_.update_to_uuids_ann,
                       c=upgrade_toLatestBindings)
-        cmds.scrollLayout('slMetaNodeScroll', rc=lambda *args: self.__uicb_fitTextScroll())
+        cmds.scrollLayout('slMetaNodeScroll', rc=lambda *args: self.__uicb_fitTextScroll(), cr=True)
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=5, style='none')
 
@@ -1340,18 +1350,14 @@ class MClassNodeUI(object):
         '''
         bodge to resize the textScroll
         '''
-        if not r9Setup.maya_screen_mapping()[0]:
-            cmds.textScrollList('slMetaNodeList', e=True, h=int(cmds.scrollLayout('slMetaNodeScroll', q=True, h=True)) - 170)
-            cmds.textScrollList('slMetaNodeList', e=True, w=int(cmds.scrollLayout('slMetaNodeScroll', q=True, w=True)) - 10)
-        else:
-            # using the same dynamic remapping values to recalculate width and height for 4k
-            height = cmds.scrollLayout('slMetaNodeScroll', q=True, h=True)
-            mapped = r9Core._ui_scaling_factors(height=height) 
-            cmds.textScrollList('slMetaNodeList', e=True, h=mapped)
-            
-            width = cmds.scrollLayout('slMetaNodeScroll', q=True, w=True)
-            mapped = r9Core._ui_scaling_factors(width=width) - 10
-            cmds.textScrollList('slMetaNodeList', e=True, w=mapped)      
+#         if not r9Setup.maya_screen_mapping()[0]:
+        cmds.textScrollList('slMetaNodeList', e=True,
+                                h=int((cmds.scrollLayout('slMetaNodeScroll', q=True, h=True) / r9Setup.maya_dpi_scaling_factor()) - 170))
+#         else:
+#             # using the same dynamic remapping values to recalculate width and height for 4k
+#             height = cmds.scrollLayout('slMetaNodeScroll', q=True, h=True)
+#             mapped = r9Core.ui_dpi_scaling_factors(height=height) - 170
+#             cmds.textScrollList('slMetaNodeList', e=True, h=mapped)
 
     def graphNetwork(self, *args):
         if r9Setup.mayaVersion() < 2013:
@@ -1823,6 +1829,7 @@ class MetaClass(object):
     def isValidMObject(self):
         '''
         validate the MObject, without this Maya will crash if the pointer is no longer valid
+
         TODO: thinking of storing the dagPath when we fill in the mNode to start with and
         if this test fails, ie the scene has been reloaded, then use the dagPath to refine
         and refill the mNode property back in.... maybe??
@@ -1999,7 +2006,7 @@ class MetaClass(object):
         else:
             return False
 
-    @r9General.Timer
+#     @r9General.Timer
     def __fillAttrCache__(self, level):
         '''
         go through all the attributes on the given node and cast each one of them into
@@ -3107,16 +3114,21 @@ class MetaClass(object):
             return mChild
 
     @r9General.Timer
-    def getChildMetaNodes(self, walk=False, mAttrs=None, stepover=False, **kws):
+    def getChildMetaNodes(self, walk=False, mAttrs=None, stepover=False, currentSystem=False, **kws):
         '''
         Find any connected Child MetaNodes to this mNode.
 
-        :param walk: walk the connected network and return ALL children conntected in the tree
+        :param walk: walk the connected network and return ALL children connected in the tree
         :param mAttrs: only return connected nodes that pass the given attribute filter
         :param stepover: if you're passing in 'mTypes' or 'mInstances' flags then this dictates if
             we continue to walk down a tree if it's parent didn't match the given type, default is False
             which will abort a tree who's parent didn't match. With stepover=True we simply stepover
             that node and continue down all child nodes
+        :param currentSystem: if True we check for the mSystemRoot attr (bool) on mNodes and if set, we skip 
+            the node and all childnodes from that node. Why?? The mSystsmRoot attr is a marker to denote the
+            root of a given mRig system, by respecting this we clamp searches to the current system and prevent
+            walking into the connected child sub-system. Primarily used in ProPack to stop facial nodes being
+            returned and processed as part of the connected body rig.
 
         .. note::
             mAttrs is only searching attrs on the mNodes themselves, not all children
@@ -3129,7 +3141,14 @@ class MetaClass(object):
             mTypes=[], mInstances=[], mAttrs=None, dataType='mClass', skipTypes=[], skipInstances=[]
         '''
         if not walk:
-            return getConnectedMetaNodes(self.mNode, source=False, destination=True, mAttrs=mAttrs, dataType='mClass', **kws)
+            children = getConnectedMetaNodes(self.mNode, source=False, destination=True, mAttrs=mAttrs, dataType='mClass', **kws)
+            if currentSystem:
+                for child in children:
+                    if child.hasAttr('mSystemRoot') and child.mSystemRoot:
+                        print 'skipping new Systems - preventing walking into child mRig systems : %s' % child
+                        children.remove(child)
+            return children
+                            
         else:
             metaNodes = []
             if not any(['mTypes' in kws, 'mInstances' in kws, mAttrs]):
@@ -3140,6 +3159,7 @@ class MetaClass(object):
                 children = getConnectedMetaNodes(self.mNode, source=False, destination=True, dataType='unicode')  # , **kws)
             else:
                 children = getConnectedMetaNodes(self.mNode, source=False, destination=True, mAttrs=mAttrs, dataType='unicode', **kws)
+
             if children:
                 runaways = 0
                 depth = 0
@@ -3147,6 +3167,11 @@ class MetaClass(object):
                 extendedChildren = []
                 while children and runaways <= 1000:
                     for child in children:
+                        if currentSystem:
+                            if cmds.objExists('%s.mSystemRoot' % child) and cmds.getAttr('%s.mSystemRoot' % child):
+                                log.debug('skipping new System - preventing walking into child mRig systems : %s' % child)
+                                children.remove(child)
+                                continue
                         mNode = child
                         if mNode not in processed:
                             metaNodes.append(child)
@@ -3174,7 +3199,7 @@ class MetaClass(object):
                         runaways += 1
 
                 # at this point we're still dealing with unicode nodes
-                childmNodes = [MetaClass(node) for node in metaNodes]
+                childmNodes = [MetaClass(node) for node in metaNodes if not node == self.mNode]
 
                 typematched = []
                 if stepover:
@@ -3196,6 +3221,14 @@ class MetaClass(object):
                     return childmNodes
         return []
 
+    def getChildSystemRoots(self):
+        '''
+        return all child MetaNodes that have the mSystemRoot checkbox set. This is used to denote a child
+        MSystem in it's own right. Usually used in ProPack to denote a new child MetaRig, ie, facial system
+        connected as a child of a mRig body system
+        '''
+        return self.getChildMetaNodes(walk=True, mAttrs=['mSystemRoot=True'])
+
     def getParentMetaNode(self, **kws):
         '''
         Find any connected Parent MetaNode to this mNode
@@ -3210,7 +3243,7 @@ class MetaClass(object):
         mNodes = getConnectedMetaNodes(self.mNode, source=True, destination=False, **kws)
         if mNodes:
             return mNodes[0]
-
+        
     @r9General.Timer
     def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False, plugsOnly=False, **kws):
         '''
@@ -5034,8 +5067,11 @@ class MetaHIKPropertiesNode(MetaClass):
         defaults = r9General.readJson(self._resetfile)
         current = self.get_mapping()
         for key, val in current.items():
-            if not val == defaults[key]:
-                changes[key] = [defaults[key], val]
+            try:
+                if not val == defaults[key]:
+                    changes[key] = [defaults[key], val]
+            except:
+                log.info('failed to compare key : %s' % key)
         return changes
 
     def reset_defaults(self):

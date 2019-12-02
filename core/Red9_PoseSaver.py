@@ -1175,7 +1175,7 @@ class PoseData(DataMap):
     # Main Calls ----------------------------------------
 
     # @r9General.Timer
-    def poseSave(self, nodes, filepath=None, useFilter=True, storeThumbnail=True):
+    def poseSave(self, nodes, filepath=None, useFilter=True, storeThumbnail=True, modelPanel=None):  # 'modelPanel4'):
         '''
         Entry point for the generic PoseSave.
 
@@ -1184,7 +1184,7 @@ class PoseData(DataMap):
         :param filepath: posefile to save - if not given the pose is cached on this 
             class instance.
         :param useFilter: use the filterSettings or not.
-        :param storeThumbnail: generate and store a thu8mbnail from the screen to go alongside the pose
+        :param storeThumbnail: generate and store a thubmbnail from the screen to go alongside the pose
         '''
         # push args to object - means that any poseHandler.py file has access to them
         if filepath:
@@ -1202,7 +1202,7 @@ class PoseData(DataMap):
             if storeThumbnail:
                 sel = cmds.ls(sl=True, l=True)
                 cmds.select(cl=True)
-                r9General.thumbNailScreen(self.filepath, self.thumbnailRes[0], self.thumbnailRes[1])
+                r9General.thumbNailScreen(self.filepath, self.thumbnailRes[0], self.thumbnailRes[1], modelPanel=modelPanel)
                 if sel:
                     cmds.select(sel)
         log.info('Pose Saved Successfully to : %s' % self.filepath)
@@ -1227,6 +1227,10 @@ class PoseData(DataMap):
             the stored pose and the current rig settings, current spaces are maintained.
             This only checks those nodes in the snapList and only runs under relative mode.
         :param percent: percentage of the pose to apply, used by the poseBlender in the UIs
+        
+        .. note::
+            Relative mode currently relies on the controller / reference node thats passed in to be Y-up in it's native state,
+            thats to say the Y axis pointing upwards. We'll be patching this moving forwards
         '''
 
         objs = cmds.ls(sl=True, l=True)
@@ -1650,7 +1654,7 @@ class PosePointCloud(object):
         self.getInputNodes()
 
         if self.mayaUpAxis == 'y':
-            cmds.setAttr('%s.rotateOrder' % self.posePointRoot, 2)
+            cmds.setAttr('%s.rotateOrder' % self.posePointRoot, 2)  # to prevent as much gimal as possible
         if self.rootReference:  # and not mesh:
             r9Anim.AnimFunctions.snap([self.rootReference, self.posePointRoot])
 
@@ -1685,7 +1689,6 @@ class PosePointCloud(object):
     def shapeSwapMeshes(self, selectable=True):
         '''
         Swap the mesh Geo so it's a shape under the PPC transform root
-        TODO: Make sure that the duplicate message link bug is covered!!
         '''
         currentCount = len(cmds.listRelatives(self.posePointRoot, type='shape'))
         for i, mesh in enumerate(self.meshes):

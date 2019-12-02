@@ -1054,13 +1054,17 @@ class AudioToolsWrap(object):
     def show(cls):
         cls()._showUI()
 
-    def _showUI(self):
+    def close(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        cmds.window(self.win, title=self.win, widthHeight=(400, 220))
+ 
+    def _showUI(self):
+        self.close()
+
+        cmds.window(self.win, title=self.win)  # , widthHeight=(400, 220))
         cmds.columnLayout('uicl_audioMain', adjustableColumn=True)
         cmds.separator(h=15, style='none')
-        cmds.text(l='Select Audio to Offset')
+        cmds.text(l='Select Audio Node to Offset')
         cmds.separator(h=15, style='in')
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 90), (3, 100)])
         cmds.button(label='<< Offset',
@@ -1085,8 +1089,9 @@ class AudioToolsWrap(object):
         cmds.separator(h=15, style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                              c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.separator(h=15, style='none')
         cmds.showWindow(self.win)
-        cmds.window(self.win, e=True, widthHeight=(290, 190))
+        #cmds.window(self.win, e=True, widthHeight=(290, 190))
 
     def __uicb_cacheAudioNodes(self, *args):
         self.audioHandler = AudioHandler()

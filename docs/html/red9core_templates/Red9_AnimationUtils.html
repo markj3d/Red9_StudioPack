@@ -119,11 +119,17 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getChannelBoxAttrs" title="Red9.core.Red9_AnimationUtils.getChannelBoxAttrs"><code class="xref py py-obj docutils literal"><span class="pre">getChannelBoxAttrs</span></code></a>([node,&nbsp;asDict,&nbsp;incLocked])</td>
 <td>return the status of all attrs on the given node, either as a flat list or</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getSettableChannels" title="Red9.core.Red9_AnimationUtils.getSettableChannels"><code class="xref py py-obj docutils literal"><span class="pre">getSettableChannels</span></code></a>([node,&nbsp;incStatics])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getNodeAttrStatus" title="Red9.core.Red9_AnimationUtils.getNodeAttrStatus"><code class="xref py py-obj docutils literal"><span class="pre">getNodeAttrStatus</span></code></a>([node,&nbsp;asDict,&nbsp;incLocked])</td>
+<td>stub function/ wrapper of getChannelBoxAttrs as the name is a</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getSettableChannels" title="Red9.core.Red9_AnimationUtils.getSettableChannels"><code class="xref py py-obj docutils literal"><span class="pre">getSettableChannels</span></code></a>([node,&nbsp;incStatics])</td>
 <td>return a list of settable attributes on a given node.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes" title="Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes"><code class="xref py py-obj docutils literal"><span class="pre">getAnimLayersFromGivenNodes</span></code></a>(nodes)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes" title="Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes"><code class="xref py py-obj docutils literal"><span class="pre">getAnimLayersFromGivenNodes</span></code></a>(nodes)</td>
 <td>return all animLayers associated with the given nodes</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.nodesDriven" title="Red9.core.Red9_AnimationUtils.nodesDriven"><code class="xref py py-obj docutils literal"><span class="pre">nodesDriven</span></code></a>(nodes[,&nbsp;allowReferenced,&nbsp;skipLocked])</td>
+<td>return a list of those nodes that are actively constrained or connected to a pairBlend</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.timeLineRangeGet" title="Red9.core.Red9_AnimationUtils.timeLineRangeGet"><code class="xref py py-obj docutils literal"><span class="pre">timeLineRangeGet</span></code></a>([always])</td>
 <td>Return the current PlaybackTimeline OR if a range is selected in the TimeLine, (Highlighted in Red) return that instead.</td>
@@ -131,10 +137,13 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.timeLineRangeProcess" title="Red9.core.Red9_AnimationUtils.timeLineRangeProcess"><code class="xref py py-obj docutils literal"><span class="pre">timeLineRangeProcess</span></code></a>(start,&nbsp;end[,&nbsp;step,&nbsp;...])</td>
 <td>Simple wrapper function to take a given framerange and return a list[] containing the actual keys required for processing.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.mergeAnimLayers" title="Red9.core.Red9_AnimationUtils.mergeAnimLayers"><code class="xref py py-obj docutils literal"><span class="pre">mergeAnimLayers</span></code></a>(nodes[,&nbsp;deleteBaked])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.animRangeFromNodes" title="Red9.core.Red9_AnimationUtils.animRangeFromNodes"><code class="xref py py-obj docutils literal"><span class="pre">animRangeFromNodes</span></code></a>(nodes[,&nbsp;setTimeline])</td>
+<td>return the extent of the animation range for the given objects</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.mergeAnimLayers" title="Red9.core.Red9_AnimationUtils.mergeAnimLayers"><code class="xref py py-obj docutils literal"><span class="pre">mergeAnimLayers</span></code></a>(nodes[,&nbsp;deleteBaked])</td>
 <td>from the given nodes find, merge and remove any animLayers found</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.eulerSelected" title="Red9.core.Red9_AnimationUtils.eulerSelected"><code class="xref py py-obj docutils literal"><span class="pre">eulerSelected</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.eulerSelected" title="Red9.core.Red9_AnimationUtils.eulerSelected"><code class="xref py py-obj docutils literal"><span class="pre">eulerSelected</span></code></a>()</td>
 <td>cheap trick! for selected objects run a Euler Filter and then delete Static curves</td>
 </tr>
 </tbody>
@@ -179,7 +188,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 
 <dl class="data">
 <dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS">
-<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000AE254A8&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000AE254A8&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000AE254A8&gt;&gt;, &lt;bound method cigProject.set_animtoolkit_UI of &lt;Red9_ClientCore.CloudImp.core.project.cigProject object at 0x00000000128DE438&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C255358&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C255358&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C255358&gt;&gt;, &lt;bound method cigProject.set_animtoolkit_UI of &lt;Red9_ClientCore.CloudImp.core.project.cigProject object at 0x000000001313EBA8&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.</p>

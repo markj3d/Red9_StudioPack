@@ -45,6 +45,10 @@ class SceneReviewerUI(object):
             raise StandardError('This tool is not supported in versions of Maya running Python2.5')
         cls()._showUI()
 
+    def close(self):
+        if cmds.window(self.win, exists=True):
+            cmds.deleteUI(self.win, window=True)
+
     def _showUI(self):
 
         reportData = self.SceneReviewer.getReportData()
@@ -72,10 +76,10 @@ class SceneReviewerUI(object):
         if not sceneName:
             sceneName = self.getSceneName()
 
-        if cmds.window(self.win, exists=True):
-            cmds.deleteUI(self.win, window=True)
+        self.close()
         window = cmds.window(self.win, title=self.win, s=True, widthHeight=(450, 700))
-        cmds.scrollLayout('reviewScrollLayout', rc=lambda *args:self._resizeTextScrollers())
+        
+        cmds.scrollLayout('reviewScrollLayout', rc=lambda *args:self._resizeTextScrollers(), cr=True)
         cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
         cmds.textFieldGrp('author', l=LANGUAGE_MAP._SceneReviewerUI_.author, ed=False, text=author)
         cmds.textFieldGrp('date', l=LANGUAGE_MAP._SceneReviewerUI_.date, ed=False, text=date)
@@ -142,24 +146,11 @@ class SceneReviewerUI(object):
             cmds.button('setReviewInActive', e=True, bgc=r9Setup.red9ButtonBGC(2))
 
     def _resizeTextScrollers(self):
-        width = cmds.scrollLayout('reviewScrollLayout', q=True, w=True)
-        height = cmds.scrollLayout('reviewScrollLayout', q=True, h=True)
-        if not r9Setup.maya_screen_mapping()[0]:
-            width = width - 20
-            cmds.scrollField('comment', e=True, h=(height / 2) - 120)
-            cmds.scrollField('comment', e=True, w=width)
-            cmds.scrollField('history', e=True, h=(height / 2) - 120)
-            cmds.scrollField('history', e=True, w=width)
-        else:
-            # using the same dynamic remapping values to recalculate width and height for 4k
-            height = (r9Core._ui_scaling_factors(height=height) / 2) - 40
-            width = r9Core._ui_scaling_factors(width=width) - 15
-            cmds.scrollField('comment', e=True, h=height)
-            cmds.scrollField('comment', e=True, w=width)
-            cmds.scrollField('history', e=True, h=height)
-            cmds.scrollField('history', e=True, w=width)
-
-        cmds.rowColumnLayout('SceneNodeActivatorRC', e=True, columnWidth=[(1, (width / 2) - 1), (2, (width / 2) - 1)])
+        height = (cmds.scrollLayout('reviewScrollLayout', q=True, h=True) / r9Setup.maya_dpi_scaling_factor())
+        width = (cmds.scrollLayout('reviewScrollLayout', q=True, w=True) / r9Setup.maya_dpi_scaling_factor()) - 10  # column attach space = 5 on both
+        cmds.scrollField('comment', e=True, h=(height / 2) - 120)
+        cmds.scrollField('history', e=True, h=(height / 2) - 120)
+        cmds.rowColumnLayout('SceneNodeActivatorRC', e=True, columnWidth=[(1, (width / 2)-1), (2, (width / 2)-1)])
 
 
 class SceneReviewer(object):
@@ -253,6 +244,10 @@ class RecordAttrs(object):
     def show(cls):
         cls()._showUI()
 
+    def close(self):
+        if cmds.window('MouseMoCap', exists=True):
+            cmds.deleteUI('MouseMoCap', window=True)
+
     def addAttrsToRecord(self, attrs=None, *args):
         node = cmds.ls(sl=True, l=True)[0]
         if not attrs:
@@ -297,26 +292,27 @@ class RecordAttrs(object):
             self.recordStop()
 
     def _showUI(self):
-            if cmds.window('MouseMoCap', exists=True):
-                cmds.deleteUI('MouseMoCap', window=True)
-            cmds.window('MouseMoCap', title="MouseMoCap", widthHeight=(260, 180))
+        self.close()
+        cmds.window('MouseMoCap', title="MouseMoCap")  # , widthHeight=(260, 180))
 
-            cmds.columnLayout(adjustableColumn=True)
-            cmds.separator(h=15, style='none')
-            cmds.text('Use the Mouse as a MoCap input devise')
-            cmds.separator(h=15, style='none')
-            cmds.button(label='Set Attributes to Record (chBox)',
-                        ann='Prime Selected Attributes in the channelBox for Recording',
-                         command=partial(self.addAttrsToRecord))
-            cmds.button(label='Remove Record Attributes (chBox)',
-                        ann='Remove Attrs from Record selected in the channelBox',
-                         command=partial(self.removeAttrsToRecord))
-            cmds.separator(h=15, style='none')
-            cmds.button('MouseMoCapRecord', label='RECORD', bgc=[0.1, 0.8, 0.1],
-                         command=partial(self._runRecord))
-            cmds.separator(h=25, style='none')
-            cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                                 c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
-            cmds.showWindow('MouseMoCap')
-            cmds.window('MouseMoCap', e=True, widthHeight=(260, 180))
+        cmds.columnLayout(adjustableColumn=True, cw=200)
+        cmds.separator(h=15, style='none')
+        cmds.text('     Use the Mouse as a MoCap input devise     ')
+        cmds.separator(h=15, style='none')
+        cmds.button(label='Set Attributes to Record (chBox)',
+                    ann='Prime Selected Attributes in the channelBox for Recording',
+                     command=partial(self.addAttrsToRecord))
+        cmds.separator(h=5, style='none')
+        cmds.button(label='Remove Record Attributes (chBox)',
+                    ann='Remove Attrs from Record selected in the channelBox',
+                     command=partial(self.removeAttrsToRecord))
+        cmds.separator(h=15, style='none')
+        cmds.button('MouseMoCapRecord', label='RECORD', bgc=[0.1, 0.8, 0.1],
+                     command=partial(self._runRecord))
+        cmds.separator(h=25, style='none')
+        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
+                             c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.separator(h=15, style='none')
+        cmds.showWindow('MouseMoCap')
+#         cmds.window('MouseMoCap', e=True, widthHeight=(260, 180))
 

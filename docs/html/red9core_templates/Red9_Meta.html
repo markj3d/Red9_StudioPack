@@ -54,7 +54,7 @@
             
   <div class="section" id="red9-meta">
 <h1>Red9_Meta<a class="headerlink" href="#red9-meta" title="Permalink to this headline">¶</a></h1>
-<p>Red9 Meta is a full metaData API that deals with Maya nodes in a more seemless manor. I&#8217;ve
+<p>Red9 Meta is a full metaData API that deals with Maya nodes in a more seamless manor. I&#8217;ve
 tried to do as much documentation as I can both in terms of commenting the code and doing
 examples and Vimeo demos.</p>
 <p>This is a big concept and I&#8217;ll be expanding these docs accordingly when I get more time.</p>
@@ -105,6 +105,12 @@ what each function is expected to return</p>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.getMetaNodes" title="Red9.core.Red9_Meta.getMetaNodes"><code class="xref py py-obj docutils literal"><span class="pre">getMetaNodes</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Get all mClass nodes in scene and return as mClass objects if possible :param mTypes: only return meta nodes of a given type :param mInstances: idea - this will check subclass inheritance, ie, MetaRig would         return ALL nodes who&#8217;s class is inherited from MetaRig.</td>
 </tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.getMetaRigs" title="Red9.core.Red9_Meta.getMetaRigs"><code class="xref py py-obj docutils literal"><span class="pre">getMetaRigs</span></code></a>([mInstances,&nbsp;mClassGrps])</td>
+<td>Wrapper over the get call to fire back specifically MetaRigs.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.getMetaRigs_fromSelected" title="Red9.core.Red9_Meta.getMetaRigs_fromSelected"><code class="xref py py-obj docutils literal"><span class="pre">getMetaRigs_fromSelected</span></code></a>([singular])</td>
+<td>light wrap over the getMetaRigs function to return a list of mRigs connected</td>
+</tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.getConnectedMetaNodes" title="Red9.core.Red9_Meta.getConnectedMetaNodes"><code class="xref py py-obj docutils literal"><span class="pre">getConnectedMetaNodes</span></code></a>(*args,&nbsp;**kws)</td>
 <td>From a given set of Maya Nodes return all connected mNodes</td>
 </tr>
@@ -144,10 +150,13 @@ what each function is expected to return</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.MetaHIKControlSetNode" title="Red9.core.Red9_Meta.MetaHIKControlSetNode"><code class="xref py py-obj docutils literal"><span class="pre">MetaHIKControlSetNode</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Casting HIK directly to a metaClass so it&#8217;s treated as meta by default.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.MetaHUDNode" title="Red9.core.Red9_Meta.MetaHUDNode"><code class="xref py py-obj docutils literal"><span class="pre">MetaHUDNode</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.MetaHIKPropertiesNode" title="Red9.core.Red9_Meta.MetaHIKPropertiesNode"><code class="xref py py-obj docutils literal"><span class="pre">MetaHIKPropertiesNode</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Casting HIK Properties to a Meta class for easy managing</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.MetaHUDNode" title="Red9.core.Red9_Meta.MetaHUDNode"><code class="xref py py-obj docutils literal"><span class="pre">MetaHUDNode</span></code></a>(*args,&nbsp;**kws)</td>
 <td>SubClass of the MetaClass, designed as a simple interface for HUD management in Maya.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">MetaTimeCodeHUD</span></code></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">MetaTimeCodeHUD</span></code></td>
 <td></td>
 </tr>
 </tbody>
@@ -2143,7 +2152,7 @@ to be restored from the gathered info</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.loadAnimation">
-<code class="descname">loadAnimation</code><span class="sig-paren">(</span><em>filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False, timecodeBinding=[None, None], referenceNode=None, relativeRots='projected', relativeTrans='projected', manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, merge=False, matchMethod='metaData', smartbake=False, *args, **kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">loadAnimation</code><span class="sig-paren">(</span><em>filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False, timecodeBinding=[None, None], referenceNode=None, relativeRots='projected', relativeTrans='projected', manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, merge=False, matchMethod='metaData', smartbake=False, loadInternalRig=False, *args, **kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>: PRO_PACK :</dt>
 <dd>Binding of the animMap format for loading animation data from
@@ -2179,6 +2188,8 @@ to ensure the data is preserved</li>
 <li><strong>merge</strong> &#8211; if True we allow the data to be merged over any current keys, else we cut all keys in the load range first</li>
 <li><strong>matchMethod</strong> &#8211; internal matching method used to match nodes to the stored data</li>
 <li><strong>smartbake</strong> &#8211; only valid if we&#8217;re loading with a referenceNode, this tries to respect current keys when doing the processing rather than frame baking</li>
+<li><strong>loadInternalRig</strong> &#8211; If True and the r9Anim was created from a rig that was referenced then re-create that reference and load the r9Anim data onto
+the resulting nodes. This is used in the Direct Load calls as the prime way to import the rigs prior to loading</li>
 </ul>
 </td>
 </tr>
