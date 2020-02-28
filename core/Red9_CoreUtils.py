@@ -256,10 +256,21 @@ def filterListByString(input_list, filter_string, matchcase=False):
     the filtering used in the UI's is consistent. Used by the poseSaver, facialUI,
     MetaUI and many others.
 
+    see : https://docs.python.org/3.3/howto/regex.html , http://www.pyregex.com , or search for Regex cheat sheets
+
     :param iniput_list: list of strings to be filtered
     :param filter_string: string to use in the filter, supports comma separated search strings
         eg : 'brows,smile,funnel'
     :param matchcase: whether to match or ignore case sensitivity
+
+    .. note::
+        this is a Regex search but it's managed under the hood.
+        >> 'attack knife' would yield matches with 'attack and knife in the string, similar to 'attack*.*knife in windows, compiles to ('attack.*knife')
+        >> 'attack..knife' would yield matches with 'attack12knife' 2 wildcards between the params (dots are wildcards in regex), compiles to ('attack..knife')
+        >> 'attack.*knife' would yield matches with 'attack_big_massive_knife' because of the .* is multiple wildcards between the search params, compiles to ('attack.*knife')
+        >> 'attack,knife' would yield matches with either 'attack' and 'knife' in the string, compiles to ('attack|knife') with the '|' or operator
+        >> 'attack|knife' same as above
+        >> 'attack$' would match 'we_attack' but not 'they_attacked' as the $ is used here as the end of the search string
     '''
 
     if not matchcase:
@@ -354,7 +365,7 @@ class FilterNode_Settings(object):
     '''
     Simple concept, this settings object is passed into the filterNode Calls
     and is used to setup how hierarchies are processed and filtered. This is
-    class is used through out Red in conjunction with the filterNode class. 
+    class is used through out Red in conjunction with the filterNode class.
 
     Default settings bound:
         * nodeTypes: []  - search for given Maya nodeTypes'
@@ -420,7 +431,7 @@ class FilterNode_Settings(object):
 
     def filterIsActive(self):
         '''
-        the filter is deemed to be active if any of the filterSettings would 
+        the filter is deemed to be active if any of the filterSettings would
         produce a hierarchy search.
         '''
         if self.nodeTypes or self.searchAttrs or self.searchPattern or self.hierarchy or self.metaRig:
@@ -454,7 +465,7 @@ class FilterNode_Settings(object):
         '''
         reset the MAIN filter args only
 
-        :param rigData: this is a cached attr and not fully handled 
+        :param rigData: this is a cached attr and not fully handled
             by the UI hence the option NOT to reset, used by the UI presetFill calls
         '''
         self.nodeTypes = []
@@ -471,7 +482,7 @@ class FilterNode_Settings(object):
 
     def setByDict(self, data):
         '''
-        set the filetrSettings via a dict correctly formatted, used 
+        set the filetrSettings via a dict correctly formatted, used
         to pull the data back from an MRig that has this data bound to it
 
         :param data: dict of data formatted as per the filterSettings keys.
@@ -502,7 +513,7 @@ class FilterNode_Settings(object):
         :param filepath: file path to write the configFile out to
 
         .. note::
-            If filepath doesn't exists or you pass in just the short name of the config you 
+            If filepath doesn't exists or you pass in just the short name of the config you
             want to load then we try and find a matching config in the default presets dir in Red9
         '''
         self.resetFilters()
@@ -627,7 +638,7 @@ class FilterNode_UI(object):
                              c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
         cmds.separator(h=15, style='none')
         cmds.showWindow(window)
-        #cmds.window(self.win, e=True, widthHeight=(400, 400))
+        # cmds.window(self.win, e=True, widthHeight=(400, 400))
 
     def __uiCall(self, mode):
         if mode == 'intersection':
@@ -689,21 +700,30 @@ class FilterNode(object):
     If the arg roots[] is given then the code filters the hierarchy's of these roots.
     If roots is not given then the functions will search globally at a scene level.
 
-    Note that the main call, ProcessFilter() is only part of this class, there are 
+    Note that the main call, ProcessFilter() is only part of this class, there are
     many other specific filtering functions for finding nodes in your Maya scene.
 
     This is a crucial class and used extensively in Red9 where ever hierarchies
-    are in need of filtering. Used in conjunction with a FilterNode_Settings object 
-    which,if not given, gets bound to self.settings. 
+    are in need of filtering. Used in conjunction with a FilterNode_Settings object
+    which,if not given, gets bound to self.settings.
 
     >>> flt = FilterNode(rootNode)
     >>> flt.settings.nodeTypes=['nurbsCurve']
     >>> filt.settings.searchPattern=['Ctrl']
     >>> filt.ProcessFilter()
 
-    The above makes a filterNode class, we pass in our hierarchies rootNode (string), 
-    then set the internal settings to filter the hierarchy for all child nurbsCurves 
+    The above makes a filterNode class, we pass in our hierarchies rootNode (string),
+    then set the internal settings to filter the hierarchy for all child nurbsCurves
     who's name includes 'Ctrl'. Finally the ProcessFilter runs the main call.
+
+    .. note::
+        the searchPattern is a compiled Regex search but it's managed under the hood.
+        >> 'attack knife' would yield matches with 'attack and knife in the string, similar to 'attack*.*knife in windows, compiles to ('attack.*knife')
+        >> 'attack..knife' would yield matches with 'attack12knife' 2 wildcards between the params (dots are wildcards in regex), compiles to ('attack..knife')
+        >> 'attack.*knife' would yield matches with 'attack_big_massive_knife' because of the .* is multiple wildcards between the search params, compiles to ('attack.*knife')
+        >> 'attack,knife' would yield matches with either 'attack' and 'knife' in the string, compiles to ('attack|knife') with the '|' or operator
+        >> 'attack|knife' same as above
+        >> 'attack$' would match 'we_attack' but not 'they_attacked' as the $ is used here as the end of the search string
     '''
     def __init__(self, roots=None, filterSettings=None):
         '''
@@ -738,7 +758,6 @@ class FilterNode(object):
         else:
             self.processMode = 'Scene'
 
-
     # Properties Block
     # ---------------------------------------------------------------------------------
 
@@ -770,7 +789,7 @@ class FilterNode(object):
 
     def __mrig_cast_settings(self):
         '''
-        get connected metaNodes relative to the rootNode then validate if we have an mRig to 
+        get connected metaNodes relative to the rootNode then validate if we have an mRig to
         process, if we do then we look for the internal filterSettings data the new rigs carry
         and overload the filterSettings of this class with some of that data
         '''
@@ -878,8 +897,7 @@ class FilterNode(object):
                         self.hierarchy.extend(cmds.listRelatives(node, ad=True, f=True, type='transform') or [])
             return self.hierarchy
         else:
-            raise StandardError('rootNodes not given to class - processing at SceneLevel Only - lsHierarchy is therefore invalid') 
-
+            raise StandardError('rootNodes not given to class - processing at SceneLevel Only - lsHierarchy is therefore invalid')
 
     # Node Management Block
     # ---------------------------------------------------------------------------------
@@ -910,7 +928,7 @@ class FilterNode(object):
         self.foundNodeTypes = []
         typeMatched = []
         if logging_is_debug():
-            log.debug('lsSearchNodeTypes : params : nodeTypes=%s, nodes=%s, incRoots=%i, transformClamp=%i'\
+            log.debug('lsSearchNodeTypes : params : nodeTypes=%s, nodes=%s, incRoots=%i, transformClamp=%i'
                    % (nodeTypes, nodes, incRoots, transformClamp))
 
         if not isinstance(nodeTypes, list):
@@ -1003,7 +1021,6 @@ class FilterNode(object):
 
         log.debug('NodeTypes Found: %s', self.foundNodeTypes)
         return self.foundNodeTypes
-
 
     # Easy wrappers for .completion if an instance is taken
     # ---------------------------------------------------------------------------------
@@ -1133,7 +1150,6 @@ class FilterNode(object):
                 # if curve.keyTimeValue.isLocked(): return False
             return safeCurves
 
-
     # Attribute Management Block
     # ---------------------------------------------------------------------------------
 
@@ -1160,7 +1176,7 @@ class FilterNode(object):
             see the ..\Red9\tests\Red9_CoreUtilTests.py for live unittest examples
 
         .. note::
-            current Implementation DOES NOT allow multiple attr tests as only 1 val per key 
+            current Implementation DOES NOT allow multiple attr tests as only 1 val per key
             in the excludeAttrs and includeAttrs is currently supported!!
         '''
 
@@ -1285,7 +1301,6 @@ class FilterNode(object):
         else:
             return self.foundAttributes
 
-
     # Name Management Block
     # ---------------------------------------------------------------------------------
 
@@ -1299,7 +1314,7 @@ class FilterNode(object):
         :param incRoots: Include the given root nodes in the search, default=True
             Valid only if the Class is in 'Selected' processMode only.
 
-        .. note:: 
+        .. note::
             If the searchPattern has an entry in the form NOT:searchtext then this will be forcibly
             excluded from the filter. ie, My_L_Foot_Ctrl will be excluded with the following pattern
             ['Ctrl','NOT:My'] where Ctrl finds it, but the 'NOT:My' tells the filter to skip it if found
@@ -1345,7 +1360,6 @@ class FilterNode(object):
             self.foundPattern = [node for node in nodes if incRegex.search(nodeNameStrip(node))]
 
         return self.foundPattern
-
 
     # Character Set Management Block
     # ---------------------------------------------------------------------------------
@@ -1443,7 +1457,6 @@ class FilterNode(object):
                 rigCtrls.extend(ctrls)
         return rigCtrls
 
-
     # Main Search Call which uses the Settings Object
     # ---------------------------------------------------------------------------------
 
@@ -1500,7 +1513,7 @@ class FilterNode(object):
 
             # MetaClass Filter ------------------------------
             if self.settings.metaRig:
-                # run the main getChildren calls for hierarchy structure  
+                # run the main getChildren calls for hierarchy structure
                 nodes = self.lsMetaRigControllers(incMain=self.settings.incRoots)
                 addToIntersection(nodes)
                 if not nodes:
@@ -1708,7 +1721,7 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix', returnfails=
 
         if unmatched and logging_is_debug():
             for node in unmatched:
-                infoPrint+='\n!! Unresolved Matched Node !! : Match Method : %s : %s' % (matchMethod, node.split('|')[-1])
+                infoPrint += '\n!! Unresolved Matched Node !! : Match Method : %s : %s' % (matchMethod, node.split('|')[-1])
 
     log.debug('\nMatched Log : \n%s' % infoPrint)
     infoPrint = None
@@ -1877,7 +1890,7 @@ class LockChannels(object):
 
         def _showUI(self):
             self.close()
-            window = cmds.window(self.win, title=LANGUAGE_MAP._LockChannelsUI_.title, s=False)  #, widthHeight=(260, 410))
+            window = cmds.window(self.win, title=LANGUAGE_MAP._LockChannelsUI_.title, s=False)  # widthHeight=(260, 410))
             cmds.menuBarLayout()
             cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
             cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help,
@@ -1995,7 +2008,7 @@ class LockChannels(object):
                                  c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
             cmds.separator(h=15, style='none')
             cmds.showWindow(window)
-            #cmds.window(self.win, e=True, widthHeight=(260, 410))
+            # cmds.window(self.win, e=True, widthHeight=(260, 410))
 
         def __uicheckboxCallbacksAttr(self, mode, attrs):
             if not isinstance(attrs, list):
@@ -2082,7 +2095,6 @@ class LockChannels(object):
                     # print self.attrs
             LockChannels.processState(cmds.ls(sl=True, l=True), self.attrs, mode, self.hierarchy, self.userDefined)
 
-
     # MapFile calls
     # ----------------------------------
     def _buildAttrStateDict(self, nodes):
@@ -2144,7 +2156,7 @@ class LockChannels(object):
             Here we're dealing with 2 possible sets of data, either decoded by the
             ConfigObj decoder or a JSON deserializer and there's subtle differences in the dict
             thats returned hence the decodeString() calls
-        TODO: Add progress bar?
+
         '''
         if not nodes:
             nodes = cmds.ls(sl=True, l=True)
@@ -2169,7 +2181,9 @@ class LockChannels(object):
                 currentAttrs = r9Anim.getChannelBoxAttrs(node, asDict=False)
                 for attr in currentAttrs:
                     try:
-                        cmds.setAttr('%s.%s' % (node, attr), keyable=False, lock=True, channelBox=False)
+                        # do not just blanket lock these!
+                        if not attr in ['rotate', 'translate', 'scale']:
+                            cmds.setAttr('%s.%s' % (node, attr), keyable=False, lock=True, channelBox=False)
                     except:
                         log.info('%s : failed to set initial state' % attr)
 
@@ -2178,21 +2192,21 @@ class LockChannels(object):
                 if not decodeString(self.statusDict[key]['keyable']) == None:
                     for attr in self.statusDict[key]['keyable']:
                         try:
-                            # print 'keyable',attr
+#                             print 'keyable',attr
                             cmds.setAttr('%s.%s' % (node, attr), k=True, l=False)
                         except:
                             log.debug('%s : failed to set keyable attr status' % attr)
                 if not decodeString(self.statusDict[key]['locked']) == None:
                     for attr in self.statusDict[key]['locked']:
                         try:
-                            # print 'locked',attr
+#                             print 'locked',attr
                             cmds.setAttr('%s.%s' % (node, attr), k=True, l=True)
                         except:
                             log.debug('%s : failed to set locked attr status' % attr)
                 if not decodeString(self.statusDict[key]['nonKeyable']) == None:
                     for attr in self.statusDict[key]['nonKeyable']:
                         try:
-                            # print 'nonKeyable',attr
+#                             print 'nonKeyable',attr
                             cmds.setAttr('%s.%s' % (node, attr), cb=True)
                             cmds.setAttr('%s.%s' % (node, attr), l=False, k=False)
                         except:
@@ -2200,7 +2214,7 @@ class LockChannels(object):
         log.info('<< AttrMap Processed >>')
 
     @staticmethod
-    def processState(nodes, attrs=None, mode=None, hierarchy=False, userDefined=False):
+    def processState(nodes, attrs=None, mode=None, hierarchy=False, userDefined=False, attrKws={}):
         '''
         Easy wrapper to manage channels that are keyable / locked
         in the channelBox.
@@ -2210,11 +2224,13 @@ class LockChannels(object):
         :param mode: 'lock', 'unlock', 'hide', 'unhide', 'fullkey', 'lockall'
         :param hierarchy: process all child nodes, default is now False
         :param usedDefined: process all UserDefined attributes on all nodes
+        :param attrKws: if mode=None then these are the flags passed to the setAttr
+            command to control the node states, ie: {'keyable':True, 'lock':False, 'channelBox':True}
 
         >>> r9Core.LockChannels.processState(nodes, attrs=["sx", "sy", "sz", "v"], mode='lockall')
         >>>
         >>> # note: if attrs='all' we now set it to the following for ease:
-        >>> ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "nds", "radius"]
+        >>> ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "radius"]
         '''
         userDefAttrs = set()
         if not nodes:
@@ -2227,7 +2243,7 @@ class LockChannels(object):
             nodes = FilterNode(nodes).lsHierarchy(incRoots=True)
         _attrs = attrs
         if attrs == 'all':
-            _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "nds", "radius", "radi"]
+            _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "radius"]
         if attrs == 'transforms':
             _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz"]
 
@@ -2236,7 +2252,8 @@ class LockChannels(object):
         if not type(_attrs) == set:
             _attrs = set(_attrs)
 
-        attrKws = {}
+        if mode:
+            attrKws = {}
 
         if mode == 'lock':
             attrKws['lock'] = True
@@ -2247,13 +2264,13 @@ class LockChannels(object):
         elif mode == 'unhide':
             attrKws['keyable'] = True
         elif mode == 'nonkeyable':
-            attrKws['cb'] = True
+            attrKws['channelBox'] = True
         elif mode == 'keyable':
-            attrKws['cb'] = False
+            attrKws['channelBox'] = False
         elif mode == 'fullkey':
             attrKws['keyable'] = True
             attrKws['lock'] = False
-			# force unlock the compounds also!
+            # force unlock the compounds also?
             if attrs == 'all' or attrs == 'transforms':
                 _attrs = _attrs | set(['translate', 'rotate', 'scale'])
         elif mode == 'lockall':
@@ -2267,7 +2284,7 @@ class LockChannels(object):
                     userDefAttrs = set(userDef)
             for attr in (_attrs | userDefAttrs):
                 try:
-                    log.debug('node: %s.%s' % (node,attr))
+                    log.debug('node: %s.%s' % (node, attr))
                     '''
                     If you pass in .tx but you've already locked the compound .translate then
                     the unlock will fail as it's parent compound is locked... do we fix this?
@@ -2407,10 +2424,10 @@ class TimeOffset(object):
                   'mnodes': [],
                   'image_planes': [],
                   'mnode_internals': []}
-    
+
     def __init__(self, cache_object=None):
         if cache_object:
-            self._processed=cache_object
+            self._processed = cache_object
             print 'consuming current cached object'
 
     @classmethod
@@ -2518,7 +2535,7 @@ class TimeOffset(object):
                 for rig in _mrigs:
                     _children = rig.getChildMetaNodes(walk=True, currentSystem=currentSystem)
                     for _child in _children:
-                        if not _child in mNodes:
+                        if _child not in mNodes:
                             mNodes.append(_child)
                     filtered.extend(rig.getChildren())
 
@@ -2828,38 +2845,38 @@ def valueToMappedRange(value, currentMin, currentMax, givenMin, givenMax):
 #     the core StudioPack UI's. This basically uses a scaling factor based on the DPI of
 #     the screen setups. This is also used in ProPack to control some of the widget sizes
 #     so we can consistently scale icon widgets as expected.
-#     '''   
+#     '''
 #     is_4k, _, _, ppi = r9Setup.maya_screen_mapping()
-# 
+#
 #     _factor = 1
-# 
+#
 #     if int(ppi) > 290: # 300% resolution scaling
 #         _factor = 2.15
 #     elif int(ppi) >= 240: # 250% resolution scaling
 #         _factor = 2.05
 #     elif int(ppi) >= 140:  # 150% resolution scaling
 #         _factor = 1.5
-# 
+#
 #     if factor:
 #         return _factor
-# 
+#
 #     _width = width * _factor
 #     _height = height * _factor
-# 
+#
 #     if width and height:
 #         return _width, _height
 #     elif width:
 #         return _width
 #     elif height:
 #         return _height
-# 
+#
 # #    if is_4k:
 #         # base size mapping setups
 # #        if width:
 # #            _width = max(valueToMappedRange(width, 500, 7673, 333, 5115), 100)
 # #        if height:
 # #           _height = max(valueToMappedRange(height, 355, 2021, 65, 1175), 100)
-# 
+#
 # #        # now multiply by the dpi, based on 144.0dpi being default
 # #        _width = _width * (144.0 / ppi)
 # #        _height = _height * (144.0 / ppi)
@@ -3093,4 +3110,3 @@ class MatrixOffset(object):
                     # cmds.setAttr('%s.scalePivot' % node, rotScal[1][0][0], rotScal[1][0][1], rotScal[1][0][2])   ?? why were we doing this ??
             except:
                 log.warning('Failed to apply offset Matrix too : %s' % node)
-
