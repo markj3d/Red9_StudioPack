@@ -268,11 +268,14 @@ def getKeyedAttrs(nodes, attrs=[], returnkeyed=True, asMap=False):
     :param asMap: if true we return (attr, curve) rather than just the list of attrs, only valid if returnKeyed
     '''
     keylist = {}
+    exclude = ['translate', 'rotate', 'scale']  # skip compounds
     _attrs = attrs
     for node in nodes:
         if not attrs:
             _attrs = getChannelBoxAttrs(node=node, asDict=True, incLocked=False)
         for attr in _attrs['keyable']:
+            if attr in exclude:
+                continue
             curve = cmds.keyframe('%s.%s' % (node, attr), q=True, n=True)
             if returnkeyed and curve:
                 if node not in keylist:
@@ -4617,16 +4620,20 @@ class MirrorHierarchy(object):
         '''
         if not self.suppresss_warnings:
             staticnodes = []
+            log = ''
             unkeyed = getKeyedAttrs(nodes, returnkeyed=False)
-            for unkeyed in unkeyed.keys():
+            for unkeyed, attrs in unkeyed.items():
                 if unkeyed in nodes:
                     staticnodes.append(unkeyed)
-                    log.debug('Unkeyed node : %s' % unkeyed)
+                    for attr in attrs:
+                        log += '\nMirrorAnim : Unkeyed attr : %s : %s' % (unkeyed, attr)
             if staticnodes:
+                print log
                 result = cmds.confirmDialog(title='Pre Mirror Validations : Animation Mode : Missing Key Daya',
-                                            message='Some nodes / attributes about to be mirrored do not have keyframe data, '
-                                                    'are you sure you want to continue?\n\n'
-                                                    'we recommend ensuring that all nodes have keys before continuing',
+                                            message='Some Nodes / Attributes about to be Mirrored do not have keyframe data.'
+                                                    '\nWe recommend ensuring that all nodes have keys before continuing.'
+                                                    '\n\nAre you sure you want to continue?'
+                                                    '\n\nPlease see ScriptEditor for details\n',
                                             button=['Continue & Ignore', 'SetKeyframes (Recommended)', 'Cancel'],
                                             defaultButton='OK',
                                             cancelButton='Cancel',
@@ -4635,7 +4642,10 @@ class MirrorHierarchy(object):
                 if result == 'Continue & Ignore':
                     return True
                 if result == 'SetKeyframes (Recommended)':
-                    cmds.setKeyframe(staticnodes)
+                    try:
+                        cmds.setKeyframe(staticnodes, t=cmds.playbackOptions(min=True))
+                    except:
+                        pass
                     return True
                 return False
         return True
