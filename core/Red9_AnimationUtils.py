@@ -116,8 +116,8 @@ def myProjectCallback(cls)
 
 r9Anim.RED_ANIMATION_UI_OPENCALLBACKS.append(myProjectCallback)
 
-.. note:: 
-    the function calls bound to the callback are passed the current instance of the animUI class 
+.. note::
+    the function calls bound to the callback are passed the current instance of the animUI class
     as an arg so you can modify as you need. Also when the PoseUI RMB popup menu is built, IF paths in the list
     cls.poseHandlerPaths are valid, then we bind into that popup all valid poseHandler.py files
     found the given path. This allow you to add custom handler types and expose them through the UI directly,
@@ -171,7 +171,7 @@ def getChannelBoxAttrs(node=None, asDict=True, incLocked=True):
     statusDict={'keyable':attrs, 'nonKeyable':attrs, 'locked':attrs}
 
     :param node: given node.
-    :param asDict: True returns a dict with keys 'keyable','locked','nonKeyable' of attrs 
+    :param asDict: True returns a dict with keys 'keyable','locked','nonKeyable' of attrs
         False returns a list (non ordered) of all attr states.
     :param incLocked: True by default - whether to include locked channels in the return (only valid if not asDict)
     '''
@@ -257,6 +257,35 @@ def nodesDriven(nodes, allowReferenced=False, skipLocked=False):
                         data.append((node, con))
                         log.info('%s is currently driven by >> %s' % (r9Core.nodeNameStrip(node), con))
     return data
+
+def getKeyedAttrs(nodes, attrs=[], returnkeyed=True, asMap=False):
+    '''
+    from a list of nodes return either all keyed or unkeyed attributes
+
+    :param nodes: the list of nodes were going to test
+    :param attrs: if given we only check against those given attrs
+    :param returnKeyed: True by default, return all keyed attrs
+    :param asMap: if true we return (attr, curve) rather than just the list of attrs, only valid if returnKeyed
+    '''
+    keylist = {}
+    _attrs = attrs
+    for node in nodes:
+        if not attrs:
+            _attrs = getChannelBoxAttrs(node=node, asDict=True, incLocked=False)
+        for attr in _attrs['keyable']:
+            curve = cmds.keyframe('%s.%s' % (node, attr), q=True, n=True)
+            if returnkeyed and curve:
+                if node not in keylist:
+                    keylist[node] = []
+                if asMap:
+                    keylist[node].append((attr, curve[0]))
+                else:
+                    keylist[node].append(attr)
+            if not returnkeyed and not curve:
+                if node not in keylist:
+                    keylist[node] = []
+                keylist[node].append(attr)
+    return keylist
 
 def getAnimLayersFromGivenNodes(nodes):
     '''
@@ -418,10 +447,10 @@ def animCurveDrawStyle(style='simple', forceBuffer=True, showBufferCurves=False,
 #         self.step = step
 #         if step < 0:
 #             self.current = end
-# 
+#
 #     def __iter__(self):
 #         return self
-# 
+#
 #     def next(self):
 #         if self.step > 0:
 #             if self.current > self.end:
@@ -429,7 +458,7 @@ def animCurveDrawStyle(style='simple', forceBuffer=True, showBufferCurves=False,
 #         else:
 #             if self.current < self.end:
 #                 raise StopIteration
-# 
+#
 #         self.current += self.step
 #         return self.current - self.step
 
@@ -476,8 +505,8 @@ def timeLineRangeProcess(start, end, step=1, incEnds=True, nodes=[]):
     Simple wrapper function to take a given framerange and return
     a list[] containing the actual keys required for processing.
     This manages whether the step is negative, if so it reverses the
-    times. When nodes are not given this is basically just a wrapper to the 
-    python range function, if nodes are given then we inspect and return the 
+    times. When nodes are not given this is basically just a wrapper to the
+    python range function, if nodes are given then we inspect and return the
     current keys between the start and end given, ignoring step except to reverse the data
 
     :param start: start frame
@@ -538,6 +567,16 @@ def setTimeRangeToo(nodes=None, setall=True):
     else:
         raise StandardError('given nodes have no found animation data')
 
+def snap(source, destination, snapTranslates=True, snapRotates=True):
+    '''
+    simple wrapper over the AnimFunctions snap call
+
+    :param source: the object we'll be aligning too
+    :param destination: the object we'll be snapping
+    :param snapTranslates: snap the translate data
+    :param snapRotates: snap the rotate data
+    '''
+    AnimFunctions.snap([source, destination], snapTranslates=snapTranslates, snapRotates=snapRotates)
 
 
 # def timeLineRangeSet(time):
@@ -555,7 +594,7 @@ def setTimeRangeToo(nodes=None, setall=True):
 
 class AnimationLayerContext(object):
     """
-    Context Manager for merging animLayers down and restoring 
+    Context Manager for merging animLayers down and restoring
     the data as is afterwards
     """
     def __init__(self, srcNodes, mergeLayers=True, restoreOnExit=True):
@@ -581,8 +620,8 @@ class AnimationLayerContext(object):
             if self.mergeLayers:
                 try:
                     for layer in self.animLayers:
-                        self.layerCache[layer] = {'mute':cmds.animLayer(layer, q=True, mute=True),
-                                                  'locked':cmds.animLayer(layer, q=True, lock=True)}
+                        self.layerCache[layer] = {'mute': cmds.animLayer(layer, q=True, mute=True),
+                                                  'locked': cmds.animLayer(layer, q=True, lock=True)}
                         # force unlock all layers before the merge  : 25/09/19 bug on restoration with baseLayer locked
                         cmds.animLayer(layer, edit=True, lock=False)
 
@@ -644,12 +683,11 @@ class AnimationUI(object):
         self.dock = dockUI
         self.uiBoot = True
 
-
         # take generic filterSettings Object
         self.filterSettings = r9Core.FilterNode_Settings()
         self.filterSettings.transformClamp = True
         self.presetDir = r9Setup.red9Presets()  # os.path.join(r9Setup.red9ModulePath(), 'presets')
-        self.basePreset = 'Default.cfg' # this is only ever run once, after which the data is pushed to the settings file
+        self.basePreset = 'Default.cfg'  # this is only ever run once, after which the data is pushed to the settings file
 
         # Pose Management variables
         self.posePath = None  # working variable
@@ -684,7 +722,7 @@ class AnimationUI(object):
             factor = r9Setup.maya_dpi_scaling_factor()
             self.initial_workspace_width = self.initial_workspace_width * factor
             self.initial_winsize = [self.initial_winsize[0] * factor, self.initial_winsize[1] * factor]
-    
+
     @classmethod
     def show(cls):
         '''
@@ -775,8 +813,8 @@ class AnimationUI(object):
 
     def __uiElementBinding(self):
         '''
-        this is GASH! rather than have each ui element cast itself to the object as we used to do, 
-        we're now manually setting up those name maps to by-pass the way we have to call the UI in 
+        this is GASH! rather than have each ui element cast itself to the object as we used to do,
+        we're now manually setting up those name maps to by-pass the way we have to call the UI in
         2017 via the workspace.... Maybe I'm missing something in the workspace setup but don't think so.
         Must see if there's a way of binding to the class object as you'd expect :(
         '''
@@ -850,7 +888,7 @@ class AnimationUI(object):
         self.posePopupGrid = 'posePopupGrid'
 
         # SubFolder Scroller
-        #=====================
+        # =====================
         self.uitslPoseSubFolders = 'uitslPoseSubFolders'
 
         # Main PoseFields
@@ -922,12 +960,10 @@ class AnimationUI(object):
         self.form = cmds.formLayout(self.uiformMain, nd=100, parent=self.MainLayout)
         self.tabs = cmds.tabLayout(self.uitabMain, innerMarginWidth=5, innerMarginHeight=5)
 
-
         cmds.formLayout(self.form, edit=True, attachForm=((self.tabs, 'top', 0),
                                                           (self.tabs, 'left', 0),
                                                           (self.tabs, 'bottom', 0),
                                                           (self.tabs, 'right', 0)))
-
 
         # TAB1: ####################################################################
 
@@ -1003,7 +1039,6 @@ class AnimationUI(object):
         cmds.floatFieldGrp(self.uiffgCKeyStep, l=LANGUAGE_MAP._AnimationUI_.offset, value1=0, cw2=(40, 50))
         cmds.setParent(self.AnimLayout)
 
-
         # ====================
         # SnapTransforms
         # ====================
@@ -1043,7 +1078,6 @@ class AnimationUI(object):
                                            ann=LANGUAGE_MAP._AnimationUI_.iteration_ann)
 
         cmds.setParent(self.AnimLayout)
-
 
         # ====================
         # Stabilizer
@@ -1123,7 +1157,6 @@ class AnimationUI(object):
                                             onc=partial(self.__uiCB_manageTimeOffsetChecks),
                                             cc=lambda x: self.__uiCache_addCheckbox(self.uicbTimeOffsetStartfrm))
 
-
         cmds.separator(style='none')
         cmds.setParent('..')
         cmds.separator(h=2, style='none')
@@ -1134,7 +1167,6 @@ class AnimationUI(object):
                      command=partial(self.__uiCall, 'TimeOffset'))
         cmds.floatFieldGrp(self.uiffgTimeOffset, value1=1, ann=LANGUAGE_MAP._AnimationUI_.offset_frms_ann)
         cmds.setParent(self.AnimLayout)
-
 
         # ===================
         # Mirror Controls
@@ -1149,8 +1181,6 @@ class AnimationUI(object):
                                             ann=LANGUAGE_MAP._AnimationUI_.mirror_hierarchy_ann,
                                             cc=lambda x: self.__uiCache_addCheckbox(self.uicbMirrorHierarchy))
 
-        #cmds.setParent('..')
-
         #cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 160), (2, 160)], columnSpacing=[(2, 2)])
         cmds.button(label=LANGUAGE_MAP._AnimationUI_.mirror_animation, bgc=self.buttonBgc,
                      ann=LANGUAGE_MAP._AnimationUI_.mirror_animation_ann,
@@ -1161,7 +1191,6 @@ class AnimationUI(object):
         cmds.setParent('..')
         cmds.separator(h=10, st='in')
 
-        # cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 160), (2, 160)], columnSpacing=[(2, 2)])
         cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1, 100), (2, 100), (3, 100)], columnSpacing=[(1, 10), (2, 10), (3, 5)])
         #cmds.rowColumnLayout(numberOfColumns=3, columnWidth=[(1,160), (2, 80), (3, 80)], columnSpacing=[(3, 2)])
         cmds.text(l='Symmetry Anim : ')
@@ -1287,7 +1316,6 @@ class AnimationUI(object):
                      command=partial(self.__uiPresetStore))
         cmds.setParent(self.FilterLayout)
         cmds.setParent(self.tabs)
-
 
         # TAB3: ####################################################################
 
@@ -1461,7 +1489,7 @@ class AnimationUI(object):
         # ====================
         if not r9Setup.mayaVersion() == 2009:
             cmds.setParent(self.MainLayout)
- 
+
         cmds.separator(h=10, style='none')
         self.r9strap = cmds.iconTextButton('r9strap',
                                            style='iconOnly',
@@ -1501,7 +1529,6 @@ class AnimationUI(object):
         self.__uiPresetsUpdate()
         self.__uiPresetReset()
         self.__uiCache_loadUIElements()
-
 
     # ------------------------------------------------------------------------------
     # UI Callbacks ---
@@ -1602,7 +1629,7 @@ class AnimationUI(object):
         '''
         base_width = 350
         base_height = 440
-        
+
         # grab the control sizes, unfortuunately Maya over the last few releases has
         # controlled docking in different ways 2016 was dockcontrol, 2017 are workspaces
         # hence all the different size calls below!
@@ -1702,10 +1729,10 @@ class AnimationUI(object):
     def __uiPresetSelection(self, Read=True, store_change=True):
         '''
         Fill the UI from on config preset file selected in the UI
-        
+
         :param Read: pull the settings back from the presets
         :param store_change: save the changed state of the preset back to the settings config
-        
+
         note that the ONLY way to now add the "filerNode_preset" into the ANIM_UI_OPTVARS is to
         manually interact with the presets in the UI, store_change=True by default which injects the key
         '''
@@ -1715,7 +1742,7 @@ class AnimationUI(object):
             # fill the cache up for the ini file
             try:
                 # we only store the change from the UI, this allows the basePreset to
-                #be loaded but NOT stored
+                # be loaded but NOT stored
                 if store_change:
                     self.ANIM_UI_OPTVARS['AnimationUI']['filterNode_preset'] = preset
             except:
@@ -1815,7 +1842,6 @@ class AnimationUI(object):
             cmds.textScrollList('uitslFilterPriority', e=True, append=data)
         self.__uiPresetFillFilter()
         self.__uiCache_storeUIElements()
-
 
     # -----------------------------------------------------------------------------
     # PoseSaver Path Management ---
@@ -1964,6 +1990,7 @@ class AnimationUI(object):
                                                 text=True))[0]
                 else:
                     print 'Sorry Maya2009 and Maya2010 support is being dropped'
+
                     def setPosePath(fileName, fileType):
                         self.posePath = fileName
                     cmds.fileBrowserDialog(m=4, fc=setPosePath, ft='image', an='setPoseFolder', om='Import')
@@ -1971,7 +1998,7 @@ class AnimationUI(object):
                 log.warning('No Folder Selected or Given')
         else:
             if not path:
-                path=cmds.textFieldButtonGrp(self.uitfgPosePath, q=True, text=True)
+                path = cmds.textFieldButtonGrp(self.uitfgPosePath, q=True, text=True)
                 if os.path.exists(path):
                     self.posePath = path
                 else:
@@ -2004,7 +2031,6 @@ class AnimationUI(object):
         self.ANIM_UI_OPTVARS['AnimationUI']['posePathProject'] = self.posePathProject
         self.ANIM_UI_OPTVARS['AnimationUI']['posePathMode'] = self.posePathMode
         self.__uiCache_storeUIElements()
-
 
     # SubFolder Pose Calls ----------
     def __uiCB_switchSubFolders(self, *args):
@@ -2300,7 +2326,6 @@ class AnimationUI(object):
                 cmds.gridLayout(self.uiglPoses, e=True, nc=cells)
         else:
             log.debug('this call FAILS in 2009???')
-
 
     # ------------------------------------------------------------------------------
     # Main Pose Function Wrappers ---
@@ -2602,7 +2627,6 @@ class AnimationUI(object):
         '''
         r9Setup.PRO_PACK_STUBS().AnimationUI_stubs.uiCB_poseAddPoseHandler(self.posePath)
 
-
     # ------------------------------------------------------------------------------
     # UI Elements ConfigStore Callbacks ---
     # ------------------------------------------------------------------------------
@@ -2643,7 +2667,7 @@ class AnimationUI(object):
             if self.basePreset:
                 # we have a basePreset but we don't yet have the "fileNode_preset" key in our
                 # config as there's been no manual interaction with the presets ui. hence (store_change=False)
-                if not 'filterNode_preset' in AnimationUI or not AnimationUI['filterNode_preset']:
+                if 'filterNode_preset' not in AnimationUI or not AnimationUI['filterNode_preset']:
                     try:
                         cmds.textScrollList(self.uitslPresets, e=True, si=self.basePreset)
                         self.__uiPresetSelection(Read=True, store_change=False)
@@ -2687,7 +2711,6 @@ class AnimationUI(object):
             self.__uiCB_manageSnapHierachy()  # preCopyAttrs
             self.__uiCB_manageSnapTime()  # preCopyKeys
             self.__uiCB_manageTimeOffsetState()
-
 
         except StandardError, err:
             log.debug('failed to complete UIConfig load')
@@ -2736,10 +2759,9 @@ class AnimationUI(object):
             if 'posePathLocal' in __constants and __constants['posePathLocal']:
                 self.ANIM_UI_OPTVARS['posePathLocal'] = __constants['posePathLocal']
             if 'posePathProject' in __constants and __constants['posePathProject']:
-                self.ANIM_UI_OPTVARS['posePathProject']  = __constants['posePathProject']
+                self.ANIM_UI_OPTVARS['posePathProject'] = __constants['posePathProject']
 
             self.__uiCache_loadUIElements()
-
 
     # -----------------------------------------------------------------------------
     # MAIN UI FUNCTION CALLS ---
@@ -2981,57 +3003,6 @@ class AnimationUI(object):
                               matchMethod=self.matchMethod)
         pb.show()
 
-#         objs = cmds.ls(sl=True, l=True)
-#         poseNode = r9Pose.PoseData(self.filterSettings)
-#         poseNode.filepath = self.getPosePath()
-#         poseNode.useFilter = cmds.checkBox(self.uicbPoseHierarchy, q=True, v=True)
-#         poseNode.matchMethod = self.matchMethod
-#         poseNode.processPoseFile(self.__uiCB_getPoseInputNodes())
-#         self._poseBlendUndoChunkOpen = False
-#         if objs:
-#             cmds.select(objs)
-# 
-#         def blendPose(*args):
-#             if not self._poseBlendUndoChunkOpen:
-#                 cmds.undoInfo(openChunk=True)
-#                 self._poseBlendUndoChunkOpen = True
-#                 log.debug('Opening Undo Chunk for PoseBlender')
-#             poseNode._applyData(percent=cmds.floatSliderGrp('poseBlender', q=True, v=True))
-# 
-#         def closeChunk(*args):
-#             cmds.undoInfo(closeChunk=True)
-#             self._poseBlendUndoChunkOpen = False
-#             log.debug('Closing Undo Chunk for PoseBlender')
-# 
-#         def keyMembers(poseNode, *args):
-#             nodes = []
-#             for _, node in poseNode.matchedPairs:
-#                 nodes.append(node)
-#             cmds.select(nodes)
-#             cmds.setKeyframe(nodes)
-# 
-# #         def selectMembers(poseNode, *args):
-# #             nodes = []
-# #             for _, node in poseNode.matchedPairs:
-# #                 nodes.append(node)
-# #             cmds.select(nodes)
-# 
-#         if cmds.window('poseBlender', exists=True):
-#             cmds.deleteUI('poseBlender')
-#         cmds.window('poseBlender')
-#         cmds.columnLayout()
-#         cmds.floatSliderButtonGrp('poseBlender',
-#                             label='Blend Pose:  "%s"  ' % self.getPoseSelected(),
-#                             field=True,
-#                             minValue=0.0,
-#                             maxValue=100.0,
-#                             value=0,
-#                             buttonLabel='key members',
-#                             buttonCommand=lambda *x: keyMembers(poseNode),
-#                             dc=blendPose,
-#                             cc=closeChunk)
-#         cmds.showWindow()
-
     def __PosePointCloud(self, func):
         '''
         .. note::
@@ -3090,14 +3061,15 @@ class AnimationUI(object):
             log.warning('Nothing selected to process from!!')
             return
 
-        self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
+#         self.kws['pasteKey'] = cmds.optionMenu('om_PasteMethod', q=True, v=True)
+        self.kws['pasteKey'] = 'replaceCompletely'  # replaced 25/02/20
         hierarchy = cmds.checkBox(self.uicbMirrorHierarchy, q=True, v=True)
 
         if hierarchy:
             nodes = self.__validate_roots()
         mirror = MirrorHierarchy(nodes=nodes,
-                               filterSettings=self.filterSettings,
-                               **self.kws)
+                                     filterSettings=self.filterSettings,
+                                     **self.kws)
 
         # Check for AnimLayers and throw the warning
         if mirrorMode == 'Anim':
@@ -3106,7 +3078,7 @@ class AnimationUI(object):
             if hierarchy:
                 animCheckNodes = mirror.getMirrorSets()
             else:
-                animCheckNodes = cmds.ls(sl=True, l=True)
+                animCheckNodes = nodes
             print animCheckNodes
             if not animLayersConfirmCheck(animCheckNodes):
                 log.warning('Process Aborted by User')
@@ -3114,15 +3086,14 @@ class AnimationUI(object):
 
         if not hierarchy:
             if process == 'mirror':
-                mirror.mirrorData(cmds.ls(sl=True, l=True), mode=mirrorMode)
+                mirror.mirrorData(nodes, mode=mirrorMode)
             else:
-                mirror.makeSymmetrical(cmds.ls(sl=True, l=True), mode=mirrorMode, primeAxis=side)
+                mirror.makeSymmetrical(nodes, mode=mirrorMode, primeAxis=side)
         else:
             if process == 'mirror':
                 mirror.mirrorData(mode=mirrorMode)
             else:
                 mirror.makeSymmetrical(mode=mirrorMode, primeAxis=side)
-
 
     # MAIN CALL
     # ------------------------------------------------------------------------------
@@ -3267,7 +3238,6 @@ class AnimFunctions(object):
         else:
             self.settings = r9Core.FilterNode_Settings()
 
-
     # ===========================================================================
     # Copy Keys
     # ===========================================================================
@@ -3332,7 +3302,7 @@ class AnimFunctions(object):
 
         if logging_is_debug():
             log.debug('CopyKey params : \n \
- \tnodes=%s \t\n:time=%s \t\n: pasteKey=%s \t\n: attributes=%s \t\n: filterSettings=%s \t\n: matchMethod=%s \t\n: mergeLayers=%s \t\n: timeOffset=%s' \
+ \tnodes=%s \t\n:time=%s \t\n: pasteKey=%s \t\n: attributes=%s \t\n: filterSettings=%s \t\n: matchMethod=%s \t\n: mergeLayers=%s \t\n: timeOffset=%s'
                     % (nodes, time, pasteKey, attributes, filterSettings, matchMethod, mergeLayers, timeOffset))
 
         # Build up the node pairs to process
@@ -3365,7 +3335,6 @@ class AnimFunctions(object):
             else:
                 raise StandardError('Nothing found by the Hierarchy Code to process')
         return True
-
 
     # ===========================================================================
     # Copy Attributes
@@ -3465,14 +3434,14 @@ class AnimFunctions(object):
             raise StandardError('Nothing found by the Hierarchy Code to process')
         return True
 
-
     # ===========================================================================
     # Transform Snapping
     # ===========================================================================
 
     # @r9General.Timer
-    def snapTransform(self, nodes=None, time=(), step=1, preCopyKeys=1, preCopyAttrs=1, filterSettings=None, iterations=1, matchMethod=None,
-                      prioritySnapOnly=False, snapRotates=True, snapTranslates=True, additionalCalls=[], cutkeys=False, smartbake=False, smartBakeRef=[], **kws):
+    def snapTransform(self, nodes=None, time=(), step=1, preCopyKeys=1, preCopyAttrs=1, filterSettings=None,
+                      iterations=1, matchMethod=None, prioritySnapOnly=False, snapRotates=True, snapTranslates=True,
+                      additionalCalls=[], cutkeys=False, smartbake=False, smartBakeRef=[], additionalCalls_pre=[], **kws):
         '''
         Snap objects over a timeRange. This wraps the default hierarchy filters
         so it's capable of multiple hierarchy filtering and matching methods.
@@ -3501,7 +3470,9 @@ class AnimFunctions(object):
         :param prioritySnapOnly: if True ONLY snap the nodes in the filterPriority list within the filterSettings object = Super speed up!!
         :param snapTranslates: only snap the translate data
         :param snapRotates: only snap the rotate data
-        :param additionalCalls: [func, func...] additional functions to run during process... allowing you
+        :param additionalCalls: [func, func...] additional functions to run AFTER the snap call during process... allowing you
+            to add in specific matching calls to a SnapTransforms run whilst having the time increment correctly managed for you
+        :param additionalCalls_pre:  [func, func...] additional functions to run BEFORE the snap call during process... allowing you
             to add in specific matching calls to a SnapTransforms run whilst having the time increment correctly managed for you
         :param cutkeys: when passing time do we clear current keys first, needed ideally if we're running with a step greater than 1
         :param smartbake: if True we ignore the step and find all current keyTimes on the nodes about to be processed, these key times
@@ -3611,6 +3582,12 @@ class AnimFunctions(object):
                             cmds.currentTime(t, e=True, u=False)
 
                             while not dataAligned:
+                                # PRE-SNAP additional calls
+                                if additionalCalls_pre:
+                                    for func in additionalCalls_pre:
+                                        log.debug('Additional Pre-Snap Func Called : %s' % func)
+                                        func()
+
                                 for src, dest in self.nodesToSnap:
 
 #                                     # we'll use the API MTimeControl in the runtime function
@@ -3634,8 +3611,12 @@ class AnimFunctions(object):
                                             cmds.setKeyframe(dest, at='rotate')
 
                                         if logging_is_debug():
-                                            log.debug('Snapfrm %s : %s - %s : to : %s' % (str(t), r9Core.nodeNameStrip(src), dest, src))
-
+                                            log.debug('Snapfrm %s : source(%s) >> target(%s) ::  %s to %s' % (str(t),
+                                                                                                                 r9Core.nodeNameStrip(src),
+                                                                                                                 r9Core.nodeNameStrip(dest),
+                                                                                                                 dest,
+                                                                                                                 src))
+                                # standard POST-SNAP additional calls
                                 if additionalCalls:
                                     for func in additionalCalls:
                                         log.debug('Additional Func Called : %s' % func)
@@ -3647,27 +3628,32 @@ class AnimFunctions(object):
                             progressBar.updateProgress()
             else:
                 for _ in range(0, iterations):
+                    # PRE-SNAP additional calls
+                    if additionalCalls_pre:
+                        for func in additionalCalls_pre:
+                            log.debug('Additional Pre-Snap Func Called : %s' % func)
+                            func()
                     for src, dest in self.nodesToSnap:  # nodeList.MatchedPairs:
                         cmds.SnapTransforms(source=src, destination=dest,
                                             timeEnabled=False,
                                             snapRotates=snapRotates,
                                             snapTranslates=snapTranslates)
                         if logging_is_debug():
-                            log.debug('Snapfrm : %s - %s : to : %s' % (r9Core.nodeNameStrip(src), dest, src))
+                            log.debug('Snapfrm : source(%s) >> target(%s) :: %s to %s' % (r9Core.nodeNameStrip(src), r9Core.nodeNameStrip(dest), dest, src))
+                    # standard POST-SNAP additional calls
                     if additionalCalls:
                         for func in additionalCalls:
                             log.debug('Additional Func Called : %s' % func)
                             func()
                         # self.snapCacheData[dest]=data
                         if logging_is_debug():
-                            log.debug('Snapped : %s - %s : to : %s' % (r9Core.nodeNameStrip(src), dest, src))
+                            log.debug('Snapped : source(%s) >> target(%s) :: %s to %s' % (r9Core.nodeNameStrip(src), r9Core.nodeNameStrip(dest), dest, src))
 
             if cancelled and preCopyKeys:
                 cmds.undo()
         else:
             raise StandardError('Nothing found by the Hierarchy Code to process')
         return True
-
 
     def snapValidateResults(self):
         '''
@@ -3725,14 +3711,9 @@ class AnimFunctions(object):
         :param trans: track translates
         :param rots: track rotates
         '''
-
         # destObj = None  #Main Object being manipulated and keyed
         # snapRef = None  #Tracking ReferenceObject Used to Pass the transforms over
         deleteMe = []
-
-        # can't use the anim context manager here as that resets the currentTime
-        # autokeyState = cmds.autoKeyframe(query=True, state=True)
-        # cmds.autoKeyframe(state=False)
         duration = step
         try:
             checkRunTimeCmds()
@@ -3802,7 +3783,6 @@ class AnimFunctions(object):
                     progressBar.updateProgress()
 
         cmds.delete(deleteMe)
-        # cmds.autoKeyframe(state=autokeyState)
         cmds.select(nodes)
 
     def bindNodes(self, nodes=None, attributes=None, filterSettings=None,
@@ -3954,7 +3934,7 @@ class curveModifierContext(object):
     NOTE that this is optimized to run with a floatSlider and used in both interactive
     Randomizer and FilterCurves
     """
-    def __init__(self, initialUndo=False, undoFuncCache=[], undoDepth=1, processBlanks=False, reselectKeys=True, manageCache=True):
+    def __init__(self, initialUndo=False, undoFuncCache=[], undoDepth=1, processBlanks=False, reselectKeys=True, manageCache=True, undoChunkName='curveModifierContext'):
         '''
         :param initialUndo: on first process whether undo on entry to the context manager
         :param undoFuncCache: functions to catch in the undo stack
@@ -3965,12 +3945,15 @@ class curveModifierContext(object):
         :param reselectKeys: if keys were selected on entry we reselect them based on their original timerange
         :param manageCache: Maya 2019 and above, manage the cache mode, stopping the fill mode from being 'syncAsync',
             this means that the cache is only filled on exit, if at all
+        :param undoChunkName: name of the undoChunk created by this, default = 'curveModifierContext'
         '''
         self.initialUndo = initialUndo
-        self.undoFuncCache = undoFuncCache + ['curveModifierContext']
+        self.undoChunkName = undoChunkName
+        self.undoFuncCache = undoFuncCache + [self.undoChunkName]
         self.undoDepth = undoDepth
         self.processBlanks = processBlanks
         self.reselectKeys = reselectKeys
+
 
 #         self.cacheMode = None
 #         if manageCache and r9Setup.mayaVersion() >= 2019:
@@ -3994,7 +3977,7 @@ class curveModifierContext(object):
             cmds.undoInfo(state=True)
         if self.initialUndo:
             self.undoCall()
-        cmds.undoInfo(openChunk=True, chunkName='curveModifierContext')  # enter and create a named chunk
+        cmds.undoInfo(openChunk=True, chunkName=self.undoChunkName)  # enter and create a named chunk
 
 #         # manage the 2019 cache so we're not always filling it up on context drag
 #         if self.cacheMode:
@@ -4014,7 +3997,7 @@ class curveModifierContext(object):
 #             cmds.cacheEvaluator(cacheFillMode=self.cacheMode)
 #             print 'Cache Restored'
 
-        cmds.undoInfo(closeChunk=True, chunkName='curveModifierContext')
+        cmds.undoInfo(closeChunk=True, chunkName=self.undoChunkName)
         if exc_type:
             log.exception('%s : %s' % (exc_type, exc_value))
         # If this was false, it would re-raise the exception when complete
@@ -4302,7 +4285,6 @@ class RandomizeKeys(object):
                       percent=percent)
 
 
-
 class FilterCurves(object):
 
     def __init__(self):
@@ -4482,7 +4464,7 @@ class FilterCurves(object):
                                  undoFuncCache=self.undoFuncCache,
                                  undoDepth=self.undoDepth):
             self.dragActive = True  # turn on the undo management
-            simplify = True  #   # default True
+            simplify = True
             if simplify:
                 cmds.simplify(animation='keysOrObjects',
                                timeTolerance=cmds.floatSliderGrp('fsg_filtertimeValue', q=True, v=True),
@@ -4546,7 +4528,7 @@ class MirrorHierarchy(object):
     >>> for src, dest in zip(srcNodes, destNodes):
     >>>     mirror.copyMirrorIDs(src,dest)
 
-    TODO: allow the mirror block to include an offset so that if you need to inverse AND offset 
+    TODO: allow the mirror block to include an offset so that if you need to inverse AND offset
         by 180 to get left and right working you can still do so.
     '''
 
@@ -4615,8 +4597,8 @@ class MirrorHierarchy(object):
             constrained = nodesDriven(nodes, skipLocked=True)
             if constrained:
                 result = cmds.confirmDialog(title='Pre Mirror Validations',
-                                            message='Some nodes about to be mirrored are currently Driven by constraints or pairBlends, '\
-                                                    'are you sure you want to continue?\n\n'\
+                                            message='Some nodes about to be mirrored are currently Driven by constraints or pairBlends, '
+                                                    'are you sure you want to continue?\n\n'
                                                     'we recommend baking the nodes down before continuing',
                                             button=['Continue', 'Cancel'],
                                             defaultButton='OK',
@@ -4624,6 +4606,36 @@ class MirrorHierarchy(object):
                                             icon='warning',
                                             dismissString='Cancel')
                 if result == 'Continue':
+                    return True
+                return False
+        return True
+
+    def _validateKeyedNodes(self, nodes):
+        '''
+        uused for the anim mirror, check that all nodes have keys else
+        the mirror will be inconsistent
+        '''
+        if not self.suppresss_warnings:
+            staticnodes = []
+            unkeyed = getKeyedAttrs(nodes, returnkeyed=False)
+            for unkeyed in unkeyed.keys():
+                if unkeyed in nodes:
+                    staticnodes.append(unkeyed)
+                    log.debug('Unkeyed node : %s' % unkeyed)
+            if staticnodes:
+                result = cmds.confirmDialog(title='Pre Mirror Validations : Animation Mode : Missing Key Daya',
+                                            message='Some nodes / attributes about to be mirrored do not have keyframe data, '
+                                                    'are you sure you want to continue?\n\n'
+                                                    'we recommend ensuring that all nodes have keys before continuing',
+                                            button=['Continue & Ignore', 'SetKeyframes (Recommended)', 'Cancel'],
+                                            defaultButton='OK',
+                                            cancelButton='Cancel',
+                                            icon='warning',
+                                            dismissString='Cancel')
+                if result == 'Continue & Ignore':
+                    return True
+                if result == 'SetKeyframes (Recommended)':
+                    cmds.setKeyframe(staticnodes)
                     return True
                 return False
         return True
@@ -4641,7 +4653,7 @@ class MirrorHierarchy(object):
             during mirror. NOT we allow axis to have a null string 'None' so it can be
             passed in blank when needed
 
-        .. note:: 
+        .. note::
             slot index can't be ZERO
         '''
         # Note using the MetaClass as all the type checking
@@ -4687,7 +4699,7 @@ class MirrorHierarchy(object):
     def copyMirrorIDs(self, src, dest):
         '''
         Copy mirrorIDs between nodes, note the nodes list passed in is zipped into pairs
-        This will copy all the mirrorData from src to dest, useful for copying data between 
+        This will copy all the mirrorData from src to dest, useful for copying data between
         systems when the MirrorMap fails due to naming.
         '''
         pairs = zip(src, dest)
@@ -4780,7 +4792,7 @@ class MirrorHierarchy(object):
         Filter the given nodes into the mirrorDict
         such that {'Centre':{id:node,},'Left':{id:node,},'Right':{id:node,}}
 
-        :param nodes: only process a given list of nodes, else run the filterSettings 
+        :param nodes: only process a given list of nodes, else run the filterSettings
             call from the initial nodes passed to the class
         '''
         # reset the current Dict prior to rescanning
@@ -4901,7 +4913,7 @@ class MirrorHierarchy(object):
         making the anim/pose symmetrical according to the mirror setups.
         Really useful for facial setups!
 
-        :param nodes: optional specific listy of nodes to process, else we run the filterSetting code 
+        :param nodes: optional specific listy of nodes to process, else we run the filterSetting code
             on the initial nodes past to the class
         :param mode: 'Anim' ot 'Pose' process as a single pose or an animation
         :param primeAxis: 'Left' or 'Right' whether to take the data from the left or right side of the setup
@@ -4930,12 +4942,12 @@ class MirrorHierarchy(object):
         with AnimationLayerContext(self.indexednodes, mergeLayers=self.mergeLayers, restoreOnExit=False):
             for index, masterSide in self.mirrorDict[masterAxis].items():
                 if index not in self.mirrorDict[slaveAxis].keys():
-                    log.warning('No matching Index Key found for %s mirrorIndex : %s >> %s' % \
+                    log.warning('No matching Index Key found for %s mirrorIndex : %s >> %s' %
                                 (masterAxis, index, r9Core.nodeNameStrip(masterSide['node'])))
                 else:
                     slaveData = self.mirrorDict[slaveAxis][index]
                     if logging_is_debug():
-                        log.debug('SymmetricalPairs : %s >> %s' % (r9Core.nodeNameStrip(masterSide['node']), \
+                        log.debug('SymmetricalPairs : %s >> %s' % (r9Core.nodeNameStrip(masterSide['node']),
                                              r9Core.nodeNameStrip(slaveData['node'])))
                     transferCall([masterSide['node'], slaveData['node']], **self.kws)
                     if logging_is_debug():
@@ -4950,7 +4962,7 @@ class MirrorHierarchy(object):
         before Mirroring the animation data. Swapping left for right and
         inversing the required animCurves
 
-        :param nodes: optional specific list of nodes to process, else we run the filterSetting code 
+        :param nodes: optional specific list of nodes to process, else we run the filterSetting code
             on the initial nodes past to the class
         :param mode: 'Anim' or 'Pose' process as a single pose or an animation
 
@@ -4968,6 +4980,10 @@ class MirrorHierarchy(object):
             return
 
         if mode == 'Anim':
+            if not self._validateKeyedNodes(self.indexednodes):
+                log.warning('Failed validation call - some nodes are unkeyed which will cause inconsistencies')
+                return
+
             inverseCall = AnimFunctions.inverseAnimChannels
             self.mergeLayers = True
         else:
@@ -4982,8 +4998,8 @@ class MirrorHierarchy(object):
                 else:
                     rightData = self.mirrorDict['Right'][index]
                     if logging_is_debug():
-                        log.debug('SwitchingPairs : %s >> %s' % (r9Core.nodeNameStrip(leftData['node']), \
-                                             r9Core.nodeNameStrip(rightData['node'])))
+                        log.debug('SwitchingPairs : %s >> %s' % (r9Core.nodeNameStrip(leftData['node']),
+                                                                 r9Core.nodeNameStrip(rightData['node'])))
                     self.switchPairData(leftData['node'], rightData['node'], mode=mode)
 
                     if logging_is_debug():
@@ -5140,13 +5156,13 @@ class MirrorSetup(object):
                       ofc=lambda x: self.__uicb_setDefaults('custom'))
         cmds.checkBox('setDirectCopy', l=LANGUAGE_MAP._Mirror_Setup_.no_inverse, v=False,
                       ann=LANGUAGE_MAP._Mirror_Setup_.no_inverse_ann,
-                      onc=lambda x:self.__uicb_setDefaults('direct'),  # cmds.checkBox('default',e=True, v=False),
-                      ofc=lambda x:self.__uicb_setDefaults('default'))  # cmds.checkBox('default',e=True, v=True))
+                      onc=lambda x: self.__uicb_setDefaults('direct'),
+                      ofc=lambda x: self.__uicb_setDefaults('default'))
         cmds.setParent('..')
         cmds.separator(h=5, style='none')
         cmds.rowColumnLayout(ann=LANGUAGE_MAP._Generic_.attrs, numberOfColumns=3,
                                  columnWidth=[(1, 90), (2, 90), (3, 90)], columnSpacing=[(1, space)])
-        cmds.checkBox('translateX', l='Trans X' , v=False)  # LANGUAGE_MAP._Generic_.transX
+        cmds.checkBox('translateX', l='Trans X', v=False)  # LANGUAGE_MAP._Generic_.transX
         cmds.checkBox('translateY', l='Trans Y', v=False)  # LANGUAGE_MAP._Generic_.transY
         cmds.checkBox('translateZ', l='Trans Z', v=False)  # LANGUAGE_MAP._Generic_.transZ
         cmds.checkBox('rotateX', l='Rot X', v=False)  # LANGUAGE_MAP._Generic_.rotX
@@ -5415,7 +5431,6 @@ class MirrorSetup(object):
             self.mirrorClass.loadMirrorSetups(filepath=filepath, nodes=cmds.ls(sl=True, l=True), clearCurrent=cmds.checkBox('mirrorClearCurrent', q=True, v=True))
 
 
-
 class CameraTracker():
 
     def __init__(self, fixed=True):
@@ -5423,7 +5438,7 @@ class CameraTracker():
         self.fixed = fixed
 
     @staticmethod
-    def cameraTrackView(start=None, end=None, step=None, fixed=True, keepOffset=False, cam=None):
+    def cameraTrackView(start=None, end=None, step=None, fixed=True, keepOffset=False, cam=None, static=False):
         '''
         CameraTracker is a simple wrap over the internal viewFit call but this manages the data
         over time. Works by taking the current camera, in the current 3dView, and fitting it to
@@ -5435,6 +5450,7 @@ class CameraTracker():
         :param fixed: switch between tracking or panning framing fit
         :param keepOffset: keep the current camera offset rather than doing a full viewFit
         :param cam: if given use this camera else we use the current modelEditors camera
+        :param static: if true we DON'T track, we just do a single frame - hook for the ProPack Playblast management
 
         TODO: add option for cloning the camera rather than using the current directly
         '''
@@ -5458,11 +5474,16 @@ class CameraTracker():
 #             if cmds.optionVar(exists='red9_cameraTrackKeepOffset'):
 #                 keepOffset = cmds.optionVar(q='red9_cameraTrackKeepOffset')
 
+        if static:
+            cmds.viewFit(cam, animate=False)
+            return
+
         if fixed:
             if keepOffset:
                 cachedTransform = cmds.getAttr('%s.translate' % cam)[0]
             else:
                 # not sure about this?
+                print 'here'
                 cmds.viewFit(cam, animate=False)
         else:
             if keepOffset:
@@ -5471,22 +5492,23 @@ class CameraTracker():
                 shifted = cmds.getAttr('%s.translate' % cam)[0]
                 offset = [(cachedTransform[0] - shifted[0]), (cachedTransform[1] - shifted[1]), (cachedTransform[2] - shifted[2])]
 
-        with r9General.AnimationContext():
-            for i in timeLineRangeProcess(start, end, step, incEnds=True):
-                cmds.currentTime(i)
-                if fixed:
-                    # fixed transform, panning camera
-                    cmds.viewLookAt(cam)
-                    if keepOffset:
-                        cmds.setAttr('%s.translate' % cam, cachedTransform[0], cachedTransform[1], cachedTransform[2])
-                else:
-                    # transform tracking camera
-                    cmds.viewFit(cam, animate=False)
-                    if keepOffset:
-                        cmds.move(offset[0], offset[1], offset[2], cam, r=True)
-                        cmds.refresh()
-                cmds.setKeyframe(cam, t=i)
-            cmds.filterCurve(cam)
+        if not static:
+            with r9General.AnimationContext():
+                for i in timeLineRangeProcess(start, end, step, incEnds=True):
+                    cmds.currentTime(i)
+                    if fixed:
+                        # fixed transform, panning camera
+                        cmds.viewLookAt(cam)
+                        if keepOffset:
+                            cmds.setAttr('%s.translate' % cam, cachedTransform[0], cachedTransform[1], cachedTransform[2])
+                    else:
+                        # transform tracking camera
+                        cmds.viewFit(cam, animate=False)
+                        if keepOffset:
+                            cmds.move(offset[0], offset[1], offset[2], cam, r=True)
+                            cmds.refresh()
+                    cmds.setKeyframe(cam, t=i)
+                cmds.filterCurve(cam)
 
     @classmethod
     def show(cls):
@@ -5563,7 +5585,7 @@ class ReconnectAnimData(object):
     def close(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
- 
+
     def _showUI(self):
         self.close()
         cmds.window(self.win, title=self.win, widthHeight=(300, 220))
@@ -5632,7 +5654,6 @@ class ReconnectAnimData(object):
                 if anim.split(':')[-1].endswith(plug):
                     print '%s >> %s' % (anim, plug)
                     pm.connectAttr('%s.output' % anim, '%s.%s' % (cSet, plug), force=True)
-
 
     @staticmethod
     def reConnectAnimDataBlind(stripNamespace=True, stripLayerNaming=False, *args):
