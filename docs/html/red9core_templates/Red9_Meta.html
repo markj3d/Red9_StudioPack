@@ -96,7 +96,7 @@ what each function is expected to return</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.registerMClassNodeMapping" title="Red9.core.Red9_Meta.registerMClassNodeMapping"><code class="xref py py-obj docutils literal"><span class="pre">registerMClassNodeMapping</span></code></a>([nodeTypes])</td>
 <td>Hook to allow you to extend the type of nodes included in all the getMeta searches.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.isMetaNode" title="Red9.core.Red9_Meta.isMetaNode"><code class="xref py py-obj docutils literal"><span class="pre">isMetaNode</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.isMetaNode" title="Red9.core.Red9_Meta.isMetaNode"><code class="xref py py-obj docutils literal"><span class="pre">isMetaNode</span></code></a>(node[,&nbsp;mTypes,&nbsp;checkInstance,&nbsp;...])</td>
 <td>Simple bool, Maya Node is or isn&#8217;t an mNode</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.isMetaNodeInherited" title="Red9.core.Red9_Meta.isMetaNodeInherited"><code class="xref py py-obj docutils literal"><span class="pre">isMetaNodeInherited</span></code></a>(node[,&nbsp;mInstances,&nbsp;mode])</td>
@@ -395,7 +395,7 @@ require change access rights to the &#8216;network&#8217; node itself.</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.isMetaNode">
-<code class="descname">isMetaNode</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.isMetaNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">isMetaNode</code><span class="sig-paren">(</span><em>node</em>, <em>mTypes=[]</em>, <em>checkInstance=True</em>, <em>returnMClass=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.isMetaNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple bool, Maya Node is or isn&#8217;t an mNode</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -475,6 +475,7 @@ system type without looking at class inheritance. Good for marking key classes a
 <li><strong>dataType</strong> &#8211; default=&#8217;mClass&#8217; return the nodes already instantiated to
 the correct class object. If not then return the Maya node itself</li>
 <li><strong>nTypes</strong> &#8211; only inspect nodes of a given Type</li>
+<li><strong>byname</strong> &#8211; [] a specific list of node names to search for</li>
 </ul>
 </td>
 </tr>
@@ -661,6 +662,11 @@ selected in the UI cmds.select(item) is run. Basically used as a dynamic callbac
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_Meta.MClassNodeUI.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MClassNodeUI.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_Meta.MClassNodeUI.graphNetwork">
 <code class="descname">graphNetwork</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MClassNodeUI.graphNetwork" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -765,8 +771,8 @@ with HIK characterNode)</li>
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.isValidMObject">
 <code class="descname">isValidMObject</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.isValidMObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>validate the MObject, without this Maya will crash if the pointer is no longer valid
-TODO: thinking of storing the dagPath when we fill in the mNode to start with and
+<dd><p>validate the MObject, without this Maya will crash if the pointer is no longer valid</p>
+<p>TODO: thinking of storing the dagPath when we fill in the mNode to start with and
 if this test fails, ie the scene has been reloaded, then use the dagPath to refine
 and refill the mNode property back in.... maybe??</p>
 </dd></dl>
@@ -1111,7 +1117,7 @@ to another node force the connection to the new attr</li>
 <li><strong>allowIncest</strong> &#8211; Over-ride the default behaviour when dealing with child nodes that are
 standard Maya Nodes not metaNodes. Default in this case is to NOT index manage
 the plugs, this flag overloads that, allow multiple parents.</li>
-<li><strong>srcSimple</strong> &#8211; By default when we wire children we expect arrays so both plugs on the src and dest 
+<li><strong>srcSimple</strong> &#8211; By default when we wire children we expect arrays so both plugs on the src and dest
 side of the connection are index managed. This flag stops the index and uses a single simple wire on the
 srcAttr side of the plug ( the child )</li>
 </ul>
@@ -1245,12 +1251,17 @@ RED9_META_REGISTERY ie &#8216;MetaRig&#8217; OR a class object, ie r9Meta.MetaRi
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>walk</strong> &#8211; walk the connected network and return ALL children conntected in the tree</li>
+<li><strong>walk</strong> &#8211; walk the connected network and return ALL children connected in the tree</li>
 <li><strong>mAttrs</strong> &#8211; only return connected nodes that pass the given attribute filter</li>
 <li><strong>stepover</strong> &#8211; if you&#8217;re passing in &#8216;mTypes&#8217; or &#8216;mInstances&#8217; flags then this dictates if
 we continue to walk down a tree if it&#8217;s parent didn&#8217;t match the given type, default is False
 which will abort a tree who&#8217;s parent didn&#8217;t match. With stepover=True we simply stepover
 that node and continue down all child nodes</li>
+<li><strong>currentSystem</strong> &#8211; if True we check for the mSystemRoot attr (bool) on mNodes and if set, we skip
+the node and all childnodes from that node. Why?? The mSystsmRoot attr is a marker to denote the
+root of a given mRig system, by respecting this we clamp searches to the current system and prevent
+walking into the connected child sub-system. Primarily used in ProPack to stop facial nodes being
+returned and processed as part of the connected body rig.</li>
 </ul>
 </td>
 </tr>
@@ -1268,6 +1279,14 @@ by going getChildMetaNodes(mAttrs=&#8217;mClass=MetaRig&#8217;)</p>
 also take ALL of that functions <a href="#id5"><span class="problematic" id="id6">**</span></a>kws functionality in the initial search:
 mTypes=[], mInstances=[], mAttrs=None, dataType=&#8217;mClass&#8217;, skipTypes=[], skipInstances=[]</p>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaClass.getChildSystemRoots">
+<code class="descname">getChildSystemRoots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.getChildSystemRoots" title="Permalink to this definition">¶</a></dt>
+<dd><p>return all child MetaNodes that have the mSystemRoot checkbox set. This is used to denote a child
+MSystem in it&#8217;s own right. Usually used in ProPack to denote a new child MetaRig, ie, facial system
+connected as a child of a mRig body system</p>
 </dd></dl>
 
 <dl class="method">
@@ -1703,7 +1722,7 @@ Arm system.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>systemType</strong> &#8211; Attribute used in the message link. Note this is what you use
-to traserve the Dag tree so use something sensible!</li>
+to traverse the Dag tree so use something sensible!</li>
 <li><strong>side</strong> &#8211; Side to designate the system. This is an enum: Centre,Left,Right</li>
 <li><strong>attr</strong> &#8211; wire name to use in the connections, if not given wire will be side[0]_systemType_&#8217;System&#8217;</li>
 <li><strong>nodeName</strong> &#8211; Name of the MetaClass network node created</li>

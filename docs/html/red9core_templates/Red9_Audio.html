@@ -153,7 +153,7 @@ like this makes it easy to consume in the classes</p>
 <dl class="function">
 <dt id="Red9.core.Red9_Audio.combineAudio">
 <code class="descname">combineAudio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.combineAudio" title="Permalink to this definition">¶</a></dt>
-<dd><p>this is a logic wrapper over the main compile call in the AudioHandler 
+<dd><p>this is a logic wrapper over the main compile call in the AudioHandler
 I wanted to keep things simple in the base class.</p>
 </dd></dl>
 
@@ -242,8 +242,8 @@ else we validate that the audio&#8217;s start and end times are fully within the
 <dt id="Red9.core.Red9_Audio.AudioHandler.getOverallBwavTimecodeRange">
 <code class="descname">getOverallBwavTimecodeRange</code><span class="sig-paren">(</span><em>ms=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.getOverallBwavTimecodeRange" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
-<dt>: PRO_PACK</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier"></span><dd>return the overall internal BWAV timecode range for the given 
+<dt>: PRO_PACK :</dt>
+<dd>return the overall internal BWAV timecode range for the given
 nodes. Note this is the internal timecode plus the length of the files</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
@@ -331,7 +331,7 @@ to offset by</p>
 <code class="descname">bwav_sync_to_Timecode</code><span class="sig-paren">(</span><em>relativeToo=None</em>, <em>offset=0</em>, <em>timecodebase=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioHandler.bwav_sync_to_Timecode" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>: PRO_PACK :</dt>
-<dd>process either selected or all audio nodes and IF they are found 
+<dd>process either selected or all audio nodes and IF they are found
 to be BWav&#8217;s with valid timecode references, sync them in Maya such
 that their offset = Bwav&#8217;s timecode ie: sync them on the timeline to
 the bwavs internal timecode.</dd>
@@ -341,14 +341,14 @@ the bwavs internal timecode.</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>relativeToo</strong> &#8211; This is fucking clever, even though I do say so. Pass in another BWav Audio node and we 
-calculate it&#8217;s internal timecode against where it is in the timeline. We then use any difference in 
-that nodes time as an offset for all the other nodes in self.audioNodes. Basically syncing multiple 
+<li><strong>relativeToo</strong> &#8211; This is fucking clever, even though I do say so. Pass in another BWav Audio node and we
+calculate it&#8217;s internal timecode against where it is in the timeline. We then use any difference in
+that nodes time as an offset for all the other nodes in self.audioNodes. Basically syncing multiple
 bwav&#8217;s against a given sound.</li>
 <li><strong>offset</strong> &#8211; given offset (in frames) to pass to the sync call</li>
 <li><strong>timecodebase</strong> &#8211; optional mapping for a reference timecode so we can manipulate the offset
 relative to a given timecodebase rather than assuming that frame 1 = &#8216;00:00:00:00&#8217;
-ie, we set the timecodebase to &#8216;01:00:00:00&#8217; therefore day 1 timecode is stripped from 
+ie, we set the timecodebase to &#8216;01:00:00:00&#8217; therefore day 1 timecode is stripped from
 all the calculations and a bwav who&#8217;s timecode is &#8216;01:00:00:10&#8217; is set to frame 10</li>
 </ul>
 </td>
@@ -565,7 +565,7 @@ in the Maya timeline to match</p>
 <li><strong>offset</strong> &#8211; offset (in frames) to apply to the internal timecode of the given wav&#8217;s</li>
 <li><strong>timecodebase</strong> &#8211; optional mapping for a reference timecode so we can manipulate the offset
 relative to a given timecodebase rather than assuming that frame 1 = &#8216;00:00:00:00&#8217;
-ie, we set the timecodebase to &#8216;01:00:00:00&#8217; therefore day 1 timecode is stripped from 
+ie, we set the timecodebase to &#8216;01:00:00:00&#8217; therefore day 1 timecode is stripped from
 all the calculations and a bwav who&#8217;s timecode is &#8216;00:00:00:10&#8217; is set to frame 10</li>
 </ul>
 </td>
@@ -586,7 +586,7 @@ same node</p>
 <dl class="method">
 <dt id="Red9.core.Red9_Audio.AudioNode.isConnected_AudioGrp">
 <code class="descname">isConnected_AudioGrp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioNode.isConnected_AudioGrp" title="Permalink to this definition">¶</a></dt>
-<dd><p>: PRO_PACK : is this audioNode connected to a <a href="#id1"><span class="problematic" id="id2">Pro_</span></a> AudioGrp metaNode 
+<dd><p>: PRO_PACK : is this audioNode connected to a <a href="#id1"><span class="problematic" id="id2">Pro_</span></a> AudioGrp metaNode
 for asset management in the Pro systems</p>
 </dd></dl>
 
@@ -733,6 +733,11 @@ track was compiled from</p>
 <dl class="classmethod">
 <dt id="Red9.core.Red9_Audio.AudioToolsWrap.show">
 <em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Audio.AudioToolsWrap.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Audio.AudioToolsWrap.close" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

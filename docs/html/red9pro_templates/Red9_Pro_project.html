@@ -268,6 +268,22 @@ added to the r9pro.PROJECT_DATA.data instance.</p>
 <p>This class is also responsible for the binding of the Scene Open Health tests that are run as
 much of the healthTests are compared to data bound to the PROJECT_DATA.data clients project file.
 This is why we usually ask that clients fill in a technical sign-off doc so that we can bind defaults expected.</p>
+<dl class="docutils">
+<dt>key internal <a href="#id1"><span class="problematic" id="id2">*</span></a>args:</dt>
+<dd><ul class="first last">
+<li><p class="first">self.suspend_openCallback : mutes the Scene Health test if bound</p>
+</li>
+<li><p class="first">self.suppress_warnings : mutes any of the Scene Health test warnings and popups if True</p>
+</li>
+<li><dl class="first docutils">
+<dt>self.scene_health_auto_fix</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">if True we automatically fix any Scene Health test failures if we can,</span><dd><p class="first last">assuming the suspend flag isn&#8217;t set to True. default = True</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -493,7 +509,7 @@ pass any connection params in before refreshing it</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.set_maya_environment">
-<code class="descname">set_maya_environment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.set_maya_environment" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_maya_environment</code><span class="sig-paren">(</span><em>framerate=True</em>, <em>animui=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.set_maya_environment" title="Permalink to this definition">¶</a></dt>
 <dd><p>manage Maya UI elements / environment setup.
 Force set the Maya Frame Rate against the Project settings
 This also sets up a number of the base flags for the AnimationToolkit
@@ -569,13 +585,13 @@ based on the data.fps setting in the project file</p>
 <dt id="Red9.pro_pack.core.project.Project.test_scene_health">
 <code class="descname">test_scene_health</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.test_scene_health" title="Permalink to this definition">¶</a></dt>
 <dd><p>validate base scene health against the project, if we&#8217;ve passed in a custom health test
-then thats bound to the main callbackls here</p>
+then thats bound to the main callbacks here</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.healthclass_binding">
 <code class="descname">healthclass_binding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.healthclass_binding" title="Permalink to this definition">¶</a></dt>
-<dd><p>bind all &#8216;<a href="#id1"><span class="problematic" id="id2">healthclass_</span></a>&#8216; keys in the project data to their class objects (remember that the keys in the
+<dd><p>bind all &#8216;<a href="#id3"><span class="problematic" id="id4">healthclass_</span></a>&#8216; keys in the project data to their class objects (remember that the keys in the
 project are just string data)  This binds the classes up to attrs direct on the PROJECT_DATA itself so
 if the project file has a key that starts with &#8216;healthclass_SRC&#8217; then that attr will get propagated to this
 class directly and the return will be a list [__module__, cls]</p>

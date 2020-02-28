@@ -171,7 +171,7 @@ timecode_to_milliseconds(&#8216;09:00:00:00&#8217;)</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>timecode</strong> &#8211; &#8216;09:00:00:20&#8217; as a string</li>
 <li><strong>smpte</strong> &#8211; calculate the milliseconds based on HH:MM:SS:FF (frames as last block)</li>
-<li><strong>framerate</strong> &#8211; only used if smpte=True, the framerate to use in the conversion, 
+<li><strong>framerate</strong> &#8211; only used if smpte=True, the framerate to use in the conversion,
 default (None) uses the current scenes framerate</li>
 </ul>
 </td>
@@ -191,7 +191,7 @@ default (None) uses the current scenes framerate</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>timecode</strong> &#8211; &#8216;09:00:00:20&#8217; as a string</li>
 <li><strong>smpte</strong> &#8211; calculate the milliseconds based on HH:MM:SS:FF (frames as last block)</li>
-<li><strong>framerate</strong> &#8211; only used if smpte=True, the framerate to use in the conversion, 
+<li><strong>framerate</strong> &#8211; only used if smpte=True, the framerate to use in the conversion,
 default (None) uses the current scenes framerate</li>
 </ul>
 </td>
@@ -212,7 +212,7 @@ relative to the given framerate</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>frame</strong> &#8211; current frame in Maya</li>
 <li><strong>smpte</strong> &#8211; calculate the milliseconds based on HH:MM:SS:FF (frames as last block)</li>
-<li><strong>framerate</strong> &#8211; the framerate to use in the conversion, 
+<li><strong>framerate</strong> &#8211; the framerate to use in the conversion,
 default (None) uses the current scenes framerate</li>
 </ul>
 </td>
@@ -224,7 +224,7 @@ default (None) uses the current scenes framerate</li>
 <dl class="function">
 <dt id="Red9.pro_pack.core.audio.frame_to_milliseconds">
 <code class="descname">frame_to_milliseconds</code><span class="sig-paren">(</span><em>frame</em>, <em>framerate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.frame_to_milliseconds" title="Permalink to this definition">¶</a></dt>
-<dd><p>from a given frame return that time in milliseconds 
+<dd><p>from a given frame return that time in milliseconds
 relative to the given framerate</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -232,7 +232,7 @@ relative to the given framerate</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>frame</strong> &#8211; current frame in Maya</li>
-<li><strong>framerate</strong> &#8211; only used if smpte=True, the framerate to use in the conversion, 
+<li><strong>framerate</strong> &#8211; only used if smpte=True, the framerate to use in the conversion,
 default (None) uses the current scenes framerate</li>
 </ul>
 </td>
@@ -245,7 +245,7 @@ default (None) uses the current scenes framerate</li>
 <dt id="Red9.pro_pack.core.audio.timecode_difference">
 <code class="descname">timecode_difference</code><span class="sig-paren">(</span><em>referencedTC</em>, <em>inputTC</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.timecode_difference" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculate the difference between 2 timecodes in frames
-timecodes are in a string format &#8216;00:00:00:00&#8217;. Mainly used in the 
+timecodes are in a string format &#8216;00:00:00:00&#8217;. Mainly used in the
 r9Anim load when we load against a given timecode and need to calculate the offsets</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -264,8 +264,8 @@ r9Anim load when we load against a given timecode and need to calculate the offs
 <dl class="function">
 <dt id="Red9.pro_pack.core.audio.timecode_falls_within">
 <code class="descname">timecode_falls_within</code><span class="sig-paren">(</span><em>timecode</em>, <em>timecode_bounds</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.timecode_falls_within" title="Permalink to this definition">¶</a></dt>
-<dd><p>from a given list of timecode bounds in smpte format [(startTC, endTC),....] see if the 
-given TC falls within any of them and if so return that timecode section. This is a little 
+<dd><p>from a given list of timecode bounds in smpte format [(startTC, endTC),....] see if the
+given TC falls within any of them and if so return that timecode section. This is a little
 like searching an EDL for the correct take based on a given timecode</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">timecode_falls_within</span><span class="p">(</span><span class="s1">&#39;06:35:01:18&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;06:34:36:17&#39;</span><span class="p">,</span> <span class="s1">&#39;06:34:40:11&#39;</span><span class="p">),</span>
 <span class="gp">&gt;&gt;&gt; </span>                                      <span class="p">(</span><span class="s1">&#39;06:34:59:21&#39;</span><span class="p">,</span> <span class="s1">&#39;06:35:03:24&#39;</span><span class="p">),</span>
@@ -289,7 +289,7 @@ like searching an EDL for the correct take based on a given timecode</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>timecode</strong> &#8211; expecting a correctly formatted string &#8216;00:00:00:00&#8217; but 
+<li><strong>timecode</strong> &#8211; expecting a correctly formatted string &#8216;00:00:00:00&#8217; but
 here we validate that this is correct and return False if not</li>
 <li><strong>smpte</strong> &#8211; format of the timecode expected</li>
 </ul>
@@ -376,7 +376,7 @@ the selected audio is shifted to start at the given frame</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.audio.Timecode_Wrangler.mrig_copy_timecode">
 <code class="descname">mrig_copy_timecode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.mrig_copy_timecode" title="Permalink to this definition">¶</a></dt>
-<dd><p>set the timecode for all selected mRigs based on the first selected node 
+<dd><p>set the timecode for all selected mRigs based on the first selected node
 being from the master rig from which all others will be synced</p>
 </dd></dl>
 
@@ -406,7 +406,7 @@ being from the master rig from which all others will be synced</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000013125E08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000204FB4C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode_Wrangler.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -462,14 +462,14 @@ counter thats added to the &#8216;timecode_ref&#8217; attr to generate the actua
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.Timecode.getTimecode_ref">
 <code class="descname">getTimecode_ref</code><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.getTimecode_ref" title="Permalink to this definition">¶</a></dt>
-<dd><p>get the &#8216;timecode_ref&#8217; attr from the Maya node at the current frame, this is the 
+<dd><p>get the &#8216;timecode_ref&#8217; attr from the Maya node at the current frame, this is the
 pointer in milliseconds</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.Timecode.getTimecode_samplerate">
 <code class="descname">getTimecode_samplerate</code><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.getTimecode_samplerate" title="Permalink to this definition">¶</a></dt>
-<dd><p>get the &#8216;timecode_samplerate&#8217; attr from the Maya node at the current frame, this is the 
+<dd><p>get the &#8216;timecode_samplerate&#8217; attr from the Maya node at the current frame, this is the
 sample-rate set when the counter attr was generated</p>
 </dd></dl>
 
@@ -549,7 +549,7 @@ to try and find an appropriate match, then returns the actual frame it was found
 <dl class="staticmethod">
 <dt id="Red9.pro_pack.core.audio.Timecode.setTimecode_maya_production">
 <em class="property">static </em><code class="descname">setTimecode_maya_production</code><span class="sig-paren">(</span><em>tc=''</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.audio.Timecode.setTimecode_maya_production" title="Permalink to this definition">¶</a></dt>
-<dd><p>set the Maya Production timecode mapping, managing and modifying the mapping 
+<dd><p>set the Maya Production timecode mapping, managing and modifying the mapping
 of the visual timecode on the timeslider in Maya</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -724,12 +724,12 @@ return it in various formats</p>
 <dd><p>retrieve the BWav header info and push it into an internal dic
 that you can inspect self.bwav_HeaderData. This is designed to be cached
 against this instance of the audioNode object.
-Note that this code uses a binary seek to first find the starting chunk 
+Note that this code uses a binary seek to first find the starting chunk
 in the binary file where the &#8216;bext&#8217; data is written.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">We could, if we could ensure it was available, use ffprobe.exe (part of the ffmpeg project)
-This would also cover most media file formats including Mov, avi etc 
+This would also cover most media file formats including Mov, avi etc
 There is coverage for this in this module getMediaFileMetaData() does just that</p>
 </div>
 </dd></dl>
@@ -791,7 +791,7 @@ There is coverage for this in this module getMediaFileMetaData() does just that<
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000204FB6C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.audio.AudioGRP_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

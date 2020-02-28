@@ -128,7 +128,7 @@ time the tools process a hierarchy it&#8217;s these classes that deal with it.</
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.LockChannels" title="Red9.core.Red9_CoreUtils.LockChannels"><code class="xref py py-obj docutils literal"><span class="pre">LockChannels</span></code></a>()</td>
 <td>Simple UI to manage the lock and key status of nodes</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.TimeOffset" title="Red9.core.Red9_CoreUtils.TimeOffset"><code class="xref py py-obj docutils literal"><span class="pre">TimeOffset</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.TimeOffset" title="Red9.core.Red9_CoreUtils.TimeOffset"><code class="xref py py-obj docutils literal"><span class="pre">TimeOffset</span></code></a>([cache_object])</td>
 <td>A class for dealing with time manipulation inside Maya.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.MatrixOffset" title="Red9.core.Red9_CoreUtils.MatrixOffset"><code class="xref py py-obj docutils literal"><span class="pre">MatrixOffset</span></code></a>()</td>
@@ -274,6 +274,15 @@ eg : &#8216;brows,smile,funnel&#8217;</li>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this is a regex search but it&#8217;s managed under the hood.
+&gt;&gt; &#8216;attack knife&#8217; would yield matches with &#8216;attack and knife in the string, similar to &#8216;attack*.*knife in windows, compiles to (&#8216;attack.*knife&#8217;)
+&gt;&gt; &#8216;attack..knife&#8217; would yield matches with &#8216;attack12knife&#8217; 2 wildcards between the params (dots are wildcards in regex), compiles to (&#8216;attack..knife&#8217;)
+&gt;&gt; &#8216;attack.*knife&#8217; would yield matches with &#8216;attack_big_massive_knife&#8217; because of the .* is multiple wildcards between the search params, compiles to (&#8216;attack.*knife&#8217;)
+&gt;&gt; &#8216;attack,knife&#8217; would yield matches with either &#8216;attack&#8217; and &#8216;knife&#8217; in the string, compiles to (&#8216;attack|knife&#8217;) with the &#8216;|&#8217; or operator
+&gt;&gt; &#8216;attack|knife&#8217; same as above</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -342,7 +351,7 @@ class is used through out Red in conjunction with the filterNode class.</p>
 <dl class="method">
 <dt id="Red9.core.Red9_CoreUtils.FilterNode_Settings.filterIsActive">
 <code class="descname">filterIsActive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode_Settings.filterIsActive" title="Permalink to this definition">¶</a></dt>
-<dd><p>the filter is deemed to be active if any of the filterSettings would 
+<dd><p>the filter is deemed to be active if any of the filterSettings would
 produce a hierarchy search.</p>
 </dd></dl>
 
@@ -360,7 +369,7 @@ produce a hierarchy search.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rigData</strong> &#8211; this is a cached attr and not fully handled 
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rigData</strong> &#8211; this is a cached attr and not fully handled
 by the UI hence the option NOT to reset, used by the UI presetFill calls</td>
 </tr>
 </tbody>
@@ -370,7 +379,7 @@ by the UI hence the option NOT to reset, used by the UI presetFill calls</td>
 <dl class="method">
 <dt id="Red9.core.Red9_CoreUtils.FilterNode_Settings.setByDict">
 <code class="descname">setByDict</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode_Settings.setByDict" title="Permalink to this definition">¶</a></dt>
-<dd><p>set the filetrSettings via a dict correctly formatted, used 
+<dd><p>set the filetrSettings via a dict correctly formatted, used
 to pull the data back from an MRig that has this data bound to it</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -412,7 +421,7 @@ object from a config file or mNode directly</td>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If filepath doesn&#8217;t exists or you pass in just the short name of the config you 
+<p class="last">If filepath doesn&#8217;t exists or you pass in just the short name of the config you
 want to load then we try and find a matching config in the default presets dir in Red9</p>
 </div>
 </dd></dl>
@@ -428,6 +437,11 @@ want to load then we try and find a matching config in the default presets dir i
 <em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode_UI.show" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="Red9.core.Red9_CoreUtils.FilterNode_UI.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode_UI.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -437,10 +451,10 @@ want to load then we try and find a matching config in the default presets dir i
 <p>FilterNode is a class for managing, searching and filtering nodes with the scene.
 If the arg roots[] is given then the code filters the hierarchy&#8217;s of these roots.
 If roots is not given then the functions will search globally at a scene level.</p>
-<p>Note that the main call, ProcessFilter() is only part of this class, there are 
+<p>Note that the main call, ProcessFilter() is only part of this class, there are
 many other specific filtering functions for finding nodes in your Maya scene.</p>
 <p>This is a crucial class and used extensively in Red9 where ever hierarchies
-are in need of filtering. Used in conjunction with a FilterNode_Settings object 
+are in need of filtering. Used in conjunction with a FilterNode_Settings object
 which,if not given, gets bound to self.settings.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span> <span class="o">=</span> <span class="n">FilterNode</span><span class="p">(</span><span class="n">rootNode</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">flt</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nurbsCurve&#39;</span><span class="p">]</span>
@@ -448,8 +462,8 @@ which,if not given, gets bound to self.settings.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">filt</span><span class="o">.</span><span class="n">ProcessFilter</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The above makes a filterNode class, we pass in our hierarchies rootNode (string), 
-then set the internal settings to filter the hierarchy for all child nurbsCurves 
+<p>The above makes a filterNode class, we pass in our hierarchies rootNode (string),
+then set the internal settings to filter the hierarchy for all child nurbsCurves
 who&#8217;s name includes &#8216;Ctrl&#8217;. Finally the ProcessFilter runs the main call.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -671,10 +685,11 @@ excluded from the filter. Also you can now do &#8216;myAttr=2.33&#8217; to only 
 similarly &#8216;NOT:myAttr=2.33&#8217; will exclude if the value is equal
 see the ..Red9     estsRed9_CoreUtilTests.py for live unittest examples</p>
 </div>
-<dl class="docutils">
-<dt>TODO: current Implementation DOES NOT allow multiple attr tests as only 1 val per key </dt>
-<dd>in the excludeAttrs and includeAttrs is currently supported!!!!!!</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">current Implementation DOES NOT allow multiple attr tests as only 1 val per key
+in the excludeAttrs and includeAttrs is currently supported!!</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -781,9 +796,6 @@ Uses the FilterNode_Settings object for all args such that:</p>
 <dt id="Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh">
 <code class="descname">getBlendTargetsFromMesh</code><span class="sig-paren">(</span><em>node</em>, <em>asList=True</em>, <em>returnAll=False</em>, <em>levels=4</em>, <em>indexes=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh" title="Permalink to this definition">¶</a></dt>
 <dd><p>quick func to return the blendshape targets found from a give mesh&#8217;s connected blendshape&#8217;s</p>
-<p>TODO: missing index&#8217;s used to be an issue if you&#8217;d deleted a target Maya would leave the 
-index free resulting in blank targets, doesn&#8217;t seem to do that now?? Also what do we 
-return and in what format if we have multiple blendShapes on the node?</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -949,6 +961,11 @@ passing the results into the matchNodeLists func.
 <em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.LockChannels.UI.show" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="Red9.core.Red9_CoreUtils.LockChannels.UI.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.LockChannels.UI.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="method">
@@ -983,12 +1000,11 @@ found that are in the map file. ie, keyable, hidden, locked</p>
 ConfigObj decoder or a JSON deserializer and there&#8217;s subtle differences in the dict
 thats returned hence the decodeString() calls</p>
 </div>
-<p>TODO: Add progress bar?</p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="Red9.core.Red9_CoreUtils.LockChannels.processState">
-<em class="property">static </em><code class="descclassname">LockChannels.</code><code class="descname">processState</code><span class="sig-paren">(</span><em>nodes</em>, <em>attrs=None</em>, <em>mode=None</em>, <em>hierarchy=False</em>, <em>userDefined=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.LockChannels.processState" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descclassname">LockChannels.</code><code class="descname">processState</code><span class="sig-paren">(</span><em>nodes</em>, <em>attrs=None</em>, <em>mode=None</em>, <em>hierarchy=False</em>, <em>userDefined=False</em>, <em>attrKws={}</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.LockChannels.processState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Easy wrapper to manage channels that are keyable / locked
 in the channelBox.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1001,6 +1017,8 @@ in the channelBox.</p>
 <li><strong>mode</strong> &#8211; &#8216;lock&#8217;, &#8216;unlock&#8217;, &#8216;hide&#8217;, &#8216;unhide&#8217;, &#8216;fullkey&#8217;, &#8216;lockall&#8217;</li>
 <li><strong>hierarchy</strong> &#8211; process all child nodes, default is now False</li>
 <li><strong>usedDefined</strong> &#8211; process all UserDefined attributes on all nodes</li>
+<li><strong>attrKws</strong> &#8211; if mode=None then these are the flags passed to the setAttr
+command to control the node states, ie: {&#8216;keyable&#8217;:True, &#8216;lock&#8217;:False, &#8216;channelBox&#8217;:True}</li>
 </ul>
 </td>
 </tr>
@@ -1009,7 +1027,7 @@ in the channelBox.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r9Core</span><span class="o">.</span><span class="n">LockChannels</span><span class="o">.</span><span class="n">processState</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sx&quot;</span><span class="p">,</span> <span class="s2">&quot;sy&quot;</span><span class="p">,</span> <span class="s2">&quot;sz&quot;</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lockall&#39;</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># note: if attrs=&#39;all&#39; we now set it to the following for ease:</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="s2">&quot;tx&quot;</span><span class="p">,</span> <span class="s2">&quot;ty&quot;</span><span class="p">,</span> <span class="s2">&quot;tz&quot;</span><span class="p">,</span> <span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="s2">&quot;ry&quot;</span><span class="p">,</span> <span class="s2">&quot;rz&quot;</span><span class="p">,</span> <span class="s2">&quot;sx&quot;</span><span class="p">,</span> <span class="s2">&quot;sy&quot;</span><span class="p">,</span> <span class="s2">&quot;sz&quot;</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;nds&quot;</span><span class="p">,</span> <span class="s2">&quot;radius&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="s2">&quot;tx&quot;</span><span class="p">,</span> <span class="s2">&quot;ty&quot;</span><span class="p">,</span> <span class="s2">&quot;tz&quot;</span><span class="p">,</span> <span class="s2">&quot;rx&quot;</span><span class="p">,</span> <span class="s2">&quot;ry&quot;</span><span class="p">,</span> <span class="s2">&quot;rz&quot;</span><span class="p">,</span> <span class="s2">&quot;sx&quot;</span><span class="p">,</span> <span class="s2">&quot;sy&quot;</span><span class="p">,</span> <span class="s2">&quot;sz&quot;</span><span class="p">,</span> <span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;radius&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1062,7 +1080,7 @@ animation curves on the selected object by shifting keys</p>
 
 <dl class="class">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset">
-<em class="property">class </em><code class="descname">TimeOffset</code><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">TimeOffset</code><span class="sig-paren">(</span><em>cache_object=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>A class for dealing with time manipulation inside Maya.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">offset</span><span class="o">=</span><span class="mi">100</span>
@@ -1100,7 +1118,7 @@ calculating the offset for you such that timerange[0] starts at the offset frm v
 
 <dl class="classmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.fromSelected">
-<em class="property">classmethod </em><code class="descname">fromSelected</code><span class="sig-paren">(</span><em>offset</em>, <em>nodes=None</em>, <em>filterSettings=None</em>, <em>flocking=False</em>, <em>randomize=False</em>, <em>timerange=None</em>, <em>ripple=True</em>, <em>mRigs=False</em>, <em>startfrm=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.fromSelected" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">fromSelected</code><span class="sig-paren">(</span><em>offset</em>, <em>nodes=None</em>, <em>filterSettings=None</em>, <em>flocking=False</em>, <em>randomize=False</em>, <em>timerange=None</em>, <em>ripple=True</em>, <em>mRigs=False</em>, <em>startfrm=False</em>, <em>currentSystem=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.fromSelected" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process the current selection list and offset as appropriate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1117,8 +1135,13 @@ calculating the offset for you such that timerange[0] starts at the offset frm v
 mRigs wired to the given nodes</li>
 <li><strong>startfrm</strong> &#8211; this turns the offset arg into a new target start frame for the animation,
 calculating the offset for you such that timerange[0] starts at the offset frm value, only works if timerange is passed in</li>
-<li><strong>filterSettings</strong> &#8211; <p>this is a FilterSettings_Node object used to pass all
-the filter types into the FilterNode code. Internally the following is true:</p>
+<li><strong>filterSettings</strong> &#8211; this is a FilterSettings_Node object used to pass all
+the filter types into the FilterNode code. Internally the following is true:</li>
+<li><strong>currentSystem</strong> &#8211; <p>mRigs flag only: if True we check for the mSystemRoot attr (bool) on mNodes and if set,
+we skip the node and all childnodes from that node. Why?? The mSystsmRoot attr is a marker to denote the
+root of a given mRig system, by respecting this we clamp searches to the current system and prevent
+walking into the connected child sub-system. Primarily used in ProPack to stop facial nodes being
+returned and processed as part of the connected body rig.</p>
 <div class="line-block">
 <div class="line">settings.nodeTypes: list[] - search nodes of type</div>
 <div class="line">settings.searchAttrs: list[] - search nodes with Attrs of name</div>
@@ -1220,7 +1243,7 @@ the &#8216;timeOffset&#8217; method has been implemented and if so, call it.</p>
 <li><strong>offset</strong> &#8211; amount to offset the sounds nodes by</li>
 <li><strong>timerange</strong> &#8211; optional timerange to process (outer bounds only)</li>
 <li><strong>ripple</strong> &#8211; when shifting nodes ripple the offset to clips after the range,
-if ripple=False we only shift clips that starts in tghe bounds of the timerange</li>
+if ripple=False we only shift clips that starts in the bounds of the timerange</li>
 </ul>
 </td>
 </tr>

@@ -87,6 +87,51 @@ this was originally added to manage non-valid ascii characters in filepaths</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.general.attr_cache_create">
+<code class="descname">attr_cache_create</code><span class="sig-paren">(</span><em>node</em>, <em>attrs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.attr_cache_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a given object cache all it&#8217;s user defined attrs, or just those attrs passed in.
+The cache returns a dict with all the current states of all attrs, including the
+general setup of the attr (type, hidden, lock, keyable, value) but also all the
+plugs to and from it. This is really useful when used with the attr_cache_rebuild
+if you want to rebuild those attrs on the fly, reorder them against a given new list,
+or build the same attrs with the same plugs and connections on other objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node</strong> &#8211; node to grab the attrs from</li>
+<li><strong>attrs</strong> &#8211; if given only cache those, else cache all user-defined attrs</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.general.attr_cache_rebuild">
+<code class="descname">attr_cache_rebuild</code><span class="sig-paren">(</span><em>node</em>, <em>attrs=[]</em>, <em>data=None</em>, <em>cast_connections=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.attr_cache_rebuild" title="Permalink to this definition">¶</a></dt>
+<dd><p>for a given object rebuild the given attrs from the data cache if given,
+else we internally cache all attrs on the node and rebuild then against the
+given attrs[] list order, effectively re-ordering them</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>node</strong> &#8211; node we&#8217;re going to build the attrs onto</li>
+<li><strong>attrs</strong> &#8211; list of attr names thats used to order the process</li>
+<li><strong>data</strong> &#8211; a cache of attrs using the cache_attrdata() func above</li>
+<li><strong>cast_connections</strong> &#8211; if True we allow the attrs cached to be pushed over to the new object including all connections</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.general.filedata_manage">
 <code class="descname">filedata_manage</code><span class="sig-paren">(</span><em>add={}</em>, <em>remove=[]</em>, <em>ontimenode=False</em>, <em>onfile=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.filedata_manage" title="Permalink to this definition">¶</a></dt>
 <dd><p>manage custom data stored to the maya file header,
@@ -151,6 +196,7 @@ between the scriptEditor or the OutputWindow</p>
 <li>self.playblast_settings__cam_mrig : do we track individual mrigs or the scene in general?</li>
 <li>self.playblast_settings__cam_track : do we auto-track the scene contents from the resolved camera</li>
 <li>self.playblast_settings__cam_track_panning : if we&#8217;re tracking do we use a fixed panning camera or a full track</li>
+<li>self.playblast_settings__cam_frame_all : static frame all of the scene</li>
 <li>self.playblast_settings__compile_audio : compile all audio into a single temporary file to ensure all audio is rendered</li>
 </ul>
 <ul class="simple">
@@ -306,7 +352,7 @@ between the scriptEditor or the OutputWindow</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.general.BatchLogger.run">
 <code class="descname">run</code><span class="sig-paren">(</span><em>files=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.general.BatchLogger.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run self.func in guiven files, if not given files it will run all files in self.batch_files
+<dd><p>Run self.func in given files, if not given files it will run all files in self.batch_files
 :param files: list of files to be process
 :return: bool True if run successful, false if not</p>
 </dd></dl>

@@ -100,7 +100,7 @@ if so return the filename. PoseHandlers are a way of extending or
 over-loading the standard behaviour of the poseSaver, see Vimeo for
 a more detailed explanation.</p>
 <p>TODO: have this also accept a pointer to a handler file rather than a direct
-poseHnadler.py file in each folder. This means we could point a folder to a generic handler 
+poseHnadler.py file in each folder. This means we could point a folder to a generic handler
 inside our presets folder rather than having the code logic in each folder.</p>
 </dd></dl>
 
@@ -158,7 +158,7 @@ return the nodes to use for the pose instead</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>rootNode</strong> &#8211; rootNode passed to the search poseHandlers 
+<li><strong>rootNode</strong> &#8211; rootNode passed to the search poseHandlers
 poseGetNodesLoad or poseGetNodesSave functions</li>
 <li><strong>mode</strong> &#8211; &#8216;save&#8217; or &#8216;load&#8217;</li>
 </ul>
@@ -213,7 +213,7 @@ or loaded.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodesToLoad</strong> &#8211; nodes that the pose is about to load the data too, 
+<li><strong>nodesToLoad</strong> &#8211; nodes that the pose is about to load the data too,
 this is the already processed nodeList</li>
 <li><strong>parentSpaceAttrs</strong> &#8211; attributes we want to be ignored by the load system</li>
 </ul>
@@ -272,9 +272,9 @@ from a given poseFile return or select the internal stored objects</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; nodes to store the data against OR the rootNode if the 
+<li><strong>nodes</strong> &#8211; nodes to store the data against OR the rootNode if the
 filter is active.</li>
-<li><strong>filepath</strong> &#8211; posefile to save - if not given the pose is cached on this 
+<li><strong>filepath</strong> &#8211; posefile to save - if not given the pose is cached on this
 class instance.</li>
 <li><strong>useFilter</strong> &#8211; use the filterSettings or not.</li>
 <li><strong>storeThumbnail</strong> &#8211; save a thumbnail or not</li>
@@ -295,11 +295,11 @@ class instance.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; if given load the data to only these. If given and filter=True 
+<li><strong>nodes</strong> &#8211; if given load the data to only these. If given and filter=True
 this is the rootNode for the filter.</li>
-<li><strong>filepath</strong> &#8211; file to load - if not given the pose is loaded from a 
+<li><strong>filepath</strong> &#8211; file to load - if not given the pose is loaded from a
 cached instance on this class.</li>
-<li><strong>useFilter</strong> &#8211; If the pose has an active Filter_Settings block and this 
+<li><strong>useFilter</strong> &#8211; If the pose has an active Filter_Settings block and this
 is True then use the filter on the destination hierarchy.</li>
 </ul>
 </td>
@@ -317,12 +317,12 @@ is True then use the filter on the destination hierarchy.</li>
 <p>The PoseData is stored per node inside an internal dict as follows:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">node</span> <span class="o">=</span> <span class="s1">&#39;|group|Rig|Body|TestCtr&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">]</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>   <span class="n">index</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">Hierarchy</span> <span class="n">used</span> <span class="n">to</span> <span class="n">build</span> <span class="n">the</span> <span class="n">data</span> <span class="n">up</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;longName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;|group|Rig|Body|TestCtr&#39;</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">][</span><span class="s1">&#39;translateX&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">][</span><span class="s1">&#39;translateY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">][</span><span class="s1">&#39;translateZ&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">22</span> 
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>   <span class="n">index</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">Hierarchy</span> <span class="n">used</span> <span class="n">to</span> <span class="n">build</span> <span class="n">the</span> <span class="n">data</span> <span class="n">up</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;longName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;|group|Rig|Body|TestCtr&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">][</span><span class="s1">&#39;translateX&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">][</span><span class="s1">&#39;translateY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">][</span><span class="s1">&#39;translateZ&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">22</span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># if we&#39;re storing as MetaData we also include:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;metaData&#39;</span><span class="p">][</span><span class="s1">&#39;metaAttr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CTRL_L_Thing</span>    <span class="o">=</span> <span class="n">the</span> <span class="n">attr</span> <span class="n">that</span> <span class="n">wires</span> <span class="n">this</span> <span class="n">node</span> <span class="n">to</span> <span class="n">the</span> <span class="n">MetaSubsystem</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;metaData&#39;</span><span class="p">][</span><span class="s1">&#39;metaNodeID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">L_Arm_System</span>  <span class="o">=</span> <span class="n">the</span> <span class="n">metaNode</span> <span class="n">this</span> <span class="n">node</span> <span class="ow">is</span> <span class="n">wired</span> <span class="n">to</span> <span class="n">via</span> <span class="n">the</span> <span class="n">above</span> <span class="n">attr</span>
@@ -345,20 +345,20 @@ from this class instance, wraps things up nicely for you:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">=</span><span class="n">r9Pose</span><span class="o">.</span><span class="n">PoseData</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">metaPose</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;C:/mypose.pose&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># processPoseFile does just that, processes and build up the list of data but doesn&#39;t apply it</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">processPoseFile</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="s1">&#39;myRootNode&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># now we can dial in a percentage of the pose, we bind this to a floatSlider in the UI</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">_applyData</span><span class="p">(</span><span class="n">percent</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>If the root node of the hierarchy passed into the poseSave() has a message attr 
-&#8216;exportSkeletonRoot&#8217; or &#8216;animSkeletonRoot&#8217; and that message is connected to a 
-skeleton then the pose will also include an internal &#8216;skeleton&#8217; pose, storing all 
-child joints into a separate block in the poseFile that can be used by the 
+<p>If the root node of the hierarchy passed into the poseSave() has a message attr
+&#8216;exportSkeletonRoot&#8217; or &#8216;animSkeletonRoot&#8217; and that message is connected to a
+skeleton then the pose will also include an internal &#8216;skeleton&#8217; pose, storing all
+child joints into a separate block in the poseFile that can be used by the
 PoseCompare class/function.</p>
 <p class="last">For metaData based rigs this calls a function on the metaRig class getSkeletonRoots()
 which wraps the &#8216;exportSkeletonRoot&#8217; attr, allowing you to overload this behaviour
@@ -375,19 +375,19 @@ expansion</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.PoseData.poseSave">
-<code class="descname">poseSave</code><span class="sig-paren">(</span><em>nodes</em>, <em>filepath=None</em>, <em>useFilter=True</em>, <em>storeThumbnail=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseData.poseSave" title="Permalink to this definition">¶</a></dt>
+<code class="descname">poseSave</code><span class="sig-paren">(</span><em>nodes</em>, <em>filepath=None</em>, <em>useFilter=True</em>, <em>storeThumbnail=True</em>, <em>modelPanel=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseData.poseSave" title="Permalink to this definition">¶</a></dt>
 <dd><p>Entry point for the generic PoseSave.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; nodes to store the data against OR the rootNode if the 
+<li><strong>nodes</strong> &#8211; nodes to store the data against OR the rootNode if the
 filter is active.</li>
-<li><strong>filepath</strong> &#8211; posefile to save - if not given the pose is cached on this 
+<li><strong>filepath</strong> &#8211; posefile to save - if not given the pose is cached on this
 class instance.</li>
 <li><strong>useFilter</strong> &#8211; use the filterSettings or not.</li>
-<li><strong>storeThumbnail</strong> &#8211; generate and store a thu8mbnail from the screen to go alongside the pose</li>
+<li><strong>storeThumbnail</strong> &#8211; generate and store a thubmbnail from the screen to go alongside the pose</li>
 </ul>
 </td>
 </tr>
@@ -423,6 +423,11 @@ This only checks those nodes in the snapList and only runs under relative mode.<
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Relative mode currently relies on the controller / reference node thats passed in to be Y-up in it&#8217;s native state,
+thats to say the Y axis pointing upwards. We&#8217;ll be patching this moving forwards</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -455,7 +460,7 @@ only meant as an internal binding</p>
 <dt id="Red9.core.Red9_PoseSaver.PoseBlender.show">
 <code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseBlender.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>main blender UI, simple but generic and allows us to dial in a percentage
-of the given pose. This is basically a wrap for the other UI&#8217;s and functions 
+of the given pose. This is basically a wrap for the other UI&#8217;s and functions
 that call this method so we have a single class managing the UI and functionality.</p>
 </dd></dl>
 
@@ -472,23 +477,23 @@ useful to be able to shift poses in global space.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># the filter settings object in the same way for any of the Red9 tools</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Red9.core.Red9_PoseSaver</span> <span class="k">as</span> <span class="nn">r9Pose</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Red9.core.Red9_Meta</span> <span class="k">as</span> <span class="nn">r9Meta</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># grab our mRig node</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">=</span><span class="n">r9Pose</span><span class="o">.</span><span class="n">PosePointCloud</span><span class="p">(</span><span class="n">nodes</span><span class="o">=</span><span class="n">mrig</span><span class="o">.</span><span class="n">ctrl_main</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">metaRig</span><span class="o">=</span><span class="kc">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">.</span><span class="n">prioritySnapOnly</span><span class="o">=</span><span class="kc">True</span>  <span class="c1"># for rigs you can turn this on so that ONLY those nodes in the filterPriority list get built and used</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># build the cloud system</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">.</span><span class="n">buildOffsetCloud</span><span class="p">()</span>   <span class="c1"># you can also pass a root point in, used as the base pivot ( rootReference=&#39;pSphere1&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># to apply the cloud, snapping the rig into the clouds pose</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">.</span><span class="n">applyPosePointCloud</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># to sync the cloud to the rigs current frame, allowing you to update the clouds internal pose</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">.</span><span class="n">updatePosePointCloud</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># delete the ppc node</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ppc</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
 </pre></div>
@@ -556,7 +561,7 @@ hierarchy and is designed for overloading if required.</p>
 <dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.PosePointCloud.generateVisualReference">
 <code class="descname">generateVisualReference</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.generateVisualReference" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generic call that&#8217;s used to overload the visual handling 
+<dd><p>Generic call that&#8217;s used to overload the visual handling
 of the PPC is other instances such as the AnimationPPC</p>
 </dd></dl>
 
@@ -584,8 +589,7 @@ of the PPC is other instances such as the AnimationPPC</p>
 <dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.PosePointCloud.shapeSwapMeshes">
 <code class="descname">shapeSwapMeshes</code><span class="sig-paren">(</span><em>selectable=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.shapeSwapMeshes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Swap the mesh Geo so it&#8217;s a shape under the PPC transform root
-TODO: Make sure that the duplicate message link bug is covered!!</p>
+<dd><p>Swap the mesh Geo so it&#8217;s a shape under the PPC transform root</p>
 </dd></dl>
 
 <dl class="method">
@@ -691,8 +695,8 @@ that string it will be skipped, note this is a partial match so you can pass in 
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>In the new setup if the pose being generated had it&#8217;s settings.nodeTypes=[&#8216;joint&#8217;] or we found the 
-exportSkeletonRoot jnt (mrig) then we add a whole new dict to serialize the current skeleton data to the pose, 
+<p>In the new setup if the pose being generated had it&#8217;s settings.nodeTypes=[&#8216;joint&#8217;] or we found the
+exportSkeletonRoot jnt (mrig) then we add a whole new dict to serialize the current skeleton data to the pose,
 this means that we can then compare a pose on a rig via the internal skeleton transforms as well
 as the actual rig controllers... makes validation a lot more accurate for export</p>
 <blockquote class="last">

@@ -180,13 +180,13 @@ the internal tests list but it&#8217;s often easier to have a bespoke class to t
 <td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.optimiser.OptimizeScene" title="Red9.pro_pack.core.optimiser.OptimizeScene"><code class="xref py py-obj docutils literal"><span class="pre">OptimizeScene</span></code></a>()</td>
-<td>The OptimizeScene class is responsible for wind optimization of the current  Maya Scene.</td>
+<td>The OptimizeScene class is responsible for wind optimization of the current Maya Scene.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthTestObject" title="Red9.pro_pack.core.optimiser.HealthTestObject"><code class="xref py py-obj docutils literal"><span class="pre">HealthTestObject</span></code></a>(name)</td>
-<td>HealthTestObject is a base class object that should be managed and  returned by all of the Health Test functions.</td>
+<td>HealthTestObject is a base class object that should be managed and returned by all of the Health Test functions.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-obj docutils literal"><span class="pre">HealthValidation</span></code></a>(*args,&nbsp;**kwargs)</td>
-<td>This is the main Health Test system for all of ProPack and Red9&#8217;s internal  publisher system.</td>
+<td>This is the main Health Test system for all of ProPack and Red9&#8217;s internal publisher system.</td>
 </tr>
 </tbody>
 </table>
@@ -210,9 +210,9 @@ the internal tests list but it&#8217;s often easier to have a bespoke class to t
 <dt id="Red9.pro_pack.core.optimiser.OptimizeScene">
 <em class="property">class </em><code class="descname">OptimizeScene</code><a class="headerlink" href="#Red9.pro_pack.core.optimiser.OptimizeScene" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>The OptimizeScene class is responsible for wind optimization of the current 
+<p>The OptimizeScene class is responsible for wind optimization of the current
 Maya Scene.</p>
-<p>when initializing the class we expose a number of internal options to 
+<p>when initializing the class we expose a number of internal options to
 allow you to tailor how the optimize_full system deals with your scene</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.optimiser.OptimizeScene.optimize_base">
@@ -236,7 +236,7 @@ importing the data and running a base optimize on the remaining data.</p>
 <dl class="docutils">
 <dt>..note ::</dt>
 <dd>any additional nodes you need to retain during the process, such as non-dag nodes
-like Audio Nodes need to be handling either by adding a selection method and adding 
+like Audio Nodes need to be handling either by adding a selection method and adding
 that in the self.get_retained_funcs list, OR adding to the initial self.nodes_to_retain list</dd>
 </dl>
 </dd></dl>
@@ -244,9 +244,9 @@ that in the self.get_retained_funcs list, OR adding to the initial self.nodes_to
 <dl class="method">
 <dt id="Red9.pro_pack.core.optimiser.OptimizeScene.get_nodes_to_retain">
 <code class="descname">get_nodes_to_retain</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.OptimizeScene.get_nodes_to_retain" title="Permalink to this definition">¶</a></dt>
-<dd><p>nodes to include in the rootNode list that gets exported during the 
-optimize_full function call. This is so that we can add in additional 
-non DAG nodes such as audio nodes into the temp export to ensure 
+<dd><p>nodes to include in the rootNode list that gets exported during the
+optimize_full function call. This is so that we can add in additional
+non DAG nodes such as audio nodes into the temp export to ensure
 everything we want to retain is kept.</p>
 </dd></dl>
 
@@ -270,14 +270,14 @@ prints that status out after the fix method has been run.</p>
 <dt id="Red9.pro_pack.core.optimiser.get_healthTests">
 <code class="descname">get_healthTests</code><span class="sig-paren">(</span><em>inc_loose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.get_healthTests" title="Permalink to this definition">¶</a></dt>
 <dd><p>get all tests that we deem to be valid HealthTests. We first find any subclasses of the base HealthValidation
-class, then we use that to find all modules that may contain health tests. From that we inspect all methods in 
+class, then we use that to find all modules that may contain health tests. From that we inspect all methods in
 the module, matching them for a &#8216;_test&#8217; in the name and extracting all args and docstrs</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inc_loose</strong> &#8211; do we also scan for any loose tests within found modules containing HealthValidation subclasses?
-these tests may be within validation subclasses but we scan as loose to include all available tests. This is used 
+these tests may be within validation subclasses but we scan as loose to include all available tests. This is used
 withing the &#8216;All_Available_Tests&#8217; collection subclass mainly</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return dict:</th><td class="field-body">full data dump for later processing</td>
@@ -290,9 +290,9 @@ withing the &#8216;All_Available_Tests&#8217; collection subclass mainly</td>
 <dt id="Red9.pro_pack.core.optimiser.HealthTestObject">
 <em class="property">class </em><code class="descname">HealthTestObject</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>HealthTestObject is a base class object that should be managed and 
-returned by all of the Health Test functions. It&#8217;s an encapsulated status 
-object for a particular test method, holding results from the test 
+<p>HealthTestObject is a base class object that should be managed and
+returned by all of the Health Test functions. It&#8217;s an encapsulated status
+object for a particular test method, holding results from the test
 and fix methods.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">maya_timeUnits_test</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s1">&#39;ntscf&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">.</span><span class="n">print_status</span>
@@ -314,7 +314,7 @@ and fix methods.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.optimiser.HealthTestObject.run_fix_method">
 <code class="descname">run_fix_method</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject.run_fix_method" title="Permalink to this definition">¶</a></dt>
-<dd><p>If this test object has already run and has a fix method bound, 
+<dd><p>If this test object has already run and has a fix method bound,
 and the test failed then run the fix method.</p>
 </dd></dl>
 
@@ -345,8 +345,8 @@ set of data.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Test.status=&#8217;PASSED&#8217; if either the test.set_passed() has been run internally, or if
-self.results_expected == self.results_returned. This allows for simple matching of default 
-data such as Maya environment calls etc. For more complex status checking I&#8217;d recommend 
+self.results_expected == self.results_returned. This allows for simple matching of default
+data such as Maya environment calls etc. For more complex status checking I&#8217;d recommend
 doing that inside your test function and setting the status there using the set_passed etc.</p>
 </div>
 </dd></dl>
@@ -354,9 +354,9 @@ doing that inside your test function and setting the status there using the set_
 <dl class="method">
 <dt id="Red9.pro_pack.core.optimiser.HealthTestObject.set_byCompare">
 <code class="descname">set_byCompare</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject.set_byCompare" title="Permalink to this definition">¶</a></dt>
-<dd><p>automatically set the status based on comparing the 
+<dd><p>automatically set the status based on comparing the
 results_expected==results_returned
-This is generally for simple test methods where you can guarantee 
+This is generally for simple test methods where you can guarantee
 the results are consistent.</p>
 </dd></dl>
 
@@ -416,11 +416,11 @@ the results are consistent.</p>
 <dt id="Red9.pro_pack.core.optimiser.HealthValidation">
 <em class="property">class </em><code class="descname">HealthValidation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>This is the main Health Test system for all of ProPack and Red9&#8217;s internal 
+<p>This is the main Health Test system for all of ProPack and Red9&#8217;s internal
 publisher system. The idea is that you bind individual test to the class
 to run, each test returns a HealthTestObject which means we can easily
 collate data and fix issues via the run_fix_methods</p>
-<p>In Pro for clients this is also bound to the fileOpen callback, allowing us to test 
+<p>In Pro for clients this is also bound to the fileOpen callback, allowing us to test
 the scene after load against a given project template.</p>
 <p>See examples in the API docs above</p>
 <p>key internal vars:
@@ -549,7 +549,7 @@ if True return a dict where the keys are the status and value is a list of tests
 <dt id="Red9.pro_pack.core.optimiser.HealthValidation.prettyPrintStatus">
 <code class="descname">prettyPrintStatus</code><span class="sig-paren">(</span><em>overview=True</em>, <em>detailed=False</em>, <em>passed=True</em>, <em>indepth=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthValidation.prettyPrintStatus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple formatter to make sense of the results in a manner that can be either printed to screen
-or out to file. It&#8217;s worth testing the flags here as there is a LOT of formatting possible to 
+or out to file. It&#8217;s worth testing the flags here as there is a LOT of formatting possible to
 tweak the results into a format that contains just the base data, or all the comples fails etc</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -618,7 +618,7 @@ tweak the results into a format that contains just the base data, or all the com
 <dt id="Red9.pro_pack.core.optimiser.SceneStripper">
 <em class="property">class </em><code class="descname">SceneStripper</code><span class="sig-paren">(</span><em>src_node=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.SceneStripper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
-<p>Base Scene Clean to strip back any bloated history, usually used as a 
+<p>Base Scene Clean to strip back any bloated history, usually used as a
 compound in the HealthManager for quick access to these key optimisations</p>
 <p>Removes:</p>
 <ul class="simple">
@@ -886,7 +886,7 @@ method internally if not already run.</p>
 <dt id="Red9.pro_pack.core.optimiser.mRigs_renderMeshes_hooked_test">
 <code class="descname">mRigs_renderMeshes_hooked_test</code><span class="sig-paren">(</span><em>expected=1</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_renderMeshes_hooked_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check if all mRigs in the scene have existing renderMeshes hooked up
-or at least the expected number or above. This wire is used by the PoseSaver 
+or at least the expected number or above. This wire is used by the PoseSaver
 to create the PosePointCloud visual mesh reference
 Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -907,7 +907,7 @@ Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <dt id="Red9.pro_pack.core.optimiser.mRigs_renderMeshes_head_hooked">
 <code class="descname">mRigs_renderMeshes_head_hooked</code><span class="sig-paren">(</span><em>expected=1</em>, <em>mRigs=[]</em>, <em>group='main'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_renderMeshes_head_hooked" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check is all mRigs in the scene have existing renderMeshes hooked up
-or at least the expected number or above. This wire is used by the PoseSaver 
+or at least the expected number or above. This wire is used by the PoseSaver
 to create the PosePointCloud visual mesh reference
 Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1068,7 +1068,7 @@ check to see if the mRig has a valid Pro Picker template</p>
 <li><strong>expected</strong> &#8211; if we were expecting a picker or not</li>
 <li><strong>mRigs</strong> &#8211; given mRigs to test, if None then we find all instances of mRigs in the scene</li>
 <li><strong>templatefile</strong> &#8211; template file to use in the fix method if not already found</li>
-<li><strong>force</strong> &#8211; if force and template file given then the test if failed by default allowing the fix to 
+<li><strong>force</strong> &#8211; if force and template file given then the test if failed by default allowing the fix to
 force update any template already loaded on the mRig</li>
 </ul>
 </td>
@@ -1087,7 +1087,7 @@ force update any template already loaded on the mRig</li>
 <dt id="Red9.pro_pack.core.optimiser.mRigs_filterssettings_test">
 <code class="descname">mRigs_filterssettings_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=[]</em>, <em>templatefile='Red9_DevRig.cfg'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_filterssettings_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>generic MetaRig also supported with this test
-check to see if the mRig has a filterSettings config 
+check to see if the mRig has a filterSettings config
 bound to it internally</p>
 <p>This is a Warning failure only</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1325,7 +1325,7 @@ zero_rotates. This ONLY tests skinClusters attached to mesh objects</p>
 <dt id="Red9.pro_pack.core.optimiser.skeleton_rotate_tolerance_test">
 <code class="descname">skeleton_rotate_tolerance_test</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>tolerance=0.001</em>, <em>searchPattern=[]</em>, <em>fk=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_rotate_tolerance_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check that all joints under a given rootJnt have a
-rotation value under the given tolerance. This is used when binding a 
+rotation value under the given tolerance. This is used when binding a
 rig-up to ensure that we get no additional gimbal introduced via a rig system etc.</p>
 <p>Running the fix method will zero the rotate values</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1571,7 +1571,7 @@ by-passing the FBX export issue</td>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.blends_target_missing_indexes_fix">
 <code class="descname">blends_target_missing_indexes_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.blends_target_missing_indexes_fix" title="Permalink to this definition">¶</a></dt>
-<dd><p>brute force fix by adding in a duplicated base mesh padder shape wired as a 
+<dd><p>brute force fix by adding in a duplicated base mesh padder shape wired as a
 new target for the missing index, there by fixing the FBX export issue for Unreal etc.</p>
 </dd></dl>
 
@@ -1747,6 +1747,11 @@ a list then the first arg is the default that failed interTypes will get set too
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">if a layer is connected to the layerManager in Id[0] slot index then it&#8217;s
+treated as the defaultLayer and UNEDITABLE. This has happened a few times with assets in 2018</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -1758,7 +1763,7 @@ a list then the first arg is the default that failed interTypes will get set too
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.reference_nodes_invalid_test">
 <code class="descname">reference_nodes_invalid_test</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.reference_nodes_invalid_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>test / return a list of reference nodes in the scene that have no 
+<dd><p>test / return a list of reference nodes in the scene that have no
 file pointer and are therefore currently invalid</p>
 </dd></dl>
 
@@ -1787,7 +1792,7 @@ nested namespaces correctly</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.namespaces_found_fix">
 <code class="descname">namespaces_found_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.namespaces_found_fix" title="Permalink to this definition">¶</a></dt>
-<dd><p>remove any references that come back as invalid. For this process we try and shift 
+<dd><p>remove any references that come back as invalid. For this process we try and shift
 the failed namespaces into the root &#8221;:&#8221; space before removing the then empty namespace</p>
 </dd></dl>
 

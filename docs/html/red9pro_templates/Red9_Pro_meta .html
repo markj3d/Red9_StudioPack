@@ -163,7 +163,7 @@ during the fk_to_fk_match call</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>mSystem</strong> &#8211; mSystem to wire the matchpnt too</li>
 <li><strong>ctrl_wire</strong> &#8211; mSystem.attr wire connecting the controller to the mSystem, OR the controller object itself - wired to a MetaRigSubSystem
-nopet that this now also supports ctrl_wire attrs that are connected to the SupportNode also</li>
+note that this now also supports ctrl_wire attrs that are connected to the SupportNode also</li>
 <li><strong>fk_wire</strong> &#8211; mSystem.attr wire connecting the fk_jnt to the mSystem, OR object to use directly</li>
 <li><strong>matchid</strong> &#8211; denotes the matchpnts base wire name - eg : &#8220;end&#8221;, &#8220;pole&#8221; creating attr wire &#8216;mSystem.SupportNode.IK_matchpnt_pole&#8217;</li>
 <li><strong>prefix</strong> &#8211; usually just the side id for the system &#8216;L&#8217;,&#8217;R&#8217;,&#8217;C&#8217;, if not given we ID this from the system mirrorSide</li>
@@ -208,7 +208,6 @@ system and requires a little baby sitting!</p>
 <p class="last">if the rig is NOT facing the &#8216;Z&#8217; axis the toe matching data sent to the toe system during the
 ik/fk match will be INCORRECT!</p>
 </div>
-<p>TODO: add in the spline MidCtrls to the match systems!!</p>
 </dd></dl>
 
 <dl class="function">
@@ -309,6 +308,25 @@ off to file and reload all wires back without having to craft custom wiring macr
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="Red9.pro_pack.core.metadata_pro.compare_connection_datamap">
+<code class="descname">compare_connection_datamap</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>mrig=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.compare_connection_datamap" title="Permalink to this definition">¶</a></dt>
+<dd><p>compare wrapper method to test a complete datamap for the given mRig systems
+against a previously stored out datamap.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> &#8211; filepath to save the datamap to, if not given prompt</li>
+<li><strong>mrig</strong> &#8211; save specific mRig in the scene or just find the first instance available</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base">
 <em class="property">class </em><code class="descname">Pro_MetaRig_Base</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Permalink to this definition">¶</a></dt>
@@ -349,7 +367,7 @@ this is for debugging enabling us to compare that we have matching connections b
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; if given and not compare=True then we write the datamap to this json filepath. 
+<li><strong>filepath</strong> &#8211; if given and not compare=True then we write the datamap to this json filepath.
 The existence of the filepath also forces the encode_objects flags on in all of the gatherInfo() calls
 ensuring that the data is suitable to file out to json</li>
 <li><strong>compare</strong> &#8211; if True and filepath is given then we compare the current data extracted with that of
@@ -369,6 +387,7 @@ written by the RigManager this should be set to False!!</li>
 <ul class="last simple">
 <li>this does NOT store any connections to HIK systems, even if wired as HIK mNodes due to the connections complexity of HIK.</li>
 <li>compare does NOT compare the actual nodes wired, only the mNode wiring and attrs are currently checked</li>
+<li>when running a compare make sure the state of the ctrl_only flag matches between the file version and the state of this key here!!</li>
 </ul>
 </div>
 <p>TODO: currently the main keys are the mNodeID but if we have 2 mNodes with the same mNodeID then we over-write the key,
@@ -399,7 +418,13 @@ this will help sort that issue out</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.is_bound">
 <code class="descname">is_bound</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.is_bound" title="Permalink to this definition">¶</a></dt>
-<dd><p>check to see if this rig is on a live binder (BND file casting via the Pro_to_BND)</p>
+<dd><p>check to see if this rig is on a live binder</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_bound_root">
+<code class="descname">get_bound_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_bound_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the bound root skeleton used by the PRO_to_BND anim tranfer systems</p>
 </dd></dl>
 
 <dl class="method">
@@ -525,7 +550,7 @@ BUT an mRig should be able to have 1 character and 1 facial tag at the same time
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig">
-<code class="descname">bake_rig</code><span class="sig-paren">(</span><em>selected=False</em>, <em>runFilter=True</em>, <em>deleteStatics=True</em>, <em>sampleby=1</em>, <em>ignoreInFilter=[]</em>, <em>debugView=False</em>, <em>sparseBake=True</em>, <em>timerange=()</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bake_rig</code><span class="sig-paren">(</span><em>selected=False</em>, <em>runFilter=True</em>, <em>deleteStatics=True</em>, <em>sampleby=1</em>, <em>ignoreInFilter=[]</em>, <em>debugView=False</em>, <em>sparseBake=True</em>, <em>timerange=()</em>, <em>whole_start=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a generic bake call for the rig controllers - mainly used in conjunction with the Red9 Binder setup but by no means tied to it.
 This call will bake all animation down to the rig and remove the Binder system hooks if found. It also manages AnimLayer removal during the bake,
 removing a controller from all animation layers if it can do so and should any animLayer become empty, we delete them.</p>
@@ -542,6 +567,7 @@ removing a controller from all animation layers if it can do so and should any a
 <li><strong>debugView</strong> &#8211; if True we allow the Maya UI to refresh each frame, else we suspend update</li>
 <li><strong>sparseBake</strong> &#8211; turns on the sparseAnimCurveBake flag in the bakeResults call, True by default</li>
 <li><strong>timerange</strong> &#8211; (start, end) optional timerange to bake, by default this uses the standard Red9 timeLineRangeGet func</li>
+<li><strong>whole_start</strong> &#8211; if True (default) we clamp tyhe start frame to a whole number, corrects for issues with scenes having frames at subframe times</li>
 </ul>
 </td>
 </tr>
@@ -646,6 +672,11 @@ self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">animMap_restore_audio_data</span><span class="p">(</span><span class="n">extractBy</span><span class="o">=</span><span class="s1">&#39;byRange_start&#39;</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;X:/my_animation_data/walk_to_sit.r9anim&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">because the restoration system relies on the AudioGroup mNode and that in turn relies on the ExportTag systems ONLY
+mRigs with a valid exportTag will accept Audio restored data via this call</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -701,7 +732,7 @@ and persistence of audio nodes and export loops stored in the r9Anim gathered in
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.poseLoad_blended">
 <code class="descname">poseLoad_blended</code><span class="sig-paren">(</span><em>filepath</em>, <em>useFilter=True</em>, <em>matchMethod='stripPrefix'</em>, <em>percentage=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.poseLoad_blended" title="Permalink to this definition">¶</a></dt>
-<dd><p>wrapper to easily be able to dial in poses via the poseBlender slider, this is basically a wrap 
+<dd><p>wrapper to easily be able to dial in poses via the poseBlender slider, this is basically a wrap
 over the StudioPack AnimatioUtils call for the pose blending but setup for the mNodes directly</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1151,12 +1182,6 @@ r9Anim and r9Pose files as cross-reference</p>
 </table>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.is_bound">
-<code class="descname">is_bound</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.is_bound" title="Permalink to this definition">¶</a></dt>
-<dd><p>check to see if this rig is on a live binder</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_renderMeshes_head">
 <code class="descname">visibility_renderMeshes_head</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_renderMeshes_head" title="Permalink to this definition">¶</a></dt>
@@ -1191,7 +1216,7 @@ switching off the body&#8217;s head geo and turning on the facialCores head.</p>
 <li><strong>state</strong> &#8211; switch state, True favours the FacialCore&#8217;s geo to be visible, not required in toggle or query mode</li>
 <li><strong>query</strong> &#8211; query the current state of the facial visibility</li>
 <li><strong>toggle</strong> &#8211; toggle the state of the visibility, overwriting any state passed in</li>
-<li><strong>evalmanaged</strong> &#8211; if True we also manage the frozen state of all key nodes in the rig to speed up 
+<li><strong>evalmanaged</strong> &#8211; if True we also manage the frozen state of all key nodes in the rig to speed up
 parallel eval on the hidden rig system</li>
 </ul>
 </td>
@@ -2520,7 +2545,7 @@ flag</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.timeOffset">
-<code class="descname">timeOffset</code><span class="sig-paren">(</span><em>offset</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.timeOffset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">timeOffset</code><span class="sig-paren">(</span><em>offset</em>, <em>timerange=None</em>, <em>ripple=True</em>, <em>cache_object=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.timeOffset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Offset the timerange data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2556,6 +2581,30 @@ used for casting data between mRigs</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.bookmark_node">
+<code class="descname">bookmark_node</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.bookmark_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the connected bookmark</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.bookmark_create">
+<code class="descname">bookmark_create</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.bookmark_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>new bookmark support for Maya 2020</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.bookmark_refresh">
+<code class="descname">bookmark_refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.bookmark_refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>run in the ui to sync the visual display of the bookmark when data changhes on self</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.bookmark_remove">
+<code class="descname">bookmark_remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.bookmark_remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>if found remove the bookmark connected to this loop</p>
 </dd></dl>
 
 </dd></dl>
@@ -2676,7 +2725,7 @@ generated by the gatherInfo call itself</td>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.timeOffset">
-<code class="descname">timeOffset</code><span class="sig-paren">(</span><em>offset</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.timeOffset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">timeOffset</code><span class="sig-paren">(</span><em>offset</em>, <em>timerange=None</em>, <em>ripple=True</em>, <em>cache_object=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.timeOffset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Offset the timerange data, generic call used by all the systems to manage mNodes and time</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2856,7 +2905,7 @@ else we validate that testRange is fully within the baseRanges times</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.AudioGroup.timeOffset">
-<code class="descname">timeOffset</code><span class="sig-paren">(</span><em>offset</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.timeOffset" title="Permalink to this definition">¶</a></dt>
+<code class="descname">timeOffset</code><span class="sig-paren">(</span><em>offset</em>, <em>timerange=None</em>, <em>ripple=True</em>, <em>cache_object=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup.timeOffset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Offset the audio node offset data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2866,6 +2915,7 @@ else we validate that testRange is fully within the baseRanges times</p>
 <li><strong>offset</strong> &#8211; offset the timerange data for this instance</li>
 <li><strong>timerange</strong> &#8211; used to check if we need to offset both start and end frames or just one</li>
 <li><strong>ripple</strong> &#8211; unused at the moment</li>
+<li><strong>cache_object</strong> &#8211; the cache / processed list used to prevent duplicate offsets. This is usually the TimeOffset()._processed dict</li>
 </ul>
 </td>
 </tr>

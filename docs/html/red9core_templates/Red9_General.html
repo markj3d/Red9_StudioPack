@@ -85,14 +85,14 @@ This includes most of the context managers and decorators.</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.getScriptEditorSelection" title="Red9.core.Red9_General.getScriptEditorSelection"><code class="xref py py-obj docutils literal"><span class="pre">getScriptEditorSelection</span></code></a>()</td>
 <td>this is a hack to bypass an issue with getting the data back from the</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.thumbNailScreen" title="Red9.core.Red9_General.thumbNailScreen"><code class="xref py py-obj docutils literal"><span class="pre">thumbNailScreen</span></code></a>(filepath,&nbsp;width,&nbsp;height[,&nbsp;mode])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.thumbNailScreen" title="Red9.core.Red9_General.thumbNailScreen"><code class="xref py py-obj docutils literal"><span class="pre">thumbNailScreen</span></code></a>(filepath,&nbsp;width,&nbsp;height[,&nbsp;...])</td>
 <td></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.thumbnailFromPlayBlast" title="Red9.core.Red9_General.thumbnailFromPlayBlast"><code class="xref py py-obj docutils literal"><span class="pre">thumbnailFromPlayBlast</span></code></a>(filepath,&nbsp;width,&nbsp;height)</td>
 <td>Generate a ThumbNail of the screen</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.thumbnailApiFromView" title="Red9.core.Red9_General.thumbnailApiFromView"><code class="xref py py-obj docutils literal"><span class="pre">thumbnailApiFromView</span></code></a>(filename,&nbsp;width,&nbsp;height)</td>
-<td>grab the thumbnail direct from the buffer?</td>
+<td>grab the thumbnail direct from the buffer. This viewport capture method</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.os_OpenFileDirectory" title="Red9.core.Red9_General.os_OpenFileDirectory"><code class="xref py py-obj docutils literal"><span class="pre">os_OpenFileDirectory</span></code></a>(path)</td>
 <td>open the given folder in the default OS browser</td>
@@ -252,7 +252,7 @@ the undo stack via the Red9.evalManager_switch plugin</p>
 
 <dl class="class">
 <dt id="Red9.core.Red9_General.AnimationContext">
-<em class="property">class </em><code class="descname">AnimationContext</code><span class="sig-paren">(</span><em>evalmanager=True</em>, <em>time=True</em>, <em>undo=True</em>, <em>autokey=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.AnimationContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">AnimationContext</code><span class="sig-paren">(</span><em>evalmanager=True</em>, <em>time=True</em>, <em>undo=True</em>, <em>autokey=False</em>, <em>suppress_exceptions=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.AnimationContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>CONTEXT MANAGER : Simple Context Manager for restoring Animation settings</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -445,24 +445,51 @@ the UI to the previous state. Maybe this could be a tool in it&#8217;s own write
 
 <dl class="function">
 <dt id="Red9.core.Red9_General.thumbNailScreen">
-<code class="descname">thumbNailScreen</code><span class="sig-paren">(</span><em>filepath</em>, <em>width</em>, <em>height</em>, <em>mode='api'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.thumbNailScreen" title="Permalink to this definition">¶</a></dt>
+<code class="descname">thumbNailScreen</code><span class="sig-paren">(</span><em>filepath</em>, <em>width</em>, <em>height</em>, <em>mode='api'</em>, <em>modelPanel=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.thumbNailScreen" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_General.thumbnailFromPlayBlast">
-<code class="descname">thumbnailFromPlayBlast</code><span class="sig-paren">(</span><em>filepath</em>, <em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.thumbnailFromPlayBlast" title="Permalink to this definition">¶</a></dt>
+<code class="descname">thumbnailFromPlayBlast</code><span class="sig-paren">(</span><em>filepath</em>, <em>width</em>, <em>height</em>, <em>modelPanel=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.thumbnailFromPlayBlast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a ThumbNail of the screen
-Note: &#8216;cf&#8217; flag is broken in 2012
-:param filepath: path to Thumbnail
-:param width: width of capture
-:param height: height of capture</p>
+Note: &#8216;cf&#8217; flag is broken in 2012</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> &#8211; path to Thumbnail</li>
+<li><strong>width</strong> &#8211; width of capture</li>
+<li><strong>height</strong> &#8211; height of capture</li>
+<li><strong>modePanel</strong> &#8211; modelPanel to grab the image from, default=None, works it out internally</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_General.thumbnailApiFromView">
-<code class="descname">thumbnailApiFromView</code><span class="sig-paren">(</span><em>filename</em>, <em>width</em>, <em>height</em>, <em>compression='bmp'</em>, <em>modelPanel='modelPanel4'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.thumbnailApiFromView" title="Permalink to this definition">¶</a></dt>
-<dd><p>grab the thumbnail direct from the buffer?
-TODO: not yet figured out how you crop the data here?</p>
+<code class="descname">thumbnailApiFromView</code><span class="sig-paren">(</span><em>filename</em>, <em>width</em>, <em>height</em>, <em>modelPanel=None</em>, <em>compression='bmp'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.thumbnailApiFromView" title="Permalink to this definition">¶</a></dt>
+<dd><p>grab the thumbnail direct from the buffer. This viewport capture method
+is apparently flagged as obsolete in the Maya API so this might need some investigation
+in the future!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> &#8211; path to store the image too</li>
+<li><strong>width</strong> &#8211; width of the image to capture</li>
+<li><strong>height</strong> &#8211; height of the image to capture</li>
+<li><strong>modelPanel</strong> &#8211; panel to capture</li>
+<li><strong>compression</strong> &#8211; base format for the image, default is &#8216;bmp&#8217;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">

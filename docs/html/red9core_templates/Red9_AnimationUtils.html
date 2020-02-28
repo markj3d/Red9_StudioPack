@@ -188,7 +188,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 
 <dl class="data">
 <dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS">
-<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C255358&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C255358&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000C255358&gt;&gt;, &lt;bound method cigProject.set_animtoolkit_UI of &lt;Red9_ClientCore.CloudImp.core.project.cigProject object at 0x000000001313EBA8&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000001CBB6F60&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000001CBB6F60&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000001CBB6F60&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000001CBB6F60&gt;&gt;, &lt;bound method cigProject.set_animtoolkit_UI of &lt;Red9_ClientCore.CloudImp.core.project.cigProject object at 0x0000000020625C50&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.</p>
@@ -247,7 +247,7 @@ a dict. As dict it contains all data which controls the lock, keyable, hidden st
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>node</strong> &#8211; given node.</li>
-<li><strong>asDict</strong> &#8211; True returns a dict with keys &#8216;keyable&#8217;,&#8217;locked&#8217;,&#8217;nonKeyable&#8217; of attrs 
+<li><strong>asDict</strong> &#8211; True returns a dict with keys &#8216;keyable&#8217;,&#8217;locked&#8217;,&#8217;nonKeyable&#8217; of attrs
 False returns a list (non ordered) of all attr states.</li>
 <li><strong>incLocked</strong> &#8211; True by default - whether to include locked channels in the return (only valid if not asDict)</li>
 </ul>
@@ -383,8 +383,8 @@ TimeLine, (Highlighted in Red) return that instead.</p>
 <dd><p>Simple wrapper function to take a given framerange and return
 a list[] containing the actual keys required for processing.
 This manages whether the step is negative, if so it reverses the
-times. When nodes are not given this is basically just a wrapper to the 
-python range function, if nodes are given then we inspect and return the 
+times. When nodes are not given this is basically just a wrapper to the
+python range function, if nodes are given then we inspect and return the
 current keys between the start and end given, ignoring step except to reverse the data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -417,11 +417,31 @@ current timeRange or selectedTimerange</p>
 AnimRange is determined to be the extent of all found animation for a given node</p>
 </dd></dl>
 
+<dl class="function">
+<dt id="Red9.core.Red9_AnimationUtils.snap">
+<code class="descname">snap</code><span class="sig-paren">(</span><em>source</em>, <em>destination</em>, <em>snapTranslates=True</em>, <em>snapRotates=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.snap" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple wrapper over the AnimFunctions snap call</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source</strong> &#8211; the object we&#8217;ll be aligning too</li>
+<li><strong>destination</strong> &#8211; the object we&#8217;ll be snapping</li>
+<li><strong>snapTranslates</strong> &#8211; snap the translate data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>&#64;param snapRotates: snap the rotate data</p>
+</dd></dl>
+
 <dl class="class">
 <dt id="Red9.core.Red9_AnimationUtils.AnimationLayerContext">
 <em class="property">class </em><code class="descname">AnimationLayerContext</code><span class="sig-paren">(</span><em>srcNodes</em>, <em>mergeLayers=True</em>, <em>restoreOnExit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimationLayerContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Context Manager for merging animLayers down and restoring 
+<p>Context Manager for merging animLayers down and restoring
 the data as is afterwards</p>
 </dd></dl>
 
@@ -434,6 +454,11 @@ the data as is afterwards</p>
 <em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimationUI.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>main UI call. manages 2017 workspaces here..</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_AnimationUtils.AnimationUI.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimationUI.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.AnimationUI.setPoseSelected">
@@ -812,7 +837,7 @@ this out from the time ranges given</li>
 
 <dl class="class">
 <dt id="Red9.core.Red9_AnimationUtils.curveModifierContext">
-<em class="property">class </em><code class="descname">curveModifierContext</code><span class="sig-paren">(</span><em>initialUndo=False</em>, <em>undoFuncCache=[]</em>, <em>undoDepth=1</em>, <em>processBlanks=False</em>, <em>reselectKeys=True</em>, <em>manageCache=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.curveModifierContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">curveModifierContext</code><span class="sig-paren">(</span><em>initialUndo=False</em>, <em>undoFuncCache=[]</em>, <em>undoDepth=1</em>, <em>processBlanks=False</em>, <em>reselectKeys=True</em>, <em>manageCache=True</em>, <em>undoChunkName='curveModifierContext'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.curveModifierContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Simple Context Manager to allow modifications to animCurves in the
 graphEditor interactively by simply managing the undo stack and making
@@ -833,6 +858,7 @@ calls to the undo stack and that was blocking some of the ProPack functionality<
 <li><strong>reselectKeys</strong> &#8211; if keys were selected on entry we reselect them based on their original timerange</li>
 <li><strong>manageCache</strong> &#8211; Maya 2019 and above, manage the cache mode, stopping the fill mode from being &#8216;syncAsync&#8217;,
 this means that the cache is only filled on exit, if at all</li>
+<li><strong>undoChunkName</strong> &#8211; name of the undoChunk created by this, default = &#8216;curveModifierContext&#8217;</li>
 </ul>
 </td>
 </tr>
@@ -909,6 +935,11 @@ implementation is too regular.</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_AnimationUtils.FilterCurves.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.FilterCurves.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.FilterCurves.simplifyWrapper">
 <code class="descname">simplifyWrapper</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.FilterCurves.simplifyWrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>straight simplify of curves using a managed cmds.simplfy call</p>
@@ -957,10 +988,10 @@ pack, using a filterSettings node thats passed into the __init__</p>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">mirror</span><span class="o">.</span><span class="n">copyMirrorIDs</span><span class="p">(</span><span class="n">src</span><span class="p">,</span><span class="n">dest</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>TODO: We need to do a UI for managing these marker attrs and the Index lists
-TODO: allow the mirror block to include an offset so that if you need to inverse AND offset</p>
-<blockquote>
-<div>by 180 to get left and right working you can still do so.</div></blockquote>
+<dl class="docutils">
+<dt>TODO: allow the mirror block to include an offset so that if you need to inverse AND offset</dt>
+<dd>by 180 to get left and right working you can still do so.</dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1012,7 +1043,7 @@ passed in blank when needed</li>
 <dt id="Red9.core.Red9_AnimationUtils.MirrorHierarchy.copyMirrorIDs">
 <code class="descname">copyMirrorIDs</code><span class="sig-paren">(</span><em>src</em>, <em>dest</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorHierarchy.copyMirrorIDs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Copy mirrorIDs between nodes, note the nodes list passed in is zipped into pairs
-This will copy all the mirrorData from src to dest, useful for copying data between 
+This will copy all the mirrorData from src to dest, useful for copying data between
 systems when the MirrorMap fails due to naming.</p>
 </dd></dl>
 
@@ -1083,7 +1114,7 @@ such that {&#8216;Centre&#8217;:{id:node,},&#8217;Left&#8217;:{id:node,},&#8217;
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nodes</strong> &#8211; only process a given list of nodes, else run the filterSettings 
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nodes</strong> &#8211; only process a given list of nodes, else run the filterSettings
 call from the initial nodes passed to the class</td>
 </tr>
 </tbody>
@@ -1128,7 +1159,7 @@ Really useful for facial setups!</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; optional specific listy of nodes to process, else we run the filterSetting code 
+<li><strong>nodes</strong> &#8211; optional specific listy of nodes to process, else we run the filterSetting code
 on the initial nodes past to the class</li>
 <li><strong>mode</strong> &#8211; &#8216;Anim&#8217; ot &#8216;Pose&#8217; process as a single pose or an animation</li>
 <li><strong>primeAxis</strong> &#8211; &#8216;Left&#8217; or &#8216;Right&#8217; whether to take the data from the left or right side of the setup</li>
@@ -1151,7 +1182,7 @@ inversing the required animCurves</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; optional specific list of nodes to process, else we run the filterSetting code 
+<li><strong>nodes</strong> &#8211; optional specific list of nodes to process, else we run the filterSetting code
 on the initial nodes past to the class</li>
 <li><strong>mode</strong> &#8211; &#8216;Anim&#8217; or &#8216;Pose&#8217; process as a single pose or an animation</li>
 </ul>
@@ -1201,6 +1232,11 @@ are no keys.</p>
 <em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorSetup.show" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="Red9.core.Red9_AnimationUtils.MirrorSetup.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.MirrorSetup.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -1208,7 +1244,7 @@ are no keys.</p>
 <em class="property">class </em><code class="descname">CameraTracker</code><span class="sig-paren">(</span><em>fixed=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.CameraTracker" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="staticmethod">
 <dt id="Red9.core.Red9_AnimationUtils.CameraTracker.cameraTrackView">
-<em class="property">static </em><code class="descname">cameraTrackView</code><span class="sig-paren">(</span><em>start=None</em>, <em>end=None</em>, <em>step=None</em>, <em>fixed=True</em>, <em>keepOffset=False</em>, <em>cam=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.CameraTracker.cameraTrackView" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">cameraTrackView</code><span class="sig-paren">(</span><em>start=None</em>, <em>end=None</em>, <em>step=None</em>, <em>fixed=True</em>, <em>keepOffset=False</em>, <em>cam=None</em>, <em>static=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.CameraTracker.cameraTrackView" title="Permalink to this definition">¶</a></dt>
 <dd><p>CameraTracker is a simple wrap over the internal viewFit call but this manages the data
 over time. Works by taking the current camera, in the current 3dView, and fitting it to
 frame the currently selected objects per frame, or rather per frameStep.</p>
@@ -1223,20 +1259,23 @@ frame the currently selected objects per frame, or rather per frameStep.</p>
 <li><strong>fixed</strong> &#8211; switch between tracking or panning framing fit</li>
 <li><strong>keepOffset</strong> &#8211; keep the current camera offset rather than doing a full viewFit</li>
 <li><strong>cam</strong> &#8211; if given use this camera else we use the current modelEditors camera</li>
+<li><strong>static</strong> &#8211; if true we DON&#8217;T track, we just do a single frame - hook for the ProPack Playblast management</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>TODO::</dt>
-<dd>add option for cloning the camera rather than using the current directly</dd>
-</dl>
+<p>TODO: add option for cloning the camera rather than using the current directly</p>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="Red9.core.Red9_AnimationUtils.CameraTracker.show">
 <em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.CameraTracker.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_AnimationUtils.CameraTracker.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.CameraTracker.close" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1251,6 +1290,11 @@ refEdits pointing to the connect calls get broken..</p>
 <dl class="classmethod">
 <dt id="Red9.core.Red9_AnimationUtils.ReconnectAnimData.show">
 <em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.ReconnectAnimData.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_AnimationUtils.ReconnectAnimData.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.ReconnectAnimData.close" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">

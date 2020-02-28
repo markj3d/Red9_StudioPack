@@ -59,6 +59,38 @@
 </div>
 <span class="target" id="module-Red9.pro_pack.UI.uibase"></span><p>This module is the base for all the Qt windows in Red9pro</p>
 <p class="rubric">Main Classes</p>
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.style_sheet">
+<code class="descname">style_sheet</code><span class="sig-paren">(</span><em>colour</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.style_sheet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.scale_size_to_dpi">
+<code class="descname">scale_size_to_dpi</code><span class="sig-paren">(</span><em>size</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.scale_size_to_dpi" title="Permalink to this definition">¶</a></dt>
+<dd><p>scale a given screen / ui size against the current DPI of the display
+:param size: base size we want to manage</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.button_widget_manage_size">
+<code class="descname">button_widget_manage_size</code><span class="sig-paren">(</span><em>widget</em>, <em>width=None</em>, <em>height=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.button_widget_manage_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>specific scale management for a widget to manage a target size
+against multiple display scale factors in 4k</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>widget</strong> &#8211; QT widget to manage</li>
+<li><strong>width</strong> &#8211; the widget width we&#8217;re aiming at when in 100% 96dpi mode</li>
+<li><strong>height</strong> &#8211; the widget height we&#8217;re aiming at when in 100% 96dpi mode</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="class">
 <dt id="Red9.pro_pack.UI.uibase.Icons">
 <em class="property">class </em><code class="descname">Icons</code><span class="sig-paren">(</span><em>iconsFolder=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.Icons" title="Permalink to this definition">¶</a></dt>
@@ -100,8 +132,9 @@
 
 <dl class="function">
 <dt id="Red9.pro_pack.UI.uibase.setr9btn">
-<code class="descname">setr9btn</code><span class="sig-paren">(</span><em>btn</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.setr9btn" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">setr9btn</code><span class="sig-paren">(</span><em>btn</em>, <em>baseheight=20</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.setr9btn" title="Permalink to this definition">¶</a></dt>
+<dd><p>the Red9 base banner on all Red9 QT windows</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="Red9.pro_pack.UI.uibase.setr9css">
@@ -342,7 +375,7 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.UI.uibase.ListModel.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000B7242C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ListModel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001CAAA848&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ListModel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -383,7 +416,7 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.UI.uibase.R9_float_slider_widget.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000B724308&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001CAAA888&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -399,7 +432,7 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.UI.uibase.R9_float_slider_window.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000B724348&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_window.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001CAAA8C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_window.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -482,9 +515,9 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 </tbody>
 </table>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#Example of using this in code</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">progressBar</span><span class="o">=</span><span class="n">ProgressBarContext</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1">#now do your code but increment and check the progress state</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">progressBar</span><span class="p">:</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span>

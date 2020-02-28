@@ -71,7 +71,7 @@
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.MayaFile" title="Red9.pro_pack.core.importexport.MayaFile"><code class="xref py py-obj docutils literal"><span class="pre">MayaFile</span></code></a>([filePath])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.Fbx" title="Red9.pro_pack.core.importexport.Fbx"><code class="xref py py-obj docutils literal"><span class="pre">Fbx</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.Fbx" title="Red9.pro_pack.core.importexport.Fbx"><code class="xref py py-obj docutils literal"><span class="pre">Fbx</span></code></a>([filepath])</td>
 <td>base class to handling FBX file import and export</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.P4_sourceControl" title="Red9.pro_pack.core.importexport.P4_sourceControl"><code class="xref py py-obj docutils literal"><span class="pre">P4_sourceControl</span></code></a>([path])</td>
@@ -125,12 +125,14 @@ where all new created nodes are store as a list</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.MayaFile.saveMa">
 <code class="descname">saveMa</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.MayaFile.saveMa" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>save out the current Maya scene as an MayaAscii file</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.MayaFile.saveMb">
 <code class="descname">saveMb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.MayaFile.saveMb" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>save out the current Maya scene as a MayaBinary file</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.MayaFile.open">
@@ -167,22 +169,23 @@ where all new created nodes are store as a list</p>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.importexport.Fbx">
-<em class="property">class </em><code class="descname">Fbx</code><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Fbx</code><span class="sig-paren">(</span><em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>base class to handling FBX file import and export</p>
 <p><a class="reference external" href="http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&amp;id=26416130">http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&amp;id=26416130</a>
 C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.Fbx.importFbx">
-<code class="descname">importFbx</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>preset=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.importFbx" title="Permalink to this definition">¶</a></dt>
+<code class="descname">importFbx</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>preset=None</em>, <em>take=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.importFbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>import fbx with the base fbximport preset from motionbuilder</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fileName</strong> &#8211; fbx file to import</li>
+<li><strong>fileName</strong> &#8211; fbx file to import, if not given we use self.filepath (if set), else we raise the selector dialog</li>
 <li><strong>preset</strong> &#8211; if given use this preset rather than the internal preset of Red9</li>
+<li><strong>take</strong> &#8211; if given we import that specific take, else we use the default which is take 1. ONLY valid for 2017 upwards</li>
 </ul>
 </td>
 </tr>
@@ -196,8 +199,23 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.Fbx.referenceFBX">
-<code class="descname">referenceFBX</code><span class="sig-paren">(</span><em>fileName</em>, <em>namespace</em>, <em>groupname</em>, <em>preset=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.referenceFBX" title="Permalink to this definition">¶</a></dt>
+<code class="descname">referenceFBX</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>namespace=None</em>, <em>groupname=None</em>, <em>preset=None</em>, <em>take=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.referenceFBX" title="Permalink to this definition">¶</a></dt>
 <dd><p>reference wrapper for FBX handling</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fileName</strong> &#8211; the fbx to reference, if not given we use self.filepath (if set), else we raise the selector dialog</li>
+<li><strong>namespace</strong> &#8211; the namespace to use</li>
+<li><strong>groupname</strong> &#8211; the groupname to group everything under</li>
+<li><strong>preset</strong> &#8211; any custom fbx handling preset to be used</li>
+<li><strong>take</strong> &#8211; if given we reference that specific take, else we use the default which is take 1. ONLY valid for 2017 upwards</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -209,10 +227,10 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fileName</strong> &#8211; fbx file to export too</li>
+<li><strong>fileName</strong> &#8211; fbx file to export too, if not given we use self.filepath (if set), else we raise the selector dialog</li>
 <li><strong>selection</strong> &#8211; bool, export the selected nodes or the scene</li>
 <li><strong>preset</strong> &#8211; if given use this preset rather than the internal preset of Red9</li>
-<li><strong>bakeanim</strong> &#8211; envoke the fbx bakeAnimation calls, designed for the export of skeleton data mainly, not SRC data</li>
+<li><strong>bakeanim</strong> &#8211; invoke the fbx bakeAnimation calls, designed for the export of skeleton data mainly, not SRC data</li>
 <li><strong>timeranges</strong> &#8211; (start,end) set the timeranges specifically OR as per the current timeranges</li>
 </ul>
 </td>
@@ -228,14 +246,18 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.Fbx.updateFbx">
-<code class="descname">updateFbx</code><span class="sig-paren">(</span><em>fileName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.updateFbx" title="Permalink to this definition">¶</a></dt>
+<code class="descname">updateFbx</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>take=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.updateFbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>import an fbx via the &#8216;update&#8217; option, if nodes are found in the
 scene their anim data will be updated</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> &#8211; fbx file to import</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fileName</strong> &#8211; fbx file to import, if not given we use self.filepath (if set), else we raise the selector dialog</li>
+<li><strong>take</strong> &#8211; if given we reference that specific take, else we use the default which is take 1</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -249,7 +271,7 @@ scene their anim data will be updated</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> &#8211; fbx file to import</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> &#8211; fbx file to import, if not given we use self.filepath (if set), else we raise the selector dialog</td>
 </tr>
 </tbody>
 </table>
@@ -257,8 +279,16 @@ scene their anim data will be updated</p>
 
 <dl class="staticmethod">
 <dt id="Red9.pro_pack.core.importexport.Fbx.getTakeInfo">
-<em class="property">static </em><code class="descname">getTakeInfo</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>index=1</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.getTakeInfo" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">getTakeInfo</code><span class="sig-paren">(</span><em>fileName</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.getTakeInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>get take info from the fbx data internals</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> &#8211; fbx file to be inspected</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -833,7 +863,7 @@ not exist, recursively create it with makedirs before the file copy</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>the dest can be either a folder or a full path, if it&#8217;s just a folder the file
-will be copied with the same name, if it&#8217;s a full path then the file copy will 
+will be copied with the same name, if it&#8217;s a full path then the file copy will
 rename the file accordingly</p>
 <p class="last">makedirs uses id:0755 in folder creation</p>
 </div>
@@ -842,7 +872,7 @@ rename the file accordingly</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.r9File.copy_to_sourcecontrol">
 <code class="descname">copy_to_sourcecontrol</code><span class="sig-paren">(</span><em>dest</em>, <em>changelist=None</em>, <em>ignore_deleted=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File.copy_to_sourcecontrol" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is a wrap over the sourcecontrol/Perforce handler, designed to 
+<dd><p>This is a wrap over the sourcecontrol/Perforce handler, designed to
 allow you, in one go, to push a file into the repository.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
