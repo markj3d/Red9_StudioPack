@@ -120,8 +120,6 @@ def inspectFunctionSource(value):
         path = mel.eval('whatIs("%s")' % value)
         if path and not path == "Command":
             path = path.split("in: ")[-1]
-            # if path:
-                # sourceType='mel'
         elif path == "Command":
             cmds.warning('%s : is a Command not a script' % value)
             return False
@@ -216,6 +214,21 @@ def Timer(func):
         return res
     return wrapper
 
+def playback_suspend(func):
+    '''
+    DECORATOR : Suspend current playback and resume after the func
+    '''
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        playing = False
+        if cmds.play(q=True, state=True):
+            playing = True
+            cmds.play(state=False)
+        res = func(*args, **kwargs)
+        if playing:
+            cmds.play(forward=True)
+        return res
+    return wrapper
 
 def runProfile(func):
     '''
@@ -229,6 +242,7 @@ def runProfile(func):
     def wrapper(*args, **kwargs):
         currentTime = strftime("%d-%m-%H.%M.%S", gmtime())
         dumpFileName = 'c:/%s(%s).profile' % (func.__name__, currentTime)
+
         def command():
             func(*args, **kwargs)
         profile = cProfile.runctx("command()", globals(), locals(), dumpFileName)
@@ -835,7 +849,7 @@ def thumbnailApiFromView(filename, width, height, modelPanel=None, compression='
     # get modelPanel: always proved a reliable way to get the active modelPanel
     if not modelPanel or not cmds.modelPanel(modelPanel, exists=True):
         modelPanel = cmds.playblast(activeEditor=True).split('|')[-1]
-    
+
     # Grab the last active 3d viewport
     view = None
     if modelPanel is None:
@@ -974,7 +988,6 @@ def os_OpenFileDirectory(path):
     '''
     open the given folder in the default OS browser
     '''
-    import subprocess
     path = os.path.abspath(path)
     if sys.platform == 'win32':
         subprocess.Popen('explorer /select, "%s"' % path)
@@ -990,7 +1003,6 @@ def os_OpenFile(filePath, *args):
     '''
     open the given file in the default program for this OS
     '''
-    import subprocess
     # log.debug('filePath : %s' % filePath)
     # filePath=os.path.abspath(filePath)
     # log.debug('abspath : %s' % filePath)
@@ -1118,8 +1130,9 @@ def readJson(filepath=None):
         name = open(filepath, 'r')
         try:
             return json.load(name)
-        except ValueError:
-            pass
+        except ValueError, err:
+            log.warning('Failed to read JSON file %s' % filepath)
+            raise ValueError(err)
 
 class abcIndex(object):
     '''
