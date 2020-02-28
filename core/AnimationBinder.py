@@ -25,7 +25,7 @@
 
     Thanks for trying the workflows, all comments more than welcomed
 
-    PLEASE NOTE: this code is in the process of being re-built for the 
+    PLEASE NOTE: this code is in the process of being re-built for the
     Red9 ProPack where we intend to bind HIK to the remapping by default
 
 
@@ -33,9 +33,6 @@
 '''
 
 
-
-# import maya.cmds as cmds
-# import maya.mel as mel
 import maya.cmds as cmds
 import pymel.core as pm
 import Red9_AnimationUtils as r9Anim
@@ -74,7 +71,7 @@ class Bindsettings(object):
     @property
     def align_to_control_trans(self):
         return self.__align_to_control_trans
-    
+
     @align_to_control_trans.setter
     def align_to_control_trans(self, value):
         if value:
@@ -87,7 +84,7 @@ class Bindsettings(object):
     @property
     def align_to_source_trans(self):
         return self.__align_to_source_trans
-    
+
     @align_to_source_trans.setter
     def align_to_source_trans(self, value):
         if value:
@@ -100,7 +97,7 @@ class Bindsettings(object):
     @property
     def align_to_control_rots(self):
         return self.__align_to_control_rots
-    
+
     @align_to_control_rots.setter
     def align_to_control_rots(self, value):
         if value:
@@ -156,11 +153,10 @@ class BindNodeBase(object):
 
         log.info(self.settings.print_settings())
 
-
     @property
     def sourceNode(self):
         return self.__source
-    
+
     @sourceNode.setter
     def sourceNode(self, node):
         if not cmds.objExists(node):
@@ -229,7 +225,6 @@ class BindNodeBase(object):
         self.BindNode['Root'] = self.BindNode['Main']
         pm.select(self.BindNode['Root'])
 
-
     def align_bind_node(self):
         '''
         Align the newly made BindNode as required
@@ -248,7 +243,6 @@ class BindNodeBase(object):
             pm.delete(pm.orientConstraint(self.destinationNode, self.BindNode['Root']))
         if self.settings.align_to_source_rots:
             pm.delete(pm.orientConstraint(self.sourceNode, self.BindNode['Root']))
-
 
     def link_bind_node(self):
         '''
@@ -277,7 +271,6 @@ class BindNodeBase(object):
 
         # Add the BindMarkers so that we can ID these nodes and connections later
         self.add_bind_markers(self.destinationNode, self.BindNode['Root'])
-
 
     def add_binder_node(self):
         '''
@@ -323,7 +316,6 @@ class BindNodeTwin(BindNodeBase):
         self.BindNode['Root'] = self.make_base_geo('Locator', '%s_Trans_BND' % Name)
         pm.parent(self.BindNode['Main'], self.BindNode['Root'])
         pm.select(self.BindNode['Root'])
-
 
     def align_bind_node(self, **kws):
         '''
@@ -400,7 +392,6 @@ class BindNodeAim(BindNodeBase):
         # self.settings.base_scale=tempScale
         pm.select(self.BindNode['Root'])
 
-
     def align_bind_node(self, **kws):
         '''
         Overwrite the default behaviour: Align the newly made BindNode as required for this bind
@@ -441,7 +432,7 @@ class AnimBinderUI(object):
     @staticmethod
     def _contactDetails(opentype='email'):
         if opentype == 'email':
-            cmds.confirmDialog(title='Contact', \
+            cmds.confirmDialog(title='Contact',
                            message=("Autodesk MasterClass - Live Animation Binding\n" +
                                     "Mark Jackson\n" +
                                     "____________________________________________\n\n" +
@@ -465,7 +456,6 @@ class AnimBinderUI(object):
         # cmds.menuItem(label='Contact', c=lambda x:self._contactDetails(opentype='email'))
         cmds.menuItem(label='Blog', c=r9Setup.red9_blog)
         cmds.menuItem(label='Red9HomePage', c=r9Setup.red9_website_home)
-
 
         cmds.columnLayout(adjustableColumn=True)
         cmds.text(fn="boldLabelFont", label="Advanced Bind Options")
@@ -547,6 +537,13 @@ class AnimBinderUI(object):
 
     @classmethod
     def Show(cls):
+        if r9Setup.has_pro_pack():
+            cmds.confirmDialog(title='UI Deprecated',
+                               message=('This version of the AnimationBinder has been superseded by '
+                                        'the new build in Red9 ProPack and is here for legacy purposes.\n'
+                                        '\nIf making a fresh Binder we recommend using the version in ProPack!'),
+                               icon='information',
+                               button='thankyou', messageAlign='center')
         cls()._UI()
 
 
@@ -763,4 +760,3 @@ def removeBindMarker(ctrls=None, *args):
         ctrls = cmds.ls(sl=True, l=True)
     for ctr in ctrls:
         cmds.deleteAttr('%s.%s' % (ctr, BAKE_MARKER))
-
