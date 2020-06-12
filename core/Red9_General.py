@@ -176,6 +176,21 @@ def getScriptEditorSelection():
         log.info('command caught: %s ' % func)
         return func
 
+def is_basestring(value):
+    '''
+    wrapper to check if an arg is string based, wrapping Python 2 & 3
+    python 3 all unicode based args are strings
+    python 2 we have str and unicode both instances of basestring
+
+    :param value: the value we're checking
+    '''
+    if isinstance(value, str):
+        return True
+    if sys.version_info[0] == 2:
+        if isinstance(value, basestring):
+            return True
+    return False
+
 
 # ---------------------------------------------------------------------------------
 # Context Managers and Decorators ---
@@ -1022,7 +1037,7 @@ def os_formatPath(path):
     '''
     return os.path.normpath(path).replace('\\', '/').replace('\t', '/t').replace('\n', '/n').replace('\a', '/a')
 
-def os_listFiles(folder, filters=[], byDate=False, fullPath=False):
+def os_listFiles(folder, filters=[], byDate=False, fullPath=False, filter_string=''):
     '''
     simple os wrap to list a dir with filters for file type and sort byDate
 
@@ -1031,8 +1046,12 @@ def os_listFiles(folder, filters=[], byDate=False, fullPath=False):
     :param byData: sort the list by modified date, newest first!
     :param fullPath: return either the fully matched path or just the files that match
     '''
+    from Red9.core.Red9_CoreUtils import filterListByString
     if not os.path.isdir(folder):
         folder = os.path.dirname(folder)
+#     if not hasattr(filters, '__iter__'):
+    if is_basestring(filters):
+        filters = [filters]
     files = os.listdir(folder)
     filtered = []
     if filters:
@@ -1041,6 +1060,8 @@ def os_listFiles(folder, filters=[], byDate=False, fullPath=False):
                 if f.lower().endswith(flt.lower()):
                     filtered.append(f)
         files = filtered
+    if filter_string:
+        files = filterListByString(files, filter_string)
     if byDate and files:
         files.sort(key=lambda x: os.stat(os.path.join(folder, x)).st_mtime)
         files.reverse()
@@ -1104,20 +1125,18 @@ def writeJson(filepath=None, content=None):
     '''
     write json file to disk
 
-    :param filepath: file pat to drive where to write the file
+    :param filepath: file path to drive where to write the file
     :param content: file content
     :return: None
     '''
-
     if filepath:
         path = os.path.dirname(filepath)
+        if not os.path.exists(path):
+            os.makedirs(path)
 
-    if not os.path.exists(path):
-        os.makedirs(path)
-
-    name = open(filepath, "w")
-    name.write(json.dumps(content, sort_keys=True, indent=4))
-    name.close()
+        name = open(filepath, "w")
+        name.write(json.dumps(content, sort_keys=True, indent=4))
+        name.close()
 
 def readJson(filepath=None):
     '''
@@ -1126,7 +1145,7 @@ def readJson(filepath=None):
     :param filepath:
     :return:
     '''
-    if os.path.exists(filepath):
+    if filepath and os.path.exists(filepath):
         name = open(filepath, 'r')
         try:
             return json.load(name)

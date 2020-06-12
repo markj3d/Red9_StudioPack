@@ -241,8 +241,11 @@ class DataMap(object):
         or loaded.
 
         .. note::
-            Currently only supported under MetaRig
+            The collection of these attrs is currently only supported under MetaRig
+            IF self.skipAttrs was passed into the object then we do NOT run this func, returning the currently setup list
         '''
+        if self.skipAttrs:
+            return self.skipAttrs
         if self.metaRig and self.metaRig.hasAttr('poseSkippedAttrs'):
             return self.metaRig.poseSkippedAttrs
         return []
@@ -955,7 +958,7 @@ class PoseData(DataMap):
     The PoseData is stored per node inside an internal dict as follows:
 
     >>> node = '|group|Rig|Body|TestCtr'
-    >>> poseDict['TestCtr'] 
+    >>> poseDict['TestCtr']
     >>> poseDict['TestCtr']['ID'] = 0   index in the Hierarchy used to build the data up
     >>> poseDict['TestCtr']['longName'] = '|group|Rig|Body|TestCtr'
     >>> poseDict['TestCtr']['attrs']['translateX'] = 0.5
@@ -1157,7 +1160,7 @@ class PoseData(DataMap):
         '''
         apply the attrs for the pose.
 
-        .. note: 
+        .. note:
             when dealing with pose blending or mirrorInverse handling we BY-PASS the
             sceneUnit conversions done in the main attr handler. This is for speed as generally
             complex adjustments such as blending in poses wouldn't be done between scenes in different Maya sceneUnits.
@@ -1203,7 +1206,7 @@ class PoseData(DataMap):
                 r9General.thumbNailScreen(self.filepath, self.thumbnailRes[0], self.thumbnailRes[1], modelPanel=modelPanel)
                 if sel:
                     cmds.select(sel)
-        log.info('Pose Saved Successfully to : %s' % self.filepath)
+            log.info('Pose Saved Successfully to : %s' % self.filepath)
 
     # @r9General.Timer
     def poseLoad(self, nodes, filepath=None, useFilter=True, relativePose=False, relativeRots='projected',

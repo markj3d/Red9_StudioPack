@@ -271,6 +271,7 @@ def filterListByString(input_list, filter_string, matchcase=False):
         >> 'attack,knife' would yield matches with either 'attack' and 'knife' in the string, compiles to ('attack|knife') with the '|' or operator
         >> 'attack|knife' same as above
         >> 'attack$' would match 'we_attack' but not 'they_attacked' as the $ is used here as the end of the search string
+        >> ^attack' would match 'attack_then' but not 'they_attack' as the ^ clamps to the front of the string
     '''
 
     if not matchcase:
@@ -381,15 +382,15 @@ class FilterNode_Settings(object):
     '''
     def __init__(self):
         self.__dict__ = {'nodeTypes': [],  # search for given Maya nodeTypes
-                       'searchAttrs': [],  # search for given attributes on nodes
-                       'searchPattern': [],  # search for nodeName patterns
-                       'hierarchy': False,  # full hierarchy process
-                       'metaRig': False,  # ??Do we do this here?? {'MetaClass','functCall'}
-                       'filterPriority': [],  # A way of re-ordering the hierarchy lists
-                       'incRoots': True,  # process rootNodes in the filters
-                       'transformClamp': True,  # clamp any nodes found to their transforms
-                       'infoBlock': '',
-                       'rigData': {}}
+                           'searchAttrs': [],  # search for given attributes on nodes
+                           'searchPattern': [],  # search for nodeName patterns
+                           'hierarchy': False,  # full hierarchy process
+                           'metaRig': False,  # ??Do we do this here?? {'MetaClass','functCall'}
+                           'filterPriority': [],  # A way of re-ordering the hierarchy lists
+                           'incRoots': True,  # process rootNodes in the filters
+                           'transformClamp': True,  # clamp any nodes found to their transforms
+                           'infoBlock': '',
+                           'rigData': {}}
         self.resetFilters()  # Just in case I screw up below
 
     def __repr__(self):
@@ -724,6 +725,7 @@ class FilterNode(object):
         >> 'attack,knife' would yield matches with either 'attack' and 'knife' in the string, compiles to ('attack|knife') with the '|' or operator
         >> 'attack|knife' same as above
         >> 'attack$' would match 'we_attack' but not 'they_attacked' as the $ is used here as the end of the search string
+        >> ^attack' would match 'attack_then' but not 'they_attack' as the ^ clamps to the front of the string
     '''
     def __init__(self, roots=None, filterSettings=None):
         '''
@@ -2243,11 +2245,12 @@ class LockChannels(object):
             nodes = FilterNode(nodes).lsHierarchy(incRoots=True)
         _attrs = attrs
         if attrs == 'all':
-            _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "radius"]
+            _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "radius", "radi"]
         if attrs == 'transforms':
             _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz"]
 
-        if not hasattr(_attrs, '__iter__'):
+#         if not hasattr(_attrs, '__iter__'):
+        if r9General.is_basestring(_attrs):
             _attrs = set([_attrs])
         if not type(_attrs) == set:
             _attrs = set(_attrs)
@@ -2259,14 +2262,17 @@ class LockChannels(object):
             attrKws['lock'] = True
         elif mode == 'unlock':
             attrKws['lock'] = False
+
         elif mode == 'hide':
             attrKws['keyable'] = False
         elif mode == 'unhide':
             attrKws['keyable'] = True
+
         elif mode == 'nonkeyable':
             attrKws['channelBox'] = True
         elif mode == 'keyable':
             attrKws['channelBox'] = False
+
         elif mode == 'fullkey':
             attrKws['keyable'] = True
             attrKws['lock'] = False
@@ -2276,6 +2282,7 @@ class LockChannels(object):
         elif mode == 'lockall':
             attrKws['keyable'] = False
             attrKws['lock'] = True
+            attrKws['channelBox'] = False  # 27/5/20 added
 
         for node in nodes:
             if userDefined:
@@ -2491,9 +2498,12 @@ class TimeOffset(object):
             | settings.incRoots: bool - include the original root nodes in the filter
         '''
 #         currentSystem = True
-        if timerange and startfrm:
-            offset = offset - timerange[0]
-            log.info('New Offset calculated based on given Start Frm and timerange : %s' % offset)
+        if startfrm:
+            if timerange:
+                offset = offset - timerange[0]
+                log.info('New Offset calculated based on given Start Frm and timerange : %s' % offset)
+            else:
+                log.warning('"startfrm" argument requires the "timeRange" argument to also be passed in, using offset as is was passed in! : %s' % offset)
         if logging_is_debug():
             log.debug('TimeOffset from Selected : offset=%s, flocking=%i, randomize=%i, timerange=%s, ripple:%s, startfrm=%s' %
                       (offset, flocking, randomize, str(timerange), ripple, startfrm))
@@ -2501,7 +2511,8 @@ class TimeOffset(object):
         if not nodes:
             basenodes = cmds.ls(sl=True, l=True)
         else:
-            if not hasattr(nodes, '__iter__'):
+#             if not hasattr(nodes, '__iter__'):
+            if r9General.is_basestring(nodes):
                 basenodes = [nodes]
             else:
                 basenodes = nodes
@@ -2589,7 +2600,7 @@ class TimeOffset(object):
             raise StandardError('Nothing selected or returned from the Hierarchy filter to offset')
 
     @classmethod
-    def animCurves(cls, offset, nodes=None, timerange=None, ripple=True):
+    def animCurves(cls, offset, nodes=None, timerange=None, ripple=True, safe=True, allow_ref=False):
         '''
         Shift Animation curves. If nodes are fed in to process then we do
         a number of aggressive searches to find all linked animation data.
@@ -2600,8 +2611,11 @@ class TimeOffset(object):
             range before shifting associated keys. Now we could just use the
             keyframe(option='insert') BUT this has a MAJOR crash bug!
         :param ripple: manage the upper range of keys and ripple them with the offset
+        :param safe: optional 'bool', only return animCurves which are safe to modify, this
+            will strip out SetDrivens, Clips curves etc..
+        :param allow_ref: if False and "safe" we remove all references animCurves, else we leave them in the return
         '''
-        safeCurves = FilterNode.lsAnimCurves(nodes, safe=True)
+        safeCurves = FilterNode.lsAnimCurves(nodes, safe=safe, allow_ref=allow_ref)
         curves_moved = []
 
         if safeCurves:

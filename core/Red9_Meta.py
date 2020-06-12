@@ -794,7 +794,8 @@ def isMetaNodeClassGrp(node, mClassGrps=[]):
         return False
     if issubclass(type(node), MetaClass):
         node = node.mNode
-    if not hasattr(mClassGrps, '__iter__'):
+#     if not hasattr(mClassGrps, '__iter__'):
+    if r9General.is_basestring(mClassGrps):
         mClassGrps = [mClassGrps]
     for grp in mClassGrps:
         # log.debug('mGroup testing: %s' % node)
@@ -843,7 +844,8 @@ def getMetaNodes(mTypes=[], mInstances=[], mClassGrps=[], mAttrs=None, dataType=
                 mNode = True
         if mNode:
             if mClassGrps:
-                if not hasattr(mClassGrps, '__iter__'):
+#                 if not hasattr(mClassGrps, '__iter__'):
+                if r9General.is_basestring(mClassGrps):
                     mClassGrps = [mClassGrps]
                 if isMetaNodeClassGrp(node, mClassGrps):
                     mNodes.append(node)
@@ -1667,7 +1669,7 @@ class MetaClass(object):
                 try:
                     if logging_is_debug():
                         log.debug('### Instantiating existing mClass : %s >> %s ###' % (mClass, _registeredMClass))
-                    return super(cls.__class__, cls).__new__(_registeredMClass, *args, **kws)
+                    return super(cls.__class__, cls).__new__(_registeredMClass)  # , *args, **kws)
                 except:
                     log.debug('Failed to initialize mClass : %s' % _registeredMClass)
                     pass
@@ -2309,7 +2311,8 @@ class MetaClass(object):
             overall state, ie, if any of the attrs in the list are locked then it will return True, only
             if they're all unlocked do we return False
         '''
-        if hasattr(attr, '__iter__'):
+#         if hasattr(attr, '__iter__'):
+        if not r9General.is_basestring(attr):
             locked = False
             for a in attr:
                 if cmds.getAttr('%s.%s' % (self.mNode, a), l=True):
@@ -2327,7 +2330,8 @@ class MetaClass(object):
         :param state: lock state
         '''
         try:
-            if not hasattr(attr, '__iter__'):
+#             if hasattr(attr, '__iter__'):
+            if r9General.is_basestring(attr):
                 attr = [attr]
             if not self.isReferenced():
                 for a in attr:
@@ -2403,19 +2407,19 @@ class MetaClass(object):
             raise ValueError('enum attrType must be passed with "enumName" keyword in args')
 
         DataTypeKws = {'string': {'longName': attr, 'dt': 'string'},
-                     'unicode': {'longName': attr, 'dt': 'string'},
-                     'int': {'longName': attr, 'at': 'long'},
-                     'long': {'longName': attr, 'at': 'long'},
-                     'bool': {'longName': attr, 'at': 'bool'},
-                     'float': {'longName': attr, 'at': 'double'},
-                     'float3': {'longName': attr, 'at': 'float3'},
-                     'double': {'longName': attr, 'at': 'double'},
-                     'double3': {'longName': attr, 'at': 'double3'},
-                     'doubleArray': {'longName': attr, 'dt': 'doubleArray'},
-                     'enum': {'longName': attr, 'at': 'enum'},
-                     'complex': {'longName': attr, 'dt': 'string'},
-                     'message': {'longName': attr, 'at': 'message', 'm': True, 'im': True},
-                     'messageSimple': {'longName': attr, 'at': 'message', 'm': False}}
+                        'unicode': {'longName': attr, 'dt': 'string'},
+                        'int': {'longName': attr, 'at': 'long'},
+                        'long': {'longName': attr, 'at': 'long'},
+                        'bool': {'longName': attr, 'at': 'bool'},
+                        'float': {'longName': attr, 'at': 'double'},
+                        'float3': {'longName': attr, 'at': 'float3'},
+                        'double': {'longName': attr, 'at': 'double'},
+                        'double3': {'longName': attr, 'at': 'double3'},
+                        'doubleArray': {'longName': attr, 'dt': 'doubleArray'},
+                        'enum': {'longName': attr, 'at': 'enum'},
+                        'complex': {'longName': attr, 'dt': 'string'},
+                        'message': {'longName': attr, 'at': 'message', 'm': True, 'im': True},
+                        'messageSimple': {'longName': attr, 'at': 'message', 'm': False}}
 
         keyable = ['int', 'float', 'bool', 'enum', 'double3']
         addCmdEditFlags = ['min', 'minValue', 'max', 'maxValue', 'defaultValue', 'dv',
@@ -3238,7 +3242,7 @@ class MetaClass(object):
             return mNodes[0]
 
     @r9General.Timer
-    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False, plugsOnly=False, **kws):
+    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False, plugsOnly=False, skip_cAttrs=[], **kws):
         '''
         This finds all UserDefined attrs of type message and returns all connected nodes
         This is now being run in the MetaUI on doubleClick. This is a generic call, implemented
@@ -3253,6 +3257,7 @@ class MetaClass(object):
         :param asMeta: return instantiated mNodes regardless of type
         :param asMap: return the data as a map such that {mNode.plugAttr:[nodes], mNode.plugAttr:[nodes]}
         :param plugsOnly: only with asMap flag, this truncates the return to [plugAttr, [nodes]]
+        :param skip_cAttrs: if given these cAttrs will be ignored in the returned data
 
         .. note::
             mAttrs is only searching attrs on the mNodes themselves, not the children
@@ -3274,6 +3279,8 @@ class MetaClass(object):
             attrs = cmds.listAttr(node.mNode, ud=True, st=cAttrs)
             if attrs:
                 for attr in attrs:
+                    if skip_cAttrs and attr in skip_cAttrs:
+                        continue
                     if cmds.getAttr('%s.%s' % (node.mNode, attr), type=True) == 'message':
                         msgLinked = cmds.listConnections('%s.%s' % (node.mNode, attr), destination=True, source=False)
                         if msgLinked:
@@ -3657,7 +3664,8 @@ class MetaRig(MetaClass):
         '''
         return self.getChildren(walk, mAttrs)
 
-    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False, plugsOnly=False, incFacial=False, baseBehaviour=False, **kws):
+    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False,
+                    plugsOnly=False, incFacial=False, baseBehaviour=False, skip_cAttrs=[], **kws):
         '''
         Massively important bit of code, this is used by most bits of code
         to find the child controllers linked to this metaRig instance.
@@ -3671,6 +3679,7 @@ class MetaRig(MetaClass):
         :param plugsOnly: only with asMap flag, this truncates the return to {plugAttr:[nodes]}
         :param incFacial: if we have a facial system linked include it's children in the return (uses the getFacialSystem to id the facial node)
         :param baseBehaviour: if True we revert the CTRL_Prefix logic such that the return won't be clamped to just controllers
+        :param skip_cAttrs: if given these connection attrs will be ignored in the returned data
 
         .. note::
             MetaRig getChildren has overloads adding the CTRL_Prefix to the cAttrs so that
@@ -3689,7 +3698,8 @@ class MetaRig(MetaClass):
                 if facialSystem:
                     cAttrs.append('%s_*' % facialSystem.CTRL_Prefix)
 
-        return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=asMeta, asMap=asMap, plugsOnly=plugsOnly, **kws)
+        return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs,
+                                                asMeta=asMeta, asMap=asMap, plugsOnly=plugsOnly, skip_cAttrs=skip_cAttrs, **kws)
 
     def selectChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], add=False):
         '''
@@ -3957,7 +3967,7 @@ class MetaRig(MetaClass):
         from the metaNode grab all controllers and return sets of nodes
         based on their mirror side data
 
-        :param set: which set/side to get, valid = 'Left' ,'Right', 'Center'
+        :param set: which set/side to get, valid = 'Left' ,'Right', 'Centre'
         :param forceRefresh: forces the mirrorDic (which is cached) to be updated
         '''
 #         submNodes=mRig.getChildMetaNodes(mAttrs=['mirrorSide=2'], walk=True)
@@ -3976,7 +3986,7 @@ class MetaRig(MetaClass):
         '''
         get the last mirror index for a given side
 
-        :param side: side to check, valid = 'Left' ,'Right', 'Center'
+        :param side: side to check, valid = 'Left' ,'Right', 'Centre'
         :param forceRefresh: forces the mirrorDic (which is cached) to be updated
         '''
         if not self.MirrorClass or forceRefresh:
@@ -3989,7 +3999,7 @@ class MetaRig(MetaClass):
         '''
         return the next available slot in the mirrorIndex list for a given side
 
-        :param side: side to check, valid = 'Left' ,'Right', 'Center'
+        :param side: side to check, valid = 'Left' ,'Right', 'Centre'
         :param forceRefresh: forces the mirrorDic (which is cached) to be updated
         '''
         return self.getMirror_lastIndexes(side, forceRefresh) + 1
@@ -4205,16 +4215,22 @@ class MetaRig(MetaClass):
         '''
         self.poseCacheLoad(nodes=nodes, attr='zeroPose')
 
-    def getAnimationRange(self, nodes=None, setTimeline=False):
+    def getAnimationRange(self, nodes=None, setTimeline=False, *args, **kws):
         '''
         return the extend of the animation range for this rig and / or the given controllers
 
         :param nodes: if given only return the extent of the animation data from the given nodes
         :param setTimeLine: if True set the playback timeranges also, default=False
+        :param decimals: int -1 default, this is the number of decimal places in the return, -1 = no clamp
+        :param transforms_only: if True we only test translate (animCurveTL) and rotate (animCurveTA) data, added for skeleton fbx baked tests
+        :param skip_static: if True we ignore static curves and return [], else we return
+            the key bounds for the static keys, ignoring the keyValues
+        :param bounds_only: if True we only return the key bounds, first and last key times,
+            else we look at the changing values to find the bounds
         '''
         if not nodes:
             nodes = self.getChildren(walk=True)
-        return r9Anim.animRangeFromNodes(nodes, setTimeline=setTimeline)
+        return r9Anim.animRangeFromNodes(nodes, setTimeline=setTimeline, *args, **kws)
 
     def keyChildren(self, nodes=[], walk=True, mAttrs=None, cAttrs=[], nAttrs=[], shapes=False):
         '''
@@ -4365,7 +4381,7 @@ class MetaRig(MetaClass):
 
     def loadAnimation(self, filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False,
                       timecodeBinding=[None, None], referenceNode=None, relativeRots='projected', relativeTrans='projected',
-                      manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, merge=False, matchMethod='metaData',
+                      manageRanges=1, manageFileName=True, keyStatics=False, blendRange=None, merge=False, matchMethod='metaData',
                       smartbake=False, loadInternalRig=False, *args, **kws):
         '''
         : PRO_PACK :
@@ -4389,11 +4405,11 @@ class MetaRig(MetaClass):
         :param manageRanges: valid values : 0=leave,  1=extend, 2=set the timeranges according to the anim data loaded
         :param manageFileName: if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
             then we take the r9Anim's filename and rename the Maya scene accordingly
-        :param keyStatics: if True then we key everything in the data at startFrame so that all non-keyed and static
+        :param keyStatics: if True then we key everything in the data at startFrame & endFrame so that all non-keyed and static
             attrs that are stored internally as a pose are keyed.
-        :param blendRange: None or int : 1 is default. If an int is passed then we use this as the hold range for the data, setting a key at
-            time=startFarme-blendRange to hold the current data before we load the new keys. Note that this also turns on the keyStatics
-            to ensure the data is preserved
+        :param blendRange: None or int : None is default. If an int is passed then we use this as the hold range for the data, setting a key at
+            time=[startFarme-blendRange, endFarme+blendRange] to hold the current data before we load the new keys. Note that this also turns
+            on the keyStatics to ensure the data is preserved
         :param merge: if True we allow the data to be merged over any current keys, else we cut all keys in the load range first
         :param matchMethod: internal matching method used to match nodes to the stored data
         :param smartbake: only valid if we're loading with a referenceNode, this tries to respect current keys when doing the processing rather than frame baking

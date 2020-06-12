@@ -76,6 +76,8 @@ class _MainMenus_(object):
     copy_to_clipboard_ann = 'Copy the current Maya filepath to the OS:Clipboard'
     open_r9anim = 'Red9 PRO: Import r9Anim Direct'
     open_r9anim_ann = 'Import an r9Anim file direct IF it has internal reference file pointers (mRig Only)'
+    import_r9anim = 'Red9 PRO: Import r9Anim to Current mRig'
+    import_r9anim_ann = 'Import an r9Anim file direct to the currently selected mRig (mRig Only)'
 
     # TimeSlider menu additions
     collapse_time = 'Red9: Collapse Time'
@@ -104,8 +106,10 @@ class _MainMenus_(object):
     range_submenu = 'Red9: Range'
     selectkeys_timerange = 'Keys : Select from Range'
     selectkeys_timerange_ann = 'Select all keys from the selected Objects within the given TimeRange or selected TimeRange(Red highlighted)'
-    setrangetoo = 'Range Set to: Animated'
-    setrangetoo_ann = 'Set the timerange to the extent of all animation found on the selected objects'
+    setrangetoo = 'Set Range to : Animated Bounds'
+    setrangetoo_ann = 'Set the timerange to the bounds of all animation found on the selected objects, (first and last keys)'
+    setrangetoo_internal = 'Set Range to : Animation No Statics'
+    setrangetoo_internal_ann = 'Set the timerange to the extent of all animation found on the selected objects LESS STATIC KEYS at start and end of curves'
 
     # audio sub_menu
     sound_red9_sound = "Red9_Sound"
