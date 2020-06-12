@@ -260,6 +260,7 @@ it back to it&#8217;s original state so we pass it through this</p>
 <dd><p>Generic way to filter a list by a given string input. This is so that all
 the filtering used in the UI&#8217;s is consistent. Used by the poseSaver, facialUI,
 MetaUI and many others.</p>
+<p>see : <a class="reference external" href="https://docs.python.org/3.3/howto/regex.html">https://docs.python.org/3.3/howto/regex.html</a> , <a class="reference external" href="http://www.pyregex.com">http://www.pyregex.com</a> , or search for Regex cheat sheets</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -276,12 +277,14 @@ eg : &#8216;brows,smile,funnel&#8217;</li>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">this is a regex search but it&#8217;s managed under the hood.
+<p class="last">this is a Regex search but it&#8217;s managed under the hood.
 &gt;&gt; &#8216;attack knife&#8217; would yield matches with &#8216;attack and knife in the string, similar to &#8216;attack*.*knife in windows, compiles to (&#8216;attack.*knife&#8217;)
 &gt;&gt; &#8216;attack..knife&#8217; would yield matches with &#8216;attack12knife&#8217; 2 wildcards between the params (dots are wildcards in regex), compiles to (&#8216;attack..knife&#8217;)
 &gt;&gt; &#8216;attack.*knife&#8217; would yield matches with &#8216;attack_big_massive_knife&#8217; because of the .* is multiple wildcards between the search params, compiles to (&#8216;attack.*knife&#8217;)
 &gt;&gt; &#8216;attack,knife&#8217; would yield matches with either &#8216;attack&#8217; and &#8216;knife&#8217; in the string, compiles to (&#8216;attack|knife&#8217;) with the &#8216;|&#8217; or operator
-&gt;&gt; &#8216;attack|knife&#8217; same as above</p>
+&gt;&gt; &#8216;attack|knife&#8217; same as above
+&gt;&gt; &#8216;attack$&#8217; would match &#8216;we_attack&#8217; but not &#8216;they_attacked&#8217; as the $ is used here as the end of the search string
+&gt;&gt; ^attack&#8217; would match &#8216;attack_then&#8217; but not &#8216;they_attack&#8217; as the ^ clamps to the front of the string</p>
 </div>
 </dd></dl>
 
@@ -465,6 +468,17 @@ which,if not given, gets bound to self.settings.</p>
 <p>The above makes a filterNode class, we pass in our hierarchies rootNode (string),
 then set the internal settings to filter the hierarchy for all child nurbsCurves
 who&#8217;s name includes &#8216;Ctrl&#8217;. Finally the ProcessFilter runs the main call.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the searchPattern is a compiled Regex search but it&#8217;s managed under the hood.
+&gt;&gt; &#8216;attack knife&#8217; would yield matches with &#8216;attack and knife in the string, similar to &#8216;attack*.*knife in windows, compiles to (&#8216;attack.*knife&#8217;)
+&gt;&gt; &#8216;attack..knife&#8217; would yield matches with &#8216;attack12knife&#8217; 2 wildcards between the params (dots are wildcards in regex), compiles to (&#8216;attack..knife&#8217;)
+&gt;&gt; &#8216;attack.*knife&#8217; would yield matches with &#8216;attack_big_massive_knife&#8217; because of the .* is multiple wildcards between the search params, compiles to (&#8216;attack.*knife&#8217;)
+&gt;&gt; &#8216;attack,knife&#8217; would yield matches with either &#8216;attack&#8217; and &#8216;knife&#8217; in the string, compiles to (&#8216;attack|knife&#8217;) with the &#8216;|&#8217; or operator
+&gt;&gt; &#8216;attack|knife&#8217; same as above
+&gt;&gt; &#8216;attack$&#8217; would match &#8216;we_attack&#8217; but not &#8216;they_attacked&#8217; as the $ is used here as the end of the search string
+&gt;&gt; ^attack&#8217; would match &#8216;attack_then&#8217; but not &#8216;they_attack&#8217; as the ^ clamps to the front of the string</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1159,7 +1173,7 @@ returned and processed as part of the connected body rig.</p>
 
 <dl class="classmethod">
 <dt id="Red9.core.Red9_CoreUtils.TimeOffset.animCurves">
-<em class="property">classmethod </em><code class="descname">animCurves</code><span class="sig-paren">(</span><em>offset</em>, <em>nodes=None</em>, <em>timerange=None</em>, <em>ripple=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.animCurves" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">animCurves</code><span class="sig-paren">(</span><em>offset</em>, <em>nodes=None</em>, <em>timerange=None</em>, <em>ripple=True</em>, <em>safe=True</em>, <em>allow_ref=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.TimeOffset.animCurves" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shift Animation curves. If nodes are fed in to process then we do
 a number of aggressive searches to find all linked animation data.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1173,6 +1187,9 @@ a number of aggressive searches to find all linked animation data.</p>
 range before shifting associated keys. Now we could just use the
 keyframe(option=&#8217;insert&#8217;) BUT this has a MAJOR crash bug!</li>
 <li><strong>ripple</strong> &#8211; manage the upper range of keys and ripple them with the offset</li>
+<li><strong>safe</strong> &#8211; optional &#8216;bool&#8217;, only return animCurves which are safe to modify, this
+will strip out SetDrivens, Clips curves etc..</li>
+<li><strong>allow_ref</strong> &#8211; if False and &#8220;safe&#8221; we remove all references animCurves, else we leave them in the return</li>
 </ul>
 </td>
 </tr>

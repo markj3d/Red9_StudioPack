@@ -137,7 +137,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.timeLineRangeProcess" title="Red9.core.Red9_AnimationUtils.timeLineRangeProcess"><code class="xref py py-obj docutils literal"><span class="pre">timeLineRangeProcess</span></code></a>(start,&nbsp;end[,&nbsp;step,&nbsp;...])</td>
 <td>Simple wrapper function to take a given framerange and return a list[] containing the actual keys required for processing.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.animRangeFromNodes" title="Red9.core.Red9_AnimationUtils.animRangeFromNodes"><code class="xref py py-obj docutils literal"><span class="pre">animRangeFromNodes</span></code></a>(nodes[,&nbsp;setTimeline])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.animRangeFromNodes" title="Red9.core.Red9_AnimationUtils.animRangeFromNodes"><code class="xref py py-obj docutils literal"><span class="pre">animRangeFromNodes</span></code></a>(nodes[,&nbsp;setTimeline,&nbsp;...])</td>
 <td>return the extent of the animation range for the given objects</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.mergeAnimLayers" title="Red9.core.Red9_AnimationUtils.mergeAnimLayers"><code class="xref py py-obj docutils literal"><span class="pre">mergeAnimLayers</span></code></a>(nodes[,&nbsp;deleteBaked])</td>
@@ -188,7 +188,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 
 <dl class="data">
 <dt id="Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS">
-<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000001CBB6F60&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000001CBB6F60&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000001CBB6F60&gt;&gt;, &lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000001CBB6F60&gt;&gt;, &lt;bound method cigProject.set_animtoolkit_UI of &lt;Red9_ClientCore.CloudImp.core.project.cigProject object at 0x0000000020625C50&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
+<code class="descname">RED_ANIMATION_UI_OPENCALLBACKS</code><em class="property"> = [&lt;bound method Project.set_animtoolkit_UI of &lt;r9project.Project object at 0x000000000BC86668&gt;&gt;]</em><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.RED_ANIMATION_UI_OPENCALLBACKS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Callback globals so you can fire in commands prior to the UI opening,
 we use this internally to fire an asset sync call on our project pose library
 and to setup some additional paths.</p>
@@ -300,6 +300,26 @@ constraints made in the main scene.</td>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_AnimationUtils.getKeyedAttrs">
+<code class="descname">getKeyedAttrs</code><span class="sig-paren">(</span><em>nodes</em>, <em>attrs=[]</em>, <em>returnkeyed=True</em>, <em>asMap=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getKeyedAttrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a list of nodes return either all keyed or unkeyed attributes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; the list of nodes were going to test</li>
+<li><strong>attrs</strong> &#8211; if given we only check against those given attrs</li>
+<li><strong>returnKeyed</strong> &#8211; True by default, return all keyed attrs</li>
+<li><strong>asMap</strong> &#8211; if true we return (attr, curve) rather than just the list of attrs, only valid if returnKeyed</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes">
 <code class="descname">getAnimLayersFromGivenNodes</code><span class="sig-paren">(</span><em>nodes</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>return all animLayers associated with the given nodes</p>
@@ -351,11 +371,47 @@ the state directly, used by the UI close event to return the editor to the last 
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_AnimationUtils.animCurve_get_bounds">
+<code class="descname">animCurve_get_bounds</code><span class="sig-paren">(</span><em>curve</em>, <em>bounds_only=False</em>, <em>skip_static=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.animCurve_get_bounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a given anim curve find it&#8217;s upper and lower bounds. By default we examine the keyValues
+for change and return the upper and lower bounds for change.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>curve</strong> &#8211; the anim curve to inspect</li>
+<li><strong>bounds_only</strong> &#8211; if True we only return the key bounds, first and last key times,
+else we look at the changing values to find the bounds</li>
+<li><strong>skip_static</strong> &#8211; if True we ignore static curves and return [], else we return
+the key bounds for the static keys, ignoring the keyValues</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.animRangeFromNodes">
-<code class="descname">animRangeFromNodes</code><span class="sig-paren">(</span><em>nodes</em>, <em>setTimeline=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.animRangeFromNodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">animRangeFromNodes</code><span class="sig-paren">(</span><em>nodes</em>, <em>setTimeline=True</em>, <em>decimals=-1</em>, <em>transforms_only=False</em>, <em>skip_static=True</em>, <em>bounds_only=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.animRangeFromNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the extent of the animation range for the given objects
 :param nodes: nodes to examine for animation data
-:param setTimeLine: whether we should set the playback timeline to the extent of the found anim data</p>
+:param setTimeLine: whether we should set the playback timeline to the extent of the found anim data
+:param decimals: int -1 default, this is the number of decimal places in the return, -1 = no clamp
+:param transforms_only: if True we only test translate (animCurveTL) and rotate (animCurveTA) data, added for skeleton fbx baked tests
+:param skip_static: if True we ignore static curves and return [], else we return</p>
+<blockquote>
+<div>the key bounds for the static keys, ignoring the keyValues</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bounds_only</strong> &#8211; if True we only return the key bounds, first and last key times,
+else we look at the changing values to find the actual animated bounds via keyValue changes</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -405,16 +461,44 @@ current keys between the start and end given, ignoring step except to reverse th
 
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.selectKeysByRange">
-<code class="descname">selectKeysByRange</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>animLen=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.selectKeysByRange" title="Permalink to this definition">¶</a></dt>
+<code class="descname">selectKeysByRange</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>animLen=False</em>, <em>bounds_only=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.selectKeysByRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>select the keys from the selected or given nodes within the
 current timeRange or selectedTimerange</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; the nodes to inspect, else we use the selected transform nodes</li>
+<li><strong>animLen</strong> &#8211; use the curent timeLine range only</li>
+<li><strong>bounds_only</strong> &#8211; if True we only use the key bounds, first and last key times,
+else we look at the changing values to find the actual animated bounds via keyValue changes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.setTimeRangeToo">
-<code class="descname">setTimeRangeToo</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>setall=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.setTimeRangeToo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setTimeRangeToo</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>setall=True</em>, <em>bounds_only=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.setTimeRangeToo" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the playback timerange to be the animation range of the selected nodes.
 AnimRange is determined to be the extent of all found animation for a given node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; the nodes to inspect, else we use the selected transform nodes</li>
+<li><strong>setall</strong> &#8211; also set the outer &#8216;-ast&#8217; / &#8216;-aet&#8217; timeranges</li>
+<li><strong>bounds_only</strong> &#8211; if True we only use the key bounds, first and last key times,
+else we look at the changing values to find the actual animated bounds via keyValue changes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -429,12 +513,12 @@ AnimRange is determined to be the extent of all found animation for a given node
 <li><strong>source</strong> &#8211; the object we&#8217;ll be aligning too</li>
 <li><strong>destination</strong> &#8211; the object we&#8217;ll be snapping</li>
 <li><strong>snapTranslates</strong> &#8211; snap the translate data</li>
+<li><strong>snapRotates</strong> &#8211; snap the rotate data</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>&#64;param snapRotates: snap the rotate data</p>
 </dd></dl>
 
 <dl class="class">
@@ -654,7 +738,7 @@ used if an attributes list is passed</li>
 
 <dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.AnimFunctions.snapTransform">
-<code class="descname">snapTransform</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>time=()</em>, <em>step=1</em>, <em>preCopyKeys=1</em>, <em>preCopyAttrs=1</em>, <em>filterSettings=None</em>, <em>iterations=1</em>, <em>matchMethod=None</em>, <em>prioritySnapOnly=False</em>, <em>snapRotates=True</em>, <em>snapTranslates=True</em>, <em>additionalCalls=[]</em>, <em>cutkeys=False</em>, <em>smartbake=False</em>, <em>smartBakeRef=[]</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.snapTransform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">snapTransform</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>time=()</em>, <em>step=1</em>, <em>preCopyKeys=1</em>, <em>preCopyAttrs=1</em>, <em>filterSettings=None</em>, <em>iterations=1</em>, <em>matchMethod=None</em>, <em>prioritySnapOnly=False</em>, <em>snapRotates=True</em>, <em>snapTranslates=True</em>, <em>additionalCalls=[]</em>, <em>cutkeys=False</em>, <em>smartbake=False</em>, <em>smartBakeRef=[]</em>, <em>additionalCalls_pre=[]</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.snapTransform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Snap objects over a timeRange. This wraps the default hierarchy filters
 so it&#8217;s capable of multiple hierarchy filtering and matching methods.
 The resulting node lists are snapped over time and keyed.
@@ -686,7 +770,9 @@ all channel Values on all nodes will have their data taken across</li>
 <li><strong>prioritySnapOnly</strong> &#8211; if True ONLY snap the nodes in the filterPriority list within the filterSettings object = Super speed up!!</li>
 <li><strong>snapTranslates</strong> &#8211; only snap the translate data</li>
 <li><strong>snapRotates</strong> &#8211; only snap the rotate data</li>
-<li><strong>additionalCalls</strong> &#8211; [func, func...] additional functions to run during process... allowing you
+<li><strong>additionalCalls</strong> &#8211; [func, func...] additional functions to run AFTER the snap call during process... allowing you
+to add in specific matching calls to a SnapTransforms run whilst having the time increment correctly managed for you</li>
+<li><strong>additionalCalls_pre</strong> &#8211; [func, func...] additional functions to run BEFORE the snap call during process... allowing you
 to add in specific matching calls to a SnapTransforms run whilst having the time increment correctly managed for you</li>
 <li><strong>cutkeys</strong> &#8211; when passing time do we clear current keys first, needed ideally if we&#8217;re running with a step greater than 1</li>
 <li><strong>smartbake</strong> &#8211; if True we ignore the step and find all current keyTimes on the nodes about to be processed, these key times

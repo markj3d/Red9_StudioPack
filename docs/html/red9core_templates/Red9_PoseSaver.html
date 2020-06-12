@@ -200,7 +200,8 @@ COMPLETELY ignored by the pose system. They will not be saved
 or loaded.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Currently only supported under MetaRig</p>
+<p class="last">The collection of these attrs is currently only supported under MetaRig
+IF self.skipAttrs was passed into the object then we do NOT run this func, returning the currently setup list</p>
 </div>
 </dd></dl>
 
@@ -316,7 +317,7 @@ is True then use the filter on the destination hierarchy.</li>
 <dd><p>Bases: <a class="reference internal" href="#Red9.core.Red9_PoseSaver.DataMap" title="Red9.core.Red9_PoseSaver.DataMap"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_PoseSaver.DataMap</span></code></a></p>
 <p>The PoseData is stored per node inside an internal dict as follows:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">node</span> <span class="o">=</span> <span class="s1">&#39;|group|Rig|Body|TestCtr&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">]</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>   <span class="n">index</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">Hierarchy</span> <span class="n">used</span> <span class="n">to</span> <span class="n">build</span> <span class="n">the</span> <span class="n">data</span> <span class="n">up</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;longName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;|group|Rig|Body|TestCtr&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">poseDict</span><span class="p">[</span><span class="s1">&#39;TestCtr&#39;</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">][</span><span class="s1">&#39;translateX&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>

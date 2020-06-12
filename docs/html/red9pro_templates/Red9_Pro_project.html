@@ -577,8 +577,22 @@ based on the data.fps setting in the project file</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.force_fps">
-<code class="descname">force_fps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.force_fps" title="Permalink to this definition">¶</a></dt>
-<dd><p>force the maya framerate to the project setting</p>
+<code class="descname">force_fps</code><span class="sig-paren">(</span><em>fps=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.force_fps" title="Permalink to this definition">¶</a></dt>
+<dd><p>force the maya framerate to the project setting including the default Maya working fps</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fps</strong> &#8211; if given this over-rides the project fps and will be used instead</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.project.Project.force_up_axis">
+<code class="descname">force_up_axis</code><span class="sig-paren">(</span><em>axis=None</em>, <em>toggle=False</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.force_up_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>toggle the current world up axis and compensate the cameras etc</p>
 </dd></dl>
 
 <dl class="method">

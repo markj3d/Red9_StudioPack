@@ -187,6 +187,39 @@ then we default to the PROJECT_DATA.data.pose_basePreset var</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.animation.offset_skeleton_to_frm">
+<code class="descname">offset_skeleton_to_frm</code><span class="sig-paren">(</span><em>start_frm</em>, <em>rootjnt=None</em>, <em>jnts=[]</em>, <em>set_timeline=False</em>, <em>allow_ref=False</em>, <em>bounds_only=True</em>, <em>decimals=-1</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.offset_skeleton_to_frm" title="Permalink to this definition">¶</a></dt>
+<dd><p>quick func to offset all the animation data on a skeleton so that it starts at the given frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>start_frm</strong> &#8211; the frame we want the skeletal animation to start at</li>
+<li><strong>rootjnt</strong> &#8211; the root of the skeleton we want to process. This can also be a list of rootjnts / jnts
+and we simply process all child jnts+rootjnts</li>
+<li><strong>jnts</strong> &#8211; [] this is a list of specific joints to process rather than passing in just the rootJoint and filtering for all child joints</li>
+<li><strong>set_timeline</strong> &#8211; if True we also reset the playback timeranges in Maya to match the new start and end times</li>
+<li><strong>allow_ref</strong> &#8211; if True we allow referenced animCurves into those analysed, used by some of the Anim_Transfer code</li>
+<li><strong>bounds_only</strong> &#8211; if True we offset the timeranges via the key bounds, first and last key times,
+else we look at the changing key values to find the actual animated bounds via keyValue changes, we then offset these values.
+This is crucial is you have static baked frames at the front on an animation that you&#8217;re wanting to ignore.</li>
+<li><strong>decimals</strong> &#8211; if not -1 (default) then this is the round(x, decimals) factor used in the calculations</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">[offset, newStart, newEnd]</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the anim range is calculated ONLY from the translate and rotate data, we ignore scale and all unitless data</p>
+</div>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.animation.hik_source_code">
 <code class="descname">hik_source_code</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.hik_source_code" title="Permalink to this definition">¶</a></dt>
 <dd><p>ensure that HIK is loaded and the core code sourced</p>
@@ -330,7 +363,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_MainWindow</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000020EDB908&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000020CD9E48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore_PreLoad.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -365,7 +398,7 @@ the AnimMap base code, verify before we hit the load calls ;)</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.AnimationStore.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000020EDF048&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000020CDC588&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimationStore.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -471,9 +504,37 @@ load for any channels marked as such. The idea being that dense data doesn&#8217
 </tbody>
 </table>
 <dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimMap.infoDict_validate">
+<code class="descname">infoDict_validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.infoDict_validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>validate we have the infoDict loaded, if not build it from the r9Anim set in self.filepath
+this enables easy access to all the info data without having to deal with the load call</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimMap.buildBlocks_fill">
 <code class="descname">buildBlocks_fill</code><span class="sig-paren">(</span><em>nodes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.buildBlocks_fill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main capture routines to build the DataMap, see the Red9.core.Red9_PoseSaver for more details here</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.animation.AnimMap.framerate">
+<code class="descname">framerate</code><span class="sig-paren">(</span><em>compare=False</em>, <em>conform=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.framerate" title="Permalink to this definition">¶</a></dt>
+<dd><p>either return or conform the current scene framerate to that of the internal r9Anim fps
+default return is the internal framerate of the r9anim in timeUnits. This is only currently
+enforced in the load_r9anim#_direct wrapper func</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>conform</strong> &#8211; we force the current scene FPS to match the internal FPS of the r9anim</li>
+<li><strong>compare</strong> &#8211; we just warn of any framerate mismatch and return True of False if its
+the same of different</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -532,9 +593,9 @@ then we take the r9Anim&#8217;s filename and rename the Maya scene accordingly</
 <li><strong>applyPose</strong> &#8211; True by default - apply the static pose stored in the file before loading the animation data</li>
 <li><strong>keyStatics</strong> &#8211; if True then we key everything in the data at startFrame so that all non-keyed and static
 attrs that are stored internally as a pose are keyed.</li>
-<li><strong>blendRange</strong> &#8211; None or int : 1 is default. If an int is passed then we use this as the hold range for the data, setting a key at
-time=startFarme-blendRange to hold the current data before we load the new keys. Note that this also turns on the keyStatics
-to ensure the data is preserved</li>
+<li><strong>blendRange</strong> &#8211; None or int : None is default. If an int is passed then we use this as the hold range for the data, setting a key at
+time=[startFarme-blendRange] to hold the current data before we load the new keys. Note that this also turns
+on the keyStatics to ensure the data is preserved</li>
 <li><strong>merge</strong> &#8211; if True we allow the data to be merged over any current keys, else we cut all keys in the load range first</li>
 <li><strong>smartbake</strong> &#8211; only valid if we&#8217;re loading with a referenceNode, this tries to respect current keys when doing the processing rather than frame baking</li>
 <li><strong>loadInternalRig</strong> &#8211; If True and the r9Anim was created from a rig that was referenced then re-create that reference and load the r9Anim data onto
@@ -677,19 +738,25 @@ that was loaded. If False then we just restore the ref information [refpath, nam
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.animation.load_r9anim_direct">
-<code class="descname">load_r9anim_direct</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>open=False</em>, <em>force=True</em>, <em>loadAsStored=True</em>, <em>loadFromFrm=None</em>, <em>manageRanges=1</em>, <em>manageFileName=True</em>, <em>manageExport='byName'</em>, <em>manageAudio='byRange_start'</em>, <em>manageImagePlanes=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.load_r9anim_direct" title="Permalink to this definition">¶</a></dt>
-<dd><p>load a given r9Anim directly using the internal mRig referenced filepath,
-we will reference that rig in under its original namespace then push the
+<code class="descname">load_r9anim_direct</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>open=False</em>, <em>force=True</em>, <em>importToCurrent=False</em>, <em>loadAsStored=True</em>, <em>loadFromFrm=None</em>, <em>manageRanges=1</em>, <em>manageFileName=True</em>, <em>manageExport='byName'</em>, <em>manageAudio='byRange_start'</em>, <em>manageImagePlanes=True</em>, <em>respect_framerate=True</em>, <em>verbose=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.load_r9anim_direct" title="Permalink to this definition">¶</a></dt>
+<dd><p>load a given r9Anim directly either using the internal r9Anim referenced filepath,
+or to the current mRig in the scene if importToCurrent=True
+If not &#8220;importToCurrent&#8221; we inspect the r9Anim for an internal rig reference pointer and if
+found we re-reference that rig in under its original namespace then push the
 anim data over to it. This will also restore the Maya sceneName if it&#8217;s currently
 untitled so it matches the r9Anim&#8217;s filename</p>
+<p>This func is designed as a wrapper over the main AnimMap class for things like UI calls and the browser stubs</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>filepath</strong> &#8211; filepath of the r9Anim we&#8217;re wanting to restore</li>
-<li><strong>open</strong> &#8211; default=True, if True we make sure we do a &#8216;NewScene&#8217; prior to load, else we import the data into the current scene</li>
-<li><strong>force</strong> &#8211; default=True, if True and &#8220;open&#8221; we force NewScene else we abort if there are unsaved changes</li>
+<li><strong>open</strong> &#8211; default=False, if True we make sure we do a &#8216;NewScene&#8217; prior to load, else we reference the internally stored
+rig (from the r9Anim data) into the current scene then import the r9Anim onto that</li>
+<li><strong>force</strong> &#8211; default=True, if True and &#8220;open&#8221; we force NewScene before the load else we abort if there are unsaved changes</li>
+<li><strong>importToCurrent</strong> &#8211; if True we import the data to the connected mRig from the selected objects, or the first instance
+of an mRig we find in the current Maya scene. This also triggers an mRig.cutKeys() before the load</li>
 <li><strong>loadAsStored</strong> &#8211; load the anim data from the original time</li>
 <li><strong>loadFromFrm</strong> &#8211; if not loadAsStored, load the animation data from a given frame by comparing the
 internal startFrm stored in the animMap with the given frame</li>
@@ -698,7 +765,10 @@ internal startFrm stored in the animMap with the given frame</li>
 new &#8216;untitled&#8217; scene, then we take the r9Anim&#8217;s filename and rename the Maya scene accordingly</li>
 <li><strong>manageExport</strong> &#8211; default=&#8217;byName&#8217;, do we want to restore the export data</li>
 <li><strong>manageAudio</strong> &#8211; default=&#8217;byRange_start&#8217;, do we want to restore the audio data</li>
-<li><strong>manageImahePlanes</strong> &#8211; default=True, do we want to restore the imnagePlane data</li>
+<li><strong>manageImagePlanes</strong> &#8211; default=True, do we want to restore the imnagePlane data</li>
+<li><strong>respect_framerate</strong> &#8211; if True (default) we respect the internal framerate of the r9Anim and force the scene to conform to it
+but only if we&#8217;re opening the rig from the internal reference, if we&#8217;re importToCurrent this flag is by-passed</li>
+<li><strong>verbose</strong> &#8211; if we have user interactions allow them, else mute all confirmDialogs. These are also muted by the PROJECT_DATA.suspend_openCallback</li>
 </ul>
 </td>
 </tr>
@@ -714,7 +784,7 @@ inherited from the metadata_pro.Pro_MetaRig_Base class</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.animation.r9anim_browser_actions">
-<code class="descname">r9anim_browser_actions</code><span class="sig-paren">(</span><em>r9anims</em>, <em>mayafile=False</em>, <em>export=False</em>, <em>playblast=False</em>, <em>_logger=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.r9anim_browser_actions" title="Permalink to this definition">¶</a></dt>
+<code class="descname">r9anim_browser_actions</code><span class="sig-paren">(</span><em>r9anims</em>, <em>open=True</em>, <em>importToCurrent=False</em>, <em>mayafile=False</em>, <em>export=False</em>, <em>playblast=False</em>, <em>_logger=None</em>, <em>clean_current=False</em>, <em>respect_framerate=True</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.r9anim_browser_actions" title="Permalink to this definition">¶</a></dt>
 <dd><p>light wrapper to manage the browser functionality.</p>
 <p>The key to this is the r9Anim file must have been generate by a reference rig.
 This information is stored in the file and if found we restore the reference and
@@ -727,6 +797,12 @@ Red9 ExportUI &gt; Settings data, store in the R9PRO&gt;settings object files</p
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Params r9anims:</th><td class="field-body">list of r9anim files to process</td>
 </tr>
+<tr class="field-even field"><th class="field-name">Params open:</th><td class="field-body">are we opening each r9anim into a fresh maya scene?</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Params importToCurrent:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">if True we try and import the data onto the current mrig in the scene, cutkeys first
+This is ideally assuming a single mRig in the current scene</td>
+</tr>
 <tr class="field-even field"><th class="field-name" colspan="2">Params mayafile:</th></tr>
 <tr class="field-even field"><td>&nbsp;</td><td class="field-body">restore the r9anim and save a Maya file</td>
 </tr>
@@ -734,6 +810,10 @@ Red9 ExportUI &gt; Settings data, store in the R9PRO&gt;settings object files</p
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">Params playblast:</th></tr>
 <tr class="field-even field"><td>&nbsp;</td><td class="field-body">restore the r9anim and create a Playblast from it</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Params clean_current:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">if True we delete all audio and export nodes between files (importCurrent only)
+This is ideally assuming a single mRig in the current scene</td>
 </tr>
 </tbody>
 </table>
@@ -751,7 +831,7 @@ Red9 ExportUI &gt; Settings data, store in the R9PRO&gt;settings object files</p
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000020EDF648&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000020CDCBC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Redirect.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -950,8 +1030,8 @@ making the re-direct live but generating pairblends</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.animation.getNewMrigs">
-<code class="descname">getNewMrigs</code><span class="sig-paren">(</span><em>old_list</em>, <em>new_list</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.getNewMrigs" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.animation.get_new_mrigs">
+<code class="descname">get_new_mrigs</code><span class="sig-paren">(</span><em>old_list</em>, <em>new_list</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.get_new_mrigs" title="Permalink to this definition">¶</a></dt>
 <dd><p>substract old_tag_list items from new_tag_list and return the difference</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1150,7 +1230,7 @@ this and wrap in any further management required at the client level.</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.rig_to_fbx">
-<code class="descname">rig_to_fbx</code><span class="sig-paren">(</span><em>startFrame=None</em>, <em>endFrame=None</em>, <em>filepath=None</em>, <em>prefix=''</em>, <em>export=True</em>, <em>debug=False</em>, <em>bindscales=True</em>, <em>method='connect'</em>, <em>export_skl=None</em>, <em>blend_map=False</em>, <em>blend_maprange=1</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.rig_to_fbx" title="Permalink to this definition">¶</a></dt>
+<code class="descname">rig_to_fbx</code><span class="sig-paren">(</span><em>startFrame=None</em>, <em>endFrame=None</em>, <em>filepath=None</em>, <em>prefix=''</em>, <em>export=True</em>, <em>debug=False</em>, <em>bindscales=True</em>, <em>method='connect'</em>, <em>export_skl=None</em>, <em>blend_map=False</em>, <em>blend_maprange=1</em>, <em>respect_attrlocks=True</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.rig_to_fbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>from a given SINGLE Red9 Puppet Rig output a clean FBX skeleton anim via a bound duplicated skeleton method</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1171,6 +1251,7 @@ mrig.renderMeshes). Each target attr on these blends gets mapped to a new attr o
 driven by the blend data. This is so we can extract blend anim data direct to mapped joints for easy, clean fbx outputs</li>
 <li><strong>blend_maprange</strong> &#8211; default=1, if range is more than 1 then we add in a multiplyDivide node between the connection
 so that the jnt attr is mapped to a larger range. This is to try and avoid compression in engine of fine facial data outputs</li>
+<li><strong>respect_attrlocks</strong> &#8211; if False we force unlock all transforms prior to the bind, else we maintain the lock status of joints form the original skeleton</li>
 </ul>
 </td>
 </tr>
@@ -1254,7 +1335,7 @@ mapped to a new max to reduce any compression further down the line</li>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder">
-<code class="descname">fbx_to_binder</code><span class="sig-paren">(</span><em>fbxfiles</em>, <em>binderfile=None</em>, <em>usecurrentscene=False</em>, <em>bake=False</em>, <em>runFilter=True</em>, <em>useTakeData=True</em>, <em>fbx_mode='update_anim'</em>, <em>mayafile=True</em>, <em>r9anim=False</em>, <em>import_bnd=False</em>, <em>hikmapping=None</em>, <em>fbx_take=1</em>, <em>spine_fit=False</em>, <em>locomotion_track=False</em>, <em>whole_frame=False</em>, <em>maintain_fps=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fbx_to_binder</code><span class="sig-paren">(</span><em>fbxfiles</em>, <em>binderfile=None</em>, <em>usecurrentscene=False</em>, <em>bake=False</em>, <em>runFilter=True</em>, <em>useTakeData=True</em>, <em>fbx_mode='update_anim'</em>, <em>mayafile=True</em>, <em>r9anim=False</em>, <em>import_bnd=False</em>, <em>hikmapping=None</em>, <em>fbx_take=1</em>, <em>spine_fit=False</em>, <em>locomotion_track=False</em>, <em>whole_frame=False</em>, <em>maintain_fps=False</em>, <em>force_start_frm=None</em>, <em>set_timeline=True</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main FBX &gt; Binder call, (PRO_TO_BND) loads the FBX file in, loads the binder in, and transfers the data</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -1292,6 +1373,9 @@ fly, allowing us to use the same binder file but with different HIK remapping ch
 <li><strong>whole_frame</strong> &#8211; if True we do math.floor(startFrame) math.ceil(endFrame) on the timeranges baked out to ensure that subframes have a whole frame clamp,
 this does NOT effect the export ranges created, those will be true to the fbx internal take data</li>
 <li><strong>maintain_fps</strong> &#8211; if True we maintain the incoming Binder scenes fps, else we allow FBX to manage it from the incoming fbx file&#8217;s fps</li>
+<li><strong>force_start_frm</strong> &#8211; if not None we look at the internal fbx ranges and reset the animation data to start at the given frame, allowing the animation
+to be force loaded at frame zero for example</li>
+<li><strong>set_timeline</strong> &#8211; set the playback timeranges, default is True</li>
 </ul>
 </td>
 </tr>
@@ -1482,7 +1566,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Pro_To_Bnd_UI.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000C2D1508&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Pro_To_Bnd_UI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000020CDCC48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Pro_To_Bnd_UI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2046,7 +2130,7 @@ Closes it every time, because the batch can kill maya outright.</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.animation.Keyerui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x00000000210EAF88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x0000000020CDCE88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.animation.Keyerui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

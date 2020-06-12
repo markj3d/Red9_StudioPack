@@ -23,6 +23,7 @@ import os
 
 import Red9.core.Red9_CoreUtils as r9Core
 import Red9.startup.setup as r9Setup
+# r9Setup.boot_client_projects(batchclients=['Testing'])
 
 # force the upAxis, just in case
 r9Setup.mayaUpAxis('y')

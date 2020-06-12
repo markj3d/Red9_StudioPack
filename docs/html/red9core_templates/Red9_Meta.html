@@ -1735,6 +1735,28 @@ to traverse the Dag tree so use something sensible!</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRig.getMetaSubSystems">
+<code class="descname">getMetaSubSystems</code><span class="sig-paren">(</span><em>walk=True</em>, <em>mAttrs=None</em>, <em>stepover=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getMetaSubSystems" title="Permalink to this definition">¶</a></dt>
+<dd><p>return all child MetaSubSystem nodes wired as to this rig</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>walk</strong> &#8211; walk the connected network and return ALL children connected in the tree</li>
+<li><strong>mAttrs</strong> &#8211; only return connected nodes that pass the given attribute filter</li>
+<li><strong>stepover</strong> &#8211; if you&#8217;re passing in &#8216;mTypes&#8217; or &#8216;mInstances&#8217; flags then this dictates if
+we continue to walk down a tree if it&#8217;s parent didn&#8217;t match the given type, default is False
+which will abort a tree who&#8217;s parent didn&#8217;t match. With stepover=True we simply stepover
+that node and continue down all child nodes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.set_ctrlColour">
 <code class="descname">set_ctrlColour</code><span class="sig-paren">(</span><em>colourIndex=4</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.set_ctrlColour" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the override colour of a given nodes shapes</p>
@@ -2029,7 +2051,7 @@ with the exception of the Main_Ctrl</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.getAnimationRange">
-<code class="descname">getAnimationRange</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>setTimeline=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getAnimationRange" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getAnimationRange</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>setTimeline=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getAnimationRange" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the extend of the animation range for this rig and / or the given controllers</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2038,6 +2060,12 @@ with the exception of the Main_Ctrl</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> &#8211; if given only return the extent of the animation data from the given nodes</li>
 <li><strong>setTimeLine</strong> &#8211; if True set the playback timeranges also, default=False</li>
+<li><strong>decimals</strong> &#8211; int -1 default, this is the number of decimal places in the return, -1 = no clamp</li>
+<li><strong>transforms_only</strong> &#8211; if True we only test translate (animCurveTL) and rotate (animCurveTA) data, added for skeleton fbx baked tests</li>
+<li><strong>skip_static</strong> &#8211; if True we ignore static curves and return [], else we return
+the key bounds for the static keys, ignoring the keyValues</li>
+<li><strong>bounds_only</strong> &#8211; if True we only return the key bounds, first and last key times,
+else we look at the changing values to find the bounds</li>
 </ul>
 </td>
 </tr>
@@ -2171,7 +2199,7 @@ to be restored from the gathered info</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.loadAnimation">
-<code class="descname">loadAnimation</code><span class="sig-paren">(</span><em>filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False, timecodeBinding=[None, None], referenceNode=None, relativeRots='projected', relativeTrans='projected', manageRanges=1, manageFileName=True, keyStatics=False, blendRange=0, merge=False, matchMethod='metaData', smartbake=False, loadInternalRig=False, *args, **kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">loadAnimation</code><span class="sig-paren">(</span><em>filepath, incRoots=True, useFilter=True, loadAsStored=True, loadFromFrm=0, loadFromTimecode=False, timecodeBinding=[None, None], referenceNode=None, relativeRots='projected', relativeTrans='projected', manageRanges=1, manageFileName=True, keyStatics=False, blendRange=None, merge=False, matchMethod='metaData', smartbake=False, loadInternalRig=False, *args, **kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.loadAnimation" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>: PRO_PACK :</dt>
 <dd>Binding of the animMap format for loading animation data from
@@ -2199,11 +2227,11 @@ has been set as reference, basically we&#8217;re saying that the timecode at frm
 <li><strong>manageRanges</strong> &#8211; valid values : 0=leave,  1=extend, 2=set the timeranges according to the anim data loaded</li>
 <li><strong>manageFileName</strong> &#8211; if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
 then we take the r9Anim&#8217;s filename and rename the Maya scene accordingly</li>
-<li><strong>keyStatics</strong> &#8211; if True then we key everything in the data at startFrame so that all non-keyed and static
+<li><strong>keyStatics</strong> &#8211; if True then we key everything in the data at startFrame &amp; endFrame so that all non-keyed and static
 attrs that are stored internally as a pose are keyed.</li>
-<li><strong>blendRange</strong> &#8211; None or int : 1 is default. If an int is passed then we use this as the hold range for the data, setting a key at
-time=startFarme-blendRange to hold the current data before we load the new keys. Note that this also turns on the keyStatics
-to ensure the data is preserved</li>
+<li><strong>blendRange</strong> &#8211; None or int : None is default. If an int is passed then we use this as the hold range for the data, setting a key at
+time=[startFarme-blendRange, endFarme+blendRange] to hold the current data before we load the new keys. Note that this also turns
+on the keyStatics to ensure the data is preserved</li>
 <li><strong>merge</strong> &#8211; if True we allow the data to be merged over any current keys, else we cut all keys in the load range first</li>
 <li><strong>matchMethod</strong> &#8211; internal matching method used to match nodes to the stored data</li>
 <li><strong>smartbake</strong> &#8211; only valid if we&#8217;re loading with a referenceNode, this tries to respect current keys when doing the processing rather than frame baking</li>

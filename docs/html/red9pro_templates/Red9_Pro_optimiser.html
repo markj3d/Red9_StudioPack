@@ -301,13 +301,25 @@ and fix methods.</p>
 </div>
 <dl class="docutils">
 <dt>Internal Vars of note:</dt>
-<dd><ul class="first last simple">
-<li>self.fix_method=None          # fix function for this test object</li>
-<li>self.results_failed_nodes=[]  # nodes deemed to have failed the test, where appropriate</li>
-<li>self.results_passed_nodes=[]  # nodes that passed the test</li>
-<li>self.results_returned=None    # results used to compare against if the results_expected var was given</li>
-<li>self.results_expected=None    # if specified this is the result expected from the test method.</li>
-<li>self.log_message=&#8217;&#8217;           # during the tests we generally fill this with useful info for the print feedbacks</li>
+<dd><ul class="first last">
+<li><p class="first">self.fix_method=None          # fix function for this test object</p>
+</li>
+<li><p class="first">self.results_failed_nodes=[]  # nodes deemed to have failed the test, where appropriate</p>
+</li>
+<li><p class="first">self.results_passed_nodes=[]  # nodes that passed the test</p>
+</li>
+<li><p class="first">self.results_returned=None    # results used to compare against if the results_expected var was given</p>
+</li>
+<li><p class="first">self.results_expected=None    # if specified this is the result expected from the test method.</p>
+</li>
+<li><p class="first">self.log_message=&#8217;&#8217;           # during the tests we generally fill this with useful info for the print feedbacks</p>
+</li>
+<li><dl class="first docutils">
+<dt>self.additional_pp_status_details  # (str) additional data that gets appended to the prettyPrintStatus() data</dt>
+<dd><p class="first last">returned by the HealthValidation class. This is only meant to be a short note such as the timeUnit test which has the expected fps in this val</p>
+</dd>
+</dl>
+</li>
 </ul>
 </dd>
 </dl>
@@ -666,6 +678,15 @@ individual tests</p>
 <li>Test for missing geometry!</li>
 <li>Test that all geometry in the scene is named as expected</li>
 </ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.optimiser.MRIG_External_HealthValidations">
+<em class="property">class </em><code class="descname">MRIG_External_HealthValidations</code><span class="sig-paren">(</span><em>mRig=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.MRIG_External_HealthValidations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
+<p>Health systems to validate the status of a connected mRig</p>
+<p>This is the base level Rig Systems Health, testing some of the core structures
+in the wiring of an external mRig system</p>
 </dd></dl>
 
 <dl class="function">
@@ -1112,6 +1133,74 @@ bound to it internally</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_isHistoricallyInteresting_shape_test">
+<code class="descname">mRigs_isHistoricallyInteresting_shape_test</code><span class="sig-paren">(</span><em>expected=0</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_isHistoricallyInteresting_shape_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>test all controllers in the rig and check the status of all of their
+child shapes isHistoricallyinteresting attr</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expected</strong> &#8211; value we&#8217;re expecting for the isHistoricallyInteresting attr, default=0 which means hide it, 2 would restore the nodes</li>
+<li><strong>mRigs</strong> &#8211; specific mRigs else we process all found in the scene</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_isHistoricallyInteresting_shape_fix">
+<code class="descname">mRigs_isHistoricallyInteresting_shape_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_isHistoricallyInteresting_shape_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset the isHistoricallyInteresting attr to the expected value</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_isHistoricallyInteresting_utility_test">
+<code class="descname">mRigs_isHistoricallyInteresting_utility_test</code><span class="sig-paren">(</span><em>expected=0</em>, <em>mRigs=[]</em>, <em>version=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_isHistoricallyInteresting_utility_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the controllers history nodes and hide all utility nodes via the node.isHistoricallyInteresting attr.
+This means in the ChannelBox we should have no Output nodes other than base blendshapes, skinclusers,
+networks and character sets etc.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expected</strong> &#8211; value we&#8217;re expecting for the isHistoricallyInteresting attr, default=0 which means hide it, 2 would restore the nodes</li>
+<li><strong>mRigs</strong> &#8211; specific mRigs else we process all found in the scene</li>
+<li><strong>version</strong> &#8211; if given this is the internal mRig.version that we have to be above or equal to in order to process. This internally
+prevents us running this on older rigs that haven&#8217;t been tested against this</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_isHistoricallyInteresting_utility_fix">
+<code class="descname">mRigs_isHistoricallyInteresting_utility_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_isHistoricallyInteresting_utility_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset the isHistoricallyInteresting attr to the expected value</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_exporttags_test">
+<code class="descname">mRigs_exporttags_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_exporttags_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Single RED9 PRODUCTION METARIG ONLY:
+Check exportTag setups</p>
+<p>This is a Warning failure only</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_exporttags_fix">
+<code class="descname">mRigs_exporttags_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_exporttags_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the base character Export tag if not found, if the root wasn&#8217;t connected then
+hook it up to the mRig.skeletonRoot jnt from the publisher</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.exportLoopNode_framerate_test">
 <code class="descname">exportLoopNode_framerate_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>loops=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.exportLoopNode_framerate_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>generic ExportLoopNode check to make sure that framerate changes are
@@ -1440,7 +1529,7 @@ hierarchy, joint naming, transforms and orients to validate one skeleton against
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>expected</strong> &#8211; default key but unused here</li>
 <li><strong>filepath</strong> &#8211; filepath of the pose file we&#8217;re going to test against</li>
-<li><strong>rootjnt</strong> &#8211; the roor joint of the skeleton we want to test against the given pose file</li>
+<li><strong>rootjnt</strong> &#8211; the root joint of the skeleton we want to test against the given pose file</li>
 <li><strong>savebase</strong> &#8211; when setting up this test we need a pose file to test against, this allows us to run it
 prior to testing and save the pose to the filepath rather than running the actual test</li>
 <li><strong>srcjnt</strong> &#8211; source skeleton to compare against if the filepath wasn&#8217;t given</li>
@@ -1808,6 +1897,30 @@ These are nodes from other plug-ins</p>
 <dt id="Red9.pro_pack.core.optimiser.unknownPlugins_fix">
 <code class="descname">unknownPlugins_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.unknownPlugins_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>fix method : delete all old plugins</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.unknownScriptNode_test">
+<code class="descname">unknownScriptNode_test</code><span class="sig-paren">(</span><em>expected=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.unknownScriptNode_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>test to find unknown scriptNodes nodes in the scene and remove them</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.unknownScriptNode_fix">
+<code class="descname">unknownScriptNode_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.unknownScriptNode_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>fix method : delete all old plugins</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.unknownScriptNode_MALWARE_test">
+<code class="descname">unknownScriptNode_MALWARE_test</code><span class="sig-paren">(</span><em>expected=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.unknownScriptNode_MALWARE_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>test to find a Specific MALWARE scriptNode in the scene and remove it!</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.unknownScriptNode_MALWARE_fix">
+<code class="descname">unknownScriptNode_MALWARE_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.unknownScriptNode_MALWARE_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>fix method : delete the Malware</p>
 </dd></dl>
 
 <dl class="function">

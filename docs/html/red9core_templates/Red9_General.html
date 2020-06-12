@@ -213,6 +213,12 @@ clipboard then pull it back afterwards.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_General.playback_suspend">
+<code class="descname">playback_suspend</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.playback_suspend" title="Permalink to this definition">¶</a></dt>
+<dd><p>DECORATOR : Suspend current playback and resume after the func</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_General.runProfile">
 <code class="descname">runProfile</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.runProfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>DECORATOR : run the profiler - only ever used when debugging /optimizing
@@ -538,7 +544,7 @@ CURRENTLY NOT BEING CALLED - switched to pyperclip.py module</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_General.os_listFiles">
-<code class="descname">os_listFiles</code><span class="sig-paren">(</span><em>folder</em>, <em>filters=[]</em>, <em>byDate=False</em>, <em>fullPath=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.os_listFiles" title="Permalink to this definition">¶</a></dt>
+<code class="descname">os_listFiles</code><span class="sig-paren">(</span><em>folder</em>, <em>filters=[]</em>, <em>byDate=False</em>, <em>fullPath=False</em>, <em>filter_string=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.os_listFiles" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple os wrap to list a dir with filters for file type and sort byDate</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -597,7 +603,7 @@ Once downloaded drop it here Red9/pakcages/diffMerge.exe</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filepath</strong> &#8211; file pat to drive where to write the file</li>
+<li><strong>filepath</strong> &#8211; file path to drive where to write the file</li>
 <li><strong>content</strong> &#8211; file content</li>
 </ul>
 </td>

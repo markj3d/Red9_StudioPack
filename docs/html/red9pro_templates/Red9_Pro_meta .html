@@ -168,7 +168,8 @@ note that this now also supports ctrl_wire attrs that are connected to the Suppo
 <li><strong>matchid</strong> &#8211; denotes the matchpnts base wire name - eg : &#8220;end&#8221;, &#8220;pole&#8221; creating attr wire &#8216;mSystem.SupportNode.IK_matchpnt_pole&#8217;</li>
 <li><strong>prefix</strong> &#8211; usually just the side id for the system &#8216;L&#8217;,&#8217;R&#8217;,&#8217;C&#8217;, if not given we ID this from the system mirrorSide</li>
 <li><strong>parent</strong> &#8211; if given this becomes the parent for the matchpnt, else we parent it to the given fk_wrie node</li>
-<li><strong>target</strong> &#8211; &#8216;IK&#8217; or &#8216;FK&#8217; only IK is currently supported in the matching systems at the moment, reverses the logic of the func</li>
+<li><strong>target</strong> &#8211; &#8216;IK&#8217; or &#8216;FK&#8217;, reverses the logic of the func. If &#8216;IK&#8217; then the matchpnt will be parented under the fk_wire node,
+if &#8216;FK&#8217; then the matchpnt is parented under the ik / ctrl_wire node</li>
 </ul>
 </td>
 </tr>
@@ -550,7 +551,7 @@ BUT an mRig should be able to have 1 character and 1 facial tag at the same time
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig">
-<code class="descname">bake_rig</code><span class="sig-paren">(</span><em>selected=False</em>, <em>runFilter=True</em>, <em>deleteStatics=True</em>, <em>sampleby=1</em>, <em>ignoreInFilter=[]</em>, <em>debugView=False</em>, <em>sparseBake=True</em>, <em>timerange=()</em>, <em>whole_start=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bake_rig</code><span class="sig-paren">(</span><em>selected=False</em>, <em>runFilter=True</em>, <em>deleteStatics=False</em>, <em>sampleby=1</em>, <em>ignoreInFilter=[]</em>, <em>debugView=False</em>, <em>sparseBake=True</em>, <em>timerange=()</em>, <em>whole_start=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a generic bake call for the rig controllers - mainly used in conjunction with the Red9 Binder setup but by no means tied to it.
 This call will bake all animation down to the rig and remove the Binder system hooks if found. It also manages AnimLayer removal during the bake,
 removing a controller from all animation layers if it can do so and should any animLayer become empty, we delete them.</p>
@@ -561,7 +562,7 @@ removing a controller from all animation layers if it can do so and should any a
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>selected</strong> &#8211; bake only the selected ctrls if True, else bake all children of this mRig class</li>
 <li><strong>runFilter</strong> &#8211; if True run a Euler filter on the baked rotate data</li>
-<li><strong>deleteStatics</strong> &#8211; if True delete static anim curves created, reducing the data set</li>
+<li><strong>deleteStatics</strong> &#8211; if True delete static anim curves created, reducing the data set  : changed 25/02/20 now defaults to False</li>
 <li><strong>sampleby</strong> &#8211; bake frame step, default=1</li>
 <li><strong>ignoreFilter</strong> &#8211; [] a list of nodes to skip the curve filter post bake if given</li>
 <li><strong>debugView</strong> &#8211; if True we allow the Maya UI to refresh each frame, else we suspend update</li>
@@ -1097,7 +1098,7 @@ wiring any other external rig system can be wired too and utilise these function
 <p>Additional internal vars worth noting, these are all for clients subclassing or running
 their own internal rigs over the Pro_MetaRig networks:</p>
 <ul>
-<li><p class="first">self.ik_fk_switchattr : []the attribute within the rig controllers that switches the rig between fk and ik mode state [&#8216;ik_fk_blender&#8217;]</p>
+<li><p class="first">self.ik_fk_switchattr : [] the attribute within the rig controllers that switches the rig between fk and ik mode state [&#8216;ik_fk_blender&#8217;]</p>
 </li>
 <li><p class="first">self.fk_world_attr : [] the attributes used within the rig for FK chain world/local orient blending [&#8216;FK_world_orient&#8217;]</p>
 </li>
@@ -1303,12 +1304,12 @@ mrig.L_ArmSystem</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; [] hint nodes wired to the systems you want to match, used to find id subSystems</li>
+<li><strong>nodes</strong> &#8211; [] hint nodes wired to the systems you want to match, used to find id subSystems to process</li>
 <li><strong>mSystems</strong> &#8211; [] list of mSystem nodes to switch, if given we don&#8217;t process the nodes args</li>
 <li><strong>time</strong> &#8211; bool, whether to enable the match over time or not, True by default if timerange arg is given</li>
 <li><strong>switch</strong> &#8211; also switch the ik_fk_blender attr to leave the system in FK mode</li>
 <li><strong>keyswitch</strong> &#8211; if switch is true, this also adds in keys to control the switch mode</li>
-<li><strong>ik_chainmethod</strong> &#8211; <p>None by default as controlled by the var self._ik_chainmethod
+<li><strong>ik_chainmethod</strong> &#8211; <p>None by default as controlled by the internal mRig var self._ik_chainmethod
 method of extracting the ik joints, currently supported:
 * jnt_index - default - straight joint hierarchy from the mSystem.SupportNode.GRP_IK_chain[0] node
 * ctrl_index - filtered hierarchy of nurbsCurve from the mSystem.SupportNode.GRP_IK_chain[0] node
@@ -1317,7 +1318,7 @@ method of extracting the ik joints, currently supported:
 <div>ik chain nodes. This is useful if a client has setup a broken hierarchy for the IK systems.
 These are processed in the following order [IK_toe, IK_end, IK_pole, IK_start]</div></blockquote>
 </li>
-<li><strong>fk_chainmethod</strong> &#8211; None by default as controlled by the var self._fk_chainmethod
+<li><strong>fk_chainmethod</strong> &#8211; None by default as controlled by the internal mRig var self._fk_chainmethod
 method of extracting the fk controls, currently supported:
 * jnt_index - straight joint hierarchy from the mSystem.SupportNode.GRP_FK_chain[0] node
 * ctrl_index - filtered hierarchy of nurbsCurve controllers from the mSystem.SupportNode.GRP_FK_chain[0] node
@@ -1353,6 +1354,7 @@ rather than auto finding it from the scene</li>
 <li><strong>step</strong> &#8211; frame step between keys if time=True</li>
 <li><strong>smartbake</strong> &#8211; if True we look at the mSystem&#8217;s current keys and only match over those keys if time enabled</li>
 <li><strong>runFilter</strong> &#8211; if processing over time run a EulerFilter on the resulting data, primarily added for the smartBake to reduce gimbal between steps</li>
+<li><strong>vectoredpole</strong> &#8211; &lt;&lt; internal testing &gt;&gt;  use the pole alignment vector code rather than just simple track</li>
 </ul>
 </td>
 </tr>
@@ -1367,9 +1369,10 @@ However these are easy to add to any rig wired to Meta</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">if the mSystem itself has a string attr &#8220;matchpnt_order=[]&#8221; then the process order of the matchpnts follows that (inversed)
-else it&#8217;s hard coded to process [&#8216;toe&#8217;, &#8216;ball&#8217;, &#8216;ankle&#8217;, &#8216;pole&#8217;, &#8216;end&#8217;] (inversed when processed). This allows clients
-and custom rigs to denote their own process order for the matching of the ik controllers. The entries here are the
-&#8220;matchid&#8221; args passed to the &#8220;add_fkik_matchpnt&#8221; func itself when the matchpnts were made</p>
+else it&#8217;s hard coded to process  [&#8216;toe&#8217;, &#8216;ball&#8217;, &#8216;end&#8217;, &#8216;ankle&#8217;, &#8216;pole&#8217;, &#8216;start&#8217;, &#8216;hip&#8217;, &#8216;clav&#8217;] (inversed when processed).
+This allows clients and custom rigs to denote their own process order for the matching of the ik controllers.
+The entries here are the &#8220;matchid&#8221; args passed to the &#8220;add_fkik_matchpnt&#8221; func itself when the matchpnts were made, basically
+the wire attr that links the matchpnt to the mSupportNode such that the attrs would be &#8220;IK_matchpnt_xxxx&#8221;</p>
 </div>
 <p>TODO: add a way to reset a given set of controllers in the IK system before the FK&gt;IK match. If there are controllers
 in the IK system that effect the position of others and these aren&#8217;t reset before the procedure then we can
@@ -2088,21 +2091,29 @@ this export tag</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getNodes">
-<code class="descname">getNodes</code><span class="sig-paren">(</span><em>select=True</em>, <em>include_jnts=True</em>, <em>include_rendermeshes=True</em>, <em>include_skinned_meshes=True</em>, <em>include_blends=True</em>, <em>include_hik=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getNodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getNodes</code><span class="sig-paren">(</span><em>select=True</em>, <em>filterSettings=None</em>, <em>include_basenodes=True</em>, <em>include_rendermeshes=None</em>, <em>include_skinned_meshes=None</em>, <em>include_blends=None</em>, <em>include_hik=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple wrap for the Exporter handling where we need to select everything
-required for the export, including the skeleton, skinned geo, blendshapes and their targets</p>
+required for the export, including the skeleton, skinned geo, blendshapes and their targets
+This works from those objects passed to it from expTag.__getNodes__() allowing you to
+modify the very base behaviour at the class level if required</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the return from  this function is what you see when you launch the set specific export root
+from the ExportTagUI and what gets selected when you do an FBX selective export</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>select</strong> &#8211; do we select the returned nodes?</li>
-<li><strong>include_jnts</strong> &#8211; include all joints in the hierarchy connected to the exportSkeletonRoot wire on the mRig,
+<li><strong>include_basenodes</strong> &#8211; include all nodes returned from self.__getNodes__ which for CharacterTags is all child jnts.
 note that this respects the over-rides available on self and set by the addSelectionOverride calls</li>
 <li><strong>include_rendermeshes</strong> &#8211; include meshes wired to the renderMeshes attr on the mRig itself</li>
 <li><strong>include_skinned_meshes</strong> &#8211; include all skinned meshes found to be connected the wired skeleton hierarchy</li>
 <li><strong>include_blends</strong> &#8211; include any blendshapes and their respective targets if found in the scene</li>
 <li><strong>include_hik</strong> &#8211; include the connected HIKCharacterNode in the return / selection if bound</li>
+<li><strong>filterSettings</strong> &#8211; takes a r9Core.FilterSettings class object and allows for very specific node selection if needed</li>
 </ul>
 </td>
 </tr>
@@ -2501,7 +2512,8 @@ the Loops non-additive state.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">the joints go through the r9Core.nodes_in_hierarchy codebase so can be shortname pointers as these
-are converted back to full path in the getRootNode calls</p>
+are converted back to full path in the getRootNode calls. This attr is always set as a comma separated
+string of shortnode names &#8216;nodeA,nodeB&#8217;</p>
 </div>
 </dd></dl>
 
