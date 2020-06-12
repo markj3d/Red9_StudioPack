@@ -318,6 +318,80 @@ def osBuild():
     elif build == 'win32':
         return 32
 
+def framerate_mapping(value=None, asAPI=False):
+    '''
+    single place to convert fps data between string representation, actual float(fps) and MTime.unit
+    if no valuye is passed we return a full mapping dict {pal: (25, OpenMaya.MTime.kPALFrame), ...}
+
+    :param value: if float or int we convert the data to timeUnit ('pal','ntsc',....)
+        if value is a string we convert to actual fps
+    :param asAPI: if True we return the OpneMaya.MTime.kUnit for the value
+    '''
+    import maya.OpenMaya as OpenMaya
+    fpsDict = {"game": (15.0, OpenMaya.MTime.kGames),
+               "film": (24.0, OpenMaya.MTime.kFilm),                    # 6
+               "pal": (25.0, OpenMaya.MTime.kPALFrame),                 # 7
+               "ntsc": (30.0, OpenMaya.MTime.kNTSCFrame),               # 8
+               "show": (48.0, OpenMaya.MTime.kShowScan),                # 9
+               "palf": (50.0, OpenMaya.MTime.kPALField),                # 10
+               "ntscf": (60.0, OpenMaya.MTime.kNTSCField)}              # 11
+
+    if mayaVersion() >= 2017:
+        new_2017fps = {"2fps": (2.0, OpenMaya.MTime.k2FPS),             # 12
+                        "3fps": (3.0, OpenMaya.MTime.k3FPS),            # 13
+                        "4fps": (4.0, OpenMaya.MTime.k4FPS),            # 14
+                        "5fps": (5.0, OpenMaya.MTime.k5FPS),            # 15
+                        "6fps": (6.0, OpenMaya.MTime.k6FPS),            # 16
+                        "8fps": (8.0, OpenMaya.MTime.k8FPS),            # 17
+                        "10fps": (10.0, OpenMaya.MTime.k10FPS),         # 18
+                        "12fps": (12.0, OpenMaya.MTime.k12FPS),         # 19
+                        "16fps": (16.0, OpenMaya.MTime.k16FPS),         # 20
+                        "20fps": (20.0, OpenMaya.MTime.k20FPS),         # 21
+                        "29.97fps": (29.97, OpenMaya.MTime.k29_97FPS),  # 44
+                        "40fps": (40.0, OpenMaya.MTime.k40FPS),         # 22
+                        "75fps": (75.0, OpenMaya.MTime.k75FPS),         # 23
+                        "80fps": (80.0, OpenMaya.MTime.k80FPS),         # 24
+                        "100fps": (100.0, OpenMaya.MTime.k100FPS),      # 25
+                        "120fps": (120.0, OpenMaya.MTime.k120FPS),      # 26
+                        "125fps": (125.0, OpenMaya.MTime.k125FPS),      # 27
+                        "150fps": (150.0, OpenMaya.MTime.k150FPS),      # 28
+                        "200fps": (200.0, OpenMaya.MTime.k200FPS),      # 29
+                        "240fps": (240.0, OpenMaya.MTime.k240FPS),      # 30
+                        "250fps": (250.0, OpenMaya.MTime.k250FPS),      # 31
+                        "300fps": (300.0, OpenMaya.MTime.k300FPS),      # 32
+                        "375fps": (375.0, OpenMaya.MTime.k375FPS),      # 33
+                        "400fps": (400.0, OpenMaya.MTime.k400FPS),      # 34
+                        "500fps": (500.0, OpenMaya.MTime.k500FPS),      # 35
+                        "600fps": (600.0, OpenMaya.MTime.k600FPS),      # 36
+                        "750fps": (750.0, OpenMaya.MTime.k750FPS),      # 37
+                        "1200fps": (1200.0, OpenMaya.MTime.k1200FPS),   # 38
+                        "1500fps": (1500.0, OpenMaya.MTime.k1500FPS),   # 39
+                        "2000fps": (2000.0, OpenMaya.MTime.k2000FPS),   # 40
+                        "3000fps": (3000.0, OpenMaya.MTime.k3000FPS),   # 41
+                        "6000fps": (6000.0, OpenMaya.MTime.k6000FPS)}   # 42
+        fpsDict.update(new_2017fps)
+
+    if mayaVersion() >= 2018:
+        new_2018fps = {"23.976fps": (23.976, OpenMaya.MTime.k23_976FPS),    # 43
+                        "29.97df": (29.97, OpenMaya.MTime.k29_97DF),        # 45
+                        "47.952fps": (47.952, OpenMaya.MTime.k47_952FPS),   # 46
+                        "59.94fps": (59.94, OpenMaya.MTime.k59_94FPS),      # 47
+                        "44100fps": (44100.0, OpenMaya.MTime.k44100FPS),    # 48
+                        "48000fps": (48000.0, OpenMaya.MTime.k48000FPS)}    # 49
+        fpsDict.update(new_2018fps)
+    if not value:
+        return fpsDict
+    if type(value) in [int, float]:
+        for k, v in fpsDict.items():
+            if float(v[0]) == float(value):
+                if not asAPI:
+                    return k
+                return v[1]
+    elif type(value) in [str, unicode]:
+        if not asAPI:
+            return fpsDict[value][0]
+        return fpsDict[value][1]
+
 def getCurrentFPS(return_full_map=False):
     '''
     returns the current frames per second as a number, rather than a useless string
@@ -325,59 +399,15 @@ def getCurrentFPS(return_full_map=False):
     :param return_full_map: if True we return a dictionary of timeUnit:fps rather than the
         current actual fps - useful for debugging
     '''
-    fpsDict = {"game": 15.0,
-               "film": 24.0,
-               "pal": 25.0,
-               "ntsc": 30.0,
-               "show": 48.0,
-               "palf": 50.0,
-               "ntscf": 60.0}
-    if mayaVersion() >= 2017:
-        new_2017fps = {"2fps": 2.0,
-                          "3fps": 3.0,
-                          "4fps": 4.0,
-                          "5fps": 5.0,
-                          "6fps": 6.0,
-                          "8fps": 8.0,
-                          "10fps": 10.0,
-                          "12fps": 12.0,
-                          "16fps": 16.0,
-                          "20fps": 20.0,
-                          "29.97fps": 29.97,
-                          "40fps": 40.0,
-                          "75fps": 70.0,
-                          "80fps": 80.0,
-                          "100fps": 100.0,
-                          "120fps": 120.0,
-                          "125fps": 125.0,
-                          "150fps": 150.0,
-                          "200fps": 200.0,
-                          "240fps": 240.0,
-                          "250fps": 250.0,
-                          "300fps": 300.0,
-                          "375fps": 375.0,
-                          "400fps": 400.0,
-                          "500fps": 500.0,
-                          "600fps": 600.0,
-                          "750fps": 750.0,
-                          "1200fps": 1200.0,
-                          "1500fps": 1500.0,
-                          "2000fps": 2000.0,
-                          "3000fps": 3000.0,
-                          "6000fps": 6000.0}
-        fpsDict.update(new_2017fps)
-    if mayaVersion() >= 2018:
-        new_2018fps = {"23.976fps": 23.976,
-                          "29.97df": 29.97,
-                          "47.952fps": 47.952,
-                          "59.94fps": 59.94,
-                          "44100fps": 44100.0,
-                          "48000fps": 48000.0}
-        fpsDict.update(new_2018fps)
     if not return_full_map:
-        return fpsDict[cmds.currentUnit(q=True, fullName=True, time=True)]
+        data = framerate_mapping()
+        return data[cmds.currentUnit(q=True, fullName=True, time=True)][0]
     else:
-        return fpsDict
+        # why remap? this is purely for consistency
+        data = {}
+        for k, v in framerate_mapping().items():
+            data[k] = v[0]
+        return data
 
 
 # -----------------------------------------------------------------------------------------
@@ -648,6 +678,12 @@ def addToMayaMenus():
                               p=mainFileMenu,
                               echoCommand=True,
                               c="from Red9.pro_pack import Pro_MenuStubs;Pro_MenuStubs('r9anim_open_direct')")
+                cmds.menuItem('redNineImportr9AnimItem',
+                              l=LANGUAGE_MAP._MainMenus_.import_r9anim,
+                              ann=LANGUAGE_MAP._MainMenus_.import_r9anim_ann,
+                              p=mainFileMenu,
+                              echoCommand=True,
+                              c="from Red9.pro_pack import Pro_MenuStubs;Pro_MenuStubs('r9anim_import_direct')")
 
         # timeSlider additions
         if not cmds.menuItem('redNineTimeSliderCollapseItem', q=True, ex=True):
@@ -663,8 +699,10 @@ def addToMayaMenus():
                           c='import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.selectKeysByRange()')
             cmds.menuItem(label=LANGUAGE_MAP._MainMenus_.setrangetoo,
                           ann=LANGUAGE_MAP._MainMenus_.setrangetoo_ann,
-                          c='import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.setTimeRangeToo()')
-
+                          c='import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.setTimeRangeToo(bounds_only=True)')
+            cmds.menuItem(label=LANGUAGE_MAP._MainMenus_.setrangetoo_internal,
+                          ann=LANGUAGE_MAP._MainMenus_.setrangetoo_internal_ann,
+                          c='import Red9.core.Red9_AnimationUtils as r9Anim;r9Anim.setTimeRangeToo(bounds_only=False)')
             cmds.menuItem(divider=True, p=TimeSliderMenu)
             cmds.menuItem('redNineTimeSliderCollapseItem', label=LANGUAGE_MAP._MainMenus_.collapse_time,
                           ann=LANGUAGE_MAP._MainMenus_.collapse_time_ann,
@@ -1380,7 +1418,7 @@ def clients_booted():
     global CLIENTS_BOOTED
     return CLIENTS_BOOTED
 
-def boot_client_projects(batchclients=[]):
+def boot_client_projects(batchclients=None):  # []):
     '''
     Boot Client modules found in the Red9_ClientCore dir. This now prompts
     if multiple client projects were found.
@@ -1397,8 +1435,11 @@ def boot_client_projects(batchclients=[]):
     clientsToBoot = []
 
     # mayaBatch boot (unittests and batching)
+    print 'Maya is Batch : ', mayaIsBatch()
+    print 'clients : ', batchclients
     if mayaIsBatch():
         if batchclients is None:
+            print '################### batchclients = None'
             return
         if batchclients:
             clientsToBoot = [_client for _client in batchclients if _client in clients]
@@ -1476,7 +1517,7 @@ def __reload_clients__():
 # BOOT CALL ---
 # -----------------------------------------------------------------------------------------
 
-def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindow', batchclients=[]):
+def start(Menu=True, MayaUIHooks=True, MayaOverloads=True, parentMenu='MayaWindow', batchclients=None):
     '''
     Main entry point for the StudioPack
     :param Menu: Add the Red9 Menu to the Maya Main Menus
