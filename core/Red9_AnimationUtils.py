@@ -465,25 +465,85 @@ def animCurveDrawStyle(style='simple', forceBuffer=True, showBufferCurves=False,
 #         self.current += self.step
 #         return self.current - self.step
 
-def animRangeFromNodes(nodes, setTimeline=True):
+def animCurve_get_bounds(curve, bounds_only=False, skip_static=True):
+    '''
+    from a given anim curve find it's upper and lower bounds. By default we examine the keyValues
+    for change and return the upper and lower bounds for change.
+
+    :param curve: the anim curve to inspect
+    :param bounds_only: if True we only return the key bounds, first and last key times,
+        else we look at the changing values to find the bounds
+    :param skip_static: if True we ignore static curves and return [], else we return
+        the key bounds for the static keys, ignoring the keyValues
+    '''
+    keyList = cmds.keyframe(curve, q=True, vc=True, tc=True)
+    if not keyList:
+        return False
+    keydata = zip(keyList[0::2], keyList[1::2])
+    minV = keydata[0]
+    maxV = keydata[-1]
+    bounds = [minV[0], maxV[0]]
+
+    if bounds_only:
+        return bounds
+
+    # find the min
+    for t, v in keydata:
+        if not r9Core.floatIsEqual(minV[1], v, 0.001):
+            break
+        bounds[0] = t
+    # find the max
+    for t, v in reversed(keydata):
+        if not r9Core.floatIsEqual(maxV[1], v, 0.001):
+            break
+        bounds[1] = t
+
+    if skip_static:
+        if bounds[0] == maxV[0]:
+            log.debug('curve is static : %s' % curve)
+            return []
+    else:
+        if bounds[0] == maxV[0]:
+            log.debug('curve is static : %s' % curve)
+            return [minV[0], maxV[0]]
+    return bounds
+
+def animRangeFromNodes(nodes, setTimeline=True, decimals=-1, transforms_only=False, skip_static=True, bounds_only=True):
     '''
     return the extent of the animation range for the given objects
     :param nodes: nodes to examine for animation data
     :param setTimeLine: whether we should set the playback timeline to the extent of the found anim data
+    :param decimals: int -1 default, this is the number of decimal places in the return, -1 = no clamp
+    :param transforms_only: if True we only test translate (animCurveTL) and rotate (animCurveTA) data, added for skeleton fbx baked tests
+    :param skip_static: if True we ignore static curves and return [], else we return
+        the key bounds for the static keys, ignoring the keyValues
+    :param bounds_only: if True we only return the key bounds, first and last key times,
+        else we look at the changing values to find the actual animated bounds via keyValue changes
     '''
     minBounds = []
     maxBounds = []
     for anim in r9Core.FilterNode.lsAnimCurves(nodes, safe=True, allow_ref=True):
-        count = cmds.keyframe(anim, q=True, kc=True)
-        minBounds.append(cmds.keyframe(anim, q=True, index=[(0, 0)], tc=True)[0])
-        maxBounds.append(cmds.keyframe(anim, q=True, index=[(count - 1, count - 1)], tc=True)[0])
-    if not minBounds:
-        minBounds = [0]
-    if not maxBounds:
-        maxBounds = [1]
+        if transforms_only and not cmds.nodeType(anim) in ['animCurveTL', 'animCurveTA']:
+            continue
+        bounds = animCurve_get_bounds(anim, bounds_only=bounds_only, skip_static=skip_static)
+
+        if bounds:
+            minBounds.append(bounds[0])
+            maxBounds.append(bounds[1])
+#         count = cmds.keyframe(anim, q=True, kc=True)
+#         minBounds.append(cmds.keyframe(anim, q=True, index=[(0, 0)], tc=True)[0])
+#         maxBounds.append(cmds.keyframe(anim, q=True, index=[(count - 1, count - 1)], tc=True)[0])
+    if not minBounds and not maxBounds:
+        return
+    min_rng = min(minBounds)
+    max_rng = max(maxBounds)
+    if decimals >= 0:
+        min_rng = round(min_rng, decimals)
+        max_rng = round(max_rng, decimals)
     if setTimeline:
-        cmds.playbackOptions(min=min(minBounds), max=max(maxBounds))
-    return min(minBounds), max(maxBounds)
+        cmds.playbackOptions(min=min_rng, max=max_rng)
+        cmds.playbackOptions(ast=min_rng, aet=max_rng)
+    return min_rng, max_rng
 
 def timeLineRangeGet(always=True):
     '''
@@ -495,11 +555,14 @@ def timeLineRangeGet(always=True):
     :return: (start,end)
     '''
     playbackRange = None
-    PlayBackSlider = mel.eval('$tmpVar=$gPlayBackSlider')
-    if cmds.timeControl(PlayBackSlider, q=True, rangeVisible=True):
-        time = cmds.timeControl(PlayBackSlider, q=True, rangeArray=True)
-        playbackRange = (time[0], time[1])
-    elif always:
+    if not r9Setup.mayaIsBatch():
+        PlayBackSlider = mel.eval('$tmpVar=$gPlayBackSlider')
+        if cmds.timeControl(PlayBackSlider, q=True, rangeVisible=True):
+            time = cmds.timeControl(PlayBackSlider, q=True, rangeArray=True)
+            playbackRange = (time[0], time[1])
+        elif always:
+            playbackRange = (cmds.playbackOptions(q=True, min=True), cmds.playbackOptions(q=True, max=True))
+    else:
         playbackRange = (cmds.playbackOptions(q=True, min=True), cmds.playbackOptions(q=True, max=True))
     return playbackRange
 
@@ -540,26 +603,36 @@ def timeLineRangeProcess(start, end, step=1, incEnds=True, nodes=[]):
     return rng
 
 
-def selectKeysByRange(nodes=None, animLen=False):
+def selectKeysByRange(nodes=None, animLen=False, bounds_only=True):
     '''
     select the keys from the selected or given nodes within the
     current timeRange or selectedTimerange
+
+    :param nodes: the nodes to inspect, else we use the selected transform nodes
+    :param animLen: use the curent timeLine range only
+    :param bounds_only: if True we only use the key bounds, first and last key times,
+        else we look at the changing values to find the actual animated bounds via keyValue changes
     '''
     if not nodes:
         nodes = cmds.ls(sl=True, type='transform')
     if not animLen:
         cmds.selectKey(nodes, time=timeLineRangeGet())
     else:
-        cmds.selectKey(nodes, time=animRangeFromNodes(nodes, setTimeline=False))
+        cmds.selectKey(nodes, time=animRangeFromNodes(nodes, setTimeline=False, bounds_only=bounds_only))
 
-def setTimeRangeToo(nodes=None, setall=True):
+def setTimeRangeToo(nodes=None, setall=True, bounds_only=True):
     '''
     set the playback timerange to be the animation range of the selected nodes.
     AnimRange is determined to be the extent of all found animation for a given node
+
+    :param nodes: the nodes to inspect, else we use the selected transform nodes
+    :param setall: also set the outer '-ast' / '-aet' timeranges
+    :param bounds_only: if True we only use the key bounds, first and last key times,
+        else we look at the changing values to find the actual animated bounds via keyValue changes
     '''
     if not nodes:
         nodes = cmds.ls(sl=True, type='transform')
-    time = animRangeFromNodes(nodes)
+    time = animRangeFromNodes(nodes, bounds_only=bounds_only)
     if time:
         cmds.currentTime(time[0])
         cmds.playbackOptions(min=time[0])
@@ -1329,12 +1402,12 @@ class AnimationUI(object):
         self.poseUILayout = cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=10, style='none')
         cmds.textFieldButtonGrp(self.uitfgPosePath,
-                                            ann=LANGUAGE_MAP._AnimationUI_.pose_path,
-                                            text="",
-                                            bl=LANGUAGE_MAP._AnimationUI_.pose_path,
-                                            bc=lambda *x: self.__uiCB_setPosePath(fileDialog=True),
-                                            cc=lambda *x: self.__uiCB_setPosePath(path=None, fileDialog=False),
-                                            cw=[(1, 260), (2, 40)])
+                                ann=LANGUAGE_MAP._AnimationUI_.pose_path,
+                                text="",
+                                bl=LANGUAGE_MAP._AnimationUI_.pose_path,
+                                bc=lambda *x: self.__uiCB_setPosePath(fileDialog=True),
+                                cc=lambda *x: self.__uiCB_setPosePath(path=None, fileDialog=False),
+                                cw=[(1, 260), (2, 40)])
 
         cmds.rowColumnLayout(nc=2, columnWidth=[(1, 120), (2, 120)], columnSpacing=[(1, 10)])
         self.uircbPosePathMethod = cmds.radioCollection('posePathMode')
@@ -1875,16 +1948,17 @@ class AnimationUI(object):
             log.debug('posePath is invalid')
             return self.poses
         files = os.listdir(self.posePath)
-        if sortBy == 'name':
-            files = r9Core.sortNumerically(files)
-            # files.sort()
-        elif sortBy == 'date':
-            files.sort(key=lambda x: os.stat(os.path.join(self.posePath, x)).st_mtime)
-            files.reverse()
+        if files:
+            if sortBy == 'name':
+                files = r9Core.sortNumerically(files)
+                # files.sort()
+            elif sortBy == 'date':
+                files.sort(key=lambda x: os.stat(os.path.join(self.posePath, x)).st_mtime)
+                files.reverse()
 
-        for f in files:
-            if f.lower().endswith('.pose'):
-                self.poses.append(f.split('.pose')[0])
+            for f in files:
+                if f.lower().endswith('.pose'):
+                    self.poses.append(f.split('.pose')[0])
         return self.poses
 
     def buildFilteredPoseList(self, searchFilter):
@@ -1946,6 +2020,7 @@ class AnimationUI(object):
 
         :param mode: 'local' or 'project', in project the poses are load only, save=disabled
         '''
+
         if mode == 'local' or mode == 'localPoseMode':
             self.posePath = os.path.join(self.posePathLocal, self.getPoseSubFolder())
             if not os.path.exists(self.posePath):
@@ -1978,6 +2053,7 @@ class AnimationUI(object):
             # path not valid clear all
             log.warning('No Current PosePath Set or Current Path is Invalid!')
             return
+
         self.__uiCB_fillPoses(rebuildFileList=True)
 
     def __uiCB_setPosePath(self, path=None, fileDialog=False, *args):
@@ -1986,34 +2062,22 @@ class AnimationUI(object):
         '''
         if fileDialog:
             try:
-                if r9Setup.mayaVersion() >= 2011:
-                    self.posePath = cmds.fileDialog2(fileMode=3,
-                                                dir=cmds.textFieldButtonGrp(self.uitfgPosePath,
-                                                q=True,
-                                                text=True))[0]
-                else:
-                    print 'Sorry Maya2009 and Maya2010 support is being dropped'
-
-                    def setPosePath(fileName, fileType):
-                        self.posePath = fileName
-                    cmds.fileBrowserDialog(m=4, fc=setPosePath, ft='image', an='setPoseFolder', om='Import')
+                path = cmds.fileDialog2(fileMode=3, dir=cmds.textFieldButtonGrp(self.uitfgPosePath, q=True, text=True))[0]
             except:
                 log.warning('No Folder Selected or Given')
+                return
         else:
             if not path:
                 path = cmds.textFieldButtonGrp(self.uitfgPosePath, q=True, text=True)
-                if os.path.exists(path):
-                    self.posePath = path
-                else:
-                    # bug catch 05/11/19 - if we don't validate the path we end up crashing Maya
-                    # further into the pose fill code
-                    log.warning('Given Pose Path not found!')
-                    return
-            else:
-                self.posePath = path
+
+        if path and os.path.exists(path):
+            self.posePath = r9General.formatPath(path)
+        else:
+            log.warning('Given Pose Path not found!')
 
         cmds.textFieldButtonGrp(self.uitfgPosePath, edit=True, text=self.posePath)
         cmds.textFieldButtonGrp('uitfgPoseSubPath', edit=True, text="")
+
         # internal cache for the 2 path modes
         if self.posePathMode == 'localPoseMode':
             self.posePathLocal = self.posePath
@@ -2129,6 +2193,7 @@ class AnimationUI(object):
                 log.warning('No Poses found in Root Project directory, switching to subFolder pickers')
 #                 self.__uiCB_switchSubFolders()
 #                 return
+
         log.debug('searchFilter  : %s : rebuildFileList : %s' % (searchFilter, rebuildFileList))
 
         # TextScroll Layout
@@ -2142,7 +2207,7 @@ class AnimationUI(object):
             if searchFilter:
                 cmds.scrollLayout(self.uiglPoseScroll, edit=True, sp='up')
 
-            for pose in r9Core.filterListByString(self.poses, searchFilter, matchcase=False):  # self.buildFilteredPoseList(searchFilter):
+            for pose in r9Core.filterListByString(self.poses, searchFilter, matchcase=False) or []:  # self.buildFilteredPoseList(searchFilter):
                 cmds.textScrollList(self.uitslPoses, edit=True,
                                         append=pose,
                                         sc=partial(self.setPoseSelected))
@@ -2156,10 +2221,13 @@ class AnimationUI(object):
 
             # Clear the Grid if it's already filled
             try:
-                [cmds.deleteUI(button) for button in cmds.gridLayout(self.uiglPoses, q=True, ca=True)]
+                buttons = cmds.gridLayout(self.uiglPoses, q=True, ca=True)
+                if buttons:
+                    [cmds.deleteUI(button) for button in buttons]
             except StandardError, error:
                 print error
-            for pose in r9Core.filterListByString(self.poses, searchFilter, matchcase=False):  # self.buildFilteredPoseList(searchFilter):
+
+            for pose in r9Core.filterListByString(self.poses, searchFilter, matchcase=False) or []:  # self.buildFilteredPoseList(searchFilter):
                 try:
                     # :NOTE we prefix the buttons to get over the issue of non-numeric
                     # first characters which are stripped my Maya!
@@ -4767,7 +4835,7 @@ class MirrorHierarchy(object):
     def getMirrorCompiledID(self, node):
         '''
         This return the mirror data in a compiled manor for the poseSaver
-        such that mirror data  for a node : Center, ID 10 == Center_10
+        such that mirror data  for a node : Centre, ID 10 == Centre_10
         '''
         try:
             return '%s_%s' % (self.getMirrorSide(node), self.getMirrorIndex(node))
@@ -4860,7 +4928,7 @@ class MirrorHierarchy(object):
         '''
         self.getMirrorSets()
         if not short:
-            print '\nCenter MirrorLists ====================================================='
+            print '\nCentre MirrorLists ====================================================='
             for i in r9Core.sortNumerically(self.mirrorDict['Centre'].keys()):
                 print '%s > %s' % (i, self.mirrorDict['Centre'][i]['node'])
             print '\nRight MirrorLists ======================================================'
@@ -4870,7 +4938,7 @@ class MirrorHierarchy(object):
             for i in r9Core.sortNumerically(self.mirrorDict['Left'].keys()):
                 print '%s > %s' % (i, self.mirrorDict['Left'][i]['node'])
         else:
-            print '\nCenter MirrorLists ====================================================='
+            print '\nCentre MirrorLists ====================================================='
             for i in r9Core.sortNumerically(self.mirrorDict['Centre'].keys()):
                 print '%s > %s' % (i, r9Core.nodeNameStrip(self.mirrorDict['Centre'][i]['node']))
             print '\nRight MirrorLists ======================================================'
