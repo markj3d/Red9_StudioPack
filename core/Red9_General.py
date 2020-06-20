@@ -291,6 +291,58 @@ def evalManager_DG(func):
         return res
     return wrapper
 
+def evalManager_idleAction(func):
+    '''
+    DECORATOR : simple decorator to push the idleAction of the
+    EvalManager to 'Idle Rebuild' during the enclosed func.
+    In testing if this is left default "Idle Rebuild and Prepare for Manip"
+    then the cache rebuild handling breaks things like the relative pose handling
+    as you can clearly see the pose being loaded, then it looks liek a callback being triggered
+    which re-evaluates the states of the rig, and if the controllers were keyed then it
+    pushes that data back to them, breaking the static transforms we just loaded.
+
+    This decorator is intended for use on static functions, for anim functions use the AnimationContext
+
+    https://knowledge.autodesk.com/support/maya/getting-started/caas/CloudHelp/cloudhelp/2019/ENU/Maya-Customizing/files/GUID-E22B253D-914B-4056-93F5-755702A6C998-htm.html
+    '''
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        evalmode = None
+        try:
+            if r9Setup.mayaVersion() >= 2019.0:
+                evalmode = cmds.evaluationManager(q=True, idleAction=True)
+                if not evalmode == 1:
+                    cmds.evaluationManager(idleAction=1)
+            res = func(*args, **kwargs)
+        except:
+            log.info('Failed on evalManager_DG decorator')
+        finally:
+            if evalmode is not None and not evalmode == 1:
+                cmds.evaluationManager(idleAction=evalmode)
+        return res
+    return wrapper
+
+def evalManagerState(mode='off'):
+    '''
+    wrapper function for the evalManager so that it's switching is recorded in
+    the undo stack via the Red9.evalManager_switch plugin
+    '''
+    if r9Setup.mayaVersion() >= 2016:
+        if not cmds.pluginInfo('evalManager_switch', q=True, loaded=True):
+            try:
+                cmds.loadPlugin('evalManager_switch')
+            except:
+                log.warning('Plugin Failed to load : evalManager_switch')
+        try:
+            # via the plug-in to register the switch to the undoStack
+            cmds.evalManager_switch(mode=mode)
+        except:
+            log.debug('evalManager_switch plugin not found, running native Maya evalManager command')
+            cmds.evaluationManager(mode=mode)  # run the default maya call instead
+        log.debug('EvalManager - switching state : %s' % mode)
+    else:
+        log.debug("evalManager skipped as you're in an older version of Maya")
+
 def keepSelection(func):
     '''
     DECORATOR: to keep scene selection as it was before a function or a method execution
@@ -320,78 +372,125 @@ def deleteNewNodes(func):
         return res
     return wrapper
 
-def evalManagerState(mode='off'):
-    '''
-    wrapper function for the evalManager so that it's switching is recorded in
-    the undo stack via the Red9.evalManager_switch plugin
-    '''
-    if r9Setup.mayaVersion() >= 2016:
-        if not cmds.pluginInfo('evalManager_switch', q=True, loaded=True):
-            try:
-                cmds.loadPlugin('evalManager_switch')
-            except:
-                log.warning('Plugin Failed to load : evalManager_switch')
-        try:
-            # via the plug-in to register the switch to the undoStack
-            cmds.evalManager_switch(mode=mode)
-        except:
-            log.debug('evalManager_switch plugin not found, running native Maya evalManager command')
-            cmds.evaluationManager(mode=mode)  # run the default maya call instead
-        log.debug('EvalManager - switching state : %s' % mode)
-    else:
-        log.debug("evalManager skipped as you're in an older version of Maya")
-
 
 class AnimationContext(object):
     """
-    CONTEXT MANAGER : Simple Context Manager for restoring Animation settings
+    CONTEXT MANAGER : Hugely important Context Manager for restoring Animation settings.
+    This also now manages both the evaluationManager and the cachedEvaluation,
+    dropping Maya down to DG without the cache activated, then restoring the
+    previous state on exit.
 
-    :param evalmanager: do we manage the evalManager in this context for Maya 2016 onwards
-    :param time: do we manage the time and restore the original currentTime?
+    :param evalmanager: do we manage the evalManager in this context for Maya 2016 onwards,
+        switching it to DG for the duration of this context
+    :param eval_idle: if we're not setting the evalmanager state then this will turn the idleAction to 'Rebuild'
+        preventing the caching over-riding the data set by the enclose function
+    :param cached_eval: do we manage the new cachedEvaluation in Maya 2019 upwards, default is True
+    :param eval_mode: override all other EM flags passd to this context to manage the EM setups for a given role 'anim' or 'static'
+    :param time: do we manage the time and restore the original currentTime and playback ranges?
     :param undo: do we manage the undoStack, collecting everything in one chunk
     :param autokey: base state of the autokey during this context, default=False
+    :param suppress_exceptions: do we raise or suppress exceptions
+
+    .. note::
+        if the intension of the enclose func is to set time or animation data then use : eval_mode='anim'
+        This will internally set : evalmanager=True, cached_eval=True, evale_idle=False
+
+        if the intention of the enclose func is to set static data then use : eval_mode='anim':
+        This will internally set : evalmanage=False, cached_eval=False, evale_idle=True
     """
-    def __init__(self, evalmanager=True, time=True, undo=True, autokey=False, suppress_exceptions=True):
+    def __init__(self, evalmanager=True, eval_idle=False, time=True, undo=True, autokey=False, cached_eval=True,
+                 eval_mode=None, timerange=[], suppress_exceptions=True):
+
         self.autoKeyState = None
         self.timeStore = {}
         self.evalmode = None
+        self.eval_idle_mode = None
         self.autokey = autokey
+        self.cachemode = None
         self.suppress_exceptions = suppress_exceptions
+        self.timerange = timerange
 
         self.manage_em = evalmanager
         self.mangage_undo = undo
         self.manage_time = time
+        self.manage_cache = cached_eval
+        self.manage_eval_idle = eval_idle
+
+        if eval_mode == 'anim':              # for animation adjustments like snapTransforms over time
+            self.manage_em = True           # drop to DG
+            self.manage_cache = True        # flush the cache on exit
+            self.manage_eval_idle = False   # leave the EM IdleAction alone
+
+        elif eval_mode == 'static':          # for static adjustments like relative pose load / mirror pose
+            self.manage_em = False          # don't come out of parallel
+            self.manage_cache = False       # don't manage the cache
+            self.manage_eval_idle = True    # set EM IdleAction to rebuild only
+
+        # differences between build handling
+        if r9Setup.mayaVersion() < 2019.0:
+            self.manage_cache = False
+            self.manage_eval_idle = False
+        if r9Setup.mayaVersion() < 2016.0:
+            self.manage_em = False
 
     def __enter__(self):
-        self.autoKeyState = cmds.autoKeyframe(query=True, state=True)
-        self.timeStore['currentTime'] = cmds.currentTime(q=True)
-        self.timeStore['minTime'] = cmds.playbackOptions(q=True, min=True)
-        self.timeStore['maxTime'] = cmds.playbackOptions(q=True, max=True)
-        self.timeStore['startTime'] = cmds.playbackOptions(q=True, ast=True)
-        self.timeStore['endTime'] = cmds.playbackOptions(q=True, aet=True)
-        self.timeStore['playSpeed'] = cmds.playbackOptions(query=True, playbackSpeed=True)
+        # manage playback time options
+        if self.manage_time:
+            self.timeStore['currentTime'] = cmds.currentTime(q=True)
+            self.timeStore['minTime'] = cmds.playbackOptions(q=True, min=True)
+            self.timeStore['maxTime'] = cmds.playbackOptions(q=True, max=True)
+            self.timeStore['startTime'] = cmds.playbackOptions(q=True, ast=True)
+            self.timeStore['endTime'] = cmds.playbackOptions(q=True, aet=True)
+            self.timeStore['playSpeed'] = cmds.playbackOptions(query=True, playbackSpeed=True)
 
         # force AutoKey OFF
+        self.autoKeyState = cmds.autoKeyframe(query=True, state=True)
         cmds.autoKeyframe(state=self.autokey)
 
+        # open an undo stack
         if self.mangage_undo:
             cmds.undoInfo(openChunk=True)
         else:
             cmds.undoInfo(swf=False)
+
+#         # manage the new cached evaluation, turning it OFF
+        if self.manage_cache:
+            try:
+                # http://download.autodesk.com/us/company/files/MayaCachedPlayback/2019/MayaCachedPlaybackWhitePaper.html
+                from maya.plugin.evaluator.cache_preferences import CachePreferenceEnabled
+                self.cachemode = CachePreferenceEnabled().get_value()
+#                 log.info('AnimContext : CacheEnabled = False')
+#                 if self.cachemode:
+#                     CachePreferenceEnabled().set_value(False)
+            except StandardError, err:
+                log.debug(err)
+                log.debug('failed to manage cache_preferences')
+
+        if self.manage_eval_idle:
+            self.eval_idle_mode = cmds.evaluationManager(q=True, idleAction=True)
+            if not self.eval_idle_mode == 0:
+                cmds.evaluationManager(idleAction=0)
+                log.info('AnimContext : EvaluationManager idleAction = 0')
+
+        # manage the evalManager - forcing DG mode
         if self.manage_em:
-            if r9Setup.mayaVersion() >= 2016:
-                self.evalmode = cmds.evaluationManager(mode=True, q=True)[0]
-                if self.evalmode == 'parallel':
-                    evalManagerState(mode='off')
+            self.evalmode = cmds.evaluationManager(mode=True, q=True)[0]
+            if self.evalmode == 'parallel':
+#                 cmds.evaluationManager(mode='off')
+                evalManagerState(mode='off')
+                log.info('AnimContext : EvaluationManager = DG')
 
     def __exit__(self, exc_type, exc_value, traceback):
+
         # Close the undo chunk, warn if any exceptions were caught:
         cmds.autoKeyframe(state=self.autoKeyState)
         log.debug('autoKeyState restored: %s' % self.autoKeyState)
 
-        if self.manage_em and self.evalmode:
+        if self.manage_em and self.evalmode == 'parallel':
+#             cmds.evaluationManager(mode=self.evalmode)
             evalManagerState(mode=self.evalmode)
             log.debug('evalManager restored: %s' % self.evalmode)
+
         if self.manage_time:
             cmds.currentTime(self.timeStore['currentTime'])
             cmds.playbackOptions(min=self.timeStore['minTime'])
@@ -400,16 +499,35 @@ class AnimationContext(object):
             cmds.playbackOptions(aet=self.timeStore['endTime'])
             cmds.playbackOptions(ps=self.timeStore['playSpeed'])
             log.debug('currentTime restored: %f' % self.timeStore['currentTime'])
+
         if self.mangage_undo:
             cmds.undoInfo(closeChunk=True)
         else:
             cmds.undoInfo(swf=True)
-        if not exc_type == None and self.suppress_exceptions:
+
+        if self.manage_cache:
+            try:
+                if self.cachemode:
+                    if self.timerange:
+                        cmds.cacheEvaluator(fcr=(self.timerange, 1))
+                        log.info('AnimContext : CacheEvaluator flushed between %s>%s' % self.timerange)
+                    else:
+                        cmds.cacheEvaluator(fc='destroy')
+                        log.info('AnimContext : CacheEvaluator flushed')
+#                     from maya.plugin.evaluator.cache_preferences import CachePreferenceEnabled
+#                     CachePreferenceEnabled().set_value(self.cachemode)
+            except:
+                log.debug('failed to restore cache_preferences')
+
+        if self.manage_eval_idle:
+            cmds.evaluationManager(idleAction=self.eval_idle_mode)
+
+        if exc_type is not None and self.suppress_exceptions:
             log.exception('%s : %s' % (exc_type, exc_value))
         # If we're suppressing exceptions, return True, otherwise return
         # according to if an exception is being handled or not
         # https://stackoverflow.com/questions/43946416/return-value-of-exit
-        return self.suppress_exceptions or exc_type == None
+        return self.suppress_exceptions or exc_type is None
 
 class undoContext(object):
     """
@@ -566,16 +684,16 @@ class ProgressBarContext(object):
         if not self.disable:
             if self.ismain:
                 cmds.progressBar(self._gMainProgressBar,
-                              edit=True,
-                              beginProgress=True,
-                              step=self.step,
-                              isInterruptable=self._interruptable,
-                              maxValue=self._maxValue)
+                                 edit=True,
+                                 beginProgress=True,
+                                 step=self.step,
+                                 isInterruptable=self._interruptable,
+                                 maxValue=self._maxValue)
             else:
                 cmds.progressWindow(step=self.step,
-                                title=self.title,
-                                isInterruptable=self._interruptable,
-                                maxValue=self._maxValue)
+                                    title=self.title,
+                                    isInterruptable=self._interruptable,
+                                    maxValue=self._maxValue)
 
     def __exit__(self, exc_type, exc_value, traceback):
         if not self.disable:

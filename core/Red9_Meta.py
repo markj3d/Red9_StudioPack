@@ -4088,6 +4088,11 @@ class MetaRig(MetaClass):
             if not nodes:
                 self.poseCache.metaPose = True  # force to metaPose
                 self.poseCache.settings.incRoots = incRoots  # force an incRoot flag update
+
+                # added June 2020, the priority was never getting turned on internally!!
+                if self.settings.filterPriority:
+                    self.poseCache.prioritySnapOnly = True
+
                 self.poseCache.poseLoad(self.mNode,
                                         filepath=filepath,
                                         useFilter=True,

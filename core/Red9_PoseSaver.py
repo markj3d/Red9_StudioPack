@@ -1209,6 +1209,7 @@ class PoseData(DataMap):
             log.info('Pose Saved Successfully to : %s' % self.filepath)
 
     # @r9General.Timer
+    @r9General.evalManager_idleAction
     def poseLoad(self, nodes, filepath=None, useFilter=True, relativePose=False, relativeRots='projected',
                  relativeTrans='projected', maintainSpaces=False, percent=None):
         '''
@@ -1315,13 +1316,13 @@ class PoseData(DataMap):
                     if self.relativeRots == 'projected':
                         if self.mayaUpAxis == 'y':
                             pptRoot.ry = resetCache[1][1]
-                        elif self.mayaUpAxis == 'z':  # fucking Z!!!!!!
+                        elif self.mayaUpAxis == 'z':
                             pptRoot.rz = resetCache[1][2]
                     if self.relativeTrans == 'projected':
                         if self.mayaUpAxis == 'y':
                             pptRoot.tx = resetCache[0][0]
                             pptRoot.tz = resetCache[0][2]
-                        elif self.mayaUpAxis == 'z':  # fucking Z!!!!!!
+                        elif self.mayaUpAxis == 'z':
                             pptRoot.tx = resetCache[0][0]
                             pptRoot.ty = resetCache[0][1]
 

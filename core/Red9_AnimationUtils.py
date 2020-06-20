@@ -3575,6 +3575,11 @@ class AnimFunctions(object):
             smartbake = True
         if time and not type(time) == tuple:
             time = tuple(time)
+        _keyed_attrs = []
+        if snapTranslates:
+            _keyed_attrs.extend(['tx', 'ty', 'tz'])
+        if snapRotates:
+            _keyed_attrs.extend(['rx', 'ry', 'rz'])
 
         skipAttrs = ['translateX', 'translateY', 'translateZ', 'rotateX', 'rotateY', 'rotateZ']
 
@@ -3621,7 +3626,7 @@ class AnimFunctions(object):
                 self.copyAttributes(nodes=nodeList, skipAttrs=skipAttrs, filterSettings=filterSettings, **kws)
 
             if time:
-                with r9General.AnimationContext():  # Context manager to restore settings
+                with r9General.AnimationContext(eval_mode='anim'):  # Context manager to restore settings
                     cmds.autoKeyframe(state=False)
 
                     # run a copyKeys pass to take all non transform data over
@@ -3660,7 +3665,6 @@ class AnimFunctions(object):
                                         func()
 
                                 for src, dest in self.nodesToSnap:
-
 #                                     # we'll use the API MTimeControl in the runtime function
 #                                     # to update the scene without refreshing the Viewports
 #                                     cmds.currentTime(t, e=True, u=False)
@@ -3674,12 +3678,7 @@ class AnimFunctions(object):
                                                             timeEnabled=True,
                                                             snapRotates=snapRotates,
                                                             snapTranslates=snapTranslates)
-
-                                        # fill the snap cache for error checking later
-                                        if snapTranslates:
-                                            cmds.setKeyframe(dest, at='translate')
-                                        if snapRotates:
-                                            cmds.setKeyframe(dest, at='rotate')
+                                        cmds.setKeyframe(dest, at=_keyed_attrs)
 
                                         if logging_is_debug():
                                             log.debug('Snapfrm %s : source(%s) >> target(%s) ::  %s to %s' % (str(t),
@@ -3763,7 +3762,7 @@ class AnimFunctions(object):
 
         # pass to the plugin SnapCommand
         for node in nodes[1:]:
-            cmds.SnapTransforms(source=nodes[0], destination=node, snapTranslates=snapTranslates, snapRotates=snapRotates)
+            cmds.SnapTransforms(source=nodes[0], destination=node, snapTranslates=snapTranslates, snapRotates=snapRotates, timeEnabled=False)
 
     @staticmethod
     def stabilizer(nodes=None, time=(), step=1, trans=True, rots=True):
@@ -3786,12 +3785,19 @@ class AnimFunctions(object):
         # snapRef = None  #Tracking ReferenceObject Used to Pass the transforms over
         deleteMe = []
         duration = step
+
+        _keyed_attrs = []
+        if trans:
+            _keyed_attrs.extend(['tx', 'ty', 'tz'])
+        if rots:
+            _keyed_attrs.extend(['rx', 'ry', 'rz'])
+
         try:
             checkRunTimeCmds()
         except StandardError, error:
             raise StandardError(error)
 
-        with r9General.AnimationContext(time=False):
+        with r9General.AnimationContext(eval_mode='anim', time=False, timerange=time):
             if time:
                 timeRange = timeLineRangeProcess(time[0], time[1], step, incEnds=True)  # this is a LIST of frames
                 cmds.currentTime(timeRange[0], e=True)  # ensure that the initial time is updated
@@ -3842,15 +3848,9 @@ class AnimFunctions(object):
                     cmds.currentTime(time, e=True, u=False)
                     cmds.SnapTransforms(source=snapRef, destination=destObj, timeEnabled=True, snapTranslates=trans, snapRotates=rots)
                     try:
-                        if trans:
-                            cmds.setKeyframe(destObj, at='translate')
+                        cmds.setKeyframe(destObj, at=_keyed_attrs)
                     except:
-                        log.debug('failed to set translate key on %s' % destObj)
-                    try:
-                        if rots:
-                            cmds.setKeyframe(destObj, at='rotate')
-                    except:
-                        log.debug('failed to set rotate key on %s' % destObj)
+                        log.debug('failed to set full keydata on %s' % destObj)
                     progressBar.updateProgress()
 
         cmds.delete(deleteMe)
@@ -3919,8 +3919,6 @@ class AnimFunctions(object):
         '''
         really basic method used in the Mirror calls
         '''
-        # for chan in channels:
-            # cmds.scaleKey('%s_%s' % (node,chan),vs=-1)
         if not channels:
             log.debug('abort: no animChannels passed in to inverse')
             return
@@ -3938,7 +3936,6 @@ class AnimFunctions(object):
             try:
                 cmds.setAttr('%s.%s' % (node, chan), cmds.getAttr('%s.%s' % (node, chan)) * -1)
             except:
-                # log.debug(cmds.getAttr('%s.%s' % (node, chan)) * -1)
                 log.debug('failed to inverse %s.%s attr' % (node, chan))
 
     @staticmethod
@@ -4314,7 +4311,7 @@ class RandomizeKeys(object):
                     log.debug('Percent data : randomRange=%f>%f, percentage=%f' % (randomRange[0], randomRange[1], damp))
 
                 connection = [con for con in cmds.listConnections(curve, source=False, d=True, p=True)
-                            if not cmds.nodeType(con) == 'hyperLayout'][0]
+                              if not cmds.nodeType(con) == 'hyperLayout'][0]
 
                 for t in timeLineRangeProcess(time[0], time[1], step, incEnds=True):
                     if keepKeys:
@@ -4683,20 +4680,16 @@ class MirrorHierarchy(object):
 
     def _validateKeyedNodes(self, nodes):
         '''
-        uused for the anim mirror, check that all nodes have keys else
+        used for the anim mirror, check that all nodes have keys else
         the mirror will be inconsistent
         '''
         if not self.suppresss_warnings:
-            staticnodes = []
-            log = ''
+            log_unused = ''
             unkeyed = getKeyedAttrs(nodes, returnkeyed=False)
-            for unkeyed, attrs in unkeyed.items():
-                if unkeyed in nodes:
-                    staticnodes.append(unkeyed)
-                    for attr in attrs:
-                        log += '\nMirrorAnim : Unkeyed attr : %s : %s' % (unkeyed, attr)
-            if staticnodes:
-                print log
+            if unkeyed:
+                for node, attrs in unkeyed.items():
+                    log_unused += '\nMirrorAnim : Unkeyed attrs : %s : %s' % (node, attrs)
+                print(log_unused)
                 result = cmds.confirmDialog(title='Pre Mirror Validations : Animation Mode : Missing Key Daya',
                                             message='Some Nodes / Attributes about to be Mirrored do not have keyframe data.'
                                                     '\nWe recommend ensuring that all nodes have keys before continuing.'
@@ -4710,10 +4703,12 @@ class MirrorHierarchy(object):
                 if result == 'Continue & Ignore':
                     return True
                 if result == 'SetKeyframes (Recommended)':
-                    try:
-                        cmds.setKeyframe(staticnodes, t=cmds.playbackOptions(min=True))
-                    except:
-                        pass
+                    for node, attrs in unkeyed.items():
+                        try:
+                            cmds.setKeyframe(node, attribute=attrs, t=cmds.playbackOptions(min=True))
+                            log.debug('adding key to static attrs : %s > %s' % (node, attrs))
+                        except:
+                            log.warning('Failed to key static attrs : %s > %s' % (node, attrs))
                     return True
                 return False
         return True
@@ -4928,32 +4923,32 @@ class MirrorHierarchy(object):
         '''
         self.getMirrorSets()
         if not short:
-            print '\nCentre MirrorLists ====================================================='
+            print('\nCentre MirrorLists =====================================================')
             for i in r9Core.sortNumerically(self.mirrorDict['Centre'].keys()):
-                print '%s > %s' % (i, self.mirrorDict['Centre'][i]['node'])
-            print '\nRight MirrorLists ======================================================'
+                print('%s > %s' % (i, self.mirrorDict['Centre'][i]['node']))
+            print('\nRight MirrorLists ======================================================')
             for i in r9Core.sortNumerically(self.mirrorDict['Right'].keys()):
-                print '%s > %s' % (i, self.mirrorDict['Right'][i]['node'])
-            print '\nLeft MirrorLists ======================================================='
+                print('%s > %s' % (i, self.mirrorDict['Right'][i]['node']))
+            print('\nLeft MirrorLists =======================================================')
             for i in r9Core.sortNumerically(self.mirrorDict['Left'].keys()):
-                print '%s > %s' % (i, self.mirrorDict['Left'][i]['node'])
+                print('%s > %s' % (i, self.mirrorDict['Left'][i]['node']))
         else:
-            print '\nCentre MirrorLists ====================================================='
+            print('\nCentre MirrorLists =====================================================')
             for i in r9Core.sortNumerically(self.mirrorDict['Centre'].keys()):
-                print '%s > %s' % (i, r9Core.nodeNameStrip(self.mirrorDict['Centre'][i]['node']))
-            print '\nRight MirrorLists ======================================================'
+                print('%s > %s' % (i, r9Core.nodeNameStrip(self.mirrorDict['Centre'][i]['node'])))
+            print('\nRight MirrorLists ======================================================')
             for i in r9Core.sortNumerically(self.mirrorDict['Right'].keys()):
-                print '%s > %s' % (i, r9Core.nodeNameStrip(self.mirrorDict['Right'][i]['node']))
-            print '\nLeft MirrorLists ======================================================='
+                print('%s > %s' % (i, r9Core.nodeNameStrip(self.mirrorDict['Right'][i]['node'])))
+            print('\nLeft MirrorLists =======================================================')
             for i in r9Core.sortNumerically(self.mirrorDict['Left'].keys()):
-                print '%s > %s' % (i, r9Core.nodeNameStrip(self.mirrorDict['Left'][i]['node']))
+                print('%s > %s' % (i, r9Core.nodeNameStrip(self.mirrorDict['Left'][i]['node'])))
         if self.unresolved:
             for key, val in self.unresolved.items():
                 if val:
                     print '\CLASHING %s Mirror Indexes =====================================================' % key
                     for i in r9Core.sortNumerically(val):
-                        print 'clashing Index : %s : %s : %s' % \
-                        (key, i, ', '.join([r9Core.nodeNameStrip(n) for n in val[i]]))
+                        print('clashing Index : %s : %s : %s' %
+                              (key, i, ', '.join([r9Core.nodeNameStrip(n) for n in val[i]])))
 
     def switchPairData(self, objA, objB, mode='Anim'):
         '''
@@ -4965,24 +4960,23 @@ class MirrorHierarchy(object):
         :param mode: 'Anim' or 'Pose'
 
         '''
-        objs = cmds.ls(sl=True, l=True)
+#         objs = cmds.ls(sl=True, l=True)
         if mode == 'Anim':
             transferCall = self.transferCallKeys  # AnimFunctions().copyKeys
         else:
             transferCall = self.transferCallAttrs  # AnimFunctions().copyAttributes
 
         # switch the anim data over via temp
-        cmds.select(objA)
-        cmds.duplicate(name='DELETE_ME_TEMP', po=True)
-        temp = cmds.ls(sl=True, l=True)[0]
-        log.debug('temp %s:' % temp)
+#         cmds.select(objA)
+        temp = cmds.duplicate(objA, name='DELETE_ME_TEMP', po=True)[0]
+#         temp = cmds.ls(sl=True, l=True)[0]
+#         log.debug('temp %s:' % temp)
         transferCall([objA, temp], **self.kws)
         transferCall([objB, objA], **self.kws)
         transferCall([temp, objB], **self.kws)
         cmds.delete(temp)
-
-        if objs:
-            cmds.select(objs)
+#         if objs:
+#             cmds.select(objs)
 
     def makeSymmetrical(self, nodes=None, mode='Anim', primeAxis='Left'):
         '''
@@ -5033,6 +5027,7 @@ class MirrorHierarchy(object):
                     if slaveData['axis']:
                         inverseCall(slaveData['node'], slaveData['axis'])
 
+    # @r9General.Timer
     def mirrorData(self, nodes=None, mode='Anim'):
         '''
         Using the FilterSettings obj find all nodes in the return that have
@@ -5057,40 +5052,43 @@ class MirrorHierarchy(object):
             log.warning('Failed validation call - some nodes may be driven by constraints or pairBlends')
             return
 
+        context_kws = {'time': False, 'undo': True, 'autokey': False}
         if mode == 'Anim':
             if not self._validateKeyedNodes(self.indexednodes):
                 log.warning('Failed validation call - some nodes are unkeyed which will cause inconsistencies')
                 return
-
             inverseCall = AnimFunctions.inverseAnimChannels
             self.mergeLayers = True
+            context_kws['eval_mode'] = 'anim'
         else:
             inverseCall = AnimFunctions.inverseAttributes
             self.mergeLayers = False
+            context_kws['eval_mode'] = 'static'
 
-        with AnimationLayerContext(self.indexednodes, mergeLayers=self.mergeLayers, restoreOnExit=False):
-            # Switch Pairs on the Left and Right and inverse the channels
-            for index, leftData in self.mirrorDict['Left'].items():
-                if index not in self.mirrorDict['Right'].keys():
-                    log.warning('No matching Index Key found for Left mirrorIndex : %s >> %s' % (index, r9Core.nodeNameStrip(leftData['node'])))
-                else:
-                    rightData = self.mirrorDict['Right'][index]
-                    if logging_is_debug():
-                        log.debug('SwitchingPairs : %s >> %s' % (r9Core.nodeNameStrip(leftData['node']),
-                                                                 r9Core.nodeNameStrip(rightData['node'])))
-                    self.switchPairData(leftData['node'], rightData['node'], mode=mode)
+        with r9General.AnimationContext(**context_kws):
+            with AnimationLayerContext(self.indexednodes, mergeLayers=self.mergeLayers, restoreOnExit=False):
+                # Switch Pairs on the Left and Right and inverse the channels
+                for index, leftData in self.mirrorDict['Left'].items():
+                    if index not in self.mirrorDict['Right'].keys():
+                        log.warning('No matching Index Key found for Left mirrorIndex : %s >> %s' % (index, r9Core.nodeNameStrip(leftData['node'])))
+                    else:
+                        rightData = self.mirrorDict['Right'][index]
+                        if logging_is_debug():
+                            log.debug('SwitchingPairs : %s >> %s' % (r9Core.nodeNameStrip(leftData['node']),
+                                                                     r9Core.nodeNameStrip(rightData['node'])))
+                        self.switchPairData(leftData['node'], rightData['node'], mode=mode)
 
-                    if logging_is_debug():
-                        log.debug('Axis Inversions: left: %s' % ','.join(leftData['axis']))
-                        log.debug('Axis Inversions: right: %s' % ','.join(rightData['axis']))
-                    if leftData['axis']:
-                        inverseCall(leftData['node'], leftData['axis'])
-                    if rightData['axis']:
-                        inverseCall(rightData['node'], rightData['axis'])
+                        if logging_is_debug():
+                            log.debug('Axis Inversions: left: %s' % ','.join(leftData['axis']))
+                            log.debug('Axis Inversions: right: %s' % ','.join(rightData['axis']))
+                        if leftData['axis']:
+                            inverseCall(leftData['node'], leftData['axis'])
+                        if rightData['axis']:
+                            inverseCall(rightData['node'], rightData['axis'])
 
-            # Inverse the Centre Nodes
-            for data in self.mirrorDict['Centre'].values():
-                inverseCall(data['node'], data['axis'])
+                # Inverse the Centre Nodes
+                for data in self.mirrorDict['Centre'].values():
+                    inverseCall(data['node'], data['axis'])
 
     def saveMirrorSetups(self, filepath):
         '''
@@ -5571,7 +5569,7 @@ class CameraTracker():
                 offset = [(cachedTransform[0] - shifted[0]), (cachedTransform[1] - shifted[1]), (cachedTransform[2] - shifted[2])]
 
         if not static:
-            with r9General.AnimationContext():
+            with r9General.AnimationContext(eval_mode='anim'):
                 for i in timeLineRangeProcess(start, end, step, incEnds=True):
                     cmds.currentTime(i)
                     if fixed:
