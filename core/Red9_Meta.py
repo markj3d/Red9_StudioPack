@@ -33,6 +33,7 @@ what each function is expected to return
 
 '''
 
+from __future__ import print_function
 
 import maya.cmds as cmds
 import maya.mel as mel
@@ -45,6 +46,7 @@ import uuid
 import types
 import inspect
 import traceback
+
 
 import Red9.startup.setup as r9Setup
 import Red9_General as r9General
@@ -144,7 +146,7 @@ def registerMClassInheritanceMapping():
 
 def printSubClassRegistry():
     for m in RED9_META_REGISTERY:
-        print m
+        print(m)
 
 def getMClassMetaRegistry():
     '''
@@ -313,7 +315,7 @@ def registerMClassNodeMapping(nodeTypes=[]):
 
 def printMetaTypeRegistry():
     for t in RED9_META_NODETYPE_REGISTERY:
-        print t
+        print(t)
 
 def getMClassNodeTypes():
     '''
@@ -488,7 +490,7 @@ def printMetaCacheRegistry():
     '''
     cleanCache()
     for k, v in RED9_META_NODECACHE.items():
-        print '%s : %s : %s' % (k, r9Core.nodeNameStrip(v.mNode), v)
+        print('%s : %s : %s' % (k, r9Core.nodeNameStrip(v.mNode), v))
 
 def cleanCache():
     '''
@@ -1492,15 +1494,15 @@ class MClassNodeUI(object):
 
             if mTypesFilter:
                 self.mNodes = getMetaNodes(mTypes=mCalssSelected, mInstances=None, dataType=self.dataType)
-                print 'mTypeFilter : ', mCalssSelected
+                print('mTypeFilter : ', mCalssSelected)
             elif mInstanceFilter:
                 self.mNodes = getMetaNodes(mTypes=None, mInstances=mCalssSelected, dataType=self.dataType)
-                print 'mInstanceFilter : ', mCalssSelected
+                print('mInstanceFilter : ', mCalssSelected)
             else:
                 self.mNodes = getMetaNodes(mTypes=self.mTypes, mInstances=self.mInstances, dataType=self.dataType)
         else:
             self.mNodes = getMetaNodes(mTypes=self.mTypes, mInstances=self.mInstances, dataType=self.dataType)
-            print 'none', self.mTypes, self.mInstances
+            print('none', self.mTypes, self.mInstances)
 
         if not self.mNodes:
             log.warning('no metaNodes found that match the filters')
@@ -1533,7 +1535,7 @@ class MClassNodeUI(object):
         if len(indexes) == 1:
             mNode = MetaClass(self.mNodes[indexes[0] - 1])
             for c in mNode.getInheritanceMap():
-                print 'Class Inheritance : ', c
+                print('Class Inheritance : ', c)
 
     def __uiCB_connectNode(self, *args):
         '''
@@ -1588,23 +1590,23 @@ class MClassNodeUI(object):
             raise StandardError('Connect Call only works with a single selected mNode from the UI')
         r9Setup.PRO_PACK_STUBS().MetaDataUI.uiCB_addChildMetaNode(mNode, mClass)
         self.fillScroll()
-        print 'adding childMetaNode of mClass type : %s to %s' % (mClass, mNode.mNode)
+        print('adding childMetaNode of mClass type : %s to %s' % (mClass, mNode.mNode))
 
     def printRegisteredNodeTypes(self, *args):
-        print '\nRED9_META_NODETYPE_REGISTERY:\n============================='
-        print getMClassNodeTypes()
+        print('\nRED9_META_NODETYPE_REGISTERY:\n=============================')
+        print(getMClassNodeTypes())
 
     def printRegisteredMetaClasses(self, *args):
         data = getMClassMetaRegistry()
-        print '\nRED9_META_REGISTERY:\n===================='
+        print('\nRED9_META_REGISTERY:\n====================')
         for key, value in sorted(data.items()):
-            print key, ' : ', value
+            print(key, ' : ', value)
 
     def printMetaNodeCache(self, *args):
         data = getMClassNodeCache()
-        print '\nRED9_META_NODECACHE:\n===================='
+        print('\nRED9_META_NODECACHE:\n====================')
         for key, value in sorted(data.items()):
-            print key, ' : ', value
+            print(key, ' : ', value)
 
 
 # ----------------------------------------------------------------------------
@@ -1821,7 +1823,7 @@ class MetaClass(object):
             if self.hasAttr('mClass') and not cmds.listConnections(self.mNode):
                 return False
         except MetaInstanceError, err:
-            print 'Bailing caught exception'
+            print('Bailing caught exception')
             return False
         return True
 
@@ -3143,7 +3145,7 @@ class MetaClass(object):
             if currentSystem:
                 for child in children:
                     if child.hasAttr('mSystemRoot') and child.mSystemRoot:
-                        print 'skipping new Systems - preventing walking into child mRig systems : %s' % child
+                        print('skipping new Systems - preventing walking into child mRig systems : %s' % child)
                         children.remove(child)
             return children
         else:
@@ -3434,7 +3436,7 @@ def deleteEntireMetaRigStructure(searchNode=None):
     mNodes.reverse()
 
     for a in mNodes:
-        print a
+        print(a)
 
     for metaChild in mNodes:
         for child in metaChild.getChildren(walk=False):
@@ -3548,7 +3550,7 @@ class MetaRig(MetaClass):
             mNodes.reverse()
 
         for a in mNodes:
-            print 'nodes to delete : ', a
+            print('nodes to delete : ', a)
 
         for mNode in mNodes:
             try:
@@ -4061,7 +4063,7 @@ class MetaRig(MetaClass):
             self.attrSetLocked(attr, True)
 
     def poseCacheLoad(self, nodes=None, attr=None, filepath=None, incRoots=True, relativePose=False, relativeRots='projected',
-                      relativeTrans='projected', maintainSpaces=False, *args, **kws):
+                      relativeTrans='projected', maintainSpaces=False, skipAttrs=[], *args, **kws):
         '''
         load a cached pose back to this mRig. If attr is given then its assumed
         that that attr is a cached poseDict on the mNode. If not given then it
@@ -4078,6 +4080,7 @@ class MetaRig(MetaClass):
         :param maintainSpaces: this preserves any parentSwitching mismatches between
             the stored pose and the current rig settings, current spaces are maintained.
             This only checks those nodes in the snapList and only runs under relative mode.
+        :param skipAttrs: attrs to skip when loading the data
         '''
         import Red9.core.Red9_PoseSaver as r9Pose  # lazy loaded
         if attr or filepath:
@@ -4092,7 +4095,8 @@ class MetaRig(MetaClass):
                 # added June 2020, the priority was never getting turned on internally!!
                 if self.settings.filterPriority:
                     self.poseCache.prioritySnapOnly = True
-
+                if skipAttrs:
+                    self.poseCache.skipAttrs = skipAttrs
                 self.poseCache.poseLoad(self.mNode,
                                         filepath=filepath,
                                         useFilter=True,
@@ -4166,7 +4170,7 @@ class MetaRig(MetaClass):
                 for shape in shapes:
                     cmds.setAttr('%s.lodVisibility' % shape, state)
             else:
-                print plug, skip
+                print(plug, skip)
 
     def hideNodes(self):
         '''
@@ -4212,13 +4216,14 @@ class MetaRig(MetaClass):
         '''
         self.poseCacheStore(attr='zeroPose')
 
-    def loadZeroPose(self, nodes=None, *args):
+    def loadZeroPose(self, nodes=None, skipAttrs=[], *args):
         '''
         load the zeroPose form the internal dict
 
         :param nodes: optional, load at subSystem level for given nodes
+        :param skipAttrs: optional list of attrs to skip during the load
         '''
-        self.poseCacheLoad(nodes=nodes, attr='zeroPose')
+        self.poseCacheLoad(nodes=nodes, attr='zeroPose', skipAttrs=skipAttrs)
 
     def getAnimationRange(self, nodes=None, setTimeline=False, *args, **kws):
         '''
@@ -5225,7 +5230,7 @@ def monitorHUDManagement(func):
             HUDS = cmds.headsUpDisplay(lh=True)
             for hud in HUDS:
                 if 'MetaHUDConnector' in hud:
-                    print 'killing HUD : ', hud
+                    print('killing HUD : ', hud)
                     cmds.headsUpDisplay(hud, remove=True)
     if func == 'refreshHeadsUp':
         metaHUD.headsUpOnly = True
@@ -5251,7 +5256,7 @@ def monitorHUDremoveCBAttrs():
             metaHUD.killHud()
             for attr in attrs:
                 monitoredAttr = '%s_%s' % (r9Core.nodeNameStrip(node), attr)
-                print 'removing attr :', attr, monitoredAttr
+                print('removing attr :', attr, monitoredAttr)
                 try:
                     metaHUD.removeMonitoredAttr(monitoredAttr)
                 except:
@@ -5416,7 +5421,7 @@ class MetaHUDNode(MetaClass):
                                         attachToRefresh=True,
                                         command=partial(self.__compute__, attr))
             else:
-                print 'node : ', self.mNode, ' attrs : ', attr
+                print('node : ', self.mNode, ' attrs : ', attr)
                 connectedData = cmds.listConnections('%s.%s' % (self.mNode, attr),
                                                    connections=True,
                                                    skipConversionNodes=True,

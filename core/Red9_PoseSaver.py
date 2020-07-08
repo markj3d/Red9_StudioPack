@@ -19,12 +19,15 @@ posePointCloud and the snapping core
 
 '''
 
+from __future__ import print_function
+
 import Red9.startup.setup as r9Setup
 import Red9_CoreUtils as r9Core
 import Red9_General as r9General
 import Red9_AnimationUtils as r9Anim
 import Red9_Meta as r9Meta
 import maya.OpenMaya as OpenMaya
+
 
 import maya.cmds as cmds
 import os
@@ -194,7 +197,7 @@ class DataMap(object):
         import imp
         log.debug('getNodesFromFolderConfig - useFilter=True : custom poseHandler running')
         posedir = os.path.dirname(self.filepath)
-        print 'imp : ', self.poseHandler.split('.py')[0], '  :  ', os.path.join(posedir, self.poseHandler)
+        print('imp : ', self.poseHandler.split('.py')[0], '  :  ', os.path.join(posedir, self.poseHandler))
         tempPoseFuncs = imp.load_source(self.poseHandler.split('.py')[0], os.path.join(posedir, self.poseHandler))
 
         if mode == 'load':
@@ -1980,16 +1983,16 @@ class PoseCompare(object):
                         continue
 
         if any(['missingKeys' in self.fails, 'failedAttrs' in self.fails, 'dagMismatch' in self.fails]):
-            print 'PoseCompare returns : "%s" ========================================\n' % self.compareDict
+            print('PoseCompare returns : "%s" ========================================\n' % self.compareDict)
             if logprint_keymismacth:
-                print logprint_keymismacth
+                print(logprint_keymismacth)
             if logprint_dagpath:
-                print logprint_dagpath
+                print(logprint_dagpath)
             if logprint_missingattr:
-                print logprint_missingattr
+                print(logprint_missingattr)
             if logprint_missingfail:
-                print logprint_missingfail
-            print 'PoseCompare returns : ========================================'
+                print(logprint_missingfail)
+            print('PoseCompare returns : ========================================')
             return False
         self.status = True
         return True
@@ -2019,7 +2022,7 @@ def batchPatchPoses(posedir, config, poseroot, load=True, save=True, patchfunc=N
     for f in files:
         if f.lower().endswith('.pose'):
             if load:
-                print 'Loading Pose : %s' % os.path.join(posedir, f)
+                print('Loading Pose : %s' % os.path.join(posedir, f))
                 mPose.poseLoad(nodes=poseroot,
                                filepath=os.path.join(posedir, f),
                                useFilter=True,
@@ -2027,10 +2030,10 @@ def batchPatchPoses(posedir, config, poseroot, load=True, save=True, patchfunc=N
                                relativeRots=relativeRots,
                                relativeTrans=relativeTrans)
             if patchfunc:
-                print 'Applying patch'
+                print('Applying patch')
                 patchfunc(f)
             if save:
-                print 'Saving Pose : %s' % os.path.join(posedir, f)
+                print('Saving Pose : %s' % os.path.join(posedir, f))
                 mPose.poseSave(nodes=poseroot,
                                filepath=os.path.join(posedir, f),
                                useFilter=True,

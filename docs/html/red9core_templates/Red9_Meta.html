@@ -1322,6 +1322,7 @@ in generic meta functions.</p>
 <li><strong>asMeta</strong> &#8211; return instantiated mNodes regardless of type</li>
 <li><strong>asMap</strong> &#8211; return the data as a map such that {mNode.plugAttr:[nodes], mNode.plugAttr:[nodes]}</li>
 <li><strong>plugsOnly</strong> &#8211; only with asMap flag, this truncates the return to [plugAttr, [nodes]]</li>
+<li><strong>skip_cAttrs</strong> &#8211; if given these cAttrs will be ignored in the returned data</li>
 </ul>
 </td>
 </tr>
@@ -1530,7 +1531,7 @@ by 180 to get left and right working you can still do so.</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.getChildren">
-<code class="descname">getChildren</code><span class="sig-paren">(</span><em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em>, <em>asMeta=False</em>, <em>asMap=False</em>, <em>plugsOnly=False</em>, <em>incFacial=False</em>, <em>baseBehaviour=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getChildren" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getChildren</code><span class="sig-paren">(</span><em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em>, <em>asMeta=False</em>, <em>asMap=False</em>, <em>plugsOnly=False</em>, <em>incFacial=False</em>, <em>baseBehaviour=False</em>, <em>skip_cAttrs=[]</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.getChildren" title="Permalink to this definition">¶</a></dt>
 <dd><p>Massively important bit of code, this is used by most bits of code
 to find the child controllers linked to this metaRig instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1547,6 +1548,7 @@ to find the child controllers linked to this metaRig instance.</p>
 <li><strong>plugsOnly</strong> &#8211; only with asMap flag, this truncates the return to {plugAttr:[nodes]}</li>
 <li><strong>incFacial</strong> &#8211; if we have a facial system linked include it&#8217;s children in the return (uses the getFacialSystem to id the facial node)</li>
 <li><strong>baseBehaviour</strong> &#8211; if True we revert the CTRL_Prefix logic such that the return won&#8217;t be clamped to just controllers</li>
+<li><strong>skip_cAttrs</strong> &#8211; if given these connection attrs will be ignored in the returned data</li>
 </ul>
 </td>
 </tr>
@@ -1831,7 +1833,7 @@ based on their mirror side data</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>set</strong> &#8211; which set/side to get, valid = &#8216;Left&#8217; ,&#8217;Right&#8217;, &#8216;Center&#8217;</li>
+<li><strong>set</strong> &#8211; which set/side to get, valid = &#8216;Left&#8217; ,&#8217;Right&#8217;, &#8216;Centre&#8217;</li>
 <li><strong>forceRefresh</strong> &#8211; forces the mirrorDic (which is cached) to be updated</li>
 </ul>
 </td>
@@ -1849,7 +1851,7 @@ based on their mirror side data</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>side</strong> &#8211; side to check, valid = &#8216;Left&#8217; ,&#8217;Right&#8217;, &#8216;Center&#8217;</li>
+<li><strong>side</strong> &#8211; side to check, valid = &#8216;Left&#8217; ,&#8217;Right&#8217;, &#8216;Centre&#8217;</li>
 <li><strong>forceRefresh</strong> &#8211; forces the mirrorDic (which is cached) to be updated</li>
 </ul>
 </td>
@@ -1867,7 +1869,7 @@ based on their mirror side data</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>side</strong> &#8211; side to check, valid = &#8216;Left&#8217; ,&#8217;Right&#8217;, &#8216;Center&#8217;</li>
+<li><strong>side</strong> &#8211; side to check, valid = &#8216;Left&#8217; ,&#8217;Right&#8217;, &#8216;Centre&#8217;</li>
 <li><strong>forceRefresh</strong> &#8211; forces the mirrorDic (which is cached) to be updated</li>
 </ul>
 </td>

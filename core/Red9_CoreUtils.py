@@ -12,7 +12,8 @@
     Setup : Follow the Install instructions in the Modules package
 '''
 
-from __future__ import with_statement  # required only for Maya2009/8
+from __future__ import print_function
+
 import maya.cmds as cmds
 import maya.OpenMaya as OpenMaya
 
@@ -244,7 +245,6 @@ def validateString(strText, fix=False, illegals=['-', '#', '!', ' ', '@']):
             raise ValueError('String contains illegal characters "%s" <in> "%s"' % (','.join(illegal), strText))
         else:
             for i in illegal:
-                print i
                 strText = strText.replace(i, '_')
             log.info('%s : reformatted string to valid string : %s' % (base, strText))
     return strText
@@ -2435,7 +2435,7 @@ class TimeOffset(object):
     def __init__(self, cache_object=None):
         if cache_object:
             self._processed = cache_object
-            print 'consuming current cached object'
+            print('consuming current cached object')
 
     @classmethod
     def fullScene(cls, offset, timelines=False, timerange=None, ripple=True, startfrm=False):
@@ -2456,7 +2456,8 @@ class TimeOffset(object):
                   (offset, str(timelines)))
         cls._processed = {}  # clear the cache
 
-        with r9General.undoContext():
+#         with r9General.undoContext():
+        with r9General.AnimationContext(eval_mode='anim', time=False, undo=True):
             cls._processed['mnodes'], cls._processed['mnode_internals'] = cls.metaNodes(offset, timerange=timerange, ripple=ripple)
             cls._processed['animcurves'] = cls.animCurves(offset, timerange=timerange, ripple=ripple)
             cls._processed['sound'] = cls.sound(offset, mode='Scene', timerange=timerange, ripple=ripple)
@@ -2558,7 +2559,8 @@ class TimeOffset(object):
             filtered = basenodes
 
         if filtered:
-            with r9General.undoContext():
+#             with r9General.undoContext():
+            with r9General.AnimationContext(eval_mode='anim', time=False, undo=True):
                 if flocking or randomize:
                     cachedOffset = 0  # Cached last flocking value
                     increment = 0
@@ -2585,9 +2587,9 @@ class TimeOffset(object):
                     cls._processed['animcurves'] = cls.animCurves(offset, nodes=filtered, timerange=timerange, ripple=ripple)
 
                     cls._processed['sound'] = cls.sound(offset, mode='Selected',
-                                                    audioNodes=FilterNode().lsSearchNodeTypes('audio', filtered),
-                                                    timerange=timerange,
-                                                    ripple=ripple)
+                                                        audioNodes=FilterNode().lsSearchNodeTypes('audio', filtered),
+                                                        timerange=timerange,
+                                                        ripple=ripple)
 
                     cls._processed['animclips'] = cls.animClips(offset, mode='Selected',
                                                                 clips=FilterNode().lsSearchNodeTypes('animClip', filtered),
@@ -2787,7 +2789,7 @@ class TimeOffset(object):
                     log.debug('skipping already processed mNode : %s' % mNode)
                     continue
 
-                if 'timeOffset' in dir(mNode) and callable(getattr(mNode, 'timeOffset')):
+                if 'timeOffset' in dir(mNode) and r9General.is_callable(getattr(mNode, 'timeOffset')):
                     mNodes_internal_offset.extend(mNode.timeOffset(offset, timerange=timerange, ripple=ripple, cache_object=cls._processed) or [])
                     mNodes_offset.append(mNode.mNode)  # set to cache as dag path to make sure we cover duplicate systems
                 log.debug('offset mnode : %s' % mNode)

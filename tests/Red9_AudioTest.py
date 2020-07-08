@@ -28,6 +28,7 @@ import Red9.core.Red9_CoreUtils as r9Core
 # force the upAxis, just in case
 r9Setup.mayaUpAxis('y')
 
+
 import maya.cmds as cmds
 import os
 
@@ -88,6 +89,7 @@ class Test_BwavHandler(object):
         self.bwavpath = os.path.join(r9Setup.red9ModulePath(), 'tests', 'testFiles', 'bwav_test.wav')
         self.audioNode = r9Audio.AudioNode(filepath=self.bwavpath)
         self.audioNode.importAndActivate()
+        cmds.currentUnit(time='ntsc')
 
     def test_funcs(self):
         assert isinstance(self.audioNode, r9Audio.AudioNode)
@@ -152,6 +154,7 @@ class Test_BwavHandler(object):
 class Test_timecode_converts(object):
     def setup(self):
         cmds.file(new=True, f=True)
+        cmds.currentUnit(time='ntsc')
 
     def test_full_convert(self):
         '''

@@ -10,9 +10,10 @@
 
 This is the Audio library of utils used throughout the modules
 
-
 '''
-from __future__ import with_statement  # required only for Maya2009/8
+
+from __future__ import print_function
+
 import maya.cmds as cmds
 import maya.mel as mel
 from functools import partial
@@ -54,10 +55,9 @@ def bind_pro_audio():
     if r9Setup.has_pro_pack():
         try:
             import Red9.pro_pack.core.audio as r9paudio  # dev mode only ;)
-        except:
+        except StandardError, err:
             from Red9.pro_pack import r9pro
-            r9pro.r9import('r9paudio')
-            import r9paudio
+            r9paudio = r9pro.r9import('r9paudio')
         return r9paudio
 
 def milliseconds_to_Timecode(milliseconds, smpte=True, framerate=None):
@@ -70,7 +70,11 @@ def timecode_to_milliseconds(timecode, smpte=True, framerate=None):
     return bind_pro_audio().timecode_to_milliseconds(timecode, smpte=smpte, framerate=framerate)
 
 def timecode_to_frame(timecode, smpte=True, framerate=None):
-    return bind_pro_audio().timecode_to_frame(timecode, smpte=smpte, framerate=framerate)
+    try:
+        return bind_pro_audio().timecode_to_frame(timecode, smpte=smpte, framerate=framerate)
+    except:
+        import traceback
+        print(traceback.format_exc())
 
 def frame_to_timecode(frame, smpte=True, framerate=None):
     return bind_pro_audio().frame_to_timecode(frame, smpte=smpte, framerate=framerate)
@@ -414,7 +418,7 @@ class AudioHandler(object):
                     fails.append(audio.audioNode)
         if fails:
             for f in fails:
-                print 'Error : Audio node is not in Bwav format : %s' % f
+                print('Error : Audio node is not in Bwav format : %s' % f)
             log.warning('Some Audio Node were not in Bwav format, see script editor for debug')
             # self.offsetBy(diff)
 
@@ -438,7 +442,7 @@ class AudioHandler(object):
                 fails.append(audio.audioNode)
         if fails:
             for f in fails:
-                print 'Error : Audio node failed to sync : %s' % f
+                print('Error : Audio node failed to sync : %s' % f)
             log.warning('Some Audio Node were not in Bwav format, see script editor for debug')
 
 #     def delCombined(self):
@@ -918,7 +922,7 @@ class AudioNode(object):
         '''
         If self was instantiated with filepath then this will import that wav
         into Maya and activate it on the timeline. Note that if there is already
-        an instance of a sound node in Maya that points to this path them the 
+        an instance of a sound node in Maya that points to this path them the
         class will bind itself to that node.
 
         :param active: do we set the imported audio to be active on the timerange in Maya

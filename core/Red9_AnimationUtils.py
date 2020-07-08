@@ -68,8 +68,8 @@ Code examples:
 
 '''
 
+from __future__ import print_function
 
-from __future__ import with_statement  # required only for Maya2009/8
 import maya.cmds as cmds
 import maya.mel as mel
 
@@ -404,7 +404,7 @@ def animCurveDrawStyle(style='simple', forceBuffer=True, showBufferCurves=False,
     simplify the display and the curve whilst processing. This allows you to also pass in
     the state directly, used by the UI close event to return the editor to the last cached state
     '''
-    print 'toggleCalled', style, showBufferCurves, displayTangents, displayActiveKeyTangents
+    print('toggleCalled', style, showBufferCurves, displayTangents, displayActiveKeyTangents)
     if forceBuffer is not None:
         if forceBuffer:
             if r9Setup.mayaVersion() < 2017:
@@ -815,10 +815,10 @@ class AnimationUI(object):
             animUI.dock = eval(animUI.ANIM_UI_OPTVARS['AnimationUI']['ui_docked'])
         if r9General.getModifier() == 'Ctrl':
             if not animUI.dock:
-                print 'Switching dockState : True'
+                print('Switching dockState : True')
                 animUI.dock = True
             else:
-                print 'Switching dockState : False'
+                print('Switching dockState : False')
                 animUI.dock = False
 
 #         RED_ANIMATION_UI = animUI
@@ -870,9 +870,9 @@ class AnimationUI(object):
         # RED_ANIMATION_UI is a global so we can pick the animUI class backup after the workspace call!!
         if RED_ANIMATION_UI_OPENCALLBACKS:
             for func in RED_ANIMATION_UI_OPENCALLBACKS:
-                if callable(func):
+                if r9General.is_callable(func):
                     try:
-                        print 'calling RED_ANIMATION_UI_OPENCALLBACKS'
+                        print('calling RED_ANIMATION_UI_OPENCALLBACKS')
                         log.debug('calling RED_ANIMATION_UI_OPENCALLBACKS')
                         func(RED_ANIMATION_UI)
                     except:
@@ -2225,7 +2225,7 @@ class AnimationUI(object):
                 if buttons:
                     [cmds.deleteUI(button) for button in buttons]
             except StandardError, error:
-                print error
+                print(error)
 
             for pose in r9Core.filterListByString(self.poses, searchFilter, matchcase=False) or []:  # self.buildFilteredPoseList(searchFilter):
                 try:
@@ -2354,7 +2354,7 @@ class AnimationUI(object):
         if poseHandler:
             import imp
             import inspect
-            print 'Adding to menus From PoseHandler File!!!!'
+            print('Adding to menus From PoseHandler File!!!!')
             tempPoseFuncs = imp.load_source(poseHandler.split('.py')[0], os.path.join(self.getPoseDir(), poseHandler))
             if [func for name, func in inspect.getmembers(tempPoseFuncs, inspect.isfunction) if name == 'posePopupAdditions']:
                 # NOTE we pass in self so the new additions have the same access as everything else!
@@ -2731,7 +2731,7 @@ class AnimationUI(object):
                         try:
                             cmds.checkBox(cb, e=True, v=r9Core.decodeString(status))
                         except:
-                            print 'given checkbox no longer exists : %s' % cb
+                            print('given checkbox no longer exists : %s' % cb)
 
             AnimationUI = self.ANIM_UI_OPTVARS['AnimationUI']
 
@@ -2774,7 +2774,7 @@ class AnimationUI(object):
 
             # callbacks
             if self.posePathMode:
-                print 'setting : ', self.posePathMode
+                print('setting : ', self.posePathMode)
                 cmds.radioCollection(self.uircbPosePathMethod, edit=True, select=self.posePathMode)
             self.__uiCB_enableRelativeSwitches()  # relativePose switch enables
             self.__uiCB_managePoseRootMethod()  # metaRig or SetRootNode for Pose Root
@@ -2872,7 +2872,7 @@ class AnimationUI(object):
             else:
                 AnimFunctions(filterSettings=self.filterSettings, matchMethod=self.matchMethod).copyAttributes(nodes=self.__validate_roots(), **self.kws)
         else:
-            print self.kws
+            print(self.kws)
             AnimFunctions(matchMethod=self.matchMethod).copyAttributes(nodes=None, **self.kws)
 
     def __CopyKeys(self):
@@ -3150,7 +3150,7 @@ class AnimationUI(object):
                 animCheckNodes = mirror.getMirrorSets()
             else:
                 animCheckNodes = nodes
-            print animCheckNodes
+            print(animCheckNodes)
             if not animLayersConfirmCheck(animCheckNodes):
                 log.warning('Process Aborted by User')
                 return
@@ -3510,6 +3510,7 @@ class AnimFunctions(object):
     # ===========================================================================
 
     # @r9General.Timer
+#     @r9General.evalManager_idleAction
     def snapTransform(self, nodes=None, time=(), step=1, preCopyKeys=1, preCopyAttrs=1, filterSettings=None,
                       iterations=1, matchMethod=None, prioritySnapOnly=False, snapRotates=True, snapTranslates=True,
                       additionalCalls=[], cutkeys=False, smartbake=False, smartBakeRef=[], additionalCalls_pre=[], **kws):
@@ -3564,6 +3565,11 @@ class AnimFunctions(object):
         _smartBake_nodekeys = {}
         _smartBakeRef = list(smartBakeRef)  # so we don't mutate the input arg (pass by reference issues)
         # cutkeys = False
+
+        # new management of the AnimContext to deal with 2019+
+        eval_mode = 'static'
+        if time:
+            eval_mode = 'anim'
 
         # this is so it carries on the legacy behaviour where these are always passed in
         if not filterSettings:
@@ -3622,102 +3628,101 @@ class AnimFunctions(object):
                 if not _smartBakeRef:
                     raise IOError("ABORTED : SmartBake couldn't find any reference nodes with keys to base the data on!")
 
-            if preCopyAttrs:
-                self.copyAttributes(nodes=nodeList, skipAttrs=skipAttrs, filterSettings=filterSettings, **kws)
+            # Primary AnimContext Manager to deal with EM / Cache settings
+            with r9General.AnimationContext(eval_mode=eval_mode, timerange=time):
+                if preCopyAttrs:
+                    self.copyAttributes(nodes=nodeList, skipAttrs=skipAttrs, filterSettings=filterSettings, **kws)
+                if time:
+                        cmds.autoKeyframe(state=False)
+                        # run a copyKeys pass to take all non transform data over
+                        # maybe do a channel attr pass to get non-keyed data over too?
+                        if preCopyKeys:
+                            self.copyKeys(nodes=nodeList, time=time, filterSettings=filterSettings, **kws)
 
-            if time:
-                with r9General.AnimationContext(eval_mode='anim'):  # Context manager to restore settings
-                    cmds.autoKeyframe(state=False)
+                        progressBar = r9General.ProgressBarContext(maxValue=time[1] - time[0], step=step, ismain=True)
 
-                    # run a copyKeys pass to take all non transform data over
-                    # maybe do a channel attr pass to get non-keyed data over too?
-                    if preCopyKeys:
-                        self.copyKeys(nodes=nodeList, time=time, filterSettings=filterSettings, **kws)
+                        if cutkeys:
+                            for _, dest in self.nodesToSnap:
+                                # print 'cutting keys : ', time, dest
+                                if snapTranslates:
+                                    cmds.cutKey(dest, at='translate', time=time)
+                                if snapRotates:
+                                    cmds.cutKey(dest, at='rotate', time=time)
 
-                    progressBar = r9General.ProgressBarContext(maxValue=time[1] - time[0], step=step, ismain=True)
+                        with progressBar:
+                            for t in timeLineRangeProcess(time[0], time[1], step, incEnds=True, nodes=_smartBakeRef):
+                                if progressBar.isCanceled():
+                                    cancelled = True
+                                    break
 
-                    if cutkeys:
-                        for _, dest in self.nodesToSnap:
-                            # print 'cutting keys : ', time, dest
-                            if snapTranslates:
-                                cmds.cutKey(dest, at='translate', time=time)
-                            if snapRotates:
-                                cmds.cutKey(dest, at='rotate', time=time)
+                                dataAligned = False
+                                processRepeat = iterations
 
-                    with progressBar:
-                        for t in timeLineRangeProcess(time[0], time[1], step, incEnds=True, nodes=_smartBakeRef):
-                            if progressBar.isCanceled():
-                                cancelled = True
-                                break
+                                # we'll use the API MTimeControl in the runtime function
+                                # to update the scene without refreshing the Viewports
+                                cmds.currentTime(t, e=True, u=False)
 
-                            dataAligned = False
-                            processRepeat = iterations
+                                while not dataAligned:
+                                    # PRE-SNAP additional calls
+                                    if additionalCalls_pre:
+                                        for func in additionalCalls_pre:
+                                            log.debug('Additional Pre-Snap Func Called : %s' % func)
+                                            func()
 
-                            # we'll use the API MTimeControl in the runtime function
-                            # to update the scene without refreshing the Viewports
-                            cmds.currentTime(t, e=True, u=False)
+                                    for src, dest in self.nodesToSnap:
+                                        # verify the src node has a key at the given accumulated keytime (if smartbake)
+                                        if _smartBake_nodekeys and src in _smartBake_nodekeys.keys() and t not in _smartBake_nodekeys[src]:
+                                            if logging_is_debug():
+                                                log.debug('skipping time : %s : node : %s' % (t, r9Core.nodeNameStrip(src)))
+                                        else:
+                                            cmds.SnapTransforms(source=src, destination=dest,
+                                                                timeEnabled=True,
+                                                                snapRotates=snapRotates,
+                                                                snapTranslates=snapTranslates)
+                                            cmds.setKeyframe(dest, at=_keyed_attrs)
 
-                            while not dataAligned:
-                                # PRE-SNAP additional calls
-                                if additionalCalls_pre:
-                                    for func in additionalCalls_pre:
-                                        log.debug('Additional Pre-Snap Func Called : %s' % func)
-                                        func()
+                                            if logging_is_debug():
+                                                log.debug('Snapfrm %s : source(%s) >> target(%s) ::  %s to %s' % (str(t),
+                                                                                                                  r9Core.nodeNameStrip(src),
+                                                                                                                  r9Core.nodeNameStrip(dest),
+                                                                                                                  dest,
+                                                                                                                  src))
+                                    # standard POST-SNAP additional calls
+                                    if additionalCalls:
+                                        for func in additionalCalls:
+                                            log.debug('Additional Func Called : %s' % func)
+                                            func()
 
-                                for src, dest in self.nodesToSnap:
-#                                     # we'll use the API MTimeControl in the runtime function
-#                                     # to update the scene without refreshing the Viewports
-#                                     cmds.currentTime(t, e=True, u=False)
-
-                                    # verify the src node has a key at the given accumulated keytime (if smartbake)
-                                    if _smartBake_nodekeys and src in _smartBake_nodekeys.keys() and t not in _smartBake_nodekeys[src]:
-                                        if logging_is_debug():
-                                            log.debug('skipping time : %s : node : %s' % (t, r9Core.nodeNameStrip(src)))
-                                    else:
-                                        cmds.SnapTransforms(source=src, destination=dest,
-                                                            timeEnabled=True,
-                                                            snapRotates=snapRotates,
-                                                            snapTranslates=snapTranslates)
-                                        cmds.setKeyframe(dest, at=_keyed_attrs)
-
-                                        if logging_is_debug():
-                                            log.debug('Snapfrm %s : source(%s) >> target(%s) ::  %s to %s' % (str(t),
-                                                                                                                 r9Core.nodeNameStrip(src),
-                                                                                                                 r9Core.nodeNameStrip(dest),
-                                                                                                                 dest,
-                                                                                                                 src))
-                                # standard POST-SNAP additional calls
-                                if additionalCalls:
-                                    for func in additionalCalls:
-                                        log.debug('Additional Func Called : %s' % func)
-                                        func()
-
-                                processRepeat -= 1
-                                if not processRepeat:
-                                    dataAligned = True
-                            progressBar.updateProgress()
-            else:
-                for _ in range(0, iterations):
-                    # PRE-SNAP additional calls
-                    if additionalCalls_pre:
-                        for func in additionalCalls_pre:
-                            log.debug('Additional Pre-Snap Func Called : %s' % func)
-                            func()
-                    for src, dest in self.nodesToSnap:  # nodeList.MatchedPairs:
-                        cmds.SnapTransforms(source=src, destination=dest,
-                                            timeEnabled=False,
-                                            snapRotates=snapRotates,
-                                            snapTranslates=snapTranslates)
-                        if logging_is_debug():
-                            log.debug('Snapfrm : source(%s) >> target(%s) :: %s to %s' % (r9Core.nodeNameStrip(src), r9Core.nodeNameStrip(dest), dest, src))
-                    # standard POST-SNAP additional calls
-                    if additionalCalls:
-                        for func in additionalCalls:
-                            log.debug('Additional Func Called : %s' % func)
-                            func()
-                        # self.snapCacheData[dest]=data
-                        if logging_is_debug():
-                            log.debug('Snapped : source(%s) >> target(%s) :: %s to %s' % (r9Core.nodeNameStrip(src), r9Core.nodeNameStrip(dest), dest, src))
+                                    processRepeat -= 1
+                                    if not processRepeat:
+                                        dataAligned = True
+                                progressBar.updateProgress()
+                else:
+                    for _ in range(0, iterations):
+                        # PRE-SNAP additional calls
+                        if additionalCalls_pre:
+                            for func in additionalCalls_pre:
+                                log.debug('Additional Pre-Snap Func Called : %s' % func)
+                                func()
+                        for src, dest in self.nodesToSnap:  # nodeList.MatchedPairs:
+                            cmds.SnapTransforms(source=src, destination=dest,
+                                                timeEnabled=False,
+                                                snapRotates=snapRotates,
+                                                snapTranslates=snapTranslates)
+                            if logging_is_debug():
+                                log.debug('Snapfrm : source(%s) >> target(%s) :: %s to %s' % (r9Core.nodeNameStrip(src),
+                                                                                              r9Core.nodeNameStrip(dest),
+                                                                                              dest, src))
+                        # standard POST-SNAP additional calls
+                        if additionalCalls:
+                            for func in additionalCalls:
+                                log.debug('Additional Func Called : %s' % func)
+                                func()
+                            # self.snapCacheData[dest]=data
+                            if logging_is_debug():
+                                log.debug('Snapped : source(%s) >> target(%s) :: %s to %s' % (r9Core.nodeNameStrip(src),
+                                                                                              r9Core.nodeNameStrip(dest),
+                                                                                              dest, src))
 
             if cancelled and preCopyKeys:
                 cmds.undo()
@@ -3785,76 +3790,85 @@ class AnimFunctions(object):
         # snapRef = None  #Tracking ReferenceObject Used to Pass the transforms over
         deleteMe = []
         duration = step
+        timeRange = []
 
         _keyed_attrs = []
         if trans:
             _keyed_attrs.extend(['tx', 'ty', 'tz'])
         if rots:
             _keyed_attrs.extend(['rx', 'ry', 'rz'])
-
         try:
             checkRunTimeCmds()
         except StandardError, error:
             raise StandardError(error)
 
-        with r9General.AnimationContext(eval_mode='anim', time=False, timerange=time):
+        eval_mode = 'static'
+        if time:
+            eval_mode = 'anim'
+
+        with r9General.AnimationContext(eval_mode=eval_mode, time=False):  # , cached_eval=False):
             if time:
                 timeRange = timeLineRangeProcess(time[0], time[1], step, incEnds=True)  # this is a LIST of frames
                 cmds.currentTime(timeRange[0], e=True)  # ensure that the initial time is updated
                 duration = time[1] - time[0]
-            else:
-                timeRange = [cmds.currentTime(q=True) + step]  # no time specified so move forward by the step
-                duration = 1
-            log.debug('timeRange : %s', timeRange)
+                log.debug('timeRange : %s', timeRange)
 
             if not nodes:
                 nodes = cmds.ls(sl=True, l=True)
 
             destObj = nodes[-1]
-            snapRef = cmds.spaceLocator()[0]
+            snapRef = cmds.createNode('transform', ss=True)
             deleteMe.append(snapRef)
 
-            # Generate the reference node that we'll use to snap too
-            # ==========================================================
-            if len(nodes) == 2:
-                # Tracker Mode 2 nodes passed in - Reference taken against the source node position
-                offsetRef = nodes[0]
+            try:
+                # Generate the reference node that we'll use to snap too
+                # ==========================================================
+                if len(nodes) == 2:
+                    # Tracker Mode 2 nodes passed in - Reference taken against the source node position
+                    offsetRef = nodes[0]
+                    if cmds.nodeType(nodes[0]) == 'mesh':  # Component level selection method
+                        if r9Setup.mayaVersion() >= 2011:
+                            offsetRef = cmds.spaceLocator()[0]
+                            deleteMe.append(offsetRef)
+                            cmds.select([nodes[0], offsetRef])
+                            pointOnPolyCmd([nodes[0], offsetRef])
+                        else:
+                            raise StandardError('Component Level Tracking is only available in Maya2011 upwards')
 
-                if cmds.nodeType(nodes[0]) == 'mesh':  # Component level selection method
-                    if r9Setup.mayaVersion() >= 2011:
-                        offsetRef = cmds.spaceLocator()[0]
-                        deleteMe.append(offsetRef)
-                        cmds.select([nodes[0], offsetRef])
-                        pointOnPolyCmd([nodes[0], offsetRef])
-                    else:
-                        raise StandardError('Component Level Tracking is only available in Maya2011 upwards')
+                    cmds.parent(snapRef, offsetRef)
+                    cmds.SnapTransforms(source=destObj, destination=snapRef, snapTranslates=trans, snapRotates=rots)
+                else:
+                    # Stabilizer Mode - take the reference from the node position itself
+                    cmds.SnapTransforms(source=destObj, destination=snapRef, snapTranslates=trans, snapRotates=rots)
 
-                cmds.parent(snapRef, offsetRef)
-                cmds.SnapTransforms(source=destObj, destination=snapRef, snapTranslates=trans, snapRotates=rots)
-            else:
-                # Stabilizer Mode - take the reference from the node position itself
-                cmds.SnapTransforms(source=destObj, destination=snapRef, snapTranslates=trans, snapRotates=rots)
-
-            # Now run the snap against the reference node we've just made
-            # ==========================================================
-            progressBar = r9General.ProgressBarContext(duration, step=step, ismain=True)
-
-            with progressBar:
-                for time in timeRange:
-                    if progressBar.isCanceled():
-                        break
-
-                    # Switched to using the Commands time query to stop  the viewport updates
-                    cmds.currentTime(time, e=True, u=False)
+                if time:
+                    # Now run the snap against the reference node we've just made
+                    # ==========================================================
+                    progressBar = r9General.ProgressBarContext(duration, step=step, ismain=True)
+                    with progressBar:
+                        for time in timeRange:
+                            if progressBar.isCanceled():
+                                break
+                            # Switched to using the Commands time query to stop  the viewport updates
+                            cmds.currentTime(time, e=True, u=False)
+                            cmds.SnapTransforms(source=snapRef, destination=destObj, timeEnabled=True, snapTranslates=trans, snapRotates=rots)
+                            try:
+                                cmds.setKeyframe(destObj, at=_keyed_attrs)
+                            except:
+                                log.debug('failed to set full keydata on %s' % destObj)
+                            progressBar.updateProgress()
+                else:
+                    cmds.currentTime(cmds.currentTime(q=True) + step, e=True, u=False)
                     cmds.SnapTransforms(source=snapRef, destination=destObj, timeEnabled=True, snapTranslates=trans, snapRotates=rots)
                     try:
                         cmds.setKeyframe(destObj, at=_keyed_attrs)
                     except:
                         log.debug('failed to set full keydata on %s' % destObj)
-                    progressBar.updateProgress()
-
-        cmds.delete(deleteMe)
-        cmds.select(nodes)
+            except StandardError, err:
+                log.warning('Stabilizer Error %s' % err)
+            finally:
+                cmds.delete(deleteMe)
+#                 cmds.select(nodes)
 
     def bindNodes(self, nodes=None, attributes=None, filterSettings=None,
                   bindMethod='connect', matchMethod=None, **kws):
@@ -4538,7 +4552,7 @@ class FilterCurves(object):
                                timeTolerance=cmds.floatSliderGrp('fsg_filtertimeValue', q=True, v=True),
                                valueTolerance=cmds.floatSliderGrp('fsg_filterfloatValue', q=True, v=True))
             else:
-                print 'testing filter call'
+                print('testing filter call')
                 objs = cmds.ls(sl=True)
                 cmds.filterCurve(objs, f='simplify',
                                  timeTolerance=cmds.floatSliderGrp('fsg_filterfloatValue', q=True, v=True))
@@ -4878,7 +4892,7 @@ class MirrorHierarchy(object):
 
         if self.settings.metaRig and nodes:
             mrig = r9Meta.getConnectedMetaSystemRoot(self.indexednodes[0])
-            print 'Resolved MRig', mrig
+            print('Resolved MRig', mrig)
             self.indexednodes.extend(mrig.getMirror_opposites(self.indexednodes))
 
         if not self.indexednodes:
@@ -4945,7 +4959,7 @@ class MirrorHierarchy(object):
         if self.unresolved:
             for key, val in self.unresolved.items():
                 if val:
-                    print '\CLASHING %s Mirror Indexes =====================================================' % key
+                    print('\CLASHING %s Mirror Indexes =====================================================' % key)
                     for i in r9Core.sortNumerically(val):
                         print('clashing Index : %s : %s : %s' %
                               (key, i, ', '.join([r9Core.nodeNameStrip(n) for n in val[i]])))
@@ -5365,7 +5379,7 @@ class MirrorSetup(object):
         if axis:
             self.__uicb_setDefaults('custom')
             for a in list(axis):
-                print 'MirroAxis : ', a
+                print('MirroAxis : ', a)
                 if a == 'translateX':
                     cmds.checkBox('translateX', e=True, v=True)
                     axis.remove(a)
@@ -5559,7 +5573,6 @@ class CameraTracker():
                 cachedTransform = cmds.getAttr('%s.translate' % cam)[0]
             else:
                 # not sure about this?
-                print 'here'
                 cmds.viewFit(cam, animate=False)
         else:
             if keepOffset:
@@ -5728,7 +5741,7 @@ class ReconnectAnimData(object):
         for plug in cSetPlugs[::2]:
             for anim in animCurves:
                 if anim.split(':')[-1].endswith(plug):
-                    print '%s >> %s' % (anim, plug)
+                    print('%s >> %s' % (anim, plug))
                     pm.connectAttr('%s.output' % anim, '%s.%s' % (cSet, plug), force=True)
 
     @staticmethod
@@ -5755,12 +5768,12 @@ class ReconnectAnimData(object):
                 animCurveExpected = chn.split('|')[-1].replace('.', '_')
             if animCurveExpected in animCurves:
                 if not cmds.isConnected('%s.output' % animCurveExpected, chn):
-                    print '%s >> %s' % (animCurveExpected, chn)
+                    print('%s >> %s' % (animCurveExpected, chn))
                     cmds.connectAttr('%s.output' % animCurveExpected, chn, force=True)
             elif stripLayerNaming:
                 for curve in animCurves:
                     curveStripped = curve.replace('_Merged_Layer_inputB', '').rstrip('123456789')
                     if curveStripped == animCurveExpected:
                         if not cmds.isConnected(curve, chn):
-                            print '%s >> %s' % (curve, chn)
+                            print('%s >> %s' % (curve, chn))
                             cmds.connectAttr('%s.output' % curve, chn, force=True)

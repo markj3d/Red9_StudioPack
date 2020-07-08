@@ -14,7 +14,9 @@
     NOTHING IN THIS MODULE SHOULD REQUIRE RED9
 
 '''
-from __future__ import with_statement  # required only for Maya2009/8
+
+from __future__ import print_function
+
 from functools import wraps
 import maya.cmds as cmds
 import maya.mel as mel
@@ -26,6 +28,8 @@ import tempfile
 import subprocess
 import json
 import itertools
+import traceback
+import datetime
 
 # Only valid Red9 import
 import Red9.startup.setup as r9Setup
@@ -131,7 +135,7 @@ def inspectFunctionSource(value):
         try:
             log.debug('value :  %s' % value)
             log.debug('value isString : ', isinstance(value, str))
-            log.debug('value callable: ', callable(value))
+            log.debug('value callable: ', is_callable(value))
             log.debug('value is module : ', inspect.ismodule(value))
             log.debug('value is method : ', inspect.ismethod(value))
             if isinstance(value, str):
@@ -176,6 +180,37 @@ def getScriptEditorSelection():
         log.info('command caught: %s ' % func)
         return func
 
+def string_to_date(date_string):
+    '''
+    TODO: no longer used in the ProSystems?
+    '''
+    date_data = [int(x) for x in date_string.split('-')]
+    return datetime.date(date_data[0], date_data[1], date_data[2])
+
+def string_to_date_time(date_time_string):
+    """
+    converts time string information to datetime.datetime object
+    :param date_time_string: string with time information EX. '2019-11-21T17:05:02Z'
+    :return: object datetime.datetime
+    """
+    try:
+        import numpy
+    except:
+        log.warning('import Numpy failed')
+        print(traceback.format_exc())
+    return numpy.datetime64(date_time_string).astype(datetime.datetime)
+
+def string_to_timestamp(date_time_string):
+    """
+    :param date_time_string: date_time_string: string with time information EX. '2019-11-21T17:05:02Z'
+    :return: float, time stamp
+    """
+    return time.mktime(string_to_date_time(date_time_string).timetuple())
+
+# ---------------------------------------------------------------------------------
+# Python 2 / 3 handlers ----
+# ---------------------------------------------------------------------------------
+
 def is_basestring(value):
     '''
     wrapper to check if an arg is string based, wrapping Python 2 & 3
@@ -190,6 +225,17 @@ def is_basestring(value):
         if isinstance(value, basestring):
             return True
     return False
+
+def is_callable(func):
+    '''
+    wrapper to check if a variable is callable, wrapping Python 2 & 3
+
+    :param func: the func we're inspecting
+    '''
+    if sys.version_info[0] == 2:
+        return callable(func)
+    elif sys.version_info[0] == 3:
+        return hasattr(func, '__call__')
 
 
 # ---------------------------------------------------------------------------------
@@ -264,6 +310,18 @@ def runProfile(func):
         return profile
     return wrapper
 
+def run_dgtimer():
+    '''
+    simple call to write a dgtime output file based on the current scene name
+    yes we can easily now run the profiler but this also contains some valuable info
+    '''
+    outfile = os.path.splitext(sceneName())[0] + '__dgtime.txt'
+    cmds.currentTime(cmds.playbackOptions(q=True, min=True))
+    cmds.dgtimer(on=True, reset=True)
+    cmds.play(wait=True)
+    cmds.dgtimer(off=True)
+    cmds.dgtimer(q=True, o=outfile)
+    os_OpenFileDirectory(outfile)
 
 def evalManager_DG(func):
     '''
@@ -373,6 +431,26 @@ def deleteNewNodes(func):
     return wrapper
 
 
+def suppressScriptEditor(func):
+    '''
+    DECORATOR : suppress scriptInfo, scriptResults within the decorator
+    '''
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            se_info = cmds.scriptEditorInfo(q=True, suppressInfo=True)
+            se_results = cmds.scriptEditorInfo(q=True, suppressResults=True)
+            cmds.scriptEditorInfo(suppressInfo=True)
+            cmds.scriptEditorInfo(suppressResults=True)
+            res = func(*args, **kwargs)
+        except:
+            log.info('Failed on SuppressScriptEditor decorator')
+        finally:
+            cmds.scriptEditorInfo(suppressInfo=se_info)
+            cmds.scriptEditorInfo(suppressResults=se_results)
+        return res
+    return wrapper
+
 class AnimationContext(object):
     """
     CONTEXT MANAGER : Hugely important Context Manager for restoring Animation settings.
@@ -416,15 +494,18 @@ class AnimationContext(object):
         self.manage_cache = cached_eval
         self.manage_eval_idle = eval_idle
 
-        if eval_mode == 'anim':              # for animation adjustments like snapTransforms over time
+        if eval_mode == 'anim':             # for animation adjustments like snapTransforms over time
+            log.debug('AnimContext : MODE : "anim"')
             self.manage_em = True           # drop to DG
             self.manage_cache = True        # flush the cache on exit
             self.manage_eval_idle = False   # leave the EM IdleAction alone
 
-        elif eval_mode == 'static':          # for static adjustments like relative pose load / mirror pose
+        elif eval_mode == 'static':         # for static adjustments like relative pose load / mirror pose
+            log.debug('AnimContext : MODE : "static"')
             self.manage_em = False          # don't come out of parallel
             self.manage_cache = False       # don't manage the cache
             self.manage_eval_idle = True    # set EM IdleAction to rebuild only
+            self.manage_time = False        # don't manage time!
 
         # differences between build handling
         if r9Setup.mayaVersion() < 2019.0:
@@ -468,28 +549,23 @@ class AnimationContext(object):
 
         if self.manage_eval_idle:
             self.eval_idle_mode = cmds.evaluationManager(q=True, idleAction=True)
-            if not self.eval_idle_mode == 0:
-                cmds.evaluationManager(idleAction=0)
-                log.info('AnimContext : EvaluationManager idleAction = 0')
+            if not self.eval_idle_mode == 1:
+                cmds.evaluationManager(idleAction=1)
+                log.debug('AnimContext : ENTRY : EvaluationManager idleAction = 1')
 
         # manage the evalManager - forcing DG mode
         if self.manage_em:
             self.evalmode = cmds.evaluationManager(mode=True, q=True)[0]
             if self.evalmode == 'parallel':
-#                 cmds.evaluationManager(mode='off')
-                evalManagerState(mode='off')
-                log.info('AnimContext : EvaluationManager = DG')
+                cmds.evaluationManager(mode='off')
+#                 evalManagerState(mode='off')
+                log.debug('AnimContext : ENTRY : EvaluationManager = DG')
 
     def __exit__(self, exc_type, exc_value, traceback):
 
         # Close the undo chunk, warn if any exceptions were caught:
         cmds.autoKeyframe(state=self.autoKeyState)
-        log.debug('autoKeyState restored: %s' % self.autoKeyState)
-
-        if self.manage_em and self.evalmode == 'parallel':
-#             cmds.evaluationManager(mode=self.evalmode)
-            evalManagerState(mode=self.evalmode)
-            log.debug('evalManager restored: %s' % self.evalmode)
+        log.debug('AnimContext : EXIT : autoKeyState restored: %s' % self.autoKeyState)
 
         if self.manage_time:
             cmds.currentTime(self.timeStore['currentTime'])
@@ -498,22 +574,27 @@ class AnimationContext(object):
             cmds.playbackOptions(ast=self.timeStore['startTime'])
             cmds.playbackOptions(aet=self.timeStore['endTime'])
             cmds.playbackOptions(ps=self.timeStore['playSpeed'])
-            log.debug('currentTime restored: %f' % self.timeStore['currentTime'])
+            log.debug('AnimContext : EXIT : currentTime restored: %f' % self.timeStore['currentTime'])
 
         if self.mangage_undo:
             cmds.undoInfo(closeChunk=True)
         else:
             cmds.undoInfo(swf=True)
 
+        if self.manage_em and self.evalmode == 'parallel':
+            cmds.evaluationManager(mode=self.evalmode)
+#             evalManagerState(mode=self.evalmode)
+            log.debug('AnimContext : EXIT : evalManager restored: %s' % self.evalmode)
+
         if self.manage_cache:
             try:
                 if self.cachemode:
                     if self.timerange:
                         cmds.cacheEvaluator(fcr=(self.timerange, 1))
-                        log.info('AnimContext : CacheEvaluator flushed between %s>%s' % self.timerange)
+                        log.debug('AnimContext : EXIT : CacheEvaluator flushed between %s > %s' % self.timerange)
                     else:
                         cmds.cacheEvaluator(fc='destroy')
-                        log.info('AnimContext : CacheEvaluator flushed')
+                        log.debug('AnimContext : EXIT : CacheEvaluator flushed')
 #                     from maya.plugin.evaluator.cache_preferences import CachePreferenceEnabled
 #                     CachePreferenceEnabled().set_value(self.cachemode)
             except:
@@ -521,6 +602,7 @@ class AnimationContext(object):
 
         if self.manage_eval_idle:
             cmds.evaluationManager(idleAction=self.eval_idle_mode)
+            log.debug('AnimContext : EXIT : EM idleAction restored: %s' % self.eval_idle_mode)
 
         if exc_type is not None and self.suppress_exceptions:
             log.exception('%s : %s' % (exc_type, exc_value))

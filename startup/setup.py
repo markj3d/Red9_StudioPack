@@ -324,61 +324,67 @@ def framerate_mapping(value=None, asAPI=False):
     if no valuye is passed we return a full mapping dict {pal: (25, OpenMaya.MTime.kPALFrame), ...}
 
     :param value: if float or int we convert the data to timeUnit ('pal','ntsc',....)
-        if value is a string we convert to actual fps
-    :param asAPI: if True we return the OpneMaya.MTime.kUnit for the value
+        if value is a string we convert to actual fps as float
+    :param asAPI: if value was given and this is True we return the OpneMaya.MTime.kUnit for the value
     '''
     import maya.OpenMaya as OpenMaya
-    fpsDict = {"game": (15.0, OpenMaya.MTime.kGames),
-               "film": (24.0, OpenMaya.MTime.kFilm),                    # 6
-               "pal": (25.0, OpenMaya.MTime.kPALFrame),                 # 7
-               "ntsc": (30.0, OpenMaya.MTime.kNTSCFrame),               # 8
-               "show": (48.0, OpenMaya.MTime.kShowScan),                # 9
-               "palf": (50.0, OpenMaya.MTime.kPALField),                # 10
-               "ntscf": (60.0, OpenMaya.MTime.kNTSCField)}              # 11
+    fpsDict = {}
 
-    if mayaVersion() >= 2017:
-        new_2017fps = {"2fps": (2.0, OpenMaya.MTime.k2FPS),             # 12
-                        "3fps": (3.0, OpenMaya.MTime.k3FPS),            # 13
-                        "4fps": (4.0, OpenMaya.MTime.k4FPS),            # 14
-                        "5fps": (5.0, OpenMaya.MTime.k5FPS),            # 15
-                        "6fps": (6.0, OpenMaya.MTime.k6FPS),            # 16
-                        "8fps": (8.0, OpenMaya.MTime.k8FPS),            # 17
-                        "10fps": (10.0, OpenMaya.MTime.k10FPS),         # 18
-                        "12fps": (12.0, OpenMaya.MTime.k12FPS),         # 19
-                        "16fps": (16.0, OpenMaya.MTime.k16FPS),         # 20
-                        "20fps": (20.0, OpenMaya.MTime.k20FPS),         # 21
-                        "29.97fps": (29.97, OpenMaya.MTime.k29_97FPS),  # 44
-                        "40fps": (40.0, OpenMaya.MTime.k40FPS),         # 22
-                        "75fps": (75.0, OpenMaya.MTime.k75FPS),         # 23
-                        "80fps": (80.0, OpenMaya.MTime.k80FPS),         # 24
-                        "100fps": (100.0, OpenMaya.MTime.k100FPS),      # 25
-                        "120fps": (120.0, OpenMaya.MTime.k120FPS),      # 26
-                        "125fps": (125.0, OpenMaya.MTime.k125FPS),      # 27
-                        "150fps": (150.0, OpenMaya.MTime.k150FPS),      # 28
-                        "200fps": (200.0, OpenMaya.MTime.k200FPS),      # 29
-                        "240fps": (240.0, OpenMaya.MTime.k240FPS),      # 30
-                        "250fps": (250.0, OpenMaya.MTime.k250FPS),      # 31
-                        "300fps": (300.0, OpenMaya.MTime.k300FPS),      # 32
-                        "375fps": (375.0, OpenMaya.MTime.k375FPS),      # 33
-                        "400fps": (400.0, OpenMaya.MTime.k400FPS),      # 34
-                        "500fps": (500.0, OpenMaya.MTime.k500FPS),      # 35
-                        "600fps": (600.0, OpenMaya.MTime.k600FPS),      # 36
-                        "750fps": (750.0, OpenMaya.MTime.k750FPS),      # 37
-                        "1200fps": (1200.0, OpenMaya.MTime.k1200FPS),   # 38
-                        "1500fps": (1500.0, OpenMaya.MTime.k1500FPS),   # 39
-                        "2000fps": (2000.0, OpenMaya.MTime.k2000FPS),   # 40
-                        "3000fps": (3000.0, OpenMaya.MTime.k3000FPS),   # 41
-                        "6000fps": (6000.0, OpenMaya.MTime.k6000FPS)}   # 42
-        fpsDict.update(new_2017fps)
+    _bases = {"game": (15.0, 'kGames'),              # 5
+               "film": (24.0, 'kFilm'),              # 6
+               "pal": (25.0, 'kPALFrame'),           # 7
+               "ntsc": (30.0, 'kNTSCFrame'),         # 8
+               "show": (48.0, 'kShowScan'),          # 9
+               "palf": (50.0, 'kPALField'),          # 10
+               "ntscf": (60.0, 'kNTSCField'),        # 11
+               "2fps": (2.0, 'k2FPS'),               # 12
+               "3fps": (3.0, 'k3FPS'),               # 13
+               "4fps": (4.0, 'k4FPS'),               # 14
+               "5fps": (5.0, 'k5FPS'),               # 15
+               "6fps": (6.0, 'k6FPS'),               # 16
+               "8fps": (8.0, 'k8FPS'),               # 17
+               "10fps": (10.0, 'k10FPS'),            # 18
+               "12fps": (12.0, 'k12FPS'),            # 19 
+               "16fps": (16.0, 'k16FPS'),            # 20 
+               "20fps": (20.0, 'k20FPS'),            # 21 
+               "40fps": (40.0, 'k40FPS'),            # 22
+               "75fps": (75.0, 'k75FPS'),            # 23
+               "80fps": (80.0, 'k80FPS'),            # 24
+               "100fps": (100.0, 'k100FPS'),         # 25
+               "120fps": (120.0, 'k120FPS'),         # 26 
+               "125fps": (125.0, 'k125FPS'),         # 27 
+               "150fps": (150.0, 'k150FPS'),         # 28 
+               "200fps": (200.0, 'k200FPS'),         # 29 
+               "240fps": (240.0, 'k240FPS'),         # 30 
+               "250fps": (250.0, 'k250FPS'),         # 31
+               "300fps": (300.0, 'k300FPS'),         # 32
+               "375fps": (375.0, 'k375FPS'),         # 33
+               "400fps": (400.0, 'k400FPS'),         # 34
+               "500fps": (500.0, 'k500FPS'),         # 35 
+               "600fps": (600.0, 'k600FPS'),         # 36
+               "750fps": (750.0, 'k750FPS'),         # 37
+               "1200fps": (1200.0, 'k1200FPS'),      # 38
+               "1500fps": (1500.0, 'k1500FPS'),      # 39 
+               "2000fps": (2000.0, 'k2000FPS'),      # 40 
+               "3000fps": (3000.0, 'k3000FPS'),      # 41
+               "6000fps": (6000.0, 'k6000FPS'),      # 42
+               "23.976fps": (24.0 * 1000.0 / 1001.0, 'k23_976FPS'),  # 43
+               "29.97fps": (30.0 * 1000.0 / 1001.0, 'k29_97FPS'),    # 44
+               "29.97df": (30.0 * 1000.0 / 1001.0, 'k29_97DF'),      # 45
+               "47.952fps": (48.0 * 1000.0 / 1001.0, 'k47_952FPS'),  # 46
+               "59.94fps": (60.0 * 1000.0 / 1001.0, 'k59_94FPS'),    # 47
+               "44100fps": (44100.0, 'k44100FPS'),   # 48
+               "48000fps": (48000.0, 'k48000FPS')}   # 49
 
-    if mayaVersion() >= 2018:
-        new_2018fps = {"23.976fps": (23.976, OpenMaya.MTime.k23_976FPS),    # 43
-                        "29.97df": (29.97, OpenMaya.MTime.k29_97DF),        # 45
-                        "47.952fps": (47.952, OpenMaya.MTime.k47_952FPS),   # 46
-                        "59.94fps": (59.94, OpenMaya.MTime.k59_94FPS),      # 47
-                        "44100fps": (44100.0, OpenMaya.MTime.k44100FPS),    # 48
-                        "48000fps": (48000.0, OpenMaya.MTime.k48000FPS)}    # 49
-        fpsDict.update(new_2018fps)
+    # now in a try loop so that when the API bails due to MTime differences
+    # between Maya versions we're still ok
+    for fps, data in _bases.items():
+        try:
+            api = getattr(OpenMaya.MTime, data[1])
+            fpsDict[fps] = (data[0], api)
+        except:
+            log.debug("given fps doesn't exist in this build of Maya API")
+
     if not value:
         return fpsDict
     if type(value) in [int, float]:
@@ -399,11 +405,12 @@ def getCurrentFPS(return_full_map=False):
     :param return_full_map: if True we return a dictionary of timeUnit:fps rather than the
         current actual fps - useful for debugging
     '''
-    if not return_full_map:
+    if not return_full_map:  
+        # do we just call the Maya `currentTimeUnitToFPS` ?
         data = framerate_mapping()
         return data[cmds.currentUnit(q=True, fullName=True, time=True)][0]
     else:
-        # why remap? this is purely for consistency
+        # why remap? this is purely for consistency on older calls
         data = {}
         for k, v in framerate_mapping().items():
             data[k] = v[0]
@@ -777,7 +784,6 @@ def addAudioMenu(parent=None, rootMenu='redNineTraxRoot', prefix=''):
             log.info('New Red9 Sound subMenu added to current Menu : %s' % parent)
         else:
             raise StandardError('given parent for Red9 Sound Menu is invalid %s' % parent)
-
 
     cmds.menuItem(l=LANGUAGE_MAP._MainMenus_.sound_offset_manager, p=rootMenu,
                   ann=LANGUAGE_MAP._MainMenus_.sound_offset_manager_ann,
@@ -1249,8 +1255,6 @@ def has_pro_pack():
     Red9 Pro_Pack is available and activated as user
     '''
     if os.path.exists(pro_pack_path()):
-        # return True
-
         # Red 9 pro is not boot yet,
         # better not call if before boot is finish
         try:
@@ -1261,8 +1265,10 @@ def has_pro_pack():
             else:
                 return False
         except StandardError, err:
+#             import traceback
             # we have the pro-pack folder so assume we're running legacy build
             log.info('r9Pro : checkr9User : failed validation! : %s' % err)
+#             print traceback.format_exc()
             return True
     else:
         return False
@@ -1400,7 +1406,7 @@ def get_client_modules():
     '''
     get all client modules ready for the boot sequence
 
-    #TODO: link this up with a management setup so we can determine
+    # TODO: link this up with a management setup so we can determine
     which client to boot if we have multiple client repositories in the system.
     '''
     clients = []
@@ -1435,11 +1441,11 @@ def boot_client_projects(batchclients=None):  # []):
     clientsToBoot = []
 
     # mayaBatch boot (unittests and batching)
-    print 'Maya is Batch : ', mayaIsBatch()
-    print 'clients : ', batchclients
+#     print 'Maya is Batch : ', mayaIsBatch()
+#     print 'clients : ', batchclients
     if mayaIsBatch():
         if batchclients is None:
-            print '################### batchclients = None'
+#             print '################### batchclients = None'
             return
         if batchclients:
             clientsToBoot = [_client for _client in batchclients if _client in clients]
@@ -1462,7 +1468,7 @@ def boot_client_projects(batchclients=None):  # []):
             if result == 'NONE':
                 return
             elif result not in ['Cancel', 'ALL', 'NONE']:
-                print 'Appending Client selection ', result
+#                 print 'Appending Client selection ', result
                 clientsToBoot.append(result)
         else:
             clientsToBoot = clients

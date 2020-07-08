@@ -125,7 +125,7 @@ This includes most of the context managers and decorators.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_General.AnimationContext" title="Red9.core.Red9_General.AnimationContext"><code class="xref py py-obj docutils literal"><span class="pre">AnimationContext</span></code></a>([evalmanager,&nbsp;time,&nbsp;undo,&nbsp;...])</td>
-<td>CONTEXT MANAGER : Simple Context Manager for restoring Animation settings</td>
+<td>CONTEXT MANAGER : Simple Context Manager for restoring Animation settings.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.undoContext" title="Red9.core.Red9_General.undoContext"><code class="xref py py-obj docutils literal"><span class="pre">undoContext</span></code></a>([initialUndo,&nbsp;undoFuncCache,&nbsp;...])</td>
 <td>CONTEXT MANAGER : Simple Context Manager for chunking the undoState</td>
@@ -207,6 +207,22 @@ clipboard then pull it back afterwards.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_General.is_basestring">
+<code class="descname">is_basestring</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.is_basestring" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper to check if an arg is string based, wrapping Python 2 &amp; 3
+python 3 all unicode based args are strings
+python 2 we have str and unicode both instances of basestring</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> &#8211; the value we&#8217;re checking</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_General.Timer">
 <code class="descname">Timer</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.Timer" title="Permalink to this definition">¶</a></dt>
 <dd><p>DECORATOR : Simple timer function</p>
@@ -258,9 +274,12 @@ the undo stack via the Red9.evalManager_switch plugin</p>
 
 <dl class="class">
 <dt id="Red9.core.Red9_General.AnimationContext">
-<em class="property">class </em><code class="descname">AnimationContext</code><span class="sig-paren">(</span><em>evalmanager=True</em>, <em>time=True</em>, <em>undo=True</em>, <em>autokey=False</em>, <em>suppress_exceptions=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.AnimationContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">AnimationContext</code><span class="sig-paren">(</span><em>evalmanager=True</em>, <em>time=True</em>, <em>undo=True</em>, <em>autokey=False</em>, <em>cached_eval=True</em>, <em>suppress_exceptions=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.AnimationContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>CONTEXT MANAGER : Simple Context Manager for restoring Animation settings</p>
+<p>CONTEXT MANAGER : Simple Context Manager for restoring Animation settings.
+This also now manages both the evaluationManager and the cachedEvaluation,
+dropping Maya down to DG without the cache activated, then restoring the
+previous state on exit.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -270,6 +289,8 @@ the undo stack via the Red9.evalManager_switch plugin</p>
 <li><strong>time</strong> &#8211; do we manage the time and restore the original currentTime?</li>
 <li><strong>undo</strong> &#8211; do we manage the undoStack, collecting everything in one chunk</li>
 <li><strong>autokey</strong> &#8211; base state of the autokey during this context, default=False</li>
+<li><strong>cached_eval</strong> &#8211; do we manage the new cachedEvaluation in Maya 2019 upwards, default is True</li>
+<li><strong>suppress_exceptions</strong> &#8211; do we raise or supress exceptions</li>
 </ul>
 </td>
 </tr>
