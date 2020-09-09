@@ -1,33 +1,25 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Pro_Pack : ImportExport &#8212; Red9 2.0 documentation</title>
-    
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pro_Pack : MetaData" href="Red9_Pro_meta .html" />
     <link rel="prev" title="Pro_Pack : General" href="Red9_Pro_general.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -55,8 +47,8 @@
   <div class="section" id="pro-pack-importexport">
 <h1>Pro_Pack : ImportExport<a class="headerlink" href="#pro-pack-importexport" title="Permalink to this headline">¶</a></h1>
 <p>ProPack importexport module manages files and sourcecontrol</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9ie&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9ie</span>
 </pre></div>
@@ -68,16 +60,16 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.MayaFile" title="Red9.pro_pack.core.importexport.MayaFile"><code class="xref py py-obj docutils literal"><span class="pre">MayaFile</span></code></a>([filePath])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.MayaFile" title="Red9.pro_pack.core.importexport.MayaFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MayaFile</span></code></a>([filePath])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.Fbx" title="Red9.pro_pack.core.importexport.Fbx"><code class="xref py py-obj docutils literal"><span class="pre">Fbx</span></code></a>([filepath])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.Fbx" title="Red9.pro_pack.core.importexport.Fbx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Fbx</span></code></a>([filepath])</td>
 <td>base class to handling FBX file import and export</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.P4_sourceControl" title="Red9.pro_pack.core.importexport.P4_sourceControl"><code class="xref py py-obj docutils literal"><span class="pre">P4_sourceControl</span></code></a>([path])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.P4_sourceControl" title="Red9.pro_pack.core.importexport.P4_sourceControl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">P4_sourceControl</span></code></a>([path])</td>
 <td>The P4_sourceControl object is bound to the r9File instance automatically if your project is set to run with Perforce.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.r9File" title="Red9.pro_pack.core.importexport.r9File"><code class="xref py py-obj docutils literal"><span class="pre">r9File</span></code></a>([path])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.r9File" title="Red9.pro_pack.core.importexport.r9File"><code class="xref py py-obj docutils literal notranslate"><span class="pre">r9File</span></code></a>([path])</td>
 <td>Red9 file handler system, bound to OS calls directly by inheritance from pm.util.path which then exposes all OS calls directly to the class instance.</td>
 </tr>
 </tbody>
@@ -85,7 +77,7 @@
 <dl class="function">
 <dt id="Red9.pro_pack.core.importexport.resolve_path">
 <code class="descname">resolve_path</code><span class="sig-paren">(</span><em>path</em>, <em>path_hints=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.resolve_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>from a given path make sure it exists, if it doesn&#8217;t, relax the rules and
+<dd><p>from a given path make sure it exists, if it doesn’t, relax the rules and
 try and find it in the project structure or in the same folder as the current Maya scene</p>
 <p>order of resolve:</p>
 <p>1: file exists as given
@@ -121,7 +113,7 @@ where all new created nodes are store as a list</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.importexport.MayaFile">
 <em class="property">class </em><code class="descname">MayaFile</code><span class="sig-paren">(</span><em>filePath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.MayaFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.browser.actions.FileBaseActions</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.browser.actions.FileBaseActions</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.MayaFile.saveMa">
 <code class="descname">saveMa</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.MayaFile.saveMa" title="Permalink to this definition">¶</a></dt>
@@ -152,12 +144,12 @@ where all new created nodes are store as a list</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.MayaFile.replace_reference">
 <code class="descname">replace_reference</code><span class="sig-paren">(</span><em>new_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.MayaFile.replace_reference" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replace reference paths in maya file to a new guiven file path</p>
+<dd><p>Replace reference paths in maya file to a new given file path</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_path</strong> &#8211; string new path to be use for reference</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_path</strong> – string new path to be use for reference</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">bool True or false</td>
 </tr>
@@ -170,7 +162,7 @@ where all new created nodes are store as a list</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.importexport.Fbx">
 <em class="property">class </em><code class="descname">Fbx</code><span class="sig-paren">(</span><em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>base class to handling FBX file import and export</p>
 <p><a class="reference external" href="http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&amp;id=26416130">http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&amp;id=26416130</a>
 C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
@@ -183,9 +175,9 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fileName</strong> &#8211; fbx file to import, if not given we use self.filepath (if set), else we raise the selector dialog</li>
-<li><strong>preset</strong> &#8211; if given use this preset rather than the internal preset of Red9</li>
-<li><strong>take</strong> &#8211; if given we import that specific take, else we use the default which is take 1. ONLY valid for 2017 upwards</li>
+<li><strong>fileName</strong> – fbx file to import, if not given we use self.filepath (if set), else we raise the selector dialog</li>
+<li><strong>preset</strong> – if given use this preset rather than the internal preset of Red9</li>
+<li><strong>take</strong> – if given we import that specific take, else we use the default which is take 1. ONLY valid for 2017 upwards</li>
 </ul>
 </td>
 </tr>
@@ -193,7 +185,7 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">the presets must be in the &#8220;Red9/pro_pack/core/FBX_presets/import&#8221; folder to be loaded</p>
+<p class="last">the presets must be in the “Red9/pro_pack/core/FBX_presets/import” folder to be loaded</p>
 </div>
 </dd></dl>
 
@@ -206,11 +198,11 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fileName</strong> &#8211; the fbx to reference, if not given we use self.filepath (if set), else we raise the selector dialog</li>
-<li><strong>namespace</strong> &#8211; the namespace to use</li>
-<li><strong>groupname</strong> &#8211; the groupname to group everything under</li>
-<li><strong>preset</strong> &#8211; any custom fbx handling preset to be used</li>
-<li><strong>take</strong> &#8211; if given we reference that specific take, else we use the default which is take 1. ONLY valid for 2017 upwards</li>
+<li><strong>fileName</strong> – the fbx to reference, if not given we use self.filepath (if set), else we raise the selector dialog</li>
+<li><strong>namespace</strong> – the namespace to use</li>
+<li><strong>groupname</strong> – the groupname to group everything under</li>
+<li><strong>preset</strong> – any custom fbx handling preset to be used</li>
+<li><strong>take</strong> – if given we reference that specific take, else we use the default which is take 1. ONLY valid for 2017 upwards</li>
 </ul>
 </td>
 </tr>
@@ -227,11 +219,11 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fileName</strong> &#8211; fbx file to export too, if not given we use self.filepath (if set), else we raise the selector dialog</li>
-<li><strong>selection</strong> &#8211; bool, export the selected nodes or the scene</li>
-<li><strong>preset</strong> &#8211; if given use this preset rather than the internal preset of Red9</li>
-<li><strong>bakeanim</strong> &#8211; invoke the fbx bakeAnimation calls, designed for the export of skeleton data mainly, not SRC data</li>
-<li><strong>timeranges</strong> &#8211; (start,end) set the timeranges specifically OR as per the current timeranges</li>
+<li><strong>fileName</strong> – fbx file to export too, if not given we use self.filepath (if set), else we raise the selector dialog</li>
+<li><strong>selection</strong> – bool, export the selected nodes or the scene</li>
+<li><strong>preset</strong> – if given use this preset rather than the internal preset of Red9</li>
+<li><strong>bakeanim</strong> – invoke the fbx bakeAnimation calls, designed for the export of skeleton data mainly, not SRC data</li>
+<li><strong>timeranges</strong> – (start,end) set the timeranges specifically OR as per the current timeranges</li>
 </ul>
 </td>
 </tr>
@@ -240,22 +232,22 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 <p><a class="reference external" href="https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2016/ENU/Maya/files/GUID-6CCE943A-2ED4-4CEE-96D4-9CB19C28F4E0-htm.html">https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2016/ENU/Maya/files/GUID-6CCE943A-2ED4-4CEE-96D4-9CB19C28F4E0-htm.html</a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">the presets must be in the &#8220;Red9/pro_pack/core/FBX_presets/export&#8221; folder to be loaded</p>
+<p class="last">the presets must be in the “Red9/pro_pack/core/FBX_presets/export” folder to be loaded</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.Fbx.updateFbx">
 <code class="descname">updateFbx</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>take=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.updateFbx" title="Permalink to this definition">¶</a></dt>
-<dd><p>import an fbx via the &#8216;update&#8217; option, if nodes are found in the
+<dd><p>import an fbx via the ‘update’ option, if nodes are found in the
 scene their anim data will be updated</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>fileName</strong> &#8211; fbx file to import, if not given we use self.filepath (if set), else we raise the selector dialog</li>
-<li><strong>take</strong> &#8211; if given we reference that specific take, else we use the default which is take 1</li>
+<li><strong>fileName</strong> – fbx file to import, if not given we use self.filepath (if set), else we raise the selector dialog</li>
+<li><strong>take</strong> – if given we reference that specific take, else we use the default which is take 1</li>
 </ul>
 </td>
 </tr>
@@ -266,12 +258,12 @@ scene their anim data will be updated</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.Fbx.addFbx">
 <code class="descname">addFbx</code><span class="sig-paren">(</span><em>fileName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.addFbx" title="Permalink to this definition">¶</a></dt>
-<dd><p>import using the &#8216;add&#8217; only method, all data will be imported as new</p>
+<dd><p>import using the ‘add’ only method, all data will be imported as new</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> &#8211; fbx file to import, if not given we use self.filepath (if set), else we raise the selector dialog</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> – fbx file to import, if not given we use self.filepath (if set), else we raise the selector dialog</td>
 </tr>
 </tbody>
 </table>
@@ -285,7 +277,7 @@ scene their anim data will be updated</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> &#8211; fbx file to be inspected</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> – fbx file to be inspected</td>
 </tr>
 </tbody>
 </table>
@@ -303,16 +295,16 @@ enabling the code to catch and deal with them!</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl">
 <em class="property">class </em><code class="descname">P4_sourceControl</code><span class="sig-paren">(</span><em>path=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The P4_sourceControl object is bound to the r9File instance automatically if your project
 is set to run with Perforce. This is done through the /Red9_ClientCore/MyClient/resource/client.project file
 which Red9 as a consultancy service will usually setup for you.</p>
-<p>This project file and it&#8217;s subsequently bound during boot to the PROJECT_DATA object which controls all
+<p>This project file and it’s subsequently bound during boot to the PROJECT_DATA object which controls all
 aspects of the project and paths used by all the codebase.</p>
-<p>To enable Perforce this simple json dict needs the key &#8216;p4_project&#8217; set to True and P4 must be available.
-On boot we test this and set the systems accordingly. If the following does not return &#8216;perforce&#8217; then
-the Perforce environment wasn&#8217;t found at boot and all P4 source control will be disabled.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
+<p>To enable Perforce this simple json dict needs the key ‘p4_project’ set to True and P4 must be available.
+On boot we test this and set the systems accordingly. If the following does not return ‘perforce’ then
+the Perforce environment wasn’t found at boot and all P4 source control will be disabled.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">PROJECT_DATA</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">source_control</span>
 </pre></div>
 </div>
@@ -325,10 +317,10 @@ the Perforce environment wasn&#8217;t found at boot and all P4 source control wi
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>This accepts either the file pointer or depot folder path if you want to
-act on multiple files at once. Ideally folder depot path needs to end in ...
-to denote that we&#8217;re walking into that path</p>
+act on multiple files at once. Ideally folder depot path needs to end in …
+to denote that we’re walking into that path</p>
 <p class="last">if you want to clamp to a given format in a folder you can pass the depot path
-as &#8216;//depot/path/to/stuff/...ma&#8217; for example</p>
+as ‘//depot/path/to/stuff/…ma’ for example</p>
 </div>
 <p>TODO: decouple this from Maya so it can be using in native Python (MoBu support etc)
 TODO: decouple the connection from PROJECT_DATA and use classmethods to bind to the class itself</p>
@@ -340,8 +332,8 @@ TODO: decouple the connection from PROJECT_DATA and use classmethods to bind to 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p4_params</strong> &#8211; dict with the P4 connection keys in, if not given P4 will connect with the defaults from your environment
-p4_params = {port&#8217;:, client:&#8217;&#8216;, user:&#8217;&#8216;, password:&#8217;&#8216;}</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>p4_params</strong> – dict with the P4 connection keys in, if not given P4 will connect with the defaults from your environment
+p4_params = {port’:, client:’’, user:’’, password:’’}</td>
 </tr>
 </tbody>
 </table>
@@ -356,12 +348,12 @@ p4_params = {port&#8217;:, client:&#8217;&#8216;, user:&#8217;&#8216;, password:
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.connected">
 <code class="descname">connected</code><span class="sig-paren">(</span><em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.connected" title="Permalink to this definition">¶</a></dt>
-<dd><p>a base level valid test so that it&#8217;s only called once and managed</p>
+<dd><p>a base level valid test so that it’s only called once and managed</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>force</strong> &#8211; whether we always re-test the connection or cache it&#8217;s state only once,
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>force</strong> – whether we always re-test the connection or cache it’s state only once,
 this is so that if P4 was down when we booted we can force a re-test, else the fact
 that it was down on boot is cached and the connection to P4 severed</td>
 </tr>
@@ -383,6 +375,12 @@ which is cached on connect so that we always restore the last connection</p>
 this fills in  the PROJECT_DATA._p4_params cache</p>
 </dd></dl>
 
+<dl class="staticmethod">
+<dt id="Red9.pro_pack.core.importexport.P4_sourceControl.get_application_settings_file">
+<em class="property">static </em><code class="descname">get_application_settings_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.get_application_settings_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the path to the .p4qt/ApplicationSettings.xml</p>
+</dd></dl>
+
 <dl class="classmethod">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.connection_map">
 <em class="property">classmethod </em><code class="descname">connection_map</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.connection_map" title="Permalink to this definition">¶</a></dt>
@@ -394,7 +392,7 @@ to find all recent connections, similar to the recent connection list shown in t
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.path_iswildcard">
 <code class="descname">path_iswildcard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.path_iswildcard" title="Permalink to this definition">¶</a></dt>
-<dd><p>check if our given path var is a dir or a single file object, ie endsWith &#8216;...&#8217; or &#8216;*&#8217;</p>
+<dd><p>check if our given path var is a dir or a single file object, ie endsWith ‘…’ or ‘*’</p>
 </dd></dl>
 
 <dl class="method">
@@ -404,10 +402,10 @@ to find all recent connections, similar to the recent connection list shown in t
 raised we bail the P4 connection in the PROJECT.SOURCE_CONTROL object</p>
 <p>current specific Perforce exceptions handled to raise a bailed=True:</p>
 <ul class="simple">
-<li>&#8216;TCP receive failed&#8217;</li>
-<li>&#8216;Partner exited unexpectedly&#8217;</li>
-<li>&#8216;Your session has expired, please login again&#8217;</li>
-<li>&#8220;has not been enabled by &#8216;p4 protect&#8217;&#8221;</li>
+<li>‘TCP receive failed’</li>
+<li>‘Partner exited unexpectedly’</li>
+<li>‘Your session has expired, please login again’</li>
+<li>“has not been enabled by ‘p4 protect’”</li>
 </ul>
 </dd></dl>
 
@@ -436,32 +434,32 @@ The exception level of the P4 instance.</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.username">
-<code class="descname">username</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.username" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the current &#8220;userName&#8221; from P4 info keys</p>
+<code class="descname">username</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.username" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the current “userName” from P4 info keys</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.owner">
 <code class="descname">owner</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.owner" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the current &#8220;owner&#8221; from P4</p>
+<dd><p>return the current “owner” from P4</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.client_root">
 <code class="descname">client_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.client_root" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the &#8220;clientRoot&#8221; from P4 info keys</p>
+<dd><p>return the “clientRoot” from P4 info keys</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.client_name">
 <code class="descname">client_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.client_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the &#8220;clientName&#8221; from P4 info keys</p>
+<dd><p>return the “clientName” from P4 info keys</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.client_host">
 <code class="descname">client_host</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.client_host" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the &#8220;clientHost&#8221; from the P4 info keys</p>
+<dd><p>return the “clientHost” from the P4 info keys</p>
 </dd></dl>
 
 <dl class="method">
@@ -478,7 +476,7 @@ The exception level of the P4 instance.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>client</strong> &#8211; new client to set</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>client</strong> – new client to set</td>
 </tr>
 </tbody>
 </table>
@@ -486,16 +484,16 @@ The exception level of the P4 instance.</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.clients">
-<code class="descname">clients</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.clients" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clients</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.clients" title="Permalink to this definition">¶</a></dt>
 <dd><p>return all available clients for the given user, or current user if not given</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>full</strong> &#8211; if True and no user is passed in we inspect the entire P4 database, else
+<li><strong>full</strong> – if True and no user is passed in we inspect the entire P4 database, else
 we automatically clamp to just the current user</li>
-<li><strong>user</strong> &#8211; if passed in we inspect just the given username</li>
+<li><strong>user</strong> – if passed in we inspect just the given username</li>
 </ul>
 </td>
 </tr>
@@ -536,7 +534,7 @@ the file in your workspace but you may have deleted it locally</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.fstat_dir">
-<code class="descname">fstat_dir</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.fstat_dir" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fstat_dir</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.fstat_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>where the path bound in the object is just that, a depot folder path
 rather than a file pointer.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -544,8 +542,8 @@ rather than a file pointer.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filetype</strong> &#8211; if you want to clamp the fstat to a given file extension</li>
-<li><strong>recursive</strong> &#8211; append &#8216;...&#8217; to the search to make it recursive folder</li>
+<li><strong>filetype</strong> – if you want to clamp the fstat to a given file extension</li>
+<li><strong>recursive</strong> – append ‘…’ to the search to make it recursive folder</li>
 </ul>
 </td>
 </tr>
@@ -557,7 +555,7 @@ rather than a file pointer.</p>
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.is_head">
 <code class="descname">is_head</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.is_head" title="Permalink to this definition">¶</a></dt>
 <dd><p>return True if you have the head revision in your workspace,
-this DOESN&#8217;T check if it exists locally however</p>
+this DOESN’T check if it exists locally however</p>
 </dd></dl>
 
 <dl class="method">
@@ -570,7 +568,7 @@ workspace yet and return False</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rev</strong> &#8211; if given we check the version you have against this revision and return a bool</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rev</strong> – if given we check the version you have against this revision and return a bool</td>
 </tr>
 </tbody>
 </table>
@@ -593,13 +591,13 @@ have deleted the local file. This validates both cases.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.client_file">
 <code class="descname">client_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.client_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>local &#8216;client&#8217; path to the fileobject</p>
+<dd><p>local ‘client’ path to the fileobject</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.depot_file">
 <code class="descname">depot_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.depot_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>local &#8216;depotFile&#8217; path to the fileobject</p>
+<dd><p>local ‘depotFile’ path to the fileobject</p>
 </dd></dl>
 
 <dl class="method">
@@ -616,15 +614,15 @@ have deleted the local file. This validates both cases.</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.sync">
-<code class="descname">sync</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.sync" title="Permalink to this definition">¶</a></dt>
+<code class="descname">sync</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.sync" title="Permalink to this definition">¶</a></dt>
 <dd><p>sync the file to headRevision of this fileobject</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>force</strong> &#8211; use the force flag when syncing</li>
-<li><strong>exists</strong> &#8211; ensure that the file exists in the local if not set force</li>
+<li><strong>force</strong> – use the force flag when syncing</li>
+<li><strong>exists</strong> – ensure that the file exists in the local if not set force</li>
 </ul>
 </td>
 </tr>
@@ -633,22 +631,22 @@ have deleted the local file. This validates both cases.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">if exception_level=0 the except handler will not get called
-and therefore things don&#8217;t act as expected</p>
+and therefore things don’t act as expected</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.checkout">
-<code class="descname">checkout</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.checkout" title="Permalink to this definition">¶</a></dt>
+<code class="descname">checkout</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.checkout" title="Permalink to this definition">¶</a></dt>
 <dd><p>checkout the fileobject in P4</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>changelist</strong> &#8211; if given use this changelist else use the default</li>
-<li><strong>force</strong> &#8211; if the file is NOT in your workspace, sync it before checkout,
-this also verifies that you haven&#8217;t deleted the local version of that file</li>
+<li><strong>changelist</strong> – if given use this changelist else use the default</li>
+<li><strong>force</strong> – if the file is NOT in your workspace, sync it before checkout,
+this also verifies that you haven’t deleted the local version of that file</li>
 </ul>
 </td>
 </tr>
@@ -664,7 +662,7 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.revert">
-<code class="descname">revert</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.revert" title="Permalink to this definition">¶</a></dt>
+<code class="descname">revert</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.revert" title="Permalink to this definition">¶</a></dt>
 <dd><p>revert this fileobject</p>
 </dd></dl>
 
@@ -682,7 +680,7 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>revision</strong> &#8211; revision to get</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>revision</strong> – revision to get</td>
 </tr>
 </tbody>
 </table>
@@ -696,7 +694,7 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> &#8211; text to use in the changelist description</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> – text to use in the changelist description</td>
 </tr>
 </tbody>
 </table>
@@ -710,7 +708,7 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changelist</strong> &#8211; changelist to get the info from if given</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changelist</strong> – changelist to get the info from if given</td>
 </tr>
 </tbody>
 </table>
@@ -718,13 +716,13 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.add">
-<code class="descname">add</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.add" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>add this fileobject into Perforce</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changelist</strong> &#8211; changelist to add the data to if given</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changelist</strong> – changelist to add the data to if given</td>
 </tr>
 </tbody>
 </table>
@@ -732,13 +730,13 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.delete">
-<code class="descname">delete</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.delete" title="Permalink to this definition">¶</a></dt>
+<code class="descname">delete</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>mark the fileobject for delete from P4</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changelist</strong> &#8211; changelist to delete the data from if given</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changelist</strong> – changelist to delete the data from if given</td>
 </tr>
 </tbody>
 </table>
@@ -752,7 +750,7 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changelist</strong> &#8211; changelist to revert</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changelist</strong> – changelist to revert</td>
 </tr>
 </tbody>
 </table>
@@ -762,13 +760,13 @@ this also verifies that you haven&#8217;t deleted the local version of that file
 <dt id="Red9.pro_pack.core.importexport.P4_sourceControl.push_file">
 <code class="descname">push_file</code><span class="sig-paren">(</span><em>changelist=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.P4_sourceControl.push_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a wrap over checkout and add, if the file already exists
-in P4 then we check it out, if it&#8217;s a new file that doesn&#8217;t exist
+in P4 then we check it out, if it’s a new file that doesn’t exist
 then we mark it for add</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changelist</strong> &#8211; changelist to add the fileobject to if given</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changelist</strong> – changelist to add the fileobject to if given</td>
 </tr>
 </tbody>
 </table>
@@ -779,14 +777,13 @@ then we mark it for add</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.importexport.r9File">
 <em class="property">class </em><code class="descname">r9File</code><span class="sig-paren">(</span><em>path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pymel.util.path.path</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.util.path.path</span></code></p>
 <p>Red9 file handler system, bound to OS calls directly by inheritance
 from pm.util.path which then exposes all OS calls directly to the class instance.</p>
 <p>This also binds Perforce to the class is Perforce was found on your system,
 exposing and binding all perforce commands directly to this file object</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9ie&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9ie</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9ie</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9ie&#39;</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">=</span><span class="n">r9ie</span><span class="o">.</span><span class="n">r9File</span><span class="p">(</span><span class="n">myfilepath</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">.</span><span class="n">sourcecontrol</span><span class="o">.</span><span class="n">fstat</span><span class="p">()</span>
@@ -805,7 +802,7 @@ self.sourcecontrol, exposing all the calls directly.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> &#8211; Only takes one args and that&#8217;s the filepath to convert to a file object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> – Only takes one args and that’s the filepath to convert to a file object</td>
 </tr>
 </tbody>
 </table>
@@ -818,7 +815,7 @@ self.sourcecontrol, exposing all the calls directly.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.r9File.formatPath">
 <code class="descname">formatPath</code><span class="sig-paren">(</span><em>path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File.formatPath" title="Permalink to this definition">¶</a></dt>
-<dd><p>take the given path and format it for Maya path &#8216;/&#8217;</p>
+<dd><p>take the given path and format it for Maya path ‘/’</p>
 </dd></dl>
 
 <dl class="method">
@@ -837,7 +834,7 @@ it prompt a message box to choose between open in current session or in a new ma
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.r9File.joinpath">
 <code class="descname">joinpath</code><span class="sig-paren">(</span><em>first</em>, <em>*others</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File.joinpath" title="Permalink to this definition">¶</a></dt>
-<dd><p>override of joint path to always return a Python format path not an OS path (&#8216;/&#8217; not &#8216;&#8217;)</p>
+<dd><p>override of joint path to always return a Python format path not an OS path (‘/’ not ‘’)</p>
 </dd></dl>
 
 <dl class="method">
@@ -856,14 +853,14 @@ not exist, recursively create it with makedirs before the file copy</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dest</strong> &#8211; destination path to copy the data too</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dest</strong> – destination path to copy the data too</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>the dest can be either a folder or a full path, if it&#8217;s just a folder the file
-will be copied with the same name, if it&#8217;s a full path then the file copy will
+<p>the dest can be either a folder or a full path, if it’s just a folder the file
+will be copied with the same name, if it’s a full path then the file copy will
 rename the file accordingly</p>
 <p class="last">makedirs uses id:0755 in folder creation</p>
 </div>
@@ -879,10 +876,10 @@ allow you, in one go, to push a file into the repository.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>src</strong> &#8211; source file path</li>
-<li><strong>dest</strong> &#8211; destination filepath</li>
-<li><strong>changelist</strong> &#8211; optional changelist to add it too</li>
-<li><strong>changelist_txt</strong> &#8211; text for the changelist</li>
+<li><strong>src</strong> – source file path</li>
+<li><strong>dest</strong> – destination filepath</li>
+<li><strong>changelist</strong> – optional changelist to add it too</li>
+<li><strong>changelist_txt</strong> – text for the changelist</li>
 </ul>
 </td>
 </tr>
@@ -893,7 +890,7 @@ allow you, in one go, to push a file into the repository.</p>
 <dt>It will:</dt>
 <dd><ul class="first last simple">
 <li>locally create all folder structures as required</li>
-<li>sync the dest file if it exists in the repository and isn&#8217;t in your workspace</li>
+<li>sync the dest file if it exists in the repository and isn’t in your workspace</li>
 <li>check the dest file out</li>
 <li>copy the src file to the given dest path</li>
 <li>if the file is not in the repository it will mark it for add</li>
@@ -921,18 +918,20 @@ allow you, in one go, to push a file into the repository.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/red9pro_templates/Red9_Pro_importexport.txt"
+      <li><a href="../_sources/red9pro_templates/Red9_Pro_importexport.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -959,7 +958,7 @@ allow you, in one go, to push a file into the repository.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2016, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

@@ -1,33 +1,25 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Pro_Pack : project &#8212; Red9 2.0 documentation</title>
-    
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pro_Pack : r9Data" href="Red9_Pro_r9data.html" />
     <link rel="prev" title="Pro_Pack : Optimiser" href="Red9_Pro_optimiser.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -54,19 +46,19 @@
             
   <div class="section" id="pro-pack-project">
 <h1>Pro_Pack : project<a class="headerlink" href="#pro-pack-project" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># main import statement to use</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># main import statement to use</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">PROJECT_DATA</span>
 </pre></div>
 </div>
 <p>Red9 ProPack Project object (python object) is bound on boot to pro_pack itself and is used to manage data against a clients or projects own
 project file. The project file itself is a simple Json formatted file usually found under the client resource folder here:</p>
 <p>/Red9_ClientCore/xxxx/resource/xxx.project</p>
-<p>If your build doens&#8217;t have the Red9_ClientCore modules then you&#8217;ll find an empty project file here:</p>
+<p>If your build doens’t have the Red9_ClientCore modules then you’ll find an empty project file here:</p>
 <p>Red9/pro_pack/resources/empty.project</p>
 <p>The code that adds and physically binds new project files to the systems is as follows. These lines must be added to your __init__ or
-somewhere thats parsed on boot so they&#8217;re bound to the PROJECT_DATA object. You can add as many of these as are required
+somewhere thats parsed on boot so they’re bound to the PROJECT_DATA object. You can add as many of these as are required
 for your studios setups. Each additional project added will show up in the ProjectManager UI in Maya for you to switch between on the fly.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">PROJECT_DATA</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">add_project</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_resources</span><span class="p">(),</span> <span class="s1">&#39;my_new_game.project&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -74,8 +66,8 @@ for your studios setups. Each additional project added will show up in the Proje
 or folder mount, allowing us to tailor setups to a clients needs without modifying the underlying codebase at all. The project file
 is JSON formatted and bound to the PROJECT_DATA on load, this means that anything in that .project file will be exposed as an attribute
 directly on the PROJECT_DATA.data object.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># for example</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># for example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">PROJECT_DATA</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">fps</span>  <span class="c1"># project frame rate</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">p4_root</span>  <span class="c1"># projects p4_root path which is dynamically found</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -85,13 +77,13 @@ directly on the PROJECT_DATA.data object.</p>
 </div>
 <p>Note that PROJECT also manages any initial P4 bindings and therefore exposes some of the root paths directly on the Project object.
 Because of this many of the base paths we may setup in the .project file maybe prefixed with p4_root+</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;pose_projectpath&quot;</span><span class="p">:</span> <span class="s2">&quot;p4_root+/Data/Animations_Source/Characters/Human/_projectposes/red9/&quot;</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;pose_projectpath&quot;</span><span class="p">:</span> <span class="s2">&quot;p4_root+/Data/Animations_Source/Characters/Human/_projectposes/red9/&quot;</span><span class="p">,</span>
 </pre></div>
 </div>
 <p>This denotes that the path, in this case the pose_projectpath, is dynamic to the users current P4 workspace mount, we replace the p4_root in this
 case with the actual p4_root found in the users system.</p>
 <p>Note that on boot we check if source control is available and setup the systems accordingly, all our P4 management codebase, found in the
-importexport module, relies on the PROJECT_DATA.source_control() call, which in itself is setup at boot. This function must return &#8216;perforce&#8217;
+importexport module, relies on the PROJECT_DATA.source_control() call, which in itself is setup at boot. This function must return ‘perforce’
 if any of the systems are to run under the p4 api natively. This NOT limited to P4 and is done in this manner to allow us to bind other source control
 systems to the r9File objects dynamically.</p>
 <span class="target" id="module-Red9.pro_pack.core.project"></span><p class="rubric">Main Classes</p>
@@ -101,11 +93,11 @@ systems to the r9File objects dynamically.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.project.ProjectBase" title="Red9.pro_pack.core.project.ProjectBase"><code class="xref py py-obj docutils literal"><span class="pre">ProjectBase</span></code></a>()</td>
-<td>base settings exposed to all client projects. This is a generic block of</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.project.ProjectBase" title="Red9.pro_pack.core.project.ProjectBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProjectBase</span></code></a>()</td>
+<td>base settings exposed to all client projects.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.project.Project" title="Red9.pro_pack.core.project.Project"><code class="xref py py-obj docutils literal"><span class="pre">Project</span></code></a>([projectfile])</td>
-<td>a global project object that is consumed at boot and used to setup key aspects of the</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.project.Project" title="Red9.pro_pack.core.project.Project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Project</span></code></a>([projectfile])</td>
+<td>a global project object that is consumed at boot and used to setup key aspects of the Maya pipeline environment per Client.</td>
 </tr>
 </tbody>
 </table>
@@ -118,13 +110,13 @@ systems to the r9File objects dynamically.</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.project.ProjectBase">
 <em class="property">class </em><code class="descname">ProjectBase</code><a class="headerlink" href="#Red9.pro_pack.core.project.ProjectBase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>base settings exposed to all client projects. This is a generic block of
 data designed to be inspected via the PROJECT_DATA.data object bound to r9pro.
 This class object is bound to the PROJECT_DATA object at boot and all data
 exposed as direct attributes under the data object</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">this</span> <span class="nb">object</span> <span class="ow">is</span> <span class="n">exposed</span> <span class="k">as</span> <span class="n">follows</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">this</span> <span class="nb">object</span> <span class="ow">is</span> <span class="n">exposed</span> <span class="k">as</span> <span class="n">follows</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">PROJECT_DATA</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">data</span>
 </pre></div>
 </div>
@@ -133,18 +125,18 @@ exposed as direct attributes under the data object</p>
 <li>self.client : client name</li>
 <li>self.upAxis : default Maya up axis</li>
 <li>self.scene_units : default Maya sceneunits</li>
-<li>self.evalmanager : either &#8216;off&#8217; or &#8216;parallel&#8217; the default state of the eval manager</li>
+<li>self.evalmanager : either ‘off’ or ‘parallel’ the default state of the eval manager</li>
 <li>self.skinbase : default skin weight limit</li>
 <li>self.skinmethod : default skin method</li>
 <li>self.engineTarget  : target engine platform if required</li>
-<li>self.binders : base paths for all BND binder files as as dict, {&#8216;rigname&#8217;:path,} used in the Pro_to_BND options menu</li>
+<li>self.binders : base paths for all BND binder files as as dict, {‘rigname’:path,} used in the Pro_to_BND options menu</li>
 <li>self.pose_projectpath : default posepath</li>
 <li>self.pose_basePreset : default AnimationToolkit preset</li>
 <li>self.pose_handlers : additional poseHandlers to make available in the poseLib rmb menu</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">ALL PATHS COMING FROM THIS MUST BE PYTHONIZED NOT OS!!!!!!!  on windows &#8216;/&#8217; not &#8216;&#8217;</p>
+<p class="last">ALL PATHS COMING FROM THIS MUST BE PYTHONIZED NOT OS!!!!!!!  on windows ‘/’ not ‘’</p>
 </div>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.project.ProjectBase.p4_root">
@@ -197,7 +189,7 @@ ensure they are relevant to a users environment</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.ProjectBase.resolve_paths">
 <code class="descname">resolve_paths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.ProjectBase.resolve_paths" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function responsible for replacing any &#8216;p4_root+&#8217; entries in the project file
+<dd><p>Function responsible for replacing any ‘p4_root+’ entries in the project file
 with dynamic data such as the actual p4_clientroot</p>
 <p>TODO: resolve SHOULD be able to re-resoLve this data. currently it overwrites the keys directly</p>
 </dd></dl>
@@ -205,14 +197,14 @@ with dynamic data such as the actual p4_clientroot</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.ProjectBase.save">
 <code class="descname">save</code><span class="sig-paren">(</span><em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.ProjectBase.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>save the current project data back to file. This is useful if you&#8217;ve made
+<dd><p>save the current project data back to file. This is useful if you’ve made
 changes in Maya to any of the project.data paths etc and want those written
 back to the client.project file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; filepath to save the project data to, if not passed we use the internal self.filepath var</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> – filepath to save the project data to, if not passed we use the internal self.filepath var</td>
 </tr>
 </tbody>
 </table>
@@ -227,7 +219,7 @@ to attrs on the project.data object</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; filepath to load the project data from, if not passed we use the internal self.filepath var</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> – filepath to load the project data from, if not passed we use the internal self.filepath var</td>
 </tr>
 </tbody>
 </table>
@@ -242,11 +234,11 @@ to attrs on the project.data object</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>headers</strong> &#8211; turn on the base headers in the pronts and return data, else just return the project data</li>
-<li><strong>raw</strong> &#8211; do we return/print the actual raw json data, or the compiled and resolved version of it</li>
-<li><strong>ppindent</strong> &#8211; the indent var passed to the pprint command to resolve nested data</li>
-<li><strong>prefix</strong> &#8211; added prefix to the from of each key in the data</li>
-<li><strong>feedback</strong> &#8211; True by default, pring the output, else just return the formatted data</li>
+<li><strong>headers</strong> – turn on the base headers in the pronts and return data, else just return the project data</li>
+<li><strong>raw</strong> – do we return/print the actual raw json data, or the compiled and resolved version of it</li>
+<li><strong>ppindent</strong> – the indent var passed to the pprint command to resolve nested data</li>
+<li><strong>prefix</strong> – added prefix to the from of each key in the data</li>
+<li><strong>feedback</strong> – True by default, pring the output, else just return the formatted data</li>
 </ul>
 </td>
 </tr>
@@ -259,10 +251,10 @@ to attrs on the project.data object</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.project.Project">
 <em class="property">class </em><code class="descname">Project</code><span class="sig-paren">(</span><em>projectfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>a global project object that is consumed at boot and used to setup key aspects of the
 Maya pipeline environment per Client. This is designed to be run in the ClientCore boot sequence
-so we can set a studio&#8217;s environment remotely, all set from a .project json file in the
+so we can set a studio’s environment remotely, all set from a .project json file in the
 clients /resource folder. All changes to this json file will be automatically consumed and
 added to the r9pro.PROJECT_DATA.data instance.</p>
 <p>This class is also responsible for the binding of the Scene Open Health tests that are run as
@@ -270,15 +262,12 @@ much of the healthTests are compared to data bound to the PROJECT_DATA.data clie
 This is why we usually ask that clients fill in a technical sign-off doc so that we can bind defaults expected.</p>
 <dl class="docutils">
 <dt>key internal <a href="#id1"><span class="problematic" id="id2">*</span></a>args:</dt>
-<dd><ul class="first last">
-<li><p class="first">self.suspend_openCallback : mutes the Scene Health test if bound</p>
-</li>
-<li><p class="first">self.suppress_warnings : mutes any of the Scene Health test warnings and popups if True</p>
-</li>
+<dd><ul class="first last simple">
+<li>self.suspend_openCallback : mutes the Scene Health test if bound</li>
+<li>self.suppress_warnings : mutes any of the Scene Health test warnings and popups if True</li>
 <li><dl class="first docutils">
-<dt>self.scene_health_auto_fix</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">if True we automatically fix any Scene Health test failures if we can,</span><dd><p class="first last">assuming the suspend flag isn&#8217;t set to True. default = True</p>
-</dd>
+<dt>self.scene_health_auto_fix <span class="classifier-delimiter">:</span> <span class="classifier">if True we automatically fix any Scene Health test failures if we can,</span></dt>
+<dd>assuming the suspend flag isn’t set to True. default = True</dd>
 </dl>
 </li>
 </ul>
@@ -288,7 +277,7 @@ This is why we usually ask that clients fill in a technical sign-off doc so that
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>projectfile</strong> &#8211; the project filepath currently loaded</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>projectfile</strong> – the project filepath currently loaded</td>
 </tr>
 </tbody>
 </table>
@@ -314,8 +303,8 @@ as the ID so we can verify it against the data entry if needed</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.add_project">
 <code class="descname">add_project</code><span class="sig-paren">(</span><em>projectfile</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.add_project" title="Permalink to this definition">¶</a></dt>
-<dd><p>light wrapper that just consumes and adds the project but doesn&#8217;t do the full load
-this is for boot sequence speedups so that we&#8217;re not processing all the Perforce calls
+<dd><p>light wrapper that just consumes and adds the project but doesn’t do the full load
+this is for boot sequence speedups so that we’re not processing all the Perforce calls
 for all available projects</p>
 </dd></dl>
 
@@ -329,19 +318,19 @@ for all available projects</p>
 <dt id="Red9.pro_pack.core.project.Project.load_project">
 <code class="descname">load_project</code><span class="sig-paren">(</span><em>projectfile</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.load_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>main load for the project file object, this now encompasses the path_replacement
-calls for when dealing with mapped source_control keys such as &#8216;p4_root+&#8217; in the data</p>
+calls for when dealing with mapped source_control keys such as ‘p4_root+’ in the data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>projectfile</strong> &#8211; .project filepath to load and consume, we take a fresh
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>projectfile</strong> – .project filepath to load and consume, we take a fresh
 instance of the ProjectBase object to ensure full sync to the incoming data</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If a path in the .project json file starts with &#8216;p4_root+&#8217; and we&#8217;re connected to Perforce
+<p class="last">If a path in the .project json file starts with ‘p4_root+’ and we’re connected to Perforce
 then we replace that element on the fly with the users current p4_root path, reconstructing
 on the fly all paths to be relative to their P4 environment regardless of workspace
 mounts</p>
@@ -353,15 +342,15 @@ mounts</p>
 <code class="descname">sync_project_to_settings</code><span class="sig-paren">(</span><em>project=True</em>, <em>perforce=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.sync_project_to_settings" title="Permalink to this definition">¶</a></dt>
 <dd><p>a post load call to allow us to be able to globally set all Project Data
 as the user last set it in the ProjectManagerUI. This includes the last
-loaded project and it&#8217;s P4_client data / mounts</p>
+loaded project and it’s P4_client data / mounts</p>
 <p>Used in the initial r9Setup call when we build the client_boot lists up</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>project</strong> &#8211; sync of the actual project data itself from the projectfile</li>
-<li><strong>perforce</strong> &#8211; deal with specific perforce FORCE handling. This is False during the boot sequence,
+<li><strong>project</strong> – sync of the actual project data itself from the projectfile</li>
+<li><strong>perforce</strong> – deal with specific perforce FORCE handling. This is False during the boot sequence,
 called at the end of Red9.startup.setup.start, as the binding is dealt with during the initial
 self.switch_project call, handled internally (this prevents multiple calls and p4 project connection calls).
 when calling this after boot the perforce args should be set True to rebind to different project settings.</li>
@@ -381,7 +370,7 @@ when calling this after boot the perforce args should be set True to rebind to d
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.refresh_project">
 <code class="descname">refresh_project</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.refresh_project" title="Permalink to this definition">¶</a></dt>
-<dd><p>this doesn&#8217;t do a reload, instead it just re-processes the paths data</p>
+<dd><p>this doesn’t do a reload, instead it just re-processes the paths data</p>
 </dd></dl>
 
 <dl class="method">
@@ -393,11 +382,11 @@ when calling this after boot the perforce args should be set True to rebind to d
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>project</strong> &#8211; project to boot</li>
-<li><strong>client</strong> &#8211; assuming we&#8217;ve not specified the project but have given the client, we use the keys in
+<li><strong>project</strong> – project to boot</li>
+<li><strong>client</strong> – assuming we’ve not specified the project but have given the client, we use the keys in
 projects_available to find that clients initial project instead</li>
-<li><strong>verbose</strong> &#8211; if project was NOT given then this throws a prompt UI to allow you to select which one to load</li>
-<li><strong>managed</strong> &#8211; controls the Client sub-menu states in the Red9 menu, disabling all others except that being loaded</li>
+<li><strong>verbose</strong> – if project was NOT given then this throws a prompt UI to allow you to select which one to load</li>
+<li><strong>managed</strong> – controls the Client sub-menu states in the Red9 menu, disabling all others except that being loaded</li>
 </ul>
 </td>
 </tr>
@@ -416,8 +405,8 @@ the p4 connection if your client project is set to p4_project</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>force</strong> &#8211; if True we force the re-test of the source_control setup, else we run the cached result</li>
-<li><strong>bailed</strong> &#8211; if True we revoke the source_control as something went wrong in the connection down
+<li><strong>force</strong> – if True we force the re-test of the source_control setup, else we run the cached result</li>
+<li><strong>bailed</strong> – if True we revoke the source_control as something went wrong in the connection down
 stream in the importexport module so it set the bail flag, turning off future management</li>
 </ul>
 </td>
@@ -433,7 +422,7 @@ stream in the importexport module so it set the bail flag, turning off future ma
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.bind_settings">
 <code class="descname">bind_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.bind_settings" title="Permalink to this definition">¶</a></dt>
-<dd><p>this can&#8217;t be in the __init__ like usual as PROJECT is instanciated
+<dd><p>this can’t be in the __init__ like usual as PROJECT is instanciated
 before pro_pack is up during the boot sequence</p>
 </dd></dl>
 
@@ -456,12 +445,12 @@ all subsequent Perforce functions to prevent Maya hanging on timeouts</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.p4_valid">
 <code class="descname">p4_valid</code><span class="sig-paren">(</span><em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.p4_valid" title="Permalink to this definition">¶</a></dt>
-<dd><p>a base level valid test so that it&#8217;s only called once and managed</p>
+<dd><p>a base level valid test so that it’s only called once and managed</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>force</strong> &#8211; whether we always re-test the connection or cache it&#8217;s state only once,
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>force</strong> – whether we always re-test the connection or cache it’s state only once,
 this is so that if P4 was down when we booted we can force a re-test, else the fact
 that it was down on boot is cached and the connection to P4 severed</td>
 </tr>
@@ -475,14 +464,14 @@ that it was down on boot is cached and the connection to P4 severed</td>
 <dd><p>re-validate the Perforce connection and refresh the Project accordingly</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">this will refresh to the current default connection from P4 as we don&#8217;t yet
+<p class="last">this will refresh to the current default connection from P4 as we don’t yet
 pass any connection params in before refreshing it</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reload</strong> &#8211; if True we also force reload the current project file</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reload</strong> – if True we also force reload the current project file</td>
 </tr>
 </tbody>
 </table>
@@ -497,8 +486,8 @@ pass any connection params in before refreshing it</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>client</strong> &#8211; P4 client to switch the P4_API too, this is usually the name of the P4 workspace</li>
-<li><strong>reload</strong> &#8211; do we also re-load the project data or switch the P4_API</li>
+<li><strong>client</strong> – P4 client to switch the P4_API too, this is usually the name of the P4 workspace</li>
+<li><strong>reload</strong> – do we also re-load the project data or switch the P4_API</li>
 </ul>
 </td>
 </tr>
@@ -513,7 +502,7 @@ pass any connection params in before refreshing it</p>
 <dd><p>manage Maya UI elements / environment setup.
 Force set the Maya Frame Rate against the Project settings
 This also sets up a number of the base flags for the AnimationToolkit
-via it&#8217;s internal callback mechanism (called via the set_animtoolkit_UI)</p>
+via it’s internal callback mechanism (called via the set_animtoolkit_UI)</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">this is only run in the Client __init__ calls not when switching projects</p>
@@ -571,7 +560,7 @@ these variables are pulled directly from the clients own resource/client.project
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.project.Project.timeunits">
 <code class="descname">timeunits</code><a class="headerlink" href="#Red9.pro_pack.core.project.Project.timeunits" title="Permalink to this definition">¶</a></dt>
-<dd><p>simple property to return the project files fps entry as timeunit in Maya (&#8216;game&#8217;,&#8217;film&#8217;,&#8217;pal&#8217;,&#8217;ntsc&#8217;,&#8217;show&#8217;,&#8217;palf&#8217;,&#8217;ntscf&#8217;)
+<dd><p>simple property to return the project files fps entry as timeunit in Maya (‘game’,’film’,’pal’,’ntsc’,’show’,’palf’,’ntscf’)
 based on the data.fps setting in the project file</p>
 </dd></dl>
 
@@ -583,7 +572,7 @@ based on the data.fps setting in the project file</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fps</strong> &#8211; if given this over-rides the project fps and will be used instead</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fps</strong> – if given this over-rides the project fps and will be used instead</td>
 </tr>
 </tbody>
 </table>
@@ -598,16 +587,16 @@ based on the data.fps setting in the project file</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.test_scene_health">
 <code class="descname">test_scene_health</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.test_scene_health" title="Permalink to this definition">¶</a></dt>
-<dd><p>validate base scene health against the project, if we&#8217;ve passed in a custom health test
+<dd><p>validate base scene health against the project, if we’ve passed in a custom health test
 then thats bound to the main callbacks here</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.healthclass_binding">
 <code class="descname">healthclass_binding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.healthclass_binding" title="Permalink to this definition">¶</a></dt>
-<dd><p>bind all &#8216;<a href="#id3"><span class="problematic" id="id4">healthclass_</span></a>&#8216; keys in the project data to their class objects (remember that the keys in the
+<dd><p>bind all ‘<a href="#id3"><span class="problematic" id="id4">healthclass_</span></a>’ keys in the project data to their class objects (remember that the keys in the
 project are just string data)  This binds the classes up to attrs direct on the PROJECT_DATA itself so
-if the project file has a key that starts with &#8216;healthclass_SRC&#8217; then that attr will get propagated to this
+if the project file has a key that starts with ‘healthclass_SRC’ then that attr will get propagated to this
 class directly and the return will be a list [__module__, cls]</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -634,18 +623,20 @@ class directly and the return will be a list [__module__, cls]</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/red9pro_templates/Red9_Pro_project.txt"
+      <li><a href="../_sources/red9pro_templates/Red9_Pro_project.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -672,7 +663,7 @@ class directly and the return will be a list [__module__, cls]</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2016, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

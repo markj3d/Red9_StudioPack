@@ -1615,7 +1615,7 @@ class MClassNodeUI(object):
 
 class MetaInstanceError(Exception):
     '''
-    exception thrown if the mClass object iunstance is no longer valid
+    exception thrown if the mClass object instance is no longer valid
     usually thrown if the class object is called after the Maya scene has been
     changed by loading or new
     '''
@@ -1670,7 +1670,7 @@ class MetaClass(object):
                 _registeredMClass = RED9_META_REGISTERY[mClass]
                 try:
                     if logging_is_debug():
-                        log.debug('### Instantiating existing mClass : %s >> %s ###' % (mClass, _registeredMClass))
+                        log.debug('\n### Instantiating existing mClass : %s >> %s ###' % (mClass, _registeredMClass))
                     return super(cls.__class__, cls).__new__(_registeredMClass)  # , *args, **kws)
                 except:
                     log.debug('Failed to initialize mClass : %s' % _registeredMClass)
@@ -2560,7 +2560,7 @@ class MetaClass(object):
             These connected Attrs will be renamed to reflect the change in node name
         '''
         currentName = self.shortName()
-        cmds.rename(self.mNode, name)
+        newname = cmds.rename(self.mNode, name)
         # UNDER TEST
         if renameChildLinks:
             plugs = cmds.listConnections(self.mNode, s=True, d=True, p=True)
@@ -2578,6 +2578,7 @@ class MetaClass(object):
                     except:
                         if logging_is_debug():
                             log.debug('Failed to rename attr : %s on node : %s' % (attr, child.mNode))
+        return newname
 
     def delete(self):
         '''
@@ -4095,6 +4096,7 @@ class MetaRig(MetaClass):
                 # added June 2020, the priority was never getting turned on internally!!
                 if self.settings.filterPriority:
                     self.poseCache.prioritySnapOnly = True
+                    self.poseCache.settings.filterPriority = self.settings.filterPriority
                 if skipAttrs:
                     self.poseCache.skipAttrs = skipAttrs
                 self.poseCache.poseLoad(self.mNode,

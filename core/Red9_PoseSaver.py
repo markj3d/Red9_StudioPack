@@ -706,6 +706,17 @@ class DataMap(object):
         if self.filepath and not os.path.exists(self.filepath):
             raise StandardError('Given Path does not Exist')
 
+        if self.filepath and self.hasFolderOverload():  # and useFilter:
+            self.nodesToLoad = self.getNodesFromFolderConfig(nodes, mode='load')
+        else:
+            self.nodesToLoad = self.getNodes(nodes)
+        if not self.nodesToLoad:
+            raise StandardError('Nothing selected or returned by the filter to load the pose onto')
+
+        if self.filepath:
+            self._readPose(self.filepath)
+            log.debug('Pose Read Successfully from : %s' % self.filepath)
+
         if self.metaPose:
             # set the mRig in a consistent manner
             self.setMetaRig(nodes[0])
@@ -718,16 +729,6 @@ class DataMap(object):
             else:
                 log.debug('Warning, trying to load a NON metaPose to a MRig - switching to NameMatching')
 
-        if self.filepath and self.hasFolderOverload():  # and useFilter:
-            self.nodesToLoad = self.getNodesFromFolderConfig(nodes, mode='load')
-        else:
-            self.nodesToLoad = self.getNodes(nodes)
-        if not self.nodesToLoad:
-            raise StandardError('Nothing selected or returned by the filter to load the pose onto')
-
-        if self.filepath:
-            self._readPose(self.filepath)
-            log.debug('Pose Read Successfully from : %s' % self.filepath)
 
         # fill the skip list, these attrs will be totally ignored by the code
         self.skipAttrs = self.getSkippedAttrs(nodes[0])
@@ -738,7 +739,7 @@ class DataMap(object):
 
         # added 14/02/19: if the metaData mNodeID has been changed between rigs then the proper
         # metaData match will fail as it's based on mNodeID and mAttr matches for all nodes.
-        # if this happens then regress the testing back to stripPrefix for all failed nodes
+        # if this happens then regress the testing back to stripPrefix for all UNMATCHED nodes
         if self.matchMethod == 'metaData' and unmatched:
             log.info('Regressing matchMethod from "metaData" to "stripPrefix" for failed matches within the mNode ConnectionMap')
             rematched = self._matchNodesToPoseData(unmatched, matchMethod='stripPrefix')
@@ -833,6 +834,7 @@ class DataMap(object):
                 matched = False
                 try:
                     metaDict = getMetaDict(node)
+
                     for key in poseKeys:
                         if poseKeys[key]['metaData'] == metaDict:
                             matchedPairs.append((key, node))

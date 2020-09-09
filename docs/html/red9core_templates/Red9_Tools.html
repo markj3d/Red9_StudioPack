@@ -1,33 +1,25 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Red9_Tools &#8212; Red9 2.0 documentation</title>
-    
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pro_Pack : Animation" href="../red9pro_templates/Red9_Pro_animation.html" />
     <link rel="prev" title="Red9_Setup" href="Red9_Setup.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -62,21 +54,21 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Tools.SceneReviewerUI" title="Red9.core.Red9_Tools.SceneReviewerUI"><code class="xref py py-obj docutils literal"><span class="pre">SceneReviewerUI</span></code></a>()</td>
-<td>this is the reporter Dialogue that the scriptNode calls to display and edit the</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Tools.SceneReviewerUI" title="Red9.core.Red9_Tools.SceneReviewerUI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SceneReviewerUI</span></code></a>()</td>
+<td>this is the reporter Dialogue that the scriptNode calls to display and edit the sceneReview data, held on the time node</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Tools.SceneReviewer" title="Red9.core.Red9_Tools.SceneReviewer"><code class="xref py py-obj docutils literal"><span class="pre">SceneReviewer</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Tools.SceneReviewer" title="Red9.core.Red9_Tools.SceneReviewer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SceneReviewer</span></code></a>()</td>
 <td>This is a really simple proc that will stamp data onto the time node and retrieve it so that leads can review and enter info into the scene itself.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Tools.RecordAttrs" title="Red9.core.Red9_Tools.RecordAttrs"><code class="xref py py-obj docutils literal"><span class="pre">RecordAttrs</span></code></a>()</td>
-<td>Simple class to use the Mouse as a MoCap input device #BUG : Maya can&#8217;t now record fucking rotate channels as it pushes a unitConvert Node between the rotate and the record plugs and nothing gets captured.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Tools.RecordAttrs" title="Red9.core.Red9_Tools.RecordAttrs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RecordAttrs</span></code></a>()</td>
+<td>Simple class to use the Mouse as a MoCap input device #BUG : Maya can’t now record fucking rotate channels as it pushes a unitConvert Node between the rotate and the record plugs and nothing gets captured.</td>
 </tr>
 </tbody>
 </table>
 <dl class="class">
 <dt id="Red9.core.Red9_Tools.SceneReviewerUI">
 <em class="property">class </em><code class="descname">SceneReviewerUI</code><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewerUI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>this is the reporter Dialogue that the scriptNode calls to display and edit the
 sceneReview data, held on the time node</p>
 <dl class="classmethod">
@@ -109,7 +101,7 @@ sceneReview data, held on the time node</p>
 <dl class="class">
 <dt id="Red9.core.Red9_Tools.SceneReviewer">
 <em class="property">class </em><code class="descname">SceneReviewer</code><a class="headerlink" href="#Red9.core.Red9_Tools.SceneReviewer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This is a really simple proc that will stamp data onto the time node and retrieve it so that
 leads can review and enter info into the scene itself. Why the time1 node??? this saves any
 issues with merging scenes as the time node is one of the only nodes in Maya that can only
@@ -159,9 +151,9 @@ exist once, and is managed in that way internally</p>
 <dl class="class">
 <dt id="Red9.core.Red9_Tools.RecordAttrs">
 <em class="property">class </em><code class="descname">RecordAttrs</code><a class="headerlink" href="#Red9.core.Red9_Tools.RecordAttrs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Simple class to use the Mouse as a MoCap input device
-#BUG : Maya can&#8217;t now record fucking rotate channels as it pushes a unitConvert Node
+#BUG : Maya can’t now record fucking rotate channels as it pushes a unitConvert Node
 between the rotate and the record plugs and nothing gets captured. Trying to figure a way
 round this</p>
 <dl class="classmethod">
@@ -213,18 +205,20 @@ round this</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/red9core_templates/Red9_Tools.txt"
+      <li><a href="../_sources/red9core_templates/Red9_Tools.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -251,7 +245,7 @@ round this</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2016, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

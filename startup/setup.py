@@ -1424,7 +1424,57 @@ def clients_booted():
     global CLIENTS_BOOTED
     return CLIENTS_BOOTED
 
-def boot_client_projects(batchclients=None):  # []):
+
+class Client_Manager(object):
+    '''
+    simple Client select manager which we trigger as a layoutDialog so it' acts like a
+    confirmDialog and pauses till you hit one of the confirmation buttons / is closed
+    '''
+    def __init__(self, *args):
+        self.clients_selected = []
+        self.clients = get_client_modules()
+        self.returned = []
+
+    def show(self):
+        cmds.columnLayout(adjustableColumn=True)
+        cmds.separator(h=15, style='none')
+        cmds.text('    Please Select the Required Clients to boot    ', font='boldLabelFont')
+        cmds.separator(h=15, style='none')
+        cmds.separator(h=2, style='in')
+        for client in self.clients:
+            cmds.iconTextCheckBox('%s' % client, style='textOnly', label=client,
+            onc=partial(self.add_client, client),
+            ofc=partial(self.remove_client, client))
+            cmds.separator(h=2, style='in')
+        cmds.separator(h=15, style='none')
+#         cmds.rowColumnLayout(nc=3)
+        cmds.button(label='Boot SELECTED', c=partial(self.close_and_return, 'selected'))
+        cmds.separator(h=3, style='none')
+        cmds.button(label='Boot ALL', c=partial(self.close_and_return, 'all'))
+        cmds.separator(h=3, style='none')
+        cmds.button(label='Boot NONE', c=partial(self.close_and_return, 'none'))
+#         cmds.setParent('..')
+        cmds.separator(h=15, style='none')
+        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
+                                 c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+    
+    def add_client(self, client, *args):
+        self.clients_selected.append(client)
+
+    def remove_client(self, client, *args):
+        self.clients_selected.remove(client)
+
+    def close_and_return(self, mode, *args):
+        cmds.layoutDialog(dismiss=mode)
+        if mode=='selected':
+            self.returned = self.clients_selected
+        elif mode=='all':
+            self.returned = self.clients
+        else:
+            self.returned = []
+
+
+def boot_client_projects(batchclients=None, clientsToBoot=[]):
     '''
     Boot Client modules found in the Red9_ClientCore dir. This now prompts
     if multiple client projects were found.
@@ -1438,7 +1488,6 @@ def boot_client_projects(batchclients=None):  # []):
     global CLIENTS_BOOTED
     CLIENTS_BOOTED = []
     clients = get_client_modules()
-    clientsToBoot = []
 
     # mayaBatch boot (unittests and batching)
 #     print 'Maya is Batch : ', mayaIsBatch()
@@ -1456,20 +1505,27 @@ def boot_client_projects(batchclients=None):  # []):
     else:
         # standard boot sequence
         if clients and len(clients) > 1:
-            options = ['ALL', 'NONE']
-            options.extend(clients)
-            result = cmds.confirmDialog(title='ProjectPicker',
-                                message=("Multiple Clients Found!\r\r" +
-                                         "Which Client would you like to boot?"),
-                                button=options, messageAlign='center', icon='question',
-                                dismissString='Cancel')
-            if result == 'ALL':
-                clientsToBoot = clients
-            if result == 'NONE':
-                return
-            elif result not in ['Cancel', 'ALL', 'NONE']:
-#                 print 'Appending Client selection ', result
-                clientsToBoot.append(result)
+
+            cm=Client_Manager()
+            cmds.layoutDialog(ui=cm.show)
+            print('clients booting : ', cm.returned)
+            clientsToBoot = cm.returned
+            
+              
+#             options = ['ALL', 'NONE']
+#             options.extend(clients)
+#             result = cmds.confirmDialog(title='ProjectPicker',
+#                                 message=("Multiple Clients Found!\r\r" +
+#                                          "Which Client would you like to boot?"),
+#                                 button=options, icon='question',
+#                                 dismissString='Cancel')
+#             if result == 'ALL':
+#                 clientsToBoot = clients
+#             if result == 'NONE':
+#                 return
+#             elif result not in ['Cancel', 'ALL', 'NONE']:
+# #                 print 'Appending Client selection ', result
+#                 clientsToBoot.append(result)
         else:
             clientsToBoot = clients
 

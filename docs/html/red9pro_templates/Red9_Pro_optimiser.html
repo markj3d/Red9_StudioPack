@@ -1,33 +1,25 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Pro_Pack : Optimiser &#8212; Red9 2.0 documentation</title>
-    
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pro_Pack : project" href="Red9_Pro_project.html" />
     <link rel="prev" title="Pro_Pack : MetaData" href="Red9_Pro_meta .html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -68,13 +60,13 @@ run standalone without the HealthValidation class to test specific things, or gr
 set of tests, for example to health check a rig prior to releasing to an animator.</p>
 <blockquote>
 <div><blockquote>
-<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9popt&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9popt</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">simple_example_test</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">simple_example_test</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="sd">&#39;&#39;&#39;</span>
 <span class="gp">... </span><span class="sd">    This is an example of how to write correctly formatted Health tests</span>
 <span class="gp">... </span><span class="sd">    for the Validation systems based on simply matching a predictable input result.</span>
@@ -105,7 +97,7 @@ set of tests, for example to health check a rig prior to releasing to an animato
 <span class="gp">... </span>   <span class="k">return</span> <span class="n">HealthObject</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">custom_example_test</span><span class="p">(</span><span class="n">expected</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">custom_example_test</span><span class="p">(</span><span class="n">expected</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="sd">&#39;&#39;&#39;</span>
 <span class="gp">... </span><span class="sd">        more complex test, most of the time we don&#39;t know what exactly</span>
 <span class="gp">... </span><span class="sd">        is in the scene before we run the test so the above example is useless.</span>
@@ -138,8 +130,8 @@ set of tests, for example to health check a rig prior to releasing to an animato
 </div>
 <p>When we put this together with the HealValidation system we get a very powerful way of checking data inside Maya.
 In Pro for clients this is also bound to the fileOpen callback, allowing us to test the scene after load against a given project template.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Client_SceneOpen_HealthValidation</span><span class="p">(</span><span class="n">r9popt</span><span class="o">.</span><span class="n">HealthValidation</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Client_SceneOpen_HealthValidation</span><span class="p">(</span><span class="n">r9popt</span><span class="o">.</span><span class="n">HealthValidation</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="c1"># Tests to run, note this is a list of tuples where the second</span>
 <span class="gp">... </span>        <span class="c1"># arg is the expected result if specified</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">tests</span><span class="o">=</span><span class="p">[(</span><span class="n">r9popt</span><span class="o">.</span><span class="n">maya_sceneUnits_test</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;expected&#39;</span><span class="p">:</span><span class="s1">&#39;centimeter&#39;</span><span class="p">}),</span> <span class="c1"># Maya environment units</span>
@@ -159,8 +151,8 @@ In Pro for clients this is also bound to the fileOpen callback, allowing us to t
 </div>
 </div></blockquote>
 <p>You could of course just take an instance of the default HealthValidataion object and fill up
-the internal tests list but it&#8217;s often easier to have a bespoke class to test a specific set of data</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">=</span><span class="n">r9popt</span><span class="o">.</span><span class="n">HealthValidation</span><span class="p">()</span>
+the internal tests list but it’s often easier to have a bespoke class to test a specific set of data</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">=</span><span class="n">r9popt</span><span class="o">.</span><span class="n">HealthValidation</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">.</span><span class="n">tests</span><span class="o">=</span><span class="p">[(</span><span class="n">r9popt</span><span class="o">.</span><span class="n">maya_sceneUnits_test</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;expected&#39;</span><span class="p">:</span><span class="s1">&#39;centimeter&#39;</span><span class="p">}),</span>
 <span class="gp">... </span>                    <span class="p">(</span><span class="n">r9popt</span><span class="o">.</span><span class="n">maya_timeUnits_test</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;expected&#39;</span><span class="p">:</span><span class="s1">&#39;ntsc&#39;</span><span class="p">}),</span>
 <span class="gp">... </span>                    <span class="p">(</span><span class="n">r9popt</span><span class="o">.</span><span class="n">maya_upAxis_test</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;expected&#39;</span><span class="p">:</span><span class="s1">&#39;y&#39;</span><span class="p">})]</span>
@@ -176,17 +168,17 @@ the internal tests list but it&#8217;s often easier to have a bespoke class to t
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.optimiser.OptimizerUI" title="Red9.pro_pack.core.optimiser.OptimizerUI"><code class="xref py py-obj docutils literal"><span class="pre">OptimizerUI</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.optimiser.OptimizerUI" title="Red9.pro_pack.core.optimiser.OptimizerUI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OptimizerUI</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.optimiser.OptimizeScene" title="Red9.pro_pack.core.optimiser.OptimizeScene"><code class="xref py py-obj docutils literal"><span class="pre">OptimizeScene</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.optimiser.OptimizeScene" title="Red9.pro_pack.core.optimiser.OptimizeScene"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OptimizeScene</span></code></a>()</td>
 <td>The OptimizeScene class is responsible for wind optimization of the current Maya Scene.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthTestObject" title="Red9.pro_pack.core.optimiser.HealthTestObject"><code class="xref py py-obj docutils literal"><span class="pre">HealthTestObject</span></code></a>(name)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthTestObject" title="Red9.pro_pack.core.optimiser.HealthTestObject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HealthTestObject</span></code></a>(name)</td>
 <td>HealthTestObject is a base class object that should be managed and returned by all of the Health Test functions.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-obj docutils literal"><span class="pre">HealthValidation</span></code></a>(*args,&nbsp;**kwargs)</td>
-<td>This is the main Health Test system for all of ProPack and Red9&#8217;s internal publisher system.</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HealthValidation</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>This is the main Health Test system for all of ProPack and Red9’s internal publisher system.</td>
 </tr>
 </tbody>
 </table>
@@ -198,7 +190,7 @@ the internal tests list but it&#8217;s often easier to have a bespoke class to t
 <dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.OptimizerUI">
 <em class="property">class </em><code class="descname">OptimizerUI</code><a class="headerlink" href="#Red9.pro_pack.core.optimiser.OptimizerUI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="classmethod">
 <dt id="Red9.pro_pack.core.optimiser.OptimizerUI.show">
 <em class="property">classmethod </em><code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.OptimizerUI.show" title="Permalink to this definition">¶</a></dt>
@@ -209,7 +201,7 @@ the internal tests list but it&#8217;s often easier to have a bespoke class to t
 <dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.OptimizeScene">
 <em class="property">class </em><code class="descname">OptimizeScene</code><a class="headerlink" href="#Red9.pro_pack.core.optimiser.OptimizeScene" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The OptimizeScene class is responsible for wind optimization of the current
 Maya Scene.</p>
 <p>when initializing the class we expose a number of internal options to
@@ -217,7 +209,7 @@ allow you to tailor how the optimize_full system deals with your scene</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.optimiser.OptimizeScene.optimize_base">
 <code class="descname">optimize_base</code><span class="sig-paren">(</span><em>pre_post=True</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.OptimizeScene.optimize_base" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base Maya Optimizer&#8217;s with a few extra cleanups thrown in for good measure</p>
+<dd><p>Base Maya Optimizer’s with a few extra cleanups thrown in for good measure</p>
 </dd></dl>
 
 <dl class="method">
@@ -229,7 +221,7 @@ importing the data and running a base optimize on the remaining data.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>runBase</strong> &#8211; do we run the base optimiser func first?</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>runBase</strong> – do we run the base optimiser func first?</td>
 </tr>
 </tbody>
 </table>
@@ -256,7 +248,7 @@ everything we want to retain is kept.</p>
 <dt id="Red9.pro_pack.core.optimiser.delete_format_output">
 <code class="descname">delete_format_output</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.delete_format_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple decorator to format the return prints, a fix method
-should return a list of nodes / data that it&#8217;s fixed and this decorator
+should return a list of nodes / data that it’s fixed and this decorator
 prints that status out after the fix method has been run.</p>
 </dd></dl>
 
@@ -271,14 +263,14 @@ prints that status out after the fix method has been run.</p>
 <code class="descname">get_healthTests</code><span class="sig-paren">(</span><em>inc_loose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.get_healthTests" title="Permalink to this definition">¶</a></dt>
 <dd><p>get all tests that we deem to be valid HealthTests. We first find any subclasses of the base HealthValidation
 class, then we use that to find all modules that may contain health tests. From that we inspect all methods in
-the module, matching them for a &#8216;_test&#8217; in the name and extracting all args and docstrs</p>
+the module, matching them for a ‘_test’ in the name and extracting all args and docstrs</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inc_loose</strong> &#8211; do we also scan for any loose tests within found modules containing HealthValidation subclasses?
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inc_loose</strong> – do we also scan for any loose tests within found modules containing HealthValidation subclasses?
 these tests may be within validation subclasses but we scan as loose to include all available tests. This is used
-withing the &#8216;All_Available_Tests&#8217; collection subclass mainly</td>
+withing the ‘All_Available_Tests’ collection subclass mainly</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return dict:</th><td class="field-body">full data dump for later processing</td>
 </tr>
@@ -289,35 +281,28 @@ withing the &#8216;All_Available_Tests&#8217; collection subclass mainly</td>
 <dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.HealthTestObject">
 <em class="property">class </em><code class="descname">HealthTestObject</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthTestObject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>HealthTestObject is a base class object that should be managed and
-returned by all of the Health Test functions. It&#8217;s an encapsulated status
+returned by all of the Health Test functions. It’s an encapsulated status
 object for a particular test method, holding results from the test
 and fix methods.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">maya_timeUnits_test</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s1">&#39;ntscf&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">=</span><span class="n">opt</span><span class="o">.</span><span class="n">maya_timeUnits_test</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="s1">&#39;ntscf&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">.</span><span class="n">print_status</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">test</span><span class="o">.</span><span class="n">run_fix_method</span><span class="p">()</span>
 </pre></div>
 </div>
 <dl class="docutils">
 <dt>Internal Vars of note:</dt>
-<dd><ul class="first last">
-<li><p class="first">self.fix_method=None          # fix function for this test object</p>
-</li>
-<li><p class="first">self.results_failed_nodes=[]  # nodes deemed to have failed the test, where appropriate</p>
-</li>
-<li><p class="first">self.results_passed_nodes=[]  # nodes that passed the test</p>
-</li>
-<li><p class="first">self.results_returned=None    # results used to compare against if the results_expected var was given</p>
-</li>
-<li><p class="first">self.results_expected=None    # if specified this is the result expected from the test method.</p>
-</li>
-<li><p class="first">self.log_message=&#8217;&#8217;           # during the tests we generally fill this with useful info for the print feedbacks</p>
-</li>
+<dd><ul class="first last simple">
+<li>self.fix_method=None          # fix function for this test object</li>
+<li>self.results_failed_nodes=[]  # nodes deemed to have failed the test, where appropriate</li>
+<li>self.results_passed_nodes=[]  # nodes that passed the test</li>
+<li>self.results_returned=None    # results used to compare against if the results_expected var was given</li>
+<li>self.results_expected=None    # if specified this is the result expected from the test method.</li>
+<li>self.log_message=’’           # during the tests we generally fill this with useful info for the print feedbacks</li>
 <li><dl class="first docutils">
 <dt>self.additional_pp_status_details  # (str) additional data that gets appended to the prettyPrintStatus() data</dt>
-<dd><p class="first last">returned by the HealthValidation class. This is only meant to be a short note such as the timeUnit test which has the expected fps in this val</p>
-</dd>
+<dd>returned by the HealthValidation class. This is only meant to be a short note such as the timeUnit test which has the expected fps in this val</dd>
 </dl>
 </li>
 </ul>
@@ -356,9 +341,9 @@ with the data from the test so we can compare against an expected
 set of data.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Test.status=&#8217;PASSED&#8217; if either the test.set_passed() has been run internally, or if
+<p class="last">Test.status=’PASSED’ if either the test.set_passed() has been run internally, or if
 self.results_expected == self.results_returned. This allows for simple matching of default
-data such as Maya environment calls etc. For more complex status checking I&#8217;d recommend
+data such as Maya environment calls etc. For more complex status checking I’d recommend
 doing that inside your test function and setting the status there using the set_passed etc.</p>
 </div>
 </dd></dl>
@@ -427,8 +412,8 @@ the results are consistent.</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.HealthValidation">
 <em class="property">class </em><code class="descname">HealthValidation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>This is the main Health Test system for all of ProPack and Red9&#8217;s internal
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is the main Health Test system for all of ProPack and Red9’s internal
 publisher system. The idea is that you bind individual test to the class
 to run, each test returns a HealthTestObject which means we can easily
 collate data and fix issues via the run_fix_methods</p>
@@ -439,11 +424,10 @@ the scene after load against a given project template.</p>
 * self.iscollection : False by default, this marks this set of tests as a collection, one not designed to be</p>
 <blockquote>
 <div>run as an entire test, just a collection of individual tests</div></blockquote>
-<ul>
+<ul class="simple">
 <li><dl class="first docutils">
-<dt>self.customfuncs</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">a separate binding of a given custom function, used internally to bind a specific set of</span><dd><p class="first last">random modifications for individual client needs</p>
-</dd>
+<dt>self.customfuncs <span class="classifier-delimiter">:</span> <span class="classifier">a separate binding of a given custom function, used internally to bind a specific set of</span></dt>
+<dd>random modifications for individual client needs</dd>
 </dl>
 </li>
 </ul>
@@ -469,8 +453,8 @@ to pass just set that to None</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>testdata</strong> &#8211; [] list of tuples as above</li>
-<li><strong>filepath</strong> &#8211; path to a json file with the tests setup and correctly formatted</li>
+<li><strong>testdata</strong> – [] list of tuples as above</li>
+<li><strong>filepath</strong> – path to a json file with the tests setup and correctly formatted</li>
 </ul>
 </td>
 </tr>
@@ -486,7 +470,7 @@ to pass just set that to None</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; filepath to take the tests from . Not currently implemented</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> – filepath to take the tests from . Not currently implemented</td>
 </tr>
 </tbody>
 </table>
@@ -501,8 +485,8 @@ to pass just set that to None</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>verbose</strong> &#8211; run the printouts or run it silently</li>
-<li><strong>detailed</strong> &#8211; turn on all the detailed results feedback in the printouts</li>
+<li><strong>verbose</strong> – run the printouts or run it silently</li>
+<li><strong>detailed</strong> – turn on all the detailed results feedback in the printouts</li>
 </ul>
 </td>
 </tr>
@@ -525,13 +509,13 @@ to pass just set that to None</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.optimiser.HealthValidation.getFailedTests">
 <code class="descname">getFailedTests</code><span class="sig-paren">(</span><em>asDict=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthValidation.getFailedTests" title="Permalink to this definition">¶</a></dt>
-<dd><p>for each healthObject validate it&#8217;s status and return those HealthTestObjects
+<dd><p>for each healthObject validate it’s status and return those HealthTestObjects
 that failed and or threw a warning or error</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>asDict</strong> &#8211; either return a straight list of failed HeallthTestObjects
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>asDict</strong> – either return a straight list of failed HeallthTestObjects
 or a dict where the key is the test name</td>
 </tr>
 </tbody>
@@ -541,15 +525,15 @@ or a dict where the key is the test name</td>
 <dl class="method">
 <dt id="Red9.pro_pack.core.optimiser.HealthValidation.getStatus">
 <code class="descname">getStatus</code><span class="sig-paren">(</span><em>asDict=False</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthValidation.getStatus" title="Permalink to this definition">¶</a></dt>
-<dd><p>for each healthObject validate it&#8217;s status and return the overall result</p>
+<dd><p>for each healthObject validate it’s status and return the overall result</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>asDict</strong> &#8211; If False (default) return the overall status of all the tests as a bool,
+<li><strong>asDict</strong> – If False (default) return the overall status of all the tests as a bool,
 if True return a dict where the keys are the status and value is a list of tests matching that status</li>
-<li><strong>verbose</strong> &#8211; if true print all the results out, else just return the status itself</li>
+<li><strong>verbose</strong> – if true print all the results out, else just return the status itself</li>
 </ul>
 </td>
 </tr>
@@ -561,17 +545,17 @@ if True return a dict where the keys are the status and value is a list of tests
 <dt id="Red9.pro_pack.core.optimiser.HealthValidation.prettyPrintStatus">
 <code class="descname">prettyPrintStatus</code><span class="sig-paren">(</span><em>overview=True</em>, <em>detailed=False</em>, <em>passed=True</em>, <em>indepth=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthValidation.prettyPrintStatus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple formatter to make sense of the results in a manner that can be either printed to screen
-or out to file. It&#8217;s worth testing the flags here as there is a LOT of formatting possible to
+or out to file. It’s worth testing the flags here as there is a LOT of formatting possible to
 tweak the results into a format that contains just the base data, or all the comples fails etc</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>overview</strong> &#8211; just print / return the overview of each test status - no results data</li>
-<li><strong>detailed</strong> &#8211; turn on the detailed results in the feedback data</li>
-<li><strong>passed</strong> &#8211; include passed tests in the detailed data</li>
-<li><strong>indepth</strong> &#8211; expand the detailed results to include all the health results data</li>
+<li><strong>overview</strong> – just print / return the overview of each test status - no results data</li>
+<li><strong>detailed</strong> – turn on the detailed results in the feedback data</li>
+<li><strong>passed</strong> – include passed tests in the detailed data</li>
+<li><strong>indepth</strong> – expand the detailed results to include all the health results data</li>
 </ul>
 </td>
 </tr>
@@ -588,8 +572,8 @@ tweak the results into a format that contains just the base data, or all the com
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; filepath for the log file</li>
-<li><strong>indepth</strong> &#8211; expand the detailed results to include all the health results data</li>
+<li><strong>filepath</strong> – filepath for the log file</li>
+<li><strong>indepth</strong> – expand the detailed results to include all the health results data</li>
 </ul>
 </td>
 </tr>
@@ -602,14 +586,14 @@ tweak the results into a format that contains just the base data, or all the com
 <dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.SRCHealthValidations">
 <em class="property">class </em><code class="descname">SRCHealthValidations</code><span class="sig-paren">(</span><em>src_node=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.SRCHealthValidations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
 <p>RED9 PRODUCTION RIG ONLY : Health systems to validate an SRC Prior to saving it and then binding to a Rig</p>
 <p>This is a base level test only, the actual SRC validation run by the internal publisher is WAY more aggresive!</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>src_node</strong> &#8211; a Meta SRC_Extension mNode</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>src_node</strong> – a Meta SRC_Extension mNode</td>
 </tr>
 </tbody>
 </table>
@@ -629,7 +613,7 @@ tweak the results into a format that contains just the base data, or all the com
 <dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.SceneStripper">
 <em class="property">class </em><code class="descname">SceneStripper</code><span class="sig-paren">(</span><em>src_node=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.SceneStripper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
 <p>Base Scene Clean to strip back any bloated history, usually used as a
 compound in the HealthManager for quick access to these key optimisations</p>
 <p>Removes:</p>
@@ -647,7 +631,7 @@ compound in the HealthManager for quick access to these key optimisations</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.BlendShapes_HealthValidation">
 <em class="property">class </em><code class="descname">BlendShapes_HealthValidation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.BlendShapes_HealthValidation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
 <p>Base test to validate the health of all Blendshapes in the scene.</p>
 <p>This will:</p>
 <ul class="simple">
@@ -660,7 +644,7 @@ compound in the HealthManager for quick access to these key optimisations</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.All_Available_Tests">
 <em class="property">class </em><code class="descname">All_Available_Tests</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.All_Available_Tests" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
 <p>Collection class - this will build up the internal tests to include
 ALL currently instanced and found test functions but at the same time
 will disable the main run buttons in the HealthManager as these are
@@ -671,7 +655,7 @@ individual tests</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.SceneGeo_HealthValidation">
 <em class="property">class </em><code class="descname">SceneGeo_HealthValidation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.SceneGeo_HealthValidation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
 <p>Base test to validate the health of all geometry in the scene.</p>
 <p>This will:</p>
 <ul class="simple">
@@ -683,7 +667,7 @@ individual tests</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.MRIG_External_HealthValidations">
 <em class="property">class </em><code class="descname">MRIG_External_HealthValidations</code><span class="sig-paren">(</span><em>mRig=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.MRIG_External_HealthValidations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
 <p>Health systems to validate the status of a connected mRig</p>
 <p>This is the base level Rig Systems Health, testing some of the core structures
 in the wiring of an external mRig system</p>
@@ -802,12 +786,12 @@ Uses the r9Setup.mayaVersion() call to get the data</p>
 <dd><p>test for metaNodes in the scene which are deemed inValid
 by their own internal mNode.isValid() call. Usually if they
 have no connections to other nodes.
-Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
+Failed Results built : HealthObject.results_failed_nodes  : [mRig,…]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> &#8211; NA - unused</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> – NA - unused</td>
 </tr>
 </tbody>
 </table>
@@ -826,14 +810,14 @@ method internally if not already run.</p>
 <dt id="Red9.pro_pack.core.optimiser.mRigs_haveKeys_test">
 <code class="descname">mRigs_haveKeys_test</code><span class="sig-paren">(</span><em>expected=False</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_haveKeys_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check if all mRigs in the scene have existing keys or not
-Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
+Failed Results built : HealthObject.results_failed_nodes  : [mRig,…]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; if we&#8217;re expecting keys or not</li>
-<li><strong>mRigs</strong> &#8211; specific mRig metaNodes only if passed</li>
+<li><strong>expected</strong> – if we’re expecting keys or not</li>
+<li><strong>mRigs</strong> – specific mRig metaNodes only if passed</li>
 </ul>
 </td>
 </tr>
@@ -853,14 +837,14 @@ method internally if not already run.</p>
 <dt id="Red9.pro_pack.core.optimiser.mRigs_zeroPose_test">
 <code class="descname">mRigs_zeroPose_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_zeroPose_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check if all mRigs in the scene have existing zeroPoses
-Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
+Failed Results built : HealthObject.results_failed_nodes  : [mRig,…]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; NA - unused</li>
-<li><strong>mRigs</strong> &#8211; specific mRig metaNodes only if passed</li>
+<li><strong>expected</strong> – NA - unused</li>
+<li><strong>mRigs</strong> – specific mRig metaNodes only if passed</li>
 </ul>
 </td>
 </tr>
@@ -871,7 +855,7 @@ Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_zeroPose_fix">
 <code class="descname">mRigs_zeroPose_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_zeroPose_fix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a ZeroPose to the Rig in it&#8217;s current state
+<dd><p>Add a ZeroPose to the Rig in it’s current state
 This fix method is bound in such a way that it will run the test
 method internally if not already run.</p>
 </dd></dl>
@@ -880,14 +864,14 @@ method internally if not already run.</p>
 <dt id="Red9.pro_pack.core.optimiser.mRigs_attrMap_test">
 <code class="descname">mRigs_attrMap_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_attrMap_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check if all mRigs in the scene have existing attrMaps
-Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
+Failed Results built : HealthObject.results_failed_nodes  : [mRig,…]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; NA - unused</li>
-<li><strong>mRigs</strong> &#8211; specific mRig metaNodes only if passed</li>
+<li><strong>expected</strong> – NA - unused</li>
+<li><strong>mRigs</strong> – specific mRig metaNodes only if passed</li>
 </ul>
 </td>
 </tr>
@@ -898,7 +882,7 @@ Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_attrMap_fix">
 <code class="descname">mRigs_attrMap_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_attrMap_fix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a ZeroPose to the Rig in it&#8217;s current state
+<dd><p>Add a ZeroPose to the Rig in it’s current state
 This fix method is bound in such a way that it will run the test
 method internally if not already run.</p>
 </dd></dl>
@@ -909,14 +893,14 @@ method internally if not already run.</p>
 <dd><p>Test to check if all mRigs in the scene have existing renderMeshes hooked up
 or at least the expected number or above. This wire is used by the PoseSaver
 to create the PosePointCloud visual mesh reference
-Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
+Failed Results built : HealthObject.results_failed_nodes  : [mRig,…]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; minimum number of expected meshes hooked up</li>
-<li><strong>mRigs</strong> &#8211; specific mRig metaNodes only if passed</li>
+<li><strong>expected</strong> – minimum number of expected meshes hooked up</li>
+<li><strong>mRigs</strong> – specific mRig metaNodes only if passed</li>
 </ul>
 </td>
 </tr>
@@ -930,14 +914,14 @@ Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <dd><p>Test to check is all mRigs in the scene have existing renderMeshes hooked up
 or at least the expected number or above. This wire is used by the PoseSaver
 to create the PosePointCloud visual mesh reference
-Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
+Failed Results built : HealthObject.results_failed_nodes  : [mRig,…]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; minimum number of expected meshes hooked up</li>
-<li><strong>mRigs</strong> &#8211; specific mRig metaNodes only if passed</li>
+<li><strong>expected</strong> – minimum number of expected meshes hooked up</li>
+<li><strong>mRigs</strong> – specific mRig metaNodes only if passed</li>
 </ul>
 </td>
 </tr>
@@ -950,14 +934,14 @@ Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <code class="descname">mRigs_exportSkeletonRoot_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_exportSkeletonRoot_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check if all mRigs in the scene have existing exportSkeletonRoot hooked up
 this wire is used by the PoseSaver to generate the skeletonData block
-Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
+Failed Results built : HealthObject.results_failed_nodes  : [mRig,…]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; NA - unused</li>
-<li><strong>mRigs</strong> &#8211; specific mRig metaNodes only if passed</li>
+<li><strong>expected</strong> – NA - unused</li>
+<li><strong>mRigs</strong> – specific mRig metaNodes only if passed</li>
 </ul>
 </td>
 </tr>
@@ -969,14 +953,14 @@ Failed Results built : HealthObject.results_failed_nodes  : [mRig,...]</p>
 <dt id="Red9.pro_pack.core.optimiser.mRigs_mirrorIndexClashes_test">
 <code class="descname">mRigs_mirrorIndexClashes_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_mirrorIndexClashes_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check for any clashing mirrorIndexes on mRigs
-Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),...]</p>
+Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),…]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; NA - unused</li>
-<li><strong>mRigs</strong> &#8211; specific mRig metaNodes only if passed</li>
+<li><strong>expected</strong> – NA - unused</li>
+<li><strong>mRigs</strong> – specific mRig metaNodes only if passed</li>
 </ul>
 </td>
 </tr>
@@ -988,14 +972,14 @@ Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),...]</
 <dt id="Red9.pro_pack.core.optimiser.mRigs_mirrorIndexMissing_test">
 <code class="descname">mRigs_mirrorIndexMissing_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_mirrorIndexMissing_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check that all controllers wired to the rigs have mirrorIndexes assigned
-Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),...]</p>
+Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),…]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; NA - unused</li>
-<li><strong>mRigs</strong> &#8211; specific mRig metaNodes only if passed</li>
+<li><strong>expected</strong> – NA - unused</li>
+<li><strong>mRigs</strong> – specific mRig metaNodes only if passed</li>
 </ul>
 </td>
 </tr>
@@ -1007,17 +991,17 @@ Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),...]</
 <dt id="Red9.pro_pack.core.optimiser.mRigs_unwired_ctrls_test">
 <code class="descname">mRigs_unwired_ctrls_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>mRigs=[]</em>, <em>searchPattern=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_unwired_ctrls_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check that all child nurbsCurves, with optional name matching, under the mrig.ctrl_main
-of the mRig are wired to the systems. This is a WARNING only as it&#8217;s a very general test
+of the mRig are wired to the systems. This is a WARNING only as it’s a very general test
 but useful for debugging everything
-Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),...]</p>
+Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),…]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; NA - unused</li>
-<li><strong>mRigs</strong> &#8211; specific mRig metaNodes only if passed</li>
-<li><strong>searchPatetrn</strong> &#8211; if given this is used in the search to find nurbsCurves with given naming conventions</li>
+<li><strong>expected</strong> – NA - unused</li>
+<li><strong>mRigs</strong> – specific mRig metaNodes only if passed</li>
+<li><strong>searchPatetrn</strong> – if given this is used in the search to find nurbsCurves with given naming conventions</li>
 </ul>
 </td>
 </tr>
@@ -1034,7 +1018,7 @@ Failed Results built : HealthObject.results_failed_nodes  : [(mRig, node),...]</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emptyset</strong> &#8211; if given this is the name of any new chSet created for a rig, else we default to &#8216;character&#8217;</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>emptyset</strong> – if given this is the name of any new chSet created for a rig, else we default to ‘character’</td>
 </tr>
 </tbody>
 </table>
@@ -1066,7 +1050,7 @@ then all fails will be added to that chSet.</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_timecode_valid_test">
 <code class="descname">mRigs_timecode_valid_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_timecode_valid_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>check to see if the mRig timecode attrs are valid, particularly the SampleRate which doesn&#8217;t handle zero values!</p>
+<dd><p>check to see if the mRig timecode attrs are valid, particularly the SampleRate which doesn’t handle zero values!</p>
 </dd></dl>
 
 <dl class="function">
@@ -1086,10 +1070,10 @@ check to see if the mRig has a valid Pro Picker template</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; if we were expecting a picker or not</li>
-<li><strong>mRigs</strong> &#8211; given mRigs to test, if None then we find all instances of mRigs in the scene</li>
-<li><strong>templatefile</strong> &#8211; template file to use in the fix method if not already found</li>
-<li><strong>force</strong> &#8211; if force and template file given then the test if failed by default allowing the fix to
+<li><strong>expected</strong> – if we were expecting a picker or not</li>
+<li><strong>mRigs</strong> – given mRigs to test, if None then we find all instances of mRigs in the scene</li>
+<li><strong>templatefile</strong> – template file to use in the fix method if not already found</li>
+<li><strong>force</strong> – if force and template file given then the test if failed by default allowing the fix to
 force update any template already loaded on the mRig</li>
 </ul>
 </td>
@@ -1116,9 +1100,9 @@ bound to it internally</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; if we were expecting a settings or not</li>
-<li><strong>mRigs</strong> &#8211; given mRigs to test, if None then we find all instances of mRigs in the scene</li>
-<li><strong>templatefile</strong> &#8211; template file to use in the fix method if not already found</li>
+<li><strong>expected</strong> – if we were expecting a settings or not</li>
+<li><strong>mRigs</strong> – given mRigs to test, if None then we find all instances of mRigs in the scene</li>
+<li><strong>templatefile</strong> – template file to use in the fix method if not already found</li>
 </ul>
 </td>
 </tr>
@@ -1142,8 +1126,8 @@ child shapes isHistoricallyinteresting attr</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; value we&#8217;re expecting for the isHistoricallyInteresting attr, default=0 which means hide it, 2 would restore the nodes</li>
-<li><strong>mRigs</strong> &#8211; specific mRigs else we process all found in the scene</li>
+<li><strong>expected</strong> – value we’re expecting for the isHistoricallyInteresting attr, default=0 which means hide it, 2 would restore the nodes</li>
+<li><strong>mRigs</strong> – specific mRigs else we process all found in the scene</li>
 </ul>
 </td>
 </tr>
@@ -1168,10 +1152,10 @@ networks and character sets etc.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; value we&#8217;re expecting for the isHistoricallyInteresting attr, default=0 which means hide it, 2 would restore the nodes</li>
-<li><strong>mRigs</strong> &#8211; specific mRigs else we process all found in the scene</li>
-<li><strong>version</strong> &#8211; if given this is the internal mRig.version that we have to be above or equal to in order to process. This internally
-prevents us running this on older rigs that haven&#8217;t been tested against this</li>
+<li><strong>expected</strong> – value we’re expecting for the isHistoricallyInteresting attr, default=0 which means hide it, 2 would restore the nodes</li>
+<li><strong>mRigs</strong> – specific mRigs else we process all found in the scene</li>
+<li><strong>version</strong> – if given this is the internal mRig.version that we have to be above or equal to in order to process. This internally
+prevents us running this on older rigs that haven’t been tested against this</li>
 </ul>
 </td>
 </tr>
@@ -1188,15 +1172,15 @@ prevents us running this on older rigs that haven&#8217;t been tested against th
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_exporttags_test">
 <code class="descname">mRigs_exporttags_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_exporttags_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Single RED9 PRODUCTION METARIG ONLY:
-Check exportTag setups</p>
+<dd><p>Single RED9 PRODUCTION METARIG ONLY:</p>
+<p>Check exportTag setups - NOT run in the publisher, Internals has a more aggressive set of tests!</p>
 <p>This is a Warning failure only</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_exporttags_fix">
 <code class="descname">mRigs_exporttags_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_exporttags_fix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add the base character Export tag if not found, if the root wasn&#8217;t connected then
+<dd><p>Add the base character Export tag if not found, if the root wasn’t connected then
 hook it up to the mRig.skeletonRoot jnt from the publisher</p>
 </dd></dl>
 
@@ -1210,8 +1194,8 @@ reflected in the export ranges</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; this gets filled by the currentFramerate</li>
-<li><strong>loops</strong> &#8211; given exportLoops to test, if None then we find all instances of ExportLoopNodes in the scene</li>
+<li><strong>expected</strong> – this gets filled by the currentFramerate</li>
+<li><strong>loops</strong> – given exportLoops to test, if None then we find all instances of ExportLoopNodes in the scene</li>
 </ul>
 </td>
 </tr>
@@ -1235,8 +1219,8 @@ names &amp; transforms if write set to true it will write a .sgfi file in the sa
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; optional filepath of the scene geometry info file</li>
-<li><strong>write</strong> &#8211; bool to enable or disable write functionality</li>
+<li><strong>filepath</strong> – optional filepath of the scene geometry info file</li>
+<li><strong>write</strong> – bool to enable or disable write functionality</li>
 </ul>
 </td>
 </tr>
@@ -1252,7 +1236,7 @@ names &amp; transforms if write set to true it will write a .sgfi file in the sa
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; filepath of the sgfi file we&#8217;re going to test against</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> – filepath of the sgfi file we’re going to test against</td>
 </tr>
 </tbody>
 </table>
@@ -1273,7 +1257,7 @@ geometries in the scene and then trying to match using vertex counts</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; filepath of the sgfi file we&#8217;re going to test against</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> – filepath of the sgfi file we’re going to test against</td>
 </tr>
 </tbody>
 </table>
@@ -1294,7 +1278,7 @@ geometries in the scene and then tries to match using components counts to match
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; filepath of the sgfi file we&#8217;re going to test against</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> – filepath of the sgfi file we’re going to test against</td>
 </tr>
 </tbody>
 </table>
@@ -1309,7 +1293,7 @@ geometries in the scene and then tries to match using components counts to match
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; filepath of the sgfi file we&#8217;re going to test against</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> – filepath of the sgfi file we’re going to test against</td>
 </tr>
 </tbody>
 </table>
@@ -1329,8 +1313,8 @@ geometries in the scene and then tries to match using components counts to match
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>expected</strong> &#8211; </li>
-<li><strong>filepath</strong> &#8211; </li>
+<li><strong>expected</strong> – </li>
+<li><strong>filepath</strong> – </li>
 </ul>
 </td>
 </tr>
@@ -1357,8 +1341,8 @@ This ONLY tests skinClusters attached to mesh objects</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; maximum number of skin weights per vert for all skinClusters found or passed</li>
-<li><strong>skins</strong> &#8211; list of specific skins to test if you want to test only specific skins</li>
+<li><strong>expected</strong> – maximum number of skin weights per vert for all skinClusters found or passed</li>
+<li><strong>skins</strong> – list of specific skins to test if you want to test only specific skins</li>
 </ul>
 </td>
 </tr>
@@ -1376,8 +1360,8 @@ either dq or linear. This ONLY tests skinClusters attached to mesh objects</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; &#8216;linear&#8217;,&#8217;dq&#8217; or &#8216;blended&#8217; skinning methods, relates to 0=linear, 1=dq, 2=weightBlended</li>
-<li><strong>skins</strong> &#8211; list of specific skins to test if you want to test only specific skins</li>
+<li><strong>expected</strong> – ‘linear’,’dq’ or ‘blended’ skinning methods, relates to 0=linear, 1=dq, 2=weightBlended</li>
+<li><strong>skins</strong> – list of specific skins to test if you want to test only specific skins</li>
 </ul>
 </td>
 </tr>
@@ -1401,8 +1385,8 @@ zero_rotates. This ONLY tests skinClusters attached to mesh objects</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; True - all joints have zero rotates</li>
-<li><strong>skins</strong> &#8211; list of specific skins to test if you want to test only specific skins</li>
+<li><strong>expected</strong> – True - all joints have zero rotates</li>
+<li><strong>skins</strong> – list of specific skins to test if you want to test only specific skins</li>
 </ul>
 </td>
 </tr>
@@ -1422,11 +1406,11 @@ rig-up to ensure that we get no additional gimbal introduced via a rig system et
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>rootJnt</strong> &#8211; root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</li>
-<li><strong>tolerance</strong> &#8211; maximum allowed rotate in any axis for the joints</li>
-<li><strong>searchPattern</strong> &#8211; regex arg passed so we can do simple testing for strings and ignore matches.</li>
-<li><strong>fk</strong> &#8211; when dealing with an mRig this option switches the rig into FK mode before the test, due to the
-nature of IK joints will move slightly regardless, so testing in FK ensures at the base level all jnts are zero&#8217;d</li>
+<li><strong>rootJnt</strong> – root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</li>
+<li><strong>tolerance</strong> – maximum allowed rotate in any axis for the joints</li>
+<li><strong>searchPattern</strong> – regex arg passed so we can do simple testing for strings and ignore matches.</li>
+<li><strong>fk</strong> – when dealing with an mRig this option switches the rig into FK mode before the test, due to the
+nature of IK joints will move slightly regardless, so testing in FK ensures at the base level all jnts are zero’d</li>
 </ul>
 </td>
 </tr>
@@ -1452,8 +1436,8 @@ mRig or SrcExt / exportTag nodes</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>rootJnt</strong> &#8211; root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</li>
-<li><strong>searchPattern</strong> &#8211; regex arg passed so we can do simple testing for strings and ignore matches.</li>
+<li><strong>rootJnt</strong> – root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</li>
+<li><strong>searchPattern</strong> – regex arg passed so we can do simple testing for strings and ignore matches.</li>
 </ul>
 </td>
 </tr>
@@ -1471,12 +1455,12 @@ mRig or SrcExt / exportTag nodes</p>
 <dt id="Red9.pro_pack.core.optimiser.skeleton_unique_names_test">
 <code class="descname">skeleton_unique_names_test</code><span class="sig-paren">(</span><em>rootJnt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_unique_names_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>check that all joints in a given skeleton have unique short names
-results_failed={shortname:(longname1, longname2, ...)}</p>
+results_failed={shortname:(longname1, longname2, …)}</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rootJnt</strong> &#8211; root of the skeleton to test if not passed we use the mRig networks</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rootJnt</strong> – root of the skeleton to test if not passed we use the mRig networks</td>
 </tr>
 </tbody>
 </table>
@@ -1493,7 +1477,7 @@ results_failed={shortname:(longname1, longname2, ...)}</p>
 <li>jnt.overrideDisplayType = 0</li>
 <li>jnt.drawStyle = 0</li>
 </ul>
-<p>if any of the following settings aren&#8217;t met the jnt fails. This is to return the entire
+<p>if any of the following settings aren’t met the jnt fails. This is to return the entire
 skeleton back to default draw states prior to the Red9 Puppet build
 as that needs full control over these over-rides during the build process</p>
 <p>Running the fix method will reset the attrs back to default</p>
@@ -1502,8 +1486,8 @@ as that needs full control over these over-rides during the build process</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>rootJnt</strong> &#8211; root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</li>
-<li><strong>searchPattern</strong> &#8211; regex arg passed so we can do simple testing for strings and ignore matches.</li>
+<li><strong>rootJnt</strong> – root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</li>
+<li><strong>searchPattern</strong> – regex arg passed so we can do simple testing for strings and ignore matches.</li>
 </ul>
 </td>
 </tr>
@@ -1527,12 +1511,12 @@ hierarchy, joint naming, transforms and orients to validate one skeleton against
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; default key but unused here</li>
-<li><strong>filepath</strong> &#8211; filepath of the pose file we&#8217;re going to test against</li>
-<li><strong>rootjnt</strong> &#8211; the root joint of the skeleton we want to test against the given pose file</li>
-<li><strong>savebase</strong> &#8211; when setting up this test we need a pose file to test against, this allows us to run it
+<li><strong>expected</strong> – default key but unused here</li>
+<li><strong>filepath</strong> – filepath of the pose file we’re going to test against</li>
+<li><strong>rootjnt</strong> – the root joint of the skeleton we want to test against the given pose file</li>
+<li><strong>savebase</strong> – when setting up this test we need a pose file to test against, this allows us to run it
 prior to testing and save the pose to the filepath rather than running the actual test</li>
-<li><strong>srcjnt</strong> &#8211; source skeleton to compare against if the filepath wasn&#8217;t given</li>
+<li><strong>srcjnt</strong> – source skeleton to compare against if the filepath wasn’t given</li>
 </ul>
 </td>
 </tr>
@@ -1550,8 +1534,8 @@ we fail the test. Conversely if we have multiple skeletons in the scene we also 
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; max number of bindPoses any skeleton root can have, default = 1</li>
-<li><strong>skeleton_roots</strong> &#8211; if given we only test the given skeletons hierarchy for bindPoses, else we find
+<li><strong>expected</strong> – max number of bindPoses any skeleton root can have, default = 1</li>
+<li><strong>skeleton_roots</strong> – if given we only test the given skeletons hierarchy for bindPoses, else we find
 all bindPose nodes and all associated skeleton hierarchies, and test them all for multiple bindPoses</li>
 </ul>
 </td>
@@ -1576,11 +1560,11 @@ original target meshes wired up to the blend node</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; whether the targets should or shouldn&#8217;t be in the scene. If they&#8217;re found and
+<li><strong>expected</strong> – whether the targets should or shouldn’t be in the scene. If they’re found and
 expected=False then the fix method will now try and delete them.</li>
-<li><strong>blends</strong> &#8211; specific blendShape nodes to test against, default=[]</li>
-<li><strong>meshcheck</strong> &#8211; only check blends associated to polymeshes, default=True</li>
-<li><strong>forcefix</strong> &#8211; if True then the fix will try and force the re-build, managing any
+<li><strong>blends</strong> – specific blendShape nodes to test against, default=[]</li>
+<li><strong>meshcheck</strong> – only check blends associated to polymeshes, default=True</li>
+<li><strong>forcefix</strong> – if True then the fix will try and force the re-build, managing any
 current connections to the blend targets, disconnecting as needed and restoring afterwards.
 Ideally this should NOT be needed, but if your rig has multiple connections that are hard
 to track then this should by-pass the issues</li>
@@ -1598,10 +1582,10 @@ to track then this should by-pass the issues</li>
 blendShape node for editing or for export requirements</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">if the &#8220;blends_have_targetGeo_test&#8221; has the &#8220;forcefix&#8221; flag set then the fix code
+<p class="last">if the “blends_have_targetGeo_test” has the “forcefix” flag set then the fix code
 will try and manage any current connections and deformer states as well as all current
 wires to the blendshape node targets themselves. This is a hard core force fix but does restore
-all connections afterwards. If the targets are un-wired then that&#8217;s ideal but the code will cope if not</p>
+all connections afterwards. If the targets are un-wired then that’s ideal but the code will cope if not</p>
 </div>
 </dd></dl>
 
@@ -1616,8 +1600,8 @@ this its crucial for some game engine exporters</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; hard set to True, we wouldn&#8217;t run the test unless we expected it to be so.</li>
-<li><strong>blends</strong> &#8211; specific blendShape nodes to test against, default=[]</li>
+<li><strong>expected</strong> – hard set to True, we wouldn’t run the test unless we expected it to be so.</li>
+<li><strong>blends</strong> – specific blendShape nodes to test against, default=[]</li>
 </ul>
 </td>
 </tr>
@@ -1629,7 +1613,7 @@ this its crucial for some game engine exporters</p>
 <dt id="Red9.pro_pack.core.optimiser.blends_targetGeo_name_fix">
 <code class="descname">blends_targetGeo_name_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.blends_targetGeo_name_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>try and rename any failed target meshes back to the name of the
-target on the blendshape they&#8217;re connected too</p>
+target on the blendshape they’re connected too</p>
 </dd></dl>
 
 <dl class="function">
@@ -1649,7 +1633,7 @@ down the line when outputting FBX blendshape data to Unreal</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>autofix</strong> &#8211; if True we turn on the brute force fix method which will
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>autofix</strong> – if True we turn on the brute force fix method which will
 insert a copy of the base mesh into the empty index slots, therefore
 by-passing the FBX export issue</td>
 </tr>
@@ -1674,7 +1658,7 @@ new target for the missing index, there by fixing the FBX export issue for Unrea
 <dt id="Red9.pro_pack.core.optimiser.mesh_compare_against_OBJ_test">
 <code class="descname">mesh_compare_against_OBJ_test</code><span class="sig-paren">(</span><em>expected</em>, <em>mesh</em>, <em>opendiff=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_compare_against_OBJ_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>compare a given mesh against an expected OBJ file generated
-by the &#8220;mesh_compare_generate&#8221; func above and passed in as a path.
+by the “mesh_compare_generate” func above and passed in as a path.
 This is useful when building complex facial systems so you can
 validate that your mesh returns to the actual master Mesh delivered
 by clients. Sometimes simply turning off the skinCluster envelope
@@ -1684,10 +1668,10 @@ is not enough re-assurance that the mesh matches.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; in this case a path to an obj file that we&#8217;re
+<li><strong>expected</strong> – in this case a path to an obj file that we’re
 going to validate the given mesh against</li>
-<li><strong>mesh</strong> &#8211; mesh to compare against in scene</li>
-<li><strong>opendiff</strong> &#8211; if True open diffMerge and show the difference in the file structure</li>
+<li><strong>mesh</strong> – mesh to compare against in scene</li>
+<li><strong>opendiff</strong> – if True open diffMerge and show the difference in the file structure</li>
 </ul>
 </td>
 </tr>
@@ -1735,7 +1719,7 @@ the correct rootfolder path</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> &#8211; rootpath to test against</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> – rootpath to test against</td>
 </tr>
 </tbody>
 </table>
@@ -1744,7 +1728,7 @@ the correct rootfolder path</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.texture_path_under_rootfolder_fix">
 <code class="descname">texture_path_under_rootfolder_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.texture_path_under_rootfolder_fix" title="Permalink to this definition">¶</a></dt>
-<dd><p>repath the textures if they aren&#8217;t in a subfolder from the basefile</p>
+<dd><p>repath the textures if they aren’t in a subfolder from the basefile</p>
 </dd></dl>
 
 <dl class="function">
@@ -1756,8 +1740,8 @@ the correct rootfolder path</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; True - all joints have zero rotates</li>
-<li><strong>nodes</strong> &#8211; list of specific nodes to test if you want to test only specific shapes</li>
+<li><strong>expected</strong> – True - all joints have zero rotates</li>
+<li><strong>nodes</strong> – list of specific nodes to test if you want to test only specific shapes</li>
 </ul>
 </td>
 </tr>
@@ -1772,9 +1756,55 @@ the correct rootfolder path</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.optimiser.chSet_arrays">
-<code class="descname">chSet_arrays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.chSet_arrays" title="Permalink to this definition">¶</a></dt>
-<dd><p>CharacterSet debugging for placeholder list orders</p>
+<dt id="Red9.pro_pack.core.optimiser.character_set_arrays">
+<code class="descname">character_set_arrays</code><span class="sig-paren">(</span><em>chset=''</em>, <em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_arrays" title="Permalink to this definition">¶</a></dt>
+<dd><p>CharacterSet debugging for placeholder list orders. This returns a dic
+containing {‘linearValues’:[], ‘angularValues’:[], ‘unitlessValues’:[]}
+where each key is a list of tuples [(index, plug, node, attr), (……</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>chset</strong> – if given inspect this chSet, else use the character set in the scene</li>
+<li><strong>filepath</strong> – optional, if given save the data out to a json file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>TODO: store the data via the metaWires rather than dagpath/node??</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.character_set_compare">
+<code class="descname">character_set_compare</code><span class="sig-paren">(</span><em>chset=''</em>, <em>filepath=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_compare" title="Permalink to this definition">¶</a></dt>
+<dd><p>compare the contents of the current chSet in the scene with that given from filepath
+:param chset: if given inspect this chSet, else use the character set in the scene
+:param filepath: filepath for the stored out chSet to compare against. This must be written out by the character_set_arrays() func above
+:return: list of fails as a dict {‘linearValues’:[], ‘angularValues’:[], ‘unitlessValues’:[], ‘additionalPlugs’:[]}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.character_set_recreate">
+<code class="descname">character_set_recreate</code><span class="sig-paren">(</span><em>filepath</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_recreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a given chSet json file, rebuild the character set from scratch
+:param filepath: re-create a character set from scratch using the given file, generated by the character_set_arrays() func
+:param force: if True and the scene already has a character set then we delete that before rebuilding</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.character_set_compare_test">
+<code class="descname">character_set_compare_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_compare_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>test to compare the current character set in the scene with the given characterSet file.
+If filepath isn’t given then we check for the existance of a ‘_character.chset’ file in the
+same directory as the current Maya scene (assuming it’s a rig file / build directory)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.character_set_compare_fix">
+<code class="descname">character_set_compare_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_compare_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>fix method : attempt to remake the character set</p>
 </dd></dl>
 
 <dl class="function">
@@ -1786,9 +1816,9 @@ the correct rootfolder path</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expected</strong> &#8211; int=0, number of nodes of this nodeType in the scene
-that&#8217;s acceptable</li>
-<li><strong>nodeType</strong> &#8211; Maya nodeTyoe to scan for, default=audio</li>
+<li><strong>expected</strong> – int=0, number of nodes of this nodeType in the scene
+that’s acceptable</li>
+<li><strong>nodeType</strong> – Maya nodeTyoe to scan for, default=audio</li>
 </ul>
 </td>
 </tr>
@@ -1812,7 +1842,7 @@ then used as the default which fails will get set too</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> &#8211; [2, 0]  where 0=&#8217;noflip&#8217;, 1=&#8217;average&#8217;, 2=&#8217;shortest&#8217;, note that is this is given as
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> – [2, 0]  where 0=’noflip’, 1=’average’, 2=’shortest’, note that is this is given as
 a list then the first arg is the default that failed interTypes will get set too.</td>
 </tr>
 </tbody>
@@ -1832,13 +1862,13 @@ a list then the first arg is the default that failed interTypes will get set too
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> &#8211; [] list of layers expected to be present, any others would fail the test</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> – [] list of layers expected to be present, any others would fail the test</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">if a layer is connected to the layerManager in Id[0] slot index then it&#8217;s
+<p class="last">if a layer is connected to the layerManager in Id[0] slot index then it’s
 treated as the defaultLayer and UNEDITABLE. This has happened a few times with assets in 2018</p>
 </div>
 </dd></dl>
@@ -1870,7 +1900,7 @@ file pointer and are therefore currently invalid</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> &#8211; [] list of namespaces that are valid</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> – [] list of namespaces that are valid</td>
 </tr>
 </tbody>
 </table>
@@ -1882,7 +1912,7 @@ nested namespaces correctly</p>
 <dt id="Red9.pro_pack.core.optimiser.namespaces_found_fix">
 <code class="descname">namespaces_found_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.namespaces_found_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>remove any references that come back as invalid. For this process we try and shift
-the failed namespaces into the root &#8221;:&#8221; space before removing the then empty namespace</p>
+the failed namespaces into the root “:” space before removing the then empty namespace</p>
 </dd></dl>
 
 <dl class="function">
@@ -1954,8 +1984,8 @@ These are nodes from other plug-ins</p>
 <dt id="Red9.pro_pack.core.optimiser.turtle_nodes_delete">
 <code class="descname">turtle_nodes_delete</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.turtle_nodes_delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove Turtle nodes from the scene, note that from Maya 2017 we have a
-specific call in the ilrUserInterface.mel for this that doens&#8217;t cause a
-user prompt so we&#8217;re hooking to that</p>
+specific call in the ilrUserInterface.mel for this that doens’t cause a
+user prompt so we’re hooking to that</p>
 </dd></dl>
 
 <dl class="function">
@@ -1981,18 +2011,20 @@ user prompt so we&#8217;re hooking to that</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/red9pro_templates/Red9_Pro_optimiser.txt"
+      <li><a href="../_sources/red9pro_templates/Red9_Pro_optimiser.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -2019,7 +2051,7 @@ user prompt so we&#8217;re hooking to that</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2016, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

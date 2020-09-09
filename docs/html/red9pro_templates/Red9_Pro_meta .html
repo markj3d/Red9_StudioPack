@@ -1,33 +1,25 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Pro_Pack : MetaData &#8212; Red9 2.0 documentation</title>
-    
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pro_Pack : Optimiser" href="Red9_Pro_optimiser.html" />
     <link rel="prev" title="Pro_Pack : ImportExport" href="Red9_Pro_importexport.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -58,8 +50,8 @@
 extended pipelines running under ProPack. These include our Red9Puppet and
 the exporter and audio management systems. This is the very core of all the Red9
 pipeline when running the Red9 Puppet rig.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9pmeta&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9pmeta</span>
 </pre></div>
@@ -73,53 +65,53 @@ requires the StudioPack codebase to run</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig_Base</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pro_MetaRig_Base</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Red9 Puppet Rig bespoke Base Class for Rig system MetaRig core.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pro_MetaRig</span></code></a>(*args,&nbsp;**kws)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig_SRC</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pro_MetaRig_SRC</span></code></a>(*args,&nbsp;**kws)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig_Prop</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pro_MetaRig_Prop</span></code></a>(*args,&nbsp;**kws)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_External" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_External"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig_External</span></code></a>(*args,&nbsp;**kws)</td>
-<td>Base class for external rigs being wired to the system, unless</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_External" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_External"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pro_MetaRig_External</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Base class for external rigs being wired to the system, unless being wired to simulate a Red9 Puppet wiring setup, usually with support from us directly</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI"><code class="xref py py-obj docutils literal"><span class="pre">Pro_MetaRig_FacialUI</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pro_MetaRig_FacialUI</span></code></a>(*args,&nbsp;**kws)</td>
 <td>SubClass of the MetaRig, designed to manage facial board style controls for a facial system.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-obj docutils literal"><span class="pre">ExportTag_Base</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Base</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Generic Export base class inheriting from MetaClass.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Character" title="Red9.pro_pack.core.metadata_pro.ExportTag_Character"><code class="xref py py-obj docutils literal"><span class="pre">ExportTag_Character</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Character" title="Red9.pro_pack.core.metadata_pro.ExportTag_Character"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Character</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Export subclass for characters</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Facial" title="Red9.pro_pack.core.metadata_pro.ExportTag_Facial"><code class="xref py py-obj docutils literal"><span class="pre">ExportTag_Facial</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Facial" title="Red9.pro_pack.core.metadata_pro.ExportTag_Facial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Facial</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Export subclass for Facial UI systems</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Prop" title="Red9.pro_pack.core.metadata_pro.ExportTag_Prop"><code class="xref py py-obj docutils literal"><span class="pre">ExportTag_Prop</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Prop" title="Red9.pro_pack.core.metadata_pro.ExportTag_Prop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Prop</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Export subclass for props</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Environment" title="Red9.pro_pack.core.metadata_pro.ExportTag_Environment"><code class="xref py py-obj docutils literal"><span class="pre">ExportTag_Environment</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Environment" title="Red9.pro_pack.core.metadata_pro.ExportTag_Environment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Environment</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Export subclass for environments</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode" title="Red9.pro_pack.core.metadata_pro.ExportLoopNode"><code class="xref py py-obj docutils literal"><span class="pre">ExportLoopNode</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode" title="Red9.pro_pack.core.metadata_pro.ExportLoopNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportLoopNode</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Base Export Timerange node, intended to hook to a valid ExportTag metaNode to define exact timeranges and paths etc.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ImagePlane" title="Red9.pro_pack.core.metadata_pro.ImagePlane"><code class="xref py py-obj docutils literal"><span class="pre">ImagePlane</span></code></a>(*args,&nbsp;**kws)</td>
-<td>base classs to manage and setup ImagePlanes within Maya, instanciated as a MetaNode</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ImagePlane" title="Red9.pro_pack.core.metadata_pro.ImagePlane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ImagePlane</span></code></a>(*args,&nbsp;**kws)</td>
+<td>base classs to manage and setup ImagePlanes within Maya, instanciated as a MetaNode for better back-end management and exposure of the base attributes directly on the class</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.SceneMover" title="Red9.pro_pack.core.metadata_pro.SceneMover"><code class="xref py py-obj docutils literal"><span class="pre">SceneMover</span></code></a>([compensate_node])</td>
-<td>Scene Shift Handler : to move an entire Maya scene in world space</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.SceneMover" title="Red9.pro_pack.core.metadata_pro.SceneMover"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SceneMover</span></code></a>([compensate_node])</td>
+<td>Scene Shift Handler : to move an entire Maya scene in world space under a managed node</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.AudioGroup" title="Red9.pro_pack.core.metadata_pro.AudioGroup"><code class="xref py py-obj docutils literal"><span class="pre">AudioGroup</span></code></a>(*args,&nbsp;**kws)</td>
-<td>a simple node designed to group / link audio sound nodes to together so they can</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.AudioGroup" title="Red9.pro_pack.core.metadata_pro.AudioGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AudioGroup</span></code></a>(*args,&nbsp;**kws)</td>
+<td>a simple node designed to group / link audio sound nodes to together so they can be linked to a character rig for export logic handling</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD" title="Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD"><code class="xref py py-obj docutils literal"><span class="pre">MetaTimeCodeHUD</span></code></a>(*args,&nbsp;**kws)</td>
-<td>Generate&#8217;s a HUD node connected to the main timecode attrs,</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD" title="Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MetaTimeCodeHUD</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Generate’s a HUD node connected to the main timecode attrs, allows us to show the actual internal timecode attrs as their original SMPTE time’s</td>
 </tr>
 </tbody>
 </table>
@@ -133,9 +125,9 @@ features of the codebase without having to manually build a structured network</
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; nodes to wire as controllers to the MetaRig</li>
-<li><strong>name</strong> &#8211; name of the MetaRig node generated if no mRig was passed in.</li>
-<li><strong>mRig</strong> &#8211; optional MetaRig instance to add the controls too,
+<li><strong>nodes</strong> – nodes to wire as controllers to the MetaRig</li>
+<li><strong>name</strong> – name of the MetaRig node generated if no mRig was passed in.</li>
+<li><strong>mRig</strong> – optional MetaRig instance to add the controls too,
 if blank then we generate a new instance and return that</li>
 </ul>
 </td>
@@ -161,21 +153,22 @@ during the fk_to_fk_match call</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mSystem</strong> &#8211; mSystem to wire the matchpnt too</li>
-<li><strong>ctrl_wire</strong> &#8211; mSystem.attr wire connecting the controller to the mSystem, OR the controller object itself - wired to a MetaRigSubSystem
+<li><strong>mSystem</strong> – mSystem to wire the matchpnt too</li>
+<li><strong>ctrl_wire</strong> – mSystem.attr wire connecting the controller to the mSystem, OR the controller object itself - wired to a MetaRigSubSystem
 note that this now also supports ctrl_wire attrs that are connected to the SupportNode also</li>
-<li><strong>fk_wire</strong> &#8211; mSystem.attr wire connecting the fk_jnt to the mSystem, OR object to use directly</li>
-<li><strong>matchid</strong> &#8211; denotes the matchpnts base wire name - eg : &#8220;end&#8221;, &#8220;pole&#8221; creating attr wire &#8216;mSystem.SupportNode.IK_matchpnt_pole&#8217;</li>
-<li><strong>prefix</strong> &#8211; usually just the side id for the system &#8216;L&#8217;,&#8217;R&#8217;,&#8217;C&#8217;, if not given we ID this from the system mirrorSide</li>
-<li><strong>parent</strong> &#8211; if given this becomes the parent for the matchpnt, else we parent it to the given fk_wrie node</li>
-<li><strong>target</strong> &#8211; &#8216;IK&#8217; or &#8216;FK&#8217;, reverses the logic of the func. If &#8216;IK&#8217; then the matchpnt will be parented under the fk_wire node,
-if &#8216;FK&#8217; then the matchpnt is parented under the ik / ctrl_wire node</li>
+<li><strong>fk_wire</strong> – mSystem.attr wire connecting the fk_jnt to the mSystem, OR object to use directly</li>
+<li><strong>matchid</strong> – denotes the matchpnts base wire name - eg : “end”, “pole” creating attr wire ‘mSystem.SupportNode.IK_matchpnt_pole’</li>
+<li><strong>prefix</strong> – usually just the side id for the system ‘L’,’R’,’C’, if not given we ID this from the system mirrorSide</li>
+<li><strong>parent</strong> – if given this becomes the parent for the matchpnt, else we parent it to the given fk_wrie node</li>
+<li><strong>target</strong> – ‘IK’ or ‘FK’, reverses the logic of the func.
+if ‘IK’ the matchpnt is parented under the if / fk_wire node, and used when snapping to IK mode : the IK ctrl snaps to the FK ctrl
+if ‘FK’ the matchpnt is parented under the ik / ctrl_wire node, and used when snapping to FK mode : the FK ctrl snaps to the IK ctrl</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>r9pmeta.add_fkik_matchpnt(mSystem, &#8216;CTRL_Wrist&#8217;, &#8216;CTRL_FK_End&#8217;, &#8216;end&#8217;, &#8216;L&#8217;)</p>
+<p>r9pmeta.add_fkik_matchpnt(mSystem, ‘CTRL_Wrist’, ‘CTRL_FK_End’, ‘end’, ‘L’)</p>
 </dd></dl>
 
 <dl class="function">
@@ -190,8 +183,8 @@ wires to denote the group directly above the Ik and Fk chains in the system.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mrig</strong> &#8211; the mrig instantiated class to process</li>
-<li><strong>force_version</strong> &#8211; if given this forces the build version of the rig to be ignored. Some of the matchpnt logic
+<li><strong>mrig</strong> – the mrig instantiated class to process</li>
+<li><strong>force_version</strong> – if given this forces the build version of the rig to be ignored. Some of the matchpnt logic
 has been clamped to specific build versions for consistency. v1.08 and above triggers the latest logic</li>
 </ul>
 </td>
@@ -206,7 +199,7 @@ system and requires a little baby sitting!</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">if the rig is NOT facing the &#8216;Z&#8217; axis the toe matching data sent to the toe system during the
+<p class="last">if the rig is NOT facing the ‘Z’ axis the toe matching data sent to the toe system during the
 ik/fk match will be INCORRECT!</p>
 </div>
 </dd></dl>
@@ -234,8 +227,8 @@ production board, or an external board connected to the node such as 3Laterals</
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>tagIDs</strong> &#8211; [] if given only return exportTags whos id matches</li>
-<li><strong>exactmatch</strong> &#8211; bool, if True we name the exact string passed in, else we do &#8216;if x in y&#8217; : default=False</li>
+<li><strong>tagIDs</strong> – [] if given only return exportTags whos id matches</li>
+<li><strong>exactmatch</strong> – bool, if True we name the exact string passed in, else we do ‘if x in y’ : default=False</li>
 </ul>
 </td>
 </tr>
@@ -252,8 +245,8 @@ production board, or an external board connected to the node such as 3Laterals</
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>loopname</strong> &#8211; [] if given only return ExportLoops whos loopname matches</li>
-<li><strong>exactmatch</strong> &#8211; bool, if True we name the exact string passed in, else we do &#8216;if x in y&#8217; : default=False</li>
+<li><strong>loopname</strong> – [] if given only return ExportLoops whos loopname matches</li>
+<li><strong>exactmatch</strong> – bool, if True we name the exact string passed in, else we do ‘if x in y’ : default=False</li>
 </ul>
 </td>
 </tr>
@@ -265,7 +258,7 @@ production board, or an external board connected to the node such as 3Laterals</
 <dt id="Red9.pro_pack.core.metadata_pro.get_fileProductionType">
 <code class="descname">get_fileProductionType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.get_fileProductionType" title="Permalink to this definition">¶</a></dt>
 <dd><p>gets the status of the currently loaded file depending on the systems found</p>
-<p>rType: &#8216;SRC_EXT&#8217;,&#8217;RIG&#8217;,&#8217;PUB&#8217;</p>
+<p>rType: ‘SRC_EXT’,’RIG’,’PUB’</p>
 </dd></dl>
 
 <dl class="function">
@@ -273,16 +266,16 @@ production board, or an external board connected to the node such as 3Laterals</
 <code class="descname">save_connection_datamap</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>mrig=None</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.save_connection_datamap" title="Permalink to this definition">¶</a></dt>
 <dd><p>save method to store a complete datamap for the given mRig systems.
 This enables us to save an mRig system off to file and reload all wires back without
-having to craft custom wiring macro&#8217;s directly. This is called in the RigPublisher
+having to craft custom wiring macro’s directly. This is called in the RigPublisher
 to enable you to manually craft rigs and load / save them back in</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; filepath to save the datamap to, if not given prompt</li>
-<li><strong>mrig</strong> &#8211; save specific mRig in the scene or just find the first instance available</li>
-<li><strong>verbose</strong> &#8211; if True raise confirmDialog as needed</li>
+<li><strong>filepath</strong> – filepath to save the datamap to, if not given prompt</li>
+<li><strong>mrig</strong> – save specific mRig in the scene or just find the first instance available</li>
+<li><strong>verbose</strong> – if True raise confirmDialog as needed</li>
 </ul>
 </td>
 </tr>
@@ -294,14 +287,14 @@ to enable you to manually craft rigs and load / save them back in</p>
 <dt id="Red9.pro_pack.core.metadata_pro.load_connection_datamap">
 <code class="descname">load_connection_datamap</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.load_connection_datamap" title="Permalink to this definition">¶</a></dt>
 <dd><p>load method to re-construct a datamap from scratch. This enables us to save an mRig
-off to file and reload all wires back without having to craft custom wiring macro&#8217;s</p>
+off to file and reload all wires back without having to craft custom wiring macro’s</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; filepath to load the datamap from, if not given prompt</li>
-<li><strong>verbose</strong> &#8211; if True raise confirmDialog as needed</li>
+<li><strong>filepath</strong> – filepath to load the datamap from, if not given prompt</li>
+<li><strong>verbose</strong> – if True raise confirmDialog as needed</li>
 </ul>
 </td>
 </tr>
@@ -319,8 +312,28 @@ against a previously stored out datamap.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; filepath to save the datamap to, if not given prompt</li>
-<li><strong>mrig</strong> &#8211; save specific mRig in the scene or just find the first instance available</li>
+<li><strong>filepath</strong> – filepath to save the datamap to, if not given prompt</li>
+<li><strong>mrig</strong> – save specific mRig in the scene or just find the first instance available</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.metadata_pro.skeleton_bpose_get_data">
+<code class="descname">skeleton_bpose_get_data</code><span class="sig-paren">(</span><em>rootjnt</em>, <em>jntonly=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.skeleton_bpose_get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple retrieval of the BPose PoseDict object which is 
+stored on the skeleton root by the RigManager. This BPose is used
+by the additive fbx export to force reset the skeleton pose before processing</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rootjnt</strong> – the root joint of the skeleton we want to get the BPose data from</li>
+<li><strong>jntonly</strong> – if True we return only the joint that the bpose is stamped onto, else we return the poseDict itself</li>
 </ul>
 </td>
 </tr>
@@ -331,7 +344,7 @@ against a previously stored out datamap.</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base">
 <em class="property">class </em><code class="descname">Pro_MetaRig_Base</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaRig" title="Red9.core.Red9_Meta.MetaRig"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaRig</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaRig" title="Red9.core.Red9_Meta.MetaRig"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.core.Red9_Meta.MetaRig</span></code></a></p>
 <p>Red9 Puppet Rig bespoke Base Class for Rig system MetaRig core. This is a general
 extension to the default MetaRig to include systems such as the export handling.
 This is aimed to be used for simple bespoke rigs and to provide a new base set of
@@ -341,21 +354,30 @@ functions for the main rig and facial classes that inherit from it.</p>
 <code class="descname">settings</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.settings" title="Permalink to this definition">¶</a></dt>
 <dd><p>bound filterSettings object used by the Animation Systems
 from now on so that this data can be bound directly to the
-rig so we don&#8217;t have to use the preset config&#8217;s all the time</p>
+rig so we don’t have to use the preset config’s all the time</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_systems">
 <code class="descname">get_systems</code><span class="sig-paren">(</span><em>systems</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_systems" title="Permalink to this definition">¶</a></dt>
 <dd><p>check if the mRig includes the given systems, and if so, return
-those mNode</p>
-<p>&#64;param systems: simple key to the systems you&#8217;re looking for</p>
+those mNode. Note this checks the mRig.getChildren(cAttrs=systems) hook
+not the systemType. For that use the get_systems_by_type call</p>
+<p>&#64;param systems: list of simple keys to the systems you’re looking for</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.has_systems">
 <code class="descname">has_systems</code><span class="sig-paren">(</span><em>systems</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.has_systems" title="Permalink to this definition">¶</a></dt>
-<dd><p>similar to the get_subsystems method but returns a bool</p>
+<dd><p>similar to the get_systems method but returns a bool</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>systems</strong> – list of systems we’re checking for</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -368,16 +390,16 @@ this is for debugging enabling us to compare that we have matching connections b
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; if given and not compare=True then we write the datamap to this json filepath.
+<li><strong>filepath</strong> – if given and not compare=True then we write the datamap to this json filepath.
 The existence of the filepath also forces the encode_objects flags on in all of the gatherInfo() calls
 ensuring that the data is suitable to file out to json</li>
-<li><strong>compare</strong> &#8211; if True and filepath is given then we compare the current data extracted with that of
+<li><strong>compare</strong> – if True and filepath is given then we compare the current data extracted with that of
 the master file given and return a dict of mismatching data</li>
-<li><strong>infoblock</strong> &#8211; if True we run gatherInfo() on the mRig to propagate the [info] block with relevant build and meta info</li>
-<li><strong>ctrl_only</strong> &#8211; if True (default) we ONLY collect data about CTRL_Prefix wired nodes, else we build up a
-complete map of all connections to the mRig and it&#8217;s child subsystems. Note that when doing a compare against a file
+<li><strong>infoblock</strong> – if True we run gatherInfo() on the mRig to propagate the [info] block with relevant build and meta info</li>
+<li><strong>ctrl_only</strong> – if True (default) we ONLY collect data about CTRL_Prefix wired nodes, else we build up a
+complete map of all connections to the mRig and it’s child subsystems. Note that when doing a compare against a file
 written by the RigManager this should be set to False!!</li>
-<li><strong>mInstances</strong> &#8211; if given only examine mNode&#8217;s inherited from these mInstances</li>
+<li><strong>mInstances</strong> – if given only examine mNode’s inherited from these mInstances</li>
 </ul>
 </td>
 </tr>
@@ -399,7 +421,7 @@ do we switch the code so that the key is the mNode name to by-pas this?</p>
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.rename_attr_prefix">
 <code class="descname">rename_attr_prefix</code><span class="sig-paren">(</span><em>currentPrefix</em>, <em>newPrefix=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.rename_attr_prefix" title="Permalink to this definition">¶</a></dt>
 <dd><p>rename a current mRigs.CTRL_Prefix wires to bring them in line with this
-subclass. Case in point, we&#8217;ve converted a current mClass to a new class but the
+subclass. Case in point, we’ve converted a current mClass to a new class but the
 new one has a different self.CTRL_Prefix than the last, resulting in getChildren failing,
 this will help sort that issue out</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -407,8 +429,8 @@ this will help sort that issue out</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>currentPrefix</strong> &#8211; the current prefix we&#8217;re wanting to replace</li>
-<li><strong>newPrefix</strong> &#8211; default is None which will use this instances self.CTRL_Prefix</li>
+<li><strong>currentPrefix</strong> – the current prefix we’re wanting to replace</li>
+<li><strong>newPrefix</strong> – default is None which will use this instances self.CTRL_Prefix</li>
 </ul>
 </td>
 </tr>
@@ -438,9 +460,9 @@ the linked geo</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>state</strong> &#8211; switch state</li>
-<li><strong>query</strong> &#8211; query the current state of the renderMeshes visibility, not required in toggle or query mode</li>
-<li><strong>toggle</strong> &#8211; toggle the state of the visibility, overwriting any state passed in</li>
+<li><strong>state</strong> – switch state</li>
+<li><strong>query</strong> – query the current state of the renderMeshes visibility, not required in toggle or query mode</li>
+<li><strong>toggle</strong> – toggle the state of the visibility, overwriting any state passed in</li>
 </ul>
 </td>
 </tr>
@@ -458,9 +480,9 @@ the linked GRP_Main Grp node</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>state</strong> &#8211; switch state</li>
-<li><strong>query</strong> &#8211; query the current state of the grpmain visibility</li>
-<li><strong>toggle</strong> &#8211; toggle the state of the visibility, overwriting any state passed in</li>
+<li><strong>state</strong> – switch state</li>
+<li><strong>query</strong> – query the current state of the grpmain visibility</li>
+<li><strong>toggle</strong> – toggle the state of the visibility, overwriting any state passed in</li>
 </ul>
 </td>
 </tr>
@@ -471,7 +493,7 @@ the linked GRP_Main Grp node</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_meshes_grp">
 <code class="descname">get_meshes_grp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_meshes_grp" title="Permalink to this definition">¶</a></dt>
-<dd><p>from all the renderMesh wires try and find the top level grp that they&#8217;re all under</p>
+<dd><p>from all the renderMesh wires try and find the top level grp that they’re all under</p>
 </dd></dl>
 
 <dl class="method">
@@ -491,16 +513,14 @@ mSRC style rigs that purely have an exportTag to ID the root jnt.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>tag</strong> &#8211; ID of the tag as a string</li>
-<li><strong>exportClass</strong> &#8211; class of exportTag to link up, this can be a string or the actual class</li>
-<li><strong>exportRoot</strong> &#8211; the root joint for the export</li>
+<li><strong>tag</strong> – ID of the tag as a string</li>
+<li><strong>exportClass</strong> – class of exportTag to link up, this can be a string or the actual class</li>
+<li><strong>exportRoot</strong> – the root joint for the export</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>TODO : run a getExportTags first to make sure we validate 1 ExpTag of type per rig
-BUT an mRig should be able to have 1 character and 1 facial tag at the same time</p>
 </dd></dl>
 
 <dl class="method">
@@ -512,8 +532,8 @@ BUT an mRig should be able to have 1 character and 1 facial tag at the same time
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>exportClass</strong> &#8211; if given only search for exportClass of type else return all connected exportTags</li>
-<li><strong>singular</strong> &#8211; if True we clamp this to the exportTag wire from self rather than any network searching</li>
+<li><strong>exportClass</strong> – if given only search for exportClass of type else return all connected exportTags</li>
+<li><strong>singular</strong> – if True we clamp this to the exportTag wire from self rather than any network searching</li>
 </ul>
 </td>
 </tr>
@@ -529,7 +549,7 @@ BUT an mRig should be able to have 1 character and 1 facial tag at the same time
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; cpicker template file to load to the rig</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> – cpicker template file to load to the rig</td>
 </tr>
 </tbody>
 </table>
@@ -543,7 +563,7 @@ BUT an mRig should be able to have 1 character and 1 facial tag at the same time
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>clipname</strong> &#8211; if given this is the name of the clip generated</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>clipname</strong> – if given this is the name of the clip generated</td>
 </tr>
 </tbody>
 </table>
@@ -560,15 +580,15 @@ removing a controller from all animation layers if it can do so and should any a
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>selected</strong> &#8211; bake only the selected ctrls if True, else bake all children of this mRig class</li>
-<li><strong>runFilter</strong> &#8211; if True run a Euler filter on the baked rotate data</li>
-<li><strong>deleteStatics</strong> &#8211; if True delete static anim curves created, reducing the data set  : changed 25/02/20 now defaults to False</li>
-<li><strong>sampleby</strong> &#8211; bake frame step, default=1</li>
-<li><strong>ignoreFilter</strong> &#8211; [] a list of nodes to skip the curve filter post bake if given</li>
-<li><strong>debugView</strong> &#8211; if True we allow the Maya UI to refresh each frame, else we suspend update</li>
-<li><strong>sparseBake</strong> &#8211; turns on the sparseAnimCurveBake flag in the bakeResults call, True by default</li>
-<li><strong>timerange</strong> &#8211; (start, end) optional timerange to bake, by default this uses the standard Red9 timeLineRangeGet func</li>
-<li><strong>whole_start</strong> &#8211; if True (default) we clamp tyhe start frame to a whole number, corrects for issues with scenes having frames at subframe times</li>
+<li><strong>selected</strong> – bake only the selected ctrls if True, else bake all children of this mRig class</li>
+<li><strong>runFilter</strong> – if True run a Euler filter on the baked rotate data</li>
+<li><strong>deleteStatics</strong> – if True delete static anim curves created, reducing the data set  : changed 25/02/20 now defaults to False</li>
+<li><strong>sampleby</strong> – bake frame step, default=1</li>
+<li><strong>ignoreFilter</strong> – [] a list of nodes to skip the curve filter post bake if given</li>
+<li><strong>debugView</strong> – if True we allow the Maya UI to refresh each frame, else we suspend update</li>
+<li><strong>sparseBake</strong> – turns on the sparseAnimCurveBake flag in the bakeResults call, True by default</li>
+<li><strong>timerange</strong> – (start, end) optional timerange to bake, by default this uses the standard Red9 timeLineRangeGet func</li>
+<li><strong>whole_start</strong> – if True (default) we clamp tyhe start frame to a whole number, corrects for issues with scenes having frames at subframe times</li>
 </ul>
 </td>
 </tr>
@@ -592,8 +612,8 @@ so we can use the data outside of the loadAnimation call</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; path to the r9Anim file, if not given then we use the current instance
-self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim file on this mRig</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> – path to the r9Anim file, if not given then we use the current instance
+self.animCache, assuming that we’ve already loaded or processed an r9Anim file on this mRig</td>
 </tr>
 </tbody>
 </table>
@@ -607,33 +627,33 @@ self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>extractBy</strong> &#8211; method by which we match up the stored exportLoops and find the ones we want to restore:</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>extractBy</strong> – method by which we match up the stored exportLoops and find the ones we want to restore:</td>
 </tr>
 </tbody>
 </table>
 <ul class="simple">
-<li>False : don&#8217;t restore any exportData,</li>
+<li>False : don’t restore any exportData,</li>
 <li>[] : if you pass in a list then we take that list and match internal exportloop names to it</li>
-<li>&#8216;byName&#8217; : restore only exportLoops who name matches the r9Anim&#8217;s name</li>
-<li>&#8216;byRange&#8217;: restore exportLoops that fall within the timerange of the imported r9Anim</li>
-<li>&#8216;byRange_start&#8217; : restore exportLoops that start after the timerange of the importer r9Anim (ignore end time data)</li>
-<li>&#8216;byRange_end&#8217; : restore exportLoops that end before the timerange of the importer r9Anim (ignore start time data)</li>
-<li>&#8216;byAll&#8217; : restore ALL exportLoops in the r9Anim infoData block</li>
+<li>‘byName’ : restore only exportLoops who name matches the r9Anim’s name</li>
+<li>‘byRange’: restore exportLoops that fall within the timerange of the imported r9Anim</li>
+<li>‘byRange_start’ : restore exportLoops that start after the timerange of the importer r9Anim (ignore end time data)</li>
+<li>‘byRange_end’ : restore exportLoops that end before the timerange of the importer r9Anim (ignore start time data)</li>
+<li>‘byAll’ : restore ALL exportLoops in the r9Anim infoData block</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>suppress</strong> &#8211; suppress the confirm dialogs</li>
-<li><strong>filepath</strong> &#8211; path to the r9Anim file, if not given then we use the current instance
-self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim file on this mRig</li>
+<li><strong>suppress</strong> – suppress the confirm dialogs</li>
+<li><strong>filepath</strong> – path to the r9Anim file, if not given then we use the current instance
+self.animCache, assuming that we’ve already loaded or processed an r9Anim file on this mRig</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Red9.core.Red9_Meta</span> <span class="k">as</span> <span class="nn">r9Meta</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Red9.core.Red9_Meta</span> <span class="k">as</span> <span class="nn">r9Meta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">animMap_restore_export_data</span><span class="p">(</span><span class="n">extractBy</span><span class="o">=</span><span class="s1">&#39;byRange&#39;</span><span class="p">,</span><span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;X:/my_animation_data/walk_to_sit.r9anim&#39;</span><span class="p">)</span>
 </pre></div>
@@ -648,33 +668,33 @@ self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>extractBy</strong> &#8211; method by which we match up the stored exportLoops and find the ones we want to restore:</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>extractBy</strong> – method by which we match up the stored exportLoops and find the ones we want to restore:</td>
 </tr>
 </tbody>
 </table>
 <ul class="simple">
-<li>False : don&#8217;t restore any audioData,</li>
+<li>False : don’t restore any audioData,</li>
 <li>[] : if you pass in a list then we take that list and match internal audioNode names to it</li>
-<li>&#8216;byName&#8217; : restore only audioNodes who name matches the r9Anim&#8217;s name</li>
-<li>&#8216;byRange&#8217;: restore audioNodes that fall within the timerange of the imported r9Anim</li>
-<li>&#8216;byRange_start&#8217; : restore audioNodes that start after the timerange of the importer r9Anim (ignore end time data)</li>
-<li>&#8216;byRange_end&#8217; : restore audioNodes that end before the timerange of the importer r9Anim (ignore start time data)</li>
-<li>&#8216;byAll&#8217; : restore ALL audioNodes in the r9Anim infoData block</li>
+<li>‘byName’ : restore only audioNodes who name matches the r9Anim’s name</li>
+<li>‘byRange’: restore audioNodes that fall within the timerange of the imported r9Anim</li>
+<li>‘byRange_start’ : restore audioNodes that start after the timerange of the importer r9Anim (ignore end time data)</li>
+<li>‘byRange_end’ : restore audioNodes that end before the timerange of the importer r9Anim (ignore start time data)</li>
+<li>‘byAll’ : restore ALL audioNodes in the r9Anim infoData block</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>suppress</strong> &#8211; suppress the confirm dialogs</li>
-<li><strong>filepath</strong> &#8211; path to the r9Anim file, if not given then we use the current instance
-self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim file on this mRig</li>
+<li><strong>suppress</strong> – suppress the confirm dialogs</li>
+<li><strong>filepath</strong> – path to the r9Anim file, if not given then we use the current instance
+self.animCache, assuming that we’ve already loaded or processed an r9Anim file on this mRig</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Red9.core.Red9_Meta</span> <span class="k">as</span> <span class="nn">r9Meta</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">Red9.core.Red9_Meta</span> <span class="k">as</span> <span class="nn">r9Meta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">animMap_restore_audio_data</span><span class="p">(</span><span class="n">extractBy</span><span class="o">=</span><span class="s1">&#39;byRange_start&#39;</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;X:/my_animation_data/walk_to_sit.r9anim&#39;</span><span class="p">)</span>
 </pre></div>
@@ -690,15 +710,15 @@ mRigs with a valid exportTag will accept Audio restored data via this call</p>
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_restore_talkback_data">
 <code class="descname">animMap_restore_talkback_data</code><span class="sig-paren">(</span><em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.animMap_restore_talkback_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>simply parse the r9Anim file and load the animCache dict that will include the
-TalkBack data under the audio keys. This will only pull the first audioNode&#8217;s data
+TalkBack data under the audio keys. This will only pull the first audioNode’s data
 if there are multiple audioNodes under the audioGrp</p>
-<p>animCache.infoDict[&#8216;audioGrp&#8217;][&#8216;audioNodes&#8217;][audio][&#8216;talkback&#8217;]</p>
+<p>animCache.infoDict[‘audioGrp’][‘audioNodes’][audio][‘talkback’]</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> &#8211; path to the r9Anim file, if not given then we use the current instance
-self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim file on this mRig</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filepath</strong> – path to the r9Anim file, if not given then we use the current instance
+self.animCache, assuming that we’ve already loaded or processed an r9Anim file on this mRig</td>
 </tr>
 </tbody>
 </table>
@@ -710,7 +730,7 @@ self.animCache, assuming that we&#8217;ve already loaded or processed an r9Anim 
 <dd><p>simply parse the r9Anim file and load the animCache dict that will include the
 imageplane data under the facialUI keys. This will only be valid when called from
 Pro_MetaRig_FacialUI class objects, or inherited sub-classes</p>
-<p>animCache.infoDict[&#8216;facialUI&#8217;][&#8216;imageplanes&#8217;]</p>
+<p>animCache.infoDict[‘facialUI’][‘imageplanes’]</p>
 </dd></dl>
 
 <dl class="method">
@@ -724,13 +744,13 @@ and persistence of audio nodes and export loops stored in the r9Anim gathered in
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>feedback</strong> &#8211; the feedback data from the loadAnimations call</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>feedback</strong> – the feedback data from the loadAnimations call</td>
 </tr>
 </tbody>
 </table>
 <ul class="simple">
-<li>default kws: manageExport: restore the exportLoop data  # False, [list, or, specific, keys], &#8216;byName&#8217;, &#8216;byRange&#8217;, &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;byAll&#8217;</li>
-<li>default kws: manageAudio: restore the AudioGrp data # False, [list, or, specific, keys], &#8216;byName&#8217;, &#8216;byRange&#8217;, &#8216;byRange_start&#8217;, &#8216;byRange_end&#8217;, &#8216;byAll&#8217;</li>
+<li>default kws: manageExport: restore the exportLoop data  # False, [list, or, specific, keys], ‘byName’, ‘byRange’, ‘byRange_start’, ‘byRange_end’, ‘byAll’</li>
+<li>default kws: manageAudio: restore the AudioGrp data # False, [list, or, specific, keys], ‘byName’, ‘byRange’, ‘byRange_start’, ‘byRange_end’, ‘byAll’</li>
 <li>default kws: manageImagePlanes: restore the ImagePlane data, simple bool</li>
 <li>default kws: suppress: suppress any warnings</li>
 </ul>
@@ -746,10 +766,10 @@ over the StudioPack AnimatioUtils call for the pose blending but setup for the m
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; path to the pose file to load</li>
-<li><strong>useFilter</strong> &#8211; do we load as hierarchy or selected?</li>
-<li><strong>matchmethod</strong> &#8211; hard coded at the moment</li>
-<li><strong>percentage</strong> &#8211; if not None them we pass this percentage directly into the load call, by-passing the slider ui</li>
+<li><strong>filepath</strong> – path to the pose file to load</li>
+<li><strong>useFilter</strong> – do we load as hierarchy or selected?</li>
+<li><strong>matchmethod</strong> – hard coded at the moment</li>
+<li><strong>percentage</strong> – if not None them we pass this percentage directly into the load call, by-passing the slider ui</li>
 </ul>
 </td>
 </tr>
@@ -761,31 +781,31 @@ over the StudioPack AnimatioUtils call for the pose blending but setup for the m
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.switch_attr_compensated">
 <code class="descname">switch_attr_compensated</code><span class="sig-paren">(</span><em>node=None</em>, <em>attr=None</em>, <em>val=None</em>, <em>multinode=[]</em>, <em>nodes_to_compensate=[]</em>, <em>mSystems_to_compensate=[]</em>, <em>time=True</em>, <em>timerange=()</em>, <em>keyswitch=True</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>smartBakeRef=[]</em>, <em>padtime=True</em>, <em>runfilter=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.switch_attr_compensated" title="Permalink to this definition">¶</a></dt>
 <dd><p>complex func that uses the new exposure of the animPPC handlers to set an attr on a
-node / list of nodes without it affecting the world space transforms of those nodes in the &#8216;nodes_to_compensate&#8217;
-list. If this isn&#8217;t given then the entire rig will be compensated for</p>
+node / list of nodes without it affecting the world space transforms of those nodes in the ‘nodes_to_compensate’
+list. If this isn’t given then the entire rig will be compensated for</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>node</strong> &#8211; the node holding the attribute we want to switch</li>
-<li><strong>attr</strong> &#8211; the attribute to switch</li>
-<li><strong>val</strong> &#8211; the new value for the attribute</li>
-<li><strong>multinode</strong> &#8211; if given this replaces the node,attr,val data with a list of tuples such that [(node, attr, val),...]
+<li><strong>node</strong> – the node holding the attribute we want to switch</li>
+<li><strong>attr</strong> – the attribute to switch</li>
+<li><strong>val</strong> – the new value for the attribute</li>
+<li><strong>multinode</strong> – if given this replaces the node,attr,val data with a list of tuples such that [(node, attr, val),…]
 this allows for more nodes to be processed in 1 go, allowing multiple node attr values to change and be compensated for at the same time</li>
-<li><strong>nodes_to_compensate</strong> &#8211; a list of controllers that we want to have their world xforms
+<li><strong>nodes_to_compensate</strong> – a list of controllers that we want to have their world xforms
 re-calculated for to compensate for the switched attr</li>
-<li><strong>mSystems_to_compensate</strong> &#8211; a list of mSystems who&#8217;s children we want to have their world xforms
+<li><strong>mSystems_to_compensate</strong> – a list of mSystems who’s children we want to have their world xforms
 re-calculated for to compensate for the switched attr. These children are added to the nodes_to_compensate list if given</li>
-<li><strong>time</strong> &#8211; bool, do we compensate the nodes over time or at the curentTime only. if keyswitch=False this is turned off</li>
-<li><strong>timerange</strong> &#8211; timerange to process, if not given and time=True then we run the r9Anim.timeLineRangeGet() to resolve it
+<li><strong>time</strong> – bool, do we compensate the nodes over time or at the curentTime only. if keyswitch=False this is turned off</li>
+<li><strong>timerange</strong> – timerange to process, if not given and time=True then we run the r9Anim.timeLineRangeGet() to resolve it
 if keyswitch=False this is turned off</li>
-<li><strong>keyswitch</strong> &#8211; do we set keys on the switch attr and the nodes_to_compensate, or just switch the data without setting any keys</li>
-<li><strong>step</strong> &#8211; frame step between compensation keys</li>
-<li><strong>smartbake</strong> &#8211; if True we look at the mSystem&#8217;s current keys and only match over those keys if time enabled</li>
-<li><strong>padtime</strong> &#8211; if True we pad the timerange processed for the &#8220;nodes_to_compensate&#8221; by 1 frame either side to allow for solid switching and
-compensation, aimed at situations like parent switching where we need solid holding keys outside of the timerange we&#8217;re processing</li>
-<li><strong>runfilter</strong> &#8211; run a quick Euler filter after the process to try and avoid any introduced gimbal</li>
+<li><strong>keyswitch</strong> – do we set keys on the switch attr and the nodes_to_compensate, or just switch the data without setting any keys</li>
+<li><strong>step</strong> – frame step between compensation keys</li>
+<li><strong>smartbake</strong> – if True we look at the mSystem’s current keys and only match over those keys if time enabled</li>
+<li><strong>padtime</strong> – if True we pad the timerange processed for the “nodes_to_compensate” by 1 frame either side to allow for solid switching and
+compensation, aimed at situations like parent switching where we need solid holding keys outside of the timerange we’re processing</li>
+<li><strong>runfilter</strong> – run a quick Euler filter after the process to try and avoid any introduced gimbal</li>
 </ul>
 </td>
 </tr>
@@ -805,15 +825,15 @@ See the self.settings property as to how to set this up</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; if given we only create the cloud against those nodes, else we cache the rigs snapPriorities list</li>
-<li><strong>mSystems</strong> &#8211; [] list of mSystem nodes who&#8217;s children we&#8217;ll add to the nodes list for processing</li>
-<li><strong>time</strong> &#8211; if True then the code resolves the data to an animPPC, caching the motions data
+<li><strong>nodes</strong> – if given we only create the cloud against those nodes, else we cache the rigs snapPriorities list</li>
+<li><strong>mSystems</strong> – [] list of mSystem nodes who’s children we’ll add to the nodes list for processing</li>
+<li><strong>time</strong> – if True then the code resolves the data to an animPPC, caching the motions data
 if False it reverts to a static r9PosePPC and only caches the data at the currentTime</li>
-<li><strong>timerange</strong> &#8211; time to cache, if not given and time=True then we run the r9Anim.timeLineRangeGet() to resolve it</li>
-<li><strong>rootReference</strong> &#8211; the node used for the initial pivot location and whos motion the reference curves are generated against</li>
-<li><strong>isVisible</strong> &#8211; do we build all the visual reference curves or not?</li>
-<li><strong>step</strong> &#8211; frame step between keys if time=True</li>
-<li><strong>smartbake</strong> &#8211; if True we look at the mSystem&#8217;s current keys and only match over those keys if time enabled</li>
+<li><strong>timerange</strong> – time to cache, if not given and time=True then we run the r9Anim.timeLineRangeGet() to resolve it</li>
+<li><strong>rootReference</strong> – the node used for the initial pivot location and whos motion the reference curves are generated against</li>
+<li><strong>isVisible</strong> – do we build all the visual reference curves or not?</li>
+<li><strong>step</strong> – frame step between keys if time=True</li>
+<li><strong>smartbake</strong> – if True we look at the mSystem’s current keys and only match over those keys if time enabled</li>
 </ul>
 </td>
 </tr>
@@ -832,8 +852,8 @@ See the self.settings property as to how to set this up</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>delete</strong> &#8211; delete the animPPC nodes after being applied</li>
-<li><strong>timerange</strong> &#8211; if given this is the timerange to restore from the cache, if not given we run the r9Anim.timeLineRangeGet() to resolve it</li>
+<li><strong>delete</strong> – delete the animPPC nodes after being applied</li>
+<li><strong>timerange</strong> – if given this is the timerange to restore from the cache, if not given we run the r9Anim.timeLineRangeGet() to resolve it</li>
 </ul>
 </td>
 </tr>
@@ -843,14 +863,14 @@ See the self.settings property as to how to set this up</p>
 <p class="first admonition-title">Note</p>
 <p class="last">this pulls the animPPC node directly from the current PPC instance in the scene, NOT against
 any instance stored on this mNode instance. Because the PPC node caches the class it was generated
-from we don&#8217;t need to throw the &#8220;time&#8221; flag like we do in the create call</p>
+from we don’t need to throw the “time” flag like we do in the create call</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.anim_point_cloud_delete">
 <code class="descname">anim_point_cloud_delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.anim_point_cloud_delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>delete anim existing animPPC nodes, this is only really for custom use as it&#8217;s
+<dd><p>delete anim existing animPPC nodes, this is only really for custom use as it’s
 managed by the apply call by default</p>
 </dd></dl>
 
@@ -863,8 +883,8 @@ managed by the apply call by default</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mRig</strong> &#8211; destination mRig to copy the animation data over too</li>
-<li><strong>incRoots</strong> &#8211; usual flag to include the CTRL_Main controller in the copy</li>
+<li><strong>mRig</strong> – destination mRig to copy the animation data over too</li>
+<li><strong>incRoots</strong> – usual flag to include the CTRL_Main controller in the copy</li>
 </ul>
 </td>
 </tr>
@@ -881,8 +901,8 @@ managed by the apply call by default</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mRig</strong> &#8211; destination mRig to copy the animation data over too</li>
-<li><strong>incRoots</strong> &#8211; usual flag to include the CTRL_Main controller in the copy</li>
+<li><strong>mRig</strong> – destination mRig to copy the animation data over too</li>
+<li><strong>incRoots</strong> – usual flag to include the CTRL_Main controller in the copy</li>
 </ul>
 </td>
 </tr>
@@ -899,9 +919,9 @@ managed by the apply call by default</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mRig</strong> &#8211; destination mRig to copy the animation data over too</li>
-<li><strong>loops</strong> &#8211; optional specific loops to copy, else we copy all loops found</li>
-<li><strong>loopnames</strong> &#8211; if not loops then this becomes a filter to find loops with specific names</li>
+<li><strong>mRig</strong> – destination mRig to copy the animation data over too</li>
+<li><strong>loops</strong> – optional specific loops to copy, else we copy all loops found</li>
+<li><strong>loopnames</strong> – if not loops then this becomes a filter to find loops with specific names</li>
 </ul>
 </td>
 </tr>
@@ -923,7 +943,7 @@ managed by the apply call by default</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mRig</strong> &#8211; destination mRig to copy the animation data over too</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mRig</strong> – destination mRig to copy the animation data over too</td>
 </tr>
 </tbody>
 </table>
@@ -936,9 +956,9 @@ managed by the apply call by default</p>
 bound to the given mRig.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Because the facial controls are wired to different attr prefixes they don&#8217;t, by default,
-copy over as facial is treated as an isolated mrig is it&#8217;s own right. IF self in this instance
-is already a FacialRig then you&#8217;d just use the standard copyAnimation call, you wouldn&#8217;t need
+<p class="last">Because the facial controls are wired to different attr prefixes they don’t, by default,
+copy over as facial is treated as an isolated mrig is it’s own right. IF self in this instance
+is already a FacialRig then you’d just use the standard copyAnimation call, you wouldn’t need
 this extra layer of management</p>
 </div>
 </dd></dl>
@@ -954,13 +974,13 @@ and referenceEdits (this is coming soon)</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mRig</strong> &#8211; the rig to take the animation data over too</li>
-<li><strong>animation</strong> &#8211; copy the animation data from self to the given mRig</li>
-<li><strong>exportData</strong> &#8211; copy the exportData data from self to the given mRig</li>
-<li><strong>audioGrp</strong> &#8211; copy the audioGrp data from self to the given mRig</li>
-<li><strong>facialRig</strong> &#8211; if self is a subclass of Pro_MetaRig and has a FacialCore (facial mRig) connected
+<li><strong>mRig</strong> – the rig to take the animation data over too</li>
+<li><strong>animation</strong> – copy the animation data from self to the given mRig</li>
+<li><strong>exportData</strong> – copy the exportData data from self to the given mRig</li>
+<li><strong>audioGrp</strong> – copy the audioGrp data from self to the given mRig</li>
+<li><strong>facialRig</strong> – if self is a subclass of Pro_MetaRig and has a FacialCore (facial mRig) connected
 then copy the data between the facial systems also</li>
-<li><strong>refEdits</strong> &#8211; copy the refEdits data from self to the given mRig
+<li><strong>refEdits</strong> – copy the refEdits data from self to the given mRig
 not yet implemented!</li>
 </ul>
 </td>
@@ -980,13 +1000,13 @@ r9Anim and r9Pose files as cross-reference</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>level</strong> &#8211; 0,1,2,3 : the detail into which we gather data in the report
+<li><strong>level</strong> – 0,1,2,3 : the detail into which we gather data in the report
 0 = just gather data on self
 1 = gather data on self and connected subsystems
 2 = more granular detail on all systems, exporter goes into timeranges at this level
 3 = run everything and gather as much as we can at the mNode level network
 4 = including going down to the renderMeshes and inspecting those for shaders, textures, blends etc</li>
-<li><strong>keys</strong> &#8211; only return specific keys within the gathered data</li>
+<li><strong>keys</strong> – only return specific keys within the gathered data</li>
 </ul>
 </td>
 </tr>
@@ -1014,7 +1034,7 @@ r9Anim and r9Pose files as cross-reference</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_texturePaths">
 <code class="descname">info_texturePaths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_texturePaths" title="Permalink to this definition">¶</a></dt>
-<dd><p>return all textures bound to this mRig&#8217;s renderMeshes</p>
+<dd><p>return all textures bound to this mRig’s renderMeshes</p>
 </dd></dl>
 
 <dl class="method">
@@ -1027,7 +1047,7 @@ r9Anim and r9Pose files as cross-reference</p>
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_jointCount">
 <code class="descname">info_jointCount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_jointCount" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the current joint count of the bound Skeleton hierarchy
-the root of this is found firstly via the exportTags, if these aren&#8217;t setup
+the root of this is found firstly via the exportTags, if these aren’t setup
 then the skeletonRoot is found from the exportSkeletonRoot wire to the mRig</p>
 </dd></dl>
 
@@ -1058,7 +1078,7 @@ then the skeletonRoot is found from the exportSkeletonRoot wire to the mRig</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timerange</strong> &#8211; we need to process the Timecode against a start and end time to get the
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timerange</strong> – we need to process the Timecode against a start and end time to get the
 range of the anim data, if none is passed in then we grab the timeline ranges</td>
 </tr>
 </tbody>
@@ -1080,7 +1100,7 @@ freeze the returned nodes of this proc, thus returning that framerate back to th
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_mute">
 <code class="descname">parallel_eval_mute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_mute" title="Permalink to this definition">¶</a></dt>
-<dd><p>for everything returned by the &#8220;parallel_eval_get_nodes&#8221; func set their &#8216;frozen&#8217;
+<dd><p>for everything returned by the “parallel_eval_get_nodes” func set their ‘frozen’
 node state to True, this prevents them from being calculated in the evalmanager during parallel eval.</p>
 <p>Why? in 2016-17 even if you make a hierarchy invisible it is STILL getting calculated per frame,
 unlike the DG eval which would optimize these hidden nodes out. This is optimized in 2018 but
@@ -1090,7 +1110,7 @@ hidden nodes will still have full framerate hit as if they were visible</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_reset">
 <code class="descname">parallel_eval_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.parallel_eval_reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>for everything returned by the &#8220;parallel_eval_get_nodes&#8221; func reset their frozen state so they calcualte</p>
+<dd><p>for everything returned by the “parallel_eval_get_nodes” func reset their frozen state so they calcualte</p>
 </dd></dl>
 
 </dd></dl>
@@ -1098,40 +1118,35 @@ hidden nodes will still have full framerate hit as if they were visible</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig">
 <em class="property">class </em><code class="descname">Pro_MetaRig</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
 <p>This is the Red9 Puppets master base class However with a little careful
 wiring any other external rig system can be wired too and utilise these functions.</p>
 <p>Additional internal vars worth noting, these are all for clients subclassing or running
 their own internal rigs over the Pro_MetaRig networks:</p>
-<ul>
-<li><p class="first">self.ik_fk_switchattr : [] the attribute within the rig controllers that switches the rig between fk and ik mode state [&#8216;ik_fk_blender&#8217;]</p>
-</li>
-<li><p class="first">self.fk_world_attr : [] the attributes used within the rig for FK chain world/local orient blending [&#8216;FK_world_orient&#8217;]</p>
-</li>
-<li><p class="first">self.ik_switch_val : the value of the above attr when in ik state</p>
-</li>
-<li><p class="first">self.fk_switch_val : the value of the above attr when in fk state</p>
-</li>
+<ul class="simple">
+<li>self.ik_fk_switchattr : [] the attribute within the rig controllers that switches the rig between fk and ik mode state [‘ik_fk_blender’]</li>
+<li>self.fk_world_attr : [] the attributes used within the rig for FK chain world/local orient blending [‘FK_world_orient’]</li>
+<li>self.ik_switch_val : the value of the above attr when in ik state</li>
+<li>self.fk_switch_val : the value of the above attr when in fk state</li>
 <li><dl class="first docutils">
-<dt>self._ik_chainmethod</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">* &#8216;jnt_index&#8217; - default, straight joint hierarchy from the mSystem.SupportNode.GRP_IK_chain[0] node</span><dd><ul class="first last simple">
-<li>&#8216;ctrl_index&#8217; - filtered hierarchy of nurbsCurve from the mSystem.SupportNode.GRP_IK_chain[0] node</li>
-<li>&#8216;ik_wires&#8217; - uses the mSystem.SupportNode.IK_** wires to directly extract the ik chain nodes</li>
+<dt>self._ik_chainmethod <span class="classifier-delimiter">:</span> <span class="classifier">* ‘jnt_index’ - default, straight joint hierarchy from the mSystem.SupportNode.GRP_IK_chain[0] node</span></dt>
+<dd><ul class="first last">
+<li>‘ctrl_index’ - filtered hierarchy of nurbsCurve from the mSystem.SupportNode.GRP_IK_chain[0] node</li>
+<li>‘ik_wires’ - uses the mSystem.SupportNode.IK_** wires to directly extract the ik chain nodes</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>self._fk_chainmethod</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">* &#8216;jnt_index&#8217; - default, straight joint hierarchy from the mSystem.SupportNode.GRP_FK_chain[0] node</span><dd><ul class="first last simple">
-<li>&#8216;ctrl_index&#8217; - filtered hierarchy of nurbsCurve from the mSystem.SupportNode.GRP_FK_chain[0] node</li>
-<li>&#8216;fk_wires&#8217; - uses the mSystem&#8217;s CTRL_FK wiring to grab and return the nodes directly (FK_Start, FK_Pole, FK_End)</li>
+<dt>self._fk_chainmethod <span class="classifier-delimiter">:</span> <span class="classifier">* ‘jnt_index’ - default, straight joint hierarchy from the mSystem.SupportNode.GRP_FK_chain[0] node</span></dt>
+<dd><ul class="first last">
+<li>‘ctrl_index’ - filtered hierarchy of nurbsCurve from the mSystem.SupportNode.GRP_FK_chain[0] node</li>
+<li>‘fk_wires’ - uses the mSystem’s CTRL_FK wiring to grab and return the nodes directly (FK_Start, FK_Pole, FK_End)</li>
 </ul>
 </dd>
 </dl>
 </li>
-<li><p class="first">self.exportBase_class : the base export class object that will be created by the addExportTag call</p>
-</li>
+<li>self.exportBase_class : the base export class object that will be created by the addExportTag call</li>
 </ul>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.Skeleton">
@@ -1149,13 +1164,13 @@ r9Anim and r9Pose files as cross-reference</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>level</strong> &#8211; 0,1,2,3 : the detail into which we gather data in the report
+<li><strong>level</strong> – 0,1,2,3 : the detail into which we gather data in the report
 0 = just gather data on self
 1 = gather data on self and connected subsystems
 2 = more granular detail on all systems, exporter goes into timeranges at this level
 3 = run everything and gather as much as we can at the mNode level network
 4 = including going down to the renderMeshes and inspecting those for shaders,textures, blends etc</li>
-<li><strong>keys</strong> &#8211; only return specific keys within the gathered data</li>
+<li><strong>keys</strong> – only return specific keys within the gathered data</li>
 </ul>
 </td>
 </tr>
@@ -1183,7 +1198,7 @@ r9Anim and r9Pose files as cross-reference</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>systype</strong> &#8211; the system type we&#8217;re looking for based on the systemType mAttr on the Red9 Puppet nodes</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>systype</strong> – the system type we’re looking for based on the systemType mAttr on the Red9 Puppet nodes</td>
 </tr>
 </tbody>
 </table>
@@ -1193,15 +1208,15 @@ r9Anim and r9Pose files as cross-reference</p>
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_renderMeshes_head">
 <code class="descname">visibility_renderMeshes_head</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_renderMeshes_head" title="Permalink to this definition">¶</a></dt>
 <dd><p>switch off the display of all body_Rig head geo based on the renderMesh_head attr
-and if we have a facial rig wired, turn ON it&#8217;s renderMesh geo</p>
+and if we have a facial rig wired, turn ON it’s renderMesh geo</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>state</strong> &#8211; switch the state of the renderMeshs, not required in toggle or query mode</li>
-<li><strong>query</strong> &#8211; query the current state</li>
-<li><strong>toggle</strong> &#8211; toggle the state of the visibility, overwriting any state passed in</li>
+<li><strong>state</strong> – switch the state of the renderMeshs, not required in toggle or query mode</li>
+<li><strong>query</strong> – query the current state</li>
+<li><strong>toggle</strong> – toggle the state of the visibility, overwriting any state passed in</li>
 </ul>
 </td>
 </tr>
@@ -1213,17 +1228,17 @@ and if we have a facial rig wired, turn ON it&#8217;s renderMesh geo</p>
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_facial">
 <code class="descname">visibility_facial</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em>, <em>evalmanaged=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_facial" title="Permalink to this definition">¶</a></dt>
 <dd><p>if the FacialCore attr is wired to a facial rig then this will toggle
-the rigs renderMeshes_Head and the FacialCore&#8217;s renderMeshes, effectively
-switching off the body&#8217;s head geo and turning on the facialCores head.</p>
+the rigs renderMeshes_Head and the FacialCore’s renderMeshes, effectively
+switching off the body’s head geo and turning on the facialCores head.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>state</strong> &#8211; switch state, True favours the FacialCore&#8217;s geo to be visible, not required in toggle or query mode</li>
-<li><strong>query</strong> &#8211; query the current state of the facial visibility</li>
-<li><strong>toggle</strong> &#8211; toggle the state of the visibility, overwriting any state passed in</li>
-<li><strong>evalmanaged</strong> &#8211; if True we also manage the frozen state of all key nodes in the rig to speed up
+<li><strong>state</strong> – switch state, True favours the FacialCore’s geo to be visible, not required in toggle or query mode</li>
+<li><strong>query</strong> – query the current state of the facial visibility</li>
+<li><strong>toggle</strong> – toggle the state of the visibility, overwriting any state passed in</li>
+<li><strong>evalmanaged</strong> – if True we also manage the frozen state of all key nodes in the rig to speed up
 parallel eval on the hidden rig system</li>
 </ul>
 </td>
@@ -1240,9 +1255,9 @@ parallel eval on the hidden rig system</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>system</strong> &#8211; mSystem to inspect</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>system</strong> – mSystem to inspect</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return str:</th><td class="field-body">&#8216;fk&#8217; or &#8216;ik&#8217;</td>
+<tr class="field-even field"><th class="field-name">Return str:</th><td class="field-body">‘fk’ or ‘ik’</td>
 </tr>
 </tbody>
 </table>
@@ -1257,7 +1272,7 @@ This just throws the defined self.ik_fk_switchattr attr to self.fk_switch_val</p
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mSystems</strong> &#8211; systems to switch mode for</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mSystems</strong> – systems to switch mode for</td>
 </tr>
 </tbody>
 </table>
@@ -1272,7 +1287,7 @@ This just throws the defined self.ik_fk_switchattr attr to self.ik_switch_val</p
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mSystems</strong> &#8211; systems to switch mode for</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mSystems</strong> – systems to switch mode for</td>
 </tr>
 </tbody>
 </table>
@@ -1290,10 +1305,10 @@ if it equals self.ik_switch_val then we switch to IK.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mSystem</strong> &#8211; the mSystem we want to toggle, this expects an instanciated MetaSubSystems such as
+<li><strong>mSystem</strong> – the mSystem we want to toggle, this expects an instanciated MetaSubSystems such as
 mrig.L_ArmSystem</li>
-<li><strong>time</strong> &#8211; if True we match the systems over the current or selected timerange</li>
-<li><strong>verbose</strong> &#8211; if True we throw a confirm dialog when dealing with time to make sure this is what the user wanted</li>
+<li><strong>time</strong> – if True we match the systems over the current or selected timerange</li>
+<li><strong>verbose</strong> – if True we throw a confirm dialog when dealing with time to make sure this is what the user wanted</li>
 </ul>
 </td>
 </tr>
@@ -1310,12 +1325,12 @@ mrig.L_ArmSystem</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; [] hint nodes wired to the systems you want to match, used to find id subSystems to process</li>
-<li><strong>mSystems</strong> &#8211; [] list of mSystem nodes to switch, if given we don&#8217;t process the nodes args</li>
-<li><strong>time</strong> &#8211; bool, whether to enable the match over time or not, True by default if timerange arg is given</li>
-<li><strong>switch</strong> &#8211; also switch the ik_fk_blender attr to leave the system in FK mode</li>
-<li><strong>keyswitch</strong> &#8211; if switch is true, this also adds in keys to control the switch mode</li>
-<li><strong>ik_chainmethod</strong> &#8211; <p>None by default as controlled by the internal mRig var self._ik_chainmethod
+<li><strong>nodes</strong> – [] hint nodes wired to the systems you want to match, used to find id subSystems to process</li>
+<li><strong>mSystems</strong> – [] list of mSystem nodes to switch, if given we don’t process the nodes args</li>
+<li><strong>time</strong> – bool, whether to enable the match over time or not, True by default if timerange arg is given</li>
+<li><strong>switch</strong> – also switch the ik_fk_blender attr to leave the system in FK mode</li>
+<li><strong>keyswitch</strong> – if switch is true, this also adds in keys to control the switch mode</li>
+<li><strong>ik_chainmethod</strong> – <p>None by default as controlled by the internal mRig var self._ik_chainmethod
 method of extracting the ik joints, currently supported:
 * jnt_index - default - straight joint hierarchy from the mSystem.SupportNode.GRP_IK_chain[0] node
 * ctrl_index - filtered hierarchy of nurbsCurve from the mSystem.SupportNode.GRP_IK_chain[0] node
@@ -1324,43 +1339,48 @@ method of extracting the ik joints, currently supported:
 <div>ik chain nodes. This is useful if a client has setup a broken hierarchy for the IK systems.
 These are processed in the following order [IK_toe, IK_end, IK_pole, IK_start]</div></blockquote>
 </li>
-<li><strong>fk_chainmethod</strong> &#8211; None by default as controlled by the internal mRig var self._fk_chainmethod
+<li><strong>fk_chainmethod</strong> – None by default as controlled by the internal mRig var self._fk_chainmethod
 method of extracting the fk controls, currently supported:
 * jnt_index - straight joint hierarchy from the mSystem.SupportNode.GRP_FK_chain[0] node
 * ctrl_index - filtered hierarchy of nurbsCurve controllers from the mSystem.SupportNode.GRP_FK_chain[0] node
-* fk_wires - uses the mSystem&#8217;s CTRL_FK* wiring to grab and return the nodes from the mSystem itself</li>
-<li><strong>timerange</strong> &#8211; (start, end) if given we force the time switch on and use this as the timerange
+* fk_wires - uses the mSystem’s CTRL_FK* wiring to grab and return the nodes from the mSystem itself</li>
+<li><strong>timerange</strong> – (start, end) if given we force the time switch on and use this as the timerange
 rather than auto finding it from the scene</li>
-<li><strong>step</strong> &#8211; frame step between keys if time=True</li>
-<li><strong>smartbake</strong> &#8211; if True we look at the mSystem&#8217;s current keys and only match over those keys if time enabled</li>
-<li><strong>runFilter</strong> &#8211; if processing over time run a EulerFilter on the resulting data, primarily added for the smartBake to reduce gimbal between steps</li>
-<li><strong>autoclav</strong> &#8211; if Red9 Puppet and we have an arm system do we compensate its data when switching to FK, baking down any autoClav data</li>
+<li><strong>step</strong> – frame step between keys if time=True</li>
+<li><strong>smartbake</strong> – if True we look at the mSystem’s current keys and only match over those keys if time enabled</li>
+<li><strong>runFilter</strong> – if processing over time run a EulerFilter on the resulting data, primarily added for the smartBake to reduce gimbal between steps</li>
+<li><strong>autoclav</strong> – if Red9 Puppet and we have an arm system do we compensate its data when switching to FK, baking down any autoClav data</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this runs 2 main calls to get a matching set of nodes that are then matched, the return from the following
+calls should produce lists that can be matched  self._get_ik_chain, self._get_fk_chain</p>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match">
-<code class="descname">ik_fk_match</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the given systems TO IK MODE : match the ik to the fk system, relies on the IK_matchpnt&#8217;s</p>
+<code class="descname">ik_fk_match</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.ik_fk_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the given systems TO IK MODE : match the ik to the fk system, relies on the IK_matchpnt’s</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; [] hint nodes wired to the systems you want to match, used to find id subSystems</li>
-<li><strong>mSystems</strong> &#8211; [] list of mSystem nodes to switch, if given we don&#8217;t process the nodes args</li>
-<li><strong>time</strong> &#8211; bool, whether to enable the match over time or not, True by default if timerange arg is given</li>
-<li><strong>switch</strong> &#8211; also switch the ik_fk_blender attr to leave the system in IK mode</li>
-<li><strong>keyswitch</strong> &#8211; if switch is true, this also adds in keys to control the switch mode</li>
-<li><strong>timerange</strong> &#8211; if given we throw the time switch by default and use this as the time range rather than auto finding it from the scene</li>
-<li><strong>step</strong> &#8211; frame step between keys if time=True</li>
-<li><strong>smartbake</strong> &#8211; if True we look at the mSystem&#8217;s current keys and only match over those keys if time enabled</li>
-<li><strong>runFilter</strong> &#8211; if processing over time run a EulerFilter on the resulting data, primarily added for the smartBake to reduce gimbal between steps</li>
-<li><strong>vectoredpole</strong> &#8211; &lt;&lt; internal testing &gt;&gt;  use the pole alignment vector code rather than just simple track</li>
+<li><strong>nodes</strong> – [] hint nodes wired to the systems you want to match, used to find id subSystems</li>
+<li><strong>mSystems</strong> – [] list of mSystem nodes to switch, if given we don’t process the nodes args</li>
+<li><strong>time</strong> – bool, whether to enable the match over time or not, True by default if timerange arg is given</li>
+<li><strong>switch</strong> – also switch the ik_fk_blender attr to leave the system in IK mode</li>
+<li><strong>keyswitch</strong> – if switch is true, this also adds in keys to control the switch mode</li>
+<li><strong>timerange</strong> – if given we throw the time switch by default and use this as the time range rather than auto finding it from the scene</li>
+<li><strong>step</strong> – frame step between keys if time=True</li>
+<li><strong>smartbake</strong> – if True we look at the mSystem’s current keys and only match over those keys if time enabled</li>
+<li><strong>runFilter</strong> – if processing over time run a EulerFilter on the resulting data, primarily added for the smartBake to reduce gimbal between steps</li>
+<li><strong>vectoredpole</strong> – &lt;&lt; internal testing &gt;&gt;  use the pole alignment vector code rather than just simple track</li>
 </ul>
 </td>
 </tr>
@@ -1368,20 +1388,20 @@ rather than auto finding it from the scene</li>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">by default this call depends on IK_matchpnt&#8217;s which denote the relationship between the
-FK and IK controller, these are added by using the &#8220;r9pmeta.add_fkik_matchpnt&#8221; code.
+<p class="last">by default this call depends on IK_matchpnt’s which denote the relationship between the
+FK and IK controller, these are added by using the “r9pmeta.add_fkik_matchpnt” code.
 However these are easy to add to any rig wired to Meta</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">if the mSystem itself has a string attr &#8220;matchpnt_order=[]&#8221; then the process order of the matchpnts follows that (inversed)
-else it&#8217;s hard coded to process  [&#8216;toe&#8217;, &#8216;ball&#8217;, &#8216;end&#8217;, &#8216;ankle&#8217;, &#8216;pole&#8217;, &#8216;start&#8217;, &#8216;hip&#8217;, &#8216;clav&#8217;] (inversed when processed).
+<p class="last">if the mSystem itself has a string attr “matchpnt_order=[]” then the process order of the matchpnts follows that (inversed)
+else it’s hard coded to process  [‘toe’, ‘ball’, ‘end’, ‘ankle’, ‘pole’, ‘start’, ‘hip’, ‘clav’] (inversed when processed).
 This allows clients and custom rigs to denote their own process order for the matching of the ik controllers.
-The entries here are the &#8220;matchid&#8221; args passed to the &#8220;add_fkik_matchpnt&#8221; func itself when the matchpnts were made, basically
-the wire attr that links the matchpnt to the mSupportNode such that the attrs would be &#8220;IK_matchpnt_xxxx&#8221;</p>
+The entries here are the “matchid” args passed to the “add_fkik_matchpnt” func itself when the matchpnts were made, basically
+the wire attr that links the matchpnt to the mSupportNode such that the attrs would be “IK_matchpnt_xxxx”</p>
 </div>
 <p>TODO: add a way to reset a given set of controllers in the IK system before the FK&gt;IK match. If there are controllers
-in the IK system that effect the position of others and these aren&#8217;t reset before the procedure then we can
+in the IK system that effect the position of others and these aren’t reset before the procedure then we can
 sometimes get matching issues</p>
 </dd></dl>
 
@@ -1418,22 +1438,22 @@ the FingerSystem mNode directly not from the upper MetaRig node</p>
 <code class="descname">switch_parent_space</code><span class="sig-paren">(</span><em>mSystem, newspace, time=False, timerange=(), keyswitch=False, cAttrs=['CTRL_Wrist', 'CTRL_Foot', 'CTRL_Head', 'CTRL_End*'], step=1, smartbake=False, runfilter=True, *args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.switch_parent_space" title="Permalink to this definition">¶</a></dt>
 <dd><p>switch the IK Parent space whilst compensating the Wrist / Foot (default) controllers as needed
 Only valid for the Arm and Leg systems in the Red9 Puppet or any rig wired using the template. This is
-a wrapper over the more generic &#8220;switch_attr_compensated&#8221; func in the Pro_MetaRig_Base class</p>
+a wrapper over the more generic “switch_attr_compensated” func in the Pro_MetaRig_Base class</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mSystem</strong> &#8211; the sub-system we&#8217;re going to switch over</li>
-<li><strong>newspace</strong> &#8211; the new parentSpace attribute value to switch and compensate for, this is an int val as the attr should be en enum</li>
-<li><strong>time</strong> &#8211; bool, do we compensate the nodes over time or at the curentTime only. if keyswitch=False this is turned off</li>
-<li><strong>timerange</strong> &#8211; timerange to process, if not given and time=True then we run the r9Anim.timeLineRangeGet() internally
+<li><strong>mSystem</strong> – the sub-system we’re going to switch over</li>
+<li><strong>newspace</strong> – the new parentSpace attribute value to switch and compensate for, this is an int val as the attr should be en enum</li>
+<li><strong>time</strong> – bool, do we compensate the nodes over time or at the curentTime only. if keyswitch=False this is turned off</li>
+<li><strong>timerange</strong> – timerange to process, if not given and time=True then we run the r9Anim.timeLineRangeGet() internally
 to resolve it, if keyswitch=False this is turned off</li>
-<li><strong>keyswitch</strong> &#8211; do we set keys on the switch attr and the nodes_to_compensate, or just switch the data without setting any keys</li>
-<li><strong>cAttrs</strong> &#8211; this is passed into the mSystem.getChildren(cAttrs) args to find those nodes that we need to compensate,
+<li><strong>keyswitch</strong> – do we set keys on the switch attr and the nodes_to_compensate, or just switch the data without setting any keys</li>
+<li><strong>cAttrs</strong> – this is passed into the mSystem.getChildren(cAttrs) args to find those nodes that we need to compensate,
 this is a list of the mSytstem connections to the controllers NOT the node names or dags</li>
-<li><strong>step</strong> &#8211; frame step between keys if time=True</li>
-<li><strong>smartbake</strong> &#8211; if True we look at the mSystem&#8217;s current keys and only match over those keys if time enabled</li>
+<li><strong>step</strong> – frame step between keys if time=True</li>
+<li><strong>smartbake</strong> – if True we look at the mSystem’s current keys and only match over those keys if time enabled</li>
 </ul>
 </td>
 </tr>
@@ -1441,7 +1461,7 @@ this is a list of the mSytstem connections to the controllers NOT the node names
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">the parent space attr used is managed by the mRig.parentSwitchAttr[0] arg and is expected to be of type &#8216;enum&#8217;</p>
+<p class="last">the parent space attr used is managed by the mRig.parentSwitchAttr[0] arg and is expected to be of type ‘enum’</p>
 </div>
 </dd></dl>
 
@@ -1450,7 +1470,7 @@ this is a list of the mSytstem connections to the controllers NOT the node names
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC">
 <em class="property">class </em><code class="descname">Pro_MetaRig_SRC</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
 <p>Class node used by the publisher systems. With the SRC_RiggingUI you can add into an SRC file
 an Pro_MetaRig_SRC node which is designed as a basic, client facing extension to the Red9Puppet.</p>
 <p>The SRC file in our definition is the file with the base character, skeleton and skinning plus client
@@ -1461,13 +1481,13 @@ of the pipelines.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC.isValid">
 <code class="descname">isValid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC.isValid" title="Permalink to this definition">¶</a></dt>
-<dd><p>modify the behaviour as we don&#8217;t want to be stripping SRC EXT nodes that easily</p>
+<dd><p>modify the behaviour as we don’t want to be stripping SRC EXT nodes that easily</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC.grp_main">
 <code class="descname">grp_main</code><span class="sig-paren">(</span><em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC.grp_main" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the grp main group node if force=True and it doesn&#8217;t already exist create it</p>
+<dd><p>return the grp main group node if force=True and it doesn’t already exist create it</p>
 </dd></dl>
 
 </dd></dl>
@@ -1475,19 +1495,79 @@ of the pipelines.</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop">
 <em class="property">class </em><code class="descname">Pro_MetaRig_Prop</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Prop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle">
 <em class="property">class </em><code class="descname">Pro_MetaRig_Vehicle</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle.get_front_wheels">
+<code class="descname">get_front_wheels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle.get_front_wheels" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list, front wheels meta nodes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle.get_back_wheels">
+<code class="descname">get_back_wheels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle.get_back_wheels" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list, front wheels meta nodes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle.front_wheel_radius">
+<code class="descname">front_wheel_radius</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle.front_wheel_radius" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Float, the radius of the front wheel</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle.Back_wheel_radius">
+<code class="descname">Back_wheel_radius</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle.Back_wheel_radius" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Float, the radius of the back wheel</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle.wheels_height">
+<code class="descname">wheels_height</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Vehicle.wheels_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>The height fom the ground to the center of the wheels, if front and back wheels have different radius
+it wheel return an average between back and front wheels
+:return: float</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_External">
 <em class="property">class </em><code class="descname">Pro_MetaRig_External</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_External" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
 <p>Base class for external rigs being wired to the system, unless
 being wired to simulate a Red9 Puppet wiring setup, usually with
 support from us directly</p>
@@ -1499,7 +1579,7 @@ Red9 Puppets complex wiring structures.</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI">
 <em class="property">class </em><code class="descname">Pro_MetaRig_FacialUI</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
 <p>SubClass of the MetaRig, designed to manage facial board style controls
 for a facial system. Just an extract class to inherit from but it means that
 all our facial logic will find custom class control boards based on being
@@ -1514,7 +1594,8 @@ these are on-top of the usual controllers connected to the system and the render
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.delete">
 <code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>full delete and clean of a rig system and network</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.reset">
@@ -1525,7 +1606,7 @@ these are on-top of the usual controllers connected to the system and the render
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.ctrl_locomotion">
 <code class="descname">ctrl_locomotion</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.ctrl_locomotion" title="Permalink to this definition">¶</a></dt>
-<dd><p>this ensures that the facial rig returns it&#8217;s parent BodyRig&#8217;s locomotion ctrl
+<dd><p>this ensures that the facial rig returns it’s parent BodyRig’s locomotion ctrl
 which is required for some of the exporter behaviour. This forces there to  be
 a consistent return for all data</p>
 </dd></dl>
@@ -1574,13 +1655,13 @@ positions up when framing the modelPanels.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_facemesh">
 <code class="descname">add_cam_facemesh</code><span class="sig-paren">(</span><em>focus=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_facemesh" title="Permalink to this definition">¶</a></dt>
-<dd><p>create a new camera constrained to the &#8220;JNT_FaceRoot&#8221; in the system</p>
+<dd><p>create a new camera constrained to the “JNT_FaceRoot” in the system</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_rig">
 <code class="descname">add_cam_rig</code><span class="sig-paren">(</span><em>focus=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.add_cam_rig" title="Permalink to this definition">¶</a></dt>
-<dd><p>create a new camera parented to the &#8220;ctrl_main&#8221; node in the system</p>
+<dd><p>create a new camera parented to the “ctrl_main” node in the system</p>
 </dd></dl>
 
 <dl class="method">
@@ -1592,7 +1673,7 @@ should be framed to focus all controllers in the fRig system</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>camera</strong> &#8211; if given we frame this camera, else we frame the actual UI camera from the facial systems</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>camera</strong> – if given we frame this camera, else we frame the actual UI camera from the facial systems</td>
 </tr>
 </tbody>
 </table>
@@ -1602,20 +1683,20 @@ should be framed to focus all controllers in the fRig system</p>
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_mesh">
 <code class="descname">frame_cam_mesh</code><span class="sig-paren">(</span><em>imageplane=True</em>, <em>forcefit=False</em>, <em>camera=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.frame_cam_mesh" title="Permalink to this definition">¶</a></dt>
 <dd><p>to overload, simple focus call to put the camera in the right place,
-should be framed to focus on the Head meshes - &#8220;renderMeshes&#8221;</p>
+should be framed to focus on the Head meshes - “renderMeshes”</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>imageplane</strong> &#8211; if True then we include the bound imagePlane/ planes in the viewFit nodes</li>
-<li><strong>forcefit</strong> &#8211; if True we over-ride / ignore any cam_states stored on the mNode itself</li>
-<li><strong>camera</strong> &#8211; if given we frame this camera, else we frame the actual UI camera from the facial systems</li>
+<li><strong>imageplane</strong> – if True then we include the bound imagePlane/ planes in the viewFit nodes</li>
+<li><strong>forcefit</strong> – if True we over-ride / ignore any cam_states stored on the mNode itself</li>
+<li><strong>camera</strong> – if given we frame this camera, else we frame the actual UI camera from the facial systems</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name" colspan="2">Return camera as string:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">the return is for the custom Playblast handlers</p>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first last">the return is for the custom Playblast handlers</p>
 </td>
 </tr>
 </tbody>
@@ -1635,7 +1716,7 @@ custom camera framing and handling per mNode class where required!</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reframe</strong> &#8211; auto reframe the camera on the facial controls</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reframe</strong> – auto reframe the camera on the facial controls</td>
 </tr>
 </tbody>
 </table>
@@ -1650,8 +1731,8 @@ custom camera framing and handling per mNode class where required!</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>reframe</strong> &#8211; auto reframe the camera on the facial mesh / imageplace</li>
-<li><strong>imageplane</strong> &#8211; bool : if True we include any connected imageplanes in the framing of the camera</li>
+<li><strong>reframe</strong> – auto reframe the camera on the facial mesh / imageplace</li>
+<li><strong>imageplane</strong> – bool : if True we include any connected imageplanes in the framing of the camera</li>
 </ul>
 </td>
 </tr>
@@ -1678,21 +1759,21 @@ custom camera framing and handling per mNode class where required!</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_add">
 <code class="descname">image_plane_add</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>filetype=None</em>, <em>frameoffset=0</em>, <em>width=None</em>, <em>height=20</em>, <em>translates=[]</em>, <em>rotates=[]</em>, <em>scales=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_add" title="Permalink to this definition">¶</a></dt>
-<dd><p>add in an imagine plane for roto-scoping and/or checking against a headcam. If we&#8217;ve already run this and have an
+<dd><p>add in an imagine plane for roto-scoping and/or checking against a headcam. If we’ve already run this and have an
 imageplane connected these all become edit flags to manipulate it</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; filepath to the image or movie we&#8217;re binding</li>
-<li><strong>filetype</strong> &#8211; [&#8216;image&#8217;,&#8217;texture&#8217;,&#8217;movie&#8217;] if not given we work it out from the file extension</li>
-<li><strong>frameoffset</strong> &#8211; the offset applied to any image sequence</li>
-<li><strong>width</strong> &#8211; width of the imageplane</li>
-<li><strong>height</strong> &#8211; initial height of the imageplane, default=20 as width is then calculated against the aspect ratio</li>
-<li><strong>translates</strong> &#8211; if given these are the translate values applied to the imageplane&#8217;s transform after create</li>
-<li><strong>rotates</strong> &#8211; if given these are the rotate values applied to the imageplane&#8217;s transform after create</li>
-<li><strong>scales</strong> &#8211; if given these are the scales values applied to the imageplane&#8217;s transform after create</li>
+<li><strong>filepath</strong> – filepath to the image or movie we’re binding</li>
+<li><strong>filetype</strong> – [‘image’,’texture’,’movie’] if not given we work it out from the file extension</li>
+<li><strong>frameoffset</strong> – the offset applied to any image sequence</li>
+<li><strong>width</strong> – width of the imageplane</li>
+<li><strong>height</strong> – initial height of the imageplane, default=20 as width is then calculated against the aspect ratio</li>
+<li><strong>translates</strong> – if given these are the translate values applied to the imageplane’s transform after create</li>
+<li><strong>rotates</strong> – if given these are the rotate values applied to the imageplane’s transform after create</li>
+<li><strong>scales</strong> – if given these are the scales values applied to the imageplane’s transform after create</li>
 </ul>
 </td>
 </tr>
@@ -1703,21 +1784,21 @@ imageplane connected these all become edit flags to manipulate it</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_edit">
 <code class="descname">image_plane_edit</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>filetype=None</em>, <em>frameoffset=None</em>, <em>width=None</em>, <em>height=20</em>, <em>translates=[]</em>, <em>rotates=[]</em>, <em>scales=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.image_plane_edit" title="Permalink to this definition">¶</a></dt>
-<dd><p>add in an imagine plane for roto-scoping and/or checking against a headcam. If we&#8217;ve already run this and have an
+<dd><p>add in an imagine plane for roto-scoping and/or checking against a headcam. If we’ve already run this and have an
 imageplane connected these all become edit flags to manipulate it</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; filepath to the image or movie we&#8217;re binding</li>
-<li><strong>filetype</strong> &#8211; [&#8216;image&#8217;,&#8217;texture&#8217;,&#8217;movie&#8217;]</li>
-<li><strong>frameoffset</strong> &#8211; the offset applied to any image sequence</li>
-<li><strong>width</strong> &#8211; width of the imageplane</li>
-<li><strong>height</strong> &#8211; initial height of the imageplane, default=20 as width is then calculated against the aspect ratio</li>
-<li><strong>translates</strong> &#8211; if given these are the translate values applied to the imageplane&#8217;s transform after create</li>
-<li><strong>rotates</strong> &#8211; if given these are the rotate values applied to the imageplane&#8217;s transform after create</li>
-<li><strong>scales</strong> &#8211; if given these are the scales values applied to the imageplane&#8217;s transform after create</li>
+<li><strong>filepath</strong> – filepath to the image or movie we’re binding</li>
+<li><strong>filetype</strong> – [‘image’,’texture’,’movie’]</li>
+<li><strong>frameoffset</strong> – the offset applied to any image sequence</li>
+<li><strong>width</strong> – width of the imageplane</li>
+<li><strong>height</strong> – initial height of the imageplane, default=20 as width is then calculated against the aspect ratio</li>
+<li><strong>translates</strong> – if given these are the translate values applied to the imageplane’s transform after create</li>
+<li><strong>rotates</strong> – if given these are the rotate values applied to the imageplane’s transform after create</li>
+<li><strong>scales</strong> – if given these are the scales values applied to the imageplane’s transform after create</li>
 </ul>
 </td>
 </tr>
@@ -1747,8 +1828,8 @@ so we can have multiple angles of the facial data.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>offset</strong> &#8211; [[tX, tY, tZ],[rX, rY, rZ]] offset applied to the instance grp</li>
-<li><strong>name</strong> &#8211; default = &#8216;facial_instances&#8217;, name of the top grp generated</li>
+<li><strong>offset</strong> – [[tX, tY, tZ],[rX, rY, rZ]] offset applied to the instance grp</li>
+<li><strong>name</strong> – default = ‘facial_instances’, name of the top grp generated</li>
 </ul>
 </td>
 </tr>
@@ -1772,13 +1853,13 @@ so we can have multiple angles of the facial data.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_brows">
 <code class="descname">get_ctrls_brows</code><span class="sig-paren">(</span><em>select=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_brows" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get child controls wired via &#8216;brow&#8217; connection attrs
+<dd><p>Get child controls wired via ‘brow’ connection attrs
 Designed to be overloaded for your own facial systems</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>select</strong> &#8211; select the controllers found</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>select</strong> – select the controllers found</td>
 </tr>
 </tbody>
 </table>
@@ -1787,13 +1868,13 @@ Designed to be overloaded for your own facial systems</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_lips">
 <code class="descname">get_ctrls_lips</code><span class="sig-paren">(</span><em>select=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_lips" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get child controls wired via &#8216;<em>lip</em>&#8216;,&#8217;<em>funnel</em>&#8216;,&#8217;<em>pucker</em>&#8216; connection attrs,
+<dd><p>Get child controls wired via ‘<em>lip</em>’,’<em>funnel</em>’,’<em>pucker</em>’ connection attrs,
 Designed to be overloaded for your own facial systems</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>select</strong> &#8211; select the controllers found</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>select</strong> – select the controllers found</td>
 </tr>
 </tbody>
 </table>
@@ -1802,13 +1883,13 @@ Designed to be overloaded for your own facial systems</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_eyes">
 <code class="descname">get_ctrls_eyes</code><span class="sig-paren">(</span><em>select=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_eyes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get child controls wired via &#8216;eye&#8217; connection attrs,
+<dd><p>Get child controls wired via ‘eye’ connection attrs,
 Designed to be overloaded for your own facial systems</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>select</strong> &#8211; select the controllers found</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>select</strong> – select the controllers found</td>
 </tr>
 </tbody>
 </table>
@@ -1819,17 +1900,17 @@ Designed to be overloaded for your own facial systems</p>
 <code class="descname">viseme_map_set_channel</code><span class="sig-paren">(</span><em>chn, fromSelected=False, min=0.02, skip=['visibility'], *args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_set_channel" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;&lt; Red9 Internal LipSyncer calls Only &gt;&gt;</p>
 <p>set the selected controllers data to the visemeMap as a key pose.
-Note that we store the data as (plug,attr,val) so that it&#8217;s totally
+Note that we store the data as (plug,attr,val) so that it’s totally
 generic at the core level. We convert back to dag path in the LipSyncer</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>chn</strong> &#8211; channel in the map to set the data for</li>
-<li><strong>fromSelected</strong> &#8211; only set the data from the selected ctrls, else set from all ctrls</li>
-<li><strong>min</strong> &#8211; minimum attr value that&#8217;s considered as an input</li>
-<li><strong>skip</strong> &#8211; channels to ignore in any visemeMap, default=[&#8216;visibility&#8217;]</li>
+<li><strong>chn</strong> – channel in the map to set the data for</li>
+<li><strong>fromSelected</strong> – only set the data from the selected ctrls, else set from all ctrls</li>
+<li><strong>min</strong> – minimum attr value that’s considered as an input</li>
+<li><strong>skip</strong> – channels to ignore in any visemeMap, default=[‘visibility’]</li>
 </ul>
 </td>
 </tr>
@@ -1841,17 +1922,17 @@ generic at the core level. We convert back to dag path in the LipSyncer</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_set_exclusion">
 <code class="descname">viseme_map_set_exclusion</code><span class="sig-paren">(</span><em>chns=[]</em>, <em>remove=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_set_exclusion" title="Permalink to this definition">¶</a></dt>
-<dd><p>if given we add the chns [&#8216;node.attr&#8217;, ...] to the exclusion
-list so they won&#8217;t get processed by TalkBack. If none are given
+<dd><p>if given we add the chns [‘node.attr’, …] to the exclusion
+list so they won’t get processed by TalkBack. If none are given
 we use the currently selected ChannelBox attrs</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>chns</strong> &#8211; [&#8216;node.attr&#8217;, ...] if given these are the channels to add to the
+<li><strong>chns</strong> – [‘node.attr’, …] if given these are the channels to add to the
 exclusion list, else we use the currently selected channelBox attrs</li>
-<li><strong>remove</strong> &#8211; if True we&#8217;re removing the channels from the exemption list rather than adding</li>
+<li><strong>remove</strong> – if True we’re removing the channels from the exemption list rather than adding</li>
 </ul>
 </td>
 </tr>
@@ -1875,11 +1956,11 @@ and the particularly phoneme calibrate within that viseme.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>asPlug</strong> &#8211; if True return the visemeMap as it&#8217;s stored, else process it
+<li><strong>asPlug</strong> – if True return the visemeMap as it’s stored, else process it
 such that {key:(ctrl.attr, val)}</li>
-<li><strong>incTargetjnts</strong> &#8211; if True we dynamically add the target joints which
+<li><strong>incTargetjnts</strong> – if True we dynamically add the target joints which
 have been created to the visemeMap data</li>
-<li><strong>incTargetjnts</strong> &#8211; include driven target joints in the output.... these
+<li><strong>incTargetjnts</strong> – include driven target joints in the output…. these
 are simple transfer jnts connected the system and driven 0-100 range
 so that we can output the data to Unity, see TalkBack.add_driver_jnts utility</li>
 </ul>
@@ -1889,8 +1970,8 @@ so that we can output the data to Unity, see TalkBack.add_driver_jnts utility</l
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">it&#8217;s here that we deal with any &#8220;lipsync_exempt&#8221; channels which will get stripped
-from the return data and therefore by-pass TalkBack&#8217;s keyers</p>
+<p class="last">it’s here that we deal with any “lipsync_exempt” channels which will get stripped
+from the return data and therefore by-pass TalkBack’s keyers</p>
 </div>
 </dd></dl>
 
@@ -1903,9 +1984,9 @@ from the return data and therefore by-pass TalkBack&#8217;s keyers</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>channel</strong> &#8211; visemeMap channel to load</li>
-<li><strong>setdata</strong> &#8211; load or just return the data</li>
-<li><strong>corechns</strong> &#8211; if True then the return will be active core SDK channels only
+<li><strong>channel</strong> – visemeMap channel to load</li>
+<li><strong>setdata</strong> – load or just return the data</li>
+<li><strong>corechns</strong> – if True then the return will be active core SDK channels only
 if False we return the actual rig controllers</li>
 </ul>
 </td>
@@ -1938,8 +2019,8 @@ active during the visemeMap</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>chn</strong> &#8211; given viseme chn in the visemeMap</li>
-<li><strong>nodes</strong> &#8211; if given only remove those nodes from the visemeMap chn</li>
+<li><strong>chn</strong> – given viseme chn in the visemeMap</li>
+<li><strong>nodes</strong> – if given only remove those nodes from the visemeMap chn</li>
 </ul>
 </td>
 </tr>
@@ -1984,21 +2065,21 @@ return that framerate back to the user.</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.ProMetaFacialUI">
 <em class="property">class </em><code class="descname">ProMetaFacialUI</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ProMetaFacialUI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI</span></code></a></p>
 <p>LEGACY TO BE REMOVED</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.Red9_MetaRig">
 <em class="property">class </em><code class="descname">Red9_MetaRig</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Red9_MetaRig" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig</span></code></a></p>
 <p>LEGACY TO BE REMOVED</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.SRC_RigExtension">
 <em class="property">class </em><code class="descname">SRC_RigExtension</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SRC_RigExtension" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_SRC</span></code></a></p>
 <p>LEGACY TO BE REMOVED</p>
 </dd></dl>
 
@@ -2011,9 +2092,9 @@ return that framerate back to the user.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>node</strong> &#8211; node to bind the export tag to</li>
-<li><strong>exportClass</strong> &#8211; class of tag to generate and link</li>
-<li><strong>tag</strong> &#8211; name for the tag</li>
+<li><strong>node</strong> – node to bind the export tag to</li>
+<li><strong>exportClass</strong> – class of tag to generate and link</li>
+<li><strong>tag</strong> – name for the tag</li>
 </ul>
 </td>
 </tr>
@@ -2025,7 +2106,7 @@ return that framerate back to the user.</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base">
 <em class="property">class </em><code class="descname">ExportTag_Base</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
 <p>Generic Export base class inheriting from MetaClass. This is designed as a tagging system for assets
 that are then time managed via the ExportLoopNodes attached. Design is such that a rig would have a single
 exportTag, denoting asset name, base paths, root export joint, any suffix or prefix handling and any number
@@ -2035,9 +2116,9 @@ where the files should get stored, what they get called etc.</p>
 <p>key internal vars to note:</p>
 <ul class="simple">
 <li>self.resolvedpath : this will be built up in any logic from custom exporter handlers</li>
-<li>self.subfolder : if data then we insert the entry as a sub-folder from the main exportRoot so &#8216;my/export/path&#8217; =  &#8216;my/export/path/subfolder</li>
-<li>self.loop_prefix : if data then we prefix any loop-names when we resolve paths - so &#8216;my_walk.icaf&#8217; loop = &#8216;prefix_my_walk.icaf&#8217;</li>
-<li>self.loop_suffix : if data then we suffix any loop-names when we resolve paths - so &#8216;my_walk.icaf&#8217; loop = &#8216;my_walk_suffix.icaf&#8217;</li>
+<li>self.subfolder : if data then we insert the entry as a sub-folder from the main exportRoot so ‘my/export/path’ =  ‘my/export/path/subfolder</li>
+<li>self.loop_prefix : if data then we prefix any loop-names when we resolve paths - so ‘my_walk.icaf’ loop = ‘prefix_my_walk.icaf’</li>
+<li>self.loop_suffix : if data then we suffix any loop-names when we resolve paths - so ‘my_walk.icaf’ loop = ‘my_walk_suffix.icaf’</li>
 <li>self.exportLoopBase_class = ExportLoopNode  : class we generate for exportLoops, used so that this can be overloaded for client specific behaviour</li>
 <li>self.audio_allowed  : determines if AudioGrp management is allowed on this class of tag</li>
 </ul>
@@ -2050,13 +2131,13 @@ this export tag</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.tagType">
-<code class="descname">tagType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.tagType" title="Permalink to this definition">¶</a></dt>
-<dd><p>simple code to return the tags type based on it&#8217;s class inheritance</p>
+<code class="descname">tagType</code><span class="sig-paren">(</span><em>short=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.tagType" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple code to return the tags type based on it’s class inheritance</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">&#8216;CHARACTER&#8217;,&#8217;FACIAL&#8217;,&#8217;PROP&#8217;,&#8217;ENVIRONMENT&#8217; or &#8216;BASE&#8217;</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘CHARACTER’,’FACIAL’,’PROP’,’ENVIRONMENT’ or ‘BASE’</td>
 </tr>
 </tbody>
 </table>
@@ -2072,7 +2153,7 @@ this export tag</p>
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.gatherInfo">
 <code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>encode_objects=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>info block gather for the export systems</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mClass&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">super</span><span class="p">(</span><span class="n">ExportTag_Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">gatherInfo</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mClass&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">super</span><span class="p">(</span><span class="n">ExportTag_Base</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">gatherInfo</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;tagID&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tagID</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;isActive&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">isActive</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;exportPath&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">exportPath</span>
@@ -2112,25 +2193,25 @@ from the ExportTagUI and what gets selected when you do an FBX selective export<
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>select</strong> &#8211; do we select the returned nodes?</li>
-<li><strong>include_basenodes</strong> &#8211; include all nodes returned from self.__getNodes__ which for CharacterTags is all child jnts.
-note that this respects the over-rides available on self and set by the addSelectionOverride calls</li>
-<li><strong>include_rendermeshes</strong> &#8211; include meshes wired to the renderMeshes attr on the mRig itself</li>
-<li><strong>include_skinned_meshes</strong> &#8211; include all skinned meshes found to be connected the wired skeleton hierarchy</li>
-<li><strong>include_blends</strong> &#8211; include any blendshapes and their respective targets if found in the scene</li>
-<li><strong>include_hik</strong> &#8211; include the connected HIKCharacterNode in the return / selection if bound</li>
-<li><strong>filterSettings</strong> &#8211; takes a r9Core.FilterSettings class object and allows for very specific node selection if needed</li>
+<li><strong>select</strong> – do we select the returned nodes?</li>
+<li><strong>include_basenodes</strong> – include all nodes returned from self.__getNodes__ which for CharacterTags is all child jnts.
+note that this respects the over-rides available on self and set by the selection_override_add calls</li>
+<li><strong>include_rendermeshes</strong> – include meshes wired to the renderMeshes attr on the mRig itself</li>
+<li><strong>include_skinned_meshes</strong> – include all skinned meshes found to be connected the wired skeleton hierarchy</li>
+<li><strong>include_blends</strong> – include any blendshapes and their respective targets if found in the scene</li>
+<li><strong>include_hik</strong> – include the connected HIKCharacterNode in the return / selection if bound</li>
+<li><strong>filterSettings</strong> – takes a r9Core.FilterSettings class object and allows for very specific node selection if needed</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>TODO: run the health checker on the blendshape target list to ensure we don&#8217;t have empty index slots</p>
+<p>TODO: run the health checker on the blendshape target list to ensure we don’t have empty index slots</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.addSelectionOverride">
-<code class="descname">addSelectionOverride</code><span class="sig-paren">(</span><em>nodes</em>, <em>state=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.addSelectionOverride" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.selection_override_add">
+<code class="descname">selection_override_add</code><span class="sig-paren">(</span><em>nodes</em>, <em>state=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.selection_override_add" title="Permalink to this definition">¶</a></dt>
 <dd><p>A way of by-passing the getNode logic by adding specific
 marker attr to nodes under the hierarchy</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -2138,8 +2219,8 @@ marker attr to nodes under the hierarchy</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>nodes</strong> &#8211; nodes to add the override behaviour too</li>
-<li><strong>state</strong> &#8211; initial state of the override</li>
+<li><strong>nodes</strong> – nodes to add the override behaviour too</li>
+<li><strong>state</strong> – initial state of the override</li>
 </ul>
 </td>
 </tr>
@@ -2148,23 +2229,118 @@ marker attr to nodes under the hierarchy</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getSelectionOverrides">
-<code class="descname">getSelectionOverrides</code><span class="sig-paren">(</span><em>exportRoot=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getSelectionOverrides" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.selection_override_get">
+<code class="descname">selection_override_get</code><span class="sig-paren">(</span><em>exportRoot=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.selection_override_get" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a dic of nodes that are to be either force included, or excluded
 from any processed node list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>exportRoot</strong> – if given we bypass the connected default self.exportRoot</td>
+</tr>
+</tbody>
+</table>
+<p>and search this new skeleton hierarchy</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.removeSelectionOverrides">
-<code class="descname">removeSelectionOverrides</code><span class="sig-paren">(</span><em>nodes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.removeSelectionOverrides" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.selection_override_remove">
+<code class="descname">selection_override_remove</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>all=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.selection_override_remove" title="Permalink to this definition">¶</a></dt>
 <dd><p>remove any override marker on the given nodes, if no nodes are passed
 we delete ALL overrides under the full hierarchy from the exportRoot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> – nodes to remove the tags from</li>
+<li><strong>all</strong> – if True we skip the nodes arg and strip all override tags from the entire skeleton</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.setSelectionOverride">
-<code class="descname">setSelectionOverride</code><span class="sig-paren">(</span><em>nodes</em>, <em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.setSelectionOverride" title="Permalink to this definition">¶</a></dt>
-<dd><p>change the state of the override marker on the given nodes</p>
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.selection_override_set">
+<code class="descname">selection_override_set</code><span class="sig-paren">(</span><em>nodes</em>, <em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.selection_override_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>change the state of the override marker on the given nodes
+:param nodes: nodes to change the override state for</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is currently NOT used or supported</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.bpose_get_data">
+<code class="descname">bpose_get_data</code><span class="sig-paren">(</span><em>jntonly=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.bpose_get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple wrap of the retrieval of the BPose PoseDict object which is 
+stored on the skeleton root by the RigManager. This BPose is used
+by the additive fbx export to force reset the skeleton pose before processing</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jntonly</strong> – if True we return only the joint that the bpose is stamped onto, else we return the poseDict itself</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.bpose_load">
+<code class="descname">bpose_load</code><span class="sig-paren">(</span><em>skelroot=None, skip_attrs=['radius']</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.bpose_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>new call to stamp the current skeleton pose as a Bpose used in the export
+process when we’re exporting additive style data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>skelroot</strong> – if given this loads the stored Bpose onto that skeleton,
+else the data is run on the exportRoot. Note that this is a simple attr load
+so if the joints are connected or constrained then they won’t reach the Bpose data.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.bpose_stamp">
+<code class="descname">bpose_stamp</code><span class="sig-paren">(</span><em>specific_root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.bpose_stamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.build_skeleton_for_output">
+<code class="descname">build_skeleton_for_output</code><span class="sig-paren">(</span><em>bindscales=True</em>, <em>respect_attrlocks=True</em>, <em>blendmap=False</em>, <em>blend_maprange=1</em>, <em>exploop=None</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.build_skeleton_for_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main call to build the export skeleton for the FBX Export handler.
+This is only called in the “simple” fbx output process within the exporter.
+Now exposed on the Tags so we can overload for clients and expTag types as required.
+Result of this is should be a bound, duplicated, clean skeleton hierarchy in
+world space ready to push to FBX.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>exploop</strong> – if passed we also take the ExpLoop settings into account when we bind, else we use the ExpTag data only</td>
+</tr>
+</tbody>
+</table>
+<p>:return [mNode(new_skeleton_root), nodes_to_delete]</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>the <a href="#id1"><span class="problematic" id="id2">**</span></a>kws passed into this come from the exporter / fbx settings
+but ONLY when called from the export task itself. Defaults as below</p>
+<ul class="last simple">
+<li>‘bindtransforms’: True     : bind the skeletons, this must be True</li>
+<li>‘bindscales’: True         : bind the scales between the source and output skeleton</li>
+<li>‘blend_map’: False         : if the mRig system has blendshapes then cast the blendShape target attrs over to driven joint attrs</li>
+<li>‘blend_maprange’: 1        : if blend_map then this is the value used as the max output</li>
+<li>‘respect_attrlocks’: True  : if True we respect locked attrs and do not bind the data to them</li>
+</ul>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -2177,8 +2353,8 @@ mNodes that our exporters use to trigger each individual output</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>times</strong> &#8211; (start,end) float values of times</li>
-<li><strong>loopname</strong> &#8211; loopID used for export file name</li>
+<li><strong>times</strong> – (start,end) float values of times</li>
+<li><strong>loopname</strong> – loopID used for export file name</li>
 </ul>
 </td>
 </tr>
@@ -2195,7 +2371,7 @@ of each loop matches the expected internal exportLoopBase_class bound to this ex
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loops</strong> &#8211; instantiated ExportLoop nodes</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loops</strong> – instantiated ExportLoop nodes</td>
 </tr>
 </tbody>
 </table>
@@ -2209,7 +2385,7 @@ of each loop matches the expected internal exportLoopBase_class bound to this ex
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loopname</strong> &#8211; the name of the loop were searching for</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loopname</strong> – the name of the loop were searching for</td>
 </tr>
 </tbody>
 </table>
@@ -2224,8 +2400,8 @@ of each loop matches the expected internal exportLoopBase_class bound to this ex
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>loopnames</strong> &#8211; [] if given this acts as a filter to return only matching loop names on this expTag</li>
-<li><strong>filter</strong> &#8211; this is a more generic filter that passes through the r9Core.filterListByString() function</li>
+<li><strong>loopnames</strong> – [] if given this acts as a filter to return only matching loop names on this expTag</li>
+<li><strong>filter</strong> – this is a more generic filter that passes through the r9Core.filterListByString() function</li>
 </ul>
 </td>
 </tr>
@@ -2247,7 +2423,7 @@ of each loop matches the expected internal exportLoopBase_class bound to this ex
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loopnames</strong> &#8211; names passed into the search for deletion, if empty we delete all export loops connected</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>loopnames</strong> – names passed into the search for deletion, if empty we delete all export loops connected</td>
 </tr>
 </tbody>
 </table>
@@ -2274,7 +2450,7 @@ this to manage who in the scene is talking what lines of dialog</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>audioGrp</strong> &#8211; audioGrp node we&#8217;re wanting to connect</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>audioGrp</strong> – audioGrp node we’re wanting to connect</td>
 </tr>
 </tbody>
 </table>
@@ -2288,7 +2464,7 @@ this to manage who in the scene is talking what lines of dialog</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>asset_tag</strong> &#8211; aset tag to attach</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>asset_tag</strong> – aset tag to attach</td>
 </tr>
 </tbody>
 </table>
@@ -2299,47 +2475,58 @@ this to manage who in the scene is talking what lines of dialog</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Character">
 <em class="property">class </em><code class="descname">ExportTag_Character</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Character" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
 <p>Export subclass for characters</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Facial">
 <em class="property">class </em><code class="descname">ExportTag_Facial</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Facial" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
 <p>Export subclass for Facial UI systems</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Prop">
 <em class="property">class </em><code class="descname">ExportTag_Prop</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Prop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
 <p>Export subclass for props</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Prop.get_attachment_node">
 <code class="descname">get_attachment_node</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Prop.get_attachment_node" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Prop.build_skeleton_for_output">
+<code class="descname">build_skeleton_for_output</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Prop.build_skeleton_for_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>overload method for the generation of the clean skeleton
+that the ‘simple’ fbx exporter uses in it’s output. 
+Prime reason is to allow the prop exports to remove all
+root animation and reset the root joint back to [0,0,0] if
+the ‘strip_root_animation’ checkbox on the PropTag is set</p>
+<p>:return [mNode(new_skeleton_root), nodes_to_delete]</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Vehicle">
 <em class="property">class </em><code class="descname">ExportTag_Vehicle</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Vehicle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
 <p>Export subclass for props</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Environment">
 <em class="property">class </em><code class="descname">ExportTag_Environment</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Environment" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
 <p>Export subclass for environments</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode">
 <em class="property">class </em><code class="descname">ExportLoopNode</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
 <p>Base Export Timerange node, intended to hook to a valid ExportTag metaNode to define
 exact timeranges and paths etc. This is the core of the Red9 Export systems and designed to be
 pverloaded at the client level where needed. This class controls the output paths and all path
@@ -2348,7 +2535,7 @@ logic used by the export classes.</p>
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.gatherInfo">
 <code class="descname">gatherInfo</code><span class="sig-paren">(</span><em>level=0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>gather key info on this loop node and return a dic</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># base data handling</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># base data handling</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mClass&#39;</span><span class="p">]</span><span class="o">=</span><span class="nb">super</span><span class="p">(</span><span class="n">ExportLoopNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">gatherInfo</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;loopname&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loopname</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;loopname_resolved&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loopname_resolved</span>
@@ -2382,7 +2569,7 @@ Allows us to record the data and reconstruct it in a consistent manner</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> &#8211; data to consume in a form of a correctly formatted dict,
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – data to consume in a form of a correctly formatted dict,
 generated by the gatherInfo call itself</td>
 </tr>
 </tbody>
@@ -2395,13 +2582,21 @@ generated by the gatherInfo call itself</td>
 <dd><p>from the loopNode return the exportRoot from the main Tag. This is a wrapper
 so that exporters can just get all the loopNodes and grab all data directly
 rather than lots of walking logic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>allowMulti</strong> – if True we allow multiple exportRoots, used only when setting up Specific Root Jnts</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.loopname_resolved">
 <code class="descname">loopname_resolved</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.loopname_resolved" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the loopname in a resolved manner, taking into account any
-prefix or suffix handling set on it&#8217;s parent exportTag class</p>
+prefix or suffix handling set on it’s parent exportTag class</p>
 </dd></dl>
 
 <dl class="method">
@@ -2415,7 +2610,7 @@ string, removing invalid characters, and checks for duplicate names, managing co
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; the name to set the loopname attr too</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – the name to set the loopname attr too</td>
 </tr>
 </tbody>
 </table>
@@ -2430,7 +2625,7 @@ if any of the values are -1 then these are ignored when used</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>colour</strong> &#8211; colour used in the UI to colour each widget [r, g, b] all ints although we
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>colour</strong> – colour used in the UI to colour each widget [r, g, b] all ints although we
 do carefully manage the data being set here to force it to a list of ints  any values
 of -1 means that the data is empty or unused</td>
 </tr>
@@ -2498,7 +2693,7 @@ be over-loaded at a client level to support any bespoke project behaviour</p>
 <code class="descname">isAdditive</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.isAdditive" title="Permalink to this definition">¶</a></dt>
 <dd><p>return true if the additive bool if set on the tag</p>
 <p>This first checks the Loop node itself, if thats set Additive we return that,
-if not we then check the exportTag mNode and return it&#8217;s additive state.
+if not we then check the exportTag mNode and return it’s additive state.
 Logic is that the exportTag is the parent of the loop therefore would over-load
 the Loops non-additive state.</p>
 </dd></dl>
@@ -2511,7 +2706,7 @@ the Loops non-additive state.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jnts</strong> &#8211; [] joints to set as specific root nodes for the exporters</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>jnts</strong> – [] joints to set as specific root nodes for the exporters</td>
 </tr>
 </tbody>
 </table>
@@ -2519,7 +2714,7 @@ the Loops non-additive state.</p>
 <p class="first admonition-title">Note</p>
 <p class="last">the joints go through the r9Core.nodes_in_hierarchy codebase so can be shortname pointers as these
 are converted back to full path in the getRootNode calls. This attr is always set as a comma separated
-string of shortnode names &#8216;nodeA,nodeB&#8217;</p>
+string of shortnode names ‘nodeA,nodeB’</p>
 </div>
 </dd></dl>
 
@@ -2532,7 +2727,7 @@ string of shortnode names &#8216;nodeA,nodeB&#8217;</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportLoopNode.setSampleSpace">
 <code class="descname">setSampleSpace</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportLoopNode.setSampleSpace" title="Permalink to this definition">¶</a></dt>
-<dd><p>set a wire to another transform that we&#8217;re going to use as the
+<dd><p>set a wire to another transform that we’re going to use as the
 relative space for any export. This all depends on the export of course!</p>
 </dd></dl>
 
@@ -2570,9 +2765,9 @@ flag</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>offset</strong> &#8211; offset the timerange data for this instance</li>
-<li><strong>timerange</strong> &#8211; used to check if we need to offset both start and end frames or just one</li>
-<li><strong>ripple</strong> &#8211; unused at the moment</li>
+<li><strong>offset</strong> – offset the timerange data for this instance</li>
+<li><strong>timerange</strong> – used to check if we need to offset both start and end frames or just one</li>
+<li><strong>ripple</strong> – unused at the moment</li>
 </ul>
 </td>
 </tr>
@@ -2595,7 +2790,7 @@ used for casting data between mRigs</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expTag</strong> &#8211; destination exportTag that will take the duplicated ExportLoopNode</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expTag</strong> – destination exportTag that will take the duplicated ExportLoopNode</td>
 </tr>
 </tbody>
 </table>
@@ -2630,10 +2825,10 @@ used for casting data between mRigs</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.SceneMover">
 <em class="property">class </em><code class="descname">SceneMover</code><span class="sig-paren">(</span><em>compensate_node=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.SceneMover" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
 <p>Scene Shift Handler : to move an entire Maya scene in world space
 under a managed node</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mover</span><span class="o">=</span><span class="n">SceneMover</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mover</span><span class="o">=</span><span class="n">SceneMover</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mover</span><span class="o">.</span><span class="n">scene_shift</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># do your export stuff</span>
@@ -2679,7 +2874,7 @@ given transforms if specified</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transforms</strong> &#8211; format: {&#8216;translate&#8217;:(0,0,0), &#8216;rotate&#8217;:(0,0,0)} if given in these are
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transforms</strong> – format: {‘translate’:(0,0,0), ‘rotate’:(0,0,0)} if given in these are
 the transforms used on the node after everything has been grouped up</td>
 </tr>
 </tbody>
@@ -2695,8 +2890,8 @@ the transforms used on the node after everything has been grouped up</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>reset</strong> &#8211; whether we restore the scene as it originally was, or leave it in it&#8217;s shifted state</li>
-<li><strong>delete</strong> &#8211; whether to fully delete the system nodes after restore</li>
+<li><strong>reset</strong> – whether we restore the scene as it originally was, or leave it in it’s shifted state</li>
+<li><strong>delete</strong> – whether to fully delete the system nodes after restore</li>
 </ul>
 </td>
 </tr>
@@ -2715,7 +2910,7 @@ the transforms used on the node after everything has been grouped up</td>
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.ImagePlane">
 <em class="property">class </em><code class="descname">ImagePlane</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
 <p>base classs to manage and setup ImagePlanes within Maya, instanciated as a MetaNode
 for better back-end management and exposure of the base attributes directly on the class</p>
 <p># TODO: force the AETemplate callbakcs to create the expression bindings for time</p>
@@ -2734,7 +2929,7 @@ Allows us to record the data and reconstruct it in a consistent manner</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> &#8211; data to consume in a form of a correctly formatted dict,
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – data to consume in a form of a correctly formatted dict,
 generated by the gatherInfo call itself</td>
 </tr>
 </tbody>
@@ -2750,9 +2945,9 @@ generated by the gatherInfo call itself</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>offset</strong> &#8211; offset the timerange data for this instance</li>
-<li><strong>timerange</strong> &#8211; used to check if we need to offset both start and end frames or just one</li>
-<li><strong>ripple</strong> &#8211; unused at the moment</li>
+<li><strong>offset</strong> – offset the timerange data for this instance</li>
+<li><strong>timerange</strong> – used to check if we need to offset both start and end frames or just one</li>
+<li><strong>ripple</strong> – unused at the moment</li>
 </ul>
 </td>
 </tr>
@@ -2775,14 +2970,14 @@ generated by the gatherInfo call itself</td>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.set_width">
 <code class="descname">set_width</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.set_width" title="Permalink to this definition">¶</a></dt>
-<dd><p>Maya&#8217;s imageplane handling is riddled with AETemplate callbacks triggering
+<dd><p>Maya’s imageplane handling is riddled with AETemplate callbacks triggering
 a change in the width based on the height, this mimics this to a degree.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.set_height">
 <code class="descname">set_height</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.set_height" title="Permalink to this definition">¶</a></dt>
-<dd><p>Maya&#8217;s imageplane handling is riddled with AETemplate callbacks triggering
+<dd><p>Maya’s imageplane handling is riddled with AETemplate callbacks triggering
 a change in the width based on the height, this mimics this to a degree.</p>
 </dd></dl>
 
@@ -2795,16 +2990,16 @@ a change in the width based on the height, this mimics this to a degree.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> &#8211; filepath to the image or movie to load up</li>
-<li><strong>filetype</strong> &#8211; specific filetype of the data, else we work it out from the file extension
-[.avi, .mov, .mp4] = &#8220;movie&#8221;, else we assign to &#8220;image&#8221;</li>
-<li><strong>frameoffset</strong> &#8211; if given this is the offfset applied to the loaded sequence</li>
+<li><strong>filepath</strong> – filepath to the image or movie to load up</li>
+<li><strong>filetype</strong> – specific filetype of the data, else we work it out from the file extension
+[.avi, .mov, .mp4] = “movie”, else we assign to “image”</li>
+<li><strong>frameoffset</strong> – if given this is the offfset applied to the loaded sequence</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>TODO: catch load errors when Maya can&#8217;t resolve the file because of image numbering!</p>
+<p>TODO: catch load errors when Maya can’t resolve the file because of image numbering!</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -2828,7 +3023,7 @@ a change in the width based on the height, this mimics this to a degree.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ImagePlane.delete">
 <code class="descname">delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ImagePlane.delete" title="Permalink to this definition">¶</a></dt>
-<dd><p>delete the imageplane node and make sure we cleanup it&#8217;s parent transform</p>
+<dd><p>delete the imageplane node and make sure we cleanup it’s parent transform</p>
 </dd></dl>
 
 </dd></dl>
@@ -2836,7 +3031,7 @@ a change in the width based on the height, this mimics this to a degree.</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.AudioGroup">
 <em class="property">class </em><code class="descname">AudioGroup</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.AudioGroup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaClass" title="Red9.core.Red9_Meta.MetaClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.core.Red9_Meta.MetaClass</span></code></a></p>
 <p>a simple node designed to group / link audio sound nodes to together so they can
 be linked to a character rig for export logic handling</p>
 <dl class="attribute">
@@ -2867,8 +3062,8 @@ connected audio node data</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>audio</strong> &#8211; [] maya audio to connect to this AudioGrp</li>
-<li><strong>paths</strong> &#8211; [] if we give it raw filepaths this will import and then link up to the audioGrp</li>
+<li><strong>audio</strong> – [] maya audio to connect to this AudioGrp</li>
+<li><strong>paths</strong> – [] if we give it raw filepaths this will import and then link up to the audioGrp</li>
 </ul>
 </td>
 </tr>
@@ -2884,7 +3079,7 @@ connected audio node data</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nodes</strong> &#8211; audio to connect to this AudioGrp</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nodes</strong> – audio to connect to this AudioGrp</td>
 </tr>
 </tbody>
 </table>
@@ -2900,9 +3095,9 @@ timerange, if not timerange is given return all linked audio</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>time</strong> &#8211; time (start, end) tuple as a range.</li>
-<li><strong>start_inRange</strong> &#8211; check is the testRange[0] value falls fully in the baseRange</li>
-<li><strong>end_inRange</strong> &#8211; check is the testRange[1] value falls fully in the baseRange</li>
+<li><strong>time</strong> – time (start, end) tuple as a range.</li>
+<li><strong>start_inRange</strong> – check is the testRange[0] value falls fully in the baseRange</li>
+<li><strong>end_inRange</strong> – check is the testRange[1] value falls fully in the baseRange</li>
 </ul>
 </td>
 </tr>
@@ -2930,10 +3125,10 @@ else we validate that testRange is fully within the baseRanges times</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>offset</strong> &#8211; offset the timerange data for this instance</li>
-<li><strong>timerange</strong> &#8211; used to check if we need to offset both start and end frames or just one</li>
-<li><strong>ripple</strong> &#8211; unused at the moment</li>
-<li><strong>cache_object</strong> &#8211; the cache / processed list used to prevent duplicate offsets. This is usually the TimeOffset()._processed dict</li>
+<li><strong>offset</strong> – offset the timerange data for this instance</li>
+<li><strong>timerange</strong> – used to check if we need to offset both start and end frames or just one</li>
+<li><strong>ripple</strong> – unused at the moment</li>
+<li><strong>cache_object</strong> – the cache / processed list used to prevent duplicate offsets. This is usually the TimeOffset()._processed dict</li>
 </ul>
 </td>
 </tr>
@@ -2946,30 +3141,30 @@ else we validate that testRange is fully within the baseRanges times</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD">
 <em class="property">class </em><code class="descname">MetaTimeCodeHUD</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaHUDNode" title="Red9.core.Red9_Meta.MetaHUDNode"><code class="xref py py-class docutils literal"><span class="pre">Red9.core.Red9_Meta.MetaHUDNode</span></code></a></p>
-<p>Generate&#8217;s a HUD node connected to the main timecode attrs,
+<dd><p>Bases: <a class="reference internal" href="../red9core_templates/Red9_Meta.html#Red9.core.Red9_Meta.MetaHUDNode" title="Red9.core.Red9_Meta.MetaHUDNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.core.Red9_Meta.MetaHUDNode</span></code></a></p>
+<p>Generate’s a HUD node connected to the main timecode attrs,
 allows us to show the actual internal timecode attrs as their
-original SMPTE time&#8217;s</p>
+original SMPTE time’s</p>
 <p>Crucial things to be aware of:</p>
 <p>We construct timecode from 3 attrs on the given node:
 timecode_ref        : the original timecode converted to milliseconds
 timecode_count      : a linear curve that increments every frame based on the samplerate
 timecode_samplerate : samplerate that the linear counter was generated against</p>
 <p>SMPTE timecode is then reconstructed like so:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r9Audio</span><span class="o">.</span><span class="n">milliseconds_to_Timecode</span><span class="p">(</span><span class="n">ref</span> <span class="o">+</span> <span class="p">((</span><span class="n">count</span> <span class="o">/</span> <span class="n">samplerate</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r9Audio</span><span class="o">.</span><span class="n">milliseconds_to_Timecode</span><span class="p">(</span><span class="n">ref</span> <span class="o">+</span> <span class="p">((</span><span class="n">count</span> <span class="o">/</span> <span class="n">samplerate</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>The easiest and expected way to use this class is directly from the Pro_MetaRig.Timecode class
 binding in which this HUD class is managed in a correct manner. See audio.Timecode class for
 more details.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">Timecode</span><span class="o">.</span><span class="n">addTimecode_to_node</span><span class="p">(</span><span class="n">tc</span><span class="o">=</span><span class="s1">&#39;01:00:00:00&#39;</span><span class="p">,</span> <span class="n">propagate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># add timecode to the mRig</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">Timecode</span><span class="o">.</span><span class="n">hud_connect</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>You can of course run this directly from a class instance, however, the nodes
 passed to the addMonitored call have to have the timecode attrs already bound to them</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tcHUD</span><span class="o">=</span><span class="n">r9pmeta</span><span class="o">.</span><span class="n">MetaTimeCodeHUD</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tcHUD</span><span class="o">=</span><span class="n">r9pmeta</span><span class="o">.</span><span class="n">MetaTimeCodeHUD</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tcHUD</span><span class="o">.</span><span class="n">addMonitoredTimecodeNode</span><span class="p">(</span><span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># node must have valid timecode attrs already</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tcHUD</span><span class="o">.</span><span class="n">drawHUD</span><span class="p">()</span>
 </pre></div>
@@ -3001,7 +3196,7 @@ re-build the cached attrs for the timecode systems</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.connectTimecodeSystems">
-<code class="descname">connectTimecodeSystems</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.connectTimecodeSystems" title="Permalink to this definition">¶</a></dt>
+<code class="descname">connectTimecodeSystems</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.MetaTimeCodeHUD.connectTimecodeSystems" title="Permalink to this definition">¶</a></dt>
 <dd><p>connect all mRigs in the scene to the HUD node</p>
 </dd></dl>
 
@@ -3024,18 +3219,20 @@ re-build the cached attrs for the timecode systems</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/red9pro_templates/Red9_Pro_meta .txt"
+      <li><a href="../_sources/red9pro_templates/Red9_Pro_meta .rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -3062,7 +3259,7 @@ re-build the cached attrs for the timecode systems</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2016, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

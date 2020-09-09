@@ -1,33 +1,25 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Pro_Pack : skinning &#8212; Red9 2.0 documentation</title>
-    
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pro_Pack : uibase" href="Red9_Pro_uibase.html" />
     <link rel="prev" title="Pro_Pack : r9Data" href="Red9_Pro_r9data.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -55,8 +47,8 @@
   <div class="section" id="pro-pack-skinning">
 <h1>Pro_Pack : skinning<a class="headerlink" href="#pro-pack-skinning" title="Permalink to this headline">¶</a></h1>
 <p>ProPack skinning management and file format for Maya</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9skinning&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9skinning</span>
 </pre></div>
@@ -68,19 +60,19 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.Selectionfilter" title="Red9.pro_pack.core.skining.Selectionfilter"><code class="xref py py-obj docutils literal"><span class="pre">Selectionfilter</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.Selectionfilter" title="Red9.pro_pack.core.skining.Selectionfilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Selectionfilter</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.Skincluster" title="Red9.pro_pack.core.skining.Skincluster"><code class="xref py py-obj docutils literal"><span class="pre">Skincluster</span></code></a>([skincluster])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.Skincluster" title="Red9.pro_pack.core.skining.Skincluster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Skincluster</span></code></a>([skincluster])</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.Sknfile" title="Red9.pro_pack.core.skining.Sknfile"><code class="xref py py-obj docutils literal"><span class="pre">Sknfile</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.Sknfile" title="Red9.pro_pack.core.skining.Sknfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sknfile</span></code></a>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.Shapelayout" title="Red9.pro_pack.core.skining.Shapelayout"><code class="xref py py-obj docutils literal"><span class="pre">Shapelayout</span></code></a>(ui,&nbsp;shape,&nbsp;*args,&nbsp;**kws)</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.Shapelayout" title="Red9.pro_pack.core.skining.Shapelayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Shapelayout</span></code></a>(ui,&nbsp;shape,&nbsp;*args,&nbsp;**kws)</td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.R9sknui" title="Red9.pro_pack.core.skining.R9sknui"><code class="xref py py-obj docutils literal"><span class="pre">R9sknui</span></code></a>([parent])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.R9sknui" title="Red9.pro_pack.core.skining.R9sknui"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R9sknui</span></code></a>([parent])</td>
 <td></td>
 </tr>
 </tbody>
@@ -97,7 +89,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> &#8211; bool if true it will just filter selected meshes</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> – bool if true it will just filter selected meshes</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string list with all the meshes in the scene or filter by selection</td>
 </tr>
@@ -114,8 +106,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filepath</strong> &#8211; skin file</li>
-<li><strong>mesh</strong> &#8211; given mesh / meshes to load if matched in the skin file data</li>
+<li><strong>filepath</strong> – skin file</li>
+<li><strong>mesh</strong> – given mesh / meshes to load if matched in the skin file data</li>
 </ul>
 </td>
 </tr>
@@ -137,7 +129,7 @@
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.Selectionfilter">
 <em class="property">class </em><code class="descname">Selectionfilter</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Selectionfilter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.Selectionfilter.ls">
 <code class="descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Selectionfilter.ls" title="Permalink to this definition">¶</a></dt>
@@ -154,8 +146,8 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filepath</strong> &#8211; skin file path</li>
-<li><strong>namespace</strong> &#8211; namespace to use for re-mapping the file</li>
+<li><strong>filepath</strong> – skin file path</li>
+<li><strong>namespace</strong> – namespace to use for re-mapping the file</li>
 </ul>
 </td>
 </tr>
@@ -174,7 +166,7 @@
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.Root_select">
 <em class="property">class </em><code class="descname">Root_select</code><span class="sig-paren">(</span><em>func</em>, <em>jnt_roots=[]</em>, <em>parent=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Root_select" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.Root_select.set_selection">
 <code class="descname">set_selection</code><span class="sig-paren">(</span><em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Root_select.set_selection" title="Permalink to this definition">¶</a></dt>
@@ -182,7 +174,7 @@
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.skining.Root_select.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000EEB1648&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Root_select.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Root_select.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -190,7 +182,7 @@
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.Hi_selection">
 <em class="property">class </em><code class="descname">Hi_selection</code><span class="sig-paren">(</span><em>instance</em>, <em>data</em>, <em>jnt_roots=[]</em>, <em>load_data=False</em>, <em>checkdata=True</em>, <em>ignore_selection=False</em>, <em>parent=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Hi_selection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.Hi_selection.set_selection">
 <code class="descname">set_selection</code><span class="sig-paren">(</span><em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Hi_selection.set_selection" title="Permalink to this definition">¶</a></dt>
@@ -198,7 +190,7 @@
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.skining.Hi_selection.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000EEB5A88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Hi_selection.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Hi_selection.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -206,7 +198,7 @@
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.R9skn">
 <em class="property">class </em><code class="descname">R9skn</code><span class="sig-paren">(</span><em>shape=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.R9skn.root_joints">
 <code class="descname">root_joints</code><span class="sig-paren">(</span><em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.root_joints" title="Permalink to this definition">¶</a></dt>
@@ -249,7 +241,7 @@
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.R9skn.create_skincluster">
-<code class="descname">create_skincluster</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.create_skincluster" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_skincluster</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.create_skincluster" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -308,13 +300,13 @@
 <dt id="Red9.pro_pack.core.skining.R9skn.jntids">
 <code class="descname">jntids</code><span class="sig-paren">(</span><em>key='id'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.jntids" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a dictionary of joint ids that belong to the skin cluster, keyword key can be use to specify
-the way the data is return if key=&#8217;id&#8217; id will be the keys of the dictionary and joint name the value
-if key=&#8217;joint&#8217; the joint name will be the key and the id the value</p>
+the way the data is return if key=’id’ id will be the keys of the dictionary and joint name the value
+if key=’joint’ the joint name will be the key and the id the value</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> &#8211; string to define which value is the key of the dictionary, valid parameters are &#8216;id&#8217; and &#8216;joint&#8217;</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> – string to define which value is the key of the dictionary, valid parameters are ‘id’ and ‘joint’</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary containing ids and joint names the order of keys and values can be change by the use of</td>
 </tr>
@@ -344,7 +336,7 @@ if key=&#8217;joint&#8217; the joint name will be the key and the id the value</
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vrtxid</strong> &#8211; numeric id of the vertex</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vrtxid</strong> – numeric id of the vertex</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary with the weight values of the vertex keys are the joint influence name and value the is the
 value of influence</td>
@@ -362,7 +354,7 @@ influence values</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vrtxids</strong> &#8211; list of numeric ids of vertexes</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vrtxids</strong> – list of numeric ids of vertexes</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary of dictionaries with the numeric id of the vertex as a key and  a dictionary as value</td>
 </tr>
@@ -393,12 +385,12 @@ influence values</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.R9skn.check_missing_joints_on_scene">
-<code class="descname">check_missing_joints_on_scene</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_missing_joints_on_scene" title="Permalink to this definition">¶</a></dt>
+<code class="descname">check_missing_joints_on_scene</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_missing_joints_on_scene" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.R9skn.check_missing_joints_on_cluster">
-<code class="descname">check_missing_joints_on_cluster</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_missing_joints_on_cluster" title="Permalink to this definition">¶</a></dt>
+<code class="descname">check_missing_joints_on_cluster</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_missing_joints_on_cluster" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -436,7 +428,7 @@ influence values</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.R9skn_file">
 <em class="property">class </em><code class="descname">R9skn_file</code><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.R9skn_file.get_skns">
 <code class="descname">get_skns</code><span class="sig-paren">(</span><em>selection=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.get_skns" title="Permalink to this definition">¶</a></dt>
@@ -492,7 +484,7 @@ influence values</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.R9Skn_widget">
 <em class="property">class </em><code class="descname">R9Skn_widget</code><span class="sig-paren">(</span><em>ui</em>, <em>shape</em>, <em>data</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QHBoxLayout</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QHBoxLayout</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.skining.R9Skn_widget.data">
 <code class="descname">data</code><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.data" title="Permalink to this definition">¶</a></dt>
@@ -560,7 +552,7 @@ influence values</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.skining.R9Skn_widget.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000EEB5B88&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -568,7 +560,7 @@ influence values</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.R9sknui2">
 <em class="property">class </em><code class="descname">R9sknui2</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_mw_r9skn</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_mw_r9skn</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.R9sknui2.clear_ui">
 <code class="descname">clear_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.clear_ui" title="Permalink to this definition">¶</a></dt>
@@ -621,7 +613,7 @@ influence values</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.skining.R9sknui2.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000EEB5BC8&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -629,7 +621,7 @@ influence values</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.Jnt_remap">
 <em class="property">class </em><code class="descname">Jnt_remap</code><span class="sig-paren">(</span><em>parent=None</em>, <em>Skn_widget=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_mw_aditive_joint_selector</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_mw_aditive_joint_selector</span></code></p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.skining.Jnt_remap.data">
 <code class="descname">data</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.data" title="Permalink to this definition">¶</a></dt>
@@ -692,7 +684,7 @@ influence values</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.skining.Jnt_remap.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000EEB5C08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -700,7 +692,7 @@ influence values</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.skl_selection">
 <em class="property">class </em><code class="descname">skl_selection</code><span class="sig-paren">(</span><em>widget</em>, <em>func=None</em>, <em>jnt_roots=[]</em>, <em>parent=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.skl_selection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.skl_selection.set_selection">
 <code class="descname">set_selection</code><span class="sig-paren">(</span><em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.skl_selection.set_selection" title="Permalink to this definition">¶</a></dt>
@@ -708,7 +700,7 @@ influence values</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.skining.skl_selection.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000EEB5C48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.skl_selection.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.skl_selection.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -716,7 +708,7 @@ influence values</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.Skincluster">
 <em class="property">class </em><code class="descname">Skincluster</code><span class="sig-paren">(</span><em>skincluster=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.Skincluster.select">
 <code class="descname">select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.select" title="Permalink to this definition">¶</a></dt>
@@ -857,7 +849,7 @@ influence values</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.Sknfile">
 <em class="property">class </em><code class="descname">Sknfile</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.Sknfile.namebaseonscene">
 <code class="descname">namebaseonscene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile.namebaseonscene" title="Permalink to this definition">¶</a></dt>
@@ -913,7 +905,7 @@ influence values</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.Shapelayout">
 <em class="property">class </em><code class="descname">Shapelayout</code><span class="sig-paren">(</span><em>ui</em>, <em>shape</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QHBoxLayout</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QHBoxLayout</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.Shapelayout.load">
 <code class="descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.load" title="Permalink to this definition">¶</a></dt>
@@ -951,7 +943,7 @@ influence values</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.skining.Shapelayout.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000EEB5E08&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -959,7 +951,7 @@ influence values</p>
 <dl class="class">
 <dt id="Red9.pro_pack.core.skining.R9sknui">
 <em class="property">class </em><code class="descname">R9sknui</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code>, <code class="xref py py-class docutils literal"><span class="pre">Ui_mw_r9skn</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_mw_r9skn</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.R9sknui.browse">
 <code class="descname">browse</code><span class="sig-paren">(</span><em>sknfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.browse" title="Permalink to this definition">¶</a></dt>
@@ -977,7 +969,7 @@ influence values</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.skining.R9sknui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000000EEB5E48&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1019,18 +1011,20 @@ influence values</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/red9pro_templates/Red9_Pro_skinning.txt"
+      <li><a href="../_sources/red9pro_templates/Red9_Pro_skinning.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -1057,7 +1051,7 @@ influence values</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2016, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

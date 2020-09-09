@@ -638,7 +638,7 @@ def match_given_hierarchys(source, dest):
                 break
     return nameMatched
 
-def bind_skeletons(source, dest, method='connect', scales=False, verbose=False, unlock=False):
+def bind_skeletons(source, dest, method='connect', scales=False, verbose=False, unlock=False, bindroot=True):
     '''
     From 2 given root joints search through each hierarchy for child joints, match
     them based on node name, then connect their trans/rots directly, or
@@ -667,9 +667,10 @@ def bind_skeletons(source, dest, method='connect', scales=False, verbose=False, 
 
     # parent constrain the root nodes regardless of bindType, fixes issues where
     # we have additional rotated parent groups on the source
-    cmds.parentConstraint(source, dest)
-    if scales:
-        cmds.scaleConstraint(source, dest, mo=True)
+    if bindroot:
+        cmds.parentConstraint(source, dest)
+        if scales:
+            cmds.scaleConstraint(source, dest, mo=True)
 
     # attrs to 'connect' and also to ensure are unlocked
     attrs = ['rotateX', 'rotateY', 'rotateZ', 'translateX', 'translateY', 'translateZ']

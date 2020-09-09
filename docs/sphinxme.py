@@ -1,5 +1,11 @@
 '''
-cmds : sphinx-build -b html X:\Red9\docs\source X:\Red9\docs\html
+cmds : sphinx-build -b html X:\Red9_Dev\Red9\docs\source X:\Red9\docs\html
+
+cmds : sphinx-build -b html X:\Red9_Dev\Red9\docs\source X:\Red9_Dev\Red9\docs\html
+
+# from within Maya
+import os
+os.system('sphinx-build -b html X:\Red9_Dev\Red9\docs\source X:\Red9\docs\html')
 '''
 
 import os

@@ -643,7 +643,7 @@ def setTimeRangeToo(nodes=None, setall=True, bounds_only=True):
     else:
         raise StandardError('given nodes have no found animation data')
 
-def snap(source, destination, snapTranslates=True, snapRotates=True):
+def snap(source, destination, snapTranslates=True, snapRotates=True, *args):
     '''
     simple wrapper over the AnimFunctions snap call
 
@@ -2022,7 +2022,7 @@ class AnimationUI(object):
         '''
 
         if mode == 'local' or mode == 'localPoseMode':
-            self.posePath = os.path.join(self.posePathLocal, self.getPoseSubFolder())
+            self.posePath = r9General.formatPath_join(self.posePathLocal, self.getPoseSubFolder())
             if not os.path.exists(self.posePath):
                 log.warning('No Matching Local SubFolder path found - Reverting to Root')
                 self.__uiCB_clearSubFolders()
@@ -2034,7 +2034,7 @@ class AnimationUI(object):
             cmds.textFieldButtonGrp(self.uitfgPosePath, edit=True, text=self.posePathLocal)
 
         elif mode == 'project' or mode == 'projectPoseMode':
-            self.posePath = os.path.join(self.posePathProject, self.getPoseSubFolder())
+            self.posePath = r9General.formatPath_join(self.posePathProject, self.getPoseSubFolder())
             if not os.path.exists(self.posePath):
                 log.warning('No Matching Project SubFolder path found - Reverting to Root')
                 self.__uiCB_clearSubFolders()
@@ -2136,7 +2136,7 @@ class AnimationUI(object):
 
         cmds.textFieldButtonGrp('uitfgPoseSubPath', edit=True, text=subFolder)
         cmds.textScrollList(self.uitslPoseSubFolders, edit=True, vis=False)
-        self.posePath = os.path.join(basePath, subFolder)
+        self.posePath = r9General.formatPath_join(basePath, subFolder)
         self.__uiCB_pathSwitchInternals()
 
     def __uiCB_clearSubFolders(self, *args):
@@ -2223,7 +2223,8 @@ class AnimationUI(object):
             try:
                 buttons = cmds.gridLayout(self.uiglPoses, q=True, ca=True)
                 if buttons:
-                    [cmds.deleteUI(button) for button in buttons]
+                    for button in buttons:
+                        cmds.deleteUI(button)
             except StandardError, error:
                 print(error)
 
@@ -2645,7 +2646,7 @@ class AnimationUI(object):
         if result == 'OK':
             subFolder = cmds.promptDialog(query=True, text=True)
             cmds.textFieldButtonGrp('uitfgPoseSubPath', edit=True, text=subFolder)
-            self.posePath = os.path.join(basePath, subFolder)
+            self.posePath = r9General.formatPath_join(basePath, subFolder)
             os.mkdir(self.posePath)
             if handlerFile and os.path.exists(handlerFile):
                 shutil.copy(handlerFile, self.posePath)
@@ -3741,7 +3742,7 @@ class AnimFunctions(object):
         raise NotImplemented
 
     @staticmethod
-    def snap(nodes=None, snapTranslates=True, snapRotates=True):
+    def snap(nodes=None, snapTranslates=True, snapRotates=True, *args):
         '''
         This takes 2 given transform nodes and snaps them together. It takes into
         account offsets in the pivots of the objects. Uses the API MFnTransform nodes

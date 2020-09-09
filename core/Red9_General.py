@@ -180,12 +180,6 @@ def getScriptEditorSelection():
         log.info('command caught: %s ' % func)
         return func
 
-def string_to_date(date_string):
-    '''
-    TODO: no longer used in the ProSystems?
-    '''
-    date_data = [int(x) for x in date_string.split('-')]
-    return datetime.date(date_data[0], date_data[1], date_data[2])
 
 def string_to_date_time(date_time_string):
     """
@@ -199,6 +193,7 @@ def string_to_date_time(date_time_string):
         log.warning('import Numpy failed')
         print(traceback.format_exc())
     return numpy.datetime64(date_time_string).astype(datetime.datetime)
+
 
 def string_to_timestamp(date_time_string):
     """
@@ -336,6 +331,7 @@ def evalManager_DG(func):
     def wrapper(*args, **kwargs):
         try:
             evalmode = None
+            res = None
             if r9Setup.mayaVersion() >= 2016:
                 evalmode = cmds.evaluationManager(mode=True, q=True)[0]
                 if evalmode == 'parallel':
@@ -366,6 +362,7 @@ def evalManager_idleAction(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         evalmode = None
+        res = None
         try:
             if r9Setup.mayaVersion() >= 2019.0:
                 evalmode = cmds.evaluationManager(q=True, idleAction=True)

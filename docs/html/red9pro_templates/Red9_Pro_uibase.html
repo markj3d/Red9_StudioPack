@@ -1,32 +1,24 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Pro_Pack : uibase &#8212; Red9 2.0 documentation</title>
-    
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Red9 2.0 documentation" href="../index.html" />
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="Pro_Pack : skinning" href="Red9_Pro_skinning.html" /> 
-  </head>
-  <body role="document">
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -51,8 +43,8 @@
   <div class="section" id="pro-pack-uibase">
 <h1>Pro_Pack : uibase<a class="headerlink" href="#pro-pack-uibase" title="Permalink to this headline">¶</a></h1>
 <p>ProPack uibase QT and UI management for ProPack</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9uib&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9uib</span>
 </pre></div>
@@ -81,9 +73,9 @@ against multiple display scale factors in 4k</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>widget</strong> &#8211; QT widget to manage</li>
-<li><strong>width</strong> &#8211; the widget width we&#8217;re aiming at when in 100% 96dpi mode</li>
-<li><strong>height</strong> &#8211; the widget height we&#8217;re aiming at when in 100% 96dpi mode</li>
+<li><strong>widget</strong> – QT widget to manage</li>
+<li><strong>width</strong> – the widget width we’re aiming at when in 100% 96dpi mode</li>
+<li><strong>height</strong> – the widget height we’re aiming at when in 100% 96dpi mode</li>
 </ul>
 </td>
 </tr>
@@ -94,7 +86,7 @@ against multiple display scale factors in 4k</p>
 <dl class="class">
 <dt id="Red9.pro_pack.UI.uibase.Icons">
 <em class="property">class </em><code class="descname">Icons</code><span class="sig-paren">(</span><em>iconsFolder=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.Icons" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.UI.uibase.Icons.createIconsFrom">
 <code class="descname">createIconsFrom</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.Icons.createIconsFrom" title="Permalink to this definition">¶</a></dt>
@@ -144,28 +136,28 @@ against multiple display scale factors in 4k</p>
 <dl class="class">
 <dt id="Red9.pro_pack.UI.uibase.MessageBox">
 <em class="property">class </em><code class="descname">MessageBox</code><span class="sig-paren">(</span><em>message</em>, <em>funcyes=None</em>, <em>funcno=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.MessageBox" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Simple Context Manager for MessageBox</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.UI.uibase.FileDialog">
 <em class="property">class </em><code class="descname">FileDialog</code><a class="headerlink" href="#Red9.pro_pack.UI.uibase.FileDialog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>wraper for cmds.fileDialog2
 EX.</p>
 <p>f = FileDialog()</p>
 <p>#Get an existing file path
-filepath = f.getFile(&#8216;jpg&#8217;)</p>
+filepath = f.getFile(‘jpg’)</p>
 <p>#None existing file path
-filepath = f.setFile(&#8216;jpg&#8217;)</p>
+filepath = f.setFile(‘jpg’)</p>
 <p>#Get an existing folder path
 folderpath = f.getFolder()</p>
 <dl class="method">
 <dt id="Red9.pro_pack.UI.uibase.FileDialog.getFile">
 <code class="descname">getFile</code><span class="sig-paren">(</span><em>ext=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.FileDialog.getFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get an existing file path
-:param ext: string with extention name for the  file to be open ex. &#8216;jpg&#8217;
+:param ext: string with extention name for the  file to be open ex. ‘jpg’
 :return: string with the file path</p>
 </dd></dl>
 
@@ -173,7 +165,7 @@ folderpath = f.getFolder()</p>
 <dt id="Red9.pro_pack.UI.uibase.FileDialog.setFile">
 <code class="descname">setFile</code><span class="sig-paren">(</span><em>ext=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.FileDialog.setFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set None existing file path
-:param ext: string with extension name for the  file to be save ex. &#8216;jpg&#8217;
+:param ext: string with extension name for the  file to be save ex. ‘jpg’
 :return: string with the file path</p>
 </dd></dl>
 
@@ -199,7 +191,7 @@ folderpath = f.getFolder()</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ui_file</strong> &#8211; string path to .ui file</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ui_file</strong> – string path to .ui file</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string path to compiled .py file</td>
 </tr>
@@ -215,11 +207,11 @@ folderpath = f.getFolder()</p>
 <dl class="function">
 <dt id="Red9.pro_pack.UI.uibase.loadUiType">
 <code class="descname">loadUiType</code><span class="sig-paren">(</span><em>ui_file</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.loadUiType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pyside &#8220;loadUiType&#8221; command like PyQt4 has one, so we have to convert the
+<dd><p>Pyside “loadUiType” command like PyQt4 has one, so we have to convert the
 ui file to py code in-memory first and then execute it in a special frame
 to retrieve the form_class.</p>
 <p>Ex.
-base_class, form_class = loadUiType(r&#8217;D:ui.ui&#8217;)</p>
+base_class, form_class = loadUiType(r’D:ui.ui’)</p>
 <dl class="docutils">
 <dt>class Test(base_class, form_class):</dt>
 <dd><dl class="first last docutils">
@@ -239,8 +231,8 @@ self.setupUi(self)</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>uifile</strong> &#8211; path to .ui file</li>
-<li><strong>parent</strong> &#8211; patent window for .ui file, if no parent guiven, it will use the main maya ui</li>
+<li><strong>uifile</strong> – path to .ui file</li>
+<li><strong>parent</strong> – patent window for .ui file, if no parent guiven, it will use the main maya ui</li>
 </ul>
 </td>
 </tr>
@@ -259,9 +251,9 @@ self.setupUi(self)</dd>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>windowtitle</strong> &#8211; string with title of the window</li>
-<li><strong>path</strong> &#8211; path where to start</li>
-<li><strong>_filter</strong> &#8211; filter the file formats</li>
+<li><strong>windowtitle</strong> – string with title of the window</li>
+<li><strong>path</strong> – path where to start</li>
+<li><strong>_filter</strong> – filter the file formats</li>
 </ul>
 </td>
 </tr>
@@ -271,10 +263,10 @@ self.setupUi(self)</dd>
 </tbody>
 </table>
 <p>EX.
-image = saveFileName(windowtitle=&#8217;Save File&#8217;,</p>
+image = saveFileName(windowtitle=’Save File’,</p>
 <blockquote>
 <div>path=path,
-_filter=&#8221;Image Files (<a href="#id1"><span class="problematic" id="id2">*</span></a>.png <a href="#id3"><span class="problematic" id="id4">*</span></a>.jpg <a href="#id5"><span class="problematic" id="id6">*</span></a>.bmp)&#8221;)</div></blockquote>
+_filter=”Image Files (<a href="#id1"><span class="problematic" id="id2">*</span></a>.png <a href="#id3"><span class="problematic" id="id4">*</span></a>.jpg <a href="#id5"><span class="problematic" id="id6">*</span></a>.bmp)”)</div></blockquote>
 </dd></dl>
 
 <dl class="function">
@@ -285,9 +277,9 @@ _filter=&#8221;Image Files (<a href="#id1"><span class="problematic" id="id2">*<
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>windowtitle</strong> &#8211; string with title of the window</li>
-<li><strong>path</strong> &#8211; path where to start</li>
-<li><strong>_filter</strong> &#8211; filter the file formats</li>
+<li><strong>windowtitle</strong> – string with title of the window</li>
+<li><strong>path</strong> – path where to start</li>
+<li><strong>_filter</strong> – filter the file formats</li>
 </ul>
 </td>
 </tr>
@@ -297,10 +289,10 @@ _filter=&#8221;Image Files (<a href="#id1"><span class="problematic" id="id2">*<
 </tbody>
 </table>
 <p>EX.
-image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
+image = openFileName(windowtitle=’select a background image’,</p>
 <blockquote>
 <div>path=path,
-_filter=&#8221;Image Files (<a href="#id7"><span class="problematic" id="id8">*</span></a>.png <a href="#id9"><span class="problematic" id="id10">*</span></a>.jpg <a href="#id11"><span class="problematic" id="id12">*</span></a>.bmp)&#8221;)</div></blockquote>
+_filter=”Image Files (<a href="#id7"><span class="problematic" id="id8">*</span></a>.png <a href="#id9"><span class="problematic" id="id10">*</span></a>.jpg <a href="#id11"><span class="problematic" id="id12">*</span></a>.bmp)”)</div></blockquote>
 </dd></dl>
 
 <dl class="function">
@@ -311,9 +303,9 @@ _filter=&#8221;Image Files (<a href="#id7"><span class="problematic" id="id8">*<
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>windowtitle</strong> &#8211; string with title of the window</li>
-<li><strong>path</strong> &#8211; path where to start</li>
-<li><strong>_filter</strong> &#8211; filter the file formats</li>
+<li><strong>windowtitle</strong> – string with title of the window</li>
+<li><strong>path</strong> – path where to start</li>
+<li><strong>_filter</strong> – filter the file formats</li>
 </ul>
 </td>
 </tr>
@@ -323,10 +315,10 @@ _filter=&#8221;Image Files (<a href="#id7"><span class="problematic" id="id8">*<
 </tbody>
 </table>
 <p>EX.
-image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
+image = openFileName(windowtitle=’select a background image’,</p>
 <blockquote>
 <div>path=path,
-_filter=&#8221;Image Files (<a href="#id13"><span class="problematic" id="id14">*</span></a>.png <a href="#id15"><span class="problematic" id="id16">*</span></a>.jpg <a href="#id17"><span class="problematic" id="id18">*</span></a>.bmp)&#8221;)</div></blockquote>
+_filter=”Image Files (<a href="#id13"><span class="problematic" id="id14">*</span></a>.png <a href="#id15"><span class="problematic" id="id16">*</span></a>.jpg <a href="#id17"><span class="problematic" id="id18">*</span></a>.bmp)”)</div></blockquote>
 </dd></dl>
 
 <dl class="function">
@@ -337,8 +329,8 @@ _filter=&#8221;Image Files (<a href="#id13"><span class="problematic" id="id14">
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>windowtitle</strong> &#8211; string with title of the window</li>
-<li><strong>path</strong> &#8211; path where to start</li>
+<li><strong>windowtitle</strong> – string with title of the window</li>
+<li><strong>path</strong> – path where to start</li>
 </ul>
 </td>
 </tr>
@@ -348,15 +340,15 @@ _filter=&#8221;Image Files (<a href="#id13"><span class="problematic" id="id14">
 </tbody>
 </table>
 <p>EX.
-image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
+image = openFileName(windowtitle=’select a background image’,</p>
 <blockquote>
-<div>path=path&#8221;)</div></blockquote>
+<div>path=path”)</div></blockquote>
 </dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.UI.uibase.ListModel">
 <em class="property">class </em><code class="descname">ListModel</code><span class="sig-paren">(</span><em>alist=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ListModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtCore.QAbstractListModel</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtCore.QAbstractListModel</span></code></p>
 <p>List View Model setup for better management</p>
 <dl class="method">
 <dt id="Red9.pro_pack.UI.uibase.ListModel.rowCount">
@@ -375,7 +367,7 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.UI.uibase.ListModel.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001CAAA848&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ListModel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ListModel.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -393,7 +385,7 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 <dl class="class">
 <dt id="Red9.pro_pack.UI.uibase.R9_float_slider_widget">
 <em class="property">class </em><code class="descname">R9_float_slider_widget</code><span class="sig-paren">(</span><em>parent=None</em>, <em>min=0.0</em>, <em>max=1.0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_widget" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QWidget</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QWidget</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.UI.uibase.R9_float_slider_widget.set_widgets">
 <code class="descname">set_widgets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_widget.set_widgets" title="Permalink to this definition">¶</a></dt>
@@ -416,7 +408,7 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.UI.uibase.R9_float_slider_widget.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001CAAA888&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -424,7 +416,7 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 <dl class="class">
 <dt id="Red9.pro_pack.UI.uibase.R9_float_slider_window">
 <em class="property">class </em><code class="descname">R9_float_slider_window</code><span class="sig-paren">(</span><em>parent=None</em>, <em>min=0.0</em>, <em>max=1.0</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_window" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PySide.QtGui.QMainWindow</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.UI.uibase.R9_float_slider_window.value">
 <code class="descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_window.value" title="Permalink to this definition">¶</a></dt>
@@ -432,7 +424,7 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 
 <dl class="attribute">
 <dt id="Red9.pro_pack.UI.uibase.R9_float_slider_window.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide.QtCore.QMetaObject object at 0x000000001CAAA8C8&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_window.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.UI.uibase.R9_float_slider_window.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -471,7 +463,7 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 <dl class="class">
 <dt id="Red9.pro_pack.UI.uibase.BaseUI">
 <em class="property">class </em><code class="descname">BaseUI</code><span class="sig-paren">(</span><em>uifile=None</em>, <em>unik=True</em>, <em>parent=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.BaseUI" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="method">
 <dt id="Red9.pro_pack.UI.uibase.BaseUI.show">
 <code class="descname">show</code><span class="sig-paren">(</span><em>dock=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.BaseUI.show" title="Permalink to this definition">¶</a></dt>
@@ -497,24 +489,24 @@ image = openFileName(windowtitle=&#8217;select a background image&#8217;,</p>
 <dl class="class">
 <dt id="Red9.pro_pack.UI.uibase.ProgressBarDialog_QTContext">
 <em class="property">class </em><code class="descname">ProgressBarDialog_QTContext</code><span class="sig-paren">(</span><em>maxValue=100</em>, <em>step=1</em>, <em>title=''</em>, <em>text=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.ProgressBarDialog_QTContext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>CONTEXT MANAGER : Context manager to make it easier to wrap progressBars</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>maxValue</strong> &#8211; max value used in the progress</li>
-<li><strong>interruptable</strong> &#8211; if the progress is interruptable / escapable</li>
-<li><strong>step</strong> &#8211; step used in the progress bar</li>
-<li><strong>ismain</strong> &#8211; if we use the main progressBar OR a progressWindow to view the progress</li>
-<li><strong>title</strong> &#8211; only valid if ismain=False, used as the progressUI window title</li>
+<li><strong>maxValue</strong> – max value used in the progress</li>
+<li><strong>interruptable</strong> – if the progress is interruptable / escapable</li>
+<li><strong>step</strong> – step used in the progress bar</li>
+<li><strong>ismain</strong> – if we use the main progressBar OR a progressWindow to view the progress</li>
+<li><strong>title</strong> – only valid if ismain=False, used as the progressUI window title</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#Example of using this in code</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1">#Example of using this in code</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">progressBar</span><span class="o">=</span><span class="n">ProgressBarContext</span><span class="p">()</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -561,18 +553,20 @@ to do it</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/red9pro_templates/Red9_Pro_uibase.txt"
+      <li><a href="../_sources/red9pro_templates/Red9_Pro_uibase.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -596,7 +590,7 @@ to do it</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2016, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>
