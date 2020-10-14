@@ -871,13 +871,18 @@ def getMetaRigs(mInstances='MetaRig', mClassGrps=['MetaRig']):
     We use mInstances rather than mTypes directly for MetaRig to
     cope with people subclassing, then we clamp the search to the Root MetaRig
     using the mClassGrps variable. This probably will expand as it's tested
+
+    .. note::
+        Pro_MetaRig_SRC raised in the return stack 24/09/20
     '''
     # try the Red9 Production Rig nodes first
     mRigs = getMetaNodes(mInstances=['Red9_MetaRig', 'Pro_MetaRig'], mClassGrps=['Pro_BodyRig'])
     fRigs = getMetaNodes(mInstances=['Pro_MetaRig_FacialUI'], mClassGrps=['Pro_FacialUI'])
+    srcRigs = getMetaNodes(mInstances=['Pro_MetaRig_SRC'])
     if mRigs or fRigs:
         return mRigs + fRigs
-
+    if srcRigs:
+        return srcRigs
     # not found, lets widen to all instances of MetaRig with mClassGrp also set
     mRigs = getMetaNodes(mInstances=mInstances, mClassGrps=mClassGrps)
     if mRigs:
@@ -3392,7 +3397,7 @@ class MetaClass(object):
 
         :param node: node to test connection attr for
         :param filters: filter string to match for the returns
-        :param bothplugsL if True we return a list of tuples
+        :param bothplugs: if True we return a list of tuples
         '''
         cons = []
         if not bothplugs:
@@ -4325,7 +4330,7 @@ class MetaRig(MetaClass):
     '''
 
     def saveAnimation(self, filepath, incRoots=True, useFilter=True, timerange=(),
-                      storeThumbnail=False, force=False, userInfoData='', **kws):
+                      storeThumbnail=False, force=False, userInfoData='', autorange=True, **kws):
         '''
         : PRO_PACK :
             Binding of the animMap format for storing animation data out to file
@@ -4339,13 +4344,18 @@ class MetaRig(MetaClass):
         :param storeThumbnail: this will be an avi but currently it's a pose thumbnail
         :param force: allow force write on a read only file
         :param userInfoData: user information used by the AnimStore UI only
+        :param autorange: if True (default) and you pass no timerange in then the code will auto-resolve the timerange from
+            the current playback timeranges. If this is False and you pass in no timerange then the code will use the full
+            bounds of the curves themselves, saving all key data for the objects regardless of the current timelines.
+            This is designed to be run with the "manageRanges=3" flag in the loadAnim code so we can save and restore
+            entire animation files via r9Anim format. This flag is ignored if timerange is passed as an arg
         '''
         if r9Setup.has_pro_pack():
             from Red9.pro_pack import r9pro
-            r9pro.r9import('r9panim')
-            from r9panim import AnimMap
+            r9panim = r9pro.r9import('r9panim')
+#             from r9panim import AnimMap
 
-            self.animCache = AnimMap(**kws)
+            self.animCache = r9panim.AnimMap(**kws)
             self.animCache.userInfoData = userInfoData
             self.animCache.filepath = filepath
             self.animCache.metaPose = True
@@ -4354,7 +4364,8 @@ class MetaRig(MetaClass):
                                     useFilter=useFilter,
                                     timerange=timerange,
                                     storeThumbnail=storeThumbnail,
-                                    force=force)
+                                    force=force,
+                                    autorange=autorange)
 
             log.info('AnimMap data saved to : %s' % self.animCache.filepath)
 
@@ -4414,7 +4425,7 @@ class MetaRig(MetaClass):
         :param referenceNode: load relative to the given node
         :param relativeRots: 'projected' or 'absolute' - how to calculate the offset, default='projected'
         :param relativeTrans: 'projected' or 'absolute' - how to calculate the offset, default='projected'
-        :param manageRanges: valid values : 0=leave,  1=extend, 2=set the timeranges according to the anim data loaded
+        :param manageRanges: do we (0, 1, 2, 3) = leave, extend, set or set original playbackRanges for the Maya playback ranges according to the anim data loaded
         :param manageFileName: if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
             then we take the r9Anim's filename and rename the Maya scene accordingly
         :param keyStatics: if True then we key everything in the data at startFrame & endFrame so that all non-keyed and static
@@ -4468,14 +4479,14 @@ class MetaRig(MetaClass):
         '''
         if r9Setup.has_pro_pack():
             from Red9.pro_pack import r9pro
-            r9pro.r9import('r9panim')
-            from r9panim import AnimMap
+            r9panim = r9pro.r9import('r9panim')
+#             from r9panim import AnimMap
             feedback = None
             if 'ANIMMAP' in kws:
                 self.animCache = kws['ANIMMAP']
                 self.animCache._read_mute = True  # stop DatMap reading the r9Anim file again and use the cached data
             else:
-                self.animCache = AnimMap(**kws)  # **kws so we can pass back the filterSettings from the UI call in pro
+                self.animCache = r9panim.AnimMap(**kws)  # **kws so we can pass back the filterSettings from the UI call in pro
                 self.animCache.filepath = filepath  # no file so use the animcahe object data as given, this turns off the read call
 
             self.animCache.metaPose = True
@@ -4487,22 +4498,22 @@ class MetaRig(MetaClass):
                 rootNodes = cmds.ls(sl=True, l=True)
             try:
                 feedback = self.animCache.loadAnim(nodes=rootNodes,
-                                               useFilter=useFilter,
-                                               loadAsStored=loadAsStored,
-                                               loadFromFrm=loadFromFrm,
-                                               loadFromTimecode=loadFromTimecode,
-                                               timecodeBinding=timecodeBinding,
-                                               referenceNode=referenceNode,
-                                               relativeRots=relativeRots,
-                                               relativeTrans=relativeTrans,
-                                               manageRanges=manageRanges,
-                                               manageFileName=manageFileName,
-                                               keyStatics=keyStatics,
-                                               blendRange=blendRange,
-                                               merge=merge,
-                                               smartbake=smartbake,
-                                               loadInternalRig=loadInternalRig,
-                                               **kws)
+                                                   useFilter=useFilter,
+                                                   loadAsStored=loadAsStored,
+                                                   loadFromFrm=loadFromFrm,
+                                                   loadFromTimecode=loadFromTimecode,
+                                                   timecodeBinding=timecodeBinding,
+                                                   referenceNode=referenceNode,
+                                                   relativeRots=relativeRots,
+                                                   relativeTrans=relativeTrans,
+                                                   manageRanges=manageRanges,
+                                                   manageFileName=manageFileName,
+                                                   keyStatics=keyStatics,
+                                                   blendRange=blendRange,
+                                                   merge=merge,
+                                                   smartbake=smartbake,
+                                                   loadInternalRig=loadInternalRig,
+                                                   **kws)
                 # =========================================================
                 # pass the feedback to the postload code to handle, this is
                 # responsible, at the client level for restoring things like audioNodes
