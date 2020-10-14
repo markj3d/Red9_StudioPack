@@ -51,10 +51,58 @@ class SceneReviewerUI(object):
 
     def _showUI(self):
 
+        self.close()
+        window = cmds.window(self.win, title=self.win, s=True, widthHeight=(450, 700))
+
+        cmds.menuBarLayout()
+        cmds.menu(l=LANGUAGE_MAP._Generic_.tools)
+        cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help,
+                      c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/459389038')")
+        cmds.menuItem(divider=True)
+        cmds.menuItem(l='Delete SceneNode Data', c=self.delete)
+
+        cmds.scrollLayout('reviewScrollLayout', rc=lambda *args: self._resizeTextScrollers(), cr=True)
+        cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
+        cmds.textFieldGrp('author', l=LANGUAGE_MAP._SceneReviewerUI_.author, ed=False, text='')
+        cmds.textFieldGrp('date', l=LANGUAGE_MAP._SceneReviewerUI_.date, ed=False, text='')
+        cmds.textFieldGrp('sceneName', l=LANGUAGE_MAP._SceneReviewerUI_.scene_name, ed=False, text='')
+        cmds.separator(h=15, style='none')
+        cmds.text(l=LANGUAGE_MAP._SceneReviewerUI_.comment)
+        cmds.scrollField('comment', text='', ed=True, h=200, wordWrap=False,
+                         kpc=partial(self.updateInternalDict),
+                         cc=partial(self.updateInternalDict))
+        cmds.button(l=LANGUAGE_MAP._SceneReviewerUI_.new_comment, bgc=r9Setup.red9ButtonBGC(1), c=partial(self.addNewComment))
+        cmds.separator(h=15, style='none')
+        cmds.text(l=LANGUAGE_MAP._SceneReviewerUI_.history)
+        cmds.scrollField('history', editable=False, en=True, wordWrap=False, h=200, text='')
+        cmds.separator(h=15, style='none')
+        cmds.rowColumnLayout('SceneNodeActivatorRC', numberOfColumns=3, columnWidth=[(1, 200), (2, 200)])
+        cmds.button('setReviewActive', l=LANGUAGE_MAP._SceneReviewerUI_.activate_live_review,
+                                        bgc=r9Setup.red9ButtonBGC(1),
+                                        c=lambda x: self._setReviewStatus('active'))
+        cmds.button('setReviewInActive', l=LANGUAGE_MAP._SceneReviewerUI_.disable_live_review,
+                                        bgc=r9Setup.red9ButtonBGC(1),
+                                        c=lambda x: self._setReviewStatus('inactive'))
+        cmds.setParent('..')
+        cmds.separator(h=15, style='none')
+        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
+                                 c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.showWindow(window)
+        self._refresh()
+
+        if self.SceneReviewer.exists():
+            self._setReviewStatus('active')
+        else:
+            self._setReviewStatus('inactive')
+
+    def _refresh(self):
+        '''
+        sync the data to the ui
+        '''
         reportData = self.SceneReviewer.getReportData()
         allowEdit = False
         sceneName = None
-        date = reportData['date']
+        date = ''
         if 'sceneName' in reportData:
             sceneName = reportData['sceneName']
         author = None
@@ -76,41 +124,11 @@ class SceneReviewerUI(object):
         if not sceneName:
             sceneName = self.getSceneName()
 
-        self.close()
-        window = cmds.window(self.win, title=self.win, s=True, widthHeight=(450, 700))
-
-        cmds.scrollLayout('reviewScrollLayout', rc=lambda *args: self._resizeTextScrollers(), cr=True)
-        cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
-        cmds.textFieldGrp('author', l=LANGUAGE_MAP._SceneReviewerUI_.author, ed=False, text=author)
-        cmds.textFieldGrp('date', l=LANGUAGE_MAP._SceneReviewerUI_.date, ed=False, text=date)
-        cmds.textFieldGrp('sceneName', l=LANGUAGE_MAP._SceneReviewerUI_.scene_name, ed=False, text=sceneName)
-        cmds.separator(h=15, style='none')
-        cmds.text(l=LANGUAGE_MAP._SceneReviewerUI_.comment)
-        cmds.scrollField('comment', text=reportData['comment'], ed=allowEdit, h=200, wordWrap=False,
-                         kpc=partial(self.updateInternalDict),
-                         cc=partial(self.updateInternalDict))
-        cmds.button(l=LANGUAGE_MAP._SceneReviewerUI_.new_comment, bgc=r9Setup.red9ButtonBGC(1), c=partial(self.addNewComment))
-        cmds.separator(h=15, style='none')
-        cmds.text(l=LANGUAGE_MAP._SceneReviewerUI_.history)
-        cmds.scrollField('history', editable=False, en=True, wordWrap=False, h=200, text=reportData['history'])
-        cmds.separator(h=15, style='none')
-        cmds.rowColumnLayout('SceneNodeActivatorRC', numberOfColumns=2, columnWidth=[(1, 200), (2, 200)])
-        cmds.button('setReviewActive', l=LANGUAGE_MAP._SceneReviewerUI_.activate_live_review,
-                                        bgc=r9Setup.red9ButtonBGC(1),
-                                        c=lambda x: self._setReviewStatus('active'))
-        cmds.button('setReviewInActive', l=LANGUAGE_MAP._SceneReviewerUI_.disable_live_review,
-                                        bgc=r9Setup.red9ButtonBGC(1),
-                                        c=lambda x: self._setReviewStatus('inactive'))
-        cmds.setParent('..')
-        cmds.separator(h=15, style='none')
-        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                                 c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
-        cmds.showWindow(window)
-
-        if self.SceneReviewer.exists():
-            self._setReviewStatus('active')
-        else:
-            self._setReviewStatus('inactive')
+        cmds.textFieldGrp('author', e=True, text=author)
+        cmds.textFieldGrp('date', e=True, text=date)
+        cmds.textFieldGrp('sceneName', e=True, text=sceneName)
+        cmds.scrollField('comment', e=True, ed=allowEdit, text=reportData['comment'])
+        cmds.scrollField('history', e=True, text=reportData['history'])
 
     def getSceneName(self):
         return os.path.basename(cmds.file(q=True, sn=True))
@@ -147,11 +165,14 @@ class SceneReviewerUI(object):
 
     def _resizeTextScrollers(self):
         height = (cmds.scrollLayout('reviewScrollLayout', q=True, h=True) / r9Setup.maya_dpi_scaling_factor())
-        width = (cmds.scrollLayout('reviewScrollLayout', q=True, w=True) / r9Setup.maya_dpi_scaling_factor()) - 10  # column attach space = 5 on both
+        width = (cmds.scrollLayout('reviewScrollLayout', q=True, w=True) / r9Setup.maya_dpi_scaling_factor()) - 18  # column attach space = 5 on both
         cmds.scrollField('comment', e=True, h=(height / 2) - 120)
         cmds.scrollField('history', e=True, h=(height / 2) - 120)
         cmds.rowColumnLayout('SceneNodeActivatorRC', e=True, columnWidth=[(1, (width / 2) - 1), (2, (width / 2) - 1)])
 
+    def delete(self, *args):
+        self.SceneReviewer.deleteData()
+        self._refresh()
 
 class SceneReviewer(object):
 
@@ -199,6 +220,16 @@ class SceneReviewer(object):
 
     def exists(self):
         return cmds.objExists(self.sceneScriptNode)
+
+    def deleteData(self):
+        '''
+        clear the custom attr and remove all comments from the setups
+        '''
+        if self.exists():
+            self.deleteScriptNode()
+        self.dataRepository.sceneReport = ''
+        self.storedDataDict = {'author': "", 'date': "", 'sceneName': "", 'comment': "", 'history': ""}
+        self.storeReportData()
 
     def selectScriptNode(self):
         cmds.select(self.sceneScriptNode)
