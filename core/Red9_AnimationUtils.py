@@ -789,7 +789,10 @@ class AnimationUI(object):
             self.ui_optVarConfig = os.path.join(self.presetDir, '__red9config__')
         else:
             self.ui_optVarConfig = os.path.join(r9Setup.mayaPrefs(), '__red9config__')
+#         if not os.path.exists(self.ui_optVarConfig):
+
         self.ANIM_UI_OPTVARS = dict()
+        self.ANIM_UI_OPTVARS['AnimationUI'] = {}
         self.__uiCache_readUIElements()
 
         # deal with screen resolution and scaling
@@ -2351,16 +2354,17 @@ class AnimationUI(object):
         if the poseFolder has a poseHandler.py file see if it has the 'posePopupAdditions' func
         and if so, use that to extend the standard menu's
         '''
-        poseHandler = r9Pose.getFolderPoseHandler(self.getPoseDir())
-        if poseHandler:
-            import imp
-            import inspect
-            print('Adding to menus From PoseHandler File!!!!')
-            tempPoseFuncs = imp.load_source(poseHandler.split('.py')[0], os.path.join(self.getPoseDir(), poseHandler))
-            if [func for name, func in inspect.getmembers(tempPoseFuncs, inspect.isfunction) if name == 'posePopupAdditions']:
-                # NOTE we pass in self so the new additions have the same access as everything else!
-                tempPoseFuncs.posePopupAdditions(parentPopup, self)
-            del(tempPoseFuncs)
+        if self.getPoseDir():
+            poseHandler = r9Pose.getFolderPoseHandler(self.getPoseDir())
+            if poseHandler:
+                import imp
+                import inspect
+                print('Adding to menus From PoseHandler File!!!!')
+                tempPoseFuncs = imp.load_source(poseHandler.split('.py')[0], os.path.join(self.getPoseDir(), poseHandler))
+                if [func for name, func in inspect.getmembers(tempPoseFuncs, inspect.isfunction) if name == 'posePopupAdditions']:
+                    # NOTE we pass in self so the new additions have the same access as everything else!
+                    tempPoseFuncs.posePopupAdditions(parentPopup, self)
+                del(tempPoseFuncs)
 
     def __uiCB_setPoseGrid(self, size, *args):
         '''
@@ -2721,18 +2725,19 @@ class AnimationUI(object):
         '''
         Restore the main UI elements from the ini file
         '''
-        self.uiBoot = True  # is the UI being booted
+        self.uiBoot = True  # prevents the writing of the element changes during the loading
         try:
             log.debug('Red9 AnimUI : Loading UI Elements from the config file')
 
             def __uiCache_LoadCheckboxes():
-                if 'checkboxes' in self.ANIM_UI_OPTVARS['AnimationUI'] and \
-                            self.ANIM_UI_OPTVARS['AnimationUI']['checkboxes']:
-                    for cb, status in self.ANIM_UI_OPTVARS['AnimationUI']['checkboxes'].items():
-                        try:
-                            cmds.checkBox(cb, e=True, v=r9Core.decodeString(status))
-                        except:
-                            print('given checkbox no longer exists : %s' % cb)
+                if 'AnimationUI' in self.ANIM_UI_OPTVARS:
+                    if 'checkboxes' in self.ANIM_UI_OPTVARS['AnimationUI'] and \
+                                self.ANIM_UI_OPTVARS['AnimationUI']['checkboxes']:
+                        for cb, status in self.ANIM_UI_OPTVARS['AnimationUI']['checkboxes'].items():
+                            try:
+                                cmds.checkBox(cb, e=True, v=r9Core.decodeString(status))
+                            except:
+                                print('given checkbox no longer exists : %s' % cb)
 
             AnimationUI = self.ANIM_UI_OPTVARS['AnimationUI']
 
@@ -5527,6 +5532,7 @@ class CameraTracker():
     def __init__(self, fixed=True):
         self.win = 'CameraTrackOptions'
         self.fixed = fixed
+        self.poseButtonHighLight = r9Setup.red9ButtonBGC('green')
 
     @staticmethod
     def cameraTrackView(start=None, end=None, step=None, fixed=True, keepOffset=False, cam=None, static=False):
@@ -5549,6 +5555,10 @@ class CameraTracker():
             raise StandardError('Nothing selected to Track!')
         if not cam:
             cam = cmds.modelEditor(cmds.playblast(ae=True).split('|')[-1], q=True, camera=True)
+
+#         cam = cmds.camera(name='CamTracker')[0]
+#         mel.eval('cameraMakeNode 2 ""')
+#         mel.eval('lookThroughModelPanel("%s","%s")' % (cam, cmds.playblast(ae=True).split('|')[-1]))
 
         cmds.cutKey(cam, cl=True, t=(), f=())
 
@@ -5619,27 +5629,37 @@ class CameraTracker():
         cmds.menuItem(l=LANGUAGE_MAP._Generic_.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
         cmds.columnLayout(adjustableColumn=True)
         cmds.separator(h=15, style='none')
+        cmds.text(LANGUAGE_MAP._CameraTracker_.info, ww=True)
+        cmds.separator(h=15, style='none')
         cmds.intFieldGrp('CameraFrameStep', numberOfFields=1,
                          label=LANGUAGE_MAP._CameraTracker_.tracker_step, value1=10,
-                         extraLabel=LANGUAGE_MAP._CameraTracker_.frames,
+                         extraLabel=' %s' % LANGUAGE_MAP._CameraTracker_.frames,
                          cw=(1, 100),
                          cc=partial(self.__storePrefs))
         cmds.separator(h=15, style='none')
+        cmds.rowColumnLayout(numberOfColumns=2, columnSpacing=[(1, 20)])
         cmds.checkBox('CBMaintainCurrent', l=LANGUAGE_MAP._CameraTracker_.maintain_frame, v=True, cc=partial(self.__storePrefs))
+        cmds.setParent('..')
         cmds.separator(h=15, style='none')
-        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 130), (2, 130)])
+        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 132), (2, 132)])
         if self.fixed:
-            cmds.button('cameraTrackTrack', label=LANGUAGE_MAP._CameraTracker_.pan, command=partial(self.__runTracker))
+            cmds.button('cameraTrackTrack',
+                        label=LANGUAGE_MAP._CameraTracker_.pan,
+                        bgc=self.poseButtonHighLight,
+                        command=partial(self.__runTracker))
         else:
-            cmds.button('cameraTrackTrack', label=LANGUAGE_MAP._CameraTracker_.track, command=partial(self.__runTracker))
-        cmds.button('cameraTrackAppy', label=LANGUAGE_MAP._Generic_.apply, command=partial(self.__storePrefs))
+            cmds.button('cameraTrackTrack',
+                        label=LANGUAGE_MAP._CameraTracker_.track,
+                        bgc=self.poseButtonHighLight,
+                        command=partial(self.__runTracker))
+        cmds.button('cameraTrackAppy', label=LANGUAGE_MAP._Generic_.apply, bgc=self.poseButtonHighLight, command=partial(self.__storePrefs))
         cmds.setParent('..')
         cmds.separator(h=15, style='none')
         cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
                              c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
         cmds.separator(h=15, style='none')
         cmds.showWindow(self.win)
-        cmds.window(self.win, e=True, widthHeight=(263, 180))
+        cmds.window(self.win, e=True, widthHeight=(270, 240))
         self.__loadPrefsToUI()
 
     def __storePrefs(self, *args):

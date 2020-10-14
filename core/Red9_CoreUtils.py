@@ -1582,7 +1582,7 @@ def getBlendTargetsFromMesh(node, asList=True, returnAll=False, levels=4, indexe
             # print weights
             if weights:
                 data = zip(weights[1::2], weights[0::2])
-                weightKey = lambda x:int(x[0].replace('weight[', '').replace(']', ''))
+                weightKey = lambda x: int(x[0].replace('weight[', '').replace(']', ''))
                 weightSorted = sorted(data, key=weightKey)
                 if asList:
                     data = [t for i, t in weightSorted]
@@ -2246,8 +2246,12 @@ class LockChannels(object):
         _attrs = attrs
         if attrs == 'all':
             _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "radius", "radi"]
-        if attrs == 'transforms':
+        elif attrs == 'all_complete':
+            _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "radius", "radi", "rotate", "transform", "scale"]
+        elif attrs == 'transforms':
             _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz"]
+        elif attrs == 'transforms_complete':
+            _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "rotate", "transform", "scale"]
 
 #         if not hasattr(_attrs, '__iter__'):
         if r9General.is_basestring(_attrs):
@@ -2276,9 +2280,9 @@ class LockChannels(object):
         elif mode == 'fullkey':
             attrKws['keyable'] = True
             attrKws['lock'] = False
-            # force unlock the compounds also?
-            if attrs == 'all' or attrs == 'transforms':
-                _attrs = _attrs | set(['translate', 'rotate', 'scale'])
+#             # force unlock the compounds also?
+#             if attrs == 'all' or attrs == 'transforms':
+#                 _attrs = _attrs | set(['translate', 'rotate', 'scale'])
         elif mode == 'lockall':
             attrKws['keyable'] = False
             attrKws['lock'] = True

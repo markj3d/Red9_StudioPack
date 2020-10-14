@@ -56,9 +56,10 @@ def getFolderPoseHandler(posePath):
     inside our presets folder rather than having the code logic in each folder.
     '''
     poseHandler = None
-    poseHandlers = [py for py in os.listdir(posePath) if py.endswith('poseHandler.py')]
-    if poseHandlers:
-        poseHandler = poseHandlers[0]
+    if posePath and os.path.exists(posePath):
+        poseHandlers = [py for py in os.listdir(posePath) if py.endswith('poseHandler.py')]
+        if poseHandlers:
+            poseHandler = poseHandlers[0]
     return poseHandler
 
 
@@ -80,6 +81,7 @@ class DataMap(object):
         self.poseDict = {}
         self.infoDict = {}
         self.skeletonDict = {}
+        self.hikDict = {}
         self.settings_internal = None  # filterSettings object synced from the internal file block
 
         self.file_ext = ''  # extension the file will be saved as
@@ -619,6 +621,8 @@ class DataMap(object):
             ConfigObj['poseData'] = self.poseDict
             if self.skeletonDict:
                 ConfigObj['skeletonDict'] = self.skeletonDict
+            if self.hikDict:
+                ConfigObj['hikDict'] = self.hikDict
             ConfigObj.filename = filepath
             ConfigObj.write()
             self._dataformat_resolved = 'config'
@@ -1024,6 +1028,7 @@ class PoseData(DataMap):
         self.poseDict = {}
         self.infoDict = {}
         self.skeletonDict = {}
+        self.hikDict = {}
         self.posePointCloudNodes = []
         self.poseCurrentCache = {}  # cached dict storing the current state of the objects prior to applying the pose
         self.relativePose = False
@@ -1071,6 +1076,31 @@ class PoseData(DataMap):
                     log.debug('%s : attr is invalid in this instance' % attr)
             self.skeletonDict[key]['attrs_kWorld'] = self._getTranforms(jnt, worldspace=True)
 
+    def _buildBlock_hikData(self, rootJnt):
+        '''
+        if the node passed is a joint, and is part of a HIK definition then
+        capture all the wires for that skeleton HIK definition. This linked
+        with a valid t-pose (poseDict block) is enough to restore the full HIK mapping
+        and includes custom wires to that HIK node in the process, used for the Red9 PuppetRig build systems
+        '''
+        self.hikDict = {}
+        if not rootJnt:
+            log.info('skeleton rootJnt joint was not found - [hikDict] pose section will not be propagated')
+            return
+
+        fn = r9Core.FilterNode(rootJnt)
+        fn.settings.nodeTypes = 'joint'
+        fn.settings.incRoots = True
+        skeleton = fn.processFilter()
+
+        for jnt in skeleton:
+            key = r9Core.nodeNameStrip(jnt)
+            plugs = cmds.listConnections(jnt, d=True, p=True, c=True, type='HIKCharacterNode')
+            if plugs:
+                self.hikDict[key] = {}
+                self.hikDict[key]['longName'] = jnt
+                self.hikDict[key]['hikplug'] = plugs[1].split('.')[-1]
+
     def buildBlocks_fill(self, nodes=None):
         '''
         What capture routines to run in order to build the poseDict data
@@ -1081,6 +1111,7 @@ class PoseData(DataMap):
         self._buildBlock_info(nodes)
         self._buildBlock_poseDict(nodes)
         self._buildBlock_skeletonData(self.rootJnt)
+        self._buildBlock_hikData(self.rootJnt)
 
     def _cacheCurrentNodeStates(self):
         '''
