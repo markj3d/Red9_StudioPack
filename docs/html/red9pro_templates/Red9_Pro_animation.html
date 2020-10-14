@@ -212,6 +212,30 @@ This is crucial is you have static baked frames at the front on an animation tha
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.animation.wire_blends_to_jntattrs">
+<code class="descname">wire_blends_to_jntattrs</code><span class="sig-paren">(</span><em>blends</em>, <em>jnt=None</em>, <em>parent=None</em>, <em>range=1</em>, <em>mSystem=None</em>, <em>basewire='blendTargetWeight'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.wire_blends_to_jntattrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>wire given blendshapes to a driver joint with each channel mapped as a connected attr, one jnt per blend node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>blends</strong> – blendShapes we want to create mapped joints for</li>
+<li><strong>jnt</strong> – if given we add attrs per blendTarget to this joint, else we create a fresh joint to take the mapping</li>
+<li><strong>parent</strong> – re-parent the joint after completion to this node</li>
+<li><strong>range</strong> – if not 1 then we connect the attrs up via a multipleDivide node, allowing blend value of 1 to be
+mapped to a new max to reduce any compression further down the line</li>
+<li><strong>mSystem</strong> – if given wire the new jnts to the mSystem so we can verify them later. Wired as %s_%s %  (basewire, blend)
+where basewire is the arg passed in, default is ‘blendTargetWeight’</li>
+<li><strong>basewire</strong> – name used both as the base name for the jnt and the mSystem base wire of the jnts created</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.animation.hik_source_code">
 <code class="descname">hik_source_code</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.hik_source_code" title="Permalink to this definition">¶</a></dt>
 <dd><p>ensure that HIK is loaded and the core code sourced</p>
@@ -442,7 +466,17 @@ and the behaviour is also extended by way of a postload handler, currently desig
 and audio data that are gathered in the format on save from mRig</p>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">saveAnimation</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">loadAnimation</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># if you want to save the entirity of the animation, ignoring the current playback ranges</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">then</span> <span class="n">you</span> <span class="n">need</span> <span class="n">to</span> <span class="n">us</span> <span class="n">ethe</span> <span class="n">new</span> <span class="n">flags</span> <span class="n">on</span> <span class="n">save</span><span class="p">,</span> <span class="ow">and</span> <span class="n">load</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">saveAnimation</span><span class="p">(</span><span class="s1">&#39;d:/test.r9anim&#39;</span><span class="p">,</span> <span class="n">timerange</span><span class="o">=</span><span class="p">(),</span> <span class="n">autorange</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">loadAnimation</span><span class="p">(</span><span class="s1">&#39;d:/test.r9anim&#39;</span><span class="p">,</span> <span class="n">manageRanges</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># if you want to restore all of the Export and AudioGrp data at the same time through</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the MetaRig setups try this: see MetaRig base class loading flag notes for breakdown</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">loadAnimation</span><span class="p">(</span><span class="s1">&#39;d:/test.r9anim&#39;</span><span class="p">,</span> <span class="n">manageRanges</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">manageExport</span><span class="o">=</span><span class="s1">&#39;byAll&#39;</span><span class="p">,</span> <span class="n">manageAudio</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -469,7 +503,7 @@ the data is loaded.</p>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>self.prioritySnapOnly <span class="classifier-delimiter">:</span> <span class="classifier">bool - used when loading relative to a given node, limit the nodes which are adjusted in world space</span></dt>
+<dt>self.prioritySnapOnly <span class="classifier-delimiter">:</span> <span class="classifier">bool - used when loading ‘relative’ to a given node, limit the nodes which are adjusted in world space</span></dt>
 <dd>to a given subset denoted in the filterSwettings object</dd>
 </dl>
 </li>
@@ -528,7 +562,7 @@ the same of different</li>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimMap.saveAnim">
-<code class="descname">saveAnim</code><span class="sig-paren">(</span><em>nodes</em>, <em>filepath=None</em>, <em>useFilter=True</em>, <em>timerange=()</em>, <em>storeThumbnail=False</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.saveAnim" title="Permalink to this definition">¶</a></dt>
+<code class="descname">saveAnim</code><span class="sig-paren">(</span><em>nodes</em>, <em>filepath=None</em>, <em>useFilter=True</em>, <em>timerange=()</em>, <em>storeThumbnail=False</em>, <em>force=False</em>, <em>autorange=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimMap.saveAnim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save the animation out to an r9Anim file. Note that this currently stores JUST the animation data and doesn’t sample.
 It will however temporarily flatten animCurves to capture the collapsed effect of all.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -544,6 +578,11 @@ then it will use the current timeLine PlaybackRange, OR if you have a
 highlighted range of time selected (in red) it’ll use this instead.</li>
 <li><strong>storeThumbnail</strong> – this will be an avi but currently it’s a pose thumbnail</li>
 <li><strong>force</strong> – allow force write on a read only file</li>
+<li><strong>autorange</strong> – if True (default) and you pass no timerange in then the code will auto-resolve the timerange from
+the current playback timeranges. If this is False and you pass in no timerange then the code will use the full
+bounds of the curves themselves, saving all key data for the objects regardless of the current timelines.
+This is designed to be run with the “manageRanges=3” flag in the loadAnim code so we can save and restore
+entire animation files via r9Anim format. This flag is ignored if timerange is passed as an arg</li>
 </ul>
 </td>
 </tr>
@@ -576,7 +615,7 @@ has been set as reference, basically we’re saying that the timecode at frm is 
 <li><strong>referenceNode</strong> – reference node used as the offset Node for relative loading</li>
 <li><strong>relativeRots</strong> – ‘projected’, ‘absolute’ or ‘skip’ - how to calculate the offset, default=’projected’</li>
 <li><strong>relativeTrans</strong> – ‘projected’, ‘absolute’ or ‘skip’ - how to calculate the offset, default=’projected’</li>
-<li><strong>manageRanges</strong> – do we (0, 1, 2) = leave, extend or set the timeranges according to the anim data loaded</li>
+<li><strong>manageRanges</strong> – do we (0, 1, 2, 3) = leave, extend, set or set original playbackRanges for the Maya playback ranges according to the anim data loaded</li>
 <li><strong>manageFileName</strong> – if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
 then we take the r9Anim’s filename and rename the Maya scene accordingly</li>
 <li><strong>applyPose</strong> – True by default - apply the static pose stored in the file before loading the animation data</li>
@@ -1276,28 +1315,6 @@ set display attrs of the joints to default values</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>root</strong> – string: root joint of the hierarchy</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list : list of strings, names of deleted nodes from the hierarchy</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="Red9.pro_pack.core.animation.Anim_Transfer.wire_blends_to_jntattrs">
-<em class="property">static </em><code class="descname">wire_blends_to_jntattrs</code><span class="sig-paren">(</span><em>blends</em>, <em>jnt=None</em>, <em>parent=None</em>, <em>range=1</em>, <em>mSystem=None</em>, <em>basewire='blendTargetWeight'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.wire_blends_to_jntattrs" title="Permalink to this definition">¶</a></dt>
-<dd><p>wire all blendshapes found from the exportTag.getNodes call to a driver joint with each channel
-mapped as a connected attr, one jnt per blend node</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>blends</strong> – blendShapes we want to create mapped joints for</li>
-<li><strong>jnt</strong> – if given we add attrs per blendTarget to this joint, else we create a fresh joint to take the mapping</li>
-<li><strong>parent</strong> – re-parent the joint after completion to this node</li>
-<li><strong>range</strong> – if not 1 then we connect the attrs up via a multipleDivide node, allowing blend value of 1 to be
-mapped to a new max to reduce any compression further down the line</li>
-</ul>
-</td>
 </tr>
 </tbody>
 </table>

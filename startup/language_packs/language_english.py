@@ -143,7 +143,7 @@ class _Generic_(object):
     '''
     Used by many of the UI's, general non-specific text
     '''
-    contactme = 'Contact Me'
+    contactme = 'Contact Red9'
     tools = 'Tools'
     reset = 'Reset to Default'
     refresh = 'Refresh'
@@ -515,11 +515,12 @@ class _Mirror_Setup_(object):
 class _CameraTracker_(object):
 
     title = 'CameraTracker'
-    tracker_step = 'TrackerStep: '
+    tracker_step = 'Tracker Step : '
     frames = 'frames'
-    maintain_frame = 'MaintainCurrentFraming'
-    pan = 'Pan'
-    track = 'Track'
+    maintain_frame = 'Maintain Current Framing'
+    pan = 'Run Pan'
+    track = 'Run Track'
+    info = 'Select the Meshes / Transforms you want to Track.\nThis will track using the currently active camera in the Active Viewport'
 
 class _CurveFilters_(object):
 

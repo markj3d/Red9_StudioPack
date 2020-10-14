@@ -1185,6 +1185,37 @@ hook it up to the mRig.skeletonRoot jnt from the publisher</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_export_blendattrs_cast_test">
+<code class="descname">mRigs_export_blendattrs_cast_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=None</em>, <em>range=1</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_export_blendattrs_cast_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check exportTag setups - check ONLY VALID if we have renderMeshes wired.</p>
+<ul class="simple">
+<li>Validate that if any of the renderMeshes have blendshapes, that the target attrs of the blends</li>
+</ul>
+<p>are cast over to the exportRoot jnt. By propagating the root jnt with matching attrs and wiring
+those to the blendshape output we ensure that the data will be picked up on engine export.</p>
+<ul class="simple">
+<li>Also validate that is we’re casting we also add the override_attr_binduserattrs to the rootJoint</li>
+</ul>
+<p>to allow these userDefined attr through the fbx export process</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_export_blendattrs_cast_fix">
+<code class="descname">mRigs_export_blendattrs_cast_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_export_blendattrs_cast_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure we cast all target channels for all blendshapes associated with the renderMeshes
+over to connected attrs on the exportRoot jnt. This ensure</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.exportTag_bpose_test">
+<code class="descname">exportTag_bpose_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>expTags=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.exportTag_bpose_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Single RED9 PRODUCTION METARIG ONLY:</p>
+<p>Check exportTag setups - this makes sure we only have 1 joint stamped with the
+‘bpose’ attr used by the relative export output to reset the skeleton to bpose.</p>
+<p>This is a Warning failure only</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.exportLoopNode_framerate_test">
 <code class="descname">exportLoopNode_framerate_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>loops=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.exportLoopNode_framerate_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>generic ExportLoopNode check to make sure that framerate changes are
@@ -1880,6 +1911,31 @@ treated as the defaultLayer and UNEDITABLE. This has happened a few times with a
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.animLayers_test">
+<code class="descname">animLayers_test</code><span class="sig-paren">(</span><em>expected=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.animLayers_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>test to see if animLayers are present and if they should be or not</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>expected</strong> – [] list of layers expected to be present, any others would fail the test</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">if a layer is connected to the layerManager in Id[0] slot index then it’s
+treated as the defaultLayer and UNEDITABLE. This has happened a few times with assets in 2018</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.animLayers_fix">
+<code class="descname">animLayers_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.animLayers_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove all animlayers that failed the test</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.reference_nodes_invalid_test">
 <code class="descname">reference_nodes_invalid_test</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.reference_nodes_invalid_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>test / return a list of reference nodes in the scene that have no
@@ -1943,14 +1999,17 @@ These are nodes from other plug-ins</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.unknownScriptNode_MALWARE_test">
-<code class="descname">unknownScriptNode_MALWARE_test</code><span class="sig-paren">(</span><em>expected=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.unknownScriptNode_MALWARE_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>test to find a Specific MALWARE scriptNode in the scene and remove it!</p>
+<code class="descname">unknownScriptNode_MALWARE_test</code><span class="sig-paren">(</span><em>expected=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.unknownScriptNode_MALWARE_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>test to find a Specific MALWARE scriptNodes in the scene and remove them!</p>
+<p>Tests for:</p>
+<p>Malware : May 2020 : “fuck_All_U” : the one that triggered the initial AD scare
+Malware : Sept 2020 : “breed_gene”, “vaccine_gene” : reported on TA : <a class="reference external" href="https://tech-artists.org/t/another-maya-malware-in-the-wild/12970">https://tech-artists.org/t/another-maya-malware-in-the-wild/12970</a></p>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.unknownScriptNode_MALWARE_fix">
 <code class="descname">unknownScriptNode_MALWARE_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.unknownScriptNode_MALWARE_fix" title="Permalink to this definition">¶</a></dt>
-<dd><p>fix method : delete the Malware</p>
+<dd><p>fix method : delete the Malware found</p>
 </dd></dl>
 
 <dl class="function">

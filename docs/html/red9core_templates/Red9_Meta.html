@@ -482,6 +482,10 @@ the correct class object. If not then return the Maya node itself</li>
 We use mInstances rather than mTypes directly for MetaRig to
 cope with people subclassing, then we clamp the search to the Root MetaRig
 using the mClassGrps variable. This probably will expand as it’s tested</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Pro_MetaRig_SRC raised in the return stack 24/09/20</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -2131,7 +2135,7 @@ animation curve/key data</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.saveAnimation">
-<code class="descname">saveAnimation</code><span class="sig-paren">(</span><em>filepath</em>, <em>incRoots=True</em>, <em>useFilter=True</em>, <em>timerange=()</em>, <em>storeThumbnail=False</em>, <em>force=False</em>, <em>userInfoData=''</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.saveAnimation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">saveAnimation</code><span class="sig-paren">(</span><em>filepath</em>, <em>incRoots=True</em>, <em>useFilter=True</em>, <em>timerange=()</em>, <em>storeThumbnail=False</em>, <em>force=False</em>, <em>userInfoData=''</em>, <em>autorange=True</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.saveAnimation" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>: PRO_PACK :</dt>
 <dd>Binding of the animMap format for storing animation data out to file</dd>
@@ -2150,6 +2154,11 @@ highlighted range of time selected (in red) it’ll use this instead.</li>
 <li><strong>storeThumbnail</strong> – this will be an avi but currently it’s a pose thumbnail</li>
 <li><strong>force</strong> – allow force write on a read only file</li>
 <li><strong>userInfoData</strong> – user information used by the AnimStore UI only</li>
+<li><strong>autorange</strong> – if True (default) and you pass no timerange in then the code will auto-resolve the timerange from
+the current playback timeranges. If this is False and you pass in no timerange then the code will use the full
+bounds of the curves themselves, saving all key data for the objects regardless of the current timelines.
+This is designed to be run with the “manageRanges=3” flag in the loadAnim code so we can save and restore
+entire animation files via r9Anim format. This flag is ignored if timerange is passed as an arg</li>
 </ul>
 </td>
 </tr>
@@ -2223,7 +2232,7 @@ has been set as reference, basically we’re saying that the timecode at frm is 
 <li><strong>referenceNode</strong> – load relative to the given node</li>
 <li><strong>relativeRots</strong> – ‘projected’ or ‘absolute’ - how to calculate the offset, default=’projected’</li>
 <li><strong>relativeTrans</strong> – ‘projected’ or ‘absolute’ - how to calculate the offset, default=’projected’</li>
-<li><strong>manageRanges</strong> – valid values : 0=leave,  1=extend, 2=set the timeranges according to the anim data loaded</li>
+<li><strong>manageRanges</strong> – do we (0, 1, 2, 3) = leave, extend, set or set original playbackRanges for the Maya playback ranges according to the anim data loaded</li>
 <li><strong>manageFileName</strong> – if True and the current Maya scene has no filename other than a blank scene (ie freshly loaded rig)
 then we take the r9Anim’s filename and rename the Maya scene accordingly</li>
 <li><strong>keyStatics</strong> – if True then we key everything in the data at startFrame &amp; endFrame so that all non-keyed and static

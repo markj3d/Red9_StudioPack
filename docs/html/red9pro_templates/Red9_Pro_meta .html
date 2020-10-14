@@ -323,8 +323,8 @@ against a previously stored out datamap.</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.metadata_pro.skeleton_bpose_get_data">
-<code class="descname">skeleton_bpose_get_data</code><span class="sig-paren">(</span><em>rootjnt</em>, <em>jntonly=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.skeleton_bpose_get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>simple retrieval of the BPose PoseDict object which is 
+<code class="descname">skeleton_bpose_get_data</code><span class="sig-paren">(</span><em>rootjnt</em>, <em>jntonly=False</em>, <em>suppress=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.skeleton_bpose_get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple retrieval of the BPose PoseDict object which is
 stored on the skeleton root by the RigManager. This BPose is used
 by the additive fbx export to force reset the skeleton pose before processing</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -339,6 +339,10 @@ by the additive fbx export to force reset the skeleton pose before processing</p
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This will now raise an error if the skeleton has multiple joints with the “bpose” attr</p>
+</div>
 </dd></dl>
 
 <dl class="class">
@@ -1053,9 +1057,18 @@ then the skeletonRoot is found from the exportSkeletonRoot wire to the mRig</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_blendShapes">
-<code class="descname">info_blendShapes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_blendShapes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">info_blendShapes</code><span class="sig-paren">(</span><em>levels=4</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_blendShapes" title="Permalink to this definition">¶</a></dt>
 <dd><p>return all blendshapes bound to the connected renderMeshes history</p>
 <p>this is used to extract the blendshapes for fbx skeletal export if flagged</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>levels</strong> – default is 4, walk the history of the renderMeshes 4 levels deep to find blendshapes,
+previously this was unclamped but now follows the same pattern as the rest of the r9Core blend get funcs</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -1299,7 +1312,7 @@ This just throws the defined self.ik_fk_switchattr attr to self.ik_switch_val</p
 <dd><p>simple toggle call to switch the current state of the system between fk and ik with matching.
 This checks the self.ik_fk_switchattr and if it equals self.fk_switch_val toggles over to FK,
 if it equals self.ik_switch_val then we switch to IK.</p>
-<p>Used in the new DagProcMenu systems</p>
+<p>Used in the DagProcMenu systems</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1318,7 +1331,7 @@ mrig.L_ArmSystem</li>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match">
-<code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em>, <em>ik_chainmethod=None</em>, <em>fk_chainmethod=None</em>, <em>timerange=()</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>runfilter=True</em>, <em>autoclav=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em>, <em>keyctrls=True</em>, <em>ik_chainmethod=None</em>, <em>fk_chainmethod=None</em>, <em>timerange=()</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>runfilter=True</em>, <em>autoclav=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the given systems TO FK MODE : match the fk system to that of the ik</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1330,6 +1343,7 @@ mrig.L_ArmSystem</li>
 <li><strong>time</strong> – bool, whether to enable the match over time or not, True by default if timerange arg is given</li>
 <li><strong>switch</strong> – also switch the ik_fk_blender attr to leave the system in FK mode</li>
 <li><strong>keyswitch</strong> – if switch is true, this also adds in keys to control the switch mode</li>
+<li><strong>keyctrls</strong> – True by default, this dictates if we key the controllers even when time = False, ie during a static switch</li>
 <li><strong>ik_chainmethod</strong> – <p>None by default as controlled by the internal mRig var self._ik_chainmethod
 method of extracting the ik joints, currently supported:
 * jnt_index - default - straight joint hierarchy from the mSystem.SupportNode.GRP_IK_chain[0] node
@@ -1376,6 +1390,7 @@ calls should produce lists that can be matched  self._get_ik_chain, self._get_fk
 <li><strong>time</strong> – bool, whether to enable the match over time or not, True by default if timerange arg is given</li>
 <li><strong>switch</strong> – also switch the ik_fk_blender attr to leave the system in IK mode</li>
 <li><strong>keyswitch</strong> – if switch is true, this also adds in keys to control the switch mode</li>
+<li><strong>keyctrls</strong> – True by default, this dictates if we key the controllers even when time = False, ie during a static switch</li>
 <li><strong>timerange</strong> – if given we throw the time switch by default and use this as the time range rather than auto finding it from the scene</li>
 <li><strong>step</strong> – frame step between keys if time=True</li>
 <li><strong>smartbake</strong> – if True we look at the mSystem’s current keys and only match over those keys if time enabled</li>
@@ -1644,6 +1659,19 @@ and return as an mNode</p>
 <code class="descname">cam_states_get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.cam_states_get" title="Permalink to this definition">¶</a></dt>
 <dd><p>get the base transforms used to setup the camera
 positions up when framing the modelPanels.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>There are 3 possibilities here :</p>
+<ul class="simple">
+<li>the mNode has internal “cam_states” stored set via the self.cam_states_set</li>
+<li>the _initial_cam_states in the __init__  has the ‘actual’ values setup which in turn disables the viewFit call</li>
+<li>the _initial_cam_states in the __init__ only has the ‘initial’ key setup, used to position the ca,era prior to running a viewFit</li>
+</ul>
+<dl class="last docutils">
+<dt>self._initial_cam_states = {‘ui’: {‘initial’: [[2, 0, 55], [0, 0, 0]], ‘actual’: []},</dt>
+<dd>‘mesh’: {‘initial’: [[0, -3, 90], [0, 0, 0]], ‘actual’: []}}</dd>
+</dl>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -2122,6 +2150,16 @@ where the files should get stored, what they get called etc.</p>
 <li>self.exportLoopBase_class = ExportLoopNode  : class we generate for exportLoops, used so that this can be overloaded for client specific behaviour</li>
 <li>self.audio_allowed  : determines if AudioGrp management is allowed on this class of tag</li>
 </ul>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.override_attr_selection">
+<code class="descname">override_attr_selection</code><em class="property"> = 'R9Exp_selection_override'</em><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.override_attr_selection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.override_attr_binduserattrs">
+<code class="descname">override_attr_binduserattrs</code><em class="property"> = 'R9Exp_bindattrs_override'</em><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.override_attr_binduserattrs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.validate">
 <code class="descname">validate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.validate" title="Permalink to this definition">¶</a></dt>
@@ -2272,6 +2310,61 @@ we delete ALL overrides under the full hierarchy from the exportRoot</p>
 <p class="first admonition-title">Note</p>
 <p class="last">This is currently NOT used or supported</p>
 </div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.bind_override_add">
+<code class="descname">bind_override_add</code><span class="sig-paren">(</span><em>nodes</em>, <em>state=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.bind_override_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>A way of by-passing the default binding of attrs during the
+simple FBX output. By default only transform data is exported, this adds a marker 
+to the given nodes that will then include all user defined attrs from this joint in the export</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> – nodes to add the override behaviour too</li>
+<li><strong>state</strong> – initial state of the override</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.bind_override_get">
+<code class="descname">bind_override_get</code><span class="sig-paren">(</span><em>exportRoot=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.bind_override_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list of nodes with the bind_override marker, denoting that
+their user defined attrs should also be included in exports</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>exportRoot</strong> – if given we bypass the connected default self.exportRoot</td>
+</tr>
+</tbody>
+</table>
+<p>and search this new skeleton hierarchy</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.bind_override_remove">
+<code class="descname">bind_override_remove</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>all=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.bind_override_remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove any bind override marker on the given nodes, if no nodes are passed
+we delete ALL bind overrides under the full hierarchy from the exportRoot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> – nodes to remove the tags from</li>
+<li><strong>all</strong> – if True we skip the nodes arg and strip all override tags from the entire skeleton</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
