@@ -1010,7 +1010,7 @@ thats returned hence the decodeString() calls</p>
 
 <dl class="staticmethod">
 <dt id="Red9.core.Red9_CoreUtils.LockChannels.processState">
-<em class="property">static </em><code class="descname">processState</code><span class="sig-paren">(</span><em>nodes</em>, <em>attrs=None</em>, <em>mode=None</em>, <em>hierarchy=False</em>, <em>userDefined=False</em>, <em>attrKws={}</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.LockChannels.processState" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">processState</code><span class="sig-paren">(</span><em>nodes</em>, <em>attrs=None</em>, <em>mode=None</em>, <em>hierarchy=False</em>, <em>userDefined=False</em>, <em>attrKws={}</em>, <em>suppress_errors=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.LockChannels.processState" title="Permalink to this definition">¶</a></dt>
 <dd><p>Easy wrapper to manage channels that are keyable / locked
 in the channelBox.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1025,6 +1025,7 @@ in the channelBox.</p>
 <li><strong>usedDefined</strong> – process all UserDefined attributes on all nodes</li>
 <li><strong>attrKws</strong> – if mode=None then these are the flags passed to the setAttr
 command to control the node states, ie: {‘keyable’:True, ‘lock’:False, ‘channelBox’:True}</li>
+<li><strong>suppress_errors</strong> – Tue by default, if a node doesn’t have one one of the attrs we’re trying to lock suppress the errors</li>
 </ul>
 </td>
 </tr>
@@ -1484,7 +1485,7 @@ of the jointOrient matrix, after the rotation matrix</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2016, Mark Jackson.
+        &#169; Copyright 2020, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

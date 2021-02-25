@@ -427,7 +427,7 @@ TimeLine, (Highlighted in Red) return that instead.</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.timeLineRangeProcess">
-<code class="descname">timeLineRangeProcess</code><span class="sig-paren">(</span><em>start</em>, <em>end</em>, <em>step=1</em>, <em>incEnds=True</em>, <em>nodes=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.timeLineRangeProcess" title="Permalink to this definition">¶</a></dt>
+<code class="descname">timeLineRangeProcess</code><span class="sig-paren">(</span><em>start</em>, <em>end</em>, <em>step=1</em>, <em>incEnds=True</em>, <em>nodes=[]</em>, <em>process_animlayers=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.timeLineRangeProcess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple wrapper function to take a given framerange and return
 a list[] containing the actual keys required for processing.
 This manages whether the step is negative, if so it reverses the
@@ -444,6 +444,7 @@ current keys between the start and end given, ignoring step except to reverse th
 <li><strong>step</strong> – step between frame</li>
 <li><strong>inEnds</strong> – when processing without nodes do we include the end frame in the return or exclude it</li>
 <li><strong>nodes</strong> – inspect the nodes given for keyframes and use that data for the times returned</li>
+<li><strong>process_animlayers</strong> – when True (default) we process all keys on all layers for the given nodes</li>
 </ul>
 </td>
 </tr>
@@ -1470,7 +1471,7 @@ in the sameNamespace as the controllers.</li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2016, Mark Jackson.
+        &#169; Copyright 2020, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

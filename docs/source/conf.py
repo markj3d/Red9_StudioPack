@@ -16,6 +16,7 @@
 import sys
 import os
 
+'''
 if os.path.exists('C:\\Program Files\\Autodesk\\Maya2012'):
     os.environ["MAYA_LOCATION"] = "C:\\Program Files\\Autodesk\\Maya2012"
     os.environ["PYTHONHOME"] = "C:\\Program Files\\Autodesk\\Maya2012\\Python"
@@ -36,7 +37,11 @@ else:
     os.environ["MAYA_LOCATION"] = "C:\\Program Files\\Autodesk\\Maya2016"
     os.environ["PYTHONHOME"] = "C:\\Program Files\\Autodesk\\Maya2016\\Python"
     os.environ["PATH"] = os.environ["PATH"] + ";C:\\Program Files\\Autodesk\\Maya2016\\bin;"
-
+else:
+'''
+os.environ["MAYA_LOCATION"] = "C:\\Program Files\\Autodesk\\Maya2018"
+os.environ["PYTHONHOME"] = "C:\\Program Files\\Autodesk\\Maya2018\\Python"
+os.environ["PATH"] = os.environ["PATH"] + ";C:\\Program Files\\Autodesk\\Maya2018\\bin;"
 
 
 for p in sys.path:print p
@@ -86,7 +91,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Red9'
-copyright = u'2016, Mark Jackson'
+copyright = u'2020, Mark Jackson'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

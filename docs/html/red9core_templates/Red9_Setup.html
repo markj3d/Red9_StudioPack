@@ -1,0 +1,719 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Red9_Setup &#8212; Red9 2.0 documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Red9_Tools" href="Red9_Tools.html" />
+    <link rel="prev" title="Red9_PoseSaver" href="Red9_PoseSaver.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Tools.html" title="Red9_Tools"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Red9_PoseSaver.html" title="Red9_PoseSaver"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="red9-setup">
+<h1>Red9_Setup<a class="headerlink" href="#red9-setup" title="Permalink to this headline">¶</a></h1>
+<p>This is the main startup module tha controls all aspects of the boot for both StudioPack and much of ProPack</p>
+<span class="target" id="module-Red9.startup.setup"></span><p>email: <a class="reference external" href="mailto:rednineinfo&#37;&#52;&#48;gmail&#46;com">rednineinfo<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
+<p>Red9 blog : <a class="reference external" href="http://red9-consultancy.blogspot.co.uk/">http://red9-consultancy.blogspot.co.uk/</a>
+MarkJ blog: <a class="reference external" href="http://markj3d.blogspot.co.uk">http://markj3d.blogspot.co.uk</a>
+——————————————</p>
+<p>This is the heart of the Red9 StudioPack’s boot sequence, managing folder structures,
+dependencies and menuItems.</p>
+<p>#########  THIS SHOULD NOT REQUIRE ANY OF THE RED9.core modules  ##########</p>
+<p class="rubric">Main Functions</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.startup.setup.maya_QT_mainWindow" title="Red9.startup.setup.maya_QT_mainWindow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maya_QT_mainWindow</span></code></a>()</td>
+<td>return the main “MayaWindow” QT widget</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.startup.setup.maya_QT_QApplication" title="Red9.startup.setup.maya_QT_QApplication"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maya_QT_QApplication</span></code></a>()</td>
+<td>return the QApplication instance of Maya</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.startup.setup.maya_appplication_size" title="Red9.startup.setup.maya_appplication_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maya_appplication_size</span></code></a>()</td>
+<td>return the current Maya QT Application screen sizes</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.startup.setup.maya_screen_mapping" title="Red9.startup.setup.maya_screen_mapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maya_screen_mapping</span></code></a>()</td>
+<td>return the maya applications screen size mapping data.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.startup.setup.mayaVersion" title="Red9.startup.setup.mayaVersion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mayaVersion</span></code></a>()</td>
+<td>get the application version back, this doesn’t track service packs or extensions TODO: need to manage this better and use the API version, eg: 2013.5 returns 2013</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.startup.setup.mayaInstallDir" title="Red9.startup.setup.mayaInstallDir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mayaInstallDir</span></code></a>()</td>
+<td>This is more for future reference, we read the key from the win registry and return the MAYA_INSTALL_LOCATION</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.startup.setup.mayaPrefs" title="Red9.startup.setup.mayaPrefs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mayaPrefs</span></code></a>()</td>
+<td>Root of Maya prefs folder</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.startup.setup.mayaUpAxis" title="Red9.startup.setup.mayaUpAxis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mayaUpAxis</span></code></a>([setAxis])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.startup.setup.getCurrentFPS" title="Red9.startup.setup.getCurrentFPS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getCurrentFPS</span></code></a>([return_full_map])</td>
+<td>returns the current frames per second as a number, rather than a useless string</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.startup.setup.addScriptsPath" title="Red9.startup.setup.addScriptsPath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addScriptsPath</span></code></a>(path)</td>
+<td>Add additional folders to the ScriptPath</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.startup.setup.addIconsPath" title="Red9.startup.setup.addIconsPath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addIconsPath</span></code></a>([path])</td>
+<td>Make sure the icons path has been added.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.startup.setup.addPythonPackages" title="Red9.startup.setup.addPythonPackages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addPythonPackages</span></code></a>()</td>
+<td>Add the packages folder which is where any external modules will be stored</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.startup.setup.sourceMelFolderContents" title="Red9.startup.setup.sourceMelFolderContents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sourceMelFolderContents</span></code></a>(path)</td>
+<td>source all mel files in a given folder</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.startup.setup.load_shelf" title="Red9.startup.setup.load_shelf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_shelf</span></code></a>(shelf_path)</td>
+<td>load Maya shelf :param shelf_path: string: file path to maya shelf</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.startup.setup.start" title="Red9.startup.setup.start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start</span></code></a>([Menu,&nbsp;MayaUIHooks,&nbsp;MayaOverloads,&nbsp;…])</td>
+<td>Main entry point for the StudioPack :param Menu: Add the Red9 Menu to the Maya Main Menus :param MayUIHooks: Add the Red9 hooks to Maya Native UI’s :param MayaOverloads: run the Maya native script hacks for Red9 - integrates into native Maya ui’s</td>
+</tr>
+</tbody>
+</table>
+<dl class="data">
+<dt id="Red9.startup.setup.installedVersion">
+<code class="descname">installedVersion</code><em class="property"> = False</em><a class="headerlink" href="#Red9.startup.setup.installedVersion" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><blockquote>
+<div><p>2008          .  2008  .  ??????  .  2.5.1  na      na   .  2008     . 2007-09-01
+2009          .  2009  .  ??????  .  2.5.1  na      na   .  2009     . 2008-10-01
+2010          .  2010  .  201000  .  2.6.1  na      na   .  2010     . 2009-08-01
+2011 Hotfix2  .  2011  .  201102  .  2.6.4  na    4.5.3  .  2011     .
+2011 SAP      .  2011  .  201104  .  2.6.4  na    4.5.3  .  2011.5   . 2010-09-29</p>
+<p>2012          .  2012  .  201200  .  2.6.4  na    4.7.1  .  2012     . 2011-04-01
+2012 SP1      .  2012  .  ??????  .  2.6.4  na    4.7.1  .  2012     .
+2012 SAP1     .  2012  .  ??????  .  2.6.4  na    4.7.1  .  2012     . 2012-01-26
+2012 SP2      .  2012  .  201217  .  2.6.4  na    4.7.1  .  2012     .</p>
+<p>2013 SP1      .  2013  .  201301  .  2.6.4  na    4.7.1  .  2013     . 2012-07-00
+2013 SP2      .  2013  .  201303  .  2.6.4  na    4.7.1  .  2013     . 2013-01-00
+2013 EXT      .  2013  .  201350? .  2.6.4  na    4.7.1  .  2013.5   . 2012-09-25  . 2013 binary incompatible
+2013 EXT2     .  2013  .  201355  .  2.6.4  na    4.7.1  .  2013.5   . 2013-01-22  . 2013 binary incompatible</p>
+<p>2014          .  2014  .  201400  .  2.6.4  1     4.8.2  .  2014-x64 . 2013-03-01
+2015          .  2015  .  201500  .  2.7.3  1     4.8.5  .  2015-x64 . 2014-04-15
+2015 SP6      .  2015  .  201516  .  2.7.3  1     4.8.5  .  2015-x64 . 2015-03-26
+2016          .  2016  .  201600  .  2.7.6  1     4.8.6  .  2016     . 2015-04-15
+2016 EXT1 SP6 .  2016  .  201614  .  2.7.6  1     4.8.6  .  2016     . 2016-03-18
+2016 EXT2     .  2016  .  201650  .  2.7.6  1     4.8.6  .  2016.5   . 2016-03-02 . 2016 binary incompatible
+2017          .  2017  .  201700  .  2.7.11 2     5.6.1  .  2017     . 2016-05-15
+2018          .  2018  .  201800  .  2.7.11 2     5.6.1  .  2018     . 2017-06-26
+2019          .  2019  .  201900  .  2.7.11 2     5.6.1  .  2019     . 2019-01-15
+2020          .  2020  .  202000  .  2.7.11 2     5.12.5 .  2020     . 2019-12-10</p>
+</div></blockquote>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.get_language_maps">
+<code class="descname">get_language_maps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.get_language_maps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.set_language">
+<code class="descname">set_language</code><span class="sig-paren">(</span><em>language='language_english'</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.set_language" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.mayaIsBatch">
+<code class="descname">mayaIsBatch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.mayaIsBatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.mayaFullSpecs">
+<code class="descname">mayaFullSpecs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.mayaFullSpecs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.maya_QT_mainWindow">
+<code class="descname">maya_QT_mainWindow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.maya_QT_mainWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the main “MayaWindow” QT widget</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.maya_QT_QApplication">
+<code class="descname">maya_QT_QApplication</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.maya_QT_QApplication" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the QApplication instance of Maya</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.maya_appplication_size">
+<code class="descname">maya_appplication_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.maya_appplication_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the current Maya QT Application screen sizes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.maya_screen_mapping">
+<code class="descname">maya_screen_mapping</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.maya_screen_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the maya applications screen size mapping data.
+If we’re running in 4k, the screen width, the screen height,
+as well as the dot / pixels per inch (ppi) used by some of the ui scaling code</p>
+<p>full 4k 150% scaling : (True, 3840, 2097, 144.0dpi)
+full 4k 100% scaling : (True, 3840, 2097, 96.0dpi)</p>
+<p>return: (bool(is4k), width, height, dpi)</p>
+<dl class="docutils">
+<dt>..note::</dt>
+<dd>actual dpi return is only supported in PySide2 (2017 onwards)</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.maya_dpi_scaling_factor">
+<code class="descname">maya_dpi_scaling_factor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.maya_dpi_scaling_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>this is a bodge really, but needed to remap the UI scales to 4k setups in some of
+the core StudioPack UI’s. This basically uses a scaling factor based on the DPI of
+the screen setups. This is also used in ProPack to control some of the widget sizes
+so we can consistently scale icon widgets as expected.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.mayaVersion">
+<code class="descname">mayaVersion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.mayaVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the application version back, this doesn’t track service packs or extensions
+TODO: need to manage this better and use the API version, eg: 2013.5 returns 2013</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.mayaInstallDir">
+<code class="descname">mayaInstallDir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.mayaInstallDir" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is more for future reference, we read the key from the win registry and return the MAYA_INSTALL_LOCATION</p>
+<p><a class="reference external" href="https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2015/ENU/Maya/files/Environment-Variables-File-path-variables-htm.html">https://knowledge.autodesk.com/support/maya/learn-explore/caas/CloudHelp/cloudhelp/2015/ENU/Maya/files/Environment-Variables-File-path-variables-htm.html</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.mayaVersionRelease">
+<code class="descname">mayaVersionRelease</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.mayaVersionRelease" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the api version back so we can track service packs etc</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.mayaRelease">
+<code class="descname">mayaRelease</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.mayaRelease" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrap over the version and api to return EXT builds that modify the
+codebase significantly, prefs being set to 20XX.5 is a general clue
+but we use the api build id to be specific</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.mayaVersionQT">
+<code class="descname">mayaVersionQT</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.mayaVersionQT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.mayaPrefs">
+<code class="descname">mayaPrefs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.mayaPrefs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Root of Maya prefs folder</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.mayaUpAxis">
+<code class="descname">mayaUpAxis</code><span class="sig-paren">(</span><em>setAxis=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.mayaUpAxis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.osBuild">
+<code class="descname">osBuild</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.osBuild" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.framerate_mapping">
+<code class="descname">framerate_mapping</code><span class="sig-paren">(</span><em>value=None</em>, <em>asAPI=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.framerate_mapping" title="Permalink to this definition">¶</a></dt>
+<dd><p>single place to convert fps data between string representation, actual float(fps) and MTime.unit
+if no valuye is passed we return a full mapping dict {pal: (25, OpenMaya.MTime.kPALFrame), …}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>value</strong> – if float or int we convert the data to timeUnit (‘pal’,’ntsc’,….)
+if value is a string we convert to actual fps as float</li>
+<li><strong>asAPI</strong> – if value was given and this is True we return the OpneMaya.MTime.kUnit for the value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.getCurrentFPS">
+<code class="descname">getCurrentFPS</code><span class="sig-paren">(</span><em>return_full_map=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.getCurrentFPS" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the current frames per second as a number, rather than a useless string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>return_full_map</strong> – if True we return a dictionary of timeUnit:fps rather than the
+current actual fps - useful for debugging</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.menuSetup">
+<code class="descname">menuSetup</code><span class="sig-paren">(</span><em>parent='MayaWindow'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.menuSetup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.addToMayaMenus">
+<code class="descname">addToMayaMenus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.addToMayaMenus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Red9 Additions to the Maya Menu’s themselves, additions to the timeSlider, fileMenu ETC..</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.addAudioMenu">
+<code class="descname">addAudioMenu</code><span class="sig-paren">(</span><em>parent=None</em>, <em>rootMenu='redNineTraxRoot'</em>, <em>prefix=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.addAudioMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Red9 Sound Menu setup</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>parent</strong> – parent UI to add the items too</li>
+<li><strong>rootMenu</strong> – name of the new rootMenu built</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9ButtonBGC">
+<code class="descname">red9ButtonBGC</code><span class="sig-paren">(</span><em>colour</em>, <em>qt=False</em>, <em>widget=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9ButtonBGC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic setting for the main button colours in the UI’s</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9ContactInfo">
+<code class="descname">red9ContactInfo</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9ContactInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>launch the stand-in UI for ProPack</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9Presets">
+<code class="descname">red9Presets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9Presets" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the default presets dir for all filterSettings.cfg files</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9Presets_get">
+<code class="descname">red9Presets_get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9Presets_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>generic extraction of all cfg presets from the default location above</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9PoseHandlers">
+<code class="descname">red9PoseHandlers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9PoseHandlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the default dir for all custom posehandlers in the presets, used to 
+overload the behaviour of the poseSaver setups</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9PoseHandlers_get">
+<code class="descname">red9PoseHandlers_get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9PoseHandlers_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the posehandler files themselves from the default location</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9EntryPoint">
+<code class="descname">red9EntryPoint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9EntryPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the root folder, one up from the ModulePath below</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9ModulePath">
+<code class="descname">red9ModulePath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9ModulePath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the Main path to the Red9 root module folder</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9MayaNativePath">
+<code class="descname">red9MayaNativePath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9MayaNativePath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the MayaVersioned Hacked script path if valid and found</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9_help">
+<code class="descname">red9_help</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>open up the Red9 help docs</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9_pro_docs_path">
+<code class="descname">red9_pro_docs_path</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9_pro_docs_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>path to the red9 ProPack docs docs</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9_blog">
+<code class="descname">red9_blog</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9_blog" title="Permalink to this definition">¶</a></dt>
+<dd><p>open up the Red9 Blog</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9_website_home">
+<code class="descname">red9_website_home</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9_website_home" title="Permalink to this definition">¶</a></dt>
+<dd><p>open up the Red9 Consultancy homepage</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9_facebook">
+<code class="descname">red9_facebook</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9_facebook" title="Permalink to this definition">¶</a></dt>
+<dd><p>open up the Red9 Facebook Page</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9_twitter">
+<code class="descname">red9_twitter</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9_twitter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open up the Red9 Twitter feed</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9_vimeo">
+<code class="descname">red9_vimeo</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9_vimeo" title="Permalink to this definition">¶</a></dt>
+<dd><p>open up the Red9 Vimeo Channel</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9_apidocs">
+<code class="descname">red9_apidocs</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9_apidocs" title="Permalink to this definition">¶</a></dt>
+<dd><p>open up the Red9 Vimeo Channel</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9_getVersion">
+<code class="descname">red9_getVersion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9_getVersion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9_getAuthor">
+<code class="descname">red9_getAuthor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9_getAuthor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.get_pro_pack">
+<code class="descname">get_pro_pack</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.get_pro_pack" title="Permalink to this definition">¶</a></dt>
+<dd><p>launch the stand-in UI for ProPack</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.addScriptsPath">
+<code class="descname">addScriptsPath</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.addScriptsPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add additional folders to the ScriptPath</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.addPluginPath">
+<code class="descname">addPluginPath</code><span class="sig-paren">(</span><em>path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.addPluginPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make sure the plugin path has been added. If run as a module
+this will have already been added</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.addIconsPath">
+<code class="descname">addIconsPath</code><span class="sig-paren">(</span><em>path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.addIconsPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make sure the icons path has been added. If run as a module
+this will have already been added</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.addPythonPackages">
+<code class="descname">addPythonPackages</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.addPythonPackages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the packages folder which is where any external modules
+will be stored</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.sourceMelFolderContents">
+<code class="descname">sourceMelFolderContents</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.sourceMelFolderContents" title="Permalink to this definition">¶</a></dt>
+<dd><p>source all mel files in a given folder</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.delete_shelf">
+<code class="descname">delete_shelf</code><span class="sig-paren">(</span><em>shelf_name</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.delete_shelf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete maya shelf and update maya shelf optionVars
+:param shelf_name: string: name of the shelf to be deleted
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.load_shelf">
+<code class="descname">load_shelf</code><span class="sig-paren">(</span><em>shelf_path</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.load_shelf" title="Permalink to this definition">¶</a></dt>
+<dd><p>load Maya shelf
+:param shelf_path: string: file path to maya shelf</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.pro_pack_path">
+<code class="descname">pro_pack_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.pro_pack_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.has_pro_pack">
+<code class="descname">has_pro_pack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.has_pro_pack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Red9 Pro_Pack is available and activated as user</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="Red9.startup.setup.ProPack_UIError">
+<em class="property">exception </em><code class="descname">ProPack_UIError</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.ProPack_UIError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">exceptions.Exception</span></code></p>
+<p>custom exception so we can catch it, this launched the
+get ProPack UI</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="Red9.startup.setup.ProPack_Error">
+<em class="property">exception </em><code class="descname">ProPack_Error</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.ProPack_Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">exceptions.Exception</span></code></p>
+<p>custom exception so we can catch it. This is an in-function
+error</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.startup.setup.pro_pack_missing_stub">
+<em class="property">class </em><code class="descname">pro_pack_missing_stub</code><a class="headerlink" href="#Red9.startup.setup.pro_pack_missing_stub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Exception to raised when the the Pro_Pack is missing
+and the stubs are called</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.get_pro_pack_user_dir">
+<code class="descname">get_pro_pack_user_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.get_pro_pack_user_dir" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string with Red9pro user directory path, this directory is mainly use to store Red9 pro pack user files</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.get_pro_pack_prefs">
+<code class="descname">get_pro_pack_prefs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.get_pro_pack_prefs" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string with Red9pro prefs directory path, this directory is mainly use to storing user setting files</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.has_internal_systems">
+<code class="descname">has_internal_systems</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.has_internal_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Red9 Consultancy internal modules only</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.internal_module_path">
+<code class="descname">internal_module_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.internal_module_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9ProPackVersion">
+<code class="descname">red9ProPackVersion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9ProPackVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>use r9pro_version file to get ProPack build version
+:return: string build version</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.red9ProPackInfo">
+<code class="descname">red9ProPackInfo</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.red9ProPackInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>launch the stand-in UI for ProPack</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.client_core_path">
+<code class="descname">client_core_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.client_core_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.has_client_modules">
+<code class="descname">has_client_modules</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.has_client_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Red9 Client Modules is the distribution of bespoke code to clients
+that tightly integrates into our ProPack core</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.get_client_modules">
+<code class="descname">get_client_modules</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.get_client_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>get all client modules ready for the boot sequence</p>
+<p># TODO: link this up with a management setup so we can determine
+which client to boot if we have multiple client repositories in the system.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.clients_booted">
+<code class="descname">clients_booted</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.clients_booted" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the client modules booted by the system</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.startup.setup.Client_Manager">
+<em class="property">class </em><code class="descname">Client_Manager</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.Client_Manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>simple Client select manager which we trigger as a layoutDialog so it’ acts like a
+confirmDialog and pauses till you hit one of the confirmation buttons / is closed</p>
+<dl class="method">
+<dt id="Red9.startup.setup.Client_Manager.show">
+<code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.Client_Manager.show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.startup.setup.Client_Manager.add_client">
+<code class="descname">add_client</code><span class="sig-paren">(</span><em>client</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.Client_Manager.add_client" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.startup.setup.Client_Manager.remove_client">
+<code class="descname">remove_client</code><span class="sig-paren">(</span><em>client</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.Client_Manager.remove_client" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.startup.setup.Client_Manager.close_and_return">
+<code class="descname">close_and_return</code><span class="sig-paren">(</span><em>mode</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.Client_Manager.close_and_return" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.boot_client_projects">
+<code class="descname">boot_client_projects</code><span class="sig-paren">(</span><em>batchclients=None</em>, <em>clientsToBoot=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.boot_client_projects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boot Client modules found in the Red9_ClientCore dir. This now prompts
+if multiple client projects were found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>batchclients</strong> – aimed as use during mayaBatch to denote what we’re actually going
+to boot when there’s multiple clients. None, [] or [‘clientA’, ‘clientB’,…]
+if None we do NOT boot any of the ClientCore modules
+if [] we boot all available ClientCore modules
+if [‘clientA’, ‘clientB’,… ] we boot all clients matching the given</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.start">
+<code class="descname">start</code><span class="sig-paren">(</span><em>Menu=True</em>, <em>MayaUIHooks=True</em>, <em>MayaOverloads=True</em>, <em>parentMenu='MayaWindow'</em>, <em>batchclients=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main entry point for the StudioPack
+:param Menu: Add the Red9 Menu to the Maya Main Menus
+:param MayUIHooks: Add the Red9 hooks to Maya Native UI’s
+:param MayaOverloads: run the Maya native script hacks for Red9 - integrates into native Maya ui’s</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.startup.setup.reload_Red9">
+<code class="descname">reload_Red9</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.reload_Red9" title="Permalink to this definition">¶</a></dt>
+<dd><p>careful reload of the systems to maintain the integrity of the
+MetaData registry setups for pro_pack, client_core and internals</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Red9_PoseSaver.html"
+                        title="previous chapter">Red9_PoseSaver</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Red9_Tools.html"
+                        title="next chapter">Red9_Tools</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/red9core_templates/Red9_Setup.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Tools.html" title="Red9_Tools"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Red9_PoseSaver.html" title="Red9_PoseSaver"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

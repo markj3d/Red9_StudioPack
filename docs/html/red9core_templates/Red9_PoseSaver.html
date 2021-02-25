@@ -234,6 +234,16 @@ for managing the actual pose data for save</p>
 <p class="first admonition-title">Note</p>
 <p class="last">this replaces the original pose call self.buildInternalPoseData()</p>
 </div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this code sets up self.rootJnt and IF that is setup then we also trigger the
+_buildBlock_skeletonData() and _buildBlock_hikData() dicts which inject specific
+skeleton joint data for later processing. This is setup if one of the following is True
+* pose is self.metaPose and self.metaRig.getSkeletonRoots() returns a rootJnt
+* nodes[0] (rootNode) has attribute ‘exportSkeletonRoot’ that is connected to a joint
+* nodes[0] (rootNode) is of type joint
+* self.settings.nodeTypes == [‘joint’]</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -700,6 +710,13 @@ as the actual rig controllers… makes validation a lot more accurate for export
 </ul>
 </div></blockquote>
 </div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">currentPose is the driving data here. If referencePose has additional nodes then that won’t trigger a fail.
+If however currentPose has nodes that aren’t in referencePose that will trigger ‘MissingKey’ error in the fail dict.
+This is because we use this to compare a master setup against a given reference setup, and if the given has
+extra data we ignore as it’s the core of the currentPose we’re testing against.</p>
+</div>
 <dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.PoseCompare.compare">
 <code class="descname">compare</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseCompare.compare" title="Permalink to this definition">¶</a></dt>
@@ -792,7 +809,7 @@ the systems if needed. If it is then it gets run between the load and save calls
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2016, Mark Jackson.
+        &#169; Copyright 2020, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

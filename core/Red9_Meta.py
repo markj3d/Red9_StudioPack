@@ -127,6 +127,11 @@ def registerMClassInheritanceMapping():
     RED9_META_INHERITANCE_MAP : {'className': {'full': [list of inherited class pointers]},
                                               {'short': [list of inherited class.__names__]}}
     '''
+    
+    # really this should be outside the module with a reload of Meta first to prevent 
+    # reloaded modules from coming back in the subclasses func. If we reload MetaClass
+    # first then the registry will always be pointing to the correct subclasses.
+    
     global RED9_META_REGISTERY
     RED9_META_REGISTERY = {}
     global RED9_META_INHERITANCE_MAP
@@ -153,6 +158,13 @@ def getMClassMetaRegistry():
     Generic getWrapper to return the Registry from the global
     '''
     return RED9_META_REGISTERY
+
+def getMClassMetaRegistry_FromKey(mClass):
+    '''
+    new function to get the mClass object, this is needed if we end up
+    running the test versioning setup in the registery's
+    '''
+    return RED9_META_REGISTERY[mClass]
 
 def create_mNode_from_gatherInfo(data):
     '''
@@ -874,6 +886,7 @@ def getMetaRigs(mInstances='MetaRig', mClassGrps=['MetaRig']):
 
     .. note::
         Pro_MetaRig_SRC raised in the return stack 24/09/20
+        order now goes: 'Pro_MetaRig', 'Pro_MetaRig_FacialUI', 'Pro_MetaRig_SRC', 'MetaRig'
     '''
     # try the Red9 Production Rig nodes first
     mRigs = getMetaNodes(mInstances=['Red9_MetaRig', 'Pro_MetaRig'], mClassGrps=['Pro_BodyRig'])
@@ -2337,7 +2350,6 @@ class MetaClass(object):
         :param state: lock state
         '''
         try:
-#             if hasattr(attr, '__iter__'):
             if r9General.is_basestring(attr):
                 attr = [attr]
             if not self.isReferenced():
@@ -4655,6 +4667,16 @@ class MetaRigSubSystem(MetaRig):
                 return subsystems[0]
         except:
             return []
+    
+    def getChildSystem_by_Type(self, systemType, walk=True, stepover=True):
+        '''
+        return a child MetaSubsystem by its "systemType"
+
+        :param systemType: the type of systems stored in the "systemType" attr on the mSubsystem
+        :param walk: walk all child mNode systems
+        :param stepover: walk over non matching systems else a tree would stop
+        '''
+        return self.getChildMetaNodes(mAttrs=['systemType=%s' % systemType], walk=walk, stepover=stepover) or []
 
 
 class MetaRigSupport(MetaClass):
@@ -4901,6 +4923,33 @@ class MetaHIKCharacterNode(MetaRig):
         else:
             log.info('checkCharacterization for %s  : FAILED' % self.mNode)
             return False
+    
+    def checkRotate_Limits(self, unlock_all=False, ignore=[]):
+        '''
+        check if any of the defined joints in the characterization have rotation Limits enabled.
+        These are separate to the actual joint limits in Maya and more difficult to get a good
+        overview for debugging, hence this proc
+
+        :param unlock_all: If true and any of the rotate limits have been set  which will ignore these
+            strings in the checked attributes, helps debugging specific errors
+        '''
+
+        limits = ['MinRLimitEnablex','MinRLimitEnabley','MinRLimitEnablez','MaxRLimitEnablex','MaxRLimitEnabley','MaxRLimitEnablez']
+        locked_attrs=[]
+        for attr in cmds.listAttr(self.mNode):
+            for limit in limits:
+                if limit in attr:
+                    skip = False
+                    for i in ignore:
+                        if i.upper() in attr.upper():
+                            skip=True
+                    if not skip and getattr(self, attr) == 1:
+                        print ('Rotation Lock Enabled for :', attr)
+                        if unlock_all:
+                            setattr(self, attr, False)
+                        locked_attrs.append(attr)
+        return locked_attrs
+
 
 
 class MetaHIKControlSetNode(MetaRig):

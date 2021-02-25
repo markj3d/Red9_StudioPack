@@ -1,4 +1,4 @@
-Pro_Pack : Optimiser
+Pro_Pack : optimiser
 =======================
 
 ProPack optimiser module manages the health of assets and your
@@ -19,8 +19,7 @@ set of tests, for example to health check a rig prior to releasing to an animato
 
 	>>> # import statement for the module via the r9pro decompiler
 	>>> from Red9.pro_pack import r9pro 
-	>>> r9pro.r9import('r9popt')
-	>>> import r9popt
+	>>> r9popt = r9pro.r9import('r9popt')
 
 
 	>>> def simple_example_test(expected=False):

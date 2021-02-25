@@ -1,4 +1,4 @@
-Pro_Pack : Exporter
+Pro_Pack : exporter
 ======================
 
 ProPack exporter module is our own export management system for
@@ -8,8 +8,7 @@ majority of the codebase is bound to the metadata_pro mNode classes
 
 	>>> # import statement for the module via the r9pro decompiler
 	>>> from Red9.pro_pack import r9pro 
-	>>> r9pro.r9import('r9exp')
-	>>> import r9exp
+	>>> r9exp = r9pro.r9import('r9exp')
 	
 .. automodule:: Red9.pro_pack.core.exporter
    

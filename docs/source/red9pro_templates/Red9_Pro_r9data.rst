@@ -7,8 +7,7 @@ maintained. It's also a fully dot completable dict method
 
 	>>> # import statement for the module via the r9pro decompiler
 	>>> from Red9.pro_pack import r9pro 
-	>>> r9pro.r9import('r9data')
-	>>> import r9data
+	>>> r9data = r9pro.r9import('r9data')
 	
 .. automodule:: Red9.pro_pack.core.r9data
 

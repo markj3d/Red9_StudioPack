@@ -1,4 +1,4 @@
-Pro_Pack : Audio
+Pro_Pack : audio
 ======================
 
 ProPack audio module manages BWav formats, Timecode and the more advanced aspects of dealing with Audio within Maya.
@@ -7,9 +7,8 @@ from the StudioPack API.
 
 	>>> # import statement for the module via the r9pro decompiler
 	>>> from Red9.pro_pack import r9pro 
-	>>> r9pro.r9import('r9paudio')
-	>>> import r9paudio
-	
+	>>> r9paudio = r9pro.r9import('r9paudio')
+
 .. automodule:: Red9.pro_pack.core.audio
 
    .. rubric:: Core Functions

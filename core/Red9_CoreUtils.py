@@ -763,8 +763,6 @@ class FilterNode(object):
     # Properties Block
     # ---------------------------------------------------------------------------------
 
-    # Python2.5 compatible set/get property code for Maya2009
-
     def __get_rootNodes(self):
         if self._rootNodes:
             return self._rootNodes
@@ -1878,6 +1876,7 @@ class LockChannels(object):
 
         def __init__(self):
             self.attrs = set()
+            self.specific_attrs = set()
             self.hierarchy = False
             self.userDefined = False
             self.win = 'LockChannels'
@@ -1913,7 +1912,7 @@ class LockChannels(object):
             cmds.checkBox('tz', l=LANGUAGE_MAP._Generic_.tz, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "tz"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "tz"))
-            cmds.checkBox('translates', l=LANGUAGE_MAP._Generic_.translates, v=False,
+            cmds.checkBox('cb_translate', l=LANGUAGE_MAP._Generic_.translates, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', ["tx", "ty", "tz"]),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', ["tx", "ty", "tz"]))
 
@@ -1926,7 +1925,7 @@ class LockChannels(object):
             cmds.checkBox('rz', l=LANGUAGE_MAP._Generic_.rz, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "rz"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "rz"))
-            cmds.checkBox('rotates', l=LANGUAGE_MAP._Generic_.rotates, v=False,
+            cmds.checkBox('cb_rotate', l=LANGUAGE_MAP._Generic_.rotates, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', ["rx", "ry", "rz"]),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', ["rx", "ry", "rz"]))
 
@@ -1939,7 +1938,7 @@ class LockChannels(object):
             cmds.checkBox('sz', l=LANGUAGE_MAP._Generic_.sz, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "sz"),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', "sz"))
-            cmds.checkBox('scales', l=LANGUAGE_MAP._Generic_.scales, v=False,
+            cmds.checkBox('cb_scale', l=LANGUAGE_MAP._Generic_.scales, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', ["sx", "sy", "sz"]),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', ["sx", "sy", "sz"]))
 
@@ -1950,15 +1949,15 @@ class LockChannels(object):
             cmds.setParent('..')
             cmds.rowColumnLayout(ann=LANGUAGE_MAP._Generic_.attrs, numberOfColumns=2,
                                  columnWidth=[(1, 150)])
-            cmds.checkBox('userDefined', l=LANGUAGE_MAP._LockChannelsUI_.user_defined, v=False,
+            cmds.checkBox('cb_userDefined', l=LANGUAGE_MAP._LockChannelsUI_.user_defined, v=False,
                           ann=LANGUAGE_MAP._LockChannelsUI_.user_defined_ann,
                           onc=lambda x: self.__setattr__('userDefined', True),
                           ofc=lambda x: self.__setattr__('userDefined', False))
             cmds.checkBox('ALL', l=LANGUAGE_MAP._LockChannelsUI_.all_attrs, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v",
-                                                                            "userDefined", "translates", "rotates", "scales"]),
+                                                                            "cb_userDefined", "cb_translate", "cb_rotate", "cb_scale"]),
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v",
-                                                                             "userDefined", "translates", "rotates", "scales"]))
+                                                                             "cb_userDefined", "cb_translate", "cb_rotate", "cb_scale"]))
             cmds.setParent('..')
             cmds.separator(h=20, style='in')
             cmds.checkBox('givenAttrs', l=LANGUAGE_MAP._LockChannelsUI_.specific_attrs,
@@ -2018,7 +2017,8 @@ class LockChannels(object):
             for attr in attrs:
                 if mode == 'on':
                     try:
-                        self.attrs.add(attr)
+                        if not attr in ['cb_userDefined', 'cb_translate', 'cb_rotate', 'cb_scale']:
+                            self.attrs.add(attr)
                         # manage the checkbox state in case the call was made
                         # from one of the list checkboxes.
                         cmds.checkBox(attr, edit=True, v=True)
@@ -2090,11 +2090,14 @@ class LockChannels(object):
 
         def __uiCall(self, mode):
             if cmds.textField('uitf_givenAttrs', q=True, en=True):
-                newAttrs = cmds.textField('uitf_givenAttrs', q=True, text=True)
+                newAttrs = cmds.textField('uitf_givenAttrs', q=True, text=True).replace(' ', '')
                 if newAttrs:
                     for a in newAttrs.split(','):
                         self.attrs.add(a)
-                    # print self.attrs
+                        self.specific_attrs.add(a)
+            elif self.specific_attrs:
+                self.attrs = self.attrs - self.specific_attrs
+            log.info('channels being processed : %s', self.attrs)
             LockChannels.processState(cmds.ls(sl=True, l=True), self.attrs, mode, self.hierarchy, self.userDefined)
 
     # MapFile calls
@@ -2183,7 +2186,7 @@ class LockChannels(object):
                 currentAttrs = r9Anim.getChannelBoxAttrs(node, asDict=False)
                 for attr in currentAttrs:
                     try:
-                        # do not just blanket lock these!
+                        # do not just blanket lock the base compound attrs!
                         if not attr in ['rotate', 'translate', 'scale']:
                             cmds.setAttr('%s.%s' % (node, attr), keyable=False, lock=True, channelBox=False)
                     except:
@@ -2216,7 +2219,7 @@ class LockChannels(object):
         log.info('<< AttrMap Processed >>')
 
     @staticmethod
-    def processState(nodes, attrs=None, mode=None, hierarchy=False, userDefined=False, attrKws={}):
+    def processState(nodes, attrs=None, mode=None, hierarchy=False, userDefined=False, attrKws={}, suppress_errors=True):
         '''
         Easy wrapper to manage channels that are keyable / locked
         in the channelBox.
@@ -2228,6 +2231,7 @@ class LockChannels(object):
         :param usedDefined: process all UserDefined attributes on all nodes
         :param attrKws: if mode=None then these are the flags passed to the setAttr
             command to control the node states, ie: {'keyable':True, 'lock':False, 'channelBox':True}
+        :param suppress_errors: Tue by default, if a node doesn't have one one of the attrs we're trying to lock suppress the errors
 
         >>> r9Core.LockChannels.processState(nodes, attrs=["sx", "sy", "sz", "v"], mode='lockall')
         >>>
@@ -2247,7 +2251,7 @@ class LockChannels(object):
         if attrs == 'all':
             _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "radius", "radi"]
         elif attrs == 'all_complete':
-            _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "radius", "radi", "rotate", "transform", "scale"]
+            _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v", "radius", "radi", "rotate", "translate", "scale"]
         elif attrs == 'transforms':
             _attrs = ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz"]
         elif attrs == 'transforms_complete':
@@ -2280,19 +2284,22 @@ class LockChannels(object):
         elif mode == 'fullkey':
             attrKws['keyable'] = True
             attrKws['lock'] = False
-#             # force unlock the compounds also?
-#             if attrs == 'all' or attrs == 'transforms':
-#                 _attrs = _attrs | set(['translate', 'rotate', 'scale'])
+            # force unlock the compounds also?
+            if attrs == 'all' or attrs == 'transforms':
+                _attrs = _attrs | set(['translate', 'rotate', 'scale'])
         elif mode == 'lockall':
             attrKws['keyable'] = False
             attrKws['lock'] = True
             attrKws['channelBox'] = False  # 27/5/20 added
+
+        _compounds = set()
 
         for node in nodes:
             if userDefined:
                 userDef = cmds.listAttr(node, ud=True, se=True)
                 if userDef:
                     userDefAttrs = set(userDef)
+
             for attr in (_attrs | userDefAttrs):
                 try:
                     log.debug('node: %s.%s' % (node, attr))
@@ -2302,19 +2309,63 @@ class LockChannels(object):
                     '''
                     if cmds.attributeQuery(attr, node=node, exists=True):
                         attrString = '%s.%s' % (node, attr)
+                        # if you pass in a compound (translate, rotate, scale), then deal with child atrrs
                         if cmds.getAttr(attrString, type=True) in ['double3', 'float3']:
                             # why?? Maya fails to set the 'keyable' flag status for compound attrs!
                             childAttrs = cmds.listAttr(attrString, multi=True)
                             childAttrs.remove(attr)
-                            log.debug('compoundAttr handler for node: %s.%s' % (node, attr))
+                            log.debug('compoundAttr handler for node: %s.%s > childattrs: %s' % (node, attr, childAttrs))
                             cmds.setAttr(attrString, **attrKws)
                             for childattr in childAttrs:
                                 cmds.setAttr('%s.%s' % (node, childattr), **attrKws)
                         else:
                             cmds.setAttr(attrString, **attrKws)
+
                 except StandardError, error:
                     log.info(error)
 
+#                 try:
+#                     log.debug('node: %s.%s' % (node, attr))
+#                     # Dec 2020 : New Test But I'm not sure this should manage compound attrs at all??
+#                     # if the attr is a compound (ie translate, rotate, scale) then add it's children to be managed
+#                     # deal for compound attrs
+#                     if cmds.attributeQuery(attr, node=node, exists=True):
+#                         if cmds.getAttr('%s.%s' % (node, attr), type=True) in ['double3', 'float3']:
+#                             _attrs.remove(attr)
+#                             _compound_children = cmds.listAttr('%s.%s' % (node, attr), multi=True)
+#                             _compound_children.remove(attr)
+#                             for _a in _compound_children:
+#                                 _compounds.add(_a)
+#                         '''
+# #                         If you pass in .tx but you've already locked the compound .translate then
+# #                         the unlock will fail as it's parent compound is locked... fix this here
+# #                         but only for the unlocking process, we don't touch or relock the compounds!
+# #                         '''
+#                         manage = False
+#                         if 'keyable' in attrKws and attrKws['keyable']==True:
+#                             manage = True
+#                         if 'lock' in attrKws and attrKws['lock']==False:
+#                             manage = True
+#                         if manage:
+#                             compound = cmds.attributeQuery(attr, node=node, listParent=True)
+#                             if compound:
+#                                 # do we look at the compound child attrs and relock those that would
+#                                 # be unlocked by adding the compound into the attr list? 
+#                                 #_compound_children = cmds.listAttr('%s.%s' % (node, attr), multi=True)
+#                                 if cmds.getAttr('%s.%s' % (node, compound[0]), l=True) == True:
+#                                     cmds.setAttr('%s.%s' % (node, compound[0]), l=False)
+#                                     log.debug('unlocking parent compound :', compound[0])
+#                                     _attrs.remove(compound[0])
+#                 except StandardError, error:
+#                     log.info(error)
+# 
+#             for attr in (_attrs | userDefAttrs | _compounds):
+#                 try:
+#                     cmds.setAttr('%s.%s' % (node, attr), **attrKws)
+#                     log.debug('Attr managed: %s.%s' % (node, attr))
+#                 except StandardError, error:
+#                     if not suppress_errors:
+#                         log.info(error)
 
 def timeOffset_addPadding(pad=None, padfrom=None, scene=False, mRigs=False):
     '''

@@ -671,7 +671,8 @@ def addToMayaMenus():
                           ann=LANGUAGE_MAP._MainMenus_.copy_to_clipboard_ann,
                           p=mainFileMenu,
                           echoCommand=True,
-                          c="import maya.cmds as cmds;import Red9.core.Red9_General as r9General;r9General.Clipboard.setText(cmds.file(q=True,sn=True))")
+                          c="import Red9.core.Red9_General as r9General;import pyperclip;pyperclip.copy(r9General.sceneName())")
+#                           c="import maya.cmds as cmds;import Red9.core.Red9_General as r9General;r9General.Clipboard.setText(cmds.file(q=True,sn=True))")
             cmds.menuItem('redNineOpenFolderItem',
                           l=LANGUAGE_MAP._MainMenus_.open_in_explorer,
                           ann=LANGUAGE_MAP._MainMenus_.open_in_explorer_ann,
@@ -989,6 +990,11 @@ def red9_help(*args):
     import Red9.core.Red9_General as r9General  # lazy load
     helpFile = __formatPath_join(red9ModulePath(), 'docs', r'Red9-StudioTools Help.pdf')
     r9General.os_OpenFile(helpFile)
+
+def red9_pro_docs_path(*args):
+    ''' path to the red9 ProPack docs docs '''
+    import Red9.core.Red9_General as r9General  # lazy load
+    return  __formatPath_join(red9ModulePath(), 'docs', 'Red9 ProPack_release_notes')
 
 def red9_blog(*args):
     ''' open up the Red9 Blog '''

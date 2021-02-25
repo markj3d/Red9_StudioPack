@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Pro_Pack : Optimiser &#8212; Red9 2.0 documentation</title>
+    <title>Pro_Pack : optimiser &#8212; Red9 2.0 documentation</title>
     <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pro_Pack : project" href="Red9_Pro_project.html" />
-    <link rel="prev" title="Pro_Pack : MetaData" href="Red9_Pro_meta .html" /> 
+    <link rel="prev" title="Pro_Pack : metadata_pro" href="Red9_Pro_metadata_pro.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -33,7 +33,7 @@
           <a href="Red9_Pro_project.html" title="Pro_Pack : project"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_meta .html" title="Pro_Pack : MetaData"
+          <a href="Red9_Pro_metadata_pro.html" title="Pro_Pack : metadata_pro"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
       </ul>
@@ -45,7 +45,7 @@
           <div class="body" role="main">
             
   <div class="section" id="pro-pack-optimiser">
-<h1>Pro_Pack : Optimiser<a class="headerlink" href="#pro-pack-optimiser" title="Permalink to this headline">¶</a></h1>
+<h1>Pro_Pack : optimiser<a class="headerlink" href="#pro-pack-optimiser" title="Permalink to this headline">¶</a></h1>
 <p>ProPack optimiser module manages the health of assets and your
 Maya scene via a complex Health object system. The HealthValidation class runs
 tests that are bound to it, formatted such that each test returns a HealthTestObject.
@@ -62,8 +62,7 @@ set of tests, for example to health check a rig prior to releasing to an animato
 <div><blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9popt&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9popt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9popt</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9popt&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">simple_example_test</span><span class="p">(</span><span class="n">expected</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -437,6 +436,11 @@ the scene after load against a given project template.</p>
 <dd><p>ordered list of result objects</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.optimiser.HealthValidation.status">
+<code class="descname">status</code><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthValidation.status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="Red9.pro_pack.core.optimiser.HealthValidation.bindTests">
 <code class="descname">bindTests</code><span class="sig-paren">(</span><em>testdata=[]</em>, <em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.HealthValidation.bindTests" title="Permalink to this definition">¶</a></dt>
@@ -611,6 +615,39 @@ tweak the results into a format that contains just the base data, or all the com
 </dd></dl>
 
 <dl class="class">
+<dt id="Red9.pro_pack.core.optimiser.SRC_Export_HealthValidations">
+<em class="property">class </em><code class="descname">SRC_Export_HealthValidations</code><span class="sig-paren">(</span><em>src_node=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.SRC_Export_HealthValidations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
+<p>RED9 PRODUCTION RIG ONLY : 
+Health systems to validate an SRC Prior to Exporting it in the RigManager</p>
+<p>This is a destructive set of tests when run with the fix method so make
+sure to save the scene out prior to running this.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>src_node</strong> – a Meta SRC_Extension mNode</td>
+</tr>
+</tbody>
+</table>
+<p>checks to ensure:</p>
+<ul class="simple">
+<li>no audio nodes</li>
+<li>file is referenced</li>
+<li>invalid references</li>
+<li>unused display layers</li>
+<li>removes ALL namespaces</li>
+<li>invalid MetaData</li>
+<li>SRC skeleton has no keys</li>
+<li>SRC skeleton hierarchy has no Non-Joint nodes in it</li>
+<li>SRC skeleton has no incoming connections to any attr</li>
+<li>Export Skeleton is parented to world</li>
+<li>meshes connected to renderMeshes and renderMeshes_head are parented under ‘<a href="#id5"><span class="problematic" id="id6">|</span></a>models’</li>
+<li>blend target channels have no incoming connections</li>
+</ul>
+</dd></dl>
+
+<dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.SceneStripper">
 <em class="property">class </em><code class="descname">SceneStripper</code><span class="sig-paren">(</span><em>src_node=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.SceneStripper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
@@ -682,7 +719,11 @@ in the wiring of an external mRig system</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.get_root_jnt">
 <code class="descname">get_root_jnt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.get_root_jnt" title="Permalink to this definition">¶</a></dt>
-<dd><p>generic call for all tests dealing with skeleton roots</p>
+<dd><p>generic call for all tests dealing with skeleton roots. This finds the first instance
+of a mRig then calls the internal mrig.get_root_jnt() That in turn finds the rootJnt
+from the exportSkeletonRoot wire, either on the mRig or the connected exportTag.</p>
+<p>Remember that the return from the getMetaRigs() is always in favour of the most influential:
+‘Pro_MetaRig’ or ‘Pro_MetaRig_FacialUI’ or ‘Pro_MetaRig_SRC’ or ‘MetaRig’</p>
 </dd></dl>
 
 <dl class="function">
@@ -927,6 +968,46 @@ Failed Results built : HealthObject.results_failed_nodes  : [mRig,…]</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_meshes_rootparent_test">
+<code class="descname">mRigs_meshes_rootparent_test</code><span class="sig-paren">(</span><em>expected='models'</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_meshes_rootparent_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>&lt;&lt; SRC Export bindpose Test &gt;&gt;</p>
+<p>check that all renderMeshes and renderMeshes_head nodes are
+parented under a single group (expected=’models’) in the root of the
+Maya scene.
+If not the fix will create the root folder and re-parent all meshes
+into it, it will not clean up previous groups or folders as it’s designed
+primarily as a pre-export SRC test</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_meshes_rootparent_fix">
+<code class="descname">mRigs_meshes_rootparent_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_meshes_rootparent_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fix the naming and parenting of the renderMesh parent node if found</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_meshes_draw_reset_test">
+<code class="descname">mRigs_meshes_draw_reset_test</code><span class="sig-paren">(</span><em>mRigs=[]</em>, <em>forced=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_meshes_draw_reset_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>&lt;&lt; SRC Export bindpose Test &gt;&gt;</p>
+<p>check that all renderMeshes and renderMeshes_head nodes have all
+their draw overrides and visibilities set to default</p>
+<p>this tests for:</p>
+<ul class="simple">
+<li>jnt.visibility = 1</li>
+<li>jnt.lodVisibility = 1</li>
+<li>jnt.overrideEnabled = 0</li>
+<li>jnt.overrideDisplayType = 0</li>
+</ul>
+<p>If not the fix will force disconnect (if set to force) and rest the values</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_meshes_draw_reset_fix">
+<code class="descname">mRigs_meshes_draw_reset_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_meshes_draw_reset_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset the draw overrides for the failed renderMeshes</p>
 </dd></dl>
 
 <dl class="function">
@@ -1456,6 +1537,33 @@ nature of IK joints will move slightly regardless, so testing in FK ensures at t
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_at_bpose_test">
+<code class="descname">skeleton_at_bpose_test</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>fk=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_at_bpose_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test to check that all joints under a given rootJnt match that skeleton’s
+internal ‘bpose’ as stamped onto it through the Red9 ProPack RigManager</p>
+<p>Running the fix method will load the ‘bpose’ data from the internal skeleton attr</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rootJnt</strong> – root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</li>
+<li><strong>fk</strong> – when dealing with an mRig this option switches the rig into FK mode before the test, due to the
+nature of IK joints will move slightly regardless, so testing in FK ensures at the base level all jnts are zero’d</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_at_bpose_fix">
+<code class="descname">skeleton_at_bpose_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_at_bpose_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>set all failed joints to zero</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.skeleton_has_keys_test">
 <code class="descname">skeleton_has_keys_test</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>searchPattern=[]</em>, <em>expected=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_has_keys_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check that all joints under a given rootJnt have no animation
@@ -1483,6 +1591,85 @@ mRig or SrcExt / exportTag nodes</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_clean_hierarchy_test">
+<code class="descname">skeleton_clean_hierarchy_test</code><span class="sig-paren">(</span><em>rootJnt=None, expected=['camera']</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_clean_hierarchy_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>&lt;&lt; SRC Export bindpose Test &gt;&gt;</p>
+<p>Test to check that a skeletal hierarchy has no other nodetypes under it</p>
+<p>Running the fix method will delete all none joints in the hierarchy</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rootJnt</strong> – root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</li>
+<li><strong>expected</strong> – [] if given these are additional nodetypes that are allowed into the hierarchy
+default = [‘camera’] so that joints and cameras will be allowed to pass through</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_clean_hierarchy_fix">
+<code class="descname">skeleton_clean_hierarchy_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_clean_hierarchy_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete all found NONE joint type nodes in the hierarchy</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_has_connections_test">
+<code class="descname">skeleton_has_connections_test</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>expected=True</em>, <em>inc_user_defined=True</em>, <em>skip_metahooks=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_has_connections_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>&lt;&lt; SRC Export bindpose Test &gt;&gt;</p>
+<p>Test to check that a skeletal hierarchy has no other nodetypes under it</p>
+<p>Running the fix method will delete all none joints in the hierarchy</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rootJnt</strong> – root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</li>
+<li><strong>skip_metahooks</strong> – if True(default) and the connected node via a userDefined attr is a metaNode then retain it</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Parma inc_user_defined:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first last">if True we include all userDefined attrs in the search</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_has_connections_fix">
+<code class="descname">skeleton_has_connections_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_has_connections_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete all found NONE joint type nodes in the hierarchy</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_parented_world_test">
+<code class="descname">skeleton_parented_world_test</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>expected=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_parented_world_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>&lt;&lt; Export Test &gt;&gt;</p>
+<p>Test to check that a skeleton is in root parent space
+Running the fix method will parent the root joint to the world</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rootJnt</strong> – root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.skeleton_parented_world_fix">
+<code class="descname">skeleton_parented_world_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_parented_world_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete all found NONE joint type nodes in the hierarchy</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.skeleton_unique_names_test">
 <code class="descname">skeleton_unique_names_test</code><span class="sig-paren">(</span><em>rootJnt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_unique_names_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>check that all joints in a given skeleton have unique short names
@@ -1499,7 +1686,7 @@ results_failed={shortname:(longname1, longname2, …)}</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.skeleton_draw_reset_test">
-<code class="descname">skeleton_draw_reset_test</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>searchPattern=[]</em>, <em>expected=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_draw_reset_test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">skeleton_draw_reset_test</code><span class="sig-paren">(</span><em>rootJnt=None</em>, <em>searchPattern=[]</em>, <em>expected=False</em>, <em>forced=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_draw_reset_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to verify the draw states of all joints in a skeleton, this tests for:</p>
 <ul class="simple">
 <li>jnt.visibility = 1</li>
@@ -1519,6 +1706,7 @@ as that needs full control over these over-rides during the build process</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>rootJnt</strong> – root joint for the test, if not passed we use the first instance of mRig.skeletonRoot</li>
 <li><strong>searchPattern</strong> – regex arg passed so we can do simple testing for strings and ignore matches.</li>
+<li><strong>forced</strong> – if True the fix method will break any connections to the attrs above to force the value to be set</li>
 </ul>
 </td>
 </tr>
@@ -1534,7 +1722,7 @@ as that needs full control over these over-rides during the build process</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.skeleton_pose_compare_test">
-<code class="descname">skeleton_pose_compare_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>filepath=''</em>, <em>rootjnt=''</em>, <em>src_rootjnt=''</em>, <em>savebase=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_pose_compare_test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">skeleton_pose_compare_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>filepath=''</em>, <em>rootjnt=''</em>, <em>src_rootjnt=''</em>, <em>savebase=False</em>, <em>skip_attrs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skeleton_pose_compare_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>this test compares the given skeleton with a pre-saved r9Pose file, comparing the joint
 hierarchy, joint naming, transforms and orients to validate one skeleton against another</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1547,7 +1735,8 @@ hierarchy, joint naming, transforms and orients to validate one skeleton against
 <li><strong>rootjnt</strong> – the root joint of the skeleton we want to test against the given pose file</li>
 <li><strong>savebase</strong> – when setting up this test we need a pose file to test against, this allows us to run it
 prior to testing and save the pose to the filepath rather than running the actual test</li>
-<li><strong>srcjnt</strong> – source skeleton to compare against if the filepath wasn’t given</li>
+<li><strong>src_rootjnt</strong> – source skeleton to compare against if the filepath wasn’t given</li>
+<li><strong>skip_attrs</strong> – a list of attrs we want to skip from the compare</li>
 </ul>
 </td>
 </tr>
@@ -1680,6 +1869,21 @@ new target for the missing index, there by fixing the FBX export issue for Unrea
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.blends_target_driven_test">
+<code class="descname">blends_target_driven_test</code><span class="sig-paren">(</span><em>expected=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.blends_target_driven_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>&lt;&lt; SRC Export bindpose Test &gt;&gt;</p>
+<p>test connections to all blendshape nodes target channels and fail
+if they’re connected. The fix will delete the connections</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.blends_target_driven_fix">
+<code class="descname">blends_target_driven_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.blends_target_driven_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>disconnect any of the blend targets that have incoming connections
+and reset their value to 0</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mesh_compare_generate">
 <code class="descname">mesh_compare_generate</code><span class="sig-paren">(</span><em>mesh</em>, <em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_compare_generate" title="Permalink to this definition">¶</a></dt>
 <dd><p>safe consistent method to generate the test mesh to use in the compare call</p>
@@ -1788,7 +1992,7 @@ the correct rootfolder path</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.character_set_arrays">
-<code class="descname">character_set_arrays</code><span class="sig-paren">(</span><em>chset=''</em>, <em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_arrays" title="Permalink to this definition">¶</a></dt>
+<code class="descname">character_set_arrays</code><span class="sig-paren">(</span><em>chset=None</em>, <em>filepath=None</em>, <em>insert_buffers=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_arrays" title="Permalink to this definition">¶</a></dt>
 <dd><p>CharacterSet debugging for placeholder list orders. This returns a dic
 containing {‘linearValues’:[], ‘angularValues’:[], ‘unitlessValues’:[]}
 where each key is a list of tuples [(index, plug, node, attr), (……</p>
@@ -1799,17 +2003,25 @@ where each key is a list of tuples [(index, plug, node, attr), (……</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>chset</strong> – if given inspect this chSet, else use the character set in the scene</li>
 <li><strong>filepath</strong> – optional, if given save the data out to a json file</li>
+<li><strong>insert_buffers</strong> – if True and the chSet has had objects removed leaving empty indexes
+then add buffer data to pad the arrays, ensuring we deal with such data</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the nodes are always stored without namespaces for consistency. If on load the node is still
+under a namespace then the load code will deal with it as long as there’s only 1 node with
+the same name across all namespaces in the scene</p>
+</div>
 <p>TODO: store the data via the metaWires rather than dagpath/node??</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.character_set_compare">
-<code class="descname">character_set_compare</code><span class="sig-paren">(</span><em>chset=''</em>, <em>filepath=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_compare" title="Permalink to this definition">¶</a></dt>
+<code class="descname">character_set_compare</code><span class="sig-paren">(</span><em>chset=None</em>, <em>filepath=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_compare" title="Permalink to this definition">¶</a></dt>
 <dd><p>compare the contents of the current chSet in the scene with that given from filepath
 :param chset: if given inspect this chSet, else use the character set in the scene
 :param filepath: filepath for the stored out chSet to compare against. This must be written out by the character_set_arrays() func above
@@ -1818,18 +2030,31 @@ where each key is a list of tuples [(index, plug, node, attr), (……</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.character_set_recreate">
-<code class="descname">character_set_recreate</code><span class="sig-paren">(</span><em>filepath</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_recreate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">character_set_recreate</code><span class="sig-paren">(</span><em>filepath</em>, <em>force=False</em>, <em>allow_multiple=False</em>, <em>allow_padding=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_recreate" title="Permalink to this definition">¶</a></dt>
 <dd><p>from a given chSet json file, rebuild the character set from scratch
 :param filepath: re-create a character set from scratch using the given file, generated by the character_set_arrays() func
-:param force: if True and the scene already has a character set then we delete that before rebuilding</p>
+:param force: if True and the scene already has a character set then we delete that before rebuilding
+:param allow_multiple: if True we don’t try and delete current character sets, instead we just create a new one named “character”</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.character_set_compare_test">
-<code class="descname">character_set_compare_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_compare_test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">character_set_compare_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>filepath=None</em>, <em>chset=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_compare_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>test to compare the current character set in the scene with the given characterSet file.
 If filepath isn’t given then we check for the existance of a ‘_character.chset’ file in the
 same directory as the current Maya scene (assuming it’s a rig file / build directory)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filepath</strong> – compare against the given filepath</li>
+<li><strong>chset</strong> – compare against a specific chset, used generally if there are more than 1 chSet in the scene</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1933,6 +2158,19 @@ treated as the defaultLayer and UNEDITABLE. This has happened a few times with a
 <dt id="Red9.pro_pack.core.optimiser.animLayers_fix">
 <code class="descname">animLayers_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.animLayers_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>remove all animlayers that failed the test</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.references_found_test">
+<code class="descname">references_found_test</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.references_found_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>test for .ma / .mb references in the scene,
+the fix method will import and remove those references</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.references_found_fix">
+<code class="descname">references_found_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.references_found_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove all loaded references in the scene</p>
 </dd></dl>
 
 <dl class="function">
@@ -2062,8 +2300,8 @@ user prompt so we’re hooking to that</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="Red9_Pro_meta .html"
-                        title="previous chapter">Pro_Pack : MetaData</a></p>
+  <p class="topless"><a href="Red9_Pro_metadata_pro.html"
+                        title="previous chapter">Pro_Pack : metadata_pro</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="Red9_Pro_project.html"
                         title="next chapter">Pro_Pack : project</a></p>
@@ -2103,13 +2341,13 @@ user prompt so we’re hooking to that</p>
           <a href="Red9_Pro_project.html" title="Pro_Pack : project"
              >next</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_meta .html" title="Pro_Pack : MetaData"
+          <a href="Red9_Pro_metadata_pro.html" title="Pro_Pack : metadata_pro"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2016, Mark Jackson.
+        &#169; Copyright 2020, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

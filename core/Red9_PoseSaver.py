@@ -428,6 +428,14 @@ class DataMap(object):
 
         .. note::
             this replaces the original pose call self.buildInternalPoseData()
+
+        .. note:: this code sets up self.rootJnt and IF that is setup then we also trigger the
+            _buildBlock_skeletonData() and _buildBlock_hikData() dicts which inject specific
+            skeleton joint data for later processing. This is setup if one of the following is True
+            * pose is self.metaPose and self.metaRig.getSkeletonRoots() returns a rootJnt
+            * nodes[0] (rootNode) has attribute 'exportSkeletonRoot' that is connected to a joint
+            * nodes[0] (rootNode) is of type joint
+            * self.settings.nodeTypes == ['joint']
         '''
         self.nodesToStore = []
 
@@ -1732,6 +1740,7 @@ class PosePointCloud(object):
         for i, mesh in enumerate(self.meshes):
             dupMesh = cmds.duplicate(mesh, rc=True, n=self.refMesh + str(i + currentCount))[0]
             dupShape = cmds.listRelatives(dupMesh, type='shape')[0]
+            # switched to all_complete in case clients have the compound attrs locked also
             r9Core.LockChannels().processState(dupMesh, 'all', mode='fullkey', hierarchy=False)
             try:
                 if selectable:
@@ -1856,6 +1865,12 @@ class PoseCompare(object):
                 * 'poseDict'     = [poseData] main controller data
                 * 'skeletonDict' = [skeletonDict] block generated if exportSkeletonRoot is connected
                 * 'infoDict'     = [info] block
+                
+        .. note::
+            currentPose is the driving data here. If referencePose has additional nodes then that won't trigger a fail.
+            If however currentPose has nodes that aren't in referencePose that will trigger 'MissingKey' error in the fail dict.
+            This is because we use this to compare a master setup against a given reference setup, and if the given has
+            extra data we ignore as it's the core of the currentPose we're testing against.
         '''
         self.status = False
         self.compareDict = compareDict
@@ -1873,6 +1888,8 @@ class PoseCompare(object):
 
         if isinstance(currentPose, PoseData):
             self.currentPose = currentPose
+        elif isinstance(currentPose, dict):
+            self.currentPose = currentPose
         elif os.path.exists(currentPose):
             self.currentPose = PoseData()
             self.currentPose._readPose(currentPose)
@@ -1880,6 +1897,8 @@ class PoseCompare(object):
             raise IOError('Given CurrentPose Path is invalid!')
 
         if isinstance(referencePose, PoseData):
+            self.referencePose = referencePose
+        elif isinstance(referencePose, dict):
             self.referencePose = referencePose
         elif os.path.exists(referencePose):
             self.referencePose = PoseData()
@@ -1911,11 +1930,14 @@ class PoseCompare(object):
         logprint_missingattr = ''
         logprint_missingfail = ''
 
-        currentDic = getattr(self.currentPose, self.compareDict)
-        referenceDic = getattr(self.referencePose, self.compareDict)
-
-        if not currentDic or not referenceDic:
-            raise StandardError('missing pose section <<%s>> compare aborted' % self.compareDict)
+        if self.compareDict:
+            currentDic = getattr(self.currentPose, self.compareDict)
+            referenceDic = getattr(self.referencePose, self.compareDict)
+            if not currentDic or not referenceDic:
+                raise StandardError('missing pose section <<%s>> compare aborted' % self.compareDict)
+        else:
+            currentDic = self.currentPose
+            referenceDic = self.referencePose
 
         for key, attrBlock in currentDic.items():
             if self.filterMap and key not in self.filterMap:
@@ -1959,7 +1981,7 @@ class PoseCompare(object):
 
                 if self.longName and not expectedDag == currentDag:
                     if 'dagMismatch' not in self.ignoreBlocks:
-                        logprint_dagpath += 'ERROR: hierarchy Mismatch : \n\t\tcurrentValue=\t"%s" >> \n\t\texpectedValue=\t"%s"\n' % (currentDag, expectedDag)
+                        logprint_dagpath += 'ERROR: hierarchy Mismatch : \n\t\texpectedValue=\t"%s" >> \n\t\tcurrentValue=\t"%s"\n' % (currentDag, expectedDag)
                         if 'dagMismatch' not in self.fails:
                             self.fails['dagMismatch'] = []
                         self.fails['dagMismatch'].append(key)
@@ -1982,6 +2004,10 @@ class PoseCompare(object):
                     continue
                 # main compare block for attr values
                 for attr, value in attrBlock['attrs'].items():
+#                 for attr, value in attrBlock['attrs_kWorld'].items():
+#                     if isinstance(value, list):
+#                         pass
+
                     if attr in self.ignoreAttrs:
                         continue
                     # attr missing completely from the key
@@ -2002,6 +2028,7 @@ class PoseCompare(object):
 
                     if type(value) == float:
                         matched = False
+#                         print('attr being matched ' ,attr)
                         if attr in self.angularAttrs:
                             matched = r9Core.floatIsEqual(value, refValue, self.angularTolerance, allowGimbal=True)
                         else:

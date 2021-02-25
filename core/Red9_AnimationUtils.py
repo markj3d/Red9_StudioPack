@@ -566,7 +566,7 @@ def timeLineRangeGet(always=True):
         playbackRange = (cmds.playbackOptions(q=True, min=True), cmds.playbackOptions(q=True, max=True))
     return playbackRange
 
-def timeLineRangeProcess(start, end, step=1, incEnds=True, nodes=[]):
+def timeLineRangeProcess(start, end, step=1, incEnds=True, nodes=[], process_animlayers=True):
     '''
     Simple wrapper function to take a given framerange and return
     a list[] containing the actual keys required for processing.
@@ -580,11 +580,17 @@ def timeLineRangeProcess(start, end, step=1, incEnds=True, nodes=[]):
     :param step: step between frame
     :param inEnds: when processing without nodes do we include the end frame in the return or exclude it
     :param nodes: inspect the nodes given for keyframes and use that data for the times returned
+    :param process_animlayers: when True (default) we process all keys on all layers for the given nodes
     '''
     startFrm = start
     endFrm = end
     if nodes:
-        keys = cmds.keyframe(nodes, q=True, time=(startFrm, endFrm))
+        if not process_animlayers:
+            keys = cmds.keyframe(nodes, q=True, time=(startFrm, endFrm))
+        else:
+            # look at all animCurve data for the given nodes
+            keys = cmds.keyframe(r9Core.FilterNode.lsAnimCurves(nodes), q=True, time=(startFrm, endFrm))
+
         if not keys:
             log.warning('Warning :  No key times extracted from the given nodes, timeLineRange reverted to base range!')
         else:
@@ -3247,7 +3253,10 @@ class AnimationUI(object):
             traceback = sys.exc_info()[2]  # get the full traceback
             raise StandardError(StandardError(error), traceback)
         if objs and not func == 'HierarchyTest':
-            cmds.select(objs)
+            cmds.select(cl=True)
+            for obj in objs:
+                if cmds.objExists(obj):
+                    cmds.select(objs, add=True)
         # close chunk
         if mel.eval('getApplicationVersionAsFloat') < 2011:
             cmds.undoInfo(closeChunk=True)

@@ -243,6 +243,7 @@ def Timer(func):
     '''
     @wraps(func)
     def wrapper(*args, **kws):
+        res=None
         if log.getEffectiveLevel() == 20:
             # Timer Disabled as we're in log.Info mode so the data isn't used
             res = func(*args, **kws)
@@ -277,6 +278,7 @@ def playback_suspend(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         playing = False
+        res=None
         if cmds.play(q=True, state=True):
             playing = True
             cmds.play(state=False)
@@ -435,12 +437,14 @@ def suppressScriptEditor(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         try:
+            res=None
             se_info = cmds.scriptEditorInfo(q=True, suppressInfo=True)
             se_results = cmds.scriptEditorInfo(q=True, suppressResults=True)
             cmds.scriptEditorInfo(suppressInfo=True)
             cmds.scriptEditorInfo(suppressResults=True)
             res = func(*args, **kwargs)
-        except:
+        except StandardError, err:
+            log.exception(err)
             log.info('Failed on SuppressScriptEditor decorator')
         finally:
             cmds.scriptEditorInfo(suppressInfo=se_info)

@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pro_Pack : uibase" href="Red9_Pro_uibase.html" />
-    <link rel="prev" title="Pro_Pack : r9Data" href="Red9_Pro_r9data.html" /> 
+    <link rel="prev" title="Pro_Pack : rigutils" href="Red9_Pro_rigutils.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -33,7 +33,7 @@
           <a href="Red9_Pro_uibase.html" title="Pro_Pack : uibase"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_r9data.html" title="Pro_Pack : r9Data"
+          <a href="Red9_Pro_rigutils.html" title="Pro_Pack : rigutils"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
       </ul>
@@ -49,8 +49,7 @@
 <p>ProPack skinning management and file format for Maya</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9skinning&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">r9skinning</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9skinning</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9skinning&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <span class="target" id="module-Red9.pro_pack.core.skining"></span><p class="rubric">Main Classes</p>
@@ -99,7 +98,7 @@
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.skining.load_skn_file">
-<code class="descname">load_skn_file</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>mesh=None</em>, <em>vc=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.load_skn_file" title="Permalink to this definition">¶</a></dt>
+<code class="descname">load_skn_file</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>mesh=None</em>, <em>vc=False</em>, <em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.load_skn_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>load a skin file onto a given mesh or all meshes in the scene.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -108,10 +107,11 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>filepath</strong> – skin file</li>
 <li><strong>mesh</strong> – given mesh / meshes to load if matched in the skin file data</li>
+<li><strong>root</strong> – string root joint of the skeleton hierarchy</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parma vc:</th><td class="field-body"><p class="first last">match by wildcard based on vertcount of the mesh itself</p>
+<tr class="field-even field"><th class="field-name">Parma vc:</th><td class="field-body"><p class="first last">match by wildcard based on vertex count of the mesh itself</p>
 </td>
 </tr>
 </tbody>
@@ -446,7 +446,7 @@ influence values</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.skining.R9skn_file.save_file">
-<code class="descname">save_file</code><span class="sig-paren">(</span><em>file_path=None</em>, <em>debug_fix=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.save_file" title="Permalink to this definition">¶</a></dt>
+<code class="descname">save_file</code><span class="sig-paren">(</span><em>file_path=None</em>, <em>debug_fix=True</em>, <em>skip_ui=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.save_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -1003,8 +1003,8 @@ influence values</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="Red9_Pro_r9data.html"
-                        title="previous chapter">Pro_Pack : r9Data</a></p>
+  <p class="topless"><a href="Red9_Pro_rigutils.html"
+                        title="previous chapter">Pro_Pack : rigutils</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="Red9_Pro_uibase.html"
                         title="next chapter">Pro_Pack : uibase</a></p>
@@ -1044,13 +1044,13 @@ influence values</p>
           <a href="Red9_Pro_uibase.html" title="Pro_Pack : uibase"
              >next</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_r9data.html" title="Pro_Pack : r9Data"
+          <a href="Red9_Pro_rigutils.html" title="Pro_Pack : rigutils"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2016, Mark Jackson.
+        &#169; Copyright 2020, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

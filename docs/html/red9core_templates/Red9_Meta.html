@@ -181,6 +181,13 @@ RED9_META_INHERITANCE_MAP : {‘className’: {‘full’: [list of inherited cl
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_Meta.getMClassMetaRegistry_FromKey">
+<code class="descname">getMClassMetaRegistry_FromKey</code><span class="sig-paren">(</span><em>mClass</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.getMClassMetaRegistry_FromKey" title="Permalink to this definition">¶</a></dt>
+<dd><p>new function to get the mClass object, this is needed if we end up
+running the test versioning setup in the registery’s</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_Meta.create_mNode_from_gatherInfo">
 <code class="descname">create_mNode_from_gatherInfo</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.create_mNode_from_gatherInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>a simple wrapper to re-construct the correct mNode from a dict() built by
@@ -484,7 +491,8 @@ cope with people subclassing, then we clamp the search to the Root MetaRig
 using the mClassGrps variable. This probably will expand as it’s tested</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Pro_MetaRig_SRC raised in the return stack 24/09/20</p>
+<p class="last">Pro_MetaRig_SRC raised in the return stack 24/09/20
+order now goes: ‘Pro_MetaRig’, ‘Pro_MetaRig_FacialUI’, ‘Pro_MetaRig_SRC’, ‘MetaRig’</p>
 </div>
 </dd></dl>
 
@@ -1392,12 +1400,12 @@ between a given node and the mNode</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>node</strong> – node to test connection attr for</li>
 <li><strong>filters</strong> – filter string to match for the returns</li>
+<li><strong>bothplugs</strong> – if True we return a list of tuples</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>:param bothplugsL if True we return a list of tuples</p>
 </dd></dl>
 
 </dd></dl>
@@ -2413,6 +2421,25 @@ and the naming convention of the mNodeID reflects that ie: L_ArmSystem and L_Arm
 </div>
 </dd></dl>
 
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRigSubSystem.getChildSystem_by_Type">
+<code class="descname">getChildSystem_by_Type</code><span class="sig-paren">(</span><em>systemType</em>, <em>walk=True</em>, <em>stepover=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRigSubSystem.getChildSystem_by_Type" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a child MetaSubsystem by its “systemType”</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>systemType</strong> – the type of systems stored in the “systemType” attr on the mSubsystem</li>
+<li><strong>walk</strong> – walk all child mNode systems</li>
+<li><strong>stepover</strong> – walk over non matching systems else a tree would stop</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -2549,6 +2576,23 @@ Messy Sodding Maya!</p>
 <code class="descname">checkcharacterization</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKCharacterNode.checkcharacterization" title="Permalink to this definition">¶</a></dt>
 <dd><p>check that hikNode characterisation is valid
 :return: True if valid False if invalid</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaHIKCharacterNode.checkRotate_Limits">
+<code class="descname">checkRotate_Limits</code><span class="sig-paren">(</span><em>unlock_all=False</em>, <em>ignore=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaHIKCharacterNode.checkRotate_Limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if any of the defined joints in the characterization have rotation Limits enabled.
+These are separate to the actual joint limits in Maya and more difficult to get a good
+overview for debugging, hence this proc</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unlock_all</strong> – If true and any of the rotate limits have been set  which will ignore these
+strings in the checked attributes, helps debugging specific errors</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -2904,7 +2948,7 @@ any registered HUD is killed off</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2016, Mark Jackson.
+        &#169; Copyright 2020, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

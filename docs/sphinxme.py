@@ -20,6 +20,11 @@ SOURCEFOLDER = "%s/source" % THISDIR
 # time.gmtime
 
 
+# import os
+# import maya.OpenMaya
+# import maya.OpenMayaUI
+# import maya.OpenMayaAnim
+
 if __name__ == "__main__":
     #while time.strftime("%H") == starttime:
 #     print 'SRC : ', SOURCEFOLDER

@@ -1,0 +1,383 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Pro_Pack : rigutils &#8212; Red9 2.0 documentation</title>
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Pro_Pack : skinning" href="Red9_Pro_skinning.html" />
+    <link rel="prev" title="Pro_Pack : r9Data" href="Red9_Pro_r9data.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_skinning.html" title="Pro_Pack : skinning"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_r9data.html" title="Pro_Pack : r9Data"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pro-pack-rigutils">
+<h1>Pro_Pack : rigutils<a class="headerlink" href="#pro-pack-rigutils" title="Permalink to this headline">¶</a></h1>
+<p>ProPack rigutils module contains useful tools for managing both rig
+and skeletal data for the ProPack systems.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9rigutils</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9rigutils&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<span class="target" id="module-Red9.pro_pack.core.rigutils"></span><p>This module contains core rigging utils used through out the systems</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<dl class="function">
+<dt id="Red9.pro_pack.core.rigutils.skeleton_root">
+<code class="descname">skeleton_root</code><span class="sig-paren">(</span><em>joint</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.skeleton_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the name of the root joint in the hierarchy from the given child jnt
+by walking up the hierarchy to the top most joint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>joint</strong> – name of a joint in the hierarchy</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">name of the root joint in the hierarchy</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.rigutils.skeleton_pose_get_data">
+<code class="descname">skeleton_pose_get_data</code><span class="sig-paren">(</span><em>rootjnt</em>, <em>attr='bpose'</em>, <em>jntonly=False</em>, <em>suppress=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.skeleton_pose_get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple retrieval of the “BPose” or “TPose” PoseDict object which is
+stored on the skeleton root by the RigManager. These Poses are used
+by the additive fbx export to force reset the skeleton pose before processing.
+We find the jnt stamped with the given attr by filtering the hierarchy for that
+attr rather than assuming that it’s always on the rootjnt</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rootjnt</strong> – the root joint of the skeleton we want to get the Pose data from</li>
+<li><strong>attr</strong> – ‘bpose’ or ‘tpose’ depending on what data you want to get</li>
+<li><strong>jntonly</strong> – if True we return only the joint that the bpose is stamped onto, else we return the poseDict itself</li>
+<li><strong>suppress</strong> – by default we warn if the same pose attr is found on multiple joints in the skeleton hierarchy,
+this flag suppresses that warning and force uses the first matching attr found. If suppress=True and jntonly=True
+the return is a list of jnts (there may be multiple if there have been duplicated jnts in the past)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This will now raise an error if the skeleton has multiple joints with the “bpose” / “tpose” attr
+stamped, this can happen if you simply duplicate the root joitn and useif for an additional joint
+in the skeleton, hence the check! also see specific HealthTest: “r9popt.exportTag_bpose_test”</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.rigutils.skeleton_pose_current">
+<code class="descname">skeleton_pose_current</code><span class="sig-paren">(</span><em>rootjnt</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.skeleton_pose_current" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple proc to return an r9Pose.poseDict based on the current skeletons pose</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rootjnt</strong> – the root joint of the skeleton we want to get the Pose data from</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.rigutils.skeleton_pose_load">
+<code class="descname">skeleton_pose_load</code><span class="sig-paren">(</span><em>rootjnt, attr=None, filepath=None, skip_translates=False, skip_scales=True, skip_attrs=['radius', 'visibility', 'jointOrientX', 'jointOrientY', 'jointOrientZ'], custom_root=None, suppress=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.skeleton_pose_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>restore the characters skeleton to the original pose stored on the attr given, or from the filepath.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We ensure during the load that the skeleton only has 1 matching attr stamped in the joint
+hierarchy for that pose. If you’ve duplicated the root joint and used that for another joint
+then there is a chance that duplicated joint may carry a previous bpose / tpose!</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rootjnt</strong> – the root joint of the skeleton we want to get the Pose data from</li>
+<li><strong>attr</strong> – the attr we’re going to pull the pose from (if given)</li>
+<li><strong>filepath</strong> – filepath to a stored pose</li>
+<li><strong>skip_translates</strong> – only load the rotate data if True. Aimed at loading T &amp; B Poses</li>
+<li><strong>skip_scales</strong> – True by default, do not load any scale data back</li>
+<li><strong>skip_attrs</strong> – attrs to ignore during the load process default : [‘radius’, ‘visibility’, ‘jointOrientX’, ‘jointOrientY’, ‘jointOrientZ’]</li>
+<li><strong>custom_root</strong> – if given this skeleton will be used to load the pose onto. Note that this is only valid
+if attr is set, the rootjnt skeleton is used to pull the pose data, but the load happens on the additional custom_root skeleton</li>
+<li><strong>suppress</strong> – by default we warn if the same pose attr is found on multiple joints in the skeleton hierarchy,
+this flag suppresses that warning and force uses the first matching attr found</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.rigutils.skeleton_pose_save">
+<code class="descname">skeleton_pose_save</code><span class="sig-paren">(</span><em>rootjnt</em>, <em>attr=None</em>, <em>filepath=None</em>, <em>suppress=False</em>, <em>posedict=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.skeleton_pose_save" title="Permalink to this definition">¶</a></dt>
+<dd><p>save the characters current skeleton pose to either the given attr or to the filepath.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We ensure during the load that the skeleton only has 1 matching attr stamped in the joint
+hierarchy for that pose. If you’ve duplicated the root joint and used that for another joint
+then there is a chance that duplicated joint may carry a previous bpose / tpose!</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rootjnt</strong> – the root joint of the skeleton we want to get the Pose data from</li>
+<li><strong>attr</strong> – the attr we’re going to pull the pose from (if given)</li>
+<li><strong>filepath</strong> – filepath to a stored pose</li>
+<li><strong>skip_translates</strong> – only load the rotate data if True. Aimed at loading T &amp; B Poses</li>
+<li><strong>suppress</strong> – by default we warn if the same pose attr is found on multiple joints in the skeleton hierarchy,
+this flag suppresses that warning and force uses the first matching attr found</li>
+<li><strong>posedict</strong> – if given and saving to attr then this allows you to directly pass another posedict
+to be stamped into the attr rather than sampling the skeletons current transforms. This is aimed
+at pushing previous data and syncing assets already rigged</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">if neither ‘attr’ or ‘filepath’ are given the code will prompt you for a filepath to save too</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.rigutils.skeleton_pose_delete">
+<code class="descname">skeleton_pose_delete</code><span class="sig-paren">(</span><em>rootjnt</em>, <em>attr</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.skeleton_pose_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete given pose from skeleton</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rootjnt</strong> – the root joint of the skeleton we want to get the Pose data from</li>
+<li><strong>attr</strong> – the attr we’re going to delete</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if deleted</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.rigutils.skeleton_pose_replace">
+<code class="descname">skeleton_pose_replace</code><span class="sig-paren">(</span><em>rootjnt</em>, <em>filepath=None</em>, <em>attr='bpose'</em>, <em>suppress=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.skeleton_pose_replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple replacement of the internal pose on the given attr with the data from the given pose file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rootjnt</strong> – the root joint of the skeleton we want to get the Pose data from</li>
+<li><strong>attr</strong> – the attr we’re going to push the pose file data too, default=’bpose’</li>
+<li><strong>filepath</strong> – filepath for the pose we’re going to manage, if left blank we prompt for a filepath</li>
+<li><strong>suppress</strong> – by default we warn if the same pose attr is found on multiple joints in the skeleton hierarchy,
+this flag suppresses that warning and force uses the first matching attr found</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.rigutils.skeleton_pose_compare">
+<code class="descname">skeleton_pose_compare</code><span class="sig-paren">(</span><em>rootjnt, filepath=None, attr=None, skip_attrs=['radius', 'visibility']</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.skeleton_pose_compare" title="Permalink to this definition">¶</a></dt>
+<dd><p>compare the current skeletal pose with the values from either a pose file OR one of the
+internal poses stored on the skeleton (BPose or TPose)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rootjnt</strong> – the root joint of the skeleton we want to get the Pose data from</li>
+<li><strong>filepath</strong> – filepath to a stored pose which we want to compare the current skeleton pose against</li>
+<li><strong>attr</strong> – the attr on the skeleton that we’re pulling the pose from to compare against, ‘bpose’ or ‘tpose’ by default</li>
+<li><strong>skip_attrs</strong> – a list of attrs we want to skip from the compare</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.rigutils.skeleton_pose_compare_attrs">
+<code class="descname">skeleton_pose_compare_attrs</code><span class="sig-paren">(</span><em>skelA, skelB, attr='bpose', skip_attrs=['radius', 'visibility']</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.skeleton_pose_compare_attrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>unlike the “skeleton_pose_compare” func this one compares the internal BPose / TPose
+attrs of the 2 given skeletons which the skeleton_pose_save(rootjnt, attr)
+stamps onto the root joint itself. Why? this is used during the Publish time
+for the Red9 Puppet so that the binding process can verify that the 2 skeletons
+are the same and bind appropriately</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>skelA</strong> – the prime skeleton that we’re comparing against</li>
+<li><strong>skelB</strong> – the skeleton we’re comparing</li>
+<li><strong>attr</strong> – the attr on the skeleton that we’re pulling the pose from, ‘bpose’ or ‘tpose’ by default</li>
+<li><strong>skip_attrs</strong> – a list of attrs we want to skip from the compare</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.rigutils.skeleton_pose_compare_attr_to_file">
+<code class="descname">skeleton_pose_compare_attr_to_file</code><span class="sig-paren">(</span><em>skel, filepath=None, attr='bpose', skip_attrs=['radius', 'visibility']</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.skeleton_pose_compare_attr_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>compare one of the internal pose attrs against a given pose file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>skel</strong> – root skeleton to pull the pose attr from</li>
+<li><strong>filepath</strong> – the filepath to the pose file we’re comparing against, if left blank we prompt for a filepath</li>
+<li><strong>attr</strong> – internal pose attr we’re comparing, bpose or tpose</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.rigutils.extract_pole_vector">
+<code class="descname">extract_pole_vector</code><span class="sig-paren">(</span><em>startjnt</em>, <em>polejnt</em>, <em>endjnt</em>, <em>prefix</em>, <em>create=True</em>, <em>ctrl=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.extract_pole_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a node thats on the plane for perfect poleVector position
+with no movement.
+This is in testing</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>startjnt</strong> – the start of the jnt chain we’re calculating against</td>
+</tr>
+</tbody>
+</table>
+<p>:param polejnt; the polejnt in the jnt chain we’re calculating against
+:param endjnt: the end of the jnt chain we’re calculating against
+:param prefix: only used if create is True, this is the naming prefix for all node generated
+:param create: if True we create a node group with the relative trnasform for the pole Vector
+:param ctrl: if not create this is the node that will get the resulting world transform data applied
+:return: the xform data of the resulting transform (finalV, finalV.x, finalV.y, finalV.z)</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Red9_Pro_r9data.html"
+                        title="previous chapter">Pro_Pack : r9Data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Red9_Pro_skinning.html"
+                        title="next chapter">Pro_Pack : skinning</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/red9pro_templates/Red9_Pro_rigutils.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_skinning.html" title="Pro_Pack : skinning"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_r9data.html" title="Pro_Pack : r9Data"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>
