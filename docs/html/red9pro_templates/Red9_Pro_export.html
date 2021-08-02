@@ -51,7 +51,7 @@ handling the output of files based on the metaData export node
 class systems. This module is largely the UI management as the
 majority of the codebase is bound to the metadata_pro mNode classes</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9exp</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9exp&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -63,7 +63,7 @@ majority of the codebase is bound to the metadata_pro mNode classes</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.exporter.ExportManager" title="Red9.pro_pack.core.exporter.ExportManager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportManager</span></code></a>()</td>
-<td></td>
+<td>Main Export handler used by all functions.</td>
 </tr>
 </tbody>
 </table>
@@ -337,7 +337,7 @@ so that we can tailor the view to different engine targets.</p>
 <p>simple UI to edit a given ExportLoop tag</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.Export_FBX_options.pushdata">
-<code class="descname">pushdata</code><span class="sig-paren">(</span><em>close=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_FBX_options.pushdata" title="Permalink to this definition">¶</a></dt>
+<code class="descname">pushdata</code><span class="sig-paren">(</span><em>close=True</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_FBX_options.pushdata" title="Permalink to this definition">¶</a></dt>
 <dd><p>push the ui data back to the export_loop and refresh the parent UI</p>
 </dd></dl>
 
@@ -371,7 +371,7 @@ so that we can tailor the view to different engine targets.</p>
 <p>simple UI to edit a given ExportLoop tag</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.Export_Playblast_options.pushdata">
-<code class="descname">pushdata</code><span class="sig-paren">(</span><em>close=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_Playblast_options.pushdata" title="Permalink to this definition">¶</a></dt>
+<code class="descname">pushdata</code><span class="sig-paren">(</span><em>close=True</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.Export_Playblast_options.pushdata" title="Permalink to this definition">¶</a></dt>
 <dd><p>push the ui data back to the export_loop and refresh the parent UI</p>
 </dd></dl>
 
@@ -567,6 +567,12 @@ than the base class level</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportUI.pre_validate_ui_call">
+<code class="descname">pre_validate_ui_call</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.pre_validate_ui_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>validate the functions at the UI level before we hit the main calls</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>main run call for the export tags</p>
@@ -589,6 +595,23 @@ than the base class level</p>
 <dt id="Red9.pro_pack.core.exporter.ExportManager">
 <em class="property">class </em><code class="descname">ExportManager</code><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Main Export handler used by all functions. This expects the scenes to have valid
+ExportTags and ExportLoops setup for this process to pickup. This relies purely on the
+Red9 MetaData systems so all rigs must be correctly setup in the RigManager before running this codebase.</p>
+<p>There are a few key class variables that dictate what output processes the
+run() and run_files functions call:</p>
+<ul class="simple">
+<li>self.output_fbx     : export fbx using the “selective” mode</li>
+<li>self.output_r9anim  : save an r9Anim file</li>
+<li>self.output_export : main export call for FBX / Unreal / Unity animation data</li>
+<li>self.output_mayafile : save the current scene as named - used by some of the internal processes</li>
+<li>self.output_playbast : create a Maya playblast for each loop, settings controlled by the Playblast Settings UI</li>
+<li>self.output_mayaloops : save a Maya file per export Loop named as per the loop data</li>
+<li>self.export_tags : optional specific ExportTags (mNodes) for processing, if not set we process all ExportTags found in the scene</li>
+<li>self.export_loops : optional specific ExportLoops (mNodes) for processing, if not set we process all ExportLoops found in the scene</li>
+<li>Note: that if self.export_tags is given (list of mNodes already instantiated) then we only process ExportLoops connected to those tags.</li>
+</ul>
+<p>This allows you to specifically output just a given character from a list iof scenes if required.</p>
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.exporter.ExportManager.manage_P4">
 <code class="descname">manage_P4</code><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.manage_P4" title="Permalink to this definition">¶</a></dt>
@@ -738,7 +761,7 @@ managing the progressBarQT escape and file loading</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Mark Jackson.
+        &#169; Copyright 2021, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

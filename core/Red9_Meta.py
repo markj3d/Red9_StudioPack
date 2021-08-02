@@ -624,8 +624,8 @@ def nodeLockManager(func):
                 # log.debug('nodeLockManager > func : %s : node being relocked' % func.__name__)
                 cmds.lockNode(mNode.mNode, lock=True)
             if err:
-                traceback = sys.exc_info()[2]  # get the full traceback
-                raise StandardError(StandardError(err), traceback)
+                _traceback = sys.exc_info()[2]  # get the full traceback
+                raise StandardError(StandardError(err), _traceback)
             return res
     return wrapper
 
@@ -644,8 +644,8 @@ def pymelHandler(func):
             err = error
         finally:
             if err:
-                traceback = sys.exc_info()[2]  # get the full traceback
-                raise StandardError(StandardError(err), traceback)
+                _traceback = sys.exc_info()[2]  # get the full traceback
+                raise StandardError(StandardError(err), _traceback)
             return res
     return wrapper
 
@@ -1094,8 +1094,8 @@ def convertMClassType(cls, newMClass, **kws):
             return MetaClass(cls.mNode, **kws)
         except StandardError, err:
             log.debug('Failed to convert self to new mClassType : %s' % newMClass)
-            traceback = sys.exc_info()[2]  # get the full traceback
-            raise StandardError(StandardError(err), traceback)
+            _traceback = sys.exc_info()[2]  # get the full traceback
+            raise StandardError(StandardError(err), _traceback)
     else:
         raise StandardError('given class is not in the mClass Registry : %s' % newMClass)
 
@@ -1353,8 +1353,10 @@ class MClassNodeUI(object):
 
         cmds.button(label=LANGUAGE_MAP._Generic_.refresh, command=partial(self.fillScroll))
         cmds.separator(h=15, style='none')
-        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                                 c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0),
+                            image1='Rocket9_buttonStrap.png',
+                            align='left',
+                            c=lambda *args: (r9Setup.red9ContactInfo()), h=24, w=300)
         cmds.showWindow(window)
         cmds.radioCollection(self.uircbMetaUIShowStatus, edit=True, select='metaUISatusAll')
         self.fillScroll()
@@ -2024,6 +2026,13 @@ class MetaClass(object):
                 return False
         else:
             return False
+
+    def __hash__(self):
+        '''
+        handled via the MObject, using the same as the __eq__ for verification
+        '''
+#         return hash(self._MObject)
+        return hash(self.getUUID())
 
 #     @r9General.Timer
     def __fillAttrCache__(self, level):
@@ -3273,7 +3282,7 @@ class MetaClass(object):
         :param walk: walk all subMeta connections and include all their children too
         :param mAttrs: only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)
         :param cAttrs: only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)
-        :param nAttrs: search returned MayaNodes for given set of attrs and only return matched nodes
+        :param nAttrs: [] search returned MayaNodes for given set of attrs and only return matched nodes
         :param asMeta: return instantiated mNodes regardless of type
         :param asMap: return the data as a map such that {mNode.plugAttr:[nodes], mNode.plugAttr:[nodes]}
         :param plugsOnly: only with asMap flag, this truncates the return to [plugAttr, [nodes]]
@@ -3291,8 +3300,11 @@ class MetaClass(object):
         childMetaNodes = [self]
         children = []
         attrMapData = {}
+        
         if walk:
             childMetaNodes.extend([node for node in self.getChildMetaNodes(walk=True, mAttrs=mAttrs, **kws)])
+            if nAttrs and r9General.is_basestring(nAttrs):
+                nAttrs = [nAttrs]
         for node in childMetaNodes:
             if logging_is_debug():
                 log.debug('MetaNode getChildren : %s >> %s' % (type(node), node.mNode))
@@ -3721,7 +3733,7 @@ class MetaRig(MetaClass):
         return super(MetaRig, self).getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs,
                                                 asMeta=asMeta, asMap=asMap, plugsOnly=plugsOnly, skip_cAttrs=skip_cAttrs, **kws)
 
-    def selectChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], add=False):
+    def selectChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], add=False, incFacial=False):
         '''
         light wrap over the getChildren so we can more carefully manage it in some of the pro proc bindings
 
@@ -3735,7 +3747,7 @@ class MetaRig(MetaClass):
             the wrapper also accepts the 'Shift' modifier key, if pressed when this is called then we set the selection to 'add'
             else it's a fresh selection thats made
         '''
-        nodes = self.getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=False, asMap=False)
+        nodes = self.getChildren(walk=walk, mAttrs=mAttrs, cAttrs=cAttrs, nAttrs=nAttrs, asMeta=False, asMap=False, incFacial=incFacial)
         if r9General.getModifier() == 'Shift' or add:
             cmds.select(nodes, add=True)
         else:
@@ -4111,7 +4123,7 @@ class MetaRig(MetaClass):
                 self.poseCache.settings.incRoots = incRoots  # force an incRoot flag update
 
                 # added June 2020, the priority was never getting turned on internally!!
-                if self.settings.filterPriority:
+                if self.hasAttr('settings') and self.settings.filterPriority:
                     self.poseCache.prioritySnapOnly = True
                     self.poseCache.settings.filterPriority = self.settings.filterPriority
                 if skipAttrs:
@@ -5214,6 +5226,7 @@ class MetaHIKPropertiesNode(MetaClass):
         if not os.path.exists(filepath):
             raise IOError('Filepath not found! %s' % filepath)
 
+        log.info('HIKProperty Loading Preset from : %s' % filepath)
         for key, val in r9General.readJson(filepath).items():
             try:
                 if type(val) in dataTypes:
@@ -5235,13 +5248,13 @@ class MetaHIKPropertiesNode(MetaClass):
                 status['failed'][key] = (val, traceback.format_exc())
         if verbose:
             for attr, val in sorted(status['set'].items()):
-                log.info('Set HIKProperty : %s : %s' % (attr, val))
+                log.info('HIKProperty Set : %s : %s' % (attr, val))
 
             for attr, val in sorted(status['changed'].items()):
-                log.info('Changed HIKProperty : %s : from %s >  %s' % (attr, val[0], val[1]))
+                log.info('HIKProperty Changed : %s : from %s >  %s' % (attr, val[0], val[1]))
 
             for attr, val in status['failed'].items():
-                log.info('Failed to set HIKProperty : %s : %s' % (attr, val[0]))
+                log.info('HIKProperty Failed to set : %s : %s' % (attr, val[0]))
                 log.debug(val[1])
 
         return status

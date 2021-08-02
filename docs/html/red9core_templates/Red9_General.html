@@ -173,6 +173,12 @@ this will be threaded into all future calls, particularly ProPack exporter manag
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.core.Red9_General.scenePath">
+<code class="descname">scenePath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.scenePath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the directory that the current Maya scene is saved too</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="Red9.core.Red9_General.itersubclasses">
 <code class="descname">itersubclasses</code><span class="sig-paren">(</span><em>cls</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.itersubclasses" title="Permalink to this definition">¶</a></dt>
 <dd><p><a class="reference external" href="http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/">http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/</a>
@@ -261,6 +267,12 @@ python 2 we have str and unicode both instances of basestring</p>
 <dt id="Red9.core.Red9_General.playback_suspend">
 <code class="descname">playback_suspend</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.playback_suspend" title="Permalink to this definition">¶</a></dt>
 <dd><p>DECORATOR : Suspend current playback and resume after the func</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_General.gpu_toggle">
+<code class="descname">gpu_toggle</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.gpu_toggle" title="Permalink to this definition">¶</a></dt>
+<dd><p>DECORATOR : toggle the GPU Override after the enclosed func has run</p>
 </dd></dl>
 
 <dl class="function">
@@ -514,7 +526,7 @@ the UI to the previous state. Maybe this could be a tool in it’s own write?</p
 </ul>
 </dd>
 </dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.core.Red9_General</span> <span class="kn">import</span> <span class="n">SceneRestoreContext</span> <span class="k">as</span> <span class="n">sceneStore</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.core.Red9_General</span> <span class="k">import</span> <span class="n">SceneRestoreContext</span> <span class="k">as</span> <span class="n">sceneStore</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">sceneStore</span><span class="p">:</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#do something to modify the scene setup</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">cmds</span><span class="o">.</span><span class="n">currentTime</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
@@ -788,7 +800,7 @@ Once downloaded drop it here Red9/pakcages/diffMerge.exe</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Mark Jackson.
+        &#169; Copyright 2021, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

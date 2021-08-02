@@ -1,0 +1,379 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Pro_Pack : tools : anim_tools &#8212; Red9 2.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Pro_Pack : tools : health_manager" href="Red9_Pro_health_manager.html" />
+    <link rel="prev" title="Pro_Pack : tools : anim_binder" href="Red9_Pro_anim_binder.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_health_manager.html" title="Pro_Pack : tools : health_manager"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_anim_binder.html" title="Pro_Pack : tools : anim_binder"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pro-pack-tools-anim-tools">
+<h1>Pro_Pack : tools : anim_tools<a class="headerlink" href="#pro-pack-tools-anim-tools" title="Permalink to this headline">¶</a></h1>
+<p>ProPack anim_tools module deals with the more generic animation functions,
+primarily UI wrapping for some of the base rig inetractions setups.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9anim_tools</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9anim_tools&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<span class="target" id="module-Red9.pro_pack.tools.anim_tools"></span><p>Base Animation Tools with little or no other code benefits other than UI based system calls</p>
+<p class="rubric">Main Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<dl class="function">
+<dt id="Red9.pro_pack.tools.anim_tools.anim_filter_ui">
+<code class="descname">anim_filter_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.anim_filter_ui" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.anim_tools.AnimCurveFilter">
+<em class="property">class </em><code class="descname">AnimCurveFilter</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.AnimCurveFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
+<p>ProPack replacement for the interactive curve filter</p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.AnimCurveFilter.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.AnimCurveFilter.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.anim_tools.AnimCurveFilter.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.AnimCurveFilter.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.anim_tools.IK_FK_MatchingUI">
+<em class="property">class </em><code class="descname">IK_FK_MatchingUI</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.IK_FK_MatchingUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
+<p>Basic UI for the FK/IK matching used by metaData</p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.IK_FK_MatchingUI.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.IK_FK_MatchingUI.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.IK_FK_MatchingUI.match_fk_ik">
+<code class="descname">match_fk_ik</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.IK_FK_MatchingUI.match_fk_ik" title="Permalink to this definition">¶</a></dt>
+<dd><p>switch to IK mode</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.IK_FK_MatchingUI.match_ik_fk">
+<code class="descname">match_ik_fk</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.IK_FK_MatchingUI.match_ik_fk" title="Permalink to this definition">¶</a></dt>
+<dd><p>switch to FK mode</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.anim_tools.IK_FK_MatchingUI.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.IK_FK_MatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.anim_tools.SpaceMatchingUI">
+<em class="property">class </em><code class="descname">SpaceMatchingUI</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.SpaceMatchingUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
+<p>Basic UI for the FK/IK matching used by metaData</p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.SpaceMatchingUI.connect_to_systems">
+<code class="descname">connect_to_systems</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.SpaceMatchingUI.connect_to_systems" title="Permalink to this definition">¶</a></dt>
+<dd><p>update the UI feedback</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.SpaceMatchingUI.switch_ik_space">
+<code class="descname">switch_ik_space</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.SpaceMatchingUI.switch_ik_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.SpaceMatchingUI.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.SpaceMatchingUI.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.anim_tools.SpaceMatchingUI.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.SpaceMatchingUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI">
+<em class="property">class </em><code class="descname">WristLock_Spaces_UI</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
+<p>Basic UI for the management of the WristLock AUX Spaces</p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.set_mrig">
+<code class="descname">set_mrig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.set_mrig" title="Permalink to this definition">¶</a></dt>
+<dd><p>connect to the rig</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.set_space">
+<code class="descname">set_space</code><span class="sig-paren">(</span><em>side</em>, <em>aux_slot</em>, <em>newspace=None</em>, <em>align_mode='verbose'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.set_space" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the aux_space for the wristlock and deal with transform changes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>side</strong> – side of the Arm systems we’re dealing with (‘L’ or ‘R’)</li>
+<li><strong>aux_slot</strong> – which aux_slot are we modifying here</li>
+<li><strong>newspace</strong> – if given this is the new object we’re binding too, else we use the first selected object</li>
+<li><strong>align_mode</strong> – how do we initially align the systems to the new object.
+* verbose - throws a ConfirmDialog to let you choose
+* snap_to_new - snaps the wristlock to the pivot of the new object
+* maintain_wrist - maintains the current wrists transforms
+* maintain_wristlock - maintains the current wristlock transforms
+* no_align - does no alignment</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.modify_space">
+<code class="descname">modify_space</code><span class="sig-paren">(</span><em>side</em>, <em>aux_slot</em>, <em>btn</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.modify_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.select_locks">
+<code class="descname">select_locks</code><span class="sig-paren">(</span><em>side</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.select_locks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.delete_space">
+<code class="descname">delete_space</code><span class="sig-paren">(</span><em>side</em>, <em>slot</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.delete_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.bake_down">
+<code class="descname">bake_down</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.bake_down" title="Permalink to this definition">¶</a></dt>
+<dd><p>bake the selected mSytsm wristlocks back to the wrist controller</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.bake_space_to_wrist">
+<code class="descname">bake_space_to_wrist</code><span class="sig-paren">(</span><em>wrist</em>, <em>aux_obj=None</em>, <em>aux_slot=None</em>, <em>time=False</em>, <em>timerange=()</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>smartbake_ref=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.bake_space_to_wrist" title="Permalink to this definition">¶</a></dt>
+<dd><p>bake the selected mSystem auxSpace object back to the wrist controller, auxSpace object gets the keys</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>wrist</strong> – wrist we’re baking too</li>
+<li><strong>aux_obj</strong> – the AuxSpace base object that will track the wrist, maintaining current offset</li>
+<li><strong>aux_slot</strong> – allows us to just pass in the aux_slot rather than the connected object</li>
+<li><strong>time</strong> – do we drop keys or not?</li>
+<li><strong>timerange</strong> – range to process over</li>
+<li><strong>step</strong> – frame step between keys if time=True</li>
+<li><strong>smartbake</strong> – if True we look at the mSystem’s current keys and only match over those keys if time enabled</li>
+<li><strong>smartbake_ref</strong> – smartbake=True if given, used as reference nodes to extract keytimes from, else we look at all nodes about to be
+processed which isn’t always what we want. If we still find no keytimes we revert to base range times with step given</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.WristLock_Spaces_UI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion">
+<em class="property">class </em><code class="descname">Track_locomotion</code><span class="sig-paren">(</span><em>mrig=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>utility class use to create animation on locomotion ctrl</p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion.mrig">
+<code class="descname">mrig</code><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.mrig" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion.locomotion_ctrl">
+<code class="descname">locomotion_ctrl</code><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.locomotion_ctrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion.cog_ctrl">
+<code class="descname">cog_ctrl</code><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.cog_ctrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion.set_timeranges">
+<code class="descname">set_timeranges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.set_timeranges" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion.delete_locmotion_animation">
+<code class="descname">delete_locmotion_animation</code><span class="sig-paren">(</span><em>attributes=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.delete_locmotion_animation" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete animation on locomotion ctrl if attributes are pass it will delete just given attributes if no attributes
+given, all animation will be deleted</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attributes</strong> – list of attributes to be deleted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion.track_to_cog">
+<code class="descname">track_to_cog</code><span class="sig-paren">(</span><em>translates=True</em>, <em>rotates=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.track_to_cog" title="Permalink to this definition">¶</a></dt>
+<dd><p>track COG ctrl animation to the locomotion ctrl</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion.project_cog_translation">
+<code class="descname">project_cog_translation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.project_cog_translation" title="Permalink to this definition">¶</a></dt>
+<dd><p>projects the COG translations to the ground plane and extracts the directional vector for the rotates</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion.project_cog_translation_rotation">
+<code class="descname">project_cog_translation_rotation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.project_cog_translation_rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>projects COG translations and rotation to locomotion ctrl maintaining locomotion ctrl in the ground</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion.linear_translation">
+<code class="descname">linear_translation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.linear_translation" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a linear translation animation on locomotion ctrl</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion.track_cog_ty">
+<code class="descname">track_cog_ty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.track_cog_ty" title="Permalink to this definition">¶</a></dt>
+<dd><p>create locomotion ctrl animation, tracking just translation Y of COG ctrl</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion.track_cog_maintaining_offset">
+<code class="descname">track_cog_maintaining_offset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.track_cog_maintaining_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>create locomotion ctrl animation, tracking COG but maintaining the current
+offset between COG and locomotion ctrl</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.Track_locomotion.static">
+<code class="descname">static</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.static" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple projected extraction without any key management and on the current frame only</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Red9_Pro_anim_binder.html"
+                        title="previous chapter">Pro_Pack : tools : anim_binder</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Red9_Pro_health_manager.html"
+                        title="next chapter">Pro_Pack : tools : health_manager</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/red9pro_templates/tools/Red9_Pro_anim_tools.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_health_manager.html" title="Pro_Pack : tools : health_manager"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_anim_binder.html" title="Pro_Pack : tools : anim_binder"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

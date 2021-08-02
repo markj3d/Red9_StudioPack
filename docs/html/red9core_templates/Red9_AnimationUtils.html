@@ -496,7 +496,7 @@ else we look at the changing values to find the actual animated bounds via keyVa
 
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.snap">
-<code class="descname">snap</code><span class="sig-paren">(</span><em>source</em>, <em>destination</em>, <em>snapTranslates=True</em>, <em>snapRotates=True</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.snap" title="Permalink to this definition">¶</a></dt>
+<code class="descname">snap</code><span class="sig-paren">(</span><em>source</em>, <em>destination</em>, <em>snapTranslates=True</em>, <em>snapRotates=True</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.snap" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple wrapper over the AnimFunctions snap call</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -800,7 +800,7 @@ TO IMPLEMENT</p>
 
 <dl class="staticmethod">
 <dt id="Red9.core.Red9_AnimationUtils.AnimFunctions.snap">
-<em class="property">static </em><code class="descname">snap</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>snapTranslates=True</em>, <em>snapRotates=True</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.snap" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">snap</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>snapTranslates=True</em>, <em>snapRotates=True</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.snap" title="Permalink to this definition">¶</a></dt>
 <dd><p>This takes 2 given transform nodes and snaps them together. It takes into
 account offsets in the pivots of the objects. Uses the API MFnTransform nodes
 to calculate the data via a command plugin. This is a stripped down version
@@ -849,9 +849,10 @@ nodes to this poly’s normal</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.AnimFunctions.bindNodes">
-<code class="descname">bindNodes</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>attributes=None</em>, <em>filterSettings=None</em>, <em>bindMethod='connect'</em>, <em>matchMethod=None</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.bindNodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bindNodes</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>attributes=None</em>, <em>attributes_all_settable=False</em>, <em>filterSettings=None</em>, <em>bindMethod='connect'</em>, <em>matchMethod=None</em>, <em>manage_scales=False</em>, <em>unlock=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.bindNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>bindNodes is a Hi-Level wrapper function to bind animation data between
-filtered nodes, either in hierarchies or just selected pairs.</p>
+filtered nodes, either in hierarchies or just selected pairs. This has been uplifted to sync
+to the ProPack bind call for clarity</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -865,8 +866,12 @@ see docs on the FilterNode_Settings class’
 Note that this is also now bound to the class instance and if not passed in
 we use this classes instance of filterSettings cls.settings</li>
 <li><strong>attributes</strong> – Only process the given attributes[]</li>
+<li><strong>attributes_all_settable</strong> – if True and bindMethod=’connect’ we process ALL settable channels on each node</li>
 <li><strong>bindMethod</strong> – method of binding the data</li>
 <li><strong>matchMethod</strong> – arg passed to the match code, sets matchMethod used to match 2 node names</li>
+<li><strong>manage_scales</strong> – bool, do we also look at binding jnt scales where applicable, this only runs
+if the source jnt has incoming scale connections which would then be propagated via a scaleConstrain</li>
+<li><strong>unlock</strong> – if True force unlock the required transform attrs on the destination skeleton first</li>
 </ul>
 </td>
 </tr>
@@ -1425,7 +1430,7 @@ in the sameNamespace as the controllers.</li>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="../index.html"
-                        title="previous chapter">Welcome to Red9’s documentation!</a></p>
+                        title="previous chapter"><strong>Welcome to Red9’s documentation!</strong></a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="Red9_Audio.html"
                         title="next chapter">Red9_Audio</a></p>
@@ -1471,7 +1476,7 @@ in the sameNamespace as the controllers.</li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Mark Jackson.
+        &#169; Copyright 2021, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

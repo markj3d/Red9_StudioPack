@@ -248,7 +248,7 @@ it back to it’s original state so we pass it through this</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.filterListByString">
-<code class="descname">filterListByString</code><span class="sig-paren">(</span><em>input_list</em>, <em>filter_string</em>, <em>matchcase=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.filterListByString" title="Permalink to this definition">¶</a></dt>
+<code class="descname">filterListByString</code><span class="sig-paren">(</span><em>input_list</em>, <em>filter_string</em>, <em>matchcase=False</em>, <em>os_basename=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.filterListByString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic way to filter a list by a given string input. This is so that all
 the filtering used in the UI’s is consistent. Used by the poseSaver, facialUI,
 MetaUI and many others.</p>
@@ -262,6 +262,7 @@ MetaUI and many others.</p>
 <li><strong>filter_string</strong> – string to use in the filter, supports comma separated search strings
 eg : ‘brows,smile,funnel’</li>
 <li><strong>matchcase</strong> – whether to match or ignore case sensitivity</li>
+<li><strong>os_basename</strong> – if True and the list is a list of full os paths, we strip filter just the filename, path and ext stripped off</li>
 </ul>
 </td>
 </tr>
@@ -269,8 +270,9 @@ eg : ‘brows,smile,funnel’</li>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">this is a Regex search but it’s managed under the hood.
-&gt;&gt; ‘attack knife’ would yield matches with ‘attack and knife in the string, similar to ‘attack*.*knife in windows, compiles to (‘attack.*knife’)
+<p class="last">this is a Regex search but it’s carefully managed under the hood.
+&gt;&gt; ‘attack knife’ : yield matches with ‘attack’ and ‘knife’ in the string in that order, similar to ‘attack*.*knife in windows, compiles to (‘attack.*knife’)
+&gt;&gt; ‘knife+attack’ : yield matches where order does not matter but the string has to contain both ‘attack’ and ‘knife’
 &gt;&gt; ‘attack..knife’ would yield matches with ‘attack12knife’ 2 wildcards between the params (dots are wildcards in regex), compiles to (‘attack..knife’)
 &gt;&gt; ‘attack.*knife’ would yield matches with ‘attack_big_massive_knife’ because of the .* is multiple wildcards between the search params, compiles to (‘attack.*knife’)
 &gt;&gt; ‘attack,knife’ would yield matches with either ‘attack’ and ‘knife’ in the string, compiles to (‘attack|knife’) with the ‘|’ or operator
@@ -1485,7 +1487,7 @@ of the jointOrient matrix, after the rotation matrix</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Mark Jackson.
+        &#169; Copyright 2021, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

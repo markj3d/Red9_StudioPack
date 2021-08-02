@@ -61,7 +61,7 @@ set of tests, for example to health check a rig prior to releasing to an animato
 <blockquote>
 <div><blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9popt</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9popt&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -130,7 +130,7 @@ set of tests, for example to health check a rig prior to releasing to an animato
 <p>When we put this together with the HealValidation system we get a very powerful way of checking data inside Maya.
 In Pro for clients this is also bound to the fileOpen callback, allowing us to test the scene after load against a given project template.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Client_SceneOpen_HealthValidation</span><span class="p">(</span><span class="n">r9popt</span><span class="o">.</span><span class="n">HealthValidation</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="c1"># Tests to run, note this is a list of tuples where the second</span>
 <span class="gp">... </span>        <span class="c1"># arg is the expected result if specified</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">tests</span><span class="o">=</span><span class="p">[(</span><span class="n">r9popt</span><span class="o">.</span><span class="n">maya_sceneUnits_test</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;expected&#39;</span><span class="p">:</span><span class="s1">&#39;centimeter&#39;</span><span class="p">}),</span> <span class="c1"># Maya environment units</span>
@@ -588,6 +588,15 @@ tweak the results into a format that contains just the base data, or all the com
 </dd></dl>
 
 <dl class="class">
+<dt id="Red9.pro_pack.core.optimiser.SceneOpen_HealthValidation">
+<em class="property">class </em><code class="descname">SceneOpen_HealthValidation</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.SceneOpen_HealthValidation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
+<p>Health systems to validate the Scene status against the internal PROJECT_DATA object
+thats bound to the systems at boot. This is the .r9project file that controls the
+Maya environment and many of the internal systems for clients</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="Red9.pro_pack.core.optimiser.SRCHealthValidations">
 <em class="property">class </em><code class="descname">SRCHealthValidations</code><span class="sig-paren">(</span><em>src_node=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.SRCHealthValidations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.optimiser.HealthValidation" title="Red9.pro_pack.core.optimiser.HealthValidation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.optimiser.HealthValidation</span></code></a></p>
@@ -626,7 +635,8 @@ sure to save the scene out prior to running this.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>src_node</strong> – a Meta SRC_Extension mNode</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>src_node</strong> – a Meta SRC_Extension mNode, if passed in we use that, else we
+find the first instance of a “Pro_MetaRig_SRC” mNode</td>
 </tr>
 </tbody>
 </table>
@@ -952,7 +962,28 @@ Failed Results built : HealthObject.results_failed_nodes  : [mRig,…]</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_renderMeshes_head_hooked">
 <code class="descname">mRigs_renderMeshes_head_hooked</code><span class="sig-paren">(</span><em>expected=1</em>, <em>mRigs=[]</em>, <em>group='main'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_renderMeshes_head_hooked" title="Permalink to this definition">¶</a></dt>
-<dd><p>Test to check is all mRigs in the scene have existing renderMeshes hooked up
+<dd><p>Test to check is all mRigs in the scene have existing renderMeshes_head hooked up
+or at least the expected number or above. This wire is used by the PoseSaver
+to create the PosePointCloud visual mesh reference
+Failed Results built : HealthObject.results_failed_nodes  : [mRig,…]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expected</strong> – minimum number of expected meshes hooked up</li>
+<li><strong>mRigs</strong> – specific mRig metaNodes only if passed</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_renderMeshes_static_head_hooked">
+<code class="descname">mRigs_renderMeshes_static_head_hooked</code><span class="sig-paren">(</span><em>expected=1</em>, <em>mRigs=[]</em>, <em>group='main'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_renderMeshes_static_head_hooked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test to check is all mRigs in the scene have existing renderMeshes_static_head hooked up
 or at least the expected number or above. This wire is used by the PoseSaver
 to create the PosePointCloud visual mesh reference
 Failed Results built : HealthObject.results_failed_nodes  : [mRig,…]</p>
@@ -972,7 +1003,7 @@ Failed Results built : HealthObject.results_failed_nodes  : [mRig,…]</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_meshes_rootparent_test">
-<code class="descname">mRigs_meshes_rootparent_test</code><span class="sig-paren">(</span><em>expected='models'</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_meshes_rootparent_test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mRigs_meshes_rootparent_test</code><span class="sig-paren">(</span><em>expected='|models'</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_meshes_rootparent_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;&lt; SRC Export bindpose Test &gt;&gt;</p>
 <p>check that all renderMeshes and renderMeshes_head nodes are
 parented under a single group (expected=’models’) in the root of the
@@ -1248,6 +1279,24 @@ prevents us running this on older rigs that haven’t been tested against this</
 <dt id="Red9.pro_pack.core.optimiser.mRigs_isHistoricallyInteresting_utility_fix">
 <code class="descname">mRigs_isHistoricallyInteresting_utility_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_isHistoricallyInteresting_utility_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>reset the isHistoricallyInteresting attr to the expected value</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_are_referenced_test">
+<code class="descname">mRigs_are_referenced_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_are_referenced_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that all mRigs in the scene are referenced (or not) depending on the expected flag</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expected</strong> – if True we return a fail if there are none reference mRigs in the scene</li>
+<li><strong>mRigs</strong> – specific mRigs else we process all found in the scene</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -1933,6 +1982,30 @@ Once downloaded drop it here Red9/packages/diffMerge.exe</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mesh_original_shape_cleanup_test">
+<code class="descname">mesh_original_shape_cleanup_test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_original_shape_cleanup_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>this will delete all non required original geo from the scene,
+often left behind when you duplicate meshes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mesh_original_shape_cleanup_fix">
+<code class="descname">mesh_original_shape_cleanup_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_original_shape_cleanup_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>fix method : delete redundant OriginalShape nodes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mesh_intergrity_test">
+<code class="descname">mesh_intergrity_test</code><span class="sig-paren">(</span><em>meshes</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_intergrity_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>InProgress : test given mesh for ZeroArea polys and polys with No UVs</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mesh_intergrity_fix">
+<code class="descname">mesh_intergrity_fix</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_intergrity_fix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.texture_path_isValid_test">
 <code class="descname">texture_path_isValid_test</code><span class="sig-paren">(</span><em>expected=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.texture_path_isValid_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>test if all file nodes have valid texture paths</p>
@@ -2061,6 +2134,35 @@ same directory as the current Maya scene (assuming it’s a rig file / build dir
 <dt id="Red9.pro_pack.core.optimiser.character_set_compare_fix">
 <code class="descname">character_set_compare_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_compare_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>fix method : attempt to remake the character set</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.character_set_reconnect_test">
+<code class="descname">character_set_reconnect_test</code><span class="sig-paren">(</span><em>mrig=None</em>, <em>refnode=None</em>, <em>filepath=None</em>, <em>clean_edits=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_reconnect_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>test to see if the chSet has been removed from an mrig which this animation
+file was using to connect all the data. If the chSet has been removed it must
+either be stored to file OR bound to the mRig.mNode via the chset_bkg attr as
+it’s this previous state of the character set that we use to reconnect the missing data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mrig</strong> – if given we test against this, else we find the first instance from getMetaRigs()</li>
+<li><strong>refnode</strong> – specific refNode wwe want to process, else we use the refNode which contains the mRig node</li>
+<li><strong>filepath</strong> – file to a chSet file saved by the character_set_arrays() test function</li>
+<li><strong>clean_edits</strong> – run a remove failedEdits edits after the fix has run</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.character_set_removal_fix">
+<code class="descname">character_set_removal_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.character_set_removal_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>reconnect the failed chSet animcurve edits</p>
 </dd></dl>
 
 <dl class="function">
@@ -2238,9 +2340,15 @@ These are nodes from other plug-ins</p>
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.unknownScriptNode_MALWARE_test">
 <code class="descname">unknownScriptNode_MALWARE_test</code><span class="sig-paren">(</span><em>expected=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.unknownScriptNode_MALWARE_test" title="Permalink to this definition">¶</a></dt>
-<dd><p>test to find a Specific MALWARE scriptNodes in the scene and remove them!</p>
+<dd><p>test to find a Specific MALWARE by searching for know entries in:</p>
+<ul class="simple">
+<li>scriptNodes</li>
+<li>scriptJobs</li>
+<li>userSetup text : both userSetup.mel and userSetup.py in maya/scripts and maya/20**/scripts</li>
+<li>files generated by Malware known to be suspicious</li>
+</ul>
 <p>Tests for:</p>
-<p>Malware : May 2020 : “fuck_All_U” : the one that triggered the initial AD scare
+<p>Malware : May 2020 : “fuck_All_U” : the one we found which triggered the initial Autodesk scare <a class="reference external" href="https://gist.github.com/OriginalAdric/acbe902c89064e8300f2bc475a953e05">https://gist.github.com/OriginalAdric/acbe902c89064e8300f2bc475a953e05</a>
 Malware : Sept 2020 : “breed_gene”, “vaccine_gene” : reported on TA : <a class="reference external" href="https://tech-artists.org/t/another-maya-malware-in-the-wild/12970">https://tech-artists.org/t/another-maya-malware-in-the-wild/12970</a></p>
 </dd></dl>
 
@@ -2270,6 +2378,12 @@ Malware : Sept 2020 : “breed_gene”, “vaccine_gene” : reported on TA : <a
 <dt id="Red9.pro_pack.core.optimiser.audio_nodes_delete">
 <code class="descname">audio_nodes_delete</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.audio_nodes_delete" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.shader_nodes_get">
+<code class="descname">shader_nodes_get</code><span class="sig-paren">(</span><em>used=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.shader_nodes_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>return all shaders in the scene</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.turtle_nodes_get">
@@ -2347,7 +2461,7 @@ user prompt so we’re hooking to that</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Mark Jackson.
+        &#169; Copyright 2021, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

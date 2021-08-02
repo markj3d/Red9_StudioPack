@@ -65,7 +65,7 @@ installedVersion = False
   2018          .  2018  .  201800  .  2.7.11 2     5.6.1  .  2018     . 2017-06-26
   2019          .  2019  .  201900  .  2.7.11 2     5.6.1  .  2019     . 2019-01-15
   2020          .  2020  .  202000  .  2.7.11 2     5.12.5 .  2020     . 2019-12-10
-
+  2022          .  2022  .  202200  .  3.7.7  2     5.15.2 .  2022     . 2021-03-29
 
 ------------------------------------------------------------------------------------------
 '''
@@ -318,7 +318,7 @@ def osBuild():
     elif build == 'win32':
         return 32
 
-def framerate_mapping(value=None, asAPI=False):
+def framerate_mapping(value=None, asAPI=False, truncate_float=False):
     '''
     single place to convert fps data between string representation, actual float(fps) and MTime.unit
     if no valuye is passed we return a full mapping dict {pal: (25, OpenMaya.MTime.kPALFrame), ...}
@@ -326,6 +326,7 @@ def framerate_mapping(value=None, asAPI=False):
     :param value: if float or int we convert the data to timeUnit ('pal','ntsc',....)
         if value is a string we convert to actual fps as float
     :param asAPI: if value was given and this is True we return the OpneMaya.MTime.kUnit for the value
+    :param truncate_float: round(fps, 3) round the float to 3 decimal places.
     '''
     import maya.OpenMaya as OpenMaya
     fpsDict = {}
@@ -381,15 +382,20 @@ def framerate_mapping(value=None, asAPI=False):
     for fps, data in _bases.items():
         try:
             api = getattr(OpenMaya.MTime, data[1])
-            fpsDict[fps] = (data[0], api)
+            if not truncate_float:
+                fpsDict[fps] = (data[0], api)
+            else:
+                fpsDict[fps] = (round(data[0], 3), api)
         except:
             log.debug("given fps doesn't exist in this build of Maya API")
 
     if not value:
         return fpsDict
+
+    # value comparison and conversion
     if type(value) in [int, float]:
         for k, v in fpsDict.items():
-            if float(v[0]) == float(value):
+            if abs(float(v[0]) - float(value)) < 0.001:
                 if not asAPI:
                     return k
                 return v[1]
@@ -680,6 +686,13 @@ def addToMayaMenus():
                           echoCommand=True,
                           c="import maya.cmds as cmds;import Red9.core.Red9_General as r9General;r9General.os_OpenFileDirectory(cmds.file(q=True,sn=True))")
             if has_pro_pack():
+                cmds.menuItem(divider=True, p=mainFileMenu)
+                cmds.menuItem('redNineSaver9AnimItem',
+                              l=LANGUAGE_MAP._MainMenus_.save_r9anim,
+                              ann=LANGUAGE_MAP._MainMenus_.save_r9anim_ann,
+                              p=mainFileMenu,
+                              echoCommand=True,
+                              c="from Red9.pro_pack import Pro_MenuStubs;Pro_MenuStubs('r9anim_save_complete')")
                 cmds.menuItem('redNineOpenr9AnimItem',
                               l=LANGUAGE_MAP._MainMenus_.open_r9anim,
                               ann=LANGUAGE_MAP._MainMenus_.open_r9anim_ann,
@@ -846,13 +859,13 @@ def red9ButtonBGC(colour, qt=False, widget=None):
     '''
     Generic setting for the main button colours in the UI's
     '''
-
+    rgb = []
     if colour == 1 or colour == 'green':
         rgb = [0.6, 1, 0.6]
     elif colour == 2 or colour == 'grey':
         rgb = [0.5, 0.5, 0.5]
     elif colour == 3 or colour == 'red':
-        rgb = [1, 0.3, 0.3]
+        rgb = [1.0, 0.3, 0.3]
     elif colour == 4 or colour == 'white':
         rgb = [0.75, 0.75, 0.8]
     elif colour == 5 or colour == 'dark':
@@ -865,6 +878,8 @@ def red9ButtonBGC(colour, qt=False, widget=None):
         rgb = [0.25, 0.25, 0.25]
     elif colour == 9 or colour == 'darkred':
         rgb = [0.6, 0.1, 0.1]
+    else:
+        return None
     if qt:
         colour = [rgb[0] * 255, rgb[1] * 255, rgb[2] * 255]
         if widget:
@@ -1010,7 +1025,7 @@ def red9_website_home(*args):
 def red9_facebook(*args):
     ''' open up the Red9 Facebook Page '''
     import Red9.core.Red9_General as r9General  # lazy load
-    r9General.os_OpenFile('http://www.facebook.com/Red9StudioPack/')
+    r9General.os_OpenFile('http://www.facebook.com/Red9Anim/')  # Red9StudioPack/')
 
 def red9_twitter(*args):
     ''' Open up the Red9 Twitter feed '''
@@ -1393,12 +1408,30 @@ def red9ProPackInfo(*args):
 # CLIENT MODULES --- RED9 INTERNAL SUPPORT
 # -----------------------------------------------------------------------------------------
 
+'''
+New Maya.env added 07/06/21 "RED9_CLIENTCORE" which if set will allow
+you to divert the Red9_ClientCore folder to any location available.
 
+RED9_CLIENTCORE=R:/distributed/path/ClientCore
+
+this will expect the ClientCore folder to have each client as a separate sub-folder
+which will be imported by the boot process. The ClientCore folder on disc must also
+have a blank __init__.py file in it to make it a valid Python module setup
+'''
+    
 CLIENTS_BOOTED = []
 
 
 def client_core_path():
+    if os.getenv('RED9_CLIENTCORE'):
+        return __formatPath_join(os.getenv('RED9_CLIENTCORE'))
     return __formatPath_join(os.path.dirname(red9ModulePath()), 'Red9_ClientCore')
+
+def client_core_has_init(path=''):
+    if not path:
+        path = client_core_path()
+    if '__init__.py' in os.listdir(path):
+        return True
 
 def has_client_modules():
     '''
@@ -1461,8 +1494,10 @@ class Client_Manager(object):
         cmds.button(label='Boot NONE', c=partial(self.close_and_return, 'none'))
 #         cmds.setParent('..')
         cmds.separator(h=15, style='none')
-        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                                 c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0),
+                            align='left',
+                            image1='Rocket9_buttonStrap_narrow.png',
+                            c=lambda *args: (r9Setup.red9ContactInfo()), h=24, w=275)
     
     def add_client(self, client, *args):
         self.clients_selected.append(client)
@@ -1494,19 +1529,28 @@ def boot_client_projects(batchclients=None, clientsToBoot=[]):
     global CLIENTS_BOOTED
     CLIENTS_BOOTED = []
     clients = get_client_modules()
+    _clientcore_path = client_core_path()
+    _import_as_name_only = False
+
+    # append clientcore_path to the Python path ONLY if it doesn't have an __init__.py file.
+    # with no __init.py__ we import just as client name. Really though the _clientcore_path
+    # folder should have an __init__.py to make sure imports are correct when
+    # clients start to overload structures, import changes to Red9_ClientCore.client
+    if not client_core_has_init(_clientcore_path) and not _clientcore_path in sys.path:
+        sys.path.append(_clientcore_path)
+        _import_as_name_only = True
 
     # mayaBatch boot (unittests and batching)
 #     print 'Maya is Batch : ', mayaIsBatch()
 #     print 'clients : ', batchclients
     if mayaIsBatch():
         if batchclients is None:
-#             print '################### batchclients = None'
             return
         if batchclients:
             clientsToBoot = [_client for _client in batchclients if _client in clients]
         else:
             clientsToBoot = clients
-        log.info('mayBatch custom clients to load: %s' % clientsToBoot)
+        log.info('mayaBatch custom clients to load: %s' % clientsToBoot)
 
     else:
         # standard boot sequence
@@ -1516,8 +1560,7 @@ def boot_client_projects(batchclients=None, clientsToBoot=[]):
             cmds.layoutDialog(ui=cm.show)
             print('clients booting : ', cm.returned)
             clientsToBoot = cm.returned
-            
-              
+
 #             options = ['ALL', 'NONE']
 #             options.extend(clients)
 #             result = cmds.confirmDialog(title='ProjectPicker',
@@ -1539,14 +1582,20 @@ def boot_client_projects(batchclients=None, clientsToBoot=[]):
     for client in clientsToBoot:
 
         # manage default project folders
-        if os.path.exists(__formatPath_join(client_core_path(), client, 'icons')):
-            addIconsPath(__formatPath_join(client_core_path(), client, 'icons'))
+        if os.path.exists(__formatPath_join(_clientcore_path, client, 'icons')):
+            addIconsPath(__formatPath_join(_clientcore_path, client, 'icons'))
         # added 25/02/20
-        if os.path.exists(__formatPath_join(client_core_path(), client, 'plug-ins', str(int(mayaVersion())))):
-            addPluginPath(__formatPath_join(client_core_path(), client, 'plug-ins', str(int(mayaVersion()))))
-        elif os.path.exists(__formatPath_join(client_core_path(), client, 'plug-ins')):
-            addPluginPath(__formatPath_join(client_core_path(), client, 'plug-ins'))
-        cmds.evalDeferred("import Red9_ClientCore.%s" % client, lp=True)  # Unresolved Import
+        if os.path.exists(__formatPath_join(_clientcore_path, client, 'plug-ins', str(int(mayaVersion())))):
+            addPluginPath(__formatPath_join(_clientcore_path, client, 'plug-ins', str(int(mayaVersion()))))
+        elif os.path.exists(__formatPath_join(_clientcore_path, client, 'plug-ins')):
+            addPluginPath(__formatPath_join(_clientcore_path, client, 'plug-ins'))
+
+        if not _import_as_name_only:
+            cmds.evalDeferred("import %s.%s" % (os.path.basename(_clientcore_path), client), lp=True)  # Unresolved Import
+            log.info('Client Boot : ClientCore python import called as : "import %s.%s"' % (os.path.basename(_clientcore_path), client))
+        else:
+            cmds.evalDeferred("import %s" % client, lp=True)  # Unresolved Import
+            log.info('Client Boot : ClientCore python import called as : "import %s"' % client)
 
         CLIENTS_BOOTED.append(client)
 
@@ -1560,10 +1609,7 @@ def boot_client_projects(batchclients=None, clientsToBoot=[]):
                 pass
     try:
         # remove the blank placeholder project now that we have proper client projects incoming
-        cmds.evalDeferred('from Red9.pro_pack import PROJECT_DATA;PROJECT_DATA.remove_project()')
-        # Finally after booting all clients required sync the actual PROJECT_DATA object to
-        # the last loaded client. We don't need to sync Perforce mounts as the project_load will do that for us
-        # cmds.evalDeferred('from Red9.pro_pack import PROJECT_DATA;PROJECT_DATA.sync_project_to_settings(project=True, perforce=False)', lp=True)
+        cmds.evalDeferred("from Red9.pro_pack import PROJECT_DATA;PROJECT_DATA.remove_project(project='Empty')", lp=True)
     except:
         log.warning('PROJECT_DATA : Failed to sync last project handler')
 
@@ -1574,9 +1620,10 @@ def __reload_clients__():
     '''
     for client in get_client_modules():
         try:
-            path = 'Red9_ClientCore.%s' % client
-            cmds.evalDeferred("import %s;%s._reload()" % (path, path), lp=True)  # Unresolved Import
-            log.info('Reloaded Client : "%s"' % path)
+#             path = 'Red9_ClientCore.%s' % client
+#             cmds.evalDeferred("import %s;%s._reload()" % (path, path), lp=True)  # Unresolved Import
+            cmds.evalDeferred("import %s;%s._reload()" % (client, client), lp=True)  # Unresolved Import
+            log.info('Reloaded Client : "%s"' % client)
         except:
             log.info('Client : "%s" : does not have a _reload func internally' % path)
 

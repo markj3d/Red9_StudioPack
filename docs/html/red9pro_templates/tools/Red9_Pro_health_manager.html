@@ -1,0 +1,213 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Pro_Pack : tools : health_manager &#8212; Red9 2.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Pro_Pack : tools : project_manager" href="Red9_Pro_project_manager.html" />
+    <link rel="prev" title="Pro_Pack : tools : anim_tools" href="Red9_Pro_anim_tools.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_project_manager.html" title="Pro_Pack : tools : project_manager"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_anim_tools.html" title="Pro_Pack : tools : anim_tools"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pro-pack-tools-health-manager">
+<h1>Pro_Pack : tools : health_manager<a class="headerlink" href="#pro-pack-tools-health-manager" title="Permalink to this headline">¶</a></h1>
+<p>ProPack health_manager module is the main HealthManager UI wrapping.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9health_man</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9health_man&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<span class="target" id="module-Red9.pro_pack.tools.health_manager"></span><p>Health manager UI, connected to the optimiser module but separated to stop QT being imported at boot</p>
+<p class="rubric">Main Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<dl class="function">
+<dt id="Red9.pro_pack.tools.health_manager.healthmanager_ui">
+<code class="descname">healthmanager_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.healthmanager_ui" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.health_manager.HealthTest_Widget">
+<em class="property">class </em><code class="descname">HealthTest_Widget</code><span class="sig-paren">(</span><em>healthtest</em>, <em>healthui</em>, <em>*args</em>, <em>**kwrds</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthTest_Widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QWidget</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Form</span></code></p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.health_manager.HealthTest_Widget.setLabel">
+<code class="descname">setLabel</code><span class="sig-paren">(</span><em>txt</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthTest_Widget.setLabel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.health_manager.HealthTest_Widget.setStatus">
+<code class="descname">setStatus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthTest_Widget.setStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the indicator icon</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.health_manager.HealthTest_Widget.run_test">
+<code class="descname">run_test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthTest_Widget.run_test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.health_manager.HealthTest_Widget.run_test_fix">
+<code class="descname">run_test_fix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthTest_Widget.run_test_fix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.health_manager.HealthTest_Widget.run_test_status">
+<code class="descname">run_test_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthTest_Widget.run_test_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.health_manager.HealthTest_Widget.print_status">
+<code class="descname">print_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthTest_Widget.print_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.health_manager.HealthTest_Widget.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthTest_Widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.health_manager.HealthManager">
+<em class="property">class </em><code class="descname">HealthManager</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.health_manager.HealthManager.health_run">
+<code class="descname">health_run</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthManager.health_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.health_manager.HealthManager.health_runfix">
+<code class="descname">health_runfix</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthManager.health_runfix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.health_manager.HealthManager.health_print">
+<code class="descname">health_print</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthManager.health_print" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.health_manager.HealthManager.health_run_selected">
+<code class="descname">health_run_selected</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthManager.health_run_selected" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.health_manager.HealthManager.health_runfix_selected">
+<code class="descname">health_runfix_selected</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthManager.health_runfix_selected" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.health_manager.HealthManager.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthManager.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.health_manager.HealthManager.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.tools.health_manager.HealthManager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Red9_Pro_anim_tools.html"
+                        title="previous chapter">Pro_Pack : tools : anim_tools</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Red9_Pro_project_manager.html"
+                        title="next chapter">Pro_Pack : tools : project_manager</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/red9pro_templates/tools/Red9_Pro_health_manager.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_project_manager.html" title="Pro_Pack : tools : project_manager"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_anim_tools.html" title="Pro_Pack : tools : anim_tools"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

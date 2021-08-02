@@ -51,7 +51,7 @@ extended pipelines running under ProPack. These include our Red9Puppet and
 the exporter and audio management systems. This is the very core of all the Red9
 pipeline when running the Red9 Puppet rig.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9pmeta</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9pmeta&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -431,7 +431,7 @@ this will help sort that issue out</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.visibility_renderMeshes">
-<code class="descname">visibility_renderMeshes</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.visibility_renderMeshes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">visibility_renderMeshes</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em>, <em>mode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.visibility_renderMeshes" title="Permalink to this definition">¶</a></dt>
 <dd><p>if self.renderMeshes is connected then switch the visibility state of
 the linked geo</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -442,6 +442,8 @@ the linked geo</p>
 <li><strong>state</strong> – switch state</li>
 <li><strong>query</strong> – query the current state of the renderMeshes visibility, not required in toggle or query mode</li>
 <li><strong>toggle</strong> – toggle the state of the visibility, overwriting any state passed in</li>
+<li><strong>mode</strong> – specific attr that we want to switch, this by-passes the attr checks, supported: ‘visibility’, ‘lodVisibility’, ‘overrideVisibility’
+if none is given the code will find the first unlocked, unwired visibility mode from the supported list, in that order of preference</li>
 </ul>
 </td>
 </tr>
@@ -451,7 +453,7 @@ the linked geo</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.visibility_grpmain">
-<code class="descname">visibility_grpmain</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.visibility_grpmain" title="Permalink to this definition">¶</a></dt>
+<code class="descname">visibility_grpmain</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em>, <em>mode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.visibility_grpmain" title="Permalink to this definition">¶</a></dt>
 <dd><p>if self.GRP_Main is set then switch the visibility state of
 the linked GRP_Main Grp node</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -462,6 +464,8 @@ the linked GRP_Main Grp node</p>
 <li><strong>state</strong> – switch state</li>
 <li><strong>query</strong> – query the current state of the grpmain visibility</li>
 <li><strong>toggle</strong> – toggle the state of the visibility, overwriting any state passed in</li>
+<li><strong>mode</strong> – specific attr that we want to switch, this by-passes the attr checks, supported: ‘visibility’, ‘lodVisibility’, ‘overrideVisibility’
+if none is given the code will find the first unlocked, unwired visibility mode from the supported list, in that order of preference</li>
 </ul>
 </td>
 </tr>
@@ -473,6 +477,24 @@ the linked GRP_Main Grp node</p>
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_meshes_grp">
 <code class="descname">get_meshes_grp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_meshes_grp" title="Permalink to this definition">¶</a></dt>
 <dd><p>from all the renderMesh wires try and find the top level grp that they’re all under</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_export_meshes">
+<code class="descname">get_export_meshes</code><span class="sig-paren">(</span><em>walk=False</em>, <em>select=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_export_meshes" title="Permalink to this definition">¶</a></dt>
+<dd><p>new handler to return meshes for export handling, this is to make it
+easier to replace all of the renderMeshes logic with the new expTag.exportMeshes wires.
+Note that if this is set to walk=True then all subsystems, and you have a child facial mSystem with
+it’s own renderMeshes wired, these will also get picked up.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>walk</strong> – False by default, walk all child mSubsystem rigs and include all of their connected
+mesh nodes. If False we clamp the return to just those nodes wired to this mRig instance</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -505,7 +527,9 @@ mSRC style rigs that purely have an exportTag to ID the root jnt.</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.getExportTags">
 <code class="descname">getExportTags</code><span class="sig-paren">(</span><em>exportClass=None</em>, <em>singular=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.getExportTags" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find all bound exportTags in this system</p>
+<dd><p>Find all bound exportTags in this system. Usually we’d only expect a single exportTag
+per mRig however, in the case of Facial we could have a separate, yet child exportTag 
+connected the child mFacial rig, designed to only output that facial data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -568,6 +592,53 @@ removing a controller from all animation layers if it can do so and should any a
 <li><strong>sparseBake</strong> – turns on the sparseAnimCurveBake flag in the bakeResults call, True by default</li>
 <li><strong>timerange</strong> – (start, end) optional timerange to bake, by default this uses the standard Red9 timeLineRangeGet func</li>
 <li><strong>whole_start</strong> – if True (default) we clamp tyhe start frame to a whole number, corrects for issues with scenes having frames at subframe times</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.preview_camera_get">
+<code class="descname">preview_camera_get</code><span class="sig-paren">(</span><em>grp=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.preview_camera_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the preview camera top group</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>grp</strong> – default:True, if True we return the “playblast_camera” top grp, else we return the actual camera transform</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.preview_camera_create">
+<code class="descname">preview_camera_create</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.preview_camera_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>create the preview camera setup. This is a light wrap over the internal playblast
+camera handlers to expose the functionality to users, and to the DAG menus so
+animators get access to the same internal camera</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.preview_camera_delete">
+<code class="descname">preview_camera_delete</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.preview_camera_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple delete the preview camera setup</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.preview_camera_view">
+<code class="descname">preview_camera_view</code><span class="sig-paren">(</span><em>toggle=True</em>, <em>toggleview=False</em>, <em>view=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.preview_camera_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>toggle the view angle</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>toggle</strong> – add 90degrees to the current camera so we rotate around the character</li>
+<li><strong>view</strong> – the specific view we’re wanting, ‘front’,’left’,’right’,’back’,’top’,’bottom’</li>
+<li><strong>toggleview</strong> – this toggles through the available views</li>
 </ul>
 </td>
 </tr>
@@ -823,7 +894,7 @@ if False it reverts to a static r9PosePPC and only caches the data at the curren
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># create the reference animPPC system</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">anim_point_cloud_create</span><span class="p">(</span><span class="n">isVisible</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># adjust the reference PointCloud and when you want to comit back to the mRig</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># adjust the reference PointCloud and when you want to commit back to the mRig</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">anim_point_cloud_apply</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -1041,7 +1112,7 @@ then the skeletonRoot is found from the exportSkeletonRoot wire to the mRig</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_blendShapes">
-<code class="descname">info_blendShapes</code><span class="sig-paren">(</span><em>levels=4</em>, <em>inc_headmeshes=True</em>, <em>sort_by_count=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_blendShapes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">info_blendShapes</code><span class="sig-paren">(</span><em>levels=4</em>, <em>inc_headmeshes=True</em>, <em>sort_by_count=True</em>, <em>for_export=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.info_blendShapes" title="Permalink to this definition">¶</a></dt>
 <dd><p>return all blendshapes bound to the connected renderMeshes history</p>
 <p>this is used to extract the blendshapes for fbx skeletal export if flagged</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1054,6 +1125,8 @@ previously this was unclamped but now follows the same pattern as the rest of th
 <li><strong>inc_headmeshes</strong> – if the mRig has renderMeshes_head attr and we have meshes wired to that plug
 include those in the return. This wire is used primarily by our FacialCore systems</li>
 <li><strong>sort_by_count</strong> – sort the returned blendshapes by the number of targets, largest first</li>
+<li><strong>for_export</strong> – added so we can clamp the return to either this single mRig instance or the wider
+full network and all meshes set for export</li>
 </ul>
 </td>
 </tr>
@@ -1210,7 +1283,7 @@ r9Anim and r9Pose files as cross-reference</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_renderMeshes_head">
-<code class="descname">visibility_renderMeshes_head</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_renderMeshes_head" title="Permalink to this definition">¶</a></dt>
+<code class="descname">visibility_renderMeshes_head</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em>, <em>mode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_renderMeshes_head" title="Permalink to this definition">¶</a></dt>
 <dd><p>switch off the display of all body_Rig head geo based on the renderMesh_head attr
 and if we have a facial rig wired, turn ON it’s renderMesh geo</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1221,6 +1294,32 @@ and if we have a facial rig wired, turn ON it’s renderMesh geo</p>
 <li><strong>state</strong> – switch the state of the renderMeshs, not required in toggle or query mode</li>
 <li><strong>query</strong> – query the current state</li>
 <li><strong>toggle</strong> – toggle the state of the visibility, overwriting any state passed in</li>
+<li><strong>mode</strong> – specific attr that we want to switch, this by-passes the attr checks, supported: ‘visibility’, ‘lodVisibility’, ‘overrideVisibility’
+if none is given the code will find the first unlocked, unwired visibility mode from the supported list, in that order of preference</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_renderMeshes_static_head">
+<code class="descname">visibility_renderMeshes_static_head</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em>, <em>mode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_renderMeshes_static_head" title="Permalink to this definition">¶</a></dt>
+<dd><p>switch off the display of all body_Rig head geo based on the renderMeshes_static_head attr
+and if we have a facial rig wired, turn ON it’s renderMesh geo. This has replaced the 
+renderMeshes_head visibility switch as it made no sense having geo which was only
+every meant to be visual reference being marked as the head geo.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> – switch the state of the renderMeshs, not required in toggle or query mode</li>
+<li><strong>query</strong> – query the current state</li>
+<li><strong>toggle</strong> – toggle the state of the visibility, overwriting any state passed in</li>
+<li><strong>mode</strong> – specific attr that we want to switch, this by-passes the attr checks, supported: ‘visibility’, ‘lodVisibility’, ‘overrideVisibility’
+if none is given the code will find the first unlocked, unwired visibility mode from the supported list, in that order of preference</li>
 </ul>
 </td>
 </tr>
@@ -1230,10 +1329,15 @@ and if we have a facial rig wired, turn ON it’s renderMesh geo</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_facial">
-<code class="descname">visibility_facial</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em>, <em>evalmanaged=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_facial" title="Permalink to this definition">¶</a></dt>
-<dd><p>if the FacialCore attr is wired to a facial rig then this will toggle
-the rigs renderMeshes_Head and the FacialCore’s renderMeshes, effectively
-switching off the body’s head geo and turning on the facialCores head.</p>
+<code class="descname">visibility_facial</code><span class="sig-paren">(</span><em>state=True</em>, <em>query=False</em>, <em>toggle=False</em>, <em>evalmanaged=True</em>, <em>mode=None</em>, <em>gpu_toggle=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.visibility_facial" title="Permalink to this definition">¶</a></dt>
+<dd><p>this function carefully toggles the visible state of a wired facial system, allowing
+you to visually switch between fully setup facial meshes and static head meshes.</p>
+<p>If the self.FacialCore attr is wired to a facial rig then this function will carefully
+toggle that rigs visibility state. For example: if state=True and FacialCore.GRP_Main is
+wired then we turn on it’s visibility, we also turn on visibility for meshes wired to
+self.renderMeshes_head and finally we turn off those meshes wired to renderMeshes_static_head.
+There are also different levels of management depending on how much of our system are wired,
+going down to very simple toggling between “renderMeshes_static_head” and “renderMeshes_head”</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1244,11 +1348,22 @@ switching off the body’s head geo and turning on the facialCores head.</p>
 <li><strong>toggle</strong> – toggle the state of the visibility, overwriting any state passed in</li>
 <li><strong>evalmanaged</strong> – if True we also manage the frozen state of all key nodes in the rig to speed up
 parallel eval on the hidden rig system</li>
+<li><strong>mode</strong> – specific attr that we want to switch, this by-passes the attr checks, supported: ‘visibility’, ‘lodVisibility’, ‘overrideVisibility’
+if none is given the code will find the first unlocked, unwired visibility mode from the supported list, in that order of preference</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>self.renderMeshes_head has been elevated and its visibility behaviour inversed. This code deals with
+the legacy rigs which will still behave correctly as long as they were published before April 2021.</p>
+<p class="last">As of April 2021 we’ve changed this system as we’ve introduced a new wire, “renderMeshes_static_head”
+which will now be used to denote those static heads which get switched off when we toggle the facial
+system and meshes on. Previously the “renderMeshes_head” was used for this but it clashes in logic as
+this wire is also used for the exporter and these static placeholder meshes should never have been taken into account.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -1580,6 +1695,19 @@ it wheel return an average between back and front wheels
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_External">
 <em class="property">class </em><code class="descname">Pro_MetaRig_External</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_External" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<p>Base class for external rigs being wired to the system, unless
+being wired to simulate a Red9 Puppet wiring setup, usually with
+support from us directly</p>
+<p>This is designed to enable base ProPack users to quickly hook
+their own rigs to the systems without trying to emulate the
+Red9 Puppets complex wiring structures.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_RigidBody">
+<em class="property">class </em><code class="descname">Pro_MetaRig_RigidBody</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_RigidBody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base</span></code></a></p>
+<p>&lt;&lt; class to bind the RigidBody exporter &gt;&gt;</p>
 <p>Base class for external rigs being wired to the system, unless
 being wired to simulate a Red9 Puppet wiring setup, usually with
 support from us directly</p>
@@ -2083,6 +2211,10 @@ so that we can mute these in parallel eval as required for playback speed</p>
 the facial rig vis state. In 2016 when a hierarchy is not visibility it IS STILL
 being computed by the evalmanager, this way we freeze the returned nodes to
 return that framerate back to the user.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">in Maya 2020 managing the frozen attrs in referenced files is VERY BUGGY and may be removed in future releases</p>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -2178,6 +2310,11 @@ this export tag</p>
 </table>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.export_nodetypes">
+<code class="descname">export_nodetypes</code><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.export_nodetypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.mrig">
 <code class="descname">mrig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.mrig" title="Permalink to this definition">¶</a></dt>
@@ -2213,7 +2350,7 @@ this export tag</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.getNodes">
-<code class="descname">getNodes</code><span class="sig-paren">(</span><em>select=True</em>, <em>filterSettings=None</em>, <em>include_basenodes=True</em>, <em>include_rendermeshes=None</em>, <em>include_renderMeshes_head=None</em>, <em>include_skinned_meshes=None</em>, <em>include_blends=None</em>, <em>include_hik=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getNodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getNodes</code><span class="sig-paren">(</span><em>select=True</em>, <em>filterSettings=None</em>, <em>include_basenodes=True</em>, <em>include_exportMeshes=None</em>, <em>include_rendermeshes=None</em>, <em>include_renderMeshes_head=None</em>, <em>include_skinned_meshes=None</em>, <em>include_blends=None</em>, <em>include_hik=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.getNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple wrap for the Exporter handling where we need to select everything
 required for the export, including the skeleton, skinned geo, blendshapes and their targets
 This works from those objects passed to it from expTag.__getNodes__() allowing you to
@@ -2231,6 +2368,8 @@ from the ExportTagUI and what gets selected when you do an FBX selective export<
 <li><strong>select</strong> – do we select the returned nodes?</li>
 <li><strong>include_basenodes</strong> – include all nodes returned from self.__getNodes__ which for CharacterTags is all child jnts.
 note that this respects the over-rides available on self and set by the selection_override_add calls</li>
+<li><strong>include_exportMeshes</strong> – New management of exportMeshes, if this is True and self.exportMeshes has data we ONLY include those meshes,
+if self.exportMeshes isn’t wired then we revert to previous behvaiour, inspecting the renderMeshes</li>
 <li><strong>include_rendermeshes</strong> – include meshes wired to the renderMeshes attr on the mRig itself</li>
 <li><strong>include_renderMeshes_head</strong> – include meshes wired to the renderMeshes_head attr on the mRig itself</li>
 <li><strong>include_skinned_meshes</strong> – include all skinned meshes found to be connected the wired skeleton hierarchy</li>
@@ -2384,8 +2523,9 @@ by the additive fbx export to force reset the skeleton pose before processing</p
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.bpose_load">
 <code class="descname">bpose_load</code><span class="sig-paren">(</span><em>custom_root=None</em>, <em>skip_attrs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.bpose_load" title="Permalink to this definition">¶</a></dt>
-<dd><p>new call to stamp the current skeleton pose as a Bpose used in the export
-process when we’re exporting additive style data</p>
+<dd><p>load the current exportRoot’s “bpose” which should be stored as an attr on the root  node either from the RigManager UI,
+or useing the bpose_save func from this class. This is used in the export process when we’re exporting additive style data
+to reset the export hierarchy back to bpose as required</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -2401,7 +2541,9 @@ load so if the joints are connected or constrained then they won’t reach the B
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.bpose_save">
 <code class="descname">bpose_save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base.bpose_save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>save the current skeleton pose to the “bpose” attr on the ExportRoot node. This wraps the main
+functions in the rigutils.py module which the RigManager uses internally</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Base.build_skeleton_for_output">
@@ -2617,6 +2759,56 @@ the ‘strip_root_animation’ checkbox on the PropTag is set</p>
 <em class="property">class </em><code class="descname">ExportTag_Vehicle</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Vehicle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
 <p>Export subclass for props</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_RigidBody">
+<em class="property">class </em><code class="descname">ExportTag_RigidBody</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_RigidBody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
+<p>Export subclass for rigid body style outputs, These are NON SKELETAL</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_RigidBody.build_skeleton_for_output">
+<code class="descname">build_skeleton_for_output</code><span class="sig-paren">(</span><em>bindscales=True</em>, <em>respect_attrlocks=True</em>, <em>exploop=None</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_RigidBody.build_skeleton_for_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main call to build the export nodes for the FBX Export handler.
+This is only called in the “simple” fbx output process within the exporter.
+Now exposed on the Tags so we can overload for clients and expTag types as required.
+Result of this is should be a bound, duplicated, clean skeleton hierarchy in
+world space ready to push to FBX.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">unlike the ExportTag_Character and most of the other base export classes, this is a RigidBody export call,
+expecting to output nodetypes matching self.export_nodetypes, which in this case is set to “locator”</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>exploop</strong> – if passed we also take the ExpLoop settings into account when we bind, else we use the ExpTag data only</li>
+<li><strong>bindscales</strong> – bind the scales between the source and output skeleton</li>
+<li><strong>respect_attrlocks</strong> – if True we respect locked attrs and do not bind the data to them</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">[[mNode(new_skeleton_root), (mNode(additional_nodes_required_for_export), …], [nodes_to_delete]]
+where the the first list in the return is a list of mNodes that will get selected by the exporter for output
+and the second is a list of temporary nodes created during this process to delete after the export has run</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>when dealing with the RigidBody Export class the RigManager’s BPose handling will be redundant as we’re not locked to
+nodes of type “joint”. In order to save the “bpose” attr used by the reset skeleton and “strip_root_motion” flags you need
+to manually save the bpose using the following code.</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">=</span><span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">exportTag</span><span class="o">.</span><span class="n">bpose_save</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -3366,7 +3558,7 @@ re-build the cached attrs for the timecode systems</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Mark Jackson.
+        &#169; Copyright 2021, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

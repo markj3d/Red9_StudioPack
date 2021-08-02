@@ -1923,7 +1923,11 @@ class PoseCompare(object):
         Compare the 2 PoseData objects via their internal [key][attrs] blocks
         return a bool. After processing self.fails is a dict holding all the fails
         for processing later if required
+        
+        * currentPose is MASTER
+        * referencePose is the one being compared to the currentPose
         '''
+        
         self.fails = {}
         logprint_keymismacth = ''
         logprint_dagpath = ''
@@ -1976,12 +1980,12 @@ class PoseCompare(object):
             # "hierarchyMismatch" block - check full dagPaths
             # ---------------------------------------------
             try:
-                expectedDag = r9Core.removeNameSpace_fromDag(referenceAttrBlock['longName'])
+                referenceDag = r9Core.removeNameSpace_fromDag(referenceAttrBlock['longName'])
                 currentDag = r9Core.removeNameSpace_fromDag(attrBlock['longName'])
 
-                if self.longName and not expectedDag == currentDag:
+                if self.longName and not referenceDag == currentDag:
                     if 'dagMismatch' not in self.ignoreBlocks:
-                        logprint_dagpath += 'ERROR: hierarchy Mismatch : \n\t\texpectedValue=\t"%s" >> \n\t\tcurrentValue=\t"%s"\n' % (currentDag, expectedDag)
+                        logprint_dagpath += 'ERROR: hierarchy Mismatch : \n\t\texpectedValue=\t"%s" >> \n\t\tcurrentValue=\t"%s"\n' % (currentDag, referenceDag)
                         if 'dagMismatch' not in self.fails:
                             self.fails['dagMismatch'] = []
                         self.fails['dagMismatch'].append(key)
@@ -2035,11 +2039,11 @@ class PoseCompare(object):
                             matched = r9Core.floatIsEqual(value, refValue, self.linearTolerance, allowGimbal=False)
                         if not matched:
                             self.__addFailedAttr(key, attr)
-                            logprint_missingfail += 'ERROR: AttrValue float mismatch : "%s.%s" currentValue=%s >> expectedValue=%s\n' % (key, attr, value, refValue)
+                            logprint_missingfail += 'ERROR: AttrValue float mismatch : "%s.%s" expectedValue=%s >> currentValue=%s\n' % (key, attr, value, refValue)
                             continue
                     elif not value == refValue:
                         self.__addFailedAttr(key, attr)
-                        logprint_missingfail += 'ERROR: AttrValue mismatch : "%s.%s" currentValue=%s >> expectedValue=%s\n' % (key, attr, value, refValue)
+                        logprint_missingfail += 'ERROR: AttrValue mismatch : "%s.%s" expectedValue=%s >> currentValue=%s\n' % (key, attr, value, refValue)
                         continue
 
         if any(['missingKeys' in self.fails, 'failedAttrs' in self.fails, 'dagMismatch' in self.fails]):

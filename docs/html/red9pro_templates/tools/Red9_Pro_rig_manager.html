@@ -1,0 +1,464 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Pro_Pack : tools : rig_manager &#8212; Red9 2.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Pro_Pack : tools : project_manager" href="Red9_Pro_project_manager.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_project_manager.html" title="Pro_Pack : tools : project_manager"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pro-pack-tools-rig-manager">
+<h1>Pro_Pack : tools : rig_manager<a class="headerlink" href="#pro-pack-tools-rig-manager" title="Permalink to this headline">¶</a></h1>
+<p>ProPack rig_manager module is the main UI wrapping for all of the RigManager setups.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9rig_man</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9rig_man&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<span class="target" id="module-Red9.pro_pack.tools.rig_manager"></span><p>Management of the rig settings and publishing to allow external rigs to be wired to the MetaRig systems</p>
+<p class="rubric">Main Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<dl class="function">
+<dt id="Red9.pro_pack.tools.rig_manager.rigmanager_ui">
+<code class="descname">rigmanager_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.rigmanager_ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>basic pro ui stub</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.rig_manager.rig_data_copy_ui">
+<code class="descname">rig_data_copy_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.rig_data_copy_ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>basic pro ui stub</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.rig_manager.remove_red9_production_mnodes">
+<code class="descname">remove_red9_production_mnodes</code><span class="sig-paren">(</span><em>mnodes=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.remove_red9_production_mnodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove Red9 Production mNode classes from any list of mNodes
+so that Red9 Internal Production tools see what Client Production users see</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.rig_manager.Base_Creator">
+<em class="property">class </em><code class="descname">Base_Creator</code><span class="sig-paren">(</span><em>parent=None</em>, <em>*args</em>, <em>**kwgs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.Base_Creator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
+<p>simple replacement for the confirm dialog when creating the base mRig node class object</p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.Base_Creator.create">
+<code class="descname">create</code><span class="sig-paren">(</span><em>class_type</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.Base_Creator.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.rig_manager.Base_Creator.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.Base_Creator.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.rig_manager.MetaRig_DataCopy">
+<em class="property">class </em><code class="descname">MetaRig_DataCopy</code><span class="sig-paren">(</span><em>parent=None</em>, <em>*args</em>, <em>**kwgs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.MetaRig_DataCopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
+<p>simple MetaRig copy handlers</p>
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.rig_manager.MetaRig_DataCopy.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.MetaRig_DataCopy.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager">
+<em class="property">class </em><code class="descname">PuppetRig_Manager</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
+<p>simple base version of the Red9 Internal Publisher to expose a few of the
+more generic hooks to the rig to help client manage some of the base systems.</p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_src_tab_signals">
+<code class="descname">set_src_tab_signals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_src_tab_signals" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the SRC tab signals up</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_rig_tab_signals">
+<code class="descname">set_rig_tab_signals</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_rig_tab_signals" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the RIG tab signals up</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.style_sheet">
+<code class="descname">style_sheet</code><span class="sig-paren">(</span><em>colour</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.style_sheet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_mrig_data_hook">
+<code class="descname">set_mrig_data_hook</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_mrig_data_hook" title="Permalink to this definition">¶</a></dt>
+<dd><p>manage the rigType and version txt fields</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_feedback">
+<code class="descname">set_feedback</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_feedback" title="Permalink to this definition">¶</a></dt>
+<dd><p>hook the ui upto the current meta and give feedback</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.create_base_mNode">
+<code class="descname">create_base_mNode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.create_base_mNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>create the core mNode of type</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.mrig_node_verify">
+<code class="descname">mrig_node_verify</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.mrig_node_verify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.get_mRig">
+<code class="descname">get_mRig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.get_mRig" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the main MRig</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.mrig_select">
+<code class="descname">mrig_select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.mrig_select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.get_srcRig">
+<code class="descname">get_srcRig</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.get_srcRig" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the SRC Extension node</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.get_mRig_external">
+<code class="descname">get_mRig_external</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.get_mRig_external" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the external mRig subclass if found</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.check_status">
+<code class="descname">check_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.check_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Key checks to see if the rig is in a fit state to publish</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.reset_states">
+<code class="descname">reset_states</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.reset_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset the states of the base systems</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_node_select">
+<code class="descname">src_node_select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_node_select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_export_tagID">
+<code class="descname">set_export_tagID</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_export_tagID" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the exportTag ID and feedback to the UI</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_zero_pose">
+<code class="descname">set_zero_pose</code><span class="sig-paren">(</span><em>mode</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_zero_pose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_attr_map">
+<code class="descname">set_attr_map</code><span class="sig-paren">(</span><em>mode</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_attr_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_render_meshes">
+<code class="descname">set_render_meshes</code><span class="sig-paren">(</span><em>group='main'</em>, <em>mode='set'</em>, <em>extra=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_render_meshes" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the renderMeshes with additional mode and extra for the add / subtract</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_export_skeleton">
+<code class="descname">set_export_skeleton</code><span class="sig-paren">(</span><em>mode=&lt;type 'set'&gt;</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_export_skeleton" title="Permalink to this definition">¶</a></dt>
+<dd><p>do we still need this wire??</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_toggle_visibility">
+<code class="descname">set_toggle_visibility</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.set_toggle_visibility" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.switch_ik_fk_mode">
+<code class="descname">switch_ik_fk_mode</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.switch_ik_fk_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.settings_priority_manage">
+<code class="descname">settings_priority_manage</code><span class="sig-paren">(</span><em>mode</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.settings_priority_manage" title="Permalink to this definition">¶</a></dt>
+<dd><p>manage the filterPrioirty list on the mRig settings object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.reset_darw_overrides">
+<code class="descname">reset_darw_overrides</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.reset_darw_overrides" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_node_verify">
+<code class="descname">src_node_verify</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_node_verify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_node_ctrls_add">
+<code class="descname">src_node_ctrls_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_node_ctrls_add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_node_ctrls_select">
+<code class="descname">src_node_ctrls_select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_node_ctrls_select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_node_ctrls_remove">
+<code class="descname">src_node_ctrls_remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_node_ctrls_remove" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_grp_main_add">
+<code class="descname">src_grp_main_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_grp_main_add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_grp_main_select">
+<code class="descname">src_grp_main_select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_grp_main_select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_loco_add">
+<code class="descname">src_loco_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_loco_add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_loco_select">
+<code class="descname">src_loco_select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_loco_select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_jnt_faceroot_add">
+<code class="descname">src_jnt_faceroot_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_jnt_faceroot_add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_jnt_faceroot_select">
+<code class="descname">src_jnt_faceroot_select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_jnt_faceroot_select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_jnt_chest_add">
+<code class="descname">src_jnt_chest_add</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_jnt_chest_add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_jnt_chest_select">
+<code class="descname">src_jnt_chest_select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_jnt_chest_select" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_clean_meta">
+<code class="descname">src_clean_meta</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_clean_meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>general SRC file call to run and remove invalid metaNodes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_export_tag_manager">
+<code class="descname">src_export_tag_manager</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_export_tag_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>add the default export Tag for characters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_export_meshes_manage">
+<code class="descname">src_export_meshes_manage</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_export_meshes_manage" title="Permalink to this definition">¶</a></dt>
+<dd><p>manage / wire the exportMeshes to the ExportTag if setup</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_export_overrides_selection">
+<code class="descname">src_export_overrides_selection</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_export_overrides_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>manage the exportTag Overrides for the export fbx handling.
+Nodes with overrides will be removed from the output skeleton</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this has been changed so that it respects the new exportTag.export_nodetypes variable,
+clamping the management to specific nodeTypes at the tag level, NOT just joints as previously</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_export_overrides_bindattrs">
+<code class="descname">src_export_overrides_bindattrs</code><span class="sig-paren">(</span><em>mode</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_export_overrides_bindattrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>manage the exportTag Overrides for the export fbx handling.
+Nodes with overrides will be removed from the output skeleton</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this has been changed so that it respects the new exportTag.export_nodetypes variable,
+clamping the management to specific nodeTypes at the tag level, NOT just joints as previously</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_export_bindpose">
+<code class="descname">src_export_bindpose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_export_bindpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple exporter wrap to trigger an fbx output for the SRC bindpose</p>
+<p>This runs the SRC_Export_HealthValidations to make sure the scene is setup
+as expected. We also turn OFF all deformers and try to return the skeleton
+to the either the stored BPose or the bindpose for the skin data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_zero_jnts">
+<code class="descname">src_zero_jnts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_zero_jnts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_cut_keys">
+<code class="descname">src_cut_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.src_cut_keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.pose_manage">
+<code class="descname">pose_manage</code><span class="sig-paren">(</span><em>mode</em>, <em>attr=None</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.pose_manage" title="Permalink to this definition">¶</a></dt>
+<dd><p>light wraps on the bPose management</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.health_src_run">
+<code class="descname">health_src_run</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.health_src_run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.health_src_runfix">
+<code class="descname">health_src_runfix</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.health_src_runfix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.health_src_print">
+<code class="descname">health_src_print</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.health_src_print" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.health_manager_open">
+<code class="descname">health_manager_open</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.health_manager_open" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.wire_template_rig">
+<code class="descname">wire_template_rig</code><span class="sig-paren">(</span><em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.wire_template_rig" title="Permalink to this definition">¶</a></dt>
+<dd><p>template calls to wiring macros for standard industry production rigs</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>ensure we close the tag ui if we close main and clear the callbacks</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.tools.rig_manager.PuppetRig_Manager.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Red9_Pro_project_manager.html"
+                        title="previous chapter">Pro_Pack : tools : project_manager</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/red9pro_templates/tools/Red9_Pro_rig_manager.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_project_manager.html" title="Pro_Pack : tools : project_manager"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

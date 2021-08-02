@@ -1088,8 +1088,10 @@ class AudioToolsWrap(object):
                     ann="Ripple offset the selected audio nodes so they're timed one after another",
                     command=self.offsetRipple)
         cmds.separator(h=15, style='none')
-        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                             c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0),
+                            align='left',
+                            image1='Rocket9_buttonStrap_narrow.png',
+                            c=lambda *args: (r9Setup.red9ContactInfo()), h=24, w=275)
         cmds.separator(h=15, style='none')
         cmds.showWindow(self.win)
         # cmds.window(self.win, e=True, widthHeight=(290, 190))

@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pro_Pack : r9Data" href="Red9_Pro_r9data.html" />
-    <link rel="prev" title="Pro_Pack : Optimiser" href="Red9_Pro_optimiser.html" /> 
+    <link rel="prev" title="Pro_Pack : optimiser" href="Red9_Pro_optimiser.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -33,7 +33,7 @@
           <a href="Red9_Pro_r9data.html" title="Pro_Pack : r9Data"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_optimiser.html" title="Pro_Pack : Optimiser"
+          <a href="Red9_Pro_optimiser.html" title="Pro_Pack : optimiser"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
       </ul>
@@ -47,19 +47,30 @@
   <div class="section" id="pro-pack-project">
 <h1>Pro_Pack : project<a class="headerlink" href="#pro-pack-project" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># main import statement to use</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">PROJECT_DATA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
 </pre></div>
 </div>
-<p>Red9 ProPack Project object (python object) is bound on boot to pro_pack itself and is used to manage data against a clients or projects own
+<p>Red9 ProPack Project object (python object) is bound on boot to pro_pack itself and is used to manage data against a given clients
 project file. The project file itself is a simple Json formatted file usually found under the client resource folder here:</p>
 <p>/Red9_ClientCore/xxxx/resource/xxx.project</p>
-<p>If your build doens’t have the Red9_ClientCore modules then you’ll find an empty project file here:</p>
+<p>We also recently added new Maya environment variable to expand the use of this data for those running ProPack without a ClientCore module.
+If you enter the following into your Documents/maya/20XX/maya.env then all xxx.project files found will be added to the list of avaiable projects,
+enabling you to switch all of the Project data on the fly inside Maya via either the ToolShelf button, or in the Red9 ProjectManager UI.
+This also means that these projects can be on a mapped network drive so all users point to the same data.</p>
+<p>RED9_PROJECT_RESOURCES=D:/my_project_path</p>
+<p>If your build doens’t have the Red9_ClientCore modules or the above variable then you’ll find an empty project file here:</p>
 <p>Red9/pro_pack/resources/empty.project</p>
+<p>The project data can now be edited directly from the Red9 ProjectManagerUI rather than having to edit the JSON data directly. This saves
+unexperienced users from badly formatting the JSON file and breaking the pipelines! You can also now create new projects from the UI.</p>
 <p>The code that adds and physically binds new project files to the systems is as follows. These lines must be added to your __init__ or
 somewhere thats parsed on boot so they’re bound to the PROJECT_DATA object. You can add as many of these as are required
 for your studios setups. Each additional project added will show up in the ProjectManager UI in Maya for you to switch between on the fly.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">PROJECT_DATA</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># to bind a single new project file</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">add_project</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_resources</span><span class="p">(),</span> <span class="s1">&#39;my_new_game.project&#39;</span><span class="p">))</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># to add ALL projects found under a given folder</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">add_projects_found</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The PROJECT_DATA object generated is used anywhere in the Red9 codebase where a path is required which may be specific to a project,
@@ -67,7 +78,7 @@ or folder mount, allowing us to tailor setups to a clients needs without modifyi
 is JSON formatted and bound to the PROJECT_DATA on load, this means that anything in that .project file will be exposed as an attribute
 directly on the PROJECT_DATA.data object.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># for example</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">PROJECT_DATA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">fps</span>  <span class="c1"># project frame rate</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">p4_root</span>  <span class="c1"># projects p4_root path which is dynamically found</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -101,12 +112,6 @@ systems to the r9File objects dynamically.</p>
 </tr>
 </tbody>
 </table>
-<dl class="data">
-<dt id="Red9.pro_pack.core.project.RED9_SCENE_REFERENCE_CALLBACK">
-<code class="descname">RED9_SCENE_REFERENCE_CALLBACK</code><em class="property"> = None</em><a class="headerlink" href="#Red9.pro_pack.core.project.RED9_SCENE_REFERENCE_CALLBACK" title="Permalink to this definition">¶</a></dt>
-<dd><p>This codebase must NOT directly import anything from pro_pack !!!!</p>
-</dd></dl>
-
 <dl class="class">
 <dt id="Red9.pro_pack.core.project.ProjectBase">
 <em class="property">class </em><code class="descname">ProjectBase</code><a class="headerlink" href="#Red9.pro_pack.core.project.ProjectBase" title="Permalink to this definition">¶</a></dt>
@@ -116,13 +121,14 @@ data designed to be inspected via the PROJECT_DATA.data object bound to r9pro.
 This class object is bound to the PROJECT_DATA object at boot and all data
 exposed as direct attributes under the data object</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">this</span> <span class="nb">object</span> <span class="ow">is</span> <span class="n">exposed</span> <span class="k">as</span> <span class="n">follows</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">PROJECT_DATA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">data</span>
 </pre></div>
 </div>
 <p>Base keys generated by default in all project objects:</p>
 <ul class="simple">
 <li>self.client : client name</li>
+<li>self.fps :  base fps</li>
 <li>self.upAxis : default Maya up axis</li>
 <li>self.scene_units : default Maya sceneunits</li>
 <li>self.evalmanager : either ‘off’ or ‘parallel’ the default state of the eval manager</li>
@@ -138,6 +144,12 @@ exposed as direct attributes under the data object</p>
 <p class="first admonition-title">Note</p>
 <p class="last">ALL PATHS COMING FROM THIS MUST BE PYTHONIZED NOT OS!!!!!!!  on windows ‘/’ not ‘’</p>
 </div>
+<dl class="method">
+<dt id="Red9.pro_pack.core.project.ProjectBase.unused_default_keys">
+<code class="descname">unused_default_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.ProjectBase.unused_default_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>return those keys available in the DEFAULT_PROJECT_KEYS that aren’t yet in the current json data</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="Red9.pro_pack.core.project.ProjectBase.p4_root">
 <code class="descname">p4_root</code><a class="headerlink" href="#Red9.pro_pack.core.project.ProjectBase.p4_root" title="Permalink to this definition">¶</a></dt>
@@ -191,12 +203,17 @@ ensure they are relevant to a users environment</p>
 <code class="descname">resolve_paths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.ProjectBase.resolve_paths" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function responsible for replacing any ‘p4_root+’ entries in the project file
 with dynamic data such as the actual p4_clientroot</p>
-<p>TODO: resolve SHOULD be able to re-resoLve this data. currently it overwrites the keys directly</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the second part of the path must not start with ‘/’ such that if p4_root=’X:/assets/root’
+‘p4_root+resources/rigs/child_biped/Red9_Child_PUB.ma’ - this will yield correct results ‘X:/assets/root/resources/rigs/child_biped/Red9_Child_PUB.ma
+‘p4_root+/resources/rigs/child_biped/Red9_Child_PUB.ma’ - this will yield incorrect ‘X:/resources/rigs/child_biped/Red9_Child_PUB.ma</p>
+</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.ProjectBase.save">
-<code class="descname">save</code><span class="sig-paren">(</span><em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.ProjectBase.save" title="Permalink to this definition">¶</a></dt>
+<code class="descname">save</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>raw=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.ProjectBase.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>save the current project data back to file. This is useful if you’ve made
 changes in Maya to any of the project.data paths etc and want those written
 back to the client.project file</p>
@@ -208,6 +225,12 @@ back to the client.project file</p>
 </tr>
 </tbody>
 </table>
+<dl class="docutils">
+<dt>..note:: </dt>
+<dd>this will save the processed data, so if we’ve built paths or resolved them when we loaded
+the data those new values would also get saved out. If you want to change data use the new
+self._raw set of data and save with the raw flag True</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -238,7 +261,7 @@ to attrs on the project.data object</p>
 <li><strong>raw</strong> – do we return/print the actual raw json data, or the compiled and resolved version of it</li>
 <li><strong>ppindent</strong> – the indent var passed to the pprint command to resolve nested data</li>
 <li><strong>prefix</strong> – added prefix to the from of each key in the data</li>
-<li><strong>feedback</strong> – True by default, pring the output, else just return the formatted data</li>
+<li><strong>feedback</strong> – True by default, print the output, else just return the formatted data</li>
 </ul>
 </td>
 </tr>
@@ -309,9 +332,34 @@ for all available projects</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.project.Project.add_projects_found">
+<code class="descname">add_projects_found</code><span class="sig-paren">(</span><em>folder=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.add_projects_found" title="Permalink to this definition">¶</a></dt>
+<dd><p>add all projects found under a given resource folder rather than manually
+adding them one at a time as per the self.add_project call. This now support 
+a new Maya.env key RED9_PROJECT_RESOURCES which if set, allows us to bind
+external paths, maybe network mounted, to the systems</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>folder</strong> – if given this is the folder we search for child xxx.project files, 
+if not given we look for the existence of the Maya.env key RED9_PROJECT_RESOURCES and use that path</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.remove_project">
-<code class="descname">remove_project</code><span class="sig-paren">(</span><em>project='Empty'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.remove_project" title="Permalink to this definition">¶</a></dt>
+<code class="descname">remove_project</code><span class="sig-paren">(</span><em>project='Empty'</em>, <em>delete_file=False</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.remove_project" title="Permalink to this definition">¶</a></dt>
 <dd><p>remove a given project from the structures</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.project.Project.clean_projects">
+<code class="descname">clean_projects</code><span class="sig-paren">(</span><em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.clean_projects" title="Permalink to this definition">¶</a></dt>
+<dd><p>rescan the available projects and if the file has been deleted or is
+no longer available then remove it from the process lists</p>
 </dd></dl>
 
 <dl class="method">
@@ -616,7 +664,7 @@ class directly and the return will be a list [__module__, cls]</p>
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="Red9_Pro_optimiser.html"
-                        title="previous chapter">Pro_Pack : Optimiser</a></p>
+                        title="previous chapter">Pro_Pack : optimiser</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="Red9_Pro_r9data.html"
                         title="next chapter">Pro_Pack : r9Data</a></p>
@@ -656,13 +704,13 @@ class directly and the return will be a list [__module__, cls]</p>
           <a href="Red9_Pro_r9data.html" title="Pro_Pack : r9Data"
              >next</a> |</li>
         <li class="right" >
-          <a href="Red9_Pro_optimiser.html" title="Pro_Pack : Optimiser"
+          <a href="Red9_Pro_optimiser.html" title="Pro_Pack : optimiser"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Mark Jackson.
+        &#169; Copyright 2021, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

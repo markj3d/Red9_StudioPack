@@ -85,8 +85,10 @@ class SceneReviewerUI(object):
                                         c=lambda x: self._setReviewStatus('inactive'))
         cmds.setParent('..')
         cmds.separator(h=15, style='none')
-        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                                 c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0),
+                            image1='Rocket9_buttonStrap.png',
+                            align='left',
+                            c=lambda *args: (r9Setup.red9ContactInfo()), h=24, w=200)
         cmds.showWindow(window)
         self._refresh()
 
@@ -326,9 +328,9 @@ class RecordAttrs(object):
         self.close()
         cmds.window('MouseMoCap', title="MouseMoCap")  # , widthHeight=(260, 180))
 
-        cmds.columnLayout(adjustableColumn=True, cw=200)
+        cmds.columnLayout(adjustableColumn=True, cw=200,columnAttach=('both', 5))
         cmds.separator(h=15, style='none')
-        cmds.text('     Use the Mouse as a MoCap input devise     ')
+        cmds.text('     Use the Mouse as a MoCap input device     ')
         cmds.separator(h=15, style='none')
         cmds.button(label='Set Attributes to Record (chBox)',
                     ann='Prime Selected Attributes in the channelBox for Recording',
@@ -339,10 +341,12 @@ class RecordAttrs(object):
                      command=partial(self.removeAttrsToRecord))
         cmds.separator(h=15, style='none')
         cmds.button('MouseMoCapRecord', label='RECORD', bgc=[0.1, 0.8, 0.1],
-                     command=partial(self._runRecord))
+                     command=partial(self._runRecord), h=35)
         cmds.separator(h=25, style='none')
-        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                             c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0),
+                            image1='Rocket9_buttonStrap.png',
+                            align='left',
+                            c=lambda *args: (r9Setup.red9ContactInfo()), h=24, w=200)
         cmds.separator(h=15, style='none')
         cmds.showWindow('MouseMoCap')
 #         cmds.window('MouseMoCap', e=True, widthHeight=(260, 180))

@@ -4,21 +4,35 @@ Pro_Pack : project
 	>>> # main import statement to use
 	>>> from Red9.pro_pack import PROJECT_DATA
 	
-Red9 ProPack Project object (python object) is bound on boot to pro_pack itself and is used to manage data against a clients or projects own
+Red9 ProPack Project object (python object) is bound on boot to pro_pack itself and is used to manage data against a given clients 
 project file. The project file itself is a simple Json formatted file usually found under the client resource folder here:
 
 /Red9_ClientCore/xxxx/resource/xxx.project
 
-If your build doens't have the Red9_ClientCore modules then you'll find an empty project file here:
+We also recently added new Maya environment variable to expand the use of this data for those running ProPack without a ClientCore module.
+If you enter the following into your Documents/maya/20XX/maya.env then all xxx.project files found will be added to the list of avaiable projects,
+enabling you to switch all of the Project data on the fly inside Maya via either the ToolShelf button, or in the Red9 ProjectManager UI.
+This also means that these projects can be on a mapped network drive so all users point to the same data.
+
+RED9_PROJECT_RESOURCES=D:/my_project_path
+
+If your build doens't have the Red9_ClientCore modules or the above variable then you'll find an empty project file here:
 
 Red9/pro_pack/resources/empty.project
+
+The project data can now be edited directly from the Red9 ProjectManagerUI rather than having to edit the JSON data directly. This saves
+unexperienced users from badly formatting the JSON file and breaking the pipelines! You can also now create new projects from the UI.
 
 The code that adds and physically binds new project files to the systems is as follows. These lines must be added to your __init__ or
 somewhere thats parsed on boot so they're bound to the PROJECT_DATA object. You can add as many of these as are required
 for your studios setups. Each additional project added will show up in the ProjectManager UI in Maya for you to switch between on the fly.
 
 	>>> from Red9.pro_pack import PROJECT_DATA
+	>>> # to bind a single new project file
 	>>> PROJECT_DATA.add_project(os.path.join(get_resources(), 'my_new_game.project'))
+	>>>
+	>>> # to add ALL projects found under a given folder
+	>>> PROJECT_DATA.add_projects_found(folder)
 
 The PROJECT_DATA object generated is used anywhere in the Red9 codebase where a path is required which may be specific to a project, 
 or folder mount, allowing us to tailor setups to a clients needs without modifying the underlying codebase at all. The project file 

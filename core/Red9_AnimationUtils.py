@@ -649,7 +649,7 @@ def setTimeRangeToo(nodes=None, setall=True, bounds_only=True):
     else:
         raise StandardError('given nodes have no found animation data')
 
-def snap(source, destination, snapTranslates=True, snapRotates=True, *args):
+def snap(source, destination, snapTranslates=True, snapRotates=True, *args, **kws):
     '''
     simple wrapper over the AnimFunctions snap call
 
@@ -819,6 +819,7 @@ class AnimationUI(object):
         animUI = cls()
         animUI.uiBoot = True
         animUI.close()  # close any previous instances
+        RED_ANIMATION_UI = animUI
 
         if 'ui_docked' in animUI.ANIM_UI_OPTVARS['AnimationUI']:
             animUI.dock = eval(animUI.ANIM_UI_OPTVARS['AnimationUI']['ui_docked'])
@@ -830,7 +831,6 @@ class AnimationUI(object):
                 print('Switching dockState : False')
                 animUI.dock = False
 
-#         RED_ANIMATION_UI = animUI
 #         if RED_ANIMATION_UI_OPENCALLBACKS:
 #             for func in RED_ANIMATION_UI_OPENCALLBACKS:
 #                 if callable(func):
@@ -1577,11 +1577,12 @@ class AnimationUI(object):
 
         cmds.separator(h=10, style='none')
         self.r9strap = cmds.iconTextButton('r9strap',
-                                           style='iconOnly',
+                                           style='iconAndTextHorizontal', #'iconOnly',
                                            parent=self.MainLayout,
                                            bgc=(0.7, 0, 0),
-                                           image1='Rocket9_buttonStrap2.bmp',
-                                           c=lambda * args: (r9Setup.red9ContactInfo()), h=22, w=340)
+                                           image1='Rocket9_buttonStrap.png',
+                                           align='left',
+                                           c=lambda * args: (r9Setup.red9ContactInfo()), h=24, w=340)
 
         # needed for 2009
         cmds.scrollLayout(self.uiglPoseScroll, e=True, h=330)
@@ -3756,7 +3757,7 @@ class AnimFunctions(object):
         raise NotImplemented
 
     @staticmethod
-    def snap(nodes=None, snapTranslates=True, snapRotates=True, *args):
+    def snap(nodes=None, snapTranslates=True, snapRotates=True, *args, **kws):
         '''
         This takes 2 given transform nodes and snaps them together. It takes into
         account offsets in the pivots of the objects. Uses the API MFnTransform nodes
@@ -3885,11 +3886,12 @@ class AnimFunctions(object):
                 cmds.delete(deleteMe)
 #                 cmds.select(nodes)
 
-    def bindNodes(self, nodes=None, attributes=None, filterSettings=None,
-                  bindMethod='connect', matchMethod=None, **kws):
+    def bindNodes(self, nodes=None, attributes=None, attributes_all_settable=False, filterSettings=None, bindMethod='connect',
+                  matchMethod=None, manage_scales=False, unlock=False, **kws):
         '''
         bindNodes is a Hi-Level wrapper function to bind animation data between
-        filtered nodes, either in hierarchies or just selected pairs.
+        filtered nodes, either in hierarchies or just selected pairs. This has been uplifted to sync
+        to the ProPack bind call for clarity
 
         :param nodes: List of Maya nodes to process. This combines the filterSettings
             object and the MatchedNodeInputs.processMatchedPairs() call,
@@ -3899,8 +3901,12 @@ class AnimFunctions(object):
             Note that this is also now bound to the class instance and if not passed in
             we use this classes instance of filterSettings cls.settings
         :param attributes: Only process the given attributes[]
+        :param attributes_all_settable: if True and bindMethod='connect' we process ALL settable channels on each node
         :param bindMethod: method of binding the data
         :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names
+        :param manage_scales: bool, do we also look at binding jnt scales where applicable, this only runs
+            if the source jnt has incoming scale connections which would then be propagated via a scaleConstrain
+        :param unlock: if True force unlock the required transform attrs on the destination skeleton first
 
         TODO: expose this to the UI's!!!!
         '''
@@ -3914,6 +3920,12 @@ class AnimFunctions(object):
         if logging_is_debug():
             log.debug('bindNodes params : nodes=%s : attributes=%s : filterSettings=%s : matchMethod=%s'
                        % (nodes, attributes, filterSettings, matchMethod))
+         
+        if not attributes:
+            attributes = ['rotateX', 'rotateY', 'rotateZ', 'translateX', 'translateY', 'translateZ']
+        if manage_scales:
+            attributes.extend(['scaleX', 'scaleY', 'scaleZ', 'inverseScale'])
+
 
         # Build up the node pairs to process
         nodeList = r9Core.processMatchedNodes(nodes,
@@ -3921,13 +3933,19 @@ class AnimFunctions(object):
                                               toMany=False,
                                               matchMethod=matchMethod).MatchedPairs
         if nodeList:
+            # bulk unlock the required attrs if unlock flag set
+            if unlock:
+                r9Core.LockChannels().processState([dest for src, dest in nodeList], attrs=attributes, mode='fullkey', hierarchy=True)
+
             for src, dest in nodeList:
                 try:
                     if bindMethod == 'connect':
-                        if not attributes:
-                            attributes = ['rotateX', 'rotateY', 'rotateZ', 'translateX', 'translateY', 'translateZ']
+                        if attributes_all_settable:
+                            _attributes = attributes + getSettableChannels(src, incStatics=False)
+                        else:
+                            _attributes = attributes
                         # Bind only specific attributes
-                        for attr in attributes:
+                        for attr in _attributes:
                             log.info('Attr %s bindNode from %s to>> %s' % (attr, r9Core.nodeNameStrip(src),
                                                                           r9Core.nodeNameStrip(dest)))
                             try:
@@ -3935,8 +3953,24 @@ class AnimFunctions(object):
                             except:
                                 log.info('bindNode from %s to>> %s' % (r9Core.nodeNameStrip(src),
                                                                       r9Core.nodeNameStrip(dest)))
-                    if bindMethod == 'constraint':
-                        cmds.parentConstraint(src, dest, mo=True)
+                    elif bindMethod == 'constraint':
+                        try:
+                            cmds.parentConstraint(src, dest, mo=True)
+                        except:
+                            chns = r9Anim.getSettableChannels(dest)
+                            if all(['translateX' in chns, 'translateY' in chns, 'translateZ' in chns]):
+                                cmds.pointConstraint(src, dest, mo=True)
+                            elif all(['rotateX' in chns, 'rotateY' in chns, 'rotateZ' in chns]):
+                                cmds.orientConstraint(src, dest, mo=True)
+                            else:
+                                log.info('Failed to Bind nodes: %s >> %s' % (src, dest))
+
+                        # if we have incoming scale connections then run the scaleConstraint
+                        if manage_scales and cmds.listConnections('%s.sx' % src):
+                            try:
+                                cmds.scaleConstraint(src, dest, mo=True)
+                            except:
+                                print('failed : scales ', dest)
                 except:
                     pass
         else:
@@ -4198,11 +4232,13 @@ class RandomizeKeys(object):
             cmds.setParent('..')
 
             cmds.separator(h=15, style='none')
-            cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                                 c=r9Setup.red9ContactInfo, h=22, w=200)
+            cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0), 
+                                image1='Rocket9_buttonStrap_narrow.png',
+                                align='left',
+                                c=r9Setup.red9ContactInfo, h=24, w=275)
             cmds.separator(h=15, style='none')
             cmds.showWindow(self.win)
-            cmds.window('KeyRandomizerOptions', e=True, widthHeight=(320, 280))
+            cmds.window(self.win, e=True, widthHeight=(320, 280))
             self.__uicb_interactiveMode(False)
             self.__loadPrefsToUI()
 
@@ -4493,9 +4529,11 @@ class FilterCurves(object):
         cmds.setParent('..')
 
         cmds.separator(h=20, style="none")
-        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                                 c=r9Setup.red9ContactInfo,
-                                 h=22, w=220)
+        cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0),
+                            image1='Rocket9_buttonStrap.png',
+                            c=r9Setup.red9ContactInfo,
+                            align='left',
+                            h=24, w=220)
         cmds.separator(h=20, style="none")
         cmds.showWindow(self.win)
         cmds.window(self.win, e=True, widthHeight=(410, 300))
@@ -5316,8 +5354,10 @@ class MirrorSetup(object):
                      command=lambda *args: (self.__loadMirrorSetups()))
         cmds.setParent('..')
         cmds.separator(h=15, style='none')
-        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                             c=r9Setup.red9ContactInfo, h=22, w=180)
+        cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0),
+                            image1='Rocket9_buttonStrap_narrow.png',
+                            align='left',
+                            c=r9Setup.red9ContactInfo, h=24, w=275)
         cmds.separator(h=15, style='none')
         cmds.showWindow(window)
         self.__uicb_setDefaults('default')
@@ -5629,7 +5669,7 @@ class CameraTracker():
 
     def _showUI(self):
         self.close()
-        cmds.window(self.win, title=LANGUAGE_MAP._CameraTracker_.title, widthHeight=(263, 180))
+        cmds.window(self.win, title=LANGUAGE_MAP._CameraTracker_.title, widthHeight=(300, 180))
         cmds.menuBarLayout()
         cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
         cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help,
@@ -5650,7 +5690,7 @@ class CameraTracker():
         cmds.checkBox('CBMaintainCurrent', l=LANGUAGE_MAP._CameraTracker_.maintain_frame, v=True, cc=partial(self.__storePrefs))
         cmds.setParent('..')
         cmds.separator(h=15, style='none')
-        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 132), (2, 132)])
+        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 145), (2, 145)])
         if self.fixed:
             cmds.button('cameraTrackTrack',
                         label=LANGUAGE_MAP._CameraTracker_.pan,
@@ -5664,11 +5704,13 @@ class CameraTracker():
         cmds.button('cameraTrackAppy', label=LANGUAGE_MAP._Generic_.apply, bgc=self.poseButtonHighLight, command=partial(self.__storePrefs))
         cmds.setParent('..')
         cmds.separator(h=15, style='none')
-        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                             c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0),
+                                image1='Rocket9_buttonStrap_narrow.png',
+                                align='left',
+                                c=lambda *args: (r9Setup.red9ContactInfo()), h=24, w=275)
         cmds.separator(h=15, style='none')
         cmds.showWindow(self.win)
-        cmds.window(self.win, e=True, widthHeight=(270, 240))
+        cmds.window(self.win, e=True, widthHeight=(290, 255))
         self.__loadPrefsToUI()
 
     def __storePrefs(self, *args):
@@ -5736,8 +5778,10 @@ class ReconnectAnimData(object):
                     command=self.__uiCB_reConnectAnimDataBlind)
         cmds.separator(h=15, style='none')
 
-        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                             c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0),
+                            image1='Rocket9_buttonStrap.png',
+                            align='left',
+                            c=lambda *args: (r9Setup.red9ContactInfo()), h=24, w=200)
         cmds.showWindow(self.win)
         cmds.window(self.win, e=True, widthHeight=(300, 210))
 

@@ -1322,7 +1322,7 @@ in generic meta functions.</p>
 <li><strong>walk</strong> – walk all subMeta connections and include all their children too</li>
 <li><strong>mAttrs</strong> – only search connected mNodes that pass the given attribute filter (attr is at the metaSystems level)</li>
 <li><strong>cAttrs</strong> – only pass connected children whos connection to the mNode matches the given attr (accepts wildcards)</li>
-<li><strong>nAttrs</strong> – search returned MayaNodes for given set of attrs and only return matched nodes</li>
+<li><strong>nAttrs</strong> – [] search returned MayaNodes for given set of attrs and only return matched nodes</li>
 <li><strong>asMeta</strong> – return instantiated mNodes regardless of type</li>
 <li><strong>asMap</strong> – return the data as a map such that {mNode.plugAttr:[nodes], mNode.plugAttr:[nodes]}</li>
 <li><strong>plugsOnly</strong> – only with asMap flag, this truncates the return to [plugAttr, [nodes]]</li>
@@ -1574,7 +1574,7 @@ source=True, destination=True, mTypes=[], mInstances=[], mAttrs=None, dataType=�
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.selectChildren">
-<code class="descname">selectChildren</code><span class="sig-paren">(</span><em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em>, <em>add=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.selectChildren" title="Permalink to this definition">¶</a></dt>
+<code class="descname">selectChildren</code><span class="sig-paren">(</span><em>walk=True</em>, <em>mAttrs=None</em>, <em>cAttrs=[]</em>, <em>nAttrs=[]</em>, <em>add=False</em>, <em>incFacial=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.selectChildren" title="Permalink to this definition">¶</a></dt>
 <dd><p>light wrap over the getChildren so we can more carefully manage it in some of the pro proc bindings</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2948,7 +2948,7 @@ any registered HUD is killed off</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Mark Jackson.
+        &#169; Copyright 2021, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

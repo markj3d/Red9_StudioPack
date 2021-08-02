@@ -68,7 +68,9 @@ def formatPath(path):
     take a path and format it to forward slashes with catches for the exceptions so that paths
     are always Pythonized not OS based
     '''
-    return os.path.normpath(path).replace('\\', '/').replace('\t', '/t').replace('\n', '/n').replace('\a', '/a')
+    if path:
+        return os.path.normpath(path).replace('\\', '/').replace('\t', '/t').replace('\n', '/n').replace('\a', '/a')
+    return ''
 
 def formatPath_join(path, *paths):
     '''
@@ -86,6 +88,12 @@ def sceneName(short=False):
         return OpenMaya.MFileIO.currentFile()
     else:
         return os.path.splitext(os.path.basename(OpenMaya.MFileIO.currentFile()))[0]
+
+def scenePath():
+    '''
+    Return the directory that the current Maya scene is saved too
+    '''
+    return os.path.dirname(sceneName())
 
 def itersubclasses(cls, _seen=None):
     """
@@ -288,6 +296,20 @@ def playback_suspend(func):
         return res
     return wrapper
 
+def gpu_toggle(func):
+    '''
+    DECORATOR : toggle the GPU Override after the enclosed func has run
+    '''
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        res = func(*args, **kwargs)
+        try:
+            mel.eval('toggleOpenCLEvaluator')
+        except StandardError, err:
+            log.debug(err)
+        return res
+    return wrapper
+            
 def runProfile(func):
     '''
     DECORATOR : run the profiler - only ever used when debugging /optimizing
@@ -399,6 +421,9 @@ def evalManagerState(mode='off'):
         log.debug('EvalManager - switching state : %s' % mode)
     else:
         log.debug("evalManager skipped as you're in an older version of Maya")
+
+# gpu override can be toggled  in mel: toggleOpenCLEvaluator
+
 
 def keepSelection(func):
     '''

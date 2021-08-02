@@ -250,7 +250,7 @@ def validateString(strText, fix=False, illegals=['-', '#', '!', ' ', '@']):
     return strText
 
 
-def filterListByString(input_list, filter_string, matchcase=False):
+def filterListByString(input_list, filter_string, matchcase=False, os_basename=False):
     '''
     Generic way to filter a list by a given string input. This is so that all
     the filtering used in the UI's is consistent. Used by the poseSaver, facialUI,
@@ -262,10 +262,12 @@ def filterListByString(input_list, filter_string, matchcase=False):
     :param filter_string: string to use in the filter, supports comma separated search strings
         eg : 'brows,smile,funnel'
     :param matchcase: whether to match or ignore case sensitivity
+    :param os_basename: if True and the list is a list of full os paths, we strip filter just the filename, path and ext stripped off
 
     .. note::
-        this is a Regex search but it's managed under the hood.
-        >> 'attack knife' would yield matches with 'attack and knife in the string, similar to 'attack*.*knife in windows, compiles to ('attack.*knife')
+        this is a Regex search but it's carefully managed under the hood.
+        >> 'attack knife' : yield matches with 'attack' and 'knife' in the string in that order, similar to 'attack*.*knife in windows, compiles to ('attack.*knife')
+        >> 'knife+attack' : yield matches where order does not matter but the string has to contain both 'attack' and 'knife'
         >> 'attack..knife' would yield matches with 'attack12knife' 2 wildcards between the params (dots are wildcards in regex), compiles to ('attack..knife')
         >> 'attack.*knife' would yield matches with 'attack_big_massive_knife' because of the .* is multiple wildcards between the search params, compiles to ('attack.*knife')
         >> 'attack,knife' would yield matches with either 'attack' and 'knife' in the string, compiles to ('attack|knife') with the '|' or operator
@@ -274,9 +276,9 @@ def filterListByString(input_list, filter_string, matchcase=False):
         >> ^attack' would match 'attack_then' but not 'they_attack' as the ^ clamps to the front of the string
     '''
 
-    if not matchcase:
-        filter_string = filter_string.upper()
-#     filterBy=[f for f in filter_string.replace(' ','').rstrip(',').split(',') if f]
+#     if not matchcase:
+#         filter_string = filter_string.upper()
+
     filteredList = []
 
     filterBy = [f for f in filter_string.rstrip(',').split(',') if f]
@@ -284,21 +286,27 @@ def filterListByString(input_list, filter_string, matchcase=False):
     for n in filterBy:
         if ' ' in n:
             pattern.append('(%s)' % n.replace(' ', ')+.*('))
+        elif '+' in n:
+            pattern.append('(?=.*%s)' % n.replace('+', ')+(?=.*'))  # compiles to (?=.*patternA)+(?=.*patternB)
         else:
             pattern.append(n)
     filterPattern = '|'.join(n for n in pattern)
-    log.debug('new : %s' % filterPattern)
+    if not matchcase:
+        filterPattern = '(?i)%s' % filterPattern
+
+    log.debug('new search pattern : %s' % filterPattern)
 
     regexFilter = re.compile('(' + filterPattern + ')')  # convert into a regularExpression
 
     for item in input_list:
-        data = item
-        # filterPattern='|'.join(n for n in filterBy)
-        # regexFilter=re.compile('('+filterPattern+')')  # convert into a regularExpression
-        if not matchcase:
-            data = item.upper()
+        if os_basename:
+            data = os.path.splitext(os.path.basename(item))[0]
+        else:
+            data = item
+#         if not matchcase:
+#             data = data.upper()
         if regexFilter.search(data):
-            # print data,item,filterPattern
+#             print(data,item,filterPattern)
             if item not in filteredList:
                 filteredList.append(item)
     return filteredList
@@ -635,8 +643,10 @@ class FilterNode_UI(object):
                      command=lambda *args: (self.__uiCall('FullHierarchy')))
         cmds.setParent(self.MainLayout)
         cmds.separator(h=15, style='none')
-        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                             c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0),
+                            align='left',
+                            image1='Rocket9_buttonStrap.png',
+                            c=lambda *args: (r9Setup.red9ContactInfo()), h=24, w=200)
         cmds.separator(h=15, style='none')
         cmds.showWindow(window)
         # cmds.window(self.win, e=True, widthHeight=(400, 400))
@@ -1891,17 +1901,17 @@ class LockChannels(object):
 
         def _showUI(self):
             self.close()
-            window = cmds.window(self.win, title=LANGUAGE_MAP._LockChannelsUI_.title, s=False)  # widthHeight=(260, 410))
+            window = cmds.window(self.win, title=LANGUAGE_MAP._LockChannelsUI_.title, s=True)  # widthHeight=(260, 410))
             cmds.menuBarLayout()
             cmds.menu(l=LANGUAGE_MAP._Generic_.vimeo_menu)
             cmds.menuItem(l=LANGUAGE_MAP._Generic_.vimeo_help,
                           c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/58664502')")
             cmds.menuItem(divider=True)
             cmds.menuItem(l=LANGUAGE_MAP._Generic_.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
-            cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 5))
+            cmds.columnLayout(adjustableColumn=True, columnAttach=('both', 1))
             cmds.separator(h=15, style='none')
             cmds.rowColumnLayout(ann=LANGUAGE_MAP._Generic_.attrs, numberOfColumns=4,
-                                 columnWidth=[(1, 50), (2, 50), (3, 50)])
+                                 columnWidth=[(1, 55), (2, 55), (3, 55)], columnSpacing=[(1, 10)])
 
             cmds.checkBox('tx', l=LANGUAGE_MAP._Generic_.tx, v=False,
                           onc=lambda x: self.__uicheckboxCallbacksAttr('on', "tx"),
@@ -1948,7 +1958,7 @@ class LockChannels(object):
 
             cmds.setParent('..')
             cmds.rowColumnLayout(ann=LANGUAGE_MAP._Generic_.attrs, numberOfColumns=2,
-                                 columnWidth=[(1, 150)])
+                                 columnWidth=[(1, 165)], columnSpacing=[(1, 10)])
             cmds.checkBox('cb_userDefined', l=LANGUAGE_MAP._LockChannelsUI_.user_defined, v=False,
                           ann=LANGUAGE_MAP._LockChannelsUI_.user_defined_ann,
                           onc=lambda x: self.__setattr__('userDefined', True),
@@ -1959,6 +1969,7 @@ class LockChannels(object):
                           ofc=lambda x: self.__uicheckboxCallbacksAttr('off', ["tx", "ty", "tz", "rx", "ry", "rz", "sx", "sy", "sz", "v",
                                                                              "cb_userDefined", "cb_translate", "cb_rotate", "cb_scale"]))
             cmds.setParent('..')
+            cmds.rowColumnLayout(ann=LANGUAGE_MAP._Generic_.attrs, numberOfColumns=1, columnSpacing=[(1, 10)],columnWidth=[(1, 250)])
             cmds.separator(h=20, style='in')
             cmds.checkBox('givenAttrs', l=LANGUAGE_MAP._LockChannelsUI_.specific_attrs,
                           onc=lambda x: cmds.textField('uitf_givenAttrs', e=True, en=True),
@@ -1973,7 +1984,8 @@ class LockChannels(object):
             cmds.checkBox('Hierarchy', l=LANGUAGE_MAP._Generic_.hierarchy, al='left', v=False, ann=LANGUAGE_MAP._Generic_.hierarchy_ann,
                           onc=lambda x: self.__setattr__('hierarchy', True),
                           ofc=lambda x: self.__setattr__('hierarchy', False))
-            cmds.rowColumnLayout(ann=LANGUAGE_MAP._Generic_.attrs, numberOfColumns=2, columnWidth=[(1, 125), (2, 125)])
+            cmds.setParent('..')
+            cmds.rowColumnLayout(ann=LANGUAGE_MAP._Generic_.attrs, numberOfColumns=2, columnWidth=[(1, 125), (2, 125)], columnSpacing=[(1, 10)])
             cmds.button(label=LANGUAGE_MAP._LockChannelsUI_.lock, bgc=r9Setup.red9ButtonBGC(1),
                          command=lambda *args: (self.__uiCall('lock')))
             cmds.button(label=LANGUAGE_MAP._LockChannelsUI_.unlock, bgc=r9Setup.red9ButtonBGC(2),
@@ -1992,7 +2004,7 @@ class LockChannels(object):
                          command=lambda *args: (self.__uichannelMapFile('load')))
             cmds.setParent('..')
             cmds.separator(h=10, style='none')
-
+            cmds.rowColumnLayout(ann=LANGUAGE_MAP._Generic_.attrs, numberOfColumns=1, columnSpacing=[(1, 10)],columnWidth=[(1, 250)])
             cmds.checkBox('serializeToNode', l=LANGUAGE_MAP._LockChannelsUI_.serialize_attrmap_to_node,
                           ann=LANGUAGE_MAP._LockChannelsUI_.serialize_attrmap_to_node_ann,
                           cc=lambda x: self.__uiAttrMapModeSwitch())
@@ -2004,12 +2016,15 @@ class LockChannels(object):
                                     ann=LANGUAGE_MAP._LockChannelsUI_.set_ann,
                                     bc=lambda *args: cmds.textFieldButtonGrp('uitfbg_serializeNode', e=True, text=cmds.ls(sl=True)[0]),
                                     cw=[(1, 220), (2, 60)])
+            cmds.setParent('..')
             cmds.separator(h=15, style='none')
-            cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                                 c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+            cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0),
+                                image1='Rocket9_buttonStrap_narrow.png',
+                                align='left',
+                                c=lambda *args: (r9Setup.red9ContactInfo()), h=24, w=275)
             cmds.separator(h=15, style='none')
             cmds.showWindow(window)
-            # cmds.window(self.win, e=True, widthHeight=(260, 410))
+            cmds.window(self.win, e=True, widthHeight=(280, 420))
 
         def __uicheckboxCallbacksAttr(self, mode, attrs):
             if not isinstance(attrs, list):
@@ -2457,8 +2472,10 @@ def timeOffset_collapseUI():
                 command=partial(__uicb_run, False, True), bgc=r9Setup.red9ButtonBGC('green'))
 
     cmds.separator(h=15, style='none')
-    cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                                 c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+    cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0),
+                        image1='Rocket9_buttonStrap.png',
+                        align='left',
+                        c=lambda *args: (r9Setup.red9ContactInfo()), h=24, w=200)
 
     cmds.showWindow(win)
 

@@ -135,7 +135,8 @@ dependencies and menuItems.</p>
 2017          .  2017  .  201700  .  2.7.11 2     5.6.1  .  2017     . 2016-05-15
 2018          .  2018  .  201800  .  2.7.11 2     5.6.1  .  2018     . 2017-06-26
 2019          .  2019  .  201900  .  2.7.11 2     5.6.1  .  2019     . 2019-01-15
-2020          .  2020  .  202000  .  2.7.11 2     5.12.5 .  2020     . 2019-12-10</p>
+2020          .  2020  .  202000  .  2.7.11 2     5.12.5 .  2020     . 2019-12-10
+2022          .  2022  .  202200  .  3.7.7  2     5.15.2 .  2022     . 2021-03-29</p>
 </div></blockquote>
 </div></blockquote>
 </dd></dl>
@@ -253,7 +254,7 @@ but we use the api build id to be specific</p>
 
 <dl class="function">
 <dt id="Red9.startup.setup.framerate_mapping">
-<code class="descname">framerate_mapping</code><span class="sig-paren">(</span><em>value=None</em>, <em>asAPI=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.framerate_mapping" title="Permalink to this definition">¶</a></dt>
+<code class="descname">framerate_mapping</code><span class="sig-paren">(</span><em>value=None</em>, <em>asAPI=False</em>, <em>truncate_float=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.framerate_mapping" title="Permalink to this definition">¶</a></dt>
 <dd><p>single place to convert fps data between string representation, actual float(fps) and MTime.unit
 if no valuye is passed we return a full mapping dict {pal: (25, OpenMaya.MTime.kPALFrame), …}</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -264,6 +265,7 @@ if no valuye is passed we return a full mapping dict {pal: (25, OpenMaya.MTime.k
 <li><strong>value</strong> – if float or int we convert the data to timeUnit (‘pal’,’ntsc’,….)
 if value is a string we convert to actual fps as float</li>
 <li><strong>asAPI</strong> – if value was given and this is True we return the OpneMaya.MTime.kUnit for the value</li>
+<li><strong>truncate_float</strong> – round(fps, 3) round the float to 3 decimal places.</li>
 </ul>
 </td>
 </tr>
@@ -712,7 +714,7 @@ MetaData registry setups for pro_pack, client_core and internals</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Mark Jackson.
+        &#169; Copyright 2021, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

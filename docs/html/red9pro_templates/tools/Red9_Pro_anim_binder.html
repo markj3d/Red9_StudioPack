@@ -1,0 +1,435 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Pro_Pack : tools : anim_binder &#8212; Red9 2.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Pro_Pack : tools : anim_tools" href="Red9_Pro_anim_tools.html" />
+    <link rel="prev" title="Pro_Pack : uibase" href="../Red9_Pro_uibase.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_anim_tools.html" title="Pro_Pack : tools : anim_tools"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../Red9_Pro_uibase.html" title="Pro_Pack : uibase"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pro-pack-tools-anim-binder">
+<h1>Pro_Pack : tools : anim_binder<a class="headerlink" href="#pro-pack-tools-anim-binder" title="Permalink to this headline">¶</a></h1>
+<p>ProPack anim_binder module is the replacement of the original AnimationBinder
+module which was done back in 2011 for the Autodesk MasterClass support files.
+This deals with creating the BND binder files themselves.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9anim_binder</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9anim_binder&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<span class="target" id="module-Red9.pro_pack.tools.anim_binder"></span><p>Base Animation Binder with little or no other code benefits other than UI based system calls</p>
+<p class="rubric">Main Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<dl class="function">
+<dt id="Red9.pro_pack.tools.anim_binder.anim_binder_ui">
+<code class="descname">anim_binder_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.anim_binder_ui" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.anim_binder.get_bind_nodes">
+<code class="descname">get_bind_nodes</code><span class="sig-paren">(</span><em>rootNode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.get_bind_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>From selected root find all BindNodes via the marker attribute ‘BindNode’
+Note we’re not casting to PyNodes here for speed here</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.anim_binder.get_bound_controls">
+<code class="descname">get_bound_controls</code><span class="sig-paren">(</span><em>rootNode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.get_bound_controls" title="Permalink to this definition">¶</a></dt>
+<dd><p>From selected root find all BoundControllers via the marker attribute ‘BoundCtr’
+Note we’re not casting to PyNodes here for speed here</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.anim_binder.bake_binder_data">
+<code class="descname">bake_binder_data</code><span class="sig-paren">(</span><em>rootNode=None</em>, <em>debugView=False</em>, <em>ignoreInFilter=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.bake_binder_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>From a given Root Node search all children for the ‘BoundCtr’ attr marker. If none
+were found then search for the BindNode attr and use the message links to walk to
+the matching Controller.
+Those found are then baked out and the marker attribute is deleted</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.anim_binder.match_given_hierarchys">
+<code class="descname">match_given_hierarchys</code><span class="sig-paren">(</span><em>source</em>, <em>dest</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.match_given_hierarchys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple node name matching that strips any DAG path and namespaces prior to matching</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.anim_binder.bind_skeletons">
+<code class="descname">bind_skeletons</code><span class="sig-paren">(</span><em>source</em>, <em>dest</em>, <em>method='connect'</em>, <em>manage_scales=False</em>, <em>verbose=False</em>, <em>unlock=False</em>, <em>bindroot=True</em>, <em>bindroot_inc=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.bind_skeletons" title="Permalink to this definition">¶</a></dt>
+<dd><p>From 2 given root joints search through each hierarchy for child joints, match
+them based on node name, then connect their transform channels trans/rots directly, or
+parentConstrain them depending on the method flag.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source</strong> – root of the source skeleton</li>
+<li><strong>dest</strong> – root of the destination skeleton</li>
+<li><strong>method</strong> – the method used for the connection, either ‘connect’ or ‘constrain’</li>
+<li><strong>manage_scales</strong> – bool, do we also look at binding jnt scales where applicable, this only runs
+if the source jnt has incoming scale connections which would then be propagated via a scaleConstrain</li>
+<li><strong>unlock</strong> – if True force unlock the required transform attrs on the destination skeleton first</li>
+<li><strong>bindroot</strong> – if True (default) we set a parentConstraint between the source and dest rootJoint, else they remain unbound</li>
+<li><strong>bindroot_inc</strong> – if bindroot=True then this is ignored. This flag forces the 2 root jnts into the main bind loop,
+they’re ignored by default if the bindroot flag is on as that forces a parentConstraint between them.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.anim_binder.make_stabilized_node">
+<code class="descname">make_stabilized_node</code><span class="sig-paren">(</span><em>nodeName=None</em>, <em>centered=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.make_stabilized_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Very simple proc to generate a Stabilized node for
+raw MoCap tracking purposes… First selected node
+is used as the Aim axis, second selected is used as this
+aim’s worldUp</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.anim_binder.add_mrig_skeleton_wire">
+<code class="descname">add_mrig_skeleton_wire</code><span class="sig-paren">(</span><em>mRig=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.add_mrig_skeleton_wire" title="Permalink to this definition">¶</a></dt>
+<dd><p>find the current MetaRig node in the scene and bind the HIK_BND wire
+from it to the selected skeleton root. IF the skeleton has a HIK definition
+then we bind directly to its ‘HIKCharacterNode’ instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.anim_binder.add_bind_markers">
+<code class="descname">add_bind_markers</code><span class="sig-paren">(</span><em>ctrls=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.add_bind_markers" title="Permalink to this definition">¶</a></dt>
+<dd><p>add the bind markers to nodes, these dictate what gets baked</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.anim_binder.removeBindMarker">
+<code class="descname">removeBindMarker</code><span class="sig-paren">(</span><em>ctrls=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.removeBindMarker" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove the bind markers from nodes, these dictate what gets baked</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.anim_binder.conform_skeletons">
+<code class="descname">conform_skeletons</code><span class="sig-paren">(</span><em>srcRoot</em>, <em>destRoot</em>, <em>incTrans=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.conform_skeletons" title="Permalink to this definition">¶</a></dt>
+<dd><p>align a source and destination skeleton</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>srcRoot</strong> – master skeleton root joint</li>
+<li><strong>destRoot</strong> – slave skeleton root that will be conformed</li>
+<li><strong>incTrans</strong> – do we also snap the nodes translates?</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.anim_binder.Bindsettings">
+<em class="property">class </em><code class="descname">Bindsettings</code><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.Bindsettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>settings object that we pass to the Binder Classes directly, keeps the code clean</p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.Bindsettings.print_settings">
+<code class="descname">print_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.Bindsettings.print_settings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeBase">
+<em class="property">class </em><code class="descname">BindNodeBase</code><span class="sig-paren">(</span><em>source=None</em>, <em>destination=None</em>, <em>settings=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source</strong> – Driver Joint</li>
+<li><strong>destination</strong> – Rig Controller to be Bound</li>
+<li><strong>settings</strong> – a Bindsettings object</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeBase.sourceNode">
+<code class="descname">sourceNode</code><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase.sourceNode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeBase.destinationNode">
+<code class="descname">destinationNode</code><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase.destinationNode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeBase.make_base_geo">
+<code class="descname">make_base_geo</code><span class="sig-paren">(</span><em>Name</em>, <em>GeoType=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase.make_base_geo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make the Base BindGeo Type</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeBase.add_bind_markers">
+<em class="property">static </em><code class="descname">add_bind_markers</code><span class="sig-paren">(</span><em>Ctr</em>, <em>BndNode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase.add_bind_markers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeBase.make_bind_base">
+<code class="descname">make_bind_base</code><span class="sig-paren">(</span><em>Name=None</em>, <em>GeoType=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase.make_bind_base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make the unaligned BindGeo setup, this proc is overwritten for more complex binds
+Note: the BindNode is returned as a dic where [‘Main’] is always the node that
+ultimately the constraints get made too, and [‘Root’] is the root of the BindGroup
+<a href="#id1"><span class="problematic" id="id2">*</span></a>arg Name :  BaseName of the matchNode</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeBase.align_bind_node">
+<code class="descname">align_bind_node</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase.align_bind_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Align the newly made BindNode as required</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeBase.link_bind_node">
+<code class="descname">link_bind_node</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase.link_bind_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make the actual driving connections between the Bind and Destination Nodes,
+if self.skip_rot_axis or self.skip_trans_axis then we pass that to the binds made here</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeBase.lock_channels">
+<code class="descname">lock_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase.lock_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>lock the appropriate channels on the binder nodes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeBase.add_binder_node">
+<code class="descname">add_binder_node</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase.add_binder_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main Wrapper to make the AnimBind setup between Source and Destination nodes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeTwin">
+<em class="property">class </em><code class="descname">BindNodeTwin</code><span class="sig-paren">(</span><em>source=None</em>, <em>destination=None</em>, <em>settings=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeTwin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase" title="Red9.pro_pack.tools.anim_binder.BindNodeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.tools.anim_binder.BindNodeBase</span></code></a></p>
+<p>Second more complex Bind type used for the Wrists, Feet and any chain where you may
+need to isolate the rotate and translates. This allows you to easily extend the limb
+lengths whilst maintaining easily editable data.
+<a href="#id3"><span class="problematic" id="id4">*</span></a>arg source : Driver Joint
+<a href="#id5"><span class="problematic" id="id6">*</span></a>arg destination : Rig Controller to be Bound
+<a href="#id7"><span class="problematic" id="id8">*</span></a>arg settings : a Bindsettings object</p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeTwin.make_bind_base">
+<code class="descname">make_bind_base</code><span class="sig-paren">(</span><em>Name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeTwin.make_bind_base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make the unaligned BindGeo and group/parent it up to the driver Source Joint
+Note: the BindNode is returns as a dic where [‘Main’] is always the node that
+ultimately the constraints get made too, and [‘Root’] is the root of the BindGroup
+<a href="#id9"><span class="problematic" id="id10">*</span></a>arg Name :  BaseName of the matchNode</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeTwin.align_bind_node">
+<code class="descname">align_bind_node</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeTwin.align_bind_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite the default behaviour: Align the newly made BindNode as required for this bind</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeTwin.lock_channels">
+<code class="descname">lock_channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeTwin.lock_channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>lock the appropriate channels on the binder nodes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeAim">
+<em class="property">class </em><code class="descname">BindNodeAim</code><span class="sig-paren">(</span><em>source=None</em>, <em>destination=None</em>, <em>upVector=None</em>, <em>settings=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeAim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase" title="Red9.pro_pack.tools.anim_binder.BindNodeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.tools.anim_binder.BindNodeBase</span></code></a></p>
+<p>Third more complex Bind type used for complex Spine issues. Unlike the other
+methods this uses an AimConstraint to point the controller towards a target
+node to extract a rotation vector. This gets over issues with complex spline
+setups where the previous 2 methods would send in incorrect rotation data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source</strong> – Driver Aim Node</li>
+<li><strong>destination</strong> – Rig Controller to be Bound</li>
+<li><strong>upVector</strong> – UpVector and Parent node for the AimConstraint</li>
+<li><strong>settings</strong> – a Bindsettings object</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeAim.make_bind_base">
+<code class="descname">make_bind_base</code><span class="sig-paren">(</span><em>Name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeAim.make_bind_base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make the unaligned BindGeo and group/parent it up to the driver Source Joint
+Note: the BindNode is returns as a dic where [‘Main’] is always the node that
+ultimately the constraints get made too, and [‘Root’] is the root of the BindGroup</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Name</strong> – BaseName of the matchNode</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.BindNodeAim.align_bind_node">
+<code class="descname">align_bind_node</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeAim.align_bind_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite the default behaviour: Align the newly made BindNode as required for this bind</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.anim_binder.AnimationBinder_UI">
+<em class="property">class </em><code class="descname">AnimationBinder_UI</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.AnimationBinder_UI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Red9_AnimationBinder</span></code></p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.AnimationBinder_UI.refresh">
+<code class="descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.AnimationBinder_UI.refresh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.anim_binder.AnimationBinder_UI.mrig">
+<code class="descname">mrig</code><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.AnimationBinder_UI.mrig" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">first MetaRigs found in the scene</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.anim_binder.AnimationBinder_UI.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.AnimationBinder_UI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_binder.AnimationBinder_UI.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.AnimationBinder_UI.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../Red9_Pro_uibase.html"
+                        title="previous chapter">Pro_Pack : uibase</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Red9_Pro_anim_tools.html"
+                        title="next chapter">Pro_Pack : tools : anim_tools</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/red9pro_templates/tools/Red9_Pro_anim_binder.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="Red9_Pro_anim_tools.html" title="Pro_Pack : tools : anim_tools"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../Red9_Pro_uibase.html" title="Pro_Pack : uibase"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Red9 2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Mark Jackson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+    </div>
+  </body>
+</html>

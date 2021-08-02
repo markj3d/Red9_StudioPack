@@ -48,7 +48,7 @@
 <h1>Pro_Pack : importexport<a class="headerlink" href="#pro-pack-importexport" title="Permalink to this headline">¶</a></h1>
 <p>ProPack importexport module manages files and sourcecontrol</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9ie</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9ie&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -68,8 +68,8 @@
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.P4_sourceControl" title="Red9.pro_pack.core.importexport.P4_sourceControl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">P4_sourceControl</span></code></a>([path])</td>
 <td>The P4_sourceControl object is bound to the r9File instance automatically if your project is set to run with Perforce.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.importexport.r9File" title="Red9.pro_pack.core.importexport.r9File"><code class="xref py py-obj docutils literal notranslate"><span class="pre">r9File</span></code></a>([path])</td>
-<td>Red9 file handler system, bound to OS calls directly by inheritance from pm.util.path which then exposes all OS calls directly to the class instance.</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">r9File</span></code>([path])</td>
+<td>Red9 file handler system, bound to OS calls directly to the class instance.</td>
 </tr>
 </tbody>
 </table>
@@ -163,8 +163,7 @@ where all new created nodes are store as a list</p>
 <em class="property">class </em><code class="descname">Fbx</code><span class="sig-paren">(</span><em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>base class to handling FBX file import and export</p>
-<p><a class="reference external" href="http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&amp;id=26416130">http://usa.autodesk.com/adsk/servlet/pc/item?siteID=123112&amp;id=26416130</a>
-C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
+<p>C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.Fbx.importFbx">
 <code class="descname">importFbx</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>preset=None</em>, <em>take=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.importFbx" title="Permalink to this definition">¶</a></dt>
@@ -211,7 +210,7 @@ C:Program FilesAutodeskFBXlocation of the Python SDK when installed</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.importexport.Fbx.exportFbx">
-<code class="descname">exportFbx</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>selection=False</em>, <em>preset=None</em>, <em>bakeanim=False</em>, <em>geoflags=False</em>, <em>timeranges=()</em>, <em>axis=''</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.exportFbx" title="Permalink to this definition">¶</a></dt>
+<code class="descname">exportFbx</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>selection=False</em>, <em>preset=None</em>, <em>bakeanim=False</em>, <em>geoflags=False</em>, <em>timeranges=()</em>, <em>axis=''</em>, <em>takedata={}</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.exportFbx" title="Permalink to this definition">¶</a></dt>
 <dd><p>export selected data to fbx</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -268,9 +267,9 @@ scene their anim data will be updated</p>
 </table>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="Red9.pro_pack.core.importexport.Fbx.getTakeInfo">
-<em class="property">static </em><code class="descname">getTakeInfo</code><span class="sig-paren">(</span><em>fileName</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.getTakeInfo" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getTakeInfo</code><span class="sig-paren">(</span><em>fileName=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.Fbx.getTakeInfo" title="Permalink to this definition">¶</a></dt>
 <dd><p>get take info from the fbx data internals</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -303,7 +302,7 @@ aspects of the project and paths used by all the codebase.</p>
 <p>To enable Perforce this simple json dict needs the key ‘p4_project’ set to True and P4 must be available.
 On boot we test this and set the systems accordingly. If the following does not return ‘perforce’ then
 the Perforce environment wasn’t found at boot and all P4 source control will be disabled.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">PROJECT_DATA</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PROJECT_DATA</span><span class="o">.</span><span class="n">source_control</span>
 </pre></div>
 </div>
@@ -773,133 +772,6 @@ then we mark it for add</p>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="Red9.pro_pack.core.importexport.r9File">
-<em class="property">class </em><code class="descname">r9File</code><span class="sig-paren">(</span><em>path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pymel.util.path.path</span></code></p>
-<p>Red9 file handler system, bound to OS calls directly by inheritance
-from pm.util.path which then exposes all OS calls directly to the class instance.</p>
-<p>This also binds Perforce to the class is Perforce was found on your system,
-exposing and binding all perforce commands directly to this file object</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r9ie</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9ie&#39;</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">=</span><span class="n">r9ie</span><span class="o">.</span><span class="n">r9File</span><span class="p">(</span><span class="n">myfilepath</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">.</span><span class="n">sourcecontrol</span><span class="o">.</span><span class="n">fstat</span><span class="p">()</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># because we bind &quot;os&quot; we can also directly run os/path calls</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">myfile</span><span class="o">.</span><span class="n">splitext</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">when dealing with P4 the P4_SourceControl class is bound to self as
-self.sourcecontrol, exposing all the calls directly.</p>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> – Only takes one args and that’s the filepath to convert to a file object</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="Red9.pro_pack.core.importexport.r9File.explore">
-<code class="descname">explore</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File.explore" title="Permalink to this definition">¶</a></dt>
-<dd><p>open up the native OS directory to explore</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.importexport.r9File.formatPath">
-<code class="descname">formatPath</code><span class="sig-paren">(</span><em>path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File.formatPath" title="Permalink to this definition">¶</a></dt>
-<dd><p>take the given path and format it for Maya path ‘/’</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.importexport.r9File.open_osNative">
-<code class="descname">open_osNative</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File.open_osNative" title="Permalink to this definition">¶</a></dt>
-<dd><p>open the file in the native OS application</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.importexport.r9File.open_mayafile">
-<code class="descname">open_mayafile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File.open_mayafile" title="Permalink to this definition">¶</a></dt>
-<dd><p>open maya file files.i n batch mode opens in current maya session, not in batch mode
-it prompt a message box to choose between open in current session or in a new maya session</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.importexport.r9File.joinpath">
-<code class="descname">joinpath</code><span class="sig-paren">(</span><em>first</em>, <em>*others</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File.joinpath" title="Permalink to this definition">¶</a></dt>
-<dd><p>override of joint path to always return a Python format path not an OS path (‘/’ not ‘’)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.importexport.r9File.force_makedirs">
-<code class="descname">force_makedirs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File.force_makedirs" title="Permalink to this definition">¶</a></dt>
-<dd><p>for the internal path ensure that the folder structure exists
-if not create it</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.importexport.r9File.copy_makedirs">
-<code class="descname">copy_makedirs</code><span class="sig-paren">(</span><em>dest</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File.copy_makedirs" title="Permalink to this definition">¶</a></dt>
-<dd><p>copy a file to a folder and if that folder, or folder structure does
-not exist, recursively create it with makedirs before the file copy</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dest</strong> – destination path to copy the data too</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>the dest can be either a folder or a full path, if it’s just a folder the file
-will be copied with the same name, if it’s a full path then the file copy will
-rename the file accordingly</p>
-<p class="last">makedirs uses id:0755 in folder creation</p>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.importexport.r9File.copy_to_sourcecontrol">
-<code class="descname">copy_to_sourcecontrol</code><span class="sig-paren">(</span><em>dest</em>, <em>changelist=None</em>, <em>ignore_deleted=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.importexport.r9File.copy_to_sourcecontrol" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is a wrap over the sourcecontrol/Perforce handler, designed to
-allow you, in one go, to push a file into the repository.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>src</strong> – source file path</li>
-<li><strong>dest</strong> – destination filepath</li>
-<li><strong>changelist</strong> – optional changelist to add it too</li>
-<li><strong>changelist_txt</strong> – text for the changelist</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>ignore_deleted: if the file was previously marked for delete or deleted ignore it</p>
-<dl class="docutils">
-<dt>It will:</dt>
-<dd><ul class="first last simple">
-<li>locally create all folder structures as required</li>
-<li>sync the dest file if it exists in the repository and isn’t in your workspace</li>
-<li>check the dest file out</li>
-<li>copy the src file to the given dest path</li>
-<li>if the file is not in the repository it will mark it for add</li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -956,7 +828,7 @@ allow you, in one go, to push a file into the repository.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Mark Jackson.
+        &#169; Copyright 2021, Mark Jackson.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>

@@ -448,7 +448,7 @@ class AnimBinderUI(object):
     def _UI(self):
         if cmds.window(self.win, exists=True):
             cmds.deleteUI(self.win, window=True)
-        cmds.window(self.win, title=self.win, menuBar=True, sizeable=True, widthHeight=(300, 380))
+        cmds.window(self.win, title=self.win, menuBar=True, sizeable=True, widthHeight=(265, 400))
 
         cmds.menu(label='Help')
         cmds.menuItem(label='Watch MasterClass Video', c=lambda x: self._contactDetails(opentype='vimeo'))
@@ -492,7 +492,7 @@ class AnimBinderUI(object):
                     ann="Select the Joint on the driving Skeleton to AIM at, then the Controller to be driven, finally a node on the driven skeleton to use as UpVector",
                     c=lambda x: BindNodeAim(cmds.ls(sl=True, l=True)[0], cmds.ls(sl=True, l=True)[1], cmds.ls(sl=True, l=True)[2], settings=self.settings).add_binder_node())
         cmds.separator(h=15, style="none")
-        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 147), (2, 147)])
+        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 155), (2, 155)])
 
         cmds.button(label="Add BakeMarker", al="center",
                     ann="Add the BoundCtrl / Bake Marker to the selected nodes",
@@ -508,7 +508,7 @@ class AnimBinderUI(object):
                     ann="Select Top Group Node of the Bound Rig",
                     c=lambda x: pm.select(get_bound_controls(cmds.ls(sl=True, l=True))))
         cmds.setParent('..')
-        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 200), (2, 74)], columnSpacing=[(2, 5)])
+        cmds.rowColumnLayout(numberOfColumns=2, columnWidth=[(1, 200), (2, 90)], columnSpacing=[(2, 5)])
         cmds.button(label="Bake Binder", al="center",
                     ann="Select Top Group Node of the Bound Rig",
                     c=lambda x: bake_binder_data(cmds.ls(sl=True, l=True), self.settings.bake_debug))
@@ -530,10 +530,13 @@ class AnimBinderUI(object):
                     c=lambda x: make_stabilized_node())
 
         cmds.separator(h=20, style="none")
-        cmds.iconTextButton(style='iconOnly', bgc=(0.7, 0, 0), image1='Rocket9_buttonStrap2.bmp',
-                                 c=lambda *args: (r9Setup.red9ContactInfo()), h=22, w=200)
+        cmds.iconTextButton(style='iconAndTextHorizontal', bgc=(0.7, 0, 0),
+                            image1='Rocket9_buttonStrap_narrow.png',
+                            align='left',
+                            c=lambda *args: (r9Setup.red9ContactInfo()), h=24, w=265)
         cmds.showWindow(self.win)
-        cmds.window(self.win, e=True, h=400)
+        cmds.separator(h=15, style='none')
+        cmds.window(self.win, e=True, h=420, w=260)
 
     @classmethod
     def Show(cls):
