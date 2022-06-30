@@ -1,0 +1,691 @@
+{
+    "anim_curve_filter": {
+    	"title": "Curve Filter - Butterworth method",
+        "date": 20170510, 
+        "tags": [
+            "filter", 
+            "propack",
+            "key reduce", 
+            "animation", 
+            "curve",
+            "butterworth",
+            "ui"
+        ], 
+        "url": "https://youtu.be/SK6Gcj4LEAQ",
+        "info": "This new Interactive curve filter for the Red9 ProPack uses the Butterworth algorithm, very much based on the setup from MotionBuilder and designed to offer a superior method to take noise out of dense baked animation curves, ideal for MoCap and Facial data. The new setup, like the existing 'Interactive Curve Filter' from StudioPack offers live editing, enabling you to drag the sliders and have the curve adapt on the fly. The key to this tool is the quality of the re-sampled curve data itself!"
+    }, 
+    "anim_curve_filter_perception": {
+    	"title": "Butterworth Curve Filter & Perception Neuron data",
+        "date": 20170510, 
+        "tags": [
+            "filter", 
+            "propack",
+            "key reduce", 
+            "animation", 
+            "curve",
+            "butterworth",
+            "ui"
+        ], 
+        "url": "https://youtu.be/Ugv4rvqXFlU",
+        "info": "This follows on from the previous ProPack demo where we took you through the new Butterworth animation filter. In this case it's a request from a number of clients who are dealing with budget moCap setups and needing solutions to help clean-up up some of the low frequency noise inherent in the data .... a perfect case for the Butterworth algorithm."
+    },
+    "anim_redirect_preview": {
+    	"title": "Animation Re-Director",
+        "date": 20150426, 
+        "tags": [
+            "redirect", 
+            "propack", 
+            "animation", 
+            "ui"
+        ], 
+        "url": "https://youtu.be/uaj9qM0jn-s",
+        "info": "First sneak peak of the Red9 ProPack features, watch this space or check-out our website for more details. Animation Re-Director is a powerful toolset to re-direct any animation by caching the data on an editable Motion Path and allowing you to sculpt that path and therefore redirect your character. Hugely useful system for anybody dealing with cutscenes, film or pre-vis."
+    }, 
+    "anim_redirect_live_mode": {
+    	"title": "Anim ReDirect Interactive Mode",
+        "date": 20181206, 
+        "tags": [
+            "redirect", 
+            "propack", 
+            "animation", 
+            "ui"
+        ], 
+        "url": "https://youtu.be/418xztc8QIE",
+        "info": "Delighted to be able to share this update with you all, and excited about this one! Red9 ProPack Anim Re-Director now runs interactively, massively speeding up the workflow and making editing this kind of data a joy. This is ideal for animators dealing with cut-scenes, for film guys trying to animate with mass character flow in a scene. It's even more powerful when dealing with moCap data as you can now interactively re-direct the data around your environment. We also do a sneak preview of a demo version of the code running a 'proof of concept' on some quadruped data...."
+    }, 
+    "anim_redirect_update_01": {
+    	"title": "Animation Re-Director update",
+        "date": 20180125, 
+        "tags": [
+            "redirect", 
+            "propack", 
+            "animation", 
+            "ui"
+        ], 
+        "url": "https://youtu.be/9GlUbSGwLYM",
+        "info": "This is a demo showing the massive updates to the Red9 Animation Re-Direct systems in ProPack for clients. The new build allows you to automatically straighten animation data, controlling how a character moves through a scene or un-winding animation that's maybe been shot in a MotionStage with limited volume."
+    }, 
+    "anim_remapping": {
+    	"title": "Animation Remapping",
+        "chapters": [
+        	"0:00 Introduction",
+            "2:30 PRO To BND - UI", 
+            "4:43 Process Overview", 
+            "7:45 Basic ReMapping Options", 
+            "10:45 Adding HIK to FBXs on Mass", 
+            "12:06 Complex Mapping", 
+            "15:35 Output Options", 
+            "16:33 IK Spine Re-Fitting!", 
+            "18:35 Locomotion Track"
+        ], 
+        "date": 20191122, 
+        "tags": [
+            "protobnd", 
+            "browser", 
+            "propack", 
+            "animation", 
+            "remapping", 
+            "retargeting",
+            "mocap",
+            "hik",
+            "fbx",
+            "ui"
+        ], 
+        "url": "https://youtu.be/mOp1M5TB7aA",
+        "info": "The Animation Re-Targeter (Pro_to_BND ) is a huge part of the Red9 ProPack pipelines and workflows. Designed over the last 5 years to offer clients the ability to remap, on mass, any animation library to a fresh rig and bounce that data over to various formats. \n\nIf you're working with us all our Red9 PuppetRigs come with the base BND binder file, if not you can still create these manually within the toolsets.\n\nWe go through some of the extreme mapping added to the systems, including the new Spine re-fit solver, giving far more consistent data, perfect if you're moving data between MoBu and Maya consistently. This is the absolute backbone of a modern pipeline, giving you the ability to simply reuse animation data from any source in your project."
+    }, 
+    "anim_remapping_dynamic_hik": {
+    	"title": "Animation Remapping - Dynamic HIK Management",
+        "chapters": [
+            "0:00 Introduction",
+            "1:34 RigManager - Load / Save HIK from r9Pose file", 
+			"4:36 Red9 Browser - HIK Create from TPose",
+			"6:20 PRO_TO_BND - connect hik + load hik, one shot remapping"
+        ], 
+        "date": 20220520, 
+        "tags": [
+            "protobnd", 
+            "browser", 
+            "propack", 
+            "animation", 
+            "remapping", 
+            "retargeting",
+            "rigmanager",
+            "connect hik",
+            "hik",
+            "load save",
+            "tpose",
+            "xsens",
+            "ui"
+        ], 
+        "url": "https://youtu.be/qSrXXKhtFeY",
+        "info": "This is a complex subject, the Red9 PRO_TO_BND is already a complex beast when it comes to animation remapping but it just got more powerful. This time we go through how we can now insert a HIK definition, on the fly, into a skeleton during the remapping process. This cuts back on the need for your FBX files to contain a HIK definition in the first place, removing 1 step in the process to remapping complex MoCap data. This was initially designed for XSens data and we now include a base preset for XSens with ProPack, but this system isn't limited in any way.\n\nWe also go through the ability in the RigManager to load, save and deal with HIK definitions via our pose system."
+    }, 
+    "copy_xforms": {
+    	"title": "Copy Xforms & HUD",
+        "chapters": [
+        	"0:00 Introduction",
+        	"0:08 Copy Paste simple XForms",
+            "3:23 Paste full poses between Maya sessions", 
+            "4:41 Red9 HUD Monitor Attrs"
+        ], 
+        "date": 20220520, 
+        "tags": [
+            "propack", 
+            "animation", 
+            "hud", 
+            "monitor",
+            "copy",
+            "paste",
+            "poses",
+            "clipboard"
+        ], 
+        "url": "https://youtu.be/leu31DZi00Y",
+        "info": "Copy & Paste Transforms is something that Maya doesn't do natively, or at least not in a simple manner. Here we go through the new functionality that allows you to not only copy transforms, but also do so in world space AND between Maya sessions.\n\nWe also go through the Red9 HUD, designed to allow you to debug and monitor attributes live in the viewport and expose sliders to control those attrs if needed."
+    },     
+    "exporter_01_concepts_ui": {
+    	"title": "Exporter Systems 01: Concepts and UIs",
+        "chapters": [
+            "1:14 Export Manager UI Basics", 
+            "7:47 Export Path Management", 
+            "13:42 Export Node Graph", 
+            "14:28 Export Tag UI", 
+            "16:33 Export Loop/Shot Editor UI", 
+            "17:52 RMB Menu Items", 
+            "18:56 Offset Ranges & TimeOffsets", 
+            "20:26 Bookmarks and Colours", 
+            "21:16 Timecode Support", 
+            "24:02 Audio Grp & Connection Manager"
+        ], 
+        "date": 20211220, 
+        "tags": [
+            "exporter", 
+            "propack", 
+			"timecode",
+			"offsets",
+			"bookmark",
+            "ui"
+        ], 
+        "url": "https://youtu.be/OnBiq0F9puc",
+        "info": "In this demo we cover the base UI's and concepts like path management, UI's functionality, the node structures themselves, audio connection support and time offset / timecode support as well as some of the more in-depth features of the setups.\n\nThe Exporter currently support  FBX (skeletal anim & selective), custom Playblasting, r9Anim output & ABC Alembic. The specifics of how we handle these formats and the mass of options exposed will be covered in the next Exporter demo.\n\nStrap in as we finally expose just how deep this system integrates into the rest of our pipelines! What are you waiting, go get ProPack and see what you've been missing!"
+    }, 
+    "exporter_02_fbx_outputs": {
+    	"title": "Exporter Systems 02: FBX Output",
+        "chapters": [
+            "1:11 RigManager - Setting up a Custom Rig", 
+            "6:54 BindPose FBX Support", 
+            "9:13 FBX Skeletal Anim Exporter", 
+            "12:17 HIK Casting - Respect HIK in Exported FBX", 
+            "13:42 Scene Root System", 
+            "18:23 Specific Root Joints", 
+            "20:36 Blendshape Handler"
+        ], 
+        "date": 20211216, 
+        "tags": [
+            "exporter", 
+            "propack",
+            "bindpose", 
+            "fbx",
+            "r9anim", 
+            "ui", 
+            "blendshape",
+            "rigmanager", 
+            "hik"
+        ], 
+        "url": "https://youtu.be/MZmk_mpoAyk",
+        "info": "In this demo we delve into the Red9 Exporter in detail, covering the FBX export setups as well as showing you how to wire your own rig to the setup and what's required. It takes no longer than a couple of minutes to expose all of this functionality to your own characters.\n\nFBX we cover both our custom BindPose Exporter and the Animation Exporter. Topics include the SceneRoot Management, HIK Casting, Additive Anim Exports, Root Motion Compensation & Blendshape Export Management."
+    }, 
+    "exporter_03_playblast": {
+    	"title": "Exporter Systems 03: Playblast",
+        "chapters": [
+            "0:35 Base Options", 
+            "3:00 Camera Options", 
+            "5:55 MRig Preview Camera", 
+            "9:20 Batchable"
+        ], 
+        "date": 20211215, 
+        "tags": [
+            "exporter", 
+            "propack",
+            "camera", 
+            "preview",
+            "playblast", 
+            "ui"
+        ], 
+        "url": "https://youtu.be/r-GQB2qoq38",
+        "info": "Final demo in the series covering the Red9 ProPack Exporter, this time we go through the Playblast task and the settings available. These include custom handling of the visibilities & render states of objects as well as custom camera tracking to ensure the camera remains focused in on the characters motions, regardless of the motion."
+    }, 
+    "exporter_bookmarks": {
+    	"title": "Exporter Bookmarks, Maya 2020",
+        "date": 20191212, 
+        "tags": [
+            "exporter", 
+            "propack", 
+            "bookmarks",
+            "ui"
+        ], 
+        "url": "https://youtu.be/qlFv5uVE9Yg",
+        "info": "Quick demo of our Red9 Exporter systems which now hook into Maya 2020 timeslider bookmarks. These are a great addition to Maya and we think an obvious way to display data like this from the exporter systems."
+    }, 
+    "health_manager_01": {
+    	"title": "HealthManager API",
+        "date": 20180321, 
+        "tags": [
+            "mrig", 
+            "propack", 
+            "health", 
+            "ui"
+        ], 
+        "url": "https://youtu.be/jMbR8ZqtmdI",
+        "info": "The Health Manager concept is a massive part of the Red9 ProPack Pipeline, designed to allow TD's to sanity check files in a neat, clear API with full UI support. Write your own simple compounds either using our default tests or write your own from the ground up and use those to validate your files before pushing them out to production.\n\nI can't stress enough just how much this has saved our lives over the last few years, allowing us to ensure all our assets are solid before we send them out to clients.\n\nThis demo first goes through the initial concepts and UI, then we cover some of the more complex tests. Finally we go through how to write your own tests and Validation classes."
+    }, 
+    "installer": {
+    	"title": "ProPack Install and Update Manager",
+        "date": 20200817, 
+        "tags": [
+            "propack", 
+            "installer"
+        ], 
+        "url": "https://youtu.be/WTCbapn-ZF0"
+    }, 
+    "metadata_conference_01": {
+    	"title": "Develop Conference 2014 : MetaRig - Data Management and Fast Coping",
+        "date": 20140710, 
+        "tags": [
+            "metadata", 
+            "api",
+            "code",
+            "python"
+        ], 
+        "url": "https://youtu.be/fuO1Hfb03vI",
+        "info": "MetaData Attribute Handlers: This is one of the demo videos I talked over during the Develop talk back in 2014, the audio is quiet as it was only really a guide track, but worth putting up so that you can follow the PowerPoint that I'll also upload."
+    }, 
+    "metadata_conference_02": {
+    	"title": "Develop Conference 2014 : MetaData in a Maya Production Pipeline Video 1",
+        "date": 20140710, 
+        "tags": [
+            "metadata", 
+            "api",
+            "code",
+            "python"
+        ], 
+        "url": "https://youtu.be/DHXYRfhYfYU",
+        "info": "MetaData Attribute Handlers: This is one of the demo videos I talked over during the Develop talk back in 2014, the audio is quiet as it was only really a guide track, but worth putting up so that you can follow the PowerPoint that I'll also upload."
+    }, 
+    "metadata_conference_03": {
+    	"title": "Develop Conference 2014 : MetaData in a Maya Production Pipeline Video 3",
+        "date": 20140710, 
+        "tags": [
+            "metadata", 
+            "api",
+            "code",
+            "python"
+        ], 
+        "url": "https://youtu.be/NinwGp4mAq8",
+        "info": "MetaData Attribute Handlers: This is one of the demo videos I talked over during the Develop talk back in 2014, the audio is quiet as it was only really a guide track, but worth putting up so that you can follow the PowerPoint that I'll also upload."
+    }, 
+    "mrig_working_with_part_1": {
+    	"title": "Working with Red9 - Part 1 : The Red9 Puppet Rig",
+        "date": 20200817, 
+        "tags": [
+            "mrig", 
+            "animation",
+            "puppet"
+        ], 
+        "url": "https://youtu.be/VnLHEonV23Q",
+        "info": "This is the first part in a series of videos that go through working with Red9 in more detail and how you can benefit from the ProPack codebase in your production. This first part shows some of the more powerful features of our Red9 PuppetRig system and these features are exposed to the animators, including our new dynamic CharacterPicker and DagMenu systems."
+    }, 
+    "mrig_working_with_part_2": {
+    	"title": "Working with Red9 - Part 2 : Managing Animation Data Deliveries",
+        "date": 20200817, 
+        "tags": [
+            "mrig", 
+            "browser",
+            "extension file",
+           	"binder",
+           	"live",
+           	"butterworth",
+           	"remapping",
+            "animation",
+            "puppet"
+        ], 
+        "url": "https://youtu.be/VnLHEonV23Q",
+        "info": "In this second video we show you just how easy it is to map animation data over to the Red9 Puppet Rig, on-mass, using the Red9 Browser and the Pro_To_BND functionality. This hopefully gives you some insight to the power of the Browser when used with the in-built Extensions Manager to add custom functionality. We go through the AnimBinder setup itself a little to layer fast modifications to the initial character remapping, something only exposed to clients running the Puppet. Finally we show some of the tricks unique to ProPack to deal with that initial stage of animation clean-up, filtering and re-directing."
+    }, 
+    "mrig_data_copy": {
+    	"title": "MetaRig - Data Management and Fast Coping",
+        "date": 20200817, 
+        "tags": [
+            "mrig", 
+            "animation",
+            "export",
+            "copy"
+        ], 
+        "url": "https://youtu.be/Am2ZR6pGpEs",
+        "info": "New Red9 ProPack 'MetaRig: Copy User Data' allows you to sync different types of data to multiple MetaRigs in the scene. This makes is an absolute doddle to push all user data between 2 rigs in the scene, including: animation, current pose, exporter data, timecode, audio and facial. This is also exposed directly on the mRig class making it easy to code your own handling and batches of data."
+    }, 
+    "mrig_ikfk_parentspace": {
+    	"title": "IKFK & ParentSpace matching updades",
+        "chapters": [
+            "0:36 IKFK Spine Re-Fitting algorithm", 
+            "5:05 IKFK Matching UI", 
+            "15:52 Parent Space Switching"
+        ], 
+        "date": 20180622, 
+        "tags": [
+            "mrig", 
+            "animation", 
+            "ikfk matching", 
+            "parent space"
+        ], 
+        "url": "https://youtu.be/Lhde8LwSDn8",
+        "info": "This is a huge update to the way that our Red9 ProPack deals with IKFK matching in rig systems. Big new features including :\nSpine FK-IK matching via a new iterative algorithm which produces a really close match. This is a huge deal for animators going between MotionBuilder and Maya as we can now resolve the spine data far more accurately.\nLimb System matching including new toe rotate resolving. This enables twist added to the FK to be by-passed and also all random FK toe data to be pushed directly back to the ik solutions.\nAutoClav resolving and matching for the Red9 PuppetRig, allowing us to finally fully match the arm systems regardless of the state of the Auto-Clav solvers\nNew ParentSpace matching added to the toolsets so we can switch the world space of any of the ik control systems over time with compensation."
+    }, 
+    "mrig_ikfk_casting": {
+    	"title": "IKFK Casting",
+        "chapters": [
+            "0:36 IKFK Spine Re-Fitting algorithm", 
+            "5:05 IKFK Matching UI", 
+            "15:52 Parent Space Switching"
+        ], 
+        "date": 20220520, 
+        "tags": [
+            "mrig", 
+            "animation", 
+            "ikfk matching", 
+            "casting"
+        ], 
+        "url": "https://youtu.be/HSa8otoF2AI",
+        "info": "IKFK Casting is a new concept in the way we deal with IKFK switching within the Red9 PuppetRig and it's toolset. Previously switching between IK or FK would match one system to the other BUT, it wouldn't deal with matching during a soft IKFK blend. It also meant that you couldn't just push an entire animation to a given state if that anim already had numerous IKFK switching happening.\n\nThis is where the concept of IKFK Casting comes in. With casting we cache the end solve of the limb, regardless of it's IKFK state, then switch the relevant system to match that cached data. Simple concept yet very powerful!"
+    }, 
+    "mrig_preview_camera": {
+    	"title": "MRig Preview Camera",
+        "date": 20210513, 
+        "tags": [
+            "mrig", 
+            "animation", 
+            "preview",
+            "camera"
+        ], 
+        "url": "https://youtu.be/RnyPKzoluuA",
+        "info": "New Red9 ProPack : Rig Preview Camera Management. This is designed as a vital aid for animators to review their work from a stable camera platform. No more scrolling around the scene to keep focus on your fast moving animation. Integrated into the Red9 Exporter allowing you to generate consistent, focused playblasts for review. Integrated into the Browser for batch playblasting new animation drops for review. This isn't bound purely to our PuppetRig, it will run on any rig bound to our mRig systems through the RigManager."
+    }, 
+    "mrig_solvers": {
+    	"title": "Red9 PuppetRig - Auto Solvers and Trackers, resolving complex data",
+        "date": 20180925, 
+        "tags": [
+            "mrig", 
+            "animation", 
+            "r9anim",
+            "fingers",
+            "solvers", 
+            "autoclav", 
+            "pole_tracking"
+        ], 
+        "url": "https://youtu.be/9roCZUVvzu8",
+        "info": "This is a very quick demo to show just how far the solvers inside the Red9 PuppetRig can be pushed with some insane MoCap data. PuppetRig includes auto-solvers for pole-vector tracking, auto-clavicle solving as well as softIK systems and this video shows just how well they deal with even the most complex data.\n\nAs you'd expect all these solvers are blendable as we're more than aware that animators often want complete control, however, as a solution within the rigging system they make hand key extremely fast. Best thing is that all the solvers can be quickly baked back to simple translate data on their respective controllers."
+    }, 
+    "mrig_updates_114": {
+    	"title": "Red9 PuppetRig updates",
+        "chapters": [
+            "1:00 Fingers - Custom Pose Management", 
+            "3:45 Finger Pose Patch - expose pose to attr", 
+            "6:15 Default Manipulator Setup - \"T\" key", 
+            "7:30 Pickwalking Update", 
+            "9:50 Proximity Visibility", 
+            "11:00 R9Anim - Direct Load", 
+            "12:05 Locomotion Tracker"
+        ], 
+        "date": 20200529, 
+        "tags": [
+            "mrig", 
+            "animation"
+        ], 
+        "url": "https://youtu.be/rvKo4WhyCm8",
+        "info": "This video goes through a few updates to make interacting with the Red9 PuppetRig faster and more productive, including new finger pose patch, new pickwalking, proximity visibility and a few other new tricks to speed up the animator workflows."
+    }, 
+    "mrig_wrist_locks": {
+    	"title": "WristLocks - Fast Hand Interaction",
+        "date": 20210914, 
+        "tags": [
+            "mrig", 
+            "propack", 
+            "weapon",
+            "animation", 
+            "hand interaction",
+            "wrist_locks",
+            "ui"
+        ], 
+        "url": "https://youtu.be/r2zPBvuZT1Q",
+        "info": "ProPack and PuppetRig now work together to bring you our WristLock system. A new way to interactive with and manipulate objects in your characters hands. No more messing with locators, separate constraints, tedious tracking and blending, it's all done inside the rig with the UI support to allow for really fast switching and binding."
+    }, 
+    "mrig_wrist_locks_update_May2022": {
+    	"title": "WristLocks - Upgraded Integration",
+        "date": 20220520, 
+        "tags": [
+            "mrig", 
+            "propack", 
+            "weapon",
+            "r9anim",
+            "r9pose",
+            "relative",
+            "animation", 
+            "hand interaction",
+            "wrist_locks",
+            "ui"
+        ], 
+        "url": "https://youtu.be/aksJRxKFmeE",
+        "info": "This is another big update to the way we manage interaction between the Red9 PuppetRig and any other objects, weapons, props etc. The WristLock system went into the PuppetRig a few years ago, the AuxSlot ability that you see in the UI was added later last year. This time round we're uplifting those connected objects such that they then become part of the body rig once connected.\n\nThis exposes those connected objects to all the rest of the PuppetRig and ProPack systems, the objects become part of any r9Pose, r9Anim data. Capable of being re-directed and loaded back via the r9Anim systems."
+    }, 
+    "project_manager_01": {
+    	"title": "Project & Perforce Handling - Massively Important demo!",
+    	"chapters": [ 
+    		"0:00 Introduction",
+    		"1:25 The Project Object Concept",
+			"4:55 Python Project Code",
+			"5:13 Perforce Project Handling",
+			"7:42 Perforce Live Repository Browser",
+			"9:40 Health Class Validation",
+			"10:50 Perforce Activation Flag",
+			"12:21 SceneOpen Health Test",
+			"13:47 Python r9File Handler Object"
+		],
+        "date": 20180914, 
+        "tags": [
+            "mrig", 
+            "propack", 
+            "perforce",
+            "health",
+            "scene open",
+            "project_manager", 
+            "browser", 
+            "ui"
+        ], 
+        "url": "https://youtu.be/W0plGL9AcUk",
+        "info": "This is a massively important concept for anybody running ProPack in a large studio environment, if you've got a demo build of ProPack please ensure you watch at least the first 5 mins of this as its a CRUCIAL concept within the codebase!\n\nThe Project Handlers manage all aspects of our systems, anything that requires a variable, a path or a settings file inspects this system, allowing all dependencies to be dynamically changed by just switching projects.\n\nWe also go through the deep Perforce integration that's now in the pipeline, including full P4 repository exposure in our Red9 Browser within Maya. The Perforce handlers also manage not only the P4 connection but also the P4 server and workspace connection, all bound per project.\n\nFinally we go through the r9File handler, a high level file object that binds all of the project systems together, exposing P4 handling in a really simple python object for all TDs to use."
+    }, 
+    "project_manager_02__create_edit_manage": {
+        "title": "Project Manager - Create, Edit, Manage",
+    	"chapters": [ 
+    		"0:00 Introduction",
+			"1:27 Creating a New Project",
+			"3:04 Project Folder Locations",
+			"4:24 Edit Mode",
+			"5:25 Health Tests, Checks and Callback",
+			"8:19 Perforce Enabling Hooks",
+			"9:45 Perforce Tool Integration, Browser, Exporter ..",
+			"11:53 Adding Unused Default Keys",
+			"13:03 Editing Keys and using <Key> Pointer",
+			"14:50 PRO_TO_BND Binders key",
+			"17:00 Browser Favourite Paths",
+			"18:20 Project Environment Variable, Project base folder",
+			"19:33 Adding Icon to Project",
+			"21:07 Muting the Red9 Update Systems",
+			"21:50 Add Custom Keys and Code Exposure"
+		],
+        "date": 20220303, 
+        "tags": [
+            "project_manager", 
+            "propack", 
+            "edit",
+            "perforce",
+            "browser",
+            "healthtest", 
+            "icon",
+            "ui"
+        ], 
+        "url": "https://youtu.be/-kvvFDa_KRY",
+        "info": "We go through the updated Project Manager UI and how new users can now simply create and use projects to manage all aspects of the Maya environment as well as Perforce connections and hooks. This is a massively important part of the ProPack and by exposing the new Edit Mode we open it up for all users not just TD's. The new version also allow the project files to be re-directed, via a Maya Environment variable, so that studios can all point to a central folder of project files to switch between."
+    },
+    "r9anim_basics": {
+    	"title": "Animation Format",
+        "date": 20180125, 
+        "tags": [
+            "r9anim", 
+            "propack", 
+            "animation", 
+            "ui"
+        ], 
+        "url": "https://youtu.be/LZ6BP_dOk4o",
+        "info": "First look at the Red9 Pro-Pack's new animation file format handling. The new format is fast, includes a full metadata info block that can be pre-inspected before file load, and will load data relatively to a given node in the same way that the Red9 Pose handler does. This format will also expand to manage data relative to timecode, enabling cutscenes to be re-assembled from production timecode in the assets."
+    }, 
+    "r9anim_update_01": {
+    	"title": "Animation Format update part1",
+        "date": 20180125, 
+        "tags": [
+            "r9anim", 
+            "propack", 
+            "animation", 
+            "layers",
+            "tag",
+            "ui"
+        ], 
+        "url": "https://youtu.be/4wtUsduLGQc",
+        "info": "This first part of the new update goes through how we deal with animLayers and static channels within the r9Anim format itself. We also start to introduce you to the Red9 Pro Export systems for tagging and exporting data based on shots and how the r9Anim format integrates management of these crucial nodes."
+    }, 
+    "r9anim_update_02": {
+    	"title": "Animation Format update part2 - Timecode management",
+        "date": 20180125, 
+        "tags": [
+            "r9anim", 
+            "timecode",
+            "bwav",
+            "audio",
+            "sync",
+            "propack", 
+            "animation", 
+            "parent space",
+            "maintain",
+            "ui"
+        ], 
+        "url": "https://youtu.be/dEJEqjL_LyQ",
+        "info": "This is a massive update to the animation format, making it Timecode aware!! Giving you the ability to re-construct scenes, importing both Animation and Audio nodes by their internal timecode data. We take audio in BWav format, we have specific set of attrs on our rigs that represent timecode and between the 2 we can reconstruct complex scenes by giving the tools any timecode reference point."
+    }, 
+    "r9anim_update_03": {
+    	"title": "Animation Format update May2022 - Speed, Layer & Constrain handling & data integrity",
+        "date": 20220520, 
+        "chapters": [
+            "1:15 Animation Layer Handling - Save Speed", 
+            "5:54 Merge Anim Layer Code",
+            "8:08 Improved Load Speed", 
+            "8:55 Loading r9Anim into Layers",
+            "13:02 Maintain Parent Spaces"
+        ], 
+        "tags": [
+            "r9anim", 
+            "propack", 
+            "animation", 
+            "merge",
+            "animation layers",
+            "constraint",
+            "frame sampling",
+            "ui"
+        ], 
+        "url": "https://youtu.be/d6R87BDagWo",
+        "info": "This is a massive uplift to our already feature rich Red9 Animation format (r9Anim). This time we've concentrated on data integrity and speed.\n\nLoading is now around 4 - 5 times faster, particularly on dense data. When saving we now pass any nodes that are constrained, part of an animLayer, or driven by any other means, through our new frame sampler. Initially this was to speed up the way we saved layer data which previously passed through Maya's own anim layer merge code but that can be very slow. Since developing this we've decided that animation data, regardless of what's driving it, should always be capable of loading back to a fresh rig exactly as it was saved. The sampler does this as it basically saves out baked data, but only where that's needed."
+    }, 
+    "rig_manager__art_rig": {
+    	"title": "Unreal ART Rig Integrations - massive expansion on capabilities",
+        "date": 20190118, 
+        "tags": [
+            "rigmanager", 
+            "propack", 
+            "art", 
+            "setup",
+            "unreal",  
+            "ui"
+        ], 
+        "url": "https://youtu.be/AzjfXypxFpg",
+        "info": "Delighted to be able to go through the new integrated hooks added to Red9 ProPack to natively support the Unreal ART Rig. This arose out of a conversation with Jeremy Ernst and Brad Clark wanting to get mirroring working on the Art Rig, but quickly turned into a new wiring setup for Pro that we'll be expanding to other Rig systems out there soon.\n\nThis massively expands on the abilities of the Unreal Rig by exposing all of the ProPack goodness in a single click, wiring the rig fully to the MetaData subsystems. We quickly go through the integration with our Animation ReDirect tool, our custom Animation format handling (r9anim), the ProPack Exporter hooks, P4 integrations, pose handling and of course Animation Mirroring."
+    }, 
+    "rig_manager__binding_any_rig": {
+    	"title": "Rig Manager - Binding any Rig to ProPack!",
+        "date": 20180928, 
+        "tags": [
+            "rigmanager", 
+            "propack", 
+            "bind",
+            "rig",
+            "getting started",
+            "setup", 
+            "ui"
+        ], 
+        "url": "https://youtu.be/g6MLj1p4FiU",
+        "info": "This is the final missing link from ProPack, a system to enable you to bind ANY rig, both body and facial, to our Red9 Pro MetaData systems. \n\nThis shows you how easy it is to marker up your rig to behave as a native PuppetRig as far as the tools are concerned, exposing the full power of the ProPack to your productions. We'd obviously like everybody to use our Red9 PuppetRig in production but have to be realistic, so this new UI bridges the gap."
+    }, 
+    "rig_manager__skeleton_health": {
+    	"title": "RigManager - Skeleton Health",
+        "chapters": [
+            "2:30 BPose / TPose : Skeleton Pose Management", 
+            "5:15 Pose Compare",
+            "10:55 Unlock Skeleton", 
+            "12:05 Export Custom Root Joints"
+        ], 
+        "date": 20210421, 
+        "tags": [
+            "rigmanager", 
+            "propack", 
+            "bpose", 
+            "tpose", 
+            "compare",
+            "skeleton", 
+            "ui"
+        ], 
+        "url": "https://youtu.be/26PO0AQefwE",
+        "info": "This is an introduction to the skeleton BPose / TPose management in Red9 RigManager, aimed specifically at debugging and managing your skeleton base poses. This allows us to stamp master poses onto the skeleton root joint and then track and compare any changes that may have happened to that skeleton through production. The Compare method includes all jointOrients and transforms. This is such a fundamentally important concept which has saved us and our clients months of pain in the past by identifying issues before they get into production"
+    }, 
+    "scene_review": {
+    	"title": "Scene Reviewer",
+        "date": 20200918, 
+        "tags": [
+            "scenereview", 
+            "studiopack", 
+            "notes",
+            "ui"
+        ], 
+        "url": "https://youtu.be/raNwbViAPEg",
+        "info": "Looping back round some of the core tools in Red9 StudioPack. This time we look at the Scene Reviewer, a custom, tracked user notes system for Maya scenes. These notes are stored in the Maya scene itself and trigger the UI when a scene is opened, making it really easy to bring vital user information to who ever is viewing the file."
+    }, 
+    "talkback": {
+    	"title": "TalkBack LipSyncing Services for clients",
+        "date": 20200311, 
+        "tags": [
+            "lipsync", 
+            "facial", 
+            "talkback",
+            "audio",
+            "services", 
+            "performance"
+        ], 
+        "url": "https://youtu.be/ABcEE0v8lSc",
+        "info": "Red9 TalkBack is an audio driven lip-syncing service we offer to clients. Developed over the last 5 years this uses state of the art algorithms and articulation processing to realistically drive any facial rig, purely from an audio file. This is an off-line process, allowing us to achieve far better results that standard engine driven systems but at the expense of being a non real-time solution. Perfect for mid-range cutscenes or projects that can't run to the expense of full performance capture. Initially developed to help us test our own Red9 Facial Rigs, TalkBack has matured into a huge system that we're now offering clients. We've already run through a number of high end game projects (all awaiting release) as well as several VFX projects. The system is flexible enough to also produce accurate results on cartoon data and the more we process, the better the learning algorithms get.\nFor more information please contact us to see how we could help streamline your production!"
+    }, 
+    "timecode_dynamic": {
+    	"title": "Dynamic Timecode Syncing",
+        "date": 20201014, 
+        "tags": [
+            "timecode", 
+            "propack", 
+            "animation", 
+            "mocap",
+            "performance",
+            "ui"
+        ], 
+        "url": "https://youtu.be/ctswxvJ8o3c",
+        "info": "This is a massive integration of all of our Red9 timecode management and syncing systems within ProPack. Initially designed for Cloud Imperium Games who wanted to track facial performance capture, on-mass, from an EDL and master video edit of all the Headcam footage from an entire days performance shoot. This is very relevant to anybody dealing with mass facial performance data.\n\nNote that the export ranges in the UI were actually extracted from the original offline EDL itself"
+    },
+    "tracker_stabilize": {
+    	"title": "Track & Stabilize",
+        "date": 20200928, 
+        "tags": [
+            "track", 
+            "stabilize", 
+            "animtoolkit",
+            "studiopack", 
+            "ui"
+        ], 
+        "url": "https://youtu.be/vza2bEEPlzY",
+        "info": "This is probably the most used tool in the entire StudioPack. Track and Stabilizer is used to final anim shots, track objects, maintain contact points and just help you animators out. No need to manage complex constraint switching, just track objects live to create your animation data. If we had a a penny for each time this was used in production we'd be living on a desert island!"
+    },
+    "skinning_01": {
+    	"title": "Skin Tools",
+        "date": 20171102, 
+        "tags": [
+            "skinning", 
+            "save", 
+            "load",
+            "weights"
+        ], 
+        "url": "https://youtu.be/UO6MaHK4URs",
+        "info": "The SkinTools are part of the Red9 ProPack and are designed to make it easier to save, load and manage skin weight information inside Maya, ensuring that the skinCluster information is maintains exactly as it was stored!"
+    },
+    "ui_regression_tests": {
+    	"title": "UI's in 30 seconds",
+        "date": 20211213, 
+        "tags": [
+            "ui"
+        ], 
+        "url": "https://youtu.be/qhLB3b8rks0",
+        "info": "Here's a quick peak at just how deep the Red9 ProPack goes, quick regression test of all the UI's, more coming soon!"
+    }
+}

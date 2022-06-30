@@ -1,11 +1,15 @@
 '''
 ..
-    Red9 Studio Pack: Maya Pipeline Solutions
+    Red9 Pro Pack: Maya Pipeline Solutions
+    ======================================
+     
     Author: Mark Jackson
-    email: rednineinfo@gmail.com
-
-    Red9 blog : http://red9-consultancy.blogspot.co.uk/
-    MarkJ blog: http://markj3d.blogspot.co.uk
+    email: info@red9consultancy.com
+     
+    Red9 : http://red9consultancy.com
+    Red9 Vimeo : https://vimeo.com/user9491246
+    Twitter : @red9_anim
+    Facebook : https://www.facebook.com/Red9Anim
 
 
     This is the core of the Animation Toolset Lib, a suite of tools
@@ -16,9 +20,8 @@
 
 Code examples:
 
-#######################
- ProcessNodes
-#######################
+
+ **ProcessNodes**
 
     All of the functions which have the ProcessNodes call share the same
     underlying functionality as described below. This is designed to process the
@@ -26,9 +29,9 @@ Code examples:
     Params: 'nodes' and 'filterSettings' are treated as special and build up a
     MatchedNode object that contains a tuple of matching pairs based on the given settings.
 
-#######################
- AnimFunctions example:
-#######################
+
+ **AnimFunctions example:**
+
 
     The main AnimFunctions class is designed to run with an r9Core.FilterNode
     object that is responsible for how we process hierarchies. If one isn't passed
@@ -152,7 +155,7 @@ def getChannelBoxSelection(longNames=False):
     :param longNames: return the longNames of the attrs selected, else we default to Maya's short attr names
     '''
     attrs = cmds.channelBox('mainChannelBox', q=True, selectedMainAttributes=True)
-    if longNames:
+    if attrs and longNames:
         attrs = [cmds.attributeQuery(a, n=cmds.ls(sl=True, l=True)[0], ln=1) for a in attrs]
     return attrs
 
@@ -218,7 +221,7 @@ def getSettableChannels(node=None, incStatics=True):
         # all settable attrs in the channelBox
         return getChannelBoxAttrs(node, asDict=False, incLocked=False)
 
-def nodesDriven(nodes, allowReferenced=False, skipLocked=False):
+def nodesDriven(nodes, allowReferenced=False, skipLocked=False, nodes_only=False):
     '''
     return a list of those nodes that are actively constrained or connected to a pairBlend
     currently used to pre-validate nodes in the mirror class prior to running the actual mirror call
@@ -228,11 +231,12 @@ def nodesDriven(nodes, allowReferenced=False, skipLocked=False):
         constraints made in the main scene.
     :parm skipLocked: if True we ignore the relevant channels that are constrained if the attrs themselves aren't keyable
     '''
-    driven = []
-    cons = []
+    
     data = []
-    # skip = []
+
     for node in nodes:
+        driven = []
+        cons = []
         plug = cmds.listConnections(node, type='character', s=True, d=False, p=True)
         if not plug:
             plug = node
@@ -251,10 +255,18 @@ def nodesDriven(nodes, allowReferenced=False, skipLocked=False):
 
                 for con in driven:
                     if allowReferenced:
-                        data.append((node, con))
+                        if not nodes_only:
+                            data.append((node, con))
+                        else:
+                            if not node in data:
+                                data.append(node)
                         log.info('%s is currently driven by >> %s' % (r9Core.nodeNameStrip(node), con))
                     elif not cmds.referenceQuery(con, inr=True):
-                        data.append((node, con))
+                        if not nodes_only:
+                            data.append((node, con))
+                        else:
+                            if not node in data:
+                                data.append(node)
                         log.info('%s is currently driven by >> %s' % (r9Core.nodeNameStrip(node), con))
     return data
 
@@ -269,25 +281,29 @@ def getKeyedAttrs(nodes, attrs=[], returnkeyed=True, asMap=False):
     '''
     keylist = {}
     exclude = ['translate', 'rotate', 'scale']  # skip compounds
-    _attrs = attrs
     for node in nodes:
         if not attrs:
-            _attrs = getChannelBoxAttrs(node=node, asDict=True, incLocked=False)
-        for attr in _attrs['keyable']:
+            _attrs = getChannelBoxAttrs(node=node, asDict=True, incLocked=False).get('keyable') or []
+        else:
+            _attrs = attrs
+        for attr in _attrs:
             if attr in exclude:
                 continue
-            curve = cmds.keyframe('%s.%s' % (node, attr), q=True, n=True)
-            if returnkeyed and curve:
-                if node not in keylist:
-                    keylist[node] = []
-                if asMap:
-                    keylist[node].append((attr, curve[0]))
-                else:
+            try:
+                curve = cmds.keyframe('%s.%s' % (node, attr), q=True, n=True)
+                if returnkeyed and curve:
+                    if node not in keylist:
+                        keylist[node] = []
+                    if asMap:
+                        keylist[node].append((attr, curve[0]))
+                    else:
+                        keylist[node].append(attr)
+                if not returnkeyed and not curve:
+                    if node not in keylist:
+                        keylist[node] = []
                     keylist[node].append(attr)
-            if not returnkeyed and not curve:
-                if node not in keylist:
-                    keylist[node] = []
-                keylist[node].append(attr)
+            except StandardError, err:
+                log.debug(err)
     return keylist
 
 def getAnimLayersFromGivenNodes(nodes):
@@ -301,6 +317,21 @@ def getAnimLayersFromGivenNodes(nodes):
         nodes = [nodes]
     return cmds.animLayer(nodes, q=True, affectedLayers=True)
 
+def getAnimLayerMembers(animLayers=[]):
+    '''
+    simple function to get the current object menmbers of the given animLayers
+    
+    :param animLayers: animLayers to inspect, if not given we inspect all animLayers
+    '''
+    nodes = []
+    if not animLayers:
+        animLayers =  cmds.ls(type='animLayer')
+    for layer in animLayers:
+        for dag in cmds.listConnections('%s.dagSetMembers' % layer, s=True, d=False) or []:
+            node = cmds.ls(dag, l=True)[0]
+            if not node in nodes:
+                nodes.append(node)
+    return nodes
 
 def animLayersConfirmCheck(nodes=None, deleteMerged=True):
     '''
@@ -351,7 +382,9 @@ def mergeAnimLayers(nodes, deleteBaked=True):
             cmds.optionVar(intValue=('animLayerMergeDeleteLayers', deleteBaked))
 
             if not cmds.optionVar(exists='animLayerMergeByTime'):
-                cmds.optionVar(floatValue=('animLayerMergeByTime', 1.0))
+                cmds.optionVar(floatValue=('animLayerMergeByTime', 1.0))  # frame sampling
+
+            # 'optionVar -floatValue animLayerMergeByTime 1' for this on or not?
 
             mel.eval('animLayerMerge {"%s"}' % '","'.join(animLayers))
 
@@ -581,18 +614,24 @@ def timeLineRangeProcess(start, end, step=1, incEnds=True, nodes=[], process_ani
     :param inEnds: when processing without nodes do we include the end frame in the return or exclude it
     :param nodes: inspect the nodes given for keyframes and use that data for the times returned
     :param process_animlayers: when True (default) we process all keys on all layers for the given nodes
+    
+    .. note::
+        this is the base function that the ProPack smartBake functions use to extract the key time data
     '''
     startFrm = start
     endFrm = end
+    keys = []
     if nodes:
         if not process_animlayers:
             keys = cmds.keyframe(nodes, q=True, time=(startFrm, endFrm))
         else:
             # look at all animCurve data for the given nodes
-            keys = cmds.keyframe(r9Core.FilterNode.lsAnimCurves(nodes), q=True, time=(startFrm, endFrm))
+            curves = r9Core.FilterNode.lsAnimCurves(nodes)
+            if curves:
+                keys = cmds.keyframe(curves, q=True, time=(startFrm, endFrm))
 
         if not keys:
-            log.warning('Warning :  No key times extracted from the given nodes, timeLineRange reverted to base range!')
+            log.debug('Warning :  No key times extracted from the given nodes, timeLineRange reverted to base range!')
         else:
             rng = sorted(list(set(keys)))
             if step < 0:
@@ -649,7 +688,7 @@ def setTimeRangeToo(nodes=None, setall=True, bounds_only=True):
     else:
         raise StandardError('given nodes have no found animation data')
 
-def snap(source, destination, snapTranslates=True, snapRotates=True, *args, **kws):
+def snap(source, destination, snapTranslates=True, snapRotates=True, snapScales=False, *args, **kws):
     '''
     simple wrapper over the AnimFunctions snap call
 
@@ -658,7 +697,7 @@ def snap(source, destination, snapTranslates=True, snapRotates=True, *args, **kw
     :param snapTranslates: snap the translate data
     :param snapRotates: snap the rotate data
     '''
-    AnimFunctions.snap([source, destination], snapTranslates=snapTranslates, snapRotates=snapRotates)
+    AnimFunctions.snap([source, destination], snapTranslates=snapTranslates, snapRotates=snapRotates, snapScales=snapScales)
 
 
 # def timeLineRangeSet(time):
@@ -1388,6 +1427,9 @@ class AnimationUI(object):
         cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.match_index, ann=LANGUAGE_MAP._AnimationUI_.match_index_ann)
         cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.match_mirror, ann=LANGUAGE_MAP._AnimationUI_.match_mirror_ann)
         cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.match_metadata, ann=LANGUAGE_MAP._AnimationUI_.match_metadata_ann)
+        cmds.menuItem(l=LANGUAGE_MAP._AnimationUI_.match_stripsuffix, ann=LANGUAGE_MAP._AnimationUI_.match_stripsuffix_ann)
+        cmds.menuItem(l='commonPrefix', ann=LANGUAGE_MAP._AnimationUI_.match_stripprefix_ann)  # added 21/06/22
+        cmds.menuItem(l='commonSuffix', ann=LANGUAGE_MAP._AnimationUI_.match_stripsuffix_ann)  # added 21/06/22
         cmds.optionMenu('om_MatchMethod', e=True, v='stripPrefix')
 
         cmds.setParent(self.FilterLayout)
@@ -2313,12 +2355,20 @@ class AnimationUI(object):
         cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_openfile, p=parent, command=partial(self.__uiPoseOpenFile))
         cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_opendir, p=parent, command=partial(self.__uiPoseOpenDir))
         cmds.menuItem(divider=True, p=parent)
-        cmds.menuItem('red9PoseCompareSM', l=LANGUAGE_MAP._AnimationUI_.pose_rmb_compare, sm=True, p=parent)
-        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_compare_skel, p='red9PoseCompareSM', command=partial(self.__uiCall, 'PoseCompareSkelDict'))
-        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_compare_posedata, p='red9PoseCompareSM', command=partial(self.__uiCall, 'PoseComparePoseDict'))
 
+        # ProPack Additions ======
+        _submenu = cmds.menuItem('red9PoseCompareSM', l=LANGUAGE_MAP._AnimationUI_.pose_rmb_compare, sm=True, p=parent)
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_compare_skel, p=_submenu, command=partial(self.__uiCall, 'PoseCompareSkelDict'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_compare_posedata, p=_submenu, command=partial(self.__uiCall, 'PoseComparePoseDict'))
+ 
         cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_copyhandler, en=enableState, p=parent, command=partial(self.__uiPoseAddPoseHandler))
+ 
+        _submenu = cmds.menuItem('red9PoseExportSM', l=LANGUAGE_MAP._AnimationUI_.pose_rmb_export_fbx_handler, sm=True, p=parent)
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_export_fbx_handler_pose, p=_submenu, command=partial(self.__uiPoseExport_to_FBX, 'pose'))
+        cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_export_fbx_handler_dir, p=_submenu, command=partial(self.__uiPoseExport_to_FBX, 'dir'))
         cmds.menuItem(divider=True, p=parent)
+        # ProPack End ============
+        
         cmds.menuItem(label=LANGUAGE_MAP._AnimationUI_.pose_rmb_copypose, en=enableState, p=parent, command=partial(self.__uiPoseCopyToProject))
 
         cmds.menuItem(divider=True, p=parent)
@@ -2702,13 +2752,31 @@ class AnimationUI(object):
             shutil.copy2(self.getPosePath(), projectPath)
             shutil.copy2(self.getIconPath(), projectPath)
         except:
-            raise StandardError('Unable to copy pose : %s > to Project dirctory' % self.poseSelected)
+            raise StandardError('Unable to copy pose : %s > to Project directory' % self.poseSelected)
 
     def __uiPoseAddPoseHandler(self, *args):
         '''
         PRO_PACK : Copy local pose to the Project Pose Folder
         '''
         r9Setup.PRO_PACK_STUBS().AnimationUI_stubs.uiCB_poseAddPoseHandler(self.posePath)
+
+    def __uiPoseExport_to_FBX(self, mode='pose', *args):
+        '''
+        PRO_PACK : export the given pose / pose dir to single frame FBX files for MoBu usage
+        '''
+        if mode == 'pose':
+            r9Setup.PRO_PACK_STUBS().AnimationUI_stubs.uiCB_poseExport_to_fbx(posepath=self.getPosePath())
+        elif mode == 'dir':
+            result = cmds.confirmDialog(
+                    title='Export pose Dir to FBX',
+                    message='This will export all poses in the current directory to single frame FBX files, Continue?',
+                    button=['Confirm', 'Cancel'],
+                    defaultButton='Confirm',
+                    icon='warning',
+                    cancelButton='Cancel',
+                    dismissString='Cancel')
+            if result == 'Confirm':
+                r9Setup.PRO_PACK_STUBS().AnimationUI_stubs.uiCB_poseExport_to_fbx(pose_folder=self.getPoseDir())
 
     # ------------------------------------------------------------------------------
     # UI Elements ConfigStore Callbacks ---
@@ -3013,13 +3081,6 @@ class AnimationUI(object):
 
         poseHierarchy = cmds.checkBox(self.uicbPoseHierarchy, q=True, v=True)
 
-#         #Work to hook the poseSave directly to the metaRig.poseCacheStore func directly
-#         if self.filterSettings.metaRig and r9Meta.isMetaNodeInherited(self.__uiCB_getPoseInputNodes(),
-#                                                                       mInstances=r9Meta.MetaRig):
-#             print 'active MetaNode, calling poseCacheSave from metaRig subclass'
-#             r9Meta.MetaClass(self.__uiCB_getPoseInputNodes()).poseCacheStore(filepath=path,
-#                                                                              storeThumbnail=storeThumbnail)
-#         else:
         r9Pose.PoseData(self.filterSettings).poseSave(self.__uiCB_getPoseInputNodes(),
                                                       path,
                                                       useFilter=poseHierarchy,
@@ -3374,7 +3435,7 @@ class AnimFunctions(object):
             then it will consider the current timeLine PlaybackRange, OR if you have a
             highlighted range of time selected(in red) it'll use this instead.
         :param attributes: Only copy the given attributes[]
-        :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names
+        :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names, see r9Core.matchNodeLists for details
         :param mergeLayers: this pre-processes animLayers so that we have a single, temporary merged
             animLayer to extract a compiled version of the animData from. This gets deleted afterwards.
 
@@ -3464,7 +3525,7 @@ class AnimFunctions(object):
         :param attributes: Only copy the given attributes[]
         :param skipAttrs: Copy all Settable Attributes OTHER than the given, not
             used if an attributes list is passed
-        :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names
+        :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names, see r9Core.matchNodeLists for details
 
         '''
         if not matchMethod:
@@ -3528,8 +3589,8 @@ class AnimFunctions(object):
     # @r9General.Timer
 #     @r9General.evalManager_idleAction
     def snapTransform(self, nodes=None, time=(), step=1, preCopyKeys=1, preCopyAttrs=1, filterSettings=None,
-                      iterations=1, matchMethod=None, prioritySnapOnly=False, snapRotates=True, snapTranslates=True,
-                      additionalCalls=[], cutkeys=False, smartbake=False, smartBakeRef=[], additionalCalls_pre=[], **kws):
+                      iterations=1, matchMethod=None, prioritySnapOnly=False, snapRotates=True, snapTranslates=True, 
+                      snapScales=False, additionalCalls=[], cutkeys=False, smartbake=False, smartBakeRef=[], additionalCalls_pre=[], **kws):
         '''
         Snap objects over a timeRange. This wraps the default hierarchy filters
         so it's capable of multiple hierarchy filtering and matching methods.
@@ -3554,10 +3615,11 @@ class AnimFunctions(object):
         :param preCopyAttrs: Run a CopyAttrs pass prior to snap - this means that
             all channel Values on all nodes will have their data taken across
         :param iterations: Number of times to process the frame.
-        :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names
+        :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names, see r9Core.matchNodeLists for details
         :param prioritySnapOnly: if True ONLY snap the nodes in the filterPriority list within the filterSettings object = Super speed up!!
         :param snapTranslates: only snap the translate data
         :param snapRotates: only snap the rotate data
+        :param snapScales: testing, match the scales but only in local space
         :param additionalCalls: [func, func...] additional functions to run AFTER the snap call during process... allowing you
             to add in specific matching calls to a SnapTransforms run whilst having the time increment correctly managed for you
         :param additionalCalls_pre:  [func, func...] additional functions to run BEFORE the snap call during process... allowing you
@@ -3602,8 +3664,9 @@ class AnimFunctions(object):
             _keyed_attrs.extend(['tx', 'ty', 'tz'])
         if snapRotates:
             _keyed_attrs.extend(['rx', 'ry', 'rz'])
-
-        skipAttrs = ['translateX', 'translateY', 'translateZ', 'rotateX', 'rotateY', 'rotateZ']
+        if snapScales:
+            _keyed_attrs.extend(['sx', 'sy', 'sz'])
+        skipAttrs = ['translateX', 'translateY', 'translateZ', 'rotateX', 'rotateY', 'rotateZ', 'scaleX', 'scaleY', 'scaleZ']
 
         try:
             checkRunTimeCmds()
@@ -3613,8 +3676,8 @@ class AnimFunctions(object):
 
         if logging_is_debug():
             log.debug('snapTransform params : nodes=%s : time=%s : step=%s : preCopyKeys=%s : \
-                    preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : snapTransforms=%s : snapRotates=%s'
-                       % (nodes, time, step, preCopyKeys, preCopyAttrs, filterSettings, matchMethod, prioritySnapOnly, snapTranslates, snapRotates))
+                    preCopyAttrs=%s : filterSettings=%s : matchMethod=%s : prioritySnapOnly=%s : snapTransforms=%s : snapRotates=%s : snapScales=%s'
+                       % (nodes, time, step, preCopyKeys, preCopyAttrs, filterSettings, matchMethod, prioritySnapOnly, snapTranslates, snapRotates, snapScales))
 
         # build up the node pairs to process
         nodeList = r9Core.processMatchedNodes(nodes, filterSettings, matchMethod=matchMethod)
@@ -3640,7 +3703,9 @@ class AnimFunctions(object):
                     for node in self.nodesToSnap:
                         _smartBakeRef.extend(node)  # have to take both as the src may have no keys, it may be driven
                 for node in _smartBakeRef:
-                    _smartBake_nodekeys[node] = timeLineRangeProcess(time[0], time[1], step, incEnds=True, nodes=node)
+                    _keys = timeLineRangeProcess(time[0], time[1], step, incEnds=True, nodes=node)
+                    if _keys:
+                        _smartBake_nodekeys[node] = _keys
                 if not _smartBakeRef:
                     raise IOError("ABORTED : SmartBake couldn't find any reference nodes with keys to base the data on!")
 
@@ -3656,6 +3721,9 @@ class AnimFunctions(object):
                             self.copyKeys(nodes=nodeList, time=time, filterSettings=filterSettings, **kws)
 
                         progressBar = r9General.ProgressBarContext(maxValue=time[1] - time[0], step=step, ismain=True)
+                        
+                        # grab the frms BEFORE we cut the keys in-case the nodes to process are part of the _smartbake list
+                        keytimes = timeLineRangeProcess(time[0], time[1], step, incEnds=True, nodes=_smartBakeRef)
 
                         if cutkeys:
                             for _, dest in self.nodesToSnap:
@@ -3664,9 +3732,11 @@ class AnimFunctions(object):
                                     cmds.cutKey(dest, at='translate', time=time)
                                 if snapRotates:
                                     cmds.cutKey(dest, at='rotate', time=time)
+                                if snapScales:
+                                    cmds.cutKey(dest, at='scale', time=time)
 
                         with progressBar:
-                            for t in timeLineRangeProcess(time[0], time[1], step, incEnds=True, nodes=_smartBakeRef):
+                            for t in keytimes:  # timeLineRangeProcess(time[0], time[1], step, incEnds=True, nodes=_smartBakeRef):
                                 if progressBar.isCanceled():
                                     cancelled = True
                                     break
@@ -3691,10 +3761,13 @@ class AnimFunctions(object):
                                             if logging_is_debug():
                                                 log.debug('skipping time : %s : node : %s' % (t, r9Core.nodeNameStrip(src)))
                                         else:
+#                                             cmds.matchTransform(src, dest, pos=snapTranslates, rot=snapRotates, scl=snapScales)  # still not an option
                                             cmds.SnapTransforms(source=src, destination=dest,
                                                                 timeEnabled=True,
+#                                                                 time=t,
                                                                 snapRotates=snapRotates,
-                                                                snapTranslates=snapTranslates)
+                                                                snapTranslates=snapTranslates,
+                                                                snapScales=snapScales)
                                             cmds.setKeyframe(dest, at=_keyed_attrs)
 
                                             if logging_is_debug():
@@ -3724,7 +3797,8 @@ class AnimFunctions(object):
                             cmds.SnapTransforms(source=src, destination=dest,
                                                 timeEnabled=False,
                                                 snapRotates=snapRotates,
-                                                snapTranslates=snapTranslates)
+                                                snapTranslates=snapTranslates,
+                                                snapScales=snapScales)
                             if logging_is_debug():
                                 log.debug('Snapfrm : source(%s) >> target(%s) :: %s to %s' % (r9Core.nodeNameStrip(src),
                                                                                               r9Core.nodeNameStrip(dest),
@@ -3757,7 +3831,7 @@ class AnimFunctions(object):
         raise NotImplemented
 
     @staticmethod
-    def snap(nodes=None, snapTranslates=True, snapRotates=True, *args, **kws):
+    def snap(nodes=None, snapTranslates=True, snapRotates=True, snapScales=False, *args, **kws):
         '''
         This takes 2 given transform nodes and snaps them together. It takes into
         account offsets in the pivots of the objects. Uses the API MFnTransform nodes
@@ -3767,6 +3841,7 @@ class AnimFunctions(object):
         :param nodes: [src,dest]
         :param snapTranslates: snap the translate data
         :param snapRotates: snap the rotate data
+        :param snapScales: snap the scale, this is LOCAL transforms only
         '''
         try:
             checkRunTimeCmds()
@@ -3783,7 +3858,12 @@ class AnimFunctions(object):
 
         # pass to the plugin SnapCommand
         for node in nodes[1:]:
-            cmds.SnapTransforms(source=nodes[0], destination=node, snapTranslates=snapTranslates, snapRotates=snapRotates, timeEnabled=False)
+            cmds.SnapTransforms(source=nodes[0],
+                                destination=node,
+                                snapTranslates=snapTranslates,
+                                snapRotates=snapRotates,
+                                snapScales=snapScales,
+                                timeEnabled=False)
 
     @staticmethod
     def stabilizer(nodes=None, time=(), step=1, trans=True, rots=True):
@@ -3903,7 +3983,7 @@ class AnimFunctions(object):
         :param attributes: Only process the given attributes[]
         :param attributes_all_settable: if True and bindMethod='connect' we process ALL settable channels on each node
         :param bindMethod: method of binding the data
-        :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names
+        :param matchMethod: arg passed to the match code, sets matchMethod used to match 2 node names, see r9Core.matchNodeLists for details
         :param manage_scales: bool, do we also look at binding jnt scales where applicable, this only runs
             if the source jnt has incoming scale connections which would then be propagated via a scaleConstrain
         :param unlock: if True force unlock the required transform attrs on the destination skeleton first
@@ -4864,6 +4944,7 @@ class MirrorHierarchy(object):
             current = self.getMirrorIndex(node)
             if current:
                 cmds.setAttr('%s.%s' % (node, self.mirrorIndex), (int(current) + offset))
+                log.info('MirrorID incremented %i >> %i : %s' % (current, int(current) + offset, node))
 
     def getNodes(self):
         '''
@@ -5027,23 +5108,17 @@ class MirrorHierarchy(object):
         :param mode: 'Anim' or 'Pose'
 
         '''
-#         objs = cmds.ls(sl=True, l=True)
         if mode == 'Anim':
             transferCall = self.transferCallKeys  # AnimFunctions().copyKeys
         else:
             transferCall = self.transferCallAttrs  # AnimFunctions().copyAttributes
 
         # switch the anim data over via temp
-#         cmds.select(objA)
         temp = cmds.duplicate(objA, name='DELETE_ME_TEMP', po=True)[0]
-#         temp = cmds.ls(sl=True, l=True)[0]
-#         log.debug('temp %s:' % temp)
         transferCall([objA, temp], **self.kws)
         transferCall([objB, objA], **self.kws)
         transferCall([temp, objB], **self.kws)
         cmds.delete(temp)
-#         if objs:
-#             cmds.select(objs)
 
     def makeSymmetrical(self, nodes=None, mode='Anim', primeAxis='Left'):
         '''
@@ -5109,6 +5184,11 @@ class MirrorHierarchy(object):
         TODO: Issue where if nodeA on Left has NO key data at all, and nodeB on right
         does, then nodeB will be left incorrect. We need to clean the data if there
         are no keys.
+        
+        TODO: Issue if left and right nodes have setLimits and we're doing purely a pose based mirror
+        then we can get into a situation where the mirror fails. This is because we first do a copyAttr
+        between the nodes, then we inverse the channels required. If the node on the side being inversed has limits 
+        that don't allow that initial copy then the mirror will result in zero
         '''
 
         self.getMirrorSets(nodes)
@@ -5175,7 +5255,7 @@ class MirrorHierarchy(object):
         :param filepath: filepath to a mirrorMap, if none given then we assume that the internal mirrorDict is already setup
         :param nodes: nodes to load, or the root of a system to filter
         :param clearCurrent: if True then the load will first remove all current mirrormarkers
-        :param matchMethod: method used to match the data to the nodes
+        :param matchMethod: arg passed to the match code, sets matchMethod used to match the data, see r9Core.matchNodeLists for details
         '''
         if filepath:
             if not os.path.exists(filepath):
@@ -5269,6 +5349,11 @@ class MirrorSetup(object):
                       c="import Red9.core.Red9_General as r9General;r9General.os_OpenFile('https://vimeo.com/57882801')")
         cmds.menuItem(divider=True)
         cmds.menuItem(l=LANGUAGE_MAP._Generic_.contactme, c=lambda *args: (r9Setup.red9ContactInfo()))
+
+        cmds.menu(l=LANGUAGE_MAP._Generic_.tools)
+        cmds.menuItem(l=LANGUAGE_MAP._Mirror_Setup_.increment_ids,
+                      c=self.__increment_ids)
+
         cmds.columnLayout(adjustableColumn=False, columnAttach=('both', 5), cw=size[0])
 
         # mirror side
@@ -5373,6 +5458,9 @@ class MirrorSetup(object):
         if nodes:
             try:
                 mrig = r9Meta.getConnectedMetaSystemRoot(nodes[0], mInstances=r9Meta.MetaRig)
+                # Top level grp in the PuppetRig Systems
+                if mrig and mrig.hasAttr('masterNode') and mrig.masterNode:
+                    return mrig.masterNode
                 if mrig and mrig.ctrl_main:
                     return [mrig.ctrl_main]
                 else:
@@ -5559,6 +5647,21 @@ class MirrorSetup(object):
             self.mirrorClass.setMirrorIDs(nodes[0], side=str(side), slot=index, axis=axis)
             log.info('MirrorMarkers added to : %s' % r9Core.nodeNameStrip(nodes[0]))
 
+    def __increment_ids(self, *args):
+        objs = cmds.ls(sl=True, l=True)
+        if objs:
+            result = cmds.promptDialog(
+                    title='Increment IDs',
+                    message=LANGUAGE_MAP._Mirror_Setup_.increment_ids,
+                    button=['Offset', 'Cancel'],
+                    defaultButton='OK',
+                    cancelButton='Cancel',
+                    dismissString='Cancel')
+            
+            if result == 'Offset':
+                offset = int(cmds.promptDialog(query=True, text=True))
+                self.mirrorClass.incrementIDs(objs, offset)
+                       
     def __saveMirrorSetups(self):
         filepath = cmds.fileDialog2(fileFilter="mirrorMap Files (*.mirrorMap *.mirrorMap);;", okc='Save', cap='Save MirrorSetups')[0]
         self.mirrorClass.nodes = cmds.ls(sl=True)

@@ -37,19 +37,21 @@ class _MainMenus_(object):
     animation_binder = "Animation Binder"
     animation_binder_ann = "Siggraph Autodesk MasterClass 2011 - Toolset"
 
-    red9_homepage = "Red9_HomePage"
+    red9_homepage = "Red9 : HomePage"
     red9_homepage_ann = "Open Red9Consultancy HomePage"
-    red9_blog = "Red9_News : Latest Tools!"
+    red9_blog = "Red9 : News Latest Tools!"
     red9_blog_ann = "Open Red9 News Feed"
-    red9_vimeo = "Red9_Vimeo Channel"
-    red9_vimeo_ann = "Open Red9Vimeo Channel"
-    red9_facebook = "Red9_Facebook"
+    red9_vimeo = "Red9 : Vimeo Channel"
+    red9_vimeo_ann = "Open Red9 Vimeo Channel"
+    red9_youtube = "Red9 : YouTube Channel"
+    red9_youtube_ann = "Open Red9 YouTube Channel"
+    red9_facebook = "Red9 : Facebook"
     red9_facebook_ann = "Open Red9Facebook page"
-    red9_twitter = "Red9_Twitter"
+    red9_twitter = "Red9 : Twitter"
     red9_twitter_ann = "Open Red9Twitter Feed"
-    red9_api_docs = "Red9_API Docs"
+    red9_api_docs = "Red9 : API Docs"
     red9_api_docs_ann = "Open Red9 API code reference page"
-    red9_details = "Red9_Details"
+    red9_details = "Red9 : Details"
     red9_debugger = 'Red9 Debugger'
     reconnect_anim = "Reconnect Lost Anim"
     reconnect_anim_ann = "Reconnect lost animation data via a chSet - see my blog post for more details"
@@ -114,7 +116,7 @@ class _MainMenus_(object):
     setrangetoo_internal_ann = 'Set the timerange to the extent of all animation found on the selected objects LESS STATIC KEYS at start and end of curves'
 
     # audio sub_menu
-    sound_red9_sound = "Red9_Sound"
+    sound_red9_sound = "Red9 Sound"
     sound_offset_manager = "Offset Manager"
     sound_offset_manager_ann = "offset / nudge multiple audio nodes in one go"
     sound_activate_selected_audio = "Activate Selected Audio"
@@ -202,6 +204,7 @@ class _Generic_(object):
     no = 'No'
     min = 'Min'
     max = 'Max'
+    offset = 'Offset'
 
 
 
@@ -407,6 +410,8 @@ checkBoxes will process all children of the roots'''
     match_base_ann = 'Exact shortName matching of nodes only, ignores namespaces : Fred:MainCtrl == Bert:MainCtrl'
     match_stripprefix = 'stripPrefix'
     match_stripprefix_ann = 'Allows one hierarchy to be prefixed when matching, ignores namespaces : Fred:New_MainCtrl == Bert:MainCtrl'
+    match_stripsuffix = 'stripSuffix'
+    match_stripsuffix_ann = 'Allows one hierarchy to be prefixed when matching, ignores namespaces : Fred:MainCtrl_New == Bert:MainCtrl'
     match_index = 'index'
     match_index_ann = 'No matching logic at all, just matched in the order the nodes were found in the hierarchies'
     match_mirror = 'mirrorIndex'
@@ -483,6 +488,9 @@ checkBoxes will process all children of the roots'''
     pose_rmb_compare_skel = 'Pro : Compare against - [skeletonData]'
     pose_rmb_compare_posedata = 'Pro : Compare against - [poseData]'
     pose_rmb_copyhandler = 'Pro : Copy poseHandler.py to folder'
+    pose_rmb_export_fbx_handler_pose = 'Pro : Export Pose > FBX: (mRig systems Only)'
+    pose_rmb_export_fbx_handler_dir = 'Pro : Export Directory > FBX: (mRigs systems Only)'
+    pose_rmb_export_fbx_handler = 'Pro : Export Poses to FBX'
     pose_rmb_copypose = 'Copy Pose >> Project Poses'
     pose_rmb_switchmode = 'Switch Pose Mode - Thumb/Text'
     pose_rmb_grid_small = 'Grid Size: Small'
@@ -513,6 +521,7 @@ class _Mirror_Setup_(object):
     custom_axis_ann = ' add custom attributes to include in the axis calculations, this is a comma separated string of attributes'
     grab_channel_box = 'Grab selected attrs from ChannelBox'
     channelbox = 'ChnBox'
+    increment_ids = 'Increment Selected Node Mirror IDs'
 
 class _CameraTracker_(object):
 
@@ -617,6 +626,8 @@ class _MetaNodeUI_(object):
     pro_connect_node = 'Pro: Connect Node to System'
     pro_disconnect_node = 'Pro: Disconnect Nodes from System'
     pro_addchild_metanode = 'Pro: Add Child MetaNode System'
+    pro_addchild_subsystem = 'Pro: Add Child mSubSystem = "name_System"'
+    pro_addchild_support = 'Pro: Add Child mSupport Node = "name_Support"'
     filter_by_name = 'filter by name : '
     shortname = 'shortname'
     stripnamespace = 'strip_Nspace'

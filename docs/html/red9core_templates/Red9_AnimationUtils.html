@@ -1,66 +1,121 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Red9_AnimationUtils &#8212; Red9 2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Red9_AnimationUtils &mdash; Red9 3.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Red9_Audio" href="Red9_Audio.html" />
-    <link rel="prev" title="Welcome to Red9’s documentation!" href="../index.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="Red9_Audio.html" title="Red9_Audio"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../index.html" title="Welcome to Red9’s documentation!"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+    <link rel="prev" title="Welcome to Red9 Pipeline Documentation" href="../index.html" /> 
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="section" id="red9-animationutils">
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Red9<img src="../_static/Red9_ProPack_logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Red9_AnimationUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Audio.html">Red9_Audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Core.html">Red9_CoreUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_General.html">Red9_General</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Meta.html">Red9_Meta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_PoseSaver.html">Red9_PoseSaver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Setup.html">Red9_Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Tools.html">Red9_Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_anim_map.html">Pro_Pack : anim_map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_animation.html">Pro_Pack : animation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_audio.html">Pro_Pack : audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_export.html">Pro_Pack : exporter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_general.html">Pro_Pack : general</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_importexport.html">Pro_Pack : importexport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_metadata_pro.html">Pro_Pack : metadata_pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_optimiser.html">Pro_Pack : optimiser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_project.html">Pro_Pack : project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_r9data.html">Pro_Pack : r9Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_rigutils.html">Pro_Pack : rigutils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_skining.html">Pro_Pack : skining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_skinning.html">Pro_Pack : skinning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_uibase.html">Pro_Pack : uibase</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Red9</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Red9_AnimationUtils</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/red9core_templates/Red9_AnimationUtils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <a class="reference external image-reference" href="http://red9consultancy.com/propack"><img alt="red9core_templates\../../_images/Red9_ProPack_strap_pro.png" src="red9core_templates\../../_images/Red9_ProPack_strap_pro.png" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="section" id="red9-animationutils">
 <h1>Red9_AnimationUtils<a class="headerlink" href="#red9-animationutils" title="Permalink to this headline">¶</a></h1>
 <p>Red9_AnimationUtils deals with all the key, attribute and time management
 within Red9. Anything from copying keys between processed hierarchies
 to Mirroring animation data.</p>
 <span class="target" id="module-Red9.core.Red9_AnimationUtils"></span><p>Code examples:</p>
-<div class="section" id="processnodes">
-<h2>ProcessNodes<a class="headerlink" href="#processnodes" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p><strong>ProcessNodes</strong></p>
 <blockquote>
 <div>All of the functions which have the ProcessNodes call share the same
 underlying functionality as described below. This is designed to process the
 given input nodes in a consistent manor across all the functions.
 Params: ‘nodes’ and ‘filterSettings’ are treated as special and build up a
 MatchedNode object that contains a tuple of matching pairs based on the given settings.</div></blockquote>
-</div>
-<div class="section" id="animfunctions-example">
-<h2>AnimFunctions example:<a class="headerlink" href="#animfunctions-example" title="Permalink to this headline">¶</a></h2>
+<p><strong>AnimFunctions example:</strong></p>
 <blockquote>
 <div><p>The main AnimFunctions class is designed to run with an r9Core.FilterNode
 object that is responsible for how we process hierarchies. If one isn’t passed
@@ -98,6 +153,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 </pre></div>
 </div>
 </div></blockquote>
+</div></blockquote>
 <p class="rubric">Core Functions</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -120,7 +176,7 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes" title="Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAnimLayersFromGivenNodes</span></code></a>(nodes)</td>
 <td>return all animLayers associated with the given nodes</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.nodesDriven" title="Red9.core.Red9_AnimationUtils.nodesDriven"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodesDriven</span></code></a>(nodes[,&nbsp;allowReferenced,&nbsp;skipLocked])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.nodesDriven" title="Red9.core.Red9_AnimationUtils.nodesDriven"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nodesDriven</span></code></a>(nodes[,&nbsp;allowReferenced,&nbsp;…])</td>
 <td>return a list of those nodes that are actively constrained or connected to a pairBlend currently used to pre-validate nodes in the mirror class prior to running the actual mirror call</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.timeLineRangeGet" title="Red9.core.Red9_AnimationUtils.timeLineRangeGet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">timeLineRangeGet</span></code></a>([always])</td>
@@ -273,7 +329,7 @@ ie: pointConstraint.target.targetWeight</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.nodesDriven">
-<code class="descname">nodesDriven</code><span class="sig-paren">(</span><em>nodes</em>, <em>allowReferenced=False</em>, <em>skipLocked=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.nodesDriven" title="Permalink to this definition">¶</a></dt>
+<code class="descname">nodesDriven</code><span class="sig-paren">(</span><em>nodes</em>, <em>allowReferenced=False</em>, <em>skipLocked=False</em>, <em>nodes_only=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.nodesDriven" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a list of those nodes that are actively constrained or connected to a pairBlend
 currently used to pre-validate nodes in the mirror class prior to running the actual mirror call</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -315,6 +371,20 @@ constraints made in the main scene.</td>
 <dt id="Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes">
 <code class="descname">getAnimLayersFromGivenNodes</code><span class="sig-paren">(</span><em>nodes</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>return all animLayers associated with the given nodes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_AnimationUtils.getAnimLayerMembers">
+<code class="descname">getAnimLayerMembers</code><span class="sig-paren">(</span><em>animLayers=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getAnimLayerMembers" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple function to get the current object menmbers of the given animLayers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>animLayers</strong> – animLayers to inspect, if not given we inspect all animLayers</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -450,6 +520,10 @@ current keys between the start and end given, ignoring step except to reverse th
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this is the base function that the ProPack smartBake functions use to extract the key time data</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -496,7 +570,7 @@ else we look at the changing values to find the actual animated bounds via keyVa
 
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.snap">
-<code class="descname">snap</code><span class="sig-paren">(</span><em>source</em>, <em>destination</em>, <em>snapTranslates=True</em>, <em>snapRotates=True</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.snap" title="Permalink to this definition">¶</a></dt>
+<code class="descname">snap</code><span class="sig-paren">(</span><em>source</em>, <em>destination</em>, <em>snapTranslates=True</em>, <em>snapRotates=True</em>, <em>snapScales=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.snap" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple wrapper over the AnimFunctions snap call</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -682,7 +756,7 @@ to use no timeRange. If time is passed in via the timeLineRange() function
 then it will consider the current timeLine PlaybackRange, OR if you have a
 highlighted range of time selected(in red) it’ll use this instead.</li>
 <li><strong>attributes</strong> – Only copy the given attributes[]</li>
-<li><strong>matchMethod</strong> – arg passed to the match code, sets matchMethod used to match 2 node names</li>
+<li><strong>matchMethod</strong> – arg passed to the match code, sets matchMethod used to match 2 node names, see r9Core.matchNodeLists for details</li>
 <li><strong>mergeLayers</strong> – this pre-processes animLayers so that we have a single, temporary merged
 animLayer to extract a compiled version of the animData from. This gets deleted afterwards.</li>
 </ul>
@@ -721,7 +795,7 @@ we use this classes instance of filterSettings cls.settings</li>
 <li><strong>attributes</strong> – Only copy the given attributes[]</li>
 <li><strong>skipAttrs</strong> – Copy all Settable Attributes OTHER than the given, not
 used if an attributes list is passed</li>
-<li><strong>matchMethod</strong> – arg passed to the match code, sets matchMethod used to match 2 node names</li>
+<li><strong>matchMethod</strong> – arg passed to the match code, sets matchMethod used to match 2 node names, see r9Core.matchNodeLists for details</li>
 </ul>
 </td>
 </tr>
@@ -731,7 +805,7 @@ used if an attributes list is passed</li>
 
 <dl class="method">
 <dt id="Red9.core.Red9_AnimationUtils.AnimFunctions.snapTransform">
-<code class="descname">snapTransform</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>time=()</em>, <em>step=1</em>, <em>preCopyKeys=1</em>, <em>preCopyAttrs=1</em>, <em>filterSettings=None</em>, <em>iterations=1</em>, <em>matchMethod=None</em>, <em>prioritySnapOnly=False</em>, <em>snapRotates=True</em>, <em>snapTranslates=True</em>, <em>additionalCalls=[]</em>, <em>cutkeys=False</em>, <em>smartbake=False</em>, <em>smartBakeRef=[]</em>, <em>additionalCalls_pre=[]</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.snapTransform" title="Permalink to this definition">¶</a></dt>
+<code class="descname">snapTransform</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>time=()</em>, <em>step=1</em>, <em>preCopyKeys=1</em>, <em>preCopyAttrs=1</em>, <em>filterSettings=None</em>, <em>iterations=1</em>, <em>matchMethod=None</em>, <em>prioritySnapOnly=False</em>, <em>snapRotates=True</em>, <em>snapTranslates=True</em>, <em>snapScales=False</em>, <em>additionalCalls=[]</em>, <em>cutkeys=False</em>, <em>smartbake=False</em>, <em>smartBakeRef=[]</em>, <em>additionalCalls_pre=[]</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.snapTransform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Snap objects over a timeRange. This wraps the default hierarchy filters
 so it’s capable of multiple hierarchy filtering and matching methods.
 The resulting node lists are snapped over time and keyed.
@@ -759,10 +833,11 @@ all channels that are keyed have their data taken across</li>
 <li><strong>preCopyAttrs</strong> – Run a CopyAttrs pass prior to snap - this means that
 all channel Values on all nodes will have their data taken across</li>
 <li><strong>iterations</strong> – Number of times to process the frame.</li>
-<li><strong>matchMethod</strong> – arg passed to the match code, sets matchMethod used to match 2 node names</li>
+<li><strong>matchMethod</strong> – arg passed to the match code, sets matchMethod used to match 2 node names, see r9Core.matchNodeLists for details</li>
 <li><strong>prioritySnapOnly</strong> – if True ONLY snap the nodes in the filterPriority list within the filterSettings object = Super speed up!!</li>
 <li><strong>snapTranslates</strong> – only snap the translate data</li>
 <li><strong>snapRotates</strong> – only snap the rotate data</li>
+<li><strong>snapScales</strong> – testing, match the scales but only in local space</li>
 <li><strong>additionalCalls</strong> – [func, func…] additional functions to run AFTER the snap call during process… allowing you
 to add in specific matching calls to a SnapTransforms run whilst having the time increment correctly managed for you</li>
 <li><strong>additionalCalls_pre</strong> – [func, func…] additional functions to run BEFORE the snap call during process… allowing you
@@ -800,7 +875,7 @@ TO IMPLEMENT</p>
 
 <dl class="staticmethod">
 <dt id="Red9.core.Red9_AnimationUtils.AnimFunctions.snap">
-<em class="property">static </em><code class="descname">snap</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>snapTranslates=True</em>, <em>snapRotates=True</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.snap" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">snap</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>snapTranslates=True</em>, <em>snapRotates=True</em>, <em>snapScales=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.snap" title="Permalink to this definition">¶</a></dt>
 <dd><p>This takes 2 given transform nodes and snaps them together. It takes into
 account offsets in the pivots of the objects. Uses the API MFnTransform nodes
 to calculate the data via a command plugin. This is a stripped down version
@@ -813,6 +888,7 @@ of the snapTransforms cmd</p>
 <li><strong>nodes</strong> – [src,dest]</li>
 <li><strong>snapTranslates</strong> – snap the translate data</li>
 <li><strong>snapRotates</strong> – snap the rotate data</li>
+<li><strong>snapScales</strong> – snap the scale, this is LOCAL transforms only</li>
 </ul>
 </td>
 </tr>
@@ -868,7 +944,7 @@ we use this classes instance of filterSettings cls.settings</li>
 <li><strong>attributes</strong> – Only process the given attributes[]</li>
 <li><strong>attributes_all_settable</strong> – if True and bindMethod=’connect’ we process ALL settable channels on each node</li>
 <li><strong>bindMethod</strong> – method of binding the data</li>
-<li><strong>matchMethod</strong> – arg passed to the match code, sets matchMethod used to match 2 node names</li>
+<li><strong>matchMethod</strong> – arg passed to the match code, sets matchMethod used to match 2 node names, see r9Core.matchNodeLists for details</li>
 <li><strong>manage_scales</strong> – bool, do we also look at binding jnt scales where applicable, this only runs
 if the source jnt has incoming scale connections which would then be propagated via a scaleConstrain</li>
 <li><strong>unlock</strong> – if True force unlock the required transform attrs on the destination skeleton first</li>
@@ -1277,6 +1353,10 @@ on the initial nodes past to the class</li>
 <p>TODO: Issue where if nodeA on Left has NO key data at all, and nodeB on right
 does, then nodeB will be left incorrect. We need to clean the data if there
 are no keys.</p>
+<p>TODO: Issue if left and right nodes have setLimits and we’re doing purely a pose based mirror
+then we can get into a situation where the mirror fails. This is because we first do a copyAttr
+between the nodes, then we inverse the channels required. If the node on the side being inversed has limits 
+that don’t allow that initial copy then the mirror will result in zero</p>
 </dd></dl>
 
 <dl class="method">
@@ -1297,7 +1377,7 @@ are no keys.</p>
 <li><strong>filepath</strong> – filepath to a mirrorMap, if none given then we assume that the internal mirrorDict is already setup</li>
 <li><strong>nodes</strong> – nodes to load, or the root of a system to filter</li>
 <li><strong>clearCurrent</strong> – if True then the load will first remove all current mirrormarkers</li>
-<li><strong>matchMethod</strong> – method used to match the data to the nodes</li>
+<li><strong>matchMethod</strong> – arg passed to the match code, sets matchMethod used to match the data, see r9Core.matchNodeLists for details</li>
 </ul>
 </td>
 </tr>
@@ -1411,73 +1491,36 @@ in the sameNamespace as the controllers.</li>
 </dd></dl>
 
 </div>
-</div>
 
 
+           </div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Red9_AnimationUtils</a><ul>
-<li><a class="reference internal" href="#processnodes">ProcessNodes</a></li>
-<li><a class="reference internal" href="#animfunctions-example">AnimFunctions example:</a></li>
-</ul>
-</li>
-</ul>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to Red9 Pipeline Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Red9_Audio.html" class="btn btn-neutral float-right" title="Red9_Audio" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../index.html"
-                        title="previous chapter"><strong>Welcome to Red9’s documentation!</strong></a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="Red9_Audio.html"
-                        title="next chapter">Red9_Audio</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/red9core_templates/Red9_AnimationUtils.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Red9 Consultancy Limited.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="Red9_Audio.html" title="Red9_Audio"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../index.html" title="Welcome to Red9’s documentation!"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

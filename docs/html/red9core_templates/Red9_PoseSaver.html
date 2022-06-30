@@ -1,50 +1,107 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Red9_PoseSaver &#8212; Red9 2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Red9_PoseSaver &mdash; Red9 3.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Red9_Setup" href="Red9_Setup.html" />
     <link rel="prev" title="Red9_Meta" href="Red9_Meta.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="Red9_Setup.html" title="Red9_Setup"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="Red9_Meta.html" title="Red9_Meta"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="section" id="red9-posesaver">
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Red9<img src="../_static/Red9_ProPack_logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Red9_AnimationUtils.html">Red9_AnimationUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Audio.html">Red9_Audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Core.html">Red9_CoreUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_General.html">Red9_General</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Meta.html">Red9_Meta</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Red9_PoseSaver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Setup.html">Red9_Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Tools.html">Red9_Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_anim_map.html">Pro_Pack : anim_map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_animation.html">Pro_Pack : animation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_audio.html">Pro_Pack : audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_export.html">Pro_Pack : exporter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_general.html">Pro_Pack : general</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_importexport.html">Pro_Pack : importexport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_metadata_pro.html">Pro_Pack : metadata_pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_optimiser.html">Pro_Pack : optimiser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_project.html">Pro_Pack : project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_r9data.html">Pro_Pack : r9Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_rigutils.html">Pro_Pack : rigutils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_skining.html">Pro_Pack : skining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_skinning.html">Pro_Pack : skinning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_uibase.html">Pro_Pack : uibase</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Red9</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Red9_PoseSaver</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/red9core_templates/Red9_PoseSaver.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <a class="reference external image-reference" href="http://red9consultancy.com/propack"><img alt="red9core_templates\../../_images/Red9_ProPack_strap_pro.png" src="red9core_templates\../../_images/Red9_ProPack_strap_pro.png" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="section" id="red9-posesaver">
 <h1>Red9_PoseSaver<a class="headerlink" href="#red9-posesaver" title="Permalink to this headline">¶</a></h1>
 <p>Red9_PoseSaver is designed as a generic module for storing and dealing
 with poses inside Maya. The PoseData object is the base for all of this
@@ -94,6 +151,47 @@ a more detailed explanation.</p>
 <p>TODO: have this also accept a pointer to a handler file rather than a direct
 poseHnadler.py file in each folder. This means we could point a folder to a generic handler
 inside our presets folder rather than having the code logic in each folder.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_PoseSaver.store_nodepose_to_clipboard">
+<code class="descname">store_nodepose_to_clipboard</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>clipboard=True</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.store_nodepose_to_clipboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>a simple wrap over the main DataMap to grab the poseData for a given set of nodes
+by-passing the rest of the pose logic. Returns the DataMap object with the poseDict filled</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> – nodes to capture</li>
+<li><strong>clipboard</strong> – if True we puhs the data to the system clipboard also for recovery</li>
+<li><strong>verbose</strong> – if True(default) we show on screen message to show the data has been captured</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_PoseSaver.apply_nodepose_from_clipboad">
+<code class="descname">apply_nodepose_from_clipboad</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>cb_selection=True</em>, <em>world_space=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.apply_nodepose_from_clipboad" title="Permalink to this definition">¶</a></dt>
+<dd><p>given a valid datamap.poseDict, buffered to the clipboard (using the above function
+“store_nodepose_to_clipboard”) apply that internal pose, attr for attr, to the given object.
+If there are selected attrs in the ChannelBox then we only load to those. This loads against index order</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> – the nodes we want to cast the data too, note these are processed in the original selection order of the data when stored</li>
+<li><strong>cb_selection</strong> – if True we only load those attrs that are selected in the channelBox</li>
+<li><strong>world_space</strong> – loads the data against the kWorld space stored in the attr blocks in the pose data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="class">
@@ -162,22 +260,26 @@ poseGetNodesLoad or poseGetNodesSave functions</li>
 
 <dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.DataMap.getNodes">
-<code class="descname">getNodes</code><span class="sig-paren">(</span><em>nodes</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.DataMap.getNodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>get the nodes to process
+<code class="descname">getNodes</code><span class="sig-paren">(</span><em>nodes</em>, <em>incRoots=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.DataMap.getNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main call to get the nodes to process based on the filterSettings data
 This is designed to allow for specific hooks to be used from user
 code stored in the pose folder itself.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nodes</strong> – nodes passed to the filter calls</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> – nodes passed to the filter calls</li>
+<li><strong>incRoots</strong> – added Oct2021 : this now force overrides the settings.incRoots value so we can
+force it on for all Save functions. For loads this isn’t used as we want the user to determine the behaviour</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Update : Aug 2016
-Because this calls FilterNode to get the data when useFilter=True it
+<p class="last">Because this calls FilterNode to get the data when useFilter=True it
 allows for any mRig with internal filterSettings bound to it to dynamically
 modify the settings on the fly to suit. This is a big update in handling
 for ProPack to integrate without having to massively restructure</p>
@@ -192,7 +294,7 @@ COMPLETELY ignored by the pose system. They will not be saved
 or loaded.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The collection of these attrs is currently only supported under MetaRig
+<p class="last">The collection of these attrs is currently only supported under MetaRig.
 IF self.skipAttrs was passed into the object then we do NOT run this func, returning the currently setup list</p>
 </div>
 </dd></dl>
@@ -236,23 +338,37 @@ for managing the actual pose data for save</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">this code sets up self.rootJnt and IF that is setup then we also trigger the
+<p>this code sets up self.rootJnt and IF that is setup then we also trigger the
 _buildBlock_skeletonData() and _buildBlock_hikData() dicts which inject specific
-skeleton joint data for later processing. This is setup if one of the following is True
-* pose is self.metaPose and self.metaRig.getSkeletonRoots() returns a rootJnt
-* nodes[0] (rootNode) has attribute ‘exportSkeletonRoot’ that is connected to a joint
-* nodes[0] (rootNode) is of type joint
-* self.settings.nodeTypes == [‘joint’]</p>
+skeleton joint data for later processing. This is setup if one of the following is True</p>
+<ul class="last simple">
+<li>pose is self.metaPose and self.metaRig.getSkeletonRoots() returns a rootJnt</li>
+<li>nodes[0] (rootNode) has attribute ‘exportSkeletonRoot’ that is connected to a joint</li>
+<li>nodes[0] (rootNode) is of type joint</li>
+<li>self.settings.nodeTypes == [‘joint’]</li>
+</ul>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.core.Red9_PoseSaver.DataMap.processPoseFile">
-<code class="descname">processPoseFile</code><span class="sig-paren">(</span><em>nodes</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.DataMap.processPoseFile" title="Permalink to this definition">¶</a></dt>
+<code class="descname">processPoseFile</code><span class="sig-paren">(</span><em>nodes</em>, <em>read=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.DataMap.processPoseFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>pre-loader function that processes all the nodes and data prior to
 actually calling the load… why? this is for the poseMixer for speed.
 This reads the file, matches the nodes to the internal file data and fills
 up the self.matchedPairs data [(src,dest),(src,dest)]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> – nodes to process</li>
+<li><strong>read</strong> – if True we read the r9Anim from file, else we skip the load</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">this replaced the original call self._poseLoad_buildcache()</p>
@@ -396,6 +512,12 @@ class instance.</li>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">as from Oct2021 the save function will ALWAYS internally set incRoots=True so that all data is captured.
+The user can then choose if they use that data during the load process but it seems correct to store it
+regardless</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -543,6 +665,18 @@ hierarchy and is designed for overloading if required.</p>
 <dd><p>return a list of the target controllers</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="Red9.core.Red9_PoseSaver.PosePointCloud.matchPPCNodes">
+<code class="descname">matchPPCNodes</code><span class="sig-paren">(</span><em>srcTargets</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.matchPPCNodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list of the PPC nodes which were generated against the given target nodes</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the PPC contains a list of tuples where [(ppc_node, target_node),(…..]
+with this we pass in the target and get a list back of the PPC node that
+was generated against it</p>
+</div>
+</dd></dl>
+
 <dl class="staticmethod">
 <dt id="Red9.core.Red9_PoseSaver.PosePointCloud.getCurrentInstances">
 <em class="property">static </em><code class="descname">getCurrentInstances</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.getCurrentInstances" title="Permalink to this definition">¶</a></dt>
@@ -620,7 +754,7 @@ of the PPC is other instances such as the AnimationPPC</p>
 
 <dl class="class">
 <dt id="Red9.core.Red9_PoseSaver.PoseCompare">
-<em class="property">class </em><code class="descname">PoseCompare</code><span class="sig-paren">(</span><em>currentPose</em>, <em>referencePose</em>, <em>angularTolerance=0.1</em>, <em>linearTolerance=0.01</em>, <em>compareDict='poseDict'</em>, <em>filterMap=[]</em>, <em>ignoreBlocks=[]</em>, <em>ignoreStrings=[]</em>, <em>ignoreAttrs=[]</em>, <em>longName=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseCompare" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">PoseCompare</code><span class="sig-paren">(</span><em>currentPose</em>, <em>referencePose</em>, <em>angularTolerance=0.1</em>, <em>linearTolerance=0.001</em>, <em>compareDict='poseDict'</em>, <em>filterMap=[]</em>, <em>ignoreBlocks=[]</em>, <em>ignoreStrings=[]</em>, <em>ignoreAttrs=[]</em>, <em>longName=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PoseCompare" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This is aimed at comparing a rigs current pose with a given one, be that a
 pose file on disc, a pose class object, or even a poseObject against another.
@@ -675,8 +809,8 @@ and for key in keys compare, with tolerance, the [attrs] block.</p>
 <p>Make sure we have 2 PoseData objects to compare
 :param currentPose: either a PoseData object or a valid pose file
 :param referencePose: either a PoseData object or a valid pose file
-:param angularTolerance: the tolerance used to check rotate attr float values
-:param linearTolerance: the tolerance used to check all other float attrs
+:param angularTolerance: default 0.1 : the tolerance used to check rotate attr float values
+:param linearTolerance: default: 0.001 : the tolerance used to check all other float attrs
 :param compareDict: the internal main dict in the pose file to compare the data with : base options : ‘poseDict’, ‘skeletonDict’
 :param filterMap: if given this is used as a high level filter, only matching nodes get compared</p>
 <blockquote>
@@ -736,18 +870,17 @@ for processing later if required</p>
 <code class="descname">batchPatchPoses</code><span class="sig-paren">(</span><em>posedir</em>, <em>config</em>, <em>poseroot</em>, <em>load=True</em>, <em>save=True</em>, <em>patchfunc=None</em>, <em>relativePose=False</em>, <em>relativeRots=False</em>, <em>relativeTrans=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.batchPatchPoses" title="Permalink to this definition">¶</a></dt>
 <dd><p>whats this?? a fast method to run through all the poses in a given dictionary and update
 or patch them. If patchfunc isn’t given it’ll just run through and resave the pose - updating
-the systems if needed. If it is then it gets run between the load and save calls.
-:param posedir: directory of poses to process
-:param config: hierarchy settings cfg to use to ID the nodes (hierarchy tab preset = filterSettings object)
-:param poseroot: root node to the filters - poseTab rootNode/MetaRig root
-:param patchfunc: optional function to run between the load and save call in processing, great for</p>
-<blockquote>
-<div>fixing issues on mass with poses. Note we now pass pose file back into this func as an arg</div></blockquote>
+the systems if needed. If it is then it gets run between the load and save calls.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>posedir</strong> – directory of poses to process</li>
+<li><strong>config</strong> – hierarchy settings cfg to use to ID the nodes (hierarchy tab preset = filterSettings object)</li>
+<li><strong>poseroot</strong> – root node to the filters - poseTab rootNode/MetaRig root</li>
+<li><strong>patchfunc</strong> – optional function to run between the load and save call in processing, great for
+fixing issues on mass with poses. Note we now pass pose file back into this func as an arg</li>
 <li><strong>load</strong> – should the batch load the pose</li>
 <li><strong>save</strong> – should the batch resave the pose</li>
 </ul>
@@ -760,61 +893,34 @@ the systems if needed. If it is then it gets run between the load and save calls
 </div>
 
 
+           </div>
           </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Red9_Meta.html" class="btn btn-neutral float-left" title="Red9_Meta" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Red9_Setup.html" class="btn btn-neutral float-right" title="Red9_Setup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Red9 Consultancy Limited.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="Red9_Meta.html"
-                        title="previous chapter">Red9_Meta</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="Red9_Setup.html"
-                        title="next chapter">Red9_Setup</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/red9core_templates/Red9_PoseSaver.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="Red9_Setup.html" title="Red9_Setup"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="Red9_Meta.html" title="Red9_Meta"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

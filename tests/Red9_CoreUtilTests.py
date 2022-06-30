@@ -492,6 +492,14 @@ class Test_baseFunctions():
         assert r9Core.timeIsInRange((40, 100), (20, 50), start_inRange=False, end_inRange=True)
         assert not r9Core.timeIsInRange((40, 100), (20, 101), start_inRange=False, end_inRange=True)
 
+    def test_common_prefix_suffix(self):
+        assert r9Core.common_prefix(['drv_spine', 'drv_leg', 'drv_ankle', 'drv_jnt_test'], suggested=False) == 'drv_'
+        assert r9Core.common_prefix(['drv_spine', 'drv_leg', 'drv_ankle', 'jnt_test'], suggested=False)  == ''
+        assert r9Core.common_prefix(['drv_spine', 'drv_leg', 'drv_ankle', 'jnt_test'], suggested=True)  == 'drv_'
+        
+        assert r9Core.common_suffix(['spine_drv', 'leg_drv', 'ankle_drv', 'jnt_test_drv'], suggested=False) == '_drv'
+        assert r9Core.common_suffix(['spine_drv', 'leg_drv', 'ankle_drv', 'jnt_test'], suggested=False)  == ''
+        assert r9Core.common_suffix(['spine_drv', 'leg_drv', 'ankle_drv', 'jnt_test'], suggested=True)  == '_drv'
 
 class Test_LockNodes(object):
     def setup(self):
@@ -527,9 +535,42 @@ class Test_Matching_CoreFuncs(object):
     def test_processMatchedNodes(self):
         # TODO: Fill Test
         pass
+
     def test_matchNodeLists(self):
-        # TODO: Fill Test
-        pass  #
+        # test new stripSuffix handlers
+        list1 = ['spine_04', 'spine_03']
+        list2 = ['spine_04_latissimusOff_l_drv', 'spine_03_latissimus_l_drv', 'spine_04_drv_latissimusOff_l_drv', 'spine_04_drv']
+
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='commonPrefix') == []
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='stripSuffix') == [('spine_04', 'spine_04_latissimusOff_l_drv'),
+                                                                                  ('spine_03', 'spine_03_latissimus_l_drv')]
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='stripSuffix', suffix='_drv') == [('spine_04', 'spine_04_drv')]
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='commonSuffix') == [('spine_04', 'spine_04_drv')]
+        
+        # test reverse logic just in case
+        list1 = ['spine_04_latissimusOff_l_drv', 'spine_03_latissimus_l_drv', 'spine_04_drv_latissimusOff_l_drv', 'spine_04_drv']
+        list2 = ['spine_04', 'spine_03']
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='stripSuffix') == [('spine_04_latissimusOff_l_drv', 'spine_04'),
+                                                                                  ('spine_03_latissimus_l_drv', 'spine_03')]  
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='commonSuffix') == [('spine_04_drv', 'spine_04')]
+                                  
+        # test new stripPrefix handlers
+        list1 = ['leg_04', 'spine_03']
+        list2 = ['pre_spine_04_latissimusOff_l', 'pre_spine_03_latissimus_l', 'pre_spine_04_drv_latissimusOff_l', 'pre_leg_04']
+
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='commonSuffix') == []
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='stripPrefix') == [('leg_04', 'pre_leg_04')]
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='stripPrefix', prefix='pre_') == [('leg_04', 'pre_leg_04')]
+
+        list2 = ['pre_spine_03_latissimusOff_l', 'pre_spine_03', 'pre_spine_04_drv_latissimusOff_l', 'pre_leg_04']
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='stripPrefix', prefix='pre_') == [('leg_04', 'pre_leg_04'), ('spine_03', 'pre_spine_03')]
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='commonPrefix') ==  [('leg_04', 'pre_leg_04'), ('spine_03', 'pre_spine_03')]
+        
+        list1 = ['pre_spine_03_latissimusOff_l', 'pre_spine_03', 'pre_spine_04_drv_latissimusOff_l', 'pre_leg_04']
+        list2 = ['leg_04', 'spine_03']
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='stripPrefix', prefix='pre_') == [('pre_spine_03', 'spine_03'), ('pre_leg_04', 'leg_04')]
+        assert r9Core.matchNodeLists(list1, list2, matchMethod='commonPrefix') ==   [('pre_spine_03', 'spine_03'), ('pre_leg_04', 'leg_04')] 
+
     def test_MatchedNodeInputs(self):
         # TODO: Fill Test
         pass  #

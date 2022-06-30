@@ -52,7 +52,29 @@ global proc red9HackChannelBox(string $parent)
 	 menuItem -label ("HUD: Delete") 
 		-p red9HUDsubmenu
 		-ann "destroy the HUD itself and cleanup"
-		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDManagement('delete')\")" red9HUDdeleteItem;	
+		-c "python(\"import Red9.core.Red9_Meta as r9Meta;r9Meta.monitorHUDManagement('delete')\")" red9HUDdeleteItem;
+
+	 menuItem -p $parent -d true;	
+	 menuItem -label ("Red9 : CopyPaste Xforms")
+	 	-subMenu true 
+	 	-tearOff true
+	 	-p $parent red9Clipboardsubmenu;
+	 menuItem -label ("Red9: Copy Node Attrs") 
+		-p red9Clipboardsubmenu
+		-ann "Add the selected objects transform data to the clipboard"
+		-c "python(\"import Red9.core.Red9_PoseSaver as r9Pose;r9Pose.store_nodepose_to_clipboard()\")" red9CBCopyItem;
+	 menuItem -label ("Red9: Paste Node Attrs - All Attrs") 
+		-p red9Clipboardsubmenu
+		-ann "Paste the transform clipboard data to the selected object / selected channels"
+		-c "python(\"import Red9.core.Red9_PoseSaver as r9Pose;r9Pose.apply_nodepose_from_clipboad(cb_selection=False, world_space=False)\")" red9CBPasteLocalItem;
+	 menuItem -label ("Red9: Paste Node Attrs - All Attrs - WorldSpace") 
+		-p red9Clipboardsubmenu
+		-ann "Paste the transform clipboard data to the selected object / selected channels, transoform data is in WorldSpace"
+		-c "python(\"import Red9.core.Red9_PoseSaver as r9Pose;r9Pose.apply_nodepose_from_clipboad(cb_selection=False, world_space=True)\")" red9CBPasteWorldItem;
+	 menuItem -label ("Red9: Paste Node Attrs - Selected CBox") 
+		-p red9Clipboardsubmenu
+		-ann "Paste the transform clipboard data to the selected object + selected channels"
+		-c "python(\"import Red9.core.Red9_PoseSaver as r9Pose;r9Pose.apply_nodepose_from_clipboad(cb_selection=True)\")" red9CBPaste2Item;
 
 }
 

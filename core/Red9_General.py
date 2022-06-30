@@ -1,11 +1,15 @@
 '''
 ..
-    Red9 Studio Pack: Maya Pipeline Solutions
+    Red9 Pro Pack: Maya Pipeline Solutions
+    ======================================
+     
     Author: Mark Jackson
-    email: rednineinfo@gmail.com
-
-    Red9 blog : http://red9-consultancy.blogspot.co.uk/
-    MarkJ blog: http://markj3d.blogspot.co.uk
+    email: info@red9consultancy.com
+     
+    Red9 : http://red9consultancy.com
+    Red9 Vimeo : https://vimeo.com/user9491246
+    Twitter : @red9_anim
+    Facebook : https://www.facebook.com/Red9Anim
 
 
     This is the General library of utils used throughout the modules
@@ -39,6 +43,10 @@ logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
+
+# new global so we know if a function is in the AnimContext manager
+global RED9_ANIM_CONTEXT_ACTIVE
+RED9_ANIM_CONTEXT_ACTIVE = None
 
 # ---------------------------------------------------------------------------------
 # Generic Utility Functions ---
@@ -98,6 +106,7 @@ def scenePath():
 def itersubclasses(cls, _seen=None):
     """
     itersubclasses(cls)
+
     http://code.activestate.com/recipes/576949-find-all-subclasses-of-a-given-class/
     Iterator to yield full inheritance from a given class, including subclasses. This
     is used in the MetaClass to build the RED9_META_REGISTERY inheritance dict
@@ -192,6 +201,7 @@ def getScriptEditorSelection():
 def string_to_date_time(date_time_string):
     """
     converts time string information to datetime.datetime object
+
     :param date_time_string: string with time information EX. '2019-11-21T17:05:02Z'
     :return: object datetime.datetime
     """
@@ -454,6 +464,16 @@ def deleteNewNodes(func):
         return res
     return wrapper
 
+def getNewNodes(func):
+    '''
+    DECORATOR: return new nodes after a function has been run
+    '''
+    @wraps(func)
+    def wrapped( *args, **kws):
+        current = set(cmds.ls(l=True))
+        func(*args, **kws)
+        return list(set(cmds.ls(l=True)) - current) or []
+    return wrapped
 
 def suppressScriptEditor(func):
     '''
@@ -489,7 +509,7 @@ class AnimationContext(object):
     :param eval_idle: if we're not setting the evalmanager state then this will turn the idleAction to 'Rebuild'
         preventing the caching over-riding the data set by the enclose function
     :param cached_eval: do we manage the new cachedEvaluation in Maya 2019 upwards, default is True
-    :param eval_mode: override all other EM flags passd to this context to manage the EM setups for a given role 'anim' or 'static'
+    :param eval_mode: override all other EM flags passed to this context to manage the EM setups for a given role 'anim' or 'static'
     :param time: do we manage the time and restore the original currentTime and playback ranges?
     :param undo: do we manage the undoStack, collecting everything in one chunk
     :param autokey: base state of the autokey during this context, default=False
@@ -538,9 +558,22 @@ class AnimationContext(object):
             self.manage_cache = False
             self.manage_eval_idle = False
         if r9Setup.mayaVersion() < 2016.0:
-            self.manage_em = False
+            self.manage_em = False        
+
+        # TESTING!!!!! 
+        if r9Setup.mayaVersion() >= 2022.0:
+#             self.manage_em = False      # Really Slow in 2022 switch from parallel
+            self.manage_cache = True      # flush the cache on exit
+            self.manage_eval_idle = False
 
     def __enter__(self):
+
+        # set the global we can use in other code to know if we're in the context
+        global RED9_ANIM_CONTEXT_ACTIVE
+        RED9_ANIM_CONTEXT_ACTIVE = True
+
+        self.objs = cmds.ls(sl=True, l=True)
+
         # manage playback time options
         if self.manage_time:
             self.timeStore['currentTime'] = cmds.currentTime(q=True)
@@ -566,10 +599,13 @@ class AnimationContext(object):
                 # http://download.autodesk.com/us/company/files/MayaCachedPlayback/2019/MayaCachedPlaybackWhitePaper.html
                 from maya.plugin.evaluator.cache_preferences import CachePreferenceEnabled
                 self.cachemode = CachePreferenceEnabled().get_value()
-#                 log.info('AnimContext : CacheEnabled = False')
-#                 if self.cachemode:
-#                     CachePreferenceEnabled().set_value(False)
-            except StandardError, err:
+
+                # TESTING: Turn caching OFF
+                if r9Setup.mayaVersion() >= 2022.0:
+                    log.info('AnimContext : CacheEnabled = False')
+                    if self.cachemode:
+                        CachePreferenceEnabled().set_value(False)
+            except Exception as err:
                 log.debug(err)
                 log.debug('failed to manage cache_preferences')
 
@@ -602,6 +638,12 @@ class AnimationContext(object):
             cmds.playbackOptions(ps=self.timeStore['playSpeed'])
             log.debug('AnimContext : EXIT : currentTime restored: %f' % self.timeStore['currentTime'])
 
+        if self.objs:
+            cmds.select(cl=True)
+            for obj in self.objs:
+                if cmds.objExists(obj):
+                    cmds.select(obj, add=True)
+
         if self.mangage_undo:
             cmds.undoInfo(closeChunk=True)
         else:
@@ -621,14 +663,20 @@ class AnimationContext(object):
                     else:
                         cmds.cacheEvaluator(fc='destroy')
                         log.debug('AnimContext : EXIT : CacheEvaluator flushed')
-#                     from maya.plugin.evaluator.cache_preferences import CachePreferenceEnabled
-#                     CachePreferenceEnabled().set_value(self.cachemode)
+
+                    # TESTING Turn Caching back on
+                    if r9Setup.mayaVersion() >= 2022.0:
+                        from maya.plugin.evaluator.cache_preferences import CachePreferenceEnabled
+                        CachePreferenceEnabled().set_value(self.cachemode)
             except:
                 log.debug('failed to restore cache_preferences')
 
         if self.manage_eval_idle:
             cmds.evaluationManager(idleAction=self.eval_idle_mode)
             log.debug('AnimContext : EXIT : EM idleAction restored: %s' % self.eval_idle_mode)
+
+        global RED9_ANIM_CONTEXT_ACTIVE
+        RED9_ANIM_CONTEXT_ACTIVE = False
 
         if exc_type is not None and self.suppress_exceptions:
             log.exception('%s : %s' % (exc_type, exc_value))
@@ -646,7 +694,8 @@ class undoContext(object):
         If initialUndo is True then the context manager will manage what to do on entry with
         the undoStack. The idea is that if True the code will look at the last functions in the
         undoQueue and if any of those mantch those in the undoFuncCache, it'll undo them to the
-        depth given.
+        depth given. 
+
         WHY?????? This is specifically designed for things like floatFliders where you've
         set a function to act on the 'dc' flag, (drag command) by passing that func through this
         each drag will only go into the stack once, enabling you to drag as much as you want
@@ -698,7 +747,7 @@ class ProgressBarContext(object):
     >>>
     >>> progressBar=r9General.ProgressBarContext(maxValue=1000, step=1)
     >>>
-    >>> #now do your code but increment and check the progress state
+    >>> # now do your code but increment and check the progress state
     >>> with progressBar:
     >>>     for i in range(1,1000,1):
     >>>        if progressBar.isCancelled():
@@ -874,8 +923,8 @@ class SceneRestoreContext(object):
     >>>     #do something to modify the scene setup
     >>>     cmds.currentTime(100)
     >>>
-    >>> #out of the context manager the scene will be restored as it was
-    >>> #before the code entered the context. (with sceneStore:)
+    >>> # out of the context manager the scene will be restored as it was
+    >>> # before the code entered the context. (with sceneStore:)
     """
     def __init__(self):
         self.gPlayBackSlider = mel.eval("string $temp=$gPlayBackSlider")
@@ -1130,6 +1179,8 @@ def getModifier():
     return the modifier key pressed
     '''
     mods = cmds.getModifiers()
+    if (mods & 4) > 0 and (mods & 1) > 0 and (mods & 8) > 0:
+        return 'Ctrl_Shift_Alt'
     if (mods & 1) > 0 and (mods & 8) > 0:
         return 'Shift_Alt'
     if (mods & 1) > 0 and (mods & 4) > 0:
@@ -1316,7 +1367,6 @@ def os_fileCompare(file1, file2, openDiff=False):
     :param openDiff: if a difference was found then boot Diffmerge UI, highlighting the diff
 
     .. note::
-
         This is a stub function that requires Diffmerge.exe, you can download from
         https://sourcegear.com/diffmerge/.
         Once downloaded drop it here Red9/pakcages/diffMerge.exe

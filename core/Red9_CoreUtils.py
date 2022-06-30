@@ -1,11 +1,15 @@
 '''
 ..
-    Red9 Studio Pack: Maya Pipeline Solutions
+    Red9 Pro Pack: Maya Pipeline Solutions
+    ======================================
+     
     Author: Mark Jackson
-    email: rednineinfo@gmail.com
-
-    Red9 blog : http://red9-consultancy.blogspot.co.uk/
-    MarkJ blog: http://markj3d.blogspot.co.uk
+    email: info@red9consultancy.com
+     
+    Red9 : http://red9consultancy.com
+    Red9 Vimeo : https://vimeo.com/user9491246
+    Twitter : @red9_anim
+    Facebook : https://www.facebook.com/Red9Anim
 
     This is the Core library of utils used throughout the modules
 
@@ -67,15 +71,15 @@ def prioritizeNodeList(inputlist, priorityList, regex=True, prioritysOnly=False)
     :param prioritysOnly: return just the priorityList matches or the entire list sorted
 
     .. note::
-        Known issue, if Regex=True and you have 2 similar str's in the priority list then there's
-        a chance that matching may be erractic...
+        Known issue, if regex=True and you have 2 similar str's in the priority list then there's
+        a chance that matching may be erratic...
 
         >>> priorityList=['upperLip','l_upperLip']
         >>> nodes=['|my|dag|path|jaw',|my|dag|path|l_upperLip','|my|dag|path|upperLip','|my|dag|path|lowerLip']
         >>> returns: ['|my|dag|path|l_upperLip','|my|dag|path|upperLip',|my|dag|path|jaw,'|my|dag|path|lowerLip]
 
-        as in regex 'l_upperLip'=='upperLip' as well as 'upperLip'=='upperLip'
-        really in regex you'd need to be more specific:  priorityList=['^upperLip','l_upperLip']
+        as in regex **'l_upperLip'=='upperLip'** as well as **'upperLip'=='upperLip'**. 
+        Really in regex you'd need to be more specific:  **priorityList=['^upperLip','l_upperLip']**
     '''
     # stripped = [nodeNameStrip(node) for node in inputlist]  # stripped back to nodeName
     nList = list(inputlist)  # take a copy so we don't mutate the input list
@@ -131,6 +135,89 @@ def sortNumerically(data):
     alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
     return sorted(data, key=alphanum_key)
 
+
+def sorted_nicely(items):
+    """
+    Sort the given iterable in the way that humans expect.
+    """
+
+    # taken form: https://stackoverflow.com/questions/2669059/how-to-sort-alpha-numeric-set-in-python
+    # From Mark Byers https://stackoverflow.com/users/61974/mark-byers
+
+    convert = lambda text: int(text) if text.isdigit() else text
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
+    return sorted(items, key = alphanum_key)
+
+def common_suffix(test_list, suggested=True):
+    '''
+    from a list of strings return the common suffix. Note that all of the 
+    strings given have to share the same suffix else we return None
+    
+    :param suggested: if True and not all strings share the same common suffix then
+        we suggest a suffix based on the percentage of matches
+        
+    >>> test_list = ['pelvis_drv', 'spine_01_drv', 'spine_02_drv', 'spine_03_drv']
+    >>> common_suffix(test_list)  # return '_drv'
+    '''
+    if not test_list:
+        return ''
+
+    common_suggested = []
+    base = nodeNameStrip(test_list[0])
+    prefix = base
+
+    for word in test_list:
+        word = nodeNameStrip(word)
+        if len(prefix) > len(word):
+            prefix, word = word, prefix
+        while len(prefix) > 0:
+            if word[-len(prefix):] == prefix:
+                if not prefix == base:
+                    common_suggested.append(prefix)
+                break
+            else:
+                prefix = prefix[1:]
+    if suggested and not prefix:
+        print(common_suggested)
+        prefix = list(set(common_suggested))
+        if len(prefix) == 1:
+            return prefix[0]
+    return prefix
+
+def common_prefix(test_list, suggested=True):
+    '''
+    from a list of strings return the common prefix. Note that all of the 
+    strings given have to share the same prefix else we return None
+    
+    :param test_list: list of strings we're going to test
+    :param suggested: if True and not all strings share the same common prefix then
+        we suggest a prefix based on the percentage of matches
+
+    >>> test_list = ['bob_pelvis_drv', 'bob_spine_01_drv', 'bob_spine_02_drv', 'bob_spine_03_drv']
+    >>> common_prefix(test_list)  # return 'bob_'
+    '''
+    if not test_list:
+        return ''
+
+    common_suggested = []
+    base = nodeNameStrip(test_list[0])
+    prefix = base
+    for word in test_list:
+        word = nodeNameStrip(word)
+        if len(prefix) > len(word):
+            prefix, word = word, prefix
+        while len(prefix) > 0:
+            if word[:len(prefix)] == prefix:
+                if not prefix == base:  # test_list[0]:
+                    common_suggested.append(prefix)
+                break
+            else:
+                prefix = prefix[:-1]
+    if suggested and not prefix:
+        prefix = list(set(common_suggested))
+        if len(prefix) == 1:
+            return prefix[0]
+    return prefix  
 
 def stringReplace(text, replace_dict):
     '''
@@ -266,14 +353,15 @@ def filterListByString(input_list, filter_string, matchcase=False, os_basename=F
 
     .. note::
         this is a Regex search but it's carefully managed under the hood.
-        >> 'attack knife' : yield matches with 'attack' and 'knife' in the string in that order, similar to 'attack*.*knife in windows, compiles to ('attack.*knife')
-        >> 'knife+attack' : yield matches where order does not matter but the string has to contain both 'attack' and 'knife'
-        >> 'attack..knife' would yield matches with 'attack12knife' 2 wildcards between the params (dots are wildcards in regex), compiles to ('attack..knife')
-        >> 'attack.*knife' would yield matches with 'attack_big_massive_knife' because of the .* is multiple wildcards between the search params, compiles to ('attack.*knife')
-        >> 'attack,knife' would yield matches with either 'attack' and 'knife' in the string, compiles to ('attack|knife') with the '|' or operator
-        >> 'attack|knife' same as above
-        >> 'attack$' would match 'we_attack' but not 'they_attacked' as the $ is used here as the end of the search string
-        >> ^attack' would match 'attack_then' but not 'they_attack' as the ^ clamps to the front of the string
+
+        * **'attack knife'** : yield matches with 'attack' and 'knife' in the string in that order, similar to 'attack*.*knife in windows, compiles to ('attack.*knife') 
+        * **'knife+attack'** : yield matches where order does not matter but the string has to contain both 'attack' and 'knife' 
+        * **'attack..knife'** would yield matches with 'attack12knife' 2 wildcards between the params (dots are wildcards in regex), compiles to ('attack..knife') 
+        * **'attack.*knife'** would yield matches with 'attack_big_massive_knife' because of the .* is multiple wildcards between the search params, compiles to ('attack.*knife') 
+        * **'attack,knife'** would yield matches with either 'attack' and 'knife' in the string, compiles to ('attack|knife') with the '|' or operator 
+        * **'attack|knife'** same as above 
+        * **'attack$'** would match 'we_attack' but not 'they_attacked' as the $ is used here as the end of the search string 
+        * **^attack'** would match 'attack_then' but not 'they_attack' as the ^ clamps to the front of the string 
     '''
 
 #     if not matchcase:
@@ -366,6 +454,36 @@ def nodes_are_constrained(src, target):
                 found.append(con)
     return found
 
+
+def parent(children, parent=None, *args, **kws):
+    '''
+    this is a simple parent call but includes a base check. It's simply wrapping Maya's parent call
+    but doing the check to see if the children are already parented to the given node, and if so, just returning
+    the full path of the children
+
+    :param children: [] children to parent / check parenting
+    :param parent: parent to move the child under
+    :rtype: the newly parented full dag path
+    '''
+    _rpaths = []
+    if r9General.is_basestring(children):
+        children = [children]
+    for child in children:
+        _parent = cmds.listRelatives(child, p=True, f=True)
+        if not parent:
+            # parent to world
+            if _parent:
+                _rpaths.extend(cmds.ls(cmds.parent(child, *args, **kws), l=True))
+            else:
+                _rpaths.extend(cmds.ls(child, l=True))
+        else:
+            if _parent and _parent[0] == cmds.ls(parent, l=True)[0]:
+                _rpaths.extend(cmds.ls(child, l=True))
+            else:
+                _rpaths.extend(cmds.ls(cmds.parent(child, parent, *args, **kws), l=True))
+    return _rpaths
+
+
 # -------------------------------------------------------------------------------------
 # Filter Node Setups ------
 # -------------------------------------------------------------------------------------
@@ -376,7 +494,8 @@ class FilterNode_Settings(object):
     and is used to setup how hierarchies are processed and filtered. This is
     class is used through out Red in conjunction with the filterNode class.
 
-    Default settings bound:
+    default settings bound:
+
         * nodeTypes: []  - search for given Maya nodeTypes'
         * searchAttrs: [] - search for given attributes on nodes
         * searchPattern: [] - search for nodeName patterns
@@ -386,6 +505,8 @@ class FilterNode_Settings(object):
         * incRoots: True - process rootNodes in the filters
         * transformClamp: True - clamp any nodes found to their transforms
         * infoBlock: ''
+        * prefix: '' - know prefix thats been used on these nodes
+        * suffix: '' - known suffix thats been used on these nodes
         * rigData: {}
     '''
     def __init__(self):
@@ -398,6 +519,8 @@ class FilterNode_Settings(object):
                            'incRoots': True,  # process rootNodes in the filters
                            'transformClamp': True,  # clamp any nodes found to their transforms
                            'infoBlock': '',
+                           'prefix': '',    # known prefix for these node names
+                           'suffix': '',   # know suffix for these node names
                            'rigData': {}}
         self.resetFilters()  # Just in case I screw up below
 
@@ -414,6 +537,10 @@ class FilterNode_Settings(object):
             activeFilters.append('searchAttrs=%s' % self.searchAttrs)
         if self.searchPattern:
             activeFilters.append('searchPattern=%s' % self.searchPattern)
+        if self.prefix:
+            activeFilters.append('prefix=%s' % self.prefix)
+        if self.suffix:
+            activeFilters.append('suffix=%s' % self.suffix)
         # if self.hierarchy:
         activeFilters.append('hierarchy=%s' % self.hierarchy)
         if self.filterPriority:
@@ -436,7 +563,9 @@ class FilterNode_Settings(object):
                     self.filterPriority == settingsdata.filterPriority,
                     self.nodeTypes == settingsdata.nodeTypes,
                     self.searchAttrs == settingsdata.searchAttrs,
-                    self.searchPattern == settingsdata.searchPattern])
+                    self.searchPattern == settingsdata.searchPattern,
+                    self.prefix == settingsdata.prefix,
+                    self.suffix == settingsdata.suffix])
 
     def filterIsActive(self):
         '''
@@ -467,6 +596,10 @@ class FilterNode_Settings(object):
                  (self.transformClamp, type(self.transformClamp)))
         log.info('FilterNode Settings : filterPriority : %s :   %s' %
                  (self.filterPriority, type(self.filterPriority)))
+        log.info('FilterNode Settings : prefix : %s :   %s' %
+                 (self.prefix, type(self.prefix)))
+        log.info('FilterNode Settings : suffix : %s :   %s' %
+                 (self.suffix, type(self.suffix)))
         log.info('FilterNode Settings : rigData : %s :   %s' %
                  (self.rigData, type(self.rigData)))
 
@@ -486,6 +619,8 @@ class FilterNode_Settings(object):
         self.metaRig = False
         self.transformClamp = True
         self.infoBlock = ""
+        self.prefix = ''
+        self.suffix = ''
         if rigData:
             self.rigData = {}
 
@@ -728,14 +863,15 @@ class FilterNode(object):
     who's name includes 'Ctrl'. Finally the ProcessFilter runs the main call.
 
     .. note::
-        the searchPattern is a compiled Regex search but it's managed under the hood.
-        >> 'attack knife' would yield matches with 'attack and knife in the string, similar to 'attack*.*knife in windows, compiles to ('attack.*knife')
-        >> 'attack..knife' would yield matches with 'attack12knife' 2 wildcards between the params (dots are wildcards in regex), compiles to ('attack..knife')
-        >> 'attack.*knife' would yield matches with 'attack_big_massive_knife' because of the .* is multiple wildcards between the search params, compiles to ('attack.*knife')
-        >> 'attack,knife' would yield matches with either 'attack' and 'knife' in the string, compiles to ('attack|knife') with the '|' or operator
-        >> 'attack|knife' same as above
-        >> 'attack$' would match 'we_attack' but not 'they_attacked' as the $ is used here as the end of the search string
-        >> ^attack' would match 'attack_then' but not 'they_attack' as the ^ clamps to the front of the string
+        the searchPattern is a compiled Regex search but it's managed under the hood. 
+
+        * **'attack knife'** : would yield matches with 'attack and knife in the string, similar to 'attack*.*knife in windows, compiles to ('attack.*knife') 
+        * **'attack..knife'** : would yield matches with 'attack12knife' 2 wildcards between the params (dots are wildcards in regex), compiles to ('attack..knife') 
+        * **'attack.*knife'** : would yield matches with 'attack_big_massive_knife' because of the .* is multiple wildcards between the search params, compiles to ('attack.*knife') 
+        * **'attack,knife'** : would yield matches with either 'attack' and 'knife' in the string, compiles to ('attack|knife') with the '|' or operator 
+        * **'attack|knife'** : same as above 
+        * **'attack$'** : would match 'we_attack' but not 'they_attacked' as the $ is used here as the end of the search string 
+        * **^attack'** : would match 'attack_then' but not 'they_attack' as the ^ clamps to the front of the string 
     '''
     def __init__(self, roots=None, filterSettings=None):
         '''
@@ -802,6 +938,9 @@ class FilterNode(object):
         get connected metaNodes relative to the rootNode then validate if we have an mRig to
         process, if we do then we look for the internal filterSettings data the new rigs carry
         and overload the filterSettings of this class with some of that data
+        
+        .. note::
+            we currently only pull the filterPriority setup from the mRig.settings data
         '''
         mrig = None
         if not self.settings.metaRig:
@@ -823,7 +962,7 @@ class FilterNode(object):
                             self.settings.rigData['snapPriority'] = mrig.settings.rigData['snapPriority']
                         else:
                             self.settings.rigData['snapPriority'] = True
-                        # self.settings.printSettings()
+                        self.settings.printSettings()
                         # log.info('==============================================================')
                     except StandardError, err:
                         log.info('mRig has FilterSettings data but is NOT a Pro_MetaRig - settings aborted')
@@ -927,7 +1066,6 @@ class FilterNode(object):
             Valid only if the Class is in 'Selected' processMode only.
         :param transformClamp: Clamp the return to the Transform nodes. Ie, mesh normally
             would return the shape node, this clamps the return to it's Transform node, default=False
-
         :return: a list of nodes who type match the given search list
 
         TODO: Add the ability to use the NOT: operator in this, so for example, nodeTypes=transform
@@ -1174,16 +1312,15 @@ class FilterNode(object):
             along with the node - switches return type to tuple. default=False
         :param incRoots: Include the given root nodes in the search, default=True
             Valid only if the Class is in 'Selected' processMode only.
-
         :rtype: list[] or dict{} of nodes whos attributes include any of the given attrs[]
         :return: Nodes that have the search attr/attrs. If returnValue is given as a
             keyword then it will return a dict in the form {node,attrValue}
 
         .. note::
-            If the searchAttrs has an entry in the form NOT:searchAttr then this will be forcibly
-            excluded from the filter. Also you can now do 'myAttr=2.33' to only pass if the attr is equal
-            similarly 'NOT:myAttr=2.33' will exclude if the value is equal
-            see the ..\Red9\tests\Red9_CoreUtilTests.py for live unittest examples
+            If the searchAttrs has an entry in the form **NOT:searchAttr** then this will be forcibly
+            excluded from the filter. Also you can now do **myAttr=2.33** to only pass if the attr is equal
+            similarly **NOT:myAttr=2.33** will exclude if the value is equal
+            see the "..\Red9\tests\Red9_CoreUtilTests.py" for live unittest examples
 
         .. note::
             current Implementation DOES NOT allow multiple attr tests as only 1 val per key
@@ -1325,9 +1462,9 @@ class FilterNode(object):
             Valid only if the Class is in 'Selected' processMode only.
 
         .. note::
-            If the searchPattern has an entry in the form NOT:searchtext then this will be forcibly
+            If the searchPattern has an entry in the form **NOT:searchtext** then this will be forcibly
             excluded from the filter. ie, My_L_Foot_Ctrl will be excluded with the following pattern
-            ['Ctrl','NOT:My'] where Ctrl finds it, but the 'NOT:My' tells the filter to skip it if found
+            **['Ctrl','NOT:My']** where Ctrl finds it, but the 'NOT:My' tells the filter to skip it if found
         '''
         self.foundPattern = []
         include = []
@@ -1430,6 +1567,7 @@ class FilterNode(object):
         '''
         very light wrapper to handle MetaData in the FilterSystems. This is hard coded
         to find CTRL markered attrs and give back the attached nodes
+
         :param walk: walk the found systems for subSystems and process those too
         :param incMain: Like the other filters we allow the given top
             node in the hierarchy to be removed from processing. In a MetaRig
@@ -1464,6 +1602,9 @@ class FilterNode(object):
                 if ctrls and not incMain:
                     if meta.ctrl_main in ctrls:
                         ctrls.remove(meta.ctrl_main)
+#                     # 08/10/2021 added the ctrl_offset to this call so we now ignore the CTRL_Offset
+#                     if meta.ctrl_offset  in ctrls:
+#                         ctrls.remove(meta.ctrl_offset)
                 rigCtrls.extend(ctrls)
         return rigCtrls
 
@@ -1473,6 +1614,7 @@ class FilterNode(object):
     def ProcessFilter(self):
         '''
         :Depricated Function:
+
         Replace the 'P' in the function call but not depricating it just yet
         as too much code both internally and externally relies on this method
         '''
@@ -1622,8 +1764,8 @@ def getBlendTargetIndex(blendNode, targetName):
 # -------------------------------------------------------------------------------------
 # Node Matching ------
 # -------------------------------------------------------------------------------------
-@r9General.Timer
-def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix', returnfails=False):
+# @r9General.Timer
+def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix', returnfails=False, prefix='', suffix='', **kws):
     '''
     Matches 2 given NODE LISTS by node name via various methods.
 
@@ -1632,30 +1774,62 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix', returnfails=
     :param returnfails: if True we return [matchedData, unmatched] so that we can pass the unmatched list for further processing
     :param matchMethod: default 'stripPrefix'
 
-        | * matchMethod="index" : no intelligent matching, just purely zip the lists
+        * matchMethod="index" : no intelligent matching, just purely zip the lists \
             together in the order they were given
-        | * matchMethod="indexReversed" : no intelligent matching, just purely zip
+        * matchMethod="indexReversed" : no intelligent matching, just purely zip \
             the lists together in the reverse order they were given
-        | * matchMethod="base" :  match each element by exact name (shortName) such
+        * matchMethod="base" :  match each element by exact name (shortName) such \
             that Spine==Spine or REF1:Spine==REF2:Spine
-        | * matchMethod="stripPrefix" : match each element by a relaxed naming convention
+        * matchMethod="stripPrefix" : match each element by a relaxed naming convention \
             allowing for prefixes one side such that RigX_Spine == Spine
-        | * matchMethod="mirrorIndex" : match via the nodes MirrorMarker
-        | * matchMethod="metaData" : match the nodes based on their wiring connections to the MetaData framework
+        * matchMethod="stripSuffix" : match each element by a relaxed naming convention \
+            allowing for suffixes one side such that Spine_DRV == Spine
+        * matchMethod="commonPrefix" : match each element by a relaxed naming convention \
+            allowing for prefixes such that RigX_Spine == Spine. This tries to ID a single prefix on either
+            side and uses those as the keys for the match. "stripPrefix" method falls over if you have multiple
+            nodes where nodeA.endswith(nodeB) ie:/ spine_04 == drv_spine_04 but also spine_04 == drv_leg_spine_04
+        * matchMethod="commonSuffix" : match each element by a relaxed naming convention \
+            allowing for suffixes such that Spine_DRV == Spine. This tries to ID a single suffix on either
+            side and uses those as the keys for the match. "stripSuffix" method falls over if you have multiple
+            nodes where nodeA.endswith(nodeB) ie:/ spine_04 == spine_04_drv but also spine_04 == spine_04_leg_drv
+        * matchMethod="mirrorIndex" : match via the nodes MirrorMarker
+        * matchMethod="metaData" : match the nodes based on their wiring connections to the MetaData framework
 
     :return: matched pairs of tuples for processing [(a1,b2),[(a2,b2)]
     '''
     infoPrint = ""
     matchedData = []
     unmatched = []
+    _A_suffix = suffix
+    _B_suffix = suffix
+    _A_prefix = prefix
+    _B_prefix = prefix
+
     # print 'MatchMethod : ', matchedData
     # take a copy of B as we modify the data here
     hierarchyB = list(nodeListB)
+
     if matchMethod == 'mirrorIndex':
         getMirrorID = r9Anim.MirrorHierarchy().getMirrorCompiledID
     if matchMethod == 'metaData':
         getMetaDict = r9Meta.MetaClass.getNodeConnectionMetaDataMap  # optimisation
         metaDictB = {}  # a cache of the connections so we don't re-process unless we have to
+    if matchMethod == 'commonSuffix':
+        _A_suffix = common_suffix(nodeListA, suggested=False)
+        _B_suffix = common_suffix(nodeListB, suggested=False)
+    if matchMethod == 'commonPrefix':
+        _A_prefix = common_prefix(nodeListA, suggested=False)
+        _B_prefix = common_prefix(nodeListB, suggested=False)
+
+    # all matching is done case insensitive
+    if _A_suffix:
+        _A_suffix = '%s$' % _A_suffix.upper()
+    if _B_suffix:
+        _B_suffix = '%s$' % _B_suffix.upper()
+    if _A_prefix:
+        _A_prefix = '^%s' %_A_prefix.upper()
+    if _B_prefix:
+        _B_prefix = '^%s' %_B_prefix.upper()
 
     if matchMethod == 'index':
         matchedData = zip(nodeListA, nodeListB)
@@ -1669,14 +1843,13 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix', returnfails=
                 indexA = getMirrorID(nodeA)
             if matchMethod == 'metaData':
                 metaDictA = getMetaDict(nodeA)
-
             matched = False
 
             # BaseMatch is a direct compare ONLY
-            # note that for 'stripPrefix' method we now FIRST do a base name
-            # test to match like for like if we can if successful we don't
-            # progress to the stripPrefix block itself
-            if matchMethod == 'base' or matchMethod == 'stripPrefix':
+            # note that for all string match methods we now FIRST do a base name
+            # test to match like for like if we can, if successful we don't
+            # progress to the main match block
+            if matchMethod in ['base', 'stripPrefix', 'stripSuffix', 'commonSuffix', 'commonPrefix']:
                 strippedA = nodeNameStrip(nodeA).upper()
                 for nodeB in hierarchyB:
                     strippedB = nodeNameStrip(nodeB).upper()
@@ -1690,10 +1863,36 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix', returnfails=
                         break
 
             if not matchMethod == 'base':
+
                 for nodeB in hierarchyB:
                     strippedB = nodeNameStrip(nodeB).upper()
-                    # Compare allowing for prefixing which is stripped off
-                    if matchMethod == 'stripPrefix' and not matched:
+
+                    # we have a common prefix so use that to strip the string before the match
+                    if any([_A_prefix, _B_prefix]) and not matched:
+                        if (_A_prefix and re.sub(_A_prefix, '', strippedA) == strippedB) \
+                            or (_B_prefix and re.sub(_B_prefix, '', strippedB)  == strippedA):
+                            if logging_is_debug():
+                                infoPrint += '\nMatch Method : %s : %s == %s' % \
+                                         (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
+                            matchedData.append((nodeA, nodeB))
+                            hierarchyB.remove(nodeB)
+                            matched = True
+                            break
+
+                    # we have a common suffix so use that to strip the string before the match
+                    if any([_A_suffix, _B_suffix]) and not matched:
+                        if (_A_suffix and re.sub(_A_suffix, '', strippedA) == strippedB) \
+                            or (_B_suffix and re.sub(_B_suffix, '', strippedB)  == strippedA):
+                            if logging_is_debug():
+                                infoPrint += '\nMatch Method : %s : CommonSuffix : %s %s : %s == %s' % \
+                                         (matchMethod, _A_suffix, _B_suffix, nodeA.split('|')[-1], nodeB.split('|')[-1])
+                            matchedData.append((nodeA, nodeB))
+                            hierarchyB.remove(nodeB)
+                            matched = True
+                            break
+
+                    # no common prefix so use the str.endswith method to test, this can cause issues
+                    if matchMethod == 'stripPrefix' and not matched and not _A_prefix and not _B_prefix:                            
                         if strippedA.endswith(strippedB) \
                             or strippedB.endswith(strippedA):
                             if logging_is_debug():
@@ -1704,7 +1903,19 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix', returnfails=
                             matched = True
                             break
 
-                    # Compare using the nodes internal mirrorIndex if found
+                    # no common suffix so use the str.startswith method to test, this can cause issues
+                    elif matchMethod == 'stripSuffix' and not matched and not _A_suffix and not _B_suffix:        
+                        if strippedA.startswith(strippedB) \
+                            or strippedB.startswith(strippedA):
+                            if logging_is_debug():
+                                infoPrint += '\nMatch Method : %s : %s == %s' % \
+                                         (matchMethod, nodeA.split('|')[-1], nodeB.split('|')[-1])
+                            matchedData.append((nodeA, nodeB))
+                            hierarchyB.remove(nodeB)
+                            matched = True
+                            break
+
+                    # compare using the nodes internal mirrorIndex if found
                     elif matchMethod == 'mirrorIndex':
                         if indexA and indexA == getMirrorID(nodeB):
                             if logging_is_debug():
@@ -1715,6 +1926,7 @@ def matchNodeLists(nodeListA, nodeListB, matchMethod='stripPrefix', returnfails=
                             matched = True
                             break
 
+                    # straight metaData wire compare
                     elif matchMethod == 'metaData':
                         if nodeB not in metaDictB.keys():
                             metaDictB[nodeB] = getMetaDict(nodeB)
@@ -1757,6 +1969,11 @@ def processMatchedNodes(nodes=None, filterSettings=None, toMany=False, matchMeth
         node to all subsequent nodes [(ObjA,ObjB),(ObjA,ObjC),(ObjA,ObjD) ....
     :param matchMethod: method used in the name matchProcess
     :return: MatchNodeInputs class object
+    
+    .. note::
+        the filterSettings object now has ".prefix" and ".suffix" settings which can be used in the
+        match calls for a more accurate stripPrefix or stripSuffix call. This allows you to match against
+        a known / given prefix / suffix string on the hierarch nodes to match
     '''
     # nodeList = None
 
@@ -1795,11 +2012,11 @@ class MatchedNodeInputs(object):
         the filter types into the FilterNode code within. Internally the following
         is true:
 
-        | settings.nodeTypes: list[] - search nodes of type
-        | settings.searchAttrs: list[] - search nodes with Attrs of name
-        | settings.searchPattern: list[] - search for a given nodeName searchPattern
-        | settings.hierarchy: bool - process all children from the roots
-        | settings.incRoots: bool - include the original root nodes in the filter
+        * settings.nodeTypes: list[] - search nodes of type
+        * settings.searchAttrs: list[] - search nodes with Attrs of name
+        * settings.searchPattern: list[] - search for a given nodeName searchPattern
+        * settings.hierarchy: bool - process all children from the roots
+        * settings.incRoots: bool - include the original root nodes in the filter
 
     :return: list of matched pairs [(a1,b2),[(a2,b2)]
 
@@ -1833,6 +2050,7 @@ class MatchedNodeInputs(object):
         settings object if one was passed in to the main class.
         This uses the ProcessFilter() method for powerful pre-filtering before
         passing the results into the matchNodeLists func.
+
         :rtype: tuple
         :return: a matched pair list of nodes
         '''
@@ -1847,15 +2065,23 @@ class MatchedNodeInputs(object):
             filterNode.rootNodes = self.roots[1]
             nodesB = filterNode.processFilter()
 
+
             # Match the 2 nodeLists by nodeName and return the MatcherPairs list
-            self.MatchedPairs, self.unmatched = matchNodeLists(nodesA, nodesB, self.matchMethod, self.returnfails)
+            self.MatchedPairs, self.unmatched = matchNodeLists(nodesA, nodesB,
+                                                               matchMethod=self.matchMethod,
+                                                               returnfails=self.returnfails,
+                                                               prefix=self.settings.prefix,
+                                                               suffix=self.settings.suffix)
 
             # added 14/02/19: if the metaData mNodeID has been changed between rigs then the proper
             # metaData match will fail as it's based on mNodeID and mAttr matches for all nodes.
             # if this happens then regress the testing back to stripPrefix for all failed nodes
             if self.matchMethod == 'metaData' and self.unmatched:
                 log.info('Regressing matchMethod from "metaData" to "stripPrefix" for failed matches within the mNode ConnectionMap')
-                rematched = matchNodeLists(self.unmatched, nodesB, matchMethod='stripPrefix')
+                rematched = matchNodeLists(self.unmatched, nodesB,
+                                           matchMethod='stripPrefix',
+                                           prefix=self.settings.prefix,
+                                           suffix=self.settings.suffix)
                 if rematched:
                     self.MatchedPairs.extend(rematched)
                     self.unmatched = [node for node in rematched if node in self.unmatched]
@@ -1864,7 +2090,10 @@ class MatchedNodeInputs(object):
                 raise StandardError('Please select 2 or more matching base objects')
             if len(self.roots) == 2 and type(self.roots[0]) == list and type(self.roots[1]) == list:
                 log.debug('<<2 lists passed in as roots - Assuming these are 2 hierarchies to process>>')
-                self.MatchedPairs = matchNodeLists(self.roots[0], self.roots[1], self.matchMethod)
+                self.MatchedPairs = matchNodeLists(self.roots[0], self.roots[1],
+                                                   matchMethod=self.matchMethod,
+                                                   prefix=self.settings.prefix,
+                                                   suffix=self.settings.suffix)
             else:
                 # No matching, just take roots as selected and substring them with step
                 # so that (roots[0],roots[1])(roots[2],roots[3])
@@ -2299,9 +2528,9 @@ class LockChannels(object):
         elif mode == 'fullkey':
             attrKws['keyable'] = True
             attrKws['lock'] = False
-            # force unlock the compounds also?
-            if attrs == 'all' or attrs == 'transforms':
-                _attrs = _attrs | set(['translate', 'rotate', 'scale'])
+#             # force unlock the compounds also?  # what was I thinking here???!!
+#             if attrs == 'all' or attrs == 'transforms':
+#                 _attrs = _attrs | set(['translate', 'rotate', 'scale'])
         elif mode == 'lockall':
             attrKws['keyable'] = False
             attrKws['lock'] = True
@@ -2564,11 +2793,11 @@ class TimeOffset(object):
             walking into the connected child sub-system. Primarily used in ProPack to stop facial nodes being
             returned and processed as part of the connected body rig.
 
-            | settings.nodeTypes: list[] - search nodes of type
-            | settings.searchAttrs: list[] - search nodes with Attrs of name
-            | settings.searchPattern: list[] - search for a given nodeName searchPattern
-            | settings.hierarchy: bool - process all children from the roots
-            | settings.incRoots: bool - include the original root nodes in the filter
+            * settings.nodeTypes: list[] - search nodes of type
+            * settings.searchAttrs: list[] - search nodes with Attrs of name
+            * settings.searchPattern: list[] - search for a given nodeName searchPattern
+            * settings.hierarchy: bool - process all children from the roots
+            * settings.incRoots: bool - include the original root nodes in the filter
         '''
 #         currentSystem = True
         if startfrm:

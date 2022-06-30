@@ -1,117 +1,380 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Pro_Pack : skinning &#8212; Red9 2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pro_Pack : skinning &mdash; Red9 3.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pro_Pack : uibase" href="Red9_Pro_uibase.html" />
-    <link rel="prev" title="Pro_Pack : rigutils" href="Red9_Pro_rigutils.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="Red9_Pro_uibase.html" title="Pro_Pack : uibase"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="Red9_Pro_rigutils.html" title="Pro_Pack : rigutils"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+    <link rel="prev" title="Pro_Pack : skining" href="Red9_Pro_skining.html" /> 
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Red9<img src="../_static/Red9_ProPack_logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9core_templates/Red9_AnimationUtils.html">Red9_AnimationUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9core_templates/Red9_Audio.html">Red9_Audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9core_templates/Red9_Core.html">Red9_CoreUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9core_templates/Red9_General.html">Red9_General</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9core_templates/Red9_Meta.html">Red9_Meta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9core_templates/Red9_PoseSaver.html">Red9_PoseSaver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9core_templates/Red9_Setup.html">Red9_Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9core_templates/Red9_Tools.html">Red9_Tools</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_anim_map.html">Pro_Pack : anim_map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_animation.html">Pro_Pack : animation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_audio.html">Pro_Pack : audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_export.html">Pro_Pack : exporter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_general.html">Pro_Pack : general</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_importexport.html">Pro_Pack : importexport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_metadata_pro.html">Pro_Pack : metadata_pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_optimiser.html">Pro_Pack : optimiser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_project.html">Pro_Pack : project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_r9data.html">Pro_Pack : r9Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_rigutils.html">Pro_Pack : rigutils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_skining.html">Pro_Pack : skining</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pro_Pack : skinning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_uibase.html">Pro_Pack : uibase</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Red9</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Pro_Pack : skinning</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/red9pro_templates/Red9_Pro_skinning.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <div class="section" id="pro-pack-skinning">
 <h1>Pro_Pack : skinning<a class="headerlink" href="#pro-pack-skinning" title="Permalink to this headline">¶</a></h1>
 <p>ProPack skinning management and file format for Maya</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r9skinning</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9skinning&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9skn</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9skn&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<span class="target" id="module-Red9.pro_pack.core.skining"></span><p class="rubric">Main Classes</p>
+<span class="target" id="module-Red9.pro_pack.core.skinning"></span><p>Code examples:</p>
+<p><strong>Examples</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Import the tools</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9skn&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">r9skn</span> <span class="k">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Duplicate a mesh and load skin data in new mesh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># ================================================</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get skin meshes in the scene</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skin_meshes</span> <span class="o">=</span> <span class="n">get_skin_meshes</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># convert a mesh to Skn object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9skn</span> <span class="o">=</span> <span class="n">Skn</span><span class="p">(</span><span class="n">skin_meshes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># collect skin data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skin_data</span> <span class="o">=</span> <span class="n">r9skn</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># duplicate the mesh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_mesh</span> <span class="o">=</span> <span class="n">cmds</span><span class="o">.</span><span class="n">listRelatives</span><span class="p">(</span><span class="n">cmds</span><span class="o">.</span><span class="n">duplicate</span><span class="p">(</span><span class="n">r9skn</span><span class="o">.</span><span class="n">transform</span><span class="p">),</span> <span class="n">ad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;mesh&#39;</span><span class="p">,</span> <span class="n">ni</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a new Skn object with duplicated mesh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_r9skn</span> <span class="o">=</span> <span class="n">Skn</span><span class="p">(</span><span class="n">new_mesh</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load weights in new meh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_r9skn</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">skin_data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Creating Skin Files:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create .skn files save and load</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># ================================================</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_skins</span> <span class="o">=</span> <span class="s1">&#39;file/path/to/file/all_skins.skn&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">selected_skins</span> <span class="o">=</span> <span class="s1">&#39;file/path/to/file/selected_skins.skn&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">specific_skin</span> <span class="o">=</span> <span class="s1">&#39;file/path/to/file/specific_skin.skn&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a Skn_file object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skn_file</span> <span class="o">=</span> <span class="n">Skn_file</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create skin file with the data of all skinned meshes in the scene</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skn_file</span><span class="o">.</span><span class="n">save_file</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">all_skins</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">meshes</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create skin file with the data of selected skinned mesh or meshes, also works forcomponent selection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cmds</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">get_skin_meshes</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skn_file</span><span class="o">.</span><span class="n">save_file</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">selected_skins</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">meshes</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create skin file with an specific mesh/meshes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">meshes</span> <span class="o">=</span> <span class="n">get_skin_meshes</span><span class="p">()[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skn_file</span><span class="o">.</span><span class="n">save_file</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">specific_skin</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">meshes</span><span class="o">=</span><span class="n">meshes</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Deleting Skin Clusters:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># delete all skin clusters in the scene</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">mesh</span> <span class="ow">in</span> <span class="n">get_skin_meshes</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">skn</span> <span class="o">=</span> <span class="n">Skn</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">skn</span><span class="o">.</span><span class="n">delete_skin_cluster</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">skn</span><span class="o">.</span><span class="n">delete_dag_poses</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Loading Skin File Data:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a Skn_file object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skn_file</span> <span class="o">=</span> <span class="n">Skn_file</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># load all skins from file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skn_file</span><span class="o">.</span><span class="n">file_path</span> <span class="o">=</span> <span class="n">all_skins</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load data of specific mesh stored in the file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skn_file</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">skn_file</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">mesh</span><span class="p">],</span> <span class="n">selection</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># reload skin data from file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skn_file</span><span class="o">.</span><span class="n">read_skin_file</span><span class="p">(</span><span class="n">all_skins</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># load all skins from file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skn_file</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load on selected mesh or component</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cmds</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skn_file</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Main Classes</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.Selectionfilter" title="Red9.pro_pack.core.skining.Selectionfilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Selectionfilter</span></code></a>()</td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.skinning.Selectionfilter" title="Red9.pro_pack.core.skinning.Selectionfilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Selectionfilter</span></code></a>([selection])</td>
+<td>Class to manage component selections</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.Skincluster" title="Red9.pro_pack.core.skining.Skincluster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Skincluster</span></code></a>([skincluster])</td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.skinning.Weights" title="Red9.pro_pack.core.skinning.Weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Weights</span></code></a>(r9skn)</td>
+<td>Weight class to interact with skinning.Skn objects contains wrappers to deal with Maya API and R9skin format</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.Sknfile" title="Red9.pro_pack.core.skining.Sknfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sknfile</span></code></a>()</td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.skinning.Skn" title="Red9.pro_pack.core.skinning.Skn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Skn</span></code></a>([shape])</td>
+<td>higher level management class for dealing with skinClusters</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.Shapelayout" title="Red9.pro_pack.core.skining.Shapelayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Shapelayout</span></code></a>(ui,&nbsp;shape,&nbsp;*args,&nbsp;**kws)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.skining.R9sknui" title="Red9.pro_pack.core.skining.R9sknui"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R9sknui</span></code></a>([parent])</td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.skinning.Skn_file" title="Red9.pro_pack.core.skinning.Skn_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Skn_file</span></code></a>([ui])</td>
+<td>main r9Skin file handling, for dealing with the saving and loading of the actual data</td>
 </tr>
 </tbody>
 </table>
-<dl class="function">
-<dt id="Red9.pro_pack.core.skining.openui">
-<code class="descname">openui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.openui" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="class">
+<dt id="Red9.pro_pack.core.skinning.Selectionfilter">
+<em class="property">class </em><code class="descname">Selectionfilter</code><span class="sig-paren">(</span><em>selection=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Selectionfilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to manage component selections</p>
+<p>If no selection is define on creation the class instance will work with scene selection interactively
+If selection is define on creation the class instance selection is muted and will not change</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> – list transforms or shapes</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">Selectionfilter</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cmds</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">vertex</span><span class="p">())</span> <span class="c1"># Select all vertices of wat is selected in the scene</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">Selectionfilter</span><span class="p">(</span><span class="n">selection</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;|pCube1&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cmds</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">vertex</span><span class="p">())</span> <span class="c1"># Select all vertices of pCube1</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Selectionfilter.ls">
+<code class="descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Selectionfilter.ls" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dict with filtered selections keys are the type of the selection values are the selections
+{‘Polygon Face’: [u’<a href="#id1"><span class="problematic" id="id2">|</span></a>transform.f[0]’, u’<a href="#id3"><span class="problematic" id="id4">|</span></a>transform.f[1]’],
+‘Polygon Vertices’: [u’<a href="#id5"><span class="problematic" id="id6">|</span></a>transform.vtx[10]’, u’<a href="#id7"><span class="problematic" id="id8">|</span></a>transform.vtx[1]’],
+‘Polygon’: [u’<a href="#id9"><span class="problematic" id="id10">|</span></a>transformShape’]}</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Selectionfilter.shapes">
+<code class="descname">shapes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Selectionfilter.shapes" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of shape objects fom selection</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Selectionfilter.transforms">
+<code class="descname">transforms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Selectionfilter.transforms" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of mesh transforms objects fom selection</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Selectionfilter.edges">
+<code class="descname">edges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Selectionfilter.edges" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of edges fom selection</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Selectionfilter.faces">
+<code class="descname">faces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Selectionfilter.faces" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of faces fom selection</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Selectionfilter.uvs">
+<code class="descname">uvs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Selectionfilter.uvs" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of uvs fom selection</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Selectionfilter.vertex">
+<code class="descname">vertex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Selectionfilter.vertex" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of vertex from selection</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.skining.get_meshes">
-<code class="descname">get_meshes</code><span class="sig-paren">(</span><em>selection=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.get_meshes" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dt id="Red9.pro_pack.core.skinning.get_meshes">
+<code class="descname">get_meshes</code><span class="sig-paren">(</span><em>selection=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.get_meshes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all mesh/shapes in the scene</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> – bool if true it will just filter selected meshes</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string list with all the meshes in the scene or filter by selection</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string list with all the meshes/shapes in the scene or filter by selection</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.skining.load_skn_file">
-<code class="descname">load_skn_file</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>mesh=None</em>, <em>vc=False</em>, <em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.load_skn_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>load a skin file onto a given mesh or all meshes in the scene.</p>
+<dt id="Red9.pro_pack.core.skinning.get_skin_meshes">
+<code class="descname">get_skin_meshes</code><span class="sig-paren">(</span><em>selection=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.get_skin_meshes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all mesh/shapes in the scene that have an skinCluster node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> – bool if true it will just filter selected meshes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string list with all the meshes/shapes in the scene or filter by selection that have a skinCluster Node</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.skinning.get_none_skin_meshes">
+<code class="descname">get_none_skin_meshes</code><span class="sig-paren">(</span><em>selection=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.get_none_skin_meshes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all mesh/shapes in the scene that do not have an skinCluster node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> – bool if true it will just filter selected meshes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string list with all the meshes/shapes in the scene or filter by selection that do not have
+a skinCluster node</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.skinning.remove_namespace_on_data">
+<code class="descname">remove_namespace_on_data</code><span class="sig-paren">(</span><em>data</em>, <em>file_data=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.remove_namespace_on_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use to remove name spaces on .skn data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filepath</strong> – skin file</li>
-<li><strong>mesh</strong> – given mesh / meshes to load if matched in the skin file data</li>
-<li><strong>root</strong> – string root joint of the skeleton hierarchy</li>
+<li><strong>data</strong> – dict skn file</li>
+<li><strong>file_data</strong> – bool default True, if True the data comes from r9skin file key dictionaries are the full path to
+the mesh/shape, if False data is a flat dictionary with no mesh/shape key</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parma vc:</th><td class="field-body"><p class="first last">match by wildcard based on vertex count of the mesh itself</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dict</p>
 </td>
 </tr>
 </tbody>
@@ -119,27 +382,24 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.skining.jointhiroot">
-<code class="descname">jointhiroot</code><span class="sig-paren">(</span><em>joint</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.jointhiroot" title="Permalink to this definition">¶</a></dt>
-<dd><p>get the name of the root joint in the hierarchy
-:param joint: name of a joint in the hierarchy
-:return: name of the root joint in the hierarchy</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="Red9.pro_pack.core.skining.Selectionfilter">
-<em class="property">class </em><code class="descname">Selectionfilter</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Selectionfilter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Selectionfilter.ls">
-<code class="descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Selectionfilter.ls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dt id="Red9.pro_pack.core.skinning.jointhiroot">
+<code class="descname">jointhiroot</code><span class="sig-paren">(</span><em>joint</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.jointhiroot" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the name of the root joint in the hierarchy</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>joint</strong> – name of a joint in the hierarchy</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">name of the root joint in the hierarchy</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
-<dt id="Red9.pro_pack.core.skining.read_file">
-<code class="descname">read_file</code><span class="sig-paren">(</span><em>filepath</em>, <em>namespace=None</em>, <em>joints=True</em>, <em>shapes=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.read_file" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.skinning.read_file">
+<code class="descname">read_file</code><span class="sig-paren">(</span><em>filepath</em>, <em>namespace=None</em>, <em>joints=True</em>, <em>shapes=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.read_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read skin file, if namespace is provided all the data file will be mapped to the given namespace</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -158,119 +418,1166 @@
 </table>
 </dd></dl>
 
-<dl class="function">
-<dt id="Red9.pro_pack.core.skining.remove_namespace_on_data">
-<code class="descname">remove_namespace_on_data</code><span class="sig-paren">(</span><em>data</em>, <em>file_data=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.remove_namespace_on_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 <dl class="class">
-<dt id="Red9.pro_pack.core.skining.Root_select">
-<em class="property">class </em><code class="descname">Root_select</code><span class="sig-paren">(</span><em>func</em>, <em>jnt_roots=[]</em>, <em>parent=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Root_select" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code></p>
+<dt id="Red9.pro_pack.core.skinning.InfoWindow">
+<em class="property">class </em><code class="descname">InfoWindow</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.InfoWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_mw_r9p_license</span></code></p>
+<p>Information window for SknWidget</p>
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.Root_select.set_selection">
-<code class="descname">set_selection</code><span class="sig-paren">(</span><em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Root_select.set_selection" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.pro_pack.core.skinning.InfoWindow.set_information">
+<code class="descname">set_information</code><span class="sig-paren">(</span><em>text</em>, <em>widgets=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.InfoWindow.set_information" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a information message in the window</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>text</strong> – string message to be display</li>
+<li><strong>widgets</strong> – list of widgets that will need style sheet to be synchronized with information message</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.InfoWindow.set_warning">
+<code class="descname">set_warning</code><span class="sig-paren">(</span><em>text</em>, <em>widgets=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.InfoWindow.set_warning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a Warning message in the window</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>text</strong> – string message to be display</li>
+<li><strong>widgets</strong> – list of widgets that will need style sheet to be synchronized with Warning message</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.InfoWindow.set_error">
+<code class="descname">set_error</code><span class="sig-paren">(</span><em>text</em>, <em>widgets=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.InfoWindow.set_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a error message in the window</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>text</strong> – string message to be display</li>
+<li><strong>widgets</strong> – list of widgets that will need style sheet to be synchronized with error message</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.Root_select.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Root_select.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.skinning.InfoWindow.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skinning.InfoWindow.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="Red9.pro_pack.core.skining.Hi_selection">
-<em class="property">class </em><code class="descname">Hi_selection</code><span class="sig-paren">(</span><em>instance</em>, <em>data</em>, <em>jnt_roots=[]</em>, <em>load_data=False</em>, <em>checkdata=True</em>, <em>ignore_selection=False</em>, <em>parent=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Hi_selection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code></p>
+<dt id="Red9.pro_pack.core.skinning.SknWidget">
+<em class="property">class </em><code class="descname">SknWidget</code><span class="sig-paren">(</span><em>ui</em>, <em>shape</em>, <em>data</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QWidget</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_Form</span></code></p>
+<p>Widget to wrap skn objects in the main UI</p>
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.Hi_selection.set_selection">
-<code class="descname">set_selection</code><span class="sig-paren">(</span><em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Hi_selection.set_selection" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.pro_pack.core.skinning.SknWidget.shape_exist">
+<code class="descname">shape_exist</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.shape_exist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the shape associated with Skn object and set ui components</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bool True if matching shape found else False</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.remap_shape">
+<code class="descname">remap_shape</code><span class="sig-paren">(</span><em>news_shape=None</em>, <em>from_ui=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.remap_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remap skin data to a new shape</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>news_shape</strong> – str shape name</li>
+<li><strong>from_ui</strong> – bool use for the main UI, if True, sets information window</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.Hi_selection.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Hi_selection.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.skinning.SknWidget.data">
+<code class="descname">data</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.data" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dict skin data of Skn object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.transform">
+<code class="descname">transform</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.transform" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string transform name of Skn.transform</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.dagposes">
+<code class="descname">dagposes</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.dagposes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for self.r9sn.dagposes method</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of names of all dagPose nodes connected to skinCluster Node</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.skincluster">
+<code class="descname">skincluster</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.skincluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get skinCluster Node name from Skn object and set Widget components related to it</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string name of skinCluster node</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.set_debug_widgets">
+<code class="descname">set_debug_widgets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.set_debug_widgets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use to set the status of debug widgets</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.debug">
+<code class="descname">debug</code><span class="sig-paren">(</span><em>selection=True</em>, <em>select_fail_vertex=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run health  test on Skin_HealthValidations on current mesh</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>selection</strong> – bool if true it will check just selected components of the mesh</li>
+<li><strong>select_fail_vertex</strong> – bool, if true will select all vertices that are found to have some problem</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.fix">
+<code class="descname">fix</code><span class="sig-paren">(</span><em>select_fail_vertex=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run Fixes on Skin_HealthValidations on current mesh</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>select_fail_vertex</strong> – bool, if true will select all vertices that are found to have some problem</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.select_transform">
+<code class="descname">select_transform</code><span class="sig-paren">(</span><em>add=False</em>, <em>deselect=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.select_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select Transform object of r9skn object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>add</strong> – bool True add transform to current selection, False creates a new selection with just the transform</li>
+<li><strong>deselect</strong> – bool True transform will be removed from the selection</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.select_joints">
+<code class="descname">select_joints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.select_joints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select joint object influencing the skinCluster</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.select_vertex">
+<code class="descname">select_vertex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.select_vertex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select vertex on the skinCluster</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.select_skincluster">
+<code class="descname">select_skincluster</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.select_skincluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select skinCluster node</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>data=None</em>, <em>selection=True</em>, <em>select_fails=True</em>, <em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set skin data on skinCluster</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> – dict skin data</li>
+<li><strong>selection</strong> – bool if true it will load just selected components of the mesh</li>
+<li><strong>select_fails</strong> – bool, if true will select all vertices that have fail to load</li>
+<li><strong>root</strong> – string name of hierarchy root joint of the skin cluster default None</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.set_load_btn">
+<code class="descname">set_load_btn</code><span class="sig-paren">(</span><em>status</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.set_load_btn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.save">
+<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>save a skn file with the data of just the shape that belongs tho this widget</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.skn_file_path">
+<code class="descname">skn_file_path</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.skn_file_path" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string default .skn file for the polygon object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.save_context_menu">
+<code class="descname">save_context_menu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.save_context_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build right click context menu of pbt_save</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.delete_skn_file">
+<code class="descname">delete_skn_file</code><span class="sig-paren">(</span><em>file_path=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.delete_skn_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete skin file associated to this widget if no file_path given</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_path</strong> – string file/path</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">bool True if file deleted else False</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.delete_skin_cluster">
+<code class="descname">delete_skin_cluster</code><span class="sig-paren">(</span><em>ask=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.delete_skin_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete skinCluster associated to this widget</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ask</strong> – Bool if true prompt user with message box default is True</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.delete_dag_poses">
+<code class="descname">delete_dag_poses</code><span class="sig-paren">(</span><em>ask=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.delete_dag_poses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete dagPose associated to this widget</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ask</strong> – Bool if true prompt user with message box default is True</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.SknWidget.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknWidget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="Red9.pro_pack.core.skining.R9skn">
-<em class="property">class </em><code class="descname">R9skn</code><span class="sig-paren">(</span><em>shape=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.skinning.UILoadBuffer">
+<em class="property">class </em><code class="descname">UILoadBuffer</code><span class="sig-paren">(</span><em>ui=None</em>, <em>r9skn=None</em>, <em>data=None</em>, <em>load_data=None</em>, <em>selection=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.UILoadBuffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Helper class for SknUI
+use to load skins when multiple Skeleton hierarchies found which match the stored jnt list</p>
+<p># Use on main UI
+:param ui: SknUI object</p>
+<p># Use for Skn instances only
+:param r9skn: Skn object
+:param data: dict skin data
+:param load_data: bool use to load the data after skin cluster creation
+:param selection: bool use to load selection only</p>
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.root_joints">
-<code class="descname">root_joints</code><span class="sig-paren">(</span><em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.root_joints" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dt id="Red9.pro_pack.core.skinning.UILoadBuffer.clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.UILoadBuffer.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear variables use when load skins are completed Main UI only</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.UILoadBuffer.show_root_selection_ui">
+<code class="descname">show_root_selection_ui</code><span class="sig-paren">(</span><em>root_joints</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.UILoadBuffer.show_root_selection_ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prompt user with a window to allowing selection of root joint, when multiple hierarchies are found on the scene
+and the logic can not specify the correct one</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.UILoadBuffer.set_root_joint">
+<code class="descname">set_root_joint</code><span class="sig-paren">(</span><em>root_joint</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.UILoadBuffer.set_root_joint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.skinning.SknUI">
+<em class="property">class </em><code class="descname">SknUI</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_mw_r9skn</span></code></p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.search">
+<code class="descname">search</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.search" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.clear_ui">
+<code class="descname">clear_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.clear_ui" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.set_widgets">
+<code class="descname">set_widgets</code><span class="sig-paren">(</span><em>selection=False</em>, <em>from_open=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.set_widgets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.open_file">
+<code class="descname">open_file</code><span class="sig-paren">(</span><em>file_path=None</em>, <em>namespace=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.open_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.reload_r9skn_file">
+<code class="descname">reload_r9skn_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.reload_r9skn_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reload Skn file if set
+:return: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.add_widget">
+<code class="descname">add_widget</code><span class="sig-paren">(</span><em>shape</em>, <em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.add_widget" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.get_scene_selection_widget">
+<code class="descname">get_scene_selection_widget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.get_scene_selection_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters selections in the scene and return the widgets that have a mesh or mesh component selected</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of root joints from skin cluster</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">tuple first element bool, True if mesh or component are selected selected, False if not
+second element is a list of on selection Weights objects</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.get_root_joints_from_data">
-<code class="descname">get_root_joints_from_data</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_root_joints_from_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>analyze data and find root joints in the scene
-:param data: dict skin data
-:return: list of joints</p>
+<dt id="Red9.pro_pack.core.skinning.SknUI.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load Skin Data in all widgets present in the UI
+:return: None</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.get_joints_from_root">
-<code class="descname">get_joints_from_root</code><span class="sig-paren">(</span><em>root</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_joints_from_root" title="Permalink to this definition">¶</a></dt>
-<dd><p>compare joints in data against joint hierarchy and return matching joints</p>
+<dt id="Red9.pro_pack.core.skinning.SknUI.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.debug">
+<code class="descname">debug</code><span class="sig-paren">(</span><em>fix=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.debug" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.SknUI.skincluster">
+<code class="descname">skincluster</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.skincluster" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string list with all skin cluster names found in SknWidget’s</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.rename_skin_cluster_in_widgets">
+<code class="descname">rename_skin_cluster_in_widgets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.rename_skin_cluster_in_widgets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename all skin cluster found in SknWidget’s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.rename_skin_clusters_in_scene">
+<code class="descname">rename_skin_clusters_in_scene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.rename_skin_clusters_in_scene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename all skin cluster found in the scene</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.rename_skin_clusters_in_selection">
+<code class="descname">rename_skin_clusters_in_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.rename_skin_clusters_in_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>rename all skin cluster found in selected objects or components</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.select_skin_clusters_in_widget">
+<code class="descname">select_skin_clusters_in_widget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.select_skin_clusters_in_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select all skin cluster found in SknWidget’s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.select_skin_clusters_in_scene">
+<code class="descname">select_skin_clusters_in_scene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.select_skin_clusters_in_scene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select all skin cluster found in the scene</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.select_skin_clusters_in_selection">
+<code class="descname">select_skin_clusters_in_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.select_skin_clusters_in_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select all skin cluster found in selected objects or components</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.delete_skin_clusters_in_widget">
+<code class="descname">delete_skin_clusters_in_widget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.delete_skin_clusters_in_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all skin cluster found in SknWidget’s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.delete_skin_clusters_in_scene">
+<code class="descname">delete_skin_clusters_in_scene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.delete_skin_clusters_in_scene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all skin cluster found in the scene</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.delete_skin_clusters_in_selection">
+<code class="descname">delete_skin_clusters_in_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.delete_skin_clusters_in_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all skin cluster found in selected objects or components</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.R9skn.skincluster">
-<code class="descname">skincluster</code><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.skincluster" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.skinning.SknUI.dag_poses">
+<code class="descname">dag_poses</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.dag_poses" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string skinCluster node name attached to the shape</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string list with all dag poses names found in SknWidget’s</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.SknUI.widget_dag_poses">
+<code class="descname">widget_dag_poses</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.widget_dag_poses" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string list with all dagPose names found in SknWidget’s</td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.create_skincluster">
-<code class="descname">create_skincluster</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.create_skincluster" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.nameSpace">
-<code class="descname">nameSpace</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.nameSpace" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.ls">
-<code class="descname">ls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.ls" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.select_vrtx">
-<code class="descname">select_vrtx</code><span class="sig-paren">(</span><em>vrtx_id</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.select_vrtx" title="Permalink to this definition">¶</a></dt>
-<dd><p>select given vertex id
-:param vrtx_id: int vertex id</p>
+<dt id="Red9.pro_pack.core.skinning.SknUI.select_dag_poses_in_widget">
+<code class="descname">select_dag_poses_in_widget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.select_dag_poses_in_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select all dagPoses found in SknWidget’s</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.select_vrtxs">
-<code class="descname">select_vrtxs</code><span class="sig-paren">(</span><em>vrtx_ids</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.select_vrtxs" title="Permalink to this definition">¶</a></dt>
-<dd><p>select given vertex id
-:param vrtx_ids: list of ints</p>
+<dt id="Red9.pro_pack.core.skinning.SknUI.select_dag_poses_in_scene">
+<code class="descname">select_dag_poses_in_scene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.select_dag_poses_in_scene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select all dag_poses found in the scene</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.get_selected_vrtx_ids">
-<code class="descname">get_selected_vrtx_ids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_selected_vrtx_ids" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.skinning.SknUI.select_dag_poses_in_selection">
+<code class="descname">select_dag_poses_in_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.select_dag_poses_in_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select all dag_poses found in selected objects or components</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.delete_dag_poses_in_widget">
+<code class="descname">delete_dag_poses_in_widget</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.delete_dag_poses_in_widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all dag poses found in SknWidget’s</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.delete_dag_poses_in_scene">
+<code class="descname">delete_dag_poses_in_scene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.delete_dag_poses_in_scene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all dag_poses found in the scene</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.delete_dag_poses_in_selection">
+<code class="descname">delete_dag_poses_in_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.delete_dag_poses_in_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all dag_poses found in selected objects or components</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.delete_all_skin_clusters_and_dag_poses">
+<code class="descname">delete_all_skin_clusters_and_dag_poses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.delete_all_skin_clusters_and_dag_poses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all skin clusters and dag poses on the scene</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.SknUI.closeEvent">
+<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.closeEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.SknUI.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skinning.SknUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.skinning.JointRemapUI">
+<em class="property">class </em><code class="descname">JointRemapUI</code><span class="sig-paren">(</span><em>parent=None</em>, <em>r9skn_widget=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.JointRemapUI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_mw_aditive_joint_selector</span></code></p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.JointRemapUI.refresh">
+<code class="descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.JointRemapUI.refresh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.JointRemapUI.data">
+<code class="descname">data</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.JointRemapUI.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This data is casted in a internal variable for performance, if edits done to the skin cluster, this data need
+to be recast or will get out of sink, to re sink reset self._data = None before running self.data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dict, casted data from object Skn.get_data()</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.JointRemapUI.joints">
+<code class="descname">joints</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.JointRemapUI.joints" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of joint names on skinCluster</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.JointRemapUI.selected_source_joints_on_list">
+<code class="descname">selected_source_joints_on_list</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.JointRemapUI.selected_source_joints_on_list" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of joint names, selected joints in source list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.JointRemapUI.select_source_joints_on_scene">
+<code class="descname">select_source_joints_on_scene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.JointRemapUI.select_source_joints_on_scene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select in the scene all selected joints in source list</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.JointRemapUI.selected_target_joint_on_list">
+<code class="descname">selected_target_joint_on_list</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.JointRemapUI.selected_target_joint_on_list" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of joint names selected in joints target list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.JointRemapUI.select_target_joints_on_scene">
+<code class="descname">select_target_joints_on_scene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.JointRemapUI.select_target_joints_on_scene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select in the scene all selected joints in target list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.JointRemapUI.select_vertex">
+<code class="descname">select_vertex</code><span class="sig-paren">(</span><em>list_widget</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.JointRemapUI.select_vertex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.JointRemapUI.remap">
+<code class="descname">remap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.JointRemapUI.remap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.JointRemapUI.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skinning.JointRemapUI.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.skinning.Weights">
+<em class="property">class </em><code class="descname">Weights</code><span class="sig-paren">(</span><em>r9skn</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Weight class to interact with skinning.Skn objects contains wrappers to deal with Maya API and R9skin format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r9skn</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9skn&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">skn_object</span> <span class="o">=</span> <span class="n">r9skn</span><span class="o">.</span><span class="n">Skn</span><span class="p">(</span><span class="s1">&#39;|Transform|Shape&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span> <span class="o">=</span> <span class="n">r9skn</span><span class="o">.</span><span class="n">Weights</span><span class="p">(</span><span class="n">skn_object</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Collect weight data from skin cluster</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">api_weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">get_weights_from_skincluster</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Reset weights to default, use .skincluster attribute from skn_object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cmds</span><span class="o">.</span><span class="n">skinPercent</span><span class="p">(</span><span class="n">skn_object</span><span class="o">.</span><span class="n">skincluster</span><span class="p">,</span> <span class="n">rtd</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Set original weights on skin cluster</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span><span class="o">.</span><span class="n">set_weights_to_skincluster</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get weight data as dictionary, as use in skn file format</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9_weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">r9_weights</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>r9skn</strong> – skinning.Skn object</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Weights.joint_ids">
+<code class="descname">joint_ids</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.joint_ids" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dictionary with attr ids of joint connection to skincluster.matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Weights.joint_indexes">
+<code class="descname">joint_indexes</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.joint_indexes" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dictionary with index “sorted ascending order from 0 to the number of joints” 
+of joint connection to skincluster.matrix</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Weights.empty_chunk">
+<code class="descname">empty_chunk</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.empty_chunk" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">OpenMaya.MDoubleArray of zeroes each zero represents a joint in the skin cluster</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Weights.chunks">
+<code class="descname">chunks</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.chunks" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of lists, each individual list contains the weight of a vertex, list are sorted as per vertex ids
+all this list put together will give us the final impute data expected by the OpenMayaAnim.MFnSkinCluster
+calls</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Weights.r9_weights">
+<code class="descname">r9_weights</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.r9_weights" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dictionary weight data as use in .skn file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Weights.api_weights">
+<code class="descname">api_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.api_weights" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list weight data as use in OpenMayaAnim.MFnSkinCluster</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Weights.api_weights_to_r9skn_weights">
+<code class="descname">api_weights_to_r9skn_weights</code><span class="sig-paren">(</span><em>api_weights</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.api_weights_to_r9skn_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert api MDoubleArray weight data to r9_weights data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>api_weights</strong> – MDoubleArray [MDoubleArray]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dict as use in .skn file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Weights.r9skn_weight_index_to_chunk">
+<code class="descname">r9skn_weight_index_to_chunk</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.r9skn_weight_index_to_chunk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert values of given key “of r9_weights dictionary” to a list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> – string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of values</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Weights.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>data</em>, <em>vertex_ids=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts given data to api format or .skn format and Set weights data on the instance object to be sued</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> – api list data or .skn dict data</li>
+<li><strong>vertex_ids</strong> – list of vertex ids be use on</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Weights.get_mfn_skinCluster">
+<code class="descname">get_mfn_skinCluster</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.get_mfn_skinCluster" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">OpenMayaAnim.MFnSkinCluster object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Weights.get_mfn_components">
+<code class="descname">get_mfn_components</code><span class="sig-paren">(</span><em>vertex_ids</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.get_mfn_components" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">OpenMaya.MFnSingleIndexedComponent object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Weights.get_weights_from_skincluster">
+<code class="descname">get_weights_from_skincluster</code><span class="sig-paren">(</span><em>set_weights=True</em>, <em>vertex_ids=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.get_weights_from_skincluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>collect weight data from skinCluster node on self.r9skn.skincluster object
+data can be retrieve as dic by self.r9_weights “format expected for .skn file”
+or as a lis “format expected by OpenMayaAnim.MFnSkinCluster” by self.api_weights()</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">OpenMaya.MIntArray with weight values same as self.api_weights()</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Weights.set_weights_to_skincluster">
+<code class="descname">set_weights_to_skincluster</code><span class="sig-paren">(</span><em>vertex_ids=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Weights.set_weights_to_skincluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set weights in self.r9skn.skincluster node with data store in self.api_weights()</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertex_ids</strong> – list of vertex ids be use on if no vertex_ids given weights will be loaded in all object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">bool Tru if weights loaded ok False if not</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.skinning.Skn">
+<em class="property">class </em><code class="descname">Skn</code><span class="sig-paren">(</span><em>shape=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>higher level management class for dealing with skinClusters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> – string mesh shape name Ex. ‘<a href="#id11"><span class="problematic" id="id12">|</span></a>transform|Shape’</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Skn.widget">
+<code class="descname">widget</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.widget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Widget use in the SknUI</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Skn.transform">
+<code class="descname">transform</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.transform" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string transform node name</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Skn.shape">
+<code class="descname">shape</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.shape" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string shape node name</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Skn.skincluster">
+<code class="descname">skincluster</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.skincluster" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">string skinCluster attached to the shape</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.delete_skin_cluster">
+<code class="descname">delete_skin_cluster</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.delete_skin_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete skinCluster attached to the shape</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bool True if deleted False if not</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.rename_skin_cluster">
+<code class="descname">rename_skin_cluster</code><span class="sig-paren">(</span><em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.rename_skin_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename skinCluster from object if name is given use the name if no name is give it will automatically format the
+skinCluster name to skinCluster_transformName</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – string name to be given to skinCluster</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string name of skinCluster attached to the shape</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Skn.dagposes">
+<code class="descname">dagposes</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.dagposes" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of names of all dagPose nodes connected to skinCluster Node</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.delete_dag_poses">
+<code class="descname">delete_dag_poses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.delete_dag_poses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete all dagPose nodes in the skeleton</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if all deleted False if not</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Skn.maximum_influences">
+<code class="descname">maximum_influences</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.maximum_influences" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">int number of maximum influences allow in skinCluster node</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Skn.joints">
+<code class="descname">joints</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.joints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get joint that are part of skin cluster</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of strings</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Skn.vertex_count">
+<code class="descname">vertex_count</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.vertex_count" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">int number of vertex in shape</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.vertex_ids_to_full_path">
+<code class="descname">vertex_ids_to_full_path</code><span class="sig-paren">(</span><em>vertex_ids</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.vertex_ids_to_full_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert vertex ids ints to component string names Ex. [id_1, id_2] -&gt; [shape.vtx[id_1], shape.vtx[id_2]]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertex_ids</strong> – list of ints</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of strings</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.select_vertex">
+<code class="descname">select_vertex</code><span class="sig-paren">(</span><em>vertex_ids</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.select_vertex" title="Permalink to this definition">¶</a></dt>
+<dd><p>select vertex with given ids</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertex_ids</strong> – list of ints</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string list of vertex names</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.idfromattr">
+<code class="descname">idfromattr</code><span class="sig-paren">(</span><em>attr</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.idfromattr" title="Permalink to this definition">¶</a></dt>
+<dd><p>”
+split a given string attribute to return the numeric id as string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attr</strong> – string attr</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string numeric id</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.jntids">
+<code class="descname">jntids</code><span class="sig-paren">(</span><em>key='id'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.jntids" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a dictionary of joint ids that belong to the skin cluster, keyword key can be use to specify
+the way the data is mapped in the returned dictionary</p>
+<p>if key=’id’ the id will be the keys of the dictionary and joint name the value
+if key=’joint’ the joint name will be the key and the id the value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> – string to define which value is the key of the dictionary, valid parameters are ‘id’ and ‘joint’</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary containing ids and joint names the order of keys and values can be change by the use of
+key keyword</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.get_selected_vertex">
+<code class="descname">get_selected_vertex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.get_selected_vertex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert mesh component selection to vertices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of string with the full pat of each vertex in the selection</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.get_all_vertex_ids">
+<code class="descname">get_all_vertex_ids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.get_all_vertex_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query a list of vertex ids that belong to the skin cluster</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of string of vrtx ids</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.get_selected_vertex_ids">
+<code class="descname">get_selected_vertex_ids</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.get_selected_vertex_ids" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -282,776 +1589,465 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.idfromattr">
-<code class="descname">idfromattr</code><span class="sig-paren">(</span><em>attr</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.idfromattr" title="Permalink to this definition">¶</a></dt>
-<dd><p>split a guiven string attribute to return the numeric id as string
-:param attr: string attr
-:return: string numeric id</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.vrtxids">
-<code class="descname">vrtxids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.vrtxids" title="Permalink to this definition">¶</a></dt>
-<dd><p>return a list of vertex ids that belong to the skin cluster
-:return: list of string of vrtx ids</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.jntids">
-<code class="descname">jntids</code><span class="sig-paren">(</span><em>key='id'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.jntids" title="Permalink to this definition">¶</a></dt>
-<dd><p>return a dictionary of joint ids that belong to the skin cluster, keyword key can be use to specify
-the way the data is return if key=’id’ id will be the keys of the dictionary and joint name the value
-if key=’joint’ the joint name will be the key and the id the value</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> – string to define which value is the key of the dictionary, valid parameters are ‘id’ and ‘joint’</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary containing ids and joint names the order of keys and values can be change by the use of</td>
-</tr>
-</tbody>
-</table>
-<p>key keyword</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.get_joints">
-<code class="descname">get_joints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_joints" title="Permalink to this definition">¶</a></dt>
-<dd><p>get joint that are part of skin cluster
-:return: list of strings</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.get_data">
-<code class="descname">get_data</code><span class="sig-paren">(</span><em>debug=False</em>, <em>ignore_selection=False</em>, <em>namespace=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>main call to collect the skinning data and return a dict</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.get_vrtx_weights">
-<code class="descname">get_vrtx_weights</code><span class="sig-paren">(</span><em>vrtxid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_vrtx_weights" title="Permalink to this definition">¶</a></dt>
-<dd><p>analise a given or selected vertex and return a dictionary wit the joints and influence values</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vrtxid</strong> – numeric id of the vertex</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary with the weight values of the vertex keys are the joint influence name and value the is the
-value of influence</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.get_vrtxs_weights">
-<code class="descname">get_vrtxs_weights</code><span class="sig-paren">(</span><em>vrtx_ids=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_vrtxs_weights" title="Permalink to this definition">¶</a></dt>
-<dd><p>analise a given list or selected vertexes and return a dictionary of dictionaries wit the joints and
+<dt id="Red9.pro_pack.core.skinning.Skn.get_weights">
+<code class="descname">get_weights</code><span class="sig-paren">(</span><em>vertex_ids=None</em>, <em>api=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.get_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>analyse a given list or selected vertexes and return a dictionary of dictionaries with the joints and
 influence values</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vrtxids</strong> – list of numeric ids of vertexes</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>vertex_ids</strong> – list of numeric ids of vertexes</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary of dictionaries with the numeric id of the vertex as a key and  a dictionary as value</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary of dictionaries with the numeric id of the vertex as a key and  a dictionary as value
+containing skinning values, the joint influence name as key and weight value as value</td>
 </tr>
 </tbody>
 </table>
-<p>containing skinning values, the joint influence name as key and weight value as value</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.get_all_weights">
-<code class="descname">get_all_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.get_all_weights" title="Permalink to this definition">¶</a></dt>
-<dd><p>get the skiing weights of all vertices of the shape</p>
+<dt id="Red9.pro_pack.core.skinning.Skn.get_data">
+<code class="descname">get_data</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>main call to collect the skinning data</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dictionary of dictionaries with the numeric id of the vertex as a key and  a dictionary as value</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>debug</strong> – bool</li>
+<li><strong>selection</strong> – bool default is True,
+True gets just selection data, if nothing is selected it defaults to all object
+False gets all object data</li>
+<li><strong>namespace</strong> – bool</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dict</p>
+</td>
 </tr>
 </tbody>
 </table>
-<p>containing skinning values, the joint influence name as key and weight value as value</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.set_weights">
-<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em>, <em>vrtx_ids=False</em>, <em>checkdata=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.set_weights" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.pro_pack.core.skinning.Skn.select_fail_vertex">
+<code class="descname">select_fail_vertex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.select_fail_vertex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select all vertices that fail the debug</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.check_missing_joints_on_scene">
-<code class="descname">check_missing_joints_on_scene</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_missing_joints_on_scene" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.pro_pack.core.skinning.Skn.get_fail_vertex">
+<code class="descname">get_fail_vertex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.get_fail_vertex" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of ints, fail vertex ids</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.check_missing_joints_on_cluster">
-<code class="descname">check_missing_joints_on_cluster</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_missing_joints_on_cluster" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.pro_pack.core.skinning.Skn.get_fail_vertex_full_path">
+<code class="descname">get_fail_vertex_full_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.get_fail_vertex_full_path" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of strings of all debug fail vertices as full path</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.load">
-<code class="descname">load</code><span class="sig-paren">(</span><em>data</em>, <em>checkdata=True</em>, <em>ignore_selection=False</em>, <em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.pro_pack.core.skinning.Skn.fix">
+<code class="descname">fix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run fix method of all health objects in health_validation and re-run the debug in order to catch any re-fails</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of health_object that fail to be fix, if no fail fixes it reruns an empty list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.fix_weights">
-<code class="descname">fix_weights</code><span class="sig-paren">(</span><em>fix=False</em>, <em>select=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.fix_weights" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.pro_pack.core.skinning.Skn.debug">
+<code class="descname">debug</code><span class="sig-paren">(</span><em>fix=False</em>, <em>selection=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run all test for skinning</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fix</strong> – bool if true it will run fixes in all fail test</li>
+<li><strong>selection</strong> – bool works just in selected components</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of health_object that fail to be fix, if no fail fixes it reruns an empty list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.check_set_data">
-<code class="descname">check_set_data</code><span class="sig-paren">(</span><em>data</em>, <em>vrtxids</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_set_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.pro_pack.core.skinning.Skn.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>weights</em>, <em>vertex_ids=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>weights</strong> – weight data dictionary
+ex. {u’0’: {u’joint1’: 0.5, u’joint2’: 0.5}, u’2’: {u’joint3’: 0.5, u’joint4’: 0.5}, …..etc}</li>
+<li><strong>vertex_ids</strong> – list of int the vertex ids that are going to be use to set the weights on
+Ex. [1,2,3] weights will be set just in vertex 1, 2 and 3 all remaining vertex in the mesh will be ignore</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bool True if weight on the skin cluster match weights data</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.check_weight_values">
-<code class="descname">check_weight_values</code><span class="sig-paren">(</span><em>data=None</em>, <em>select=True</em>, <em>fix=False</em>, <em>logit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_weight_values" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.pro_pack.core.skinning.Skn.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>data</em>, <em>selection=True</em>, <em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load skin data in a mesh object, will use existing skin cluster if exist or create a new skin cluster if
+none attached to the mesh</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> – skin dict data
+Ex: {u’vc’: 2,  u’skinCluster’: u’skinClusterName’, u’joints’: [u’joint1’, u’joint2’], u’omi’: True,
+u’mi’: 8, u’sm’: 0, u’ids’: {u’0’: {u’joint1’: 1}, u’1’: {u’joint1’: 0.4, u’joint2’: 0.6}}}</li>
+<li><strong>selection</strong> – bool works just in selected components</li>
+<li><strong>root</strong> – string name of hierarchy root joint of the skin cluster default None</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bool True if weight on the skin cluster match weights data on skin dict data “ids”</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.check_maximun_infuences">
-<code class="descname">check_maximun_infuences</code><span class="sig-paren">(</span><em>data=None</em>, <em>select=True</em>, <em>fix=False</em>, <em>logit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_maximun_infuences" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.pro_pack.core.skinning.Skn.create_skincluster">
+<code class="descname">create_skincluster</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.create_skincluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create skin cluster Node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> – skin dict data
+Ex: {u’vc’: 2,  u’skinCluster’: u’skinClusterName’, u’joints’: [u’joint1’, u’joint2’], u’omi’: True,
+u’mi’: 8, u’sm’: 0, u’ids’: {u’0’: {u’joint1’: 1}, u’1’: {u’joint1’: 0.4, u’joint2’: 0.6}}}</li>
+<li><strong>root</strong> – string name of hierarchy root joint of the skin cluster default None</li>
+<li><strong>load_data</strong> – bool is True will load weight data on skin cluster node default False</li>
+<li><strong>selection</strong> – bool works just in selected components</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True False or ‘PASS’, ‘PASS’ is an internal variable use to create skin cluster when loading data</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.core.skinning.Skn.root_joint">
+<code class="descname">root_joint</code><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.root_joint" title="Permalink to this definition">¶</a></dt>
+<dd><p>get root joints of joint hierarchy use on skin cluster
+:return: string name of hierarchy root joint</p>
+</dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn.check_negative_weights">
-<code class="descname">check_negative_weights</code><span class="sig-paren">(</span><em>data=None</em>, <em>select=True</em>, <em>fix=False</em>, <em>logit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn.check_negative_weights" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.pro_pack.core.skinning.Skn.root_joints">
+<code class="descname">root_joints</code><span class="sig-paren">(</span><em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.root_joints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analyse scene to gather root joints, if object has a skinCluster it will gather the joints from that skinCluster, 
+if no skin cluster in the object it will try to find root joints in the scene</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – dict weight data</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list of root joints</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.get_joints_from_hierarchy">
+<code class="descname">get_joints_from_hierarchy</code><span class="sig-paren">(</span><em>joints</em>, <em>root=None</em>, <em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.get_joints_from_hierarchy" title="Permalink to this definition">¶</a></dt>
+<dd><p>find and Return full name of given joints in the skeleton hierarchy</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>joints</strong> – list of strings of joint names to be found</li>
+<li><strong>root</strong> – string name of hierarchy root joint</li>
+<li><strong>data</strong> – dict skin data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of strings</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.get_joint_hierarchy">
+<code class="descname">get_joint_hierarchy</code><span class="sig-paren">(</span><em>root=None</em>, <em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.get_joint_hierarchy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>root</strong> – string root joint name</li>
+<li><strong>data</strong> – dict weight data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">string list of all joint full path names in the hierarchy that are part of the skin cluster</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.get_joints_from_data">
+<code class="descname">get_joints_from_data</code><span class="sig-paren">(</span><em>data</em>, <em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.get_joints_from_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>compare joints in data against joint hierarchy and return matching joints in hierarchy</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>root</strong> – string root joint name</li>
+<li><strong>data</strong> – dict weight data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">string list of hierarchy joint full names</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn.check_missing_joints_on_cluster">
+<code class="descname">check_missing_joints_on_cluster</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn.check_missing_joints_on_cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if joint in data is missing from skin cluster node
+:param data: skin dict data</p>
+<blockquote>
+<div>Ex: {u’vc’: 2,  u’skinCluster’: u’skinClusterName’, u’joints’: [u’joint1’, u’joint2’], u’omi’: True,
+u’mi’: 8, u’sm’: 0, u’ids’: {u’0’: {u’joint1’: 1}, u’1’: {u’joint1’: 0.4, u’joint2’: 0.6}}}</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>add_joints</strong> – bool default True</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of missing joint, None or QMessageBox.Cancel if canceled by user</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="Red9.pro_pack.core.skining.R9skn_file">
-<em class="property">class </em><code class="descname">R9skn_file</code><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.skinning.Skn_file">
+<em class="property">class </em><code class="descname">Skn_file</code><span class="sig-paren">(</span><em>ui=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn_file.get_skns">
-<code class="descname">get_skns</code><span class="sig-paren">(</span><em>selection=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.get_skns" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn_file.get_file_path">
-<code class="descname">get_file_path</code><span class="sig-paren">(</span><em>action='save'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.get_file_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn_file.read_skin_file">
-<code class="descname">read_skin_file</code><span class="sig-paren">(</span><em>file_path=None</em>, <em>namespace=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.read_skin_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn_file.save_file">
-<code class="descname">save_file</code><span class="sig-paren">(</span><em>file_path=None</em>, <em>debug_fix=True</em>, <em>skip_ui=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.save_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn_file.namebaseonscene">
-<code class="descname">namebaseonscene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.namebaseonscene" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9skn_file.get_scene_data">
-<code class="descname">get_scene_data</code><span class="sig-paren">(</span><em>debug=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9skn_file.get_scene_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.core.skining.select_all_dagposes">
-<code class="descname">select_all_dagposes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.select_all_dagposes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.core.skining.select_all_skin_clusters">
-<code class="descname">select_all_skin_clusters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.select_all_skin_clusters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.core.skining.delete_all_dagposes">
-<code class="descname">delete_all_dagposes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.delete_all_dagposes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.core.skining.delete_all_skin_clusters">
-<code class="descname">delete_all_skin_clusters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.delete_all_skin_clusters" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="class">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget">
-<em class="property">class </em><code class="descname">R9Skn_widget</code><span class="sig-paren">(</span><em>ui</em>, <em>shape</em>, <em>data</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QHBoxLayout</span></code></p>
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.data">
-<code class="descname">data</code><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.save">
-<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.find_joints">
-<code class="descname">find_joints</code><span class="sig-paren">(</span><em>data</em>, <em>func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.find_joints" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.load">
-<code class="descname">load</code><span class="sig-paren">(</span><em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.debug">
-<code class="descname">debug</code><span class="sig-paren">(</span><em>fix=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.debug" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.remap">
-<code class="descname">remap</code><span class="sig-paren">(</span><em>newshape=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.remap" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.remap_jnt">
-<code class="descname">remap_jnt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.remap_jnt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.select_shape">
-<code class="descname">select_shape</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.select_shape" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.select_joints">
-<code class="descname">select_joints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.select_joints" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.select_vertex">
-<code class="descname">select_vertex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.select_vertex" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.select_skincluster">
-<code class="descname">select_skincluster</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.select_skincluster" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.shape_exist">
-<code class="descname">shape_exist</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.shape_exist" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.deleteLater">
-<code class="descname">deleteLater</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.deleteLater" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.R9Skn_widget.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9Skn_widget.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Red9.pro_pack.core.skining.R9sknui2">
-<em class="property">class </em><code class="descname">R9sknui2</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_mw_r9skn</span></code></p>
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui2.clear_ui">
-<code class="descname">clear_ui</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.clear_ui" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui2.set_sknfile_actions">
-<code class="descname">set_sknfile_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.set_sknfile_actions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui2.save">
-<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui2.map_namespace">
-<code class="descname">map_namespace</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.map_namespace" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui2.open_file">
-<code class="descname">open_file</code><span class="sig-paren">(</span><em>file_path=None</em>, <em>namespace=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.open_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui2.set_widgets">
-<code class="descname">set_widgets</code><span class="sig-paren">(</span><em>selection=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.set_widgets" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui2.add_widget">
-<code class="descname">add_widget</code><span class="sig-paren">(</span><em>shape</em>, <em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.add_widget" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui2.load">
-<code class="descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui2.debug">
-<code class="descname">debug</code><span class="sig-paren">(</span><em>fix=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.debug" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui2.closeEvent">
-<code class="descname">closeEvent</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.closeEvent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.R9sknui2.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui2.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap">
-<em class="property">class </em><code class="descname">Jnt_remap</code><span class="sig-paren">(</span><em>parent=None</em>, <em>Skn_widget=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_mw_aditive_joint_selector</span></code></p>
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.data">
-<code class="descname">data</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.joints">
-<code class="descname">joints</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.joints" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.old_jnt">
-<code class="descname">old_jnt</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.old_jnt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.old_joints">
-<code class="descname">old_joints</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.old_joints" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.new_jnt">
-<code class="descname">new_jnt</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.new_jnt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.select_joint_old">
-<code class="descname">select_joint_old</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.select_joint_old" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.select_joint_new">
-<code class="descname">select_joint_new</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.select_joint_new" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.select_vertex">
-<code class="descname">select_vertex</code><span class="sig-paren">(</span><em>list_to_use='old'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.select_vertex" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.refresh">
-<code class="descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.refresh" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.set_old">
-<code class="descname">set_old</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.set_old" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.set_new">
-<code class="descname">set_new</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.set_new" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.remap">
-<code class="descname">remap</code><span class="sig-paren">(</span><em>old_jnt</em>, <em>new_jnt</em>, <em>get_data=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.remap" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.Jnt_remap.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Jnt_remap.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Red9.pro_pack.core.skining.skl_selection">
-<em class="property">class </em><code class="descname">skl_selection</code><span class="sig-paren">(</span><em>widget</em>, <em>func=None</em>, <em>jnt_roots=[]</em>, <em>parent=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.skl_selection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code></p>
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.skl_selection.set_selection">
-<code class="descname">set_selection</code><span class="sig-paren">(</span><em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.skl_selection.set_selection" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.skl_selection.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.skl_selection.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Red9.pro_pack.core.skining.Skincluster">
-<em class="property">class </em><code class="descname">Skincluster</code><span class="sig-paren">(</span><em>skincluster=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.select">
-<code class="descname">select</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.select" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.selectvrtx">
-<code class="descname">selectvrtx</code><span class="sig-paren">(</span><em>vrtxid</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.selectvrtx" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.selectvrtxs">
-<code class="descname">selectvrtxs</code><span class="sig-paren">(</span><em>vrtxids</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.selectvrtxs" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.setskinclusterfromobject">
-<code class="descname">setskinclusterfromobject</code><span class="sig-paren">(</span><em>node=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.setskinclusterfromobject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.getshape">
-<code class="descname">getshape</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.getshape" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.idfromattr">
-<code class="descname">idfromattr</code><span class="sig-paren">(</span><em>attr</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.idfromattr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.vrtxids">
-<code class="descname">vrtxids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.vrtxids" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.jntids">
-<code class="descname">jntids</code><span class="sig-paren">(</span><em>key='id'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.jntids" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.getselectedvrtxids">
-<code class="descname">getselectedvrtxids</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.getselectedvrtxids" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.debug">
-<code class="descname">debug</code><span class="sig-paren">(</span><em>fix=False</em>, <em>select=True</em>, <em>logit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.debug" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.checkweightvalues">
-<code class="descname">checkweightvalues</code><span class="sig-paren">(</span><em>data=None</em>, <em>select=True</em>, <em>fix=False</em>, <em>logit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.checkweightvalues" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.checkmaximuninfuences">
-<code class="descname">checkmaximuninfuences</code><span class="sig-paren">(</span><em>data=None</em>, <em>select=True</em>, <em>fix=False</em>, <em>logit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.checkmaximuninfuences" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.checknegativeweights">
-<code class="descname">checknegativeweights</code><span class="sig-paren">(</span><em>data=None</em>, <em>select=True</em>, <em>fix=False</em>, <em>logit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.checknegativeweights" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.getvrtxweights">
-<code class="descname">getvrtxweights</code><span class="sig-paren">(</span><em>vrtxid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.getvrtxweights" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.getvrtxsweights">
-<code class="descname">getvrtxsweights</code><span class="sig-paren">(</span><em>vrtxids=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.getvrtxsweights" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.getallweights">
-<code class="descname">getallweights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.getallweights" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.loadweights">
-<code class="descname">loadweights</code><span class="sig-paren">(</span><em>weights</em>, <em>vrtxids=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.loadweights" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.copyweight">
-<code class="descname">copyweight</code><span class="sig-paren">(</span><em>vrtxid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.copyweight" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.pasteweight">
-<code class="descname">pasteweight</code><span class="sig-paren">(</span><em>vrtxids=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.pasteweight" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.get_verts_ordered_selection">
-<code class="descname">get_verts_ordered_selection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.get_verts_ordered_selection" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.copy_paste">
-<code class="descname">copy_paste</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.copy_paste" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.select_history_verts">
-<code class="descname">select_history_verts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.select_history_verts" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.run_history">
-<code class="descname">run_history</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.run_history" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.write_copy_paste_history">
-<code class="descname">write_copy_paste_history</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.write_copy_paste_history" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.load_copy_paste_history">
-<code class="descname">load_copy_paste_history</code><span class="sig-paren">(</span><em>skncph=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.load_copy_paste_history" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.namebaseonscene">
-<code class="descname">namebaseonscene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.namebaseonscene" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Skincluster.testloadedata">
-<code class="descname">testloadedata</code><span class="sig-paren">(</span><em>data</em>, <em>vrtxids</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Skincluster.testloadedata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Red9.pro_pack.core.skining.Sknfile">
-<em class="property">class </em><code class="descname">Sknfile</code><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Sknfile.namebaseonscene">
-<code class="descname">namebaseonscene</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile.namebaseonscene" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Sknfile.namebaseonshape">
-<code class="descname">namebaseonshape</code><span class="sig-paren">(</span><em>shape</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile.namebaseonshape" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Sknfile.setsknfile">
-<code class="descname">setsknfile</code><span class="sig-paren">(</span><em>sugestedname</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile.setsknfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>set skn file location on pc</p>
+<p>main r9Skin file handling, for dealing with the saving and loading of the actual data</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.skinning.Skn_file.get_skns">
+<code class="descname">get_skns</code><span class="sig-paren">(</span><em>selection=False</em>, <em>meshes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn_file.get_skns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all polygon objects in the scene that have a skinCluster and return a Skn object for each find</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>selection</strong> – bool default True. If True it works only on selected objects or components,
+If False it works on every skin mesh in the scene</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of Skn objects</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.Sknfile.getsknfile">
-<code class="descname">getsknfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile.getsknfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>get skn file location on pc</p>
+<dt id="Red9.pro_pack.core.skinning.Skn_file.get_scene_data">
+<code class="descname">get_scene_data</code><span class="sig-paren">(</span><em>selection=True</em>, <em>meshes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn_file.get_scene_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Skinning data of polygon objects in the scene</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>debug</strong> – bool default True. If True debug and fix skin weights, if False do nothing</li>
+<li><strong>selection</strong> – bool default True. If True works only on selected objects or components,
+if False it works on every skinned mesh in the scene</li>
+<li><strong>meshes</strong> – list of meshes to get the data from in conjunction with selection it will get skin data of
+selected meshes or components in given meshes</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dict of scene skin data</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.Sknfile.debug">
-<code class="descname">debug</code><span class="sig-paren">(</span><em>fix=False</em>, <em>select=False</em>, <em>logit=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile.debug" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Sknfile.saveWeights">
-<code class="descname">saveWeights</code><span class="sig-paren">(</span><em>sknfile=None</em>, <em>debug=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile.saveWeights" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Sknfile.loadWeights">
-<code class="descname">loadWeights</code><span class="sig-paren">(</span><em>sknfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile.loadWeights" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Sknfile.readsknfile">
-<code class="descname">readsknfile</code><span class="sig-paren">(</span><em>sknfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile.readsknfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>reads a given skin file
-:param sknfile: path to .skn file
-:return skin data as a dictionary</p>
+<dt id="Red9.pro_pack.core.skinning.Skn_file.get_file_path">
+<code class="descname">get_file_path</code><span class="sig-paren">(</span><em>action='save'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn_file.get_file_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for QFileDialog.getSaveFileName or QFileDialog.getOpenFileName vase on action argument.
+.skn file name allays defaults to Maya scene name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>action</strong> – string default is ‘save’ available actions are ‘save’ &amp; ‘open’</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string .skn file path</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.Sknfile.writesknfile">
-<code class="descname">writesknfile</code><span class="sig-paren">(</span><em>data=None</em>, <em>sknfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Sknfile.writesknfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dt id="Red9.pro_pack.core.skinning.Skn_file.read_skin_file">
+<code class="descname">read_skin_file</code><span class="sig-paren">(</span><em>file_path=None</em>, <em>namespace=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn_file.read_skin_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read skin file data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>file_path</strong> – string file path</li>
+<li><strong>namespace</strong> – string name space to append to data</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bool True if data read is ok</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="class">
-<dt id="Red9.pro_pack.core.skining.Shapelayout">
-<em class="property">class </em><code class="descname">Shapelayout</code><span class="sig-paren">(</span><em>ui</em>, <em>shape</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QHBoxLayout</span></code></p>
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.Shapelayout.load">
-<code class="descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Shapelayout.selectvertives">
-<code class="descname">selectvertives</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.selectvertives" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Shapelayout.selectjoints">
-<code class="descname">selectjoints</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.selectjoints" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Shapelayout.selectshape">
-<code class="descname">selectshape</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.selectshape" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Shapelayout.remap">
-<code class="descname">remap</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.remap" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Shapelayout.shapeexist">
-<code class="descname">shapeexist</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.shapeexist" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.Shapelayout.deleteLater">
-<code class="descname">deleteLater</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.deleteLater" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.Shapelayout.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.Shapelayout.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dt id="Red9.pro_pack.core.skinning.Skn_file.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>data=None</em>, <em>selection=True</em>, <em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn_file.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>load skin data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> – dict skin data Default None if no data given it defaults to data store on self.data</li>
+<li><strong>selection</strong> – bool load just selected meshes or components default is True</li>
+<li><strong>root</strong> – string name of hierarchy root joint of the skin cluster default None</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dict wit skin load report True or false, False in specific mesh means data not loaded correctly</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="class">
-<dt id="Red9.pro_pack.core.skining.R9sknui">
-<em class="property">class </em><code class="descname">R9sknui</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_mw_r9skn</span></code></p>
 <dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui.browse">
-<code class="descname">browse</code><span class="sig-paren">(</span><em>sknfile=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.browse" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui.save">
-<code class="descname">save</code><span class="sig-paren">(</span><em>debug=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.save" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui.load">
-<code class="descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.load" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="Red9.pro_pack.core.skining.R9sknui.staticMetaObject">
-<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.staticMetaObject" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui.clearshapesinsknfile">
-<code class="descname">clearshapesinsknfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.clearshapesinsknfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui.setshapesinsknfile">
-<code class="descname">setshapesinsknfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.setshapesinsknfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui.getverticesindata">
-<code class="descname">getverticesindata</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.getverticesindata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Red9.pro_pack.core.skining.R9sknui.getjointsindata">
-<code class="descname">getjointsindata</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skining.R9sknui.getjointsindata" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="Red9.pro_pack.core.skinning.Skn_file.save_file">
+<code class="descname">save_file</code><span class="sig-paren">(</span><em>file_path=None</em>, <em>selection=True</em>, <em>meshes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.skinning.Skn_file.save_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save skin data to .skn file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>file_path</strong> – string file path</li>
+<li><strong>selection</strong> – bool save just selected meshes or components default is True</li>
+<li><strong>meshes</strong> – list of meshes to save the data from in conjunction with selection it will save skin data of
+selected meshes or components  in given meshes</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">string file path</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 
 </div>
 
 
+           </div>
           </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Red9_Pro_skining.html" class="btn btn-neutral float-left" title="Pro_Pack : skining" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Red9_Pro_uibase.html" class="btn btn-neutral float-right" title="Pro_Pack : uibase" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Red9 Consultancy Limited.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="Red9_Pro_rigutils.html"
-                        title="previous chapter">Pro_Pack : rigutils</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="Red9_Pro_uibase.html"
-                        title="next chapter">Pro_Pack : uibase</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/red9pro_templates/Red9_Pro_skinning.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="Red9_Pro_uibase.html" title="Pro_Pack : uibase"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="Red9_Pro_rigutils.html" title="Pro_Pack : rigutils"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

@@ -1,11 +1,15 @@
 '''
 ..
-    Red9 Studio Pack: Maya Pipeline Solutions
+    Red9 Pro Pack: Maya Pipeline Solutions
+    ======================================
+     
     Author: Mark Jackson
-    email: rednineinfo@gmail.com
-
-    Red9 blog : http://red9-consultancy.blogspot.co.uk/
-    MarkJ blog: http://markj3d.blogspot.co.uk
+    email: info@red9consultancy.com
+     
+    Red9 : http://red9consultancy.com
+    Red9 Vimeo : https://vimeo.com/user9491246
+    Twitter : @red9_anim
+    Facebook : https://www.facebook.com/Red9Anim
 
 
 This is a new implementation of the PoseSaver core, same file format
@@ -62,6 +66,89 @@ def getFolderPoseHandler(posePath):
             poseHandler = poseHandlers[0]
     return poseHandler
 
+def store_nodepose_to_clipboard(nodes=[], clipboard=True, verbose=True):
+    '''
+    a simple wrap over the main DataMap to grab the poseData for a given set of nodes
+    by-passing the rest of the pose logic. Returns the DataMap object with the poseDict filled
+    
+    :param nodes: nodes to capture
+    :param clipboard: if True we puhs the data to the system clipboard also for recovery
+    :param verbose: if True(default) we show on screen message to show the data has been captured
+    '''
+    if not nodes:
+        nodes=cmds.ls(sl=True)
+        if not nodes:
+            raise IOError('no nodes selected to capture')
+    _data_map = PoseData()
+    _data_map._buildBlock_info(nodes)
+    _data_map._buildBlock_poseDict(nodes)
+    structured = {'poseDict': _data_map.poseDict, 'infoDict':_data_map.infoDict}
+    if clipboard:
+        import pyperclip
+        pyperclip.copy(json.dumps(structured))
+        if verbose:
+            cmds.inViewMessage(amg='Attribute Data stored to Clipboard for %i Objects' % len(nodes),
+                           fadeStayTime=1000,
+                           fadeInTime=130,
+                           fadeOutTime=130,
+                           pos='topCenter',
+                           fade=True)
+    return _data_map
+
+def apply_nodepose_from_clipboad(nodes=None, cb_selection=True, world_space=False):
+    '''
+    given a valid datamap.poseDict, buffered to the clipboard (using the above function
+    "store_nodepose_to_clipboard") apply that internal pose, attr for attr, to the given object.
+    If there are selected attrs in the ChannelBox then we only load to those. This loads against index order
+    
+    :param nodes: the nodes we want to cast the data too, note these are processed in the original selection order of the data when stored 
+    :param cb_selection: if True we only load those attrs that are selected in the channelBox 
+    :param world_space: loads the data against the kWorld space stored in the attr blocks in the pose data
+    '''
+    attrs = []
+
+    if not nodes:
+        nodes = cmds.ls(sl=True)
+        if not nodes:
+            raise IOError('no nodes selected to restore')
+
+    if cb_selection:
+        attrs = r9Anim.getChannelBoxSelection(longNames=True) or []
+
+    import pyperclip
+    datamap = pyperclip.paste()
+    if type(datamap) == unicode:
+        try:
+            datamap = json.loads(str(datamap))
+            if not type(datamap) == dict:
+                raise IOError('Clipboard data is not compatable to pose extraction')
+            else:
+                if 'poseDict' not in datamap:
+                    raise IOError('Clipboard data is not compatable to pose extraction')
+        except:
+            raise IOError('Clipboard data is not compatable to pose extraction')
+
+    if datamap:
+        poseCache = PoseData() 
+        poseCache.poseDict = datamap['poseDict']
+        poseCache.infoDict = datamap['infoDict']
+        poseCache.matchMethod = 'index'
+        poseCache.loadAttrs_only = attrs
+        poseCache.world_space = world_space
+        poseCache.poseLoad(nodes, filepath=None, useFilter=False)
+
+#     if datamap:
+#         for i, node in enumerate(nodes):
+#             for key in datamap['poseDict'].keys():
+#                 if datamap['poseDict'][key]['ID'] == i:
+#                     for attr, val in datamap['poseDict'][key]['attrs'].items():
+#                         if attrs and attr not in attrs:
+#                             continue
+#                         try:
+#                             cmds.setAttr('%s.%s' % (node, attr), val)
+#                         except:
+#                             log.warning('Failed to restore atts %s.%s' % (r9Core.nodeNameStrip(node), attr))
+
 
 class DataMap(object):
     '''
@@ -83,7 +170,7 @@ class DataMap(object):
         self.skeletonDict = {}
         self.hikDict = {}
         self.settings_internal = None  # filterSettings object synced from the internal file block
-
+        
         self.file_ext = ''  # extension the file will be saved as
         self.filepath = ''  # path to load / save
         self.__filepath = ''
@@ -104,6 +191,7 @@ class DataMap(object):
         self.useFilter = True
         self.prioritySnapOnly = False  # mainly used by any load relative calls, determines whether to use the internal filters priority list
         self.skipAttrs = []  # attrs to completely ignore in any pose handling
+        self.loadAttrs_only = []  # reverse of skipAttrs, if given we ONLY load data from matching attrs
 
         self.nodesToStore = []  # built by the buildDataMap func
         self.nodesToLoad = []  # build in the processPoseFile func
@@ -169,6 +257,7 @@ class DataMap(object):
 
         :param node: node to set the mRig from or instance of an mRig object
         '''
+#         if self.metaPose:
         log.debug('setting internal metaRig from given node : %s' % node)
         if r9Meta.isMetaNodeInherited(node, 'MetaRig'):
             self.metaRig = r9Meta.MetaClass(node)
@@ -210,16 +299,17 @@ class DataMap(object):
 
         return nodes
 
-    def getNodes(self, nodes):
+    def getNodes(self, nodes, incRoots=False):
         '''
-        get the nodes to process
+        Main call to get the nodes to process based on the filterSettings data
         This is designed to allow for specific hooks to be used from user
         code stored in the pose folder itself.
 
         :param nodes: nodes passed to the filter calls
+        :param incRoots: added Oct2021 : this now force overrides the settings.incRoots value so we can
+            force it on for all Save functions. For loads this isn't used as we want the user to determine the behaviour
 
         .. note::
-            Update : Aug 2016
             Because this calls FilterNode to get the data when useFilter=True it
             allows for any mRig with internal filterSettings bound to it to dynamically
             modify the settings on the fly to suit. This is a big update in handling
@@ -231,7 +321,13 @@ class DataMap(object):
         if self.useFilter:
             log.debug('getNodes - useFilter=True : filteActive=True  - no custom poseHandler')
             if self.settings.filterIsActive():
-                return r9Core.FilterNode(nodes, self.settings).processFilter()  # main node filter
+                if incRoots:
+                    _incRoot_cache = self.settings.incRoots
+                    self.settings.incRoots=True
+                nodes =  r9Core.FilterNode(nodes, self.settings).processFilter()  # main node filter
+                if incRoots:
+                    self.settings.incRoots=_incRoot_cache # restore in case we use this object instance again
+                return nodes
             else:
                 log.debug('getNodes - useFilter=True : filteActive=False - no custom poseHandler')
                 return nodes
@@ -246,7 +342,7 @@ class DataMap(object):
         or loaded.
 
         .. note::
-            The collection of these attrs is currently only supported under MetaRig
+            The collection of these attrs is currently only supported under MetaRig.
             IF self.skipAttrs was passed into the object then we do NOT run this func, returning the currently setup list
         '''
         if self.skipAttrs:
@@ -382,7 +478,7 @@ class DataMap(object):
 #                 self.infoDict['namespace_full'] = _root.nameSpaceFull()
 #                 self.infoDict['referenced_rigPath'] = _root.referencePath()
 #                 self.infoDict['referenced_grp'] = _root.referenceGroup()
-        if self.rootJnt:
+        if hasattr(self, 'rootJnt') and 'self.rootJnt':
             self.infoDict['skeletonRootJnt'] = self.rootJnt
 
     def _buildBlock_poseDict(self, nodes):
@@ -393,6 +489,9 @@ class DataMap(object):
         getMirrorID = r9Anim.MirrorHierarchy().getMirrorCompiledID
         if self.metaPose:
             getMetaDict = self.metaRig.getNodeConnectionMetaDataMap  # optimisation
+            mNodes = [self.metaRig.mNode]
+            mNodes.extend([n.mNode for n in self.metaRig.getChildMetaNodes(walk=True)]) # this ensures we clamp the mNode data to the current mSystem
+#             mNodes.extend([n.mNode for n in self.metaRig.getMetaSubSystems()]) # this ensures we clamp the mNode data to the current mSystem
 
         for i, node in enumerate(nodes):
             key = r9Core.nodeNameStrip(node)
@@ -403,7 +502,7 @@ class DataMap(object):
             if mirrorID:
                 self.poseDict[key]['mirrorID'] = mirrorID  # add the mirrorIndex
             if self.metaPose:
-                self.poseDict[key]['metaData'] = getMetaDict(node)  # metaSystem the node is wired too
+                self.poseDict[key]['metaData'] = getMetaDict(node, mNodes=mNodes)  # metaSystem the node is wired too
             # the above blocks are the generic info used to map the data on load
             # this call is the specific collection of data for this node required by this map type
             self._collectNodeData(node, key)
@@ -432,10 +531,11 @@ class DataMap(object):
         .. note:: this code sets up self.rootJnt and IF that is setup then we also trigger the
             _buildBlock_skeletonData() and _buildBlock_hikData() dicts which inject specific
             skeleton joint data for later processing. This is setup if one of the following is True
-            * pose is self.metaPose and self.metaRig.getSkeletonRoots() returns a rootJnt
-            * nodes[0] (rootNode) has attribute 'exportSkeletonRoot' that is connected to a joint
-            * nodes[0] (rootNode) is of type joint
-            * self.settings.nodeTypes == ['joint']
+
+            * pose is self.metaPose and self.metaRig.getSkeletonRoots() returns a rootJnt 
+            * nodes[0] (rootNode) has attribute 'exportSkeletonRoot' that is connected to a joint 
+            * nodes[0] (rootNode) is of type joint 
+            * self.settings.nodeTypes == ['joint'] 
         '''
         self.nodesToStore = []
 
@@ -476,7 +576,7 @@ class DataMap(object):
         if self.hasFolderOverload():  # and self.useFilter:
             self.nodesToStore = self.getNodesFromFolderConfig(nodes, mode='save')
         else:
-            self.nodesToStore = self.getNodes(nodes)
+            self.nodesToStore = self.getNodes(nodes, incRoots=True)
 
         if not self.nodesToStore:
             raise IOError('No Matching Nodes found to store the pose data from')
@@ -518,6 +618,9 @@ class DataMap(object):
                     if attr in self.skipAttrs:
                         log.debug('Skipping attr as requested : %s' % attr)
                         continue
+                    if self.loadAttrs_only and attr not in self.loadAttrs_only:
+                        log.debug('Skipping attr as not in self.loadAttrs_only list: %s' % attr)
+                        continue
                     try:
                         val = eval(val)
                     except:
@@ -544,7 +647,6 @@ class DataMap(object):
         Load call for dealing with attrs in kWorld space. Still need to
         deal with hierarchy when we load now we're dealing in world space as
         parent / child behaviour will get screwed if not loaded in the correct order
-
         '''
         # setup unit conversions for linear attrs
         _unitsfile = None
@@ -576,17 +678,27 @@ class DataMap(object):
 
                     tran_data = []
                     rot_data = self.poseDict[key]['attrs_kWorld']['quaternion']
-                    rot_data = [eval(rot_data[0]), eval(rot_data[1]), eval(rot_data[2]), eval(rot_data[3])]
+                    # for the conversion if the data came from ConfigObj
+                    try:
+                        rot_data = [eval(rot_data[0]), eval(rot_data[1]), eval(rot_data[2]), eval(rot_data[3])]
+                    except:
+                        pass
 
                     for attr in self.poseDict[key]['attrs_kWorld']['translation']:
                         if _conversion_needed and self.unitconversion:
                             # only unit convert linear attrs if the file supports it and it's needed!
                             _converted = r9Core.convertUnits_uiToInternal(r9Core.convertUnits_internalToUI(attr, _unitsfile), _sceneunits)
                             log.debug('node : %s : UnitConverted : val %s == %s' % (dest, attr, _converted))
-                            tran_data.append(eval(attr))
+                            try:
+                                tran_data.append(eval(attr))
+                            except:
+                                tran_data.append(attr)
                         else:
                             log.debug('node : %s : val %s' % (dest, attr))
-                            tran_data.append(eval(attr))
+                            try:
+                                tran_data.append(eval(attr))
+                            except:
+                                tran_data.append(attr)
 
                     trans = OpenMaya.MVector(tran_data[0], tran_data[1], tran_data[2])
                     rots = OpenMaya.MQuaternion(rot_data[0], rot_data[1], rot_data[2], rot_data[3])
@@ -644,8 +756,10 @@ class DataMap(object):
             data['poseData'] = self.poseDict
             if self.skeletonDict:
                 data['skeletonDict'] = self.skeletonDict
+            if self.hikDict:
+                data['hikDict'] = self.hikDict
             with open(filepath, 'w') as f:
-                f.write(json.dumps(data, sort_keys=True, indent=4))
+                f.write(json.dumps(data, sort_keys=True, indent=None)) # indent=4))  # , separators=(',', ':')))
                 f.close()
             self._dataformat_resolved = 'json'
 
@@ -691,6 +805,8 @@ class DataMap(object):
                         self.infoDict = data['info']
                     if 'skeletonDict' in data:
                         self.skeletonDict = data['skeletonDict']
+                    if 'hikDict' in data:
+                        self.hikDict = data['hikDict']
                     if 'filterNode_settings' in data:
                         self.settings_internal = r9Core.FilterNode_Settings()
                         self.settings_internal.setByDict(data['filterNode_settings'])
@@ -700,12 +816,15 @@ class DataMap(object):
         else:
             raise StandardError('No FilePath given to read the pose from')
 
-    def processPoseFile(self, nodes):
+    def processPoseFile(self, nodes, read=True):
         '''
         pre-loader function that processes all the nodes and data prior to
         actually calling the load... why? this is for the poseMixer for speed.
         This reads the file, matches the nodes to the internal file data and fills
         up the self.matchedPairs data [(src,dest),(src,dest)]
+        
+        :param nodes: nodes to process
+        :param read: if True we read the r9Anim from file, else we skip the load
 
         .. note::
             this replaced the original call self._poseLoad_buildcache()
@@ -725,7 +844,7 @@ class DataMap(object):
         if not self.nodesToLoad:
             raise StandardError('Nothing selected or returned by the filter to load the pose onto')
 
-        if self.filepath:
+        if self.filepath and read:
             self._readPose(self.filepath)
             log.debug('Pose Read Successfully from : %s' % self.filepath)
 
@@ -740,7 +859,6 @@ class DataMap(object):
                     self.matchMethod = 'metaData'
             else:
                 log.debug('Warning, trying to load a NON metaPose to a MRig - switching to NameMatching')
-
 
         # fill the skip list, these attrs will be totally ignored by the code
         self.skipAttrs = self.getSkippedAttrs(nodes[0])
@@ -779,7 +897,7 @@ class DataMap(object):
             matchMethod = self.matchMethod
 
         # standard match method logic
-        if matchMethod == 'stripPrefix' or matchMethod == 'base':
+        if matchMethod in ['base', 'stripPrefix', 'stripSuffix', 'commonSuffix', 'commonPrefix']:  # == 'stripPrefix' or matchMethod == 'base':
             log.debug('matchMethodStandard : %s' % matchMethod)
             matchedPairs = r9Core.matchNodeLists([key for key in self.poseDict.keys()], nodes, matchMethod=matchMethod)
 
@@ -1017,8 +1135,8 @@ class PoseData(DataMap):
         'exportSkeletonRoot' or 'animSkeletonRoot' and that message is connected to a
         skeleton then the pose will also include an internal 'skeleton' pose, storing all
         child joints into a separate block in the poseFile that can be used by the
-        PoseCompare class/function.
-
+        PoseCompare class/function. 
+         
         For metaData based rigs this calls a function on the metaRig class getSkeletonRoots()
         which wraps the 'exportSkeletonRoot' attr, allowing you to overload this behaviour
         in your own MetaRig subclasses.
@@ -1219,8 +1337,7 @@ class PoseData(DataMap):
 
     # Main Calls ----------------------------------------
 
-    # @r9General.Timer
-    def poseSave(self, nodes, filepath=None, useFilter=True, storeThumbnail=True, modelPanel=None):  # 'modelPanel4'):
+    def poseSave(self, nodes, filepath=None, useFilter=True, storeThumbnail=True, modelPanel=None):
         '''
         Entry point for the generic PoseSave.
 
@@ -1230,6 +1347,11 @@ class PoseData(DataMap):
             class instance.
         :param useFilter: use the filterSettings or not.
         :param storeThumbnail: generate and store a thubmbnail from the screen to go alongside the pose
+        
+        .. note::
+            as from Oct2021 the save function will ALWAYS internally set incRoots=True so that all data is captured.
+            The user can then choose if they use that data during the load process but it seems correct to store it
+            regardless
         '''
         # push args to object - means that any poseHandler.py file has access to them
         if filepath:
@@ -1252,7 +1374,6 @@ class PoseData(DataMap):
                     cmds.select(sel)
             log.info('Pose Saved Successfully to : %s' % self.filepath)
 
-    # @r9General.Timer
     @r9General.evalManager_idleAction
     def poseLoad(self, nodes, filepath=None, useFilter=True, relativePose=False, relativeRots='projected',
                  relativeTrans='projected', maintainSpaces=False, percent=None):
@@ -1319,8 +1440,6 @@ class PoseData(DataMap):
                     reference = objs[0]
                     self.PosePointCloud = PosePointCloud(self.nodesToLoad)
                     self.PosePointCloud.buildOffsetCloud(reference, raw=True)
-#                     resetCache = [cmds.getAttr('%s.translate' % self.PosePointCloud.posePointRoot),
-#                                 cmds.getAttr('%s.rotate' % self.PosePointCloud.posePointRoot)]
                     pptRoot = r9Meta.MetaClass(self.PosePointCloud.posePointRoot)
                     resetCache = [pptRoot.translate, pptRoot.rotate]
 
@@ -1551,6 +1670,7 @@ class PosePointCloud(object):
         self.posePointRoot = None  # generated rootnode of the ppc
         self.settings = None
         self.prioritySnapOnly = prioritySnapOnly  # ONLY make ppc points for the filterPriority nodes
+        self.snapScales = False
 
         self.rootReference = None  # root node used as the main pivot for the cloud
         self.isVisible = True  # Do we build the visual reference setup or not?
@@ -1576,6 +1696,7 @@ class PosePointCloud(object):
         self.ppcMeta.connectChild(self.posePointRoot, 'posePointRoot')
         self.ppcMeta.addAttr('posePointCloudNodes', self.posePointCloudNodes)
         self.ppcMeta.addAttr('baseClass', self.__class__.__name__, attrType='string')
+        self.ppcMeta.addAttr('snapScales', self.snapScales)
 
     def syncdatafromCurrentInstance(self):
         '''
@@ -1586,6 +1707,7 @@ class PosePointCloud(object):
             self.posePointCloudNodes = self.ppcMeta.posePointCloudNodes
             self.posePointRoot = self.ppcMeta.posePointRoot[0]
             self.baseClass = self.ppcMeta.baseClass
+            self.snapScales = self.ppcMeta.snapScales
 
     def getInputNodes(self):
         '''
@@ -1631,6 +1753,23 @@ class PosePointCloud(object):
         '''
         return [target for _, target in self.posePointCloudNodes]
 
+    def matchPPCNodes(self, srcTargets):
+        '''
+        return a list of the PPC nodes which were generated against the given target nodes
+        
+        .. note::
+            the PPC contains a list of tuples where [(ppc_node, target_node),(.....]
+            with this we pass in the target and get a list back of the PPC node that
+            was generated against it        
+        '''
+        matched = []
+        for src in srcTargets:
+            for ppc, sol in self.posePointCloudNodes:
+                if sol == src:
+                    matched.append(ppc)
+                    break 
+        return matched
+
     @staticmethod
     def getCurrentInstances():
         '''
@@ -1645,7 +1784,7 @@ class PosePointCloud(object):
         for pnt, node in self.posePointCloudNodes:
             try:
                 log.debug('snapping PPT : %s' % pnt)
-                r9Anim.AnimFunctions.snap([node, pnt])
+                r9Anim.AnimFunctions.snap([node, pnt], snapScales=self.snapScales)
             except:
                 log.debug('FAILED : snapping PPT : %s' % pnt)
 
@@ -1656,7 +1795,7 @@ class PosePointCloud(object):
         for pnt, node in self.posePointCloudNodes:
             try:
                 log.debug('snapping Ctrl : %s > %s : %s' % (r9Core.nodeNameStrip(node), pnt, node))
-                r9Anim.AnimFunctions.snap([pnt, node])
+                r9Anim.AnimFunctions.snap([pnt, node], snapScales=self.snapScales)
             except:
                 log.debug('FAILED : snapping PPT : %s' % pnt)
 
@@ -1741,7 +1880,7 @@ class PosePointCloud(object):
             dupMesh = cmds.duplicate(mesh, rc=True, n=self.refMesh + str(i + currentCount))[0]
             dupShape = cmds.listRelatives(dupMesh, type='shape')[0]
             # switched to all_complete in case clients have the compound attrs locked also
-            r9Core.LockChannels().processState(dupMesh, 'all', mode='fullkey', hierarchy=False)
+            r9Core.LockChannels().processState(dupMesh, 'all_complete', mode='fullkey', hierarchy=False)
             try:
                 if selectable:
                     # turn on the overrides so the duplicate geo can be selected
@@ -1755,8 +1894,10 @@ class PosePointCloud(object):
                 log.debug('Couldnt set the draw overrides for the refGeo')
             cmds.parent(dupMesh, self.posePointRoot)
             cmds.makeIdentity(dupMesh, apply=True, t=True, r=True)
-            cmds.parent(dupShape, self.posePointRoot, r=True, s=True)
-            cmds.delete(dupMesh)
+            # for some reason Maya 2022+ isn't respecting the parent -r flag
+            if r9Setup.mayaVersion() < 2022:
+                cmds.parent(dupShape, self.posePointRoot, r=True, s=True)
+                cmds.delete(dupMesh)
 
     def applyPosePointCloud(self):
         self.snapNodestoPosePnts()
@@ -1840,14 +1981,14 @@ class PoseCompare(object):
     >>> compare.compare() #>> bool, True = same
     >>> compare.fails['failedAttrs']
     '''
-    def __init__(self, currentPose, referencePose, angularTolerance=0.1, linearTolerance=0.01,
-                 compareDict='poseDict', filterMap=[], ignoreBlocks=[], ignoreStrings=[], ignoreAttrs=[], longName=False):
+    def __init__(self, currentPose, referencePose, angularTolerance=0.1, linearTolerance=0.001,
+                 compareDict='poseDict', filterMap=[], ignoreBlocks=[], ignoreStrings=[], ignoreAttrs=[], longName=False, **kws):
         '''
         Make sure we have 2 PoseData objects to compare
         :param currentPose: either a PoseData object or a valid pose file
         :param referencePose: either a PoseData object or a valid pose file
-        :param angularTolerance: the tolerance used to check rotate attr float values
-        :param linearTolerance: the tolerance used to check all other float attrs
+        :param angularTolerance: default 0.1 : the tolerance used to check rotate attr float values
+        :param linearTolerance: default: 0.001 : the tolerance used to check all other float attrs
         :param compareDict: the internal main dict in the pose file to compare the data with : base options : 'poseDict', 'skeletonDict'
         :param filterMap: if given this is used as a high level filter, only matching nodes get compared
             others get skipped. Good for passing in a master core skeleton to test whilst ignoring extra nodes
@@ -2068,6 +2209,7 @@ def batchPatchPoses(posedir, config, poseroot, load=True, save=True, patchfunc=N
     whats this?? a fast method to run through all the poses in a given dictionary and update
     or patch them. If patchfunc isn't given it'll just run through and resave the pose - updating
     the systems if needed. If it is then it gets run between the load and save calls.
+
     :param posedir: directory of poses to process
     :param config: hierarchy settings cfg to use to ID the nodes (hierarchy tab preset = filterSettings object)
     :param poseroot: root node to the filters - poseTab rootNode/MetaRig root

@@ -1,50 +1,107 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Red9_CoreUtils &#8212; Red9 2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Red9_CoreUtils &mdash; Red9 3.0 documentation</title><link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Red9_General" href="Red9_General.html" />
     <link rel="prev" title="Red9_Audio" href="Red9_Audio.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="Red9_General.html" title="Red9_General"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="Red9_Audio.html" title="Red9_Audio"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="section" id="red9-coreutils">
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Red9<img src="../_static/Red9_ProPack_logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Red9_AnimationUtils.html">Red9_AnimationUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Audio.html">Red9_Audio</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Red9_CoreUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_General.html">Red9_General</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Meta.html">Red9_Meta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_PoseSaver.html">Red9_PoseSaver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Setup.html">Red9_Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Tools.html">Red9_Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_anim_map.html">Pro_Pack : anim_map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_animation.html">Pro_Pack : animation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_audio.html">Pro_Pack : audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_export.html">Pro_Pack : exporter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_general.html">Pro_Pack : general</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_importexport.html">Pro_Pack : importexport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_metadata_pro.html">Pro_Pack : metadata_pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_optimiser.html">Pro_Pack : optimiser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_project.html">Pro_Pack : project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_r9data.html">Pro_Pack : r9Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_rigutils.html">Pro_Pack : rigutils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_skining.html">Pro_Pack : skining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_skinning.html">Pro_Pack : skinning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/Red9_Pro_uibase.html">Pro_Pack : uibase</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Red9</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Red9_CoreUtils</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/red9core_templates/Red9_Core.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <a class="reference external image-reference" href="http://red9consultancy.com/propack"><img alt="red9core_templates\../../_images/Red9_ProPack_strap_pro.png" src="red9core_templates\../../_images/Red9_ProPack_strap_pro.png" /></a>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="section" id="red9-coreutils">
 <h1>Red9_CoreUtils<a class="headerlink" href="#red9-coreutils" title="Permalink to this headline">¶</a></h1>
 <p>Red9_CoreUtils is the backbone of much of the systems, used to filter, find and process nodes
 on mass withing Maya as well as containing a lot of core functions for dealing with data.</p>
@@ -69,7 +126,7 @@ time the tools process a hierarchy it’s these classes that deal with it.</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.stringReplace" title="Red9.core.Red9_CoreUtils.stringReplace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stringReplace</span></code></a>(text,&nbsp;replace_dict)</td>
 <td>Replace words in a text that match a key in replace_dict with the associated value, return the modified text.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Red9.core.Red9_CoreUtils.matchNodeLists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matchNodeLists</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Red9.core.Red9_CoreUtils.matchNodeLists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matchNodeLists</span></code></a>(nodeListA,&nbsp;nodeListB[,&nbsp;…])</td>
 <td>Matches 2 given NODE LISTS by node name via various methods.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh" title="Red9.core.Red9_CoreUtils.getBlendTargetsFromMesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getBlendTargetsFromMesh</span></code></a>(node[,&nbsp;asList,&nbsp;…])</td>
@@ -78,7 +135,7 @@ time the tools process a hierarchy it’s these classes that deal with it.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.processMatchedNodes" title="Red9.core.Red9_CoreUtils.processMatchedNodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">processMatchedNodes</span></code></a>([nodes,&nbsp;filterSettings,&nbsp;…])</td>
 <td>HUGELY IMPORTANT CALL FOR ALL ANIMATION FUNCTIONS</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Red9.core.Red9_CoreUtils.matchNodeLists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matchNodeLists</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Red9.core.Red9_CoreUtils.matchNodeLists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matchNodeLists</span></code></a>(nodeListA,&nbsp;nodeListB[,&nbsp;…])</td>
 <td>Matches 2 given NODE LISTS by node name via various methods.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.timeOffset_addPadding" title="Red9.core.Red9_CoreUtils.timeOffset_addPadding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">timeOffset_addPadding</span></code></a>([pad,&nbsp;padfrom,&nbsp;scene,&nbsp;…])</td>
@@ -161,15 +218,15 @@ in the given priority list are moved to the front of the list.</p>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>Known issue, if Regex=True and you have 2 similar str’s in the priority list then there’s
-a chance that matching may be erractic…</p>
+<p>Known issue, if regex=True and you have 2 similar str’s in the priority list then there’s
+a chance that matching may be erratic…</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">priorityList</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;upperLip&#39;</span><span class="p">,</span><span class="s1">&#39;l_upperLip&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;|my|dag|path|jaw&#39;</span><span class="p">,</span><span class="o">|</span><span class="n">my</span><span class="o">|</span><span class="n">dag</span><span class="o">|</span><span class="n">path</span><span class="o">|</span><span class="n">l_upperLip</span><span class="s1">&#39;,&#39;</span><span class="o">|</span><span class="n">my</span><span class="o">|</span><span class="n">dag</span><span class="o">|</span><span class="n">path</span><span class="o">|</span><span class="n">upperLip</span><span class="s1">&#39;,&#39;</span><span class="o">|</span><span class="n">my</span><span class="o">|</span><span class="n">dag</span><span class="o">|</span><span class="n">path</span><span class="o">|</span><span class="n">lowerLip</span><span class="s1">&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">returns</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;|my|dag|path|l_upperLip&#39;</span><span class="p">,</span><span class="s1">&#39;|my|dag|path|upperLip&#39;</span><span class="p">,</span><span class="o">|</span><span class="n">my</span><span class="o">|</span><span class="n">dag</span><span class="o">|</span><span class="n">path</span><span class="o">|</span><span class="n">jaw</span><span class="p">,</span><span class="s1">&#39;|my|dag|path|lowerLip]</span>
 </pre></div>
 </div>
-<p class="last">as in regex ‘l_upperLip’==’upperLip’ as well as ‘upperLip’==’upperLip’
-really in regex you’d need to be more specific:  priorityList=[‘^upperLip’,’l_upperLip’]</p>
+<p class="last">as in regex <strong>‘l_upperLip’==’upperLip’</strong> as well as <strong>‘upperLip’==’upperLip’</strong>. 
+Really in regex you’d need to be more specific:  <strong>priorityList=[‘^upperLip’,’l_upperLip’]</strong></p>
 </div>
 </dd></dl>
 
@@ -186,6 +243,56 @@ really in regex you’d need to be more specific:  priorityList=[‘^upperLip’
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># sortNumerically gives us:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sortNumerically</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="s1">&#39;Joint_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_2&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_9&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_10&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_11&#39;</span><span class="p">,</span> <span class="s1">&#39;Joint_12&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.sorted_nicely">
+<code class="descname">sorted_nicely</code><span class="sig-paren">(</span><em>items</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.sorted_nicely" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort the given iterable in the way that humans expect.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.common_suffix">
+<code class="descname">common_suffix</code><span class="sig-paren">(</span><em>test_list</em>, <em>suggested=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.common_suffix" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a list of strings return the common suffix. Note that all of the 
+strings given have to share the same suffix else we return None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>suggested</strong> – if True and not all strings share the same common suffix then
+we suggest a suffix based on the percentage of matches</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">test_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pelvis_drv&#39;</span><span class="p">,</span> <span class="s1">&#39;spine_01_drv&#39;</span><span class="p">,</span> <span class="s1">&#39;spine_02_drv&#39;</span><span class="p">,</span> <span class="s1">&#39;spine_03_drv&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">common_suffix</span><span class="p">(</span><span class="n">test_list</span><span class="p">)</span>  <span class="c1"># return &#39;_drv&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.common_prefix">
+<code class="descname">common_prefix</code><span class="sig-paren">(</span><em>test_list</em>, <em>suggested=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.common_prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a list of strings return the common prefix. Note that all of the 
+strings given have to share the same prefix else we return None</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>test_list</strong> – list of strings we’re going to test</li>
+<li><strong>suggested</strong> – if True and not all strings share the same common prefix then
+we suggest a prefix based on the percentage of matches</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">test_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bob_pelvis_drv&#39;</span><span class="p">,</span> <span class="s1">&#39;bob_spine_01_drv&#39;</span><span class="p">,</span> <span class="s1">&#39;bob_spine_02_drv&#39;</span><span class="p">,</span> <span class="s1">&#39;bob_spine_03_drv&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">common_prefix</span><span class="p">(</span><span class="n">test_list</span><span class="p">)</span>  <span class="c1"># return &#39;bob_&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -270,15 +377,17 @@ eg : ‘brows,smile,funnel’</li>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">this is a Regex search but it’s carefully managed under the hood.
-&gt;&gt; ‘attack knife’ : yield matches with ‘attack’ and ‘knife’ in the string in that order, similar to ‘attack*.*knife in windows, compiles to (‘attack.*knife’)
-&gt;&gt; ‘knife+attack’ : yield matches where order does not matter but the string has to contain both ‘attack’ and ‘knife’
-&gt;&gt; ‘attack..knife’ would yield matches with ‘attack12knife’ 2 wildcards between the params (dots are wildcards in regex), compiles to (‘attack..knife’)
-&gt;&gt; ‘attack.*knife’ would yield matches with ‘attack_big_massive_knife’ because of the .* is multiple wildcards between the search params, compiles to (‘attack.*knife’)
-&gt;&gt; ‘attack,knife’ would yield matches with either ‘attack’ and ‘knife’ in the string, compiles to (‘attack|knife’) with the ‘|’ or operator
-&gt;&gt; ‘attack|knife’ same as above
-&gt;&gt; ‘attack$’ would match ‘we_attack’ but not ‘they_attacked’ as the $ is used here as the end of the search string
-&gt;&gt; ^attack’ would match ‘attack_then’ but not ‘they_attack’ as the ^ clamps to the front of the string</p>
+<p>this is a Regex search but it’s carefully managed under the hood.</p>
+<ul class="last simple">
+<li><strong>‘attack knife’</strong> : yield matches with ‘attack’ and ‘knife’ in the string in that order, similar to ‘attack*.*knife in windows, compiles to (‘attack.*knife’)</li>
+<li><strong>‘knife+attack’</strong> : yield matches where order does not matter but the string has to contain both ‘attack’ and ‘knife’</li>
+<li><strong>‘attack..knife’</strong> would yield matches with ‘attack12knife’ 2 wildcards between the params (dots are wildcards in regex), compiles to (‘attack..knife’)</li>
+<li><strong>‘attack.*knife’</strong> would yield matches with ‘attack_big_massive_knife’ because of the .* is multiple wildcards between the search params, compiles to (‘attack.*knife’)</li>
+<li><strong>‘attack,knife’</strong> would yield matches with either ‘attack’ and ‘knife’ in the string, compiles to (‘attack|knife’) with the ‘|’ or operator</li>
+<li><strong>‘attack|knife’</strong> same as above</li>
+<li><strong>‘attack$’</strong> would match ‘we_attack’ but not ‘they_attacked’ as the $ is used here as the end of the search string</li>
+<li><strong>^attack’</strong> would match ‘attack_then’ but not ‘they_attack’ as the ^ clamps to the front of the string</li>
+</ul>
 </div>
 </dd></dl>
 
@@ -322,6 +431,29 @@ This checks the target for child constraints, then checks the target list
 for those constraints to see if the src is in the list, if so it’s added to the return</p>
 </dd></dl>
 
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.parent">
+<code class="descname">parent</code><span class="sig-paren">(</span><em>children</em>, <em>parent=None</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>this is a simple parent call but includes a base check. It’s simply wrapping Maya’s parent call
+but doing the check to see if the children are already parented to the given node, and if so, just returning
+the full path of the children</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>children</strong> – [] children to parent / check parenting</li>
+<li><strong>parent</strong> – parent to move the child under</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">the newly parented full dag path</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="class">
 <dt id="Red9.core.Red9_CoreUtils.FilterNode_Settings">
 <em class="property">class </em><code class="descname">FilterNode_Settings</code><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode_Settings" title="Permalink to this definition">¶</a></dt>
@@ -329,9 +461,9 @@ for those constraints to see if the src is in the list, if so it’s added to th
 <p>Simple concept, this settings object is passed into the filterNode Calls
 and is used to setup how hierarchies are processed and filtered. This is
 class is used through out Red in conjunction with the filterNode class.</p>
-<dl class="docutils">
-<dt>Default settings bound:</dt>
-<dd><ul class="first last simple">
+<p>default settings bound:</p>
+<blockquote>
+<div><ul class="simple">
 <li>nodeTypes: []  - search for given Maya nodeTypes’</li>
 <li>searchAttrs: [] - search for given attributes on nodes</li>
 <li>searchPattern: [] - search for nodeName patterns</li>
@@ -341,10 +473,11 @@ class is used through out Red in conjunction with the filterNode class.</p>
 <li>incRoots: True - process rootNodes in the filters</li>
 <li>transformClamp: True - clamp any nodes found to their transforms</li>
 <li>infoBlock: ‘’</li>
+<li>prefix: ‘’ - know prefix thats been used on these nodes</li>
+<li>suffix: ‘’ - known suffix thats been used on these nodes</li>
 <li>rigData: {}</li>
 </ul>
-</dd>
-</dl>
+</div></blockquote>
 <dl class="method">
 <dt id="Red9.core.Red9_CoreUtils.FilterNode_Settings.filterIsActive">
 <code class="descname">filterIsActive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode_Settings.filterIsActive" title="Permalink to this definition">¶</a></dt>
@@ -464,14 +597,16 @@ then set the internal settings to filter the hierarchy for all child nurbsCurves
 who’s name includes ‘Ctrl’. Finally the ProcessFilter runs the main call.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">the searchPattern is a compiled Regex search but it’s managed under the hood.
-&gt;&gt; ‘attack knife’ would yield matches with ‘attack and knife in the string, similar to ‘attack*.*knife in windows, compiles to (‘attack.*knife’)
-&gt;&gt; ‘attack..knife’ would yield matches with ‘attack12knife’ 2 wildcards between the params (dots are wildcards in regex), compiles to (‘attack..knife’)
-&gt;&gt; ‘attack.*knife’ would yield matches with ‘attack_big_massive_knife’ because of the .* is multiple wildcards between the search params, compiles to (‘attack.*knife’)
-&gt;&gt; ‘attack,knife’ would yield matches with either ‘attack’ and ‘knife’ in the string, compiles to (‘attack|knife’) with the ‘|’ or operator
-&gt;&gt; ‘attack|knife’ same as above
-&gt;&gt; ‘attack$’ would match ‘we_attack’ but not ‘they_attacked’ as the $ is used here as the end of the search string
-&gt;&gt; ^attack’ would match ‘attack_then’ but not ‘they_attack’ as the ^ clamps to the front of the string</p>
+<p>the searchPattern is a compiled Regex search but it’s managed under the hood.</p>
+<ul class="last simple">
+<li><strong>‘attack knife’</strong> : would yield matches with ‘attack and knife in the string, similar to ‘attack*.*knife in windows, compiles to (‘attack.*knife’)</li>
+<li><strong>‘attack..knife’</strong> : would yield matches with ‘attack12knife’ 2 wildcards between the params (dots are wildcards in regex), compiles to (‘attack..knife’)</li>
+<li><strong>‘attack.*knife’</strong> : would yield matches with ‘attack_big_massive_knife’ because of the .* is multiple wildcards between the search params, compiles to (‘attack.*knife’)</li>
+<li><strong>‘attack,knife’</strong> : would yield matches with either ‘attack’ and ‘knife’ in the string, compiles to (‘attack|knife’) with the ‘|’ or operator</li>
+<li><strong>‘attack|knife’</strong> : same as above</li>
+<li><strong>‘attack$’</strong> : would match ‘we_attack’ but not ‘they_attacked’ as the $ is used here as the end of the search string</li>
+<li><strong>^attack’</strong> : would match ‘attack_then’ but not ‘they_attack’ as the ^ clamps to the front of the string</li>
+</ul>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -688,10 +823,10 @@ keyword then it will return a dict in the form {node,attrValue}</p>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If the searchAttrs has an entry in the form NOT:searchAttr then this will be forcibly
-excluded from the filter. Also you can now do ‘myAttr=2.33’ to only pass if the attr is equal
-similarly ‘NOT:myAttr=2.33’ will exclude if the value is equal
-see the ..Red9     estsRed9_CoreUtilTests.py for live unittest examples</p>
+<p class="last">If the searchAttrs has an entry in the form <strong>NOT:searchAttr</strong> then this will be forcibly
+excluded from the filter. Also you can now do <strong>myAttr=2.33</strong> to only pass if the attr is equal
+similarly <strong>NOT:myAttr=2.33</strong> will exclude if the value is equal
+see the “..Red9    estsRed9_CoreUtilTests.py” for live unittest examples</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -720,9 +855,9 @@ Valid only if the Class is in ‘Selected’ processMode only.</li>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If the searchPattern has an entry in the form NOT:searchtext then this will be forcibly
+<p class="last">If the searchPattern has an entry in the form <strong>NOT:searchtext</strong> then this will be forcibly
 excluded from the filter. ie, My_L_Foot_Ctrl will be excluded with the following pattern
-[‘Ctrl’,’NOT:My’] where Ctrl finds it, but the ‘NOT:My’ tells the filter to skip it if found</p>
+<strong>[‘Ctrl’,’NOT:My’]</strong> where Ctrl finds it, but the ‘NOT:My’ tells the filter to skip it if found</p>
 </div>
 </dd></dl>
 
@@ -748,12 +883,21 @@ subCharacterSets too</p>
 <dt id="Red9.core.Red9_CoreUtils.FilterNode.lsMetaRigControllers">
 <code class="descname">lsMetaRigControllers</code><span class="sig-paren">(</span><em>walk=True</em>, <em>incMain=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode.lsMetaRigControllers" title="Permalink to this definition">¶</a></dt>
 <dd><p>very light wrapper to handle MetaData in the FilterSystems. This is hard coded
-to find CTRL markered attrs and give back the attached nodes
-:param walk: walk the found systems for subSystems and process those too
-:param incMain: Like the other filters we allow the given top</p>
-<blockquote>
-<div>node in the hierarchy to be removed from processing. In a MetaRig
-this is the CTRL_Main controller which should be Top World Space</div></blockquote>
+to find CTRL markered attrs and give back the attached nodes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>walk</strong> – walk the found systems for subSystems and process those too</li>
+<li><strong>incMain</strong> – Like the other filters we allow the given top
+node in the hierarchy to be removed from processing. In a MetaRig
+this is the CTRL_Main controller which should be Top World Space</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -841,7 +985,7 @@ Uses the FilterNode_Settings object for all args such that:</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.matchNodeLists">
-<code class="descname">matchNodeLists</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Permalink to this definition">¶</a></dt>
+<code class="descname">matchNodeLists</code><span class="sig-paren">(</span><em>nodeListA</em>, <em>nodeListB</em>, <em>matchMethod='stripPrefix'</em>, <em>returnfails=False</em>, <em>prefix=''</em>, <em>suffix=''</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.matchNodeLists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Matches 2 given NODE LISTS by node name via various methods.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -852,18 +996,27 @@ Uses the FilterNode_Settings object for all args such that:</p>
 <li><strong>nodeListB</strong> – list of nodes</li>
 <li><strong>returnfails</strong> – if True we return [matchedData, unmatched] so that we can pass the unmatched list for further processing</li>
 <li><strong>matchMethod</strong> – <p>default ‘stripPrefix’</p>
-<div class="line-block">
-<div class="line">* matchMethod=”index” : no intelligent matching, just purely zip the lists
-together in the order they were given</div>
-<div class="line">* matchMethod=”indexReversed” : no intelligent matching, just purely zip
-the lists together in the reverse order they were given</div>
-<div class="line">* matchMethod=”base” :  match each element by exact name (shortName) such
-that Spine==Spine or REF1:Spine==REF2:Spine</div>
-<div class="line">* matchMethod=”stripPrefix” : match each element by a relaxed naming convention
-allowing for prefixes one side such that RigX_Spine == Spine</div>
-<div class="line">* matchMethod=”mirrorIndex” : match via the nodes MirrorMarker</div>
-<div class="line">* matchMethod=”metaData” : match the nodes based on their wiring connections to the MetaData framework</div>
-</div>
+<ul>
+<li>matchMethod=”index” : no intelligent matching, just purely zip the lists             together in the order they were given</li>
+<li>matchMethod=”indexReversed” : no intelligent matching, just purely zip             the lists together in the reverse order they were given</li>
+<li>matchMethod=”base” :  match each element by exact name (shortName) such             that Spine==Spine or REF1:Spine==REF2:Spine</li>
+<li>matchMethod=”stripPrefix” : match each element by a relaxed naming convention             allowing for prefixes one side such that RigX_Spine == Spine</li>
+<li>matchMethod=”stripSuffix” : match each element by a relaxed naming convention             allowing for suffixes one side such that Spine_DRV == Spine</li>
+<li><dl class="first docutils">
+<dt>matchMethod=”commonPrefix” <span class="classifier-delimiter">:</span> <span class="classifier">match each element by a relaxed naming convention             allowing for prefixes such that RigX_Spine == Spine. This tries to ID a single prefix on either</span></dt>
+<dd>side and uses those as the keys for the match. “stripPrefix” method falls over if you have multiple
+nodes where nodeA.endswith(nodeB) ie:/ spine_04 == drv_spine_04 but also spine_04 == drv_leg_spine_04</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>matchMethod=”commonSuffix” <span class="classifier-delimiter">:</span> <span class="classifier">match each element by a relaxed naming convention             allowing for suffixes such that Spine_DRV == Spine. This tries to ID a single suffix on either</span></dt>
+<dd>side and uses those as the keys for the match. “stripSuffix” method falls over if you have multiple
+nodes where nodeA.endswith(nodeB) ie:/ spine_04 == spine_04_drv but also spine_04 == spine_04_leg_drv</dd>
+</dl>
+</li>
+<li>matchMethod=”mirrorIndex” : match via the nodes MirrorMarker</li>
+<li>matchMethod=”metaData” : match the nodes based on their wiring connections to the MetaData framework</li>
+</ul>
 </li>
 </ul>
 </td>
@@ -902,6 +1055,12 @@ node to all subsequent nodes [(ObjA,ObjB),(ObjA,ObjC),(ObjA,ObjD) ….</li>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the filterSettings object now has “.prefix” and “.suffix” settings which can be used in the
+match calls for a more accurate stripPrefix or stripSuffix call. This allows you to match against
+a known / given prefix / suffix string on the hierarch nodes to match</p>
+</div>
 </dd></dl>
 
 <dl class="class">
@@ -920,13 +1079,13 @@ functions that work on carefully managed matched pairs of nodes.</p>
 <li><strong>filterSettings</strong> – <p>This is a FilterSettings_Node object used to pass all
 the filter types into the FilterNode code within. Internally the following
 is true:</p>
-<div class="line-block">
-<div class="line">settings.nodeTypes: list[] - search nodes of type</div>
-<div class="line">settings.searchAttrs: list[] - search nodes with Attrs of name</div>
-<div class="line">settings.searchPattern: list[] - search for a given nodeName searchPattern</div>
-<div class="line">settings.hierarchy: bool - process all children from the roots</div>
-<div class="line">settings.incRoots: bool - include the original root nodes in the filter</div>
-</div>
+<ul>
+<li>settings.nodeTypes: list[] - search nodes of type</li>
+<li>settings.searchAttrs: list[] - search nodes with Attrs of name</li>
+<li>settings.searchPattern: list[] - search for a given nodeName searchPattern</li>
+<li>settings.hierarchy: bool - process all children from the roots</li>
+<li>settings.incRoots: bool - include the original root nodes in the filter</li>
+</ul>
 </li>
 </ul>
 </td>
@@ -948,9 +1107,17 @@ into selected pairs obj[0]&gt;obj[1], obj[2]&gt;obj[3] etc</p>
 <dd><p>Filter selected roots for hierarchy matching using a FilterNode and it’s
 settings object if one was passed in to the main class.
 This uses the ProcessFilter() method for powerful pre-filtering before
-passing the results into the matchNodeLists func.
-:rtype: tuple
-:return: a matched pair list of nodes</p>
+passing the results into the matchNodeLists func.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a matched pair list of nodes</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -1151,13 +1318,13 @@ we skip the node and all childnodes from that node. Why?? The mSystsmRoot attr i
 root of a given mRig system, by respecting this we clamp searches to the current system and prevent
 walking into the connected child sub-system. Primarily used in ProPack to stop facial nodes being
 returned and processed as part of the connected body rig.</p>
-<div class="line-block">
-<div class="line">settings.nodeTypes: list[] - search nodes of type</div>
-<div class="line">settings.searchAttrs: list[] - search nodes with Attrs of name</div>
-<div class="line">settings.searchPattern: list[] - search for a given nodeName searchPattern</div>
-<div class="line">settings.hierarchy: bool - process all children from the roots</div>
-<div class="line">settings.incRoots: bool - include the original root nodes in the filter</div>
-</div>
+<ul>
+<li>settings.nodeTypes: list[] - search nodes of type</li>
+<li>settings.searchAttrs: list[] - search nodes with Attrs of name</li>
+<li>settings.searchPattern: list[] - search for a given nodeName searchPattern</li>
+<li>settings.hierarchy: bool - process all children from the roots</li>
+<li>settings.incRoots: bool - include the original root nodes in the filter</li>
+</ul>
 </li>
 </ul>
 </td>
@@ -1434,61 +1601,34 @@ of the jointOrient matrix, after the rotation matrix</p>
 </div>
 
 
+           </div>
           </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Red9_Audio.html" class="btn btn-neutral float-left" title="Red9_Audio" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Red9_General.html" class="btn btn-neutral float-right" title="Red9_General" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Red9 Consultancy Limited.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="Red9_Audio.html"
-                        title="previous chapter">Red9_Audio</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="Red9_General.html"
-                        title="next chapter">Red9_General</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/red9core_templates/Red9_Core.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="Red9_General.html" title="Red9_General"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="Red9_Audio.html" title="Red9_Audio"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Red9 2.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

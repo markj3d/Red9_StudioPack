@@ -1,60 +1,113 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Pro_Pack : tools : anim_binder &#8212; Red9 2.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pro_Pack : tools : anim_binder &mdash; Red9 3.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Pro_Pack : tools : anim_tools" href="Red9_Pro_anim_tools.html" />
     <link rel="prev" title="Pro_Pack : uibase" href="../Red9_Pro_uibase.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="Red9_Pro_anim_tools.html" title="Pro_Pack : tools : anim_tools"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../Red9_Pro_uibase.html" title="Pro_Pack : uibase"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Red9 2.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Red9<img src="../../_static/Red9_ProPack_logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_AnimationUtils.html">Red9_AnimationUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Audio.html">Red9_Audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Core.html">Red9_CoreUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_General.html">Red9_General</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Meta.html">Red9_Meta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_PoseSaver.html">Red9_PoseSaver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Setup.html">Red9_Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Tools.html">Red9_Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_animation.html">Pro_Pack : animation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_audio.html">Pro_Pack : audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_export.html">Pro_Pack : exporter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_general.html">Pro_Pack : general</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_importexport.html">Pro_Pack : importexport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_metadata_pro.html">Pro_Pack : metadata_pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_optimiser.html">Pro_Pack : optimiser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_project.html">Pro_Pack : project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_r9data.html">Pro_Pack : r9Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_rigutils.html">Pro_Pack : rigutils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_skinning.html">Pro_Pack : skinning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_uibase.html">Pro_Pack : uibase</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pro_Pack : tools : anim_binder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Red9</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Pro_Pack : tools : anim_binder</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/red9pro_templates/tools/Red9_Pro_anim_binder.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <div class="section" id="pro-pack-tools-anim-binder">
 <h1>Pro_Pack : tools : anim_binder<a class="headerlink" href="#pro-pack-tools-anim-binder" title="Permalink to this headline">¶</a></h1>
 <p>ProPack anim_binder module is the replacement of the original AnimationBinder
 module which was done back in 2011 for the Autodesk MasterClass support files.
 This deals with creating the BND binder files themselves.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9anim_binder</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9anim_binder&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<span class="target" id="module-Red9.pro_pack.tools.anim_binder"></span><p>Base Animation Binder with little or no other code benefits other than UI based system calls</p>
+<span class="target" id="module-Red9.pro_pack.tools.anim_binder"></span><p>Red9 Base Animation Binder systems designed to build your own BND files used by the
+Pro_to_BND setup in ProPack. This is essentially an upgraded version of the original codebase 
+produced for the Autodesk MasterClass</p>
 <p class="rubric">Main Classes</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -74,6 +127,14 @@ This deals with creating the BND binder files themselves.</p>
 <code class="descname">get_bind_nodes</code><span class="sig-paren">(</span><em>rootNode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.get_bind_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>From selected root find all BindNodes via the marker attribute ‘BindNode’
 Note we’re not casting to PyNodes here for speed here</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rootNode</strong> – the top of the hierarchy we’re going to scan for the marker attribute</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -81,6 +142,14 @@ Note we’re not casting to PyNodes here for speed here</p>
 <code class="descname">get_bound_controls</code><span class="sig-paren">(</span><em>rootNode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.get_bound_controls" title="Permalink to this definition">¶</a></dt>
 <dd><p>From selected root find all BoundControllers via the marker attribute ‘BoundCtr’
 Note we’re not casting to PyNodes here for speed here</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rootNode</strong> – the top of the hierarchy we’re going to scan for the marker attribute</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -90,12 +159,37 @@ Note we’re not casting to PyNodes here for speed here</p>
 were found then search for the BindNode attr and use the message links to walk to
 the matching Controller.
 Those found are then baked out and the marker attribute is deleted</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rootNode</strong> – the top of the hierarchy we’re going to scan for the ‘BoundCtr’ marker attribute</li>
+<li><strong>debugView</strong> – If False we suspend Maya timeline refresh</li>
+<li><strong>ignoreInFilter</strong> – [] specific list on ctrls to ignore when filtering the rootNode</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.pro_pack.tools.anim_binder.match_given_hierarchys">
 <code class="descname">match_given_hierarchys</code><span class="sig-paren">(</span><em>source</em>, <em>dest</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.match_given_hierarchys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple node name matching that strips any DAG path and namespaces prior to matching</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source</strong> – [] source node list</li>
+<li><strong>dest</strong> – [] dest node list</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -221,15 +315,18 @@ then we bind directly to its ‘HIKCharacterNode’ instead.</p>
 <dl class="staticmethod">
 <dt id="Red9.pro_pack.tools.anim_binder.BindNodeBase.add_bind_markers">
 <em class="property">static </em><code class="descname">add_bind_markers</code><span class="sig-paren">(</span><em>Ctr</em>, <em>BndNode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase.add_bind_markers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>adds the ‘BoundCtr’ marker attr to the given node and wires it via
+message link to the BndNode if given for the BakeCode to find</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.tools.anim_binder.BindNodeBase.make_bind_base">
 <code class="descname">make_bind_base</code><span class="sig-paren">(</span><em>Name=None</em>, <em>GeoType=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase.make_bind_base" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make the unaligned BindGeo setup, this proc is overwritten for more complex binds
 Note: the BindNode is returned as a dic where [‘Main’] is always the node that
-ultimately the constraints get made too, and [‘Root’] is the root of the BindGroup
-<a href="#id1"><span class="problematic" id="id2">*</span></a>arg Name :  BaseName of the matchNode</p>
+ultimately the constraints get made too, and [‘Root’] is the root of the BindGroup</p>
+<p>:param Name :  BaseName of the matchNode
+:param GeoType: type of shape node we’re going to create ‘Diamond’, ‘Locator’, ‘Sphere’</p>
 </dd></dl>
 
 <dl class="method">
@@ -265,17 +362,17 @@ if self.skip_rot_axis or self.skip_trans_axis then we pass that to the binds mad
 <dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.tools.anim_binder.BindNodeBase" title="Red9.pro_pack.tools.anim_binder.BindNodeBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.tools.anim_binder.BindNodeBase</span></code></a></p>
 <p>Second more complex Bind type used for the Wrists, Feet and any chain where you may
 need to isolate the rotate and translates. This allows you to easily extend the limb
-lengths whilst maintaining easily editable data.
-<a href="#id3"><span class="problematic" id="id4">*</span></a>arg source : Driver Joint
-<a href="#id5"><span class="problematic" id="id6">*</span></a>arg destination : Rig Controller to be Bound
-<a href="#id7"><span class="problematic" id="id8">*</span></a>arg settings : a Bindsettings object</p>
+lengths whilst maintaining easily editable data.</p>
+<p>:param source : Driver Joint
+:param destination : Rig Controller to be Bound
+:param settings : a Bindsettings object</p>
 <dl class="method">
 <dt id="Red9.pro_pack.tools.anim_binder.BindNodeTwin.make_bind_base">
 <code class="descname">make_bind_base</code><span class="sig-paren">(</span><em>Name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.BindNodeTwin.make_bind_base" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make the unaligned BindGeo and group/parent it up to the driver Source Joint
 Note: the BindNode is returns as a dic where [‘Main’] is always the node that
 ultimately the constraints get made too, and [‘Root’] is the root of the BindGroup
-<a href="#id9"><span class="problematic" id="id10">*</span></a>arg Name :  BaseName of the matchNode</p>
+<a href="#id1"><span class="problematic" id="id2">*</span></a>arg Name :  BaseName of the matchNode</p>
 </dd></dl>
 
 <dl class="method">
@@ -375,61 +472,34 @@ ultimately the constraints get made too, and [‘Root’] is the root of the Bin
 </div>
 
 
+           </div>
           </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../Red9_Pro_uibase.html" class="btn btn-neutral float-left" title="Pro_Pack : uibase" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Red9_Pro_anim_tools.html" class="btn btn-neutral float-right" title="Pro_Pack : tools : anim_tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Red9 Consultancy Limited.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../Red9_Pro_uibase.html"
-                        title="previous chapter">Pro_Pack : uibase</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="Red9_Pro_anim_tools.html"
-                        title="next chapter">Pro_Pack : tools : anim_tools</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/red9pro_templates/tools/Red9_Pro_anim_binder.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="Red9_Pro_anim_tools.html" title="Pro_Pack : tools : anim_tools"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../Red9_Pro_uibase.html" title="Pro_Pack : uibase"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Red9 2.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Mark Jackson.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>
