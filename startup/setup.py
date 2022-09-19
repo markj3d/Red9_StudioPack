@@ -1518,6 +1518,21 @@ def load_shelf(shelf_path):
     # restore users top shelf
     cmds.shelfTabLayout(gShelfTopLevel, e=True, st=top)
 
+def insert_python_security_optvars():
+    '''
+    <<< Testing Only >>>
+    insert Red9 module imports into the safety setups for Maya Python. We're
+    still a little unsure what triggers the prompts as they seem very sporadic,
+    if they were consistent it would be a little easier to track down!
+    '''
+    safeimports = cmds.optionVar(q='SafeModeImportModulesList')
+    red9_modules = ['Red9.core',
+                    'Red9.pro_pack',
+                    'Red9.packages']
+    
+    for mod in red9_modules:
+        if mod not in safe:
+            cmds.optionVar(sva=('SafeModeImportModulesList', mod))
 
 # -----------------------------------------------------------------------------------------
 # PRO PACK ---

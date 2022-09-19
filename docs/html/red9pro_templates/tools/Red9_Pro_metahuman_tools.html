@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pro_Pack : tools : metahuman_tools &mdash; Red9 3.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Pro_Pack : tools : project_manager" href="Red9_Pro_project_manager.html" />
+    <link rel="prev" title="Pro_Pack : tools : health_manager" href="Red9_Pro_health_manager.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Red9<img src="../../_static/Red9_ProPack_logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_AnimationUtils.html">Red9_AnimationUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Audio.html">Red9_Audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Core.html">Red9_CoreUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_General.html">Red9_General</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Meta.html">Red9_Meta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_PoseSaver.html">Red9_PoseSaver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Setup.html">Red9_Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Tools.html">Red9_Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_anim_map.html">Pro_Pack : anim_map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_animation.html">Pro_Pack : animation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_audio.html">Pro_Pack : audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_export.html">Pro_Pack : exporter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_general.html">Pro_Pack : general</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_importexport.html">Pro_Pack : importexport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_metadata_pro.html">Pro_Pack : metadata_pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_optimiser.html">Pro_Pack : optimiser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_project.html">Pro_Pack : project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_r9data.html">Pro_Pack : r9Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_rigutils.html">Pro_Pack : rigutils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_skining.html">Pro_Pack : skining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_skinning.html">Pro_Pack : skinning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_uibase.html">Pro_Pack : uibase</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pro_Pack : tools : metahuman_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Red9</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Pro_Pack : tools : metahuman_tools</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/red9pro_templates/tools/Red9_Pro_metahuman_tools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="pro-pack-tools-metahuman-tools">
+<h1>Pro_Pack : tools : metahuman_tools<a class="headerlink" href="#pro-pack-tools-metahuman-tools" title="Permalink to this headline">¶</a></h1>
+<p>metahuman_tools module is designed specifically to hook into and automate the
+integration or Unreal’s MetaHuman rigs to the Red9 ProPack.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9metahuman_tools</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9metahuman_tools&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<span class="target" id="module-Red9.pro_pack.tools.metahuman_tools"></span><p>MetaHuman base support tools + publish call &amp; UI/ Allows us to publish new MetaHumans
+against a given pre-published base PuppetRig asset. Including the wiring up of the root_drv skeleton,
+hooking up all the MetaData wires, and wiring up the MetaHuman facial board to the new mclass nodes</p>
+<p class="rubric">Main Classes</p>
+<dl class="function">
+<dt id="Red9.pro_pack.tools.metahuman_tools.lod_group_picker">
+<code class="descname">lod_group_picker</code><span class="sig-paren">(</span><em>geo_grp</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.metahuman_tools.lod_group_picker" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple proc to return the required lod group under a given node.
+This checks the naming structures for ‘name_lodx_grp’ and raises a confirmDialog
+allowing you to pick the required lod grp. This is used by the connection code
+to prevent ALL meshes under all LOD grps being wired to the renderMeshes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.metahuman_tools.delete_current_facial_mNode">
+<code class="descname">delete_current_facial_mNode</code><span class="sig-paren">(</span><em>verbose=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.metahuman_tools.delete_current_facial_mNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete the current instance of the Pro_MetaRig_Facial_MetaHuman node</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.metahuman_tools.get_facial_root_jnt">
+<code class="descname">get_facial_root_jnt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.metahuman_tools.get_facial_root_jnt" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrapper to return the facial root jnt. By default MH facial starts at ‘DHIhead:spine_04’
+however, for export purposes this breaks skeletal outputs so we recommend re-inserting 
+the ‘DHIhead:root’ jnt. This proc deals with that and returns the top of the facial
+skeleton hierarchy regardless.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.metahuman_tools.wire_expression_attrs_to_root">
+<code class="descname">wire_expression_attrs_to_root</code><span class="sig-paren">(</span><em>rootjnt=None</em>, <em>ctrl_expression=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.metahuman_tools.wire_expression_attrs_to_root" title="Permalink to this definition">¶</a></dt>
+<dd><p>wire the attributes on the CTRL_Expression node directly to the root jnt for export purposes.
+The Export of the ctrls is only relevant and supported in cinematic not in blueprint
+so this fixes that limitation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rootjnt</strong> – (auto found if not given) the jnt we’ll be wiring too, else we use the METAHUMAN_FACIAL_ROOT_JNT global to try and id the jnt</li>
+<li><strong>ctrl_expression</strong> – (auto found if not given) the CTRL_expressions node in the MH facial rig that holds all of the channel targets for the system</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.metahuman_tools.wire_metahuman_facial">
+<code class="descname">wire_metahuman_facial</code><span class="sig-paren">(</span><em>headgrp=None</em>, <em>ctrlmain=None</em>, <em>geo_grp=None</em>, <em>charname=None</em>, <em>mrig=None</em>, <em>wire_expressions=False</em>, <em>lod_grp=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.metahuman_tools.wire_metahuman_facial" title="Permalink to this definition">¶</a></dt>
+<dd><p>One hit function to wire the current MetaHuman Facial Rig up to our custom Pro_MetaRig_MetaHuman
+classes. This exposes the exporter hooks, all of the FacialUI systems and support and the imageplane
+and r9Anim hooks. Basically turning the MetaHuman facial rig into a nearly native Red9 FacialRig</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>headgrp</strong> – METAHUMAN_FACIAL_GRP : the main grp for the MH facialRig</li>
+<li><strong>ctrlmain</strong> – METAHUMAN_FACIAL_CTRLMAIN : the CTRL_faceGUI grp</li>
+<li><strong>geo_grp</strong> – METAHUMAN_FACIAL_GEO_GRP : the root group for all of the Head meshes, used to wire the renderMeshes up</li>
+<li><strong>mrig</strong> – instance of a body mrig node to hook this into as a child facial rig</li>
+<li><strong>lod_grp</strong> – lod grp containing the child meshes for the renderMeshes, if not given we open up a confirmDialog to enable you to specify which LOD group you want to use.
+With LOD PICKER UI that shows the “ALL” button would return r9metahuman_tools.METAHUMAN_FACIAL_GEO_GRP which is the “head_grp|geometry_grp”</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parma name:</th><td class="field-body"><p class="first last">the name for the given character to build</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this uses a number of global vars within this module to id the base names of MH nodes IF
+you’ve not already passed them directly into the args of the func;
+METAHUMAN_FACIAL_GRP, METAHUMAN_FACIAL_CTRLMAIN, METAHUMAN_FACIAL_GEO_GRP</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.metahuman_tools.reference_metahuman_facial">
+<code class="descname">reference_metahuman_facial</code><span class="sig-paren">(</span><em>metahuman_facial=None</em>, <em>name=''</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.metahuman_tools.reference_metahuman_facial" title="Permalink to this definition">¶</a></dt>
+<dd><p>reference and connect a MetaHuman Facial file to the MetaHuman body nodes. If the file
+isn’t given we assume it’s already in the scene and proceed with the connection setups.
+Note that this should be a file just with the MetaHuman facial setup in it, nothing else.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>metahuman_facial</strong> – optional path to a MH_facial file which will get referenced
+into the current scene and connected up to the MH_body nodes</li>
+<li><strong>name</strong> – name inserted into the export tag systems for the facial node, if not given and we have an</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>mRig in the scene then we sync the tagID to that of the mRig</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>the MH Facial rig being managed must have already been connected to the Pro_MetaRig_Facial_MetaHuman
+via the RigManager calls. If you want to manually add the nodes in code use the following</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r9metahuman_tools</span><span class="o">.</span><span class="n">wire_metahuman_facial</span><span class="p">(</span><span class="n">charname</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.metahuman_tools.Publish_MetaHuman">
+<em class="property">class </em><code class="descname">Publish_MetaHuman</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.metahuman_tools.Publish_MetaHuman" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
+<p>a simple class that wraps the publish call. This will, in time expand if we have more
+clients running MetaHuman body and or facial setups</p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.metahuman_tools.Publish_MetaHuman.set_path_pub">
+<code class="descname">set_path_pub</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.metahuman_tools.Publish_MetaHuman.set_path_pub" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.metahuman_tools.Publish_MetaHuman.set_path_metahuman">
+<code class="descname">set_path_metahuman</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.metahuman_tools.Publish_MetaHuman.set_path_metahuman" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.metahuman_tools.Publish_MetaHuman.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.metahuman_tools.Publish_MetaHuman.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>main run call</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.metahuman_tools.Publish_MetaHuman.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.tools.metahuman_tools.Publish_MetaHuman.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.tools.metahuman_tools.run_publish">
+<code class="descname">run_publish</code><span class="sig-paren">(</span><em>pub_file</em>, <em>metahuman_file</em>, <em>metahuman_facial=None</em>, <em>name=None</em>, <em>bindmethod='constraint'</em>, <em>grp_bases=True</em>, <em>lod_grp=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.metahuman_tools.run_publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a given Red9 PUB file and a MetaHuman setup SRC file,
+run the binding process to merge the 2 into 1 Red9 PuppetRig</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pub_file</strong> – a Red9 PuppetRig master PUB file, one that hasn’t got the standard SRC skeleton and model on it</li>
+<li><strong>metahuman_file</strong> – as it says, a MetaHuman base file with the root_drv skeleton and the connected deformation skeleton for export</li>
+<li><strong>name</strong> – name of the new character if importing the data</li>
+<li><strong>bindmethod</strong> – the way we’re going to attache dthe 2 skeletons, PUB skeleton and MetaHuman root_drv</li>
+<li><strong>grp_bases</strong> – if True (default) we group all top nodes that came in with the MetaHuman file under the Master_Node in the rig</li>
+<li><strong>lod_grp</strong> – lod grp containing the child meshes for the renderMeshes, if not given we open up a confirmDialog to enable you to specify which LOD group you want to use.
+With LOD PICKER UI that shows the “ALL” button would return r9metahuman_tools.METAHUMAN_BODY_GEO_GRP which is the “body_grp|geometry_grp”</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Red9_Pro_health_manager.html" class="btn btn-neutral float-left" title="Pro_Pack : tools : health_manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Red9_Pro_project_manager.html" class="btn btn-neutral float-right" title="Pro_Pack : tools : project_manager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Red9 Consultancy Limited.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

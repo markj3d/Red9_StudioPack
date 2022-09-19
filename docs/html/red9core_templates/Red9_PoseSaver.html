@@ -69,6 +69,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_metahuman_tools.html">Pro_Pack : tools : metahuman_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
@@ -727,6 +728,11 @@ of the PPC is other instances such as the AnimationPPC</p>
 <dt id="Red9.core.Red9_PoseSaver.PosePointCloud.shapeSwapMeshes">
 <code class="descname">shapeSwapMeshes</code><span class="sig-paren">(</span><em>selectable=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_PoseSaver.PosePointCloud.shapeSwapMeshes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Swap the mesh Geo so it’s a shape under the PPC transform root</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this has had to be modified to support 2022+ as the parent -shape flag no
+longer behaves in the same way</p>
+</div>
 </dd></dl>
 
 <dl class="method">

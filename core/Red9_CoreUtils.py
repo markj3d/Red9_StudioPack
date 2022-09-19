@@ -296,15 +296,13 @@ def decodeString(val):
             # log.debug('Decoded as type(dict)')
             return eval(val)
         try:
-            encoded = int(val)
             # log.debug('Decoded as type(int)')
-            return encoded
+            return int(val)
         except:
             pass
         try:
-            encoded = float(val)
             # log.debug('Decoded as type(float)')
-            return encoded
+            return float(val)
         except:
             pass
     except:
@@ -3251,6 +3249,18 @@ def distanceBetween(nodeA, nodeB):
     x1, y1, z1, _, _, _ = cmds.xform(nodeA, q=True, ws=True, piv=True)
     x2, y2, z2, _, _, _ = cmds.xform(nodeB, q=True, ws=True, piv=True)
     return math.sqrt(math.pow((x1 - x2), 2) + math.pow((y1 - y2), 2) + math.pow((z1 - z2), 2))
+
+def getClosestNode(target, nodelist):
+    '''
+    From a list of transforms find the node that is closest to the target node and return
+    
+    :param target: the node we're trying to find the closest match too
+    :param nodelist: list of nodes we're going to test against
+    '''
+    distances = {}
+    for node in nodelist:
+        distances[distanceBetween(node, target)] = node
+    return distances[sorted(distances)[0]]
 
 def convertUnits_internalToUI(value, unit):
     '''

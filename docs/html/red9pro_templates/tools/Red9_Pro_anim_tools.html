@@ -69,6 +69,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Pro_Pack : tools : anim_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_metahuman_tools.html">Pro_Pack : tools : metahuman_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
@@ -350,11 +351,11 @@ The run func is run by the Browser to allow for bulk processing of FBX files</p>
 by-pass to this. If you connect any node to a message wire called mrig.locomotion_track_pnt
 then that will by-pass the search for the COG and use that as the Locomotion track pnt instead.</p>
 <div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span> <span class="o">=</span> <span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">addAttr</span><span class="p">(</span><span class="s1">&#39;locomotion_track_pntr&#39;</span><span class="p">,</span> <span class="n">attrType</span><span class="o">=</span><span class="s1">&#39;messageSimple&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">addAttr</span><span class="p">(</span><span class="s1">&#39;locomotion_track_pnt&#39;</span><span class="p">,</span> <span class="n">attrType</span><span class="o">=</span><span class="s1">&#39;messageSimple&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="s1">&#39;locator1&#39;</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># OR add the attr then use the connection handling to plug it</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">addAttr</span><span class="p">(</span><span class="s1">&#39;locomotion_track_pntr&#39;</span><span class="p">,</span> <span class="n">attrType</span><span class="o">=</span><span class="s1">&#39;messageSimple&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">locomotion_track_pntr</span> <span class="o">=</span> <span class="s1">&#39;locator1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">addAttr</span><span class="p">(</span><span class="s1">&#39;locomotion_track_pnt&#39;</span><span class="p">,</span> <span class="n">attrType</span><span class="o">=</span><span class="s1">&#39;messageSimple&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">locomotion_track_pnt</span> <span class="o">=</span> <span class="s1">&#39;locator1&#39;</span>
 </pre></div>
 </div>
 </div>

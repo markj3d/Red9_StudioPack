@@ -69,6 +69,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_metahuman_tools.html">Pro_Pack : tools : metahuman_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
@@ -427,7 +428,7 @@ rig so we don’t have to use the preset config’s all the time</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_systems">
-<code class="descname">get_systems</code><span class="sig-paren">(</span><em>systems</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_systems" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_systems</code><span class="sig-paren">(</span><em>systems</em>, <em>singular=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_systems" title="Permalink to this definition">¶</a></dt>
 <dd><p>check if the mRig includes the given systems, and if so, return
 those mNode. Note this checks the mRig.getChildren(cAttrs=systems) hook
 not the systemType. For that use the get_systems_by_type call</p>
@@ -2889,10 +2890,11 @@ will cast that hik characterization over to the new skeleton so that the hik goe
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>[[mNode(new_skeleton_root), (mNode(additional_nodes_required_for_export), …], [nodes_to_delete]]</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>[[mNode(new_skeleton_root), (mNode(additional_nodes_required_for_export), …], [str(node_to_delete), str(…], hiknode]</p>
 <div class="line-block">
-<div class="line">where the the first list in the return is a list of mNodes that will get selected by the exporter for output             and the second is a list of temporary nodes created during this process to delete after the export has run</div>
+<div class="line">where the the first list in the return is a list of mNodes that will get selected by the exporter for output             and the second is a list of temporary nodes, str dag paths, created during this process to delete after the export has run.</div>
 </div>
+<p>The third is the hikNode created during the process, else None</p>
 </p>
 </td>
 </tr>
@@ -2900,7 +2902,7 @@ will cast that hik characterization over to the new skeleton so that the hik goe
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>the following are crucial internal variables found on the ExportTag and ExportLoop nodes being processed</p>
+<p>the following are crucial internal variables found on the ExportTag and ExportLoop nodes being processed here:</p>
 <ul class="last simple">
 <li><strong>‘blend_map’</strong>: False  - if the mRig system has blendshapes then cast the blendShape target attrs over to driven joint attrs</li>
 <li><strong>‘blendtarget’</strong>: str  - if we’re running the blend_map then this dictates the output. “rootjnt” will bind all blendtargets as                                     new attrs on the exportRoot jnt. “childjnts” is similar except each blendnode found will be hooked                                     to a new childjoint of the exportRoot. “meshes” will create a dummy mesh with duplicate blank blendtargets                                     for output (Unity as target usually)</li>

@@ -69,6 +69,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_metahuman_tools.html">Pro_Pack : tools : metahuman_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
@@ -150,7 +151,7 @@ what each function is expected to return</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.isMetaNodeInherited" title="Red9.core.Red9_Meta.isMetaNodeInherited"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isMetaNodeInherited</span></code></a>(node[,&nbsp;mInstances,&nbsp;mode])</td>
 <td>unlike isMetaNode which checks the node against a particular MetaClass, this expands the check to see if the node is inherited from or a subclass of a given Meta base class, ie, part of a system</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.getMetaNodes" title="Red9.core.Red9_Meta.getMetaNodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMetaNodes</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.getMetaNodes" title="Red9.core.Red9_Meta.getMetaNodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMetaNodes</span></code></a>([mTypes,&nbsp;mInstances,&nbsp;…])</td>
 <td>Get all mClass nodes in scene and return as mClass objects if possible</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.getMetaRigs" title="Red9.core.Red9_Meta.getMetaRigs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMetaRigs</span></code></a>([mInstances,&nbsp;mClassGrps])</td>
@@ -159,7 +160,7 @@ what each function is expected to return</p>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.getMetaRigs_fromSelected" title="Red9.core.Red9_Meta.getMetaRigs_fromSelected"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMetaRigs_fromSelected</span></code></a>([singular])</td>
 <td>light wrap over the getMetaRigs function to return a list of mRigs connected to the selected nodes</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.getConnectedMetaNodes" title="Red9.core.Red9_Meta.getConnectedMetaNodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getConnectedMetaNodes</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_Meta.getConnectedMetaNodes" title="Red9.core.Red9_Meta.getConnectedMetaNodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getConnectedMetaNodes</span></code></a>(nodes[,&nbsp;source,&nbsp;…])</td>
 <td>From a given set of Maya Nodes return all connected mNodes Default return is mClass objects</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_Meta.getConnectedMetaSystemRoot" title="Red9.core.Red9_Meta.getConnectedMetaSystemRoot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getConnectedMetaSystemRoot</span></code></a>(node[,&nbsp;mTypes,&nbsp;…])</td>
@@ -512,7 +513,7 @@ each classes inheritance in long and short form on boot.</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.getMetaNodes">
-<code class="descname">getMetaNodes</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.getMetaNodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getMetaNodes</code><span class="sig-paren">(</span><em>mTypes=[]</em>, <em>mInstances=[]</em>, <em>mClassGrps=[]</em>, <em>mAttrs=None</em>, <em>dataType='mClass'</em>, <em>nTypes=None</em>, <em>mSystemRoot=False</em>, <em>byname=[]</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.getMetaNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get all mClass nodes in scene and return as mClass objects if possible</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -569,7 +570,7 @@ even though you won’t be able to use or return their class objects</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_Meta.getConnectedMetaNodes">
-<code class="descname">getConnectedMetaNodes</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.getConnectedMetaNodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getConnectedMetaNodes</code><span class="sig-paren">(</span><em>nodes</em>, <em>source=True</em>, <em>destination=True</em>, <em>mTypes=[]</em>, <em>mInstances=[]</em>, <em>mAttrs=None</em>, <em>dataType='mClass'</em>, <em>nTypes=None</em>, <em>skipTypes=[]</em>, <em>skipInstances=[]</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.getConnectedMetaNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>From a given set of Maya Nodes return all connected mNodes
 Default return is mClass objects</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1313,7 +1314,7 @@ RED9_META_REGISTERY ie ‘MetaRig’ OR a class object, ie r9Meta.MetaRig</li>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaClass.getChildMetaNodes">
-<code class="descname">getChildMetaNodes</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.getChildMetaNodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getChildMetaNodes</code><span class="sig-paren">(</span><em>walk=False</em>, <em>mAttrs=None</em>, <em>stepover=False</em>, <em>currentSystem=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaClass.getChildMetaNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find any connected Child MetaNodes to this mNode.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

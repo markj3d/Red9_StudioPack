@@ -69,6 +69,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_metahuman_tools.html">Pro_Pack : tools : metahuman_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
@@ -117,7 +118,7 @@ and skeletal data for the ProPack systems.</p>
 </table>
 <dl class="function">
 <dt id="Red9.pro_pack.core.rigutils.swapshapes">
-<code class="descname">swapshapes</code><span class="sig-paren">(</span><em>source</em>, <em>target</em>, <em>replace=True</em>, <em>worldspace=True</em>, <em>delete_source=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.swapshapes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">swapshapes</code><span class="sig-paren">(</span><em>source</em>, <em>target</em>, <em>replace=True</em>, <em>worldspace=True</em>, <em>delete_source=True</em>, <em>rename_shapes=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.swapshapes" title="Permalink to this definition">¶</a></dt>
 <dd><p>from a source transform parent all shapes under the target transform.
 If replace is True we delete all current shapes under the target.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -130,6 +131,7 @@ If replace is True we delete all current shapes under the target.</p>
 <li><strong>replace</strong> – True by default, do we remove all current shapes from the target before we re-parent the new ones?</li>
 <li><strong>worldspace</strong> – if True we maintain the shapes current world positions else we use default Maya relative shape parenting</li>
 <li><strong>delete_source</strong> – delete the source after the process is complete</li>
+<li><strong>rename_shapes</strong> – if True we numerically rename all shapes in the form ‘nodename_Shape%i’ why %i is incremented per shape</li>
 </ul>
 </td>
 </tr>
@@ -183,7 +185,7 @@ leaving you with the node in place with zerp transforms</li>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.rigutils.opm_freeze_transforms_to_composition_chns">
-<code class="descname">opm_freeze_transforms_to_composition_chns</code><span class="sig-paren">(</span><em>node=None</em>, <em>compensate=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.opm_freeze_transforms_to_composition_chns" title="Permalink to this definition">¶</a></dt>
+<code class="descname">opm_freeze_transforms_to_composition_chns</code><span class="sig-paren">(</span><em>node=None</em>, <em>compensate=True</em>, <em>force=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.rigutils.opm_freeze_transforms_to_composition_chns" title="Permalink to this definition">¶</a></dt>
 <dd><p>offsetParentMatrix handlers: simple proc that copies the current transform data over to the composition channels
 and resets the xforms. This results in zero xforms but the node in the same space. We compensate for any existing
 matrix data in the composition channels during the process.</p>
@@ -195,6 +197,7 @@ matrix data in the composition channels during the process.</p>
 <li><strong>node</strong> – the node to process, if not given we use the currently selected object</li>
 <li><strong>compensate</strong> – if True (default), we compensate for any current matrix data in the composition before
 we push the current transform matrix over to those channels.</li>
+<li><strong>force</strong> – if True (default) and the current transforms are locked then we force unlock and re-lock after we’ve reset them</li>
 </ul>
 </td>
 </tr>

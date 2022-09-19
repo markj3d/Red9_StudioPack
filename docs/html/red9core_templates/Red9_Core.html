@@ -69,6 +69,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_metahuman_tools.html">Pro_Pack : tools : metahuman_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
@@ -1498,6 +1499,24 @@ else we validate that testRange is fully within the baseRanges times</p>
 <dt id="Red9.core.Red9_CoreUtils.distanceBetween">
 <code class="descname">distanceBetween</code><span class="sig-paren">(</span><em>nodeA</em>, <em>nodeB</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.distanceBetween" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple calculation to return the distance between 2 objects</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.getClosestNode">
+<code class="descname">getClosestNode</code><span class="sig-paren">(</span><em>target</em>, <em>nodelist</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.getClosestNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>From a list of transforms find the node that is closest to the target node and return</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>target</strong> – the node we’re trying to find the closest match too</li>
+<li><strong>nodelist</strong> – list of nodes we’re going to test against</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">

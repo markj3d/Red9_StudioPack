@@ -613,7 +613,7 @@ class DataMap(object):
             log.debug('Applying Key Block : %s' % key)
             try:
                 if 'attrs' not in self.poseDict[key]:
-                    continue
+                    continue 
                 for attr, val in self.poseDict[key]['attrs'].items():
                     if attr in self.skipAttrs:
                         log.debug('Skipping attr as requested : %s' % attr)
@@ -622,7 +622,8 @@ class DataMap(object):
                         log.debug('Skipping attr as not in self.loadAttrs_only list: %s' % attr)
                         continue
                     try:
-                        val = eval(val)
+                        val = r9Core.decodeString(val)  # eval causes issues under 2022 Python security management
+#                         val = eval(val)
                     except:
                         pass
                     try:
@@ -1874,13 +1875,19 @@ class PosePointCloud(object):
     def shapeSwapMeshes(self, selectable=True):
         '''
         Swap the mesh Geo so it's a shape under the PPC transform root
+        
+        .. note::
+            this has had to be modified to support 2022+ as the parent -shape flag no
+            longer behaves in the same way
         '''
         currentCount = len(cmds.listRelatives(self.posePointRoot, type='shape'))
-        for i, mesh in enumerate(self.meshes):
-            dupMesh = cmds.duplicate(mesh, rc=True, n=self.refMesh + str(i + currentCount))[0]
+        for i, mesh in enumerate(self.meshes):            
+            dupMesh = cmds.duplicate(mesh, rc=True, n='%s%s_frm%i' % (self.refMesh,
+                                                                    str(i + currentCount),
+                                                                    int(cmds.currentTime(q=True))))[0]
             dupShape = cmds.listRelatives(dupMesh, type='shape')[0]
-            # switched to all_complete in case clients have the compound attrs locked also
-            r9Core.LockChannels().processState(dupMesh, 'all_complete', mode='fullkey', hierarchy=False)
+            dupMesh = r9Meta.MetaClass(dupMesh)
+            _blank_transform = None
             try:
                 if selectable:
                     # turn on the overrides so the duplicate geo can be selected
@@ -1891,13 +1898,50 @@ class PosePointCloud(object):
                     cmds.setAttr("%s.overrideDisplayType" % dupShape, 2)
                     cmds.setAttr("%s.overrideEnabled" % dupShape, 1)
             except:
-                log.debug('Couldnt set the draw overrides for the refGeo')
-            cmds.parent(dupMesh, self.posePointRoot)
-            cmds.makeIdentity(dupMesh, apply=True, t=True, r=True)
-            # for some reason Maya 2022+ isn't respecting the parent -r flag
-            if r9Setup.mayaVersion() < 2022:
-                cmds.parent(dupShape, self.posePointRoot, r=True, s=True)
-                cmds.delete(dupMesh)
+                log.debug("Couldn't set the draw overrides for the refGeo")
+
+            # switched to all_complete in case clients have the compound attrs locked also
+            r9Core.LockChannels().processState(dupMesh.mNode, 'all_complete', mode='fullkey', hierarchy=False)
+
+            # parent to world first to make sure the inheritTransforms flag can be forced on
+            cmds.parent(dupMesh.mNode, w=True)
+            dupMesh.inheritsTransform = 1
+            # parent shape under the PPC root, note: NOT relative
+            cmds.parent(dupShape, self.posePointRoot, s=True)
+
+            # has the above created a transform node, if so freeze it
+            _test_parent = cmds.listRelatives(dupShape, p=True, f=True)[0]
+            if not _test_parent == self.posePointRoot and 'transform' in r9Core.nodeNameStrip(_test_parent):
+                cmds.makeIdentity(_test_parent, apply=True, t=True, r=True, s=True)
+                _blank_transform = _test_parent
+
+            # actual shape parent fix
+            cmds.parent(dupShape, self.posePointRoot, s=True, r=True)
+            cmds.delete(dupMesh.mNode)
+            if _blank_transform:
+                cmds.delete(_blank_transform)
+
+            # BODGE! for some reason in older versions of Maya the shading on the
+            # dupShape gets ignored, this jogs the viewport back to properly shading it
+            if r9Setup.mayaVersion() < 2022.0:
+                try:
+                    cmds.refresh()
+                    v = cmds.getAttr('%s.displaySubdComps' % dupShape)
+                    cmds.setAttr('%s.displaySubdComps' % dupShape, 1)
+                    cmds.setAttr('%s.displaySubdComps' % dupShape, 0)
+                    cmds.setAttr('%s.displaySubdComps' % dupShape, v)
+                except:
+                    pass
+
+#             # previous implementation prior to 2022 changes!
+#             # parent back under the posePointRoot
+#             cmds.parent(dupMesh.mNode, self.posePointRoot)
+#             cmds.makeIdentity(dupMesh.mNode, apply=True, t=True, r=True)
+# 
+#             # for some reason Maya 2022+ isn't respecting the parent -r flag
+#             if r9Setup.mayaVersion() < 2022:
+#                 cmds.parent(dupShape, self.posePointRoot, r=True, s=True)
+#                 cmds.delete(dupMesh.mNode)
 
     def applyPosePointCloud(self):
         self.snapNodestoPosePnts()
@@ -1905,6 +1949,7 @@ class PosePointCloud(object):
     def updatePosePointCloud(self):
         self.snapPosePntstoNodes()
         if self.meshes:
+            # delete the current geo ref shapes
             cmds.delete(cmds.listRelatives(self.posePointRoot, type=['mesh', 'nurbsCurve']))
             self.generateVisualReference()
             cmds.refresh()
@@ -1924,8 +1969,8 @@ class PosePointCloud(object):
         if PPCNodes:
             log.info('Deleting current PPC nodes in the scene')
             for ppc in PPCNodes:
-                cmds.delete(ppc.posePointRoot)
                 try:
+                    cmds.delete(ppc.posePointRoot)
                     ppc.delete()
                 except:
                     pass  # metaNode should be cleared by default when it's only connection is deleted

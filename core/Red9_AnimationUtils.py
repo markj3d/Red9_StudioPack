@@ -3151,7 +3151,7 @@ class AnimationUI(object):
     def __PosePointCloud(self, func):
         '''
         .. note::
-            this is dependant on EITHER a wire from the root of the pose to a GEO
+            this is dependent on EITHER a wire from the root of the pose to a GEO
             under the attr 'renderMeshes' OR the second selected object is the reference Mesh
             Without either of these you'll just get a locator as the PPC root
         '''
@@ -3163,6 +3163,7 @@ class AnimationUI(object):
         elif len(objs) == 2:
             if cmds.nodeType(cmds.listRelatives(objs[1])[0]) == 'mesh':
                 meshes = objs
+
         if func == 'make':
             if not objs:
                 raise StandardError('you need to select a reference object to use as pivot for the PPCloud')
@@ -3175,24 +3176,27 @@ class AnimationUI(object):
                 else:
                     cmds.modelEditor('modelPanel4', e=True, locators=True)
             self.ppc = r9Pose.PosePointCloud(self.__uiCB_getPoseInputNodes(),
-                                           self.filterSettings,
-                                           meshes=meshes)
+                                             self.filterSettings,
+                                             meshes=meshes)
             self.ppc.prioritySnapOnly = cmds.checkBox(self.uicbSnapPriorityOnly, q=True, v=True)
             self.ppc.buildOffsetCloud(rootReference)
+            return
+        # sync current instance
         if not hasattr(self, 'ppc') or not self.ppc:
             current = r9Pose.PosePointCloud.getCurrentInstances()
             if current:
                 self.ppc = r9Pose.PosePointCloud(self.__uiCB_getPoseInputNodes(),
-                                           self.filterSettings,
-                                           meshes=meshes)
+                                                 self.filterSettings,
+                                                 meshes=meshes)
                 self.ppc.syncdatafromCurrentInstance()
-
-        if func == 'delete':
-            self.ppc.delete()
-        elif func == 'snap':
-            self.ppc.applyPosePointCloud()
-        elif func == 'update':
-            self.ppc.updatePosePointCloud()
+        # process current intance
+        if self.ppc:
+            if func == 'delete':
+                self.ppc.delete()
+            elif func == 'snap':
+                self.ppc.applyPosePointCloud()
+            elif func == 'update':
+                self.ppc.updatePosePointCloud()
 
     def __MirrorPoseAnim(self, process, mirrorMode, side=None):
         '''
@@ -5630,19 +5634,43 @@ class MirrorSetup(object):
         axis = self.__ui_getMirrorAxis()
 
         if len(nodes) > 1:
+            message = "Add / Modify Mirror Markers on Multiple selected nodes?\n\n"\
+                        "Choose to either set complete mirror Markers from the UI settings OR "\
+                        "Modify part of the current mirror markers on the nodes\n\n"\
+                        "* Set New : add complete new mirror markers\n"\
+                        "* Axis : modify just the axis values on the nodes\n"\
+                        "* Side : modify just the side markers\n"\
+                        "* ID'S : change / increment just the mirror ID's\n\n"
+
             result = cmds.confirmDialog(
                 title='Mirror Markers',
-                message='Add incremented Mirror Markers to Muliple selected nodes?',
-                button=['OK', 'Cancel'],
+                message=message,
+                icon='question',
+                button=['Set New + Increment IDs', 'IDs : Modify / Increment', 'AXIS : Modify Only', 'SIDE : Modify Only', 'Cancel'],
                 defaultButton='OK',
                 cancelButton='Cancel',
                 dismissString='Cancel')
-            if result == 'OK':
+
+            if result == 'Set New + Increment IDs':
                 i = index
                 for node in nodes:
                     self.mirrorClass.setMirrorIDs(node, side=str(side), slot=i, axis=axis)
                     log.info('MirrorMarkers added to : %s' % r9Core.nodeNameStrip(node))
                     i += 1
+            elif result == 'IDs : Modify / Increment':
+                i = index
+                for node in nodes:
+                    self.mirrorClass.setMirrorIDs(node, side=None, slot=i, axis=None)
+                    log.info('MirrorMarkers Modified IDs to %i : %s' % (i, r9Core.nodeNameStrip(node)))
+                    i += 1
+            elif result == 'AXIS : Modify Only':
+                for node in nodes:
+                    self.mirrorClass.setMirrorIDs(node, side=None, slot=None, axis=axis)
+                    log.info('MirrorMarkers Axis Modified %s : %s' % (axis, r9Core.nodeNameStrip(node)))
+            elif result == 'SIDE : Modify Only':
+                for node in nodes:
+                    self.mirrorClass.setMirrorIDs(node, side=str(side), slot=None, axis=None)
+                    log.info('MirrorMarkers Side Modified %s : %s' % (side, r9Core.nodeNameStrip(node)))
         else:
             self.mirrorClass.setMirrorIDs(nodes[0], side=str(side), slot=index, axis=axis)
             log.info('MirrorMarkers added to : %s' % r9Core.nodeNameStrip(nodes[0]))

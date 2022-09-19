@@ -50,6 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../red9core_templates/Red9_Tools.html">Red9_Tools</a></li>
 </ul>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_anim_map.html">Pro_Pack : anim_map</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_animation.html">Pro_Pack : animation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_audio.html">Pro_Pack : audio</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_export.html">Pro_Pack : exporter</a></li>
@@ -60,6 +61,7 @@
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_project.html">Pro_Pack : project</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Pro_Pack : r9Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_rigutils.html">Pro_Pack : rigutils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Red9_Pro_skining.html">Pro_Pack : skining</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_skinning.html">Pro_Pack : skinning</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_uibase.html">Pro_Pack : uibase</a></li>
 </ul>
@@ -67,6 +69,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_metahuman_tools.html">Pro_Pack : tools : metahuman_tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
@@ -101,7 +104,7 @@
 with a file version of the data. This is how all the settings files in ProPack are
 maintained. It’s also a fully dot completable dict method</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9data</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9data&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -109,7 +112,7 @@ maintained. It’s also a fully dot completable dict method</p>
 Once you’ve made an R9dict if will, by default, be a dynamic entry to a json file (if path was supplied on instansiation)
 This is used for most of the settings files you’ll see our toolsets using to store preferences as any changes in the UIs
 just set a value within the settings object, that change to the attr in turn triggers a write to disc.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="kn">import</span> <span class="n">r9pro</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r9data</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9data&#39;</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># create a new dict (this is optional)</span>
