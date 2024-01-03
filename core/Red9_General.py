@@ -182,6 +182,8 @@ def getScriptEditorSelection():
         ScriptEditorHistory scroll. We need to copy the selected text to the
         clipboard then pull it back afterwards.
         '''
+        # cmds.cmdFileOutput(o=outPath.log)  # alternative?
+
         import Red9.packages.pyperclip as pyperclip
         control = mel.eval("$v=$gLastFocusedCommandControl")
         executer = mel.eval("$v=$gLastFocusedCommandExecuter")
@@ -689,11 +691,11 @@ class undoContext(object):
     """
     CONTEXT MANAGER : Simple Context Manager for chunking the undoState
     """
-    def __init__(self, initialUndo=False, undoFuncCache=[], undoDepth=1):
+    def __init__(self, initialUndo=False, undoFuncCache=[], undoDepth=1, chunkName='', exitUndo=False, *args):
         '''
         If initialUndo is True then the context manager will manage what to do on entry with
         the undoStack. The idea is that if True the code will look at the last functions in the
-        undoQueue and if any of those mantch those in the undoFuncCache, it'll undo them to the
+        undoQueue and if any of those match those in the undoFuncCache, it'll undo them to the
         depth given. 
 
         WHY?????? This is specifically designed for things like floatFliders where you've
@@ -704,6 +706,7 @@ class undoContext(object):
         :param initialUndo: on first process whether undo on entry to the context manager
         :param undoFuncCache: only if initialUndo = True : functions to catch in the undo stack
         :param undoDepth: only if initialUndo = True : depth of the undo stack to go to
+        :param exitUndo: if True we run undo on the chunk on exit
 
         .. note::
             When adding funcs to this you CAN'T call the 'dc' command on any slider with a lambda func,
@@ -713,6 +716,9 @@ class undoContext(object):
         self.initialUndo = initialUndo
         self.undoFuncCache = undoFuncCache
         self.undoDepth = undoDepth
+        self.undoChunk = chunkName
+        self.exitUndo = exitUndo
+        self.initialState = cmds.undoInfo(q=True, state=True)
 
     def undoCall(self):
         for _ in range(1, self.undoDepth + 1):
@@ -721,12 +727,26 @@ class undoContext(object):
                 cmds.undo()
 
     def __enter__(self):
+        # if the undo queue is off, turn it on
+        if not self.initialState:
+            cmds.undoInfo(state=True)
+
+        # run the initial undo if needed
         if self.initialUndo:
             self.undoCall()
-        cmds.undoInfo(openChunk=True)
+
+        cmds.undoInfo(openChunk=True, chunkName=self.undoChunk)
 
     def __exit__(self, exc_type, exc_value, traceback):
         cmds.undoInfo(closeChunk=True)
+
+        if self.exitUndo:
+            print('undo called on context exit')
+            cmds.undo()
+
+        # return the initial state
+        cmds.undoInfo(state=self.initialState)
+
         if exc_type:
             log.exception('%s : %s' % (exc_type, exc_value))
         # If this was false, it would re-raise the exception when complete
@@ -961,9 +981,11 @@ class SceneRestoreContext(object):
 
         # viewport colors
         self.dataStore['displayGradient'] = cmds.displayPref(q=True, displayGradient=True)
+        self.dataStore['displaypref_rgbbkg'] = cmds.displayRGBColor('background', q=True)
 
         # objects colors
         self.dataStore['curvecolor'] = cmds.displayColor("curve", q=True, dormant=True)
+        
 
         # panel management
         self.dataStore['panelStore'] = {}
@@ -1018,6 +1040,7 @@ class SceneRestoreContext(object):
         # viewport colors
         cmds.displayPref(displayGradient=self.dataStore['displayGradient'])
         cmds.displayRGBColor(resetToSaved=True)
+        cmds.displayRGBColor('background', self.dataStore['displaypref_rgbbkg'][0], self.dataStore['displaypref_rgbbkg'][1], self.dataStore['displaypref_rgbbkg'][2])
 
         # objects colors
         cmds.displayColor("curve", self.dataStore['curvecolor'], dormant=True)
@@ -1416,7 +1439,7 @@ def writeJson(filepath=None, content=None):
 
 def readJson(filepath=None):
     '''
-    file pat to drive where to read the file
+    file path to drive where to read the file
 
     :param filepath:
     :return:

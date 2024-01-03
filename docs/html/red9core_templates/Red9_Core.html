@@ -73,6 +73,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/puppet/Red9_Pro_ikfk_match.html">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
 
         </div>
       </div>
@@ -155,7 +158,7 @@ time the tools process a hierarchy it’s these classes that deal with it.</p>
 <td>Acts like the setRange node but code side we have a min max range, lets say 0.5 - 15 and we want to map the range to a new range say 0-1 and return where the value given is in that new range</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_CoreUtils.distanceBetween" title="Red9.core.Red9_CoreUtils.distanceBetween"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distanceBetween</span></code></a>(nodeA,&nbsp;nodeB)</td>
-<td>simple calculation to return the distance between 2 objects</td>
+<td>simple calculation to return the distance between 2 objects, also works on components</td>
 </tr>
 </tbody>
 </table>
@@ -337,7 +340,7 @@ it back to it’s original state so we pass it through this</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.validateString">
-<code class="descname">validateString</code><span class="sig-paren">(</span><em>strText, fix=False, illegals=['-', '#', '!', ' ', '&#64;']</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.validateString" title="Permalink to this definition">¶</a></dt>
+<code class="descname">validateString</code><span class="sig-paren">(</span><em>strText, fix=False, illegals=['-', '#', '!', ' ', '&#64;'], mayanode=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.validateString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to validate that a string has no illegal characters</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -347,6 +350,8 @@ it back to it’s original state so we pass it through this</p>
 <li><strong>strText</strong> – text to validate</li>
 <li><strong>fix</strong> – if True then we replace illegals with ‘_’</li>
 <li><strong>illegals</strong> – now allow you to pass in what you consider illegals, default=[‘-‘, ‘#’, ‘!’, ‘ ‘, ‘&#64;’]</li>
+<li><strong>mayanode</strong> – if True we assume we’re processing a string name for a Maya node and add in ‘.’ to the list. 
+this is ommitted by default as generally we’re processing filenames</li>
 </ul>
 </td>
 </tr>
@@ -882,7 +887,7 @@ subCharacterSets too</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_CoreUtils.FilterNode.lsMetaRigControllers">
-<code class="descname">lsMetaRigControllers</code><span class="sig-paren">(</span><em>walk=True</em>, <em>incMain=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode.lsMetaRigControllers" title="Permalink to this definition">¶</a></dt>
+<code class="descname">lsMetaRigControllers</code><span class="sig-paren">(</span><em>walk=True</em>, <em>incMain=True</em>, <em>incOffset=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.FilterNode.lsMetaRigControllers" title="Permalink to this definition">¶</a></dt>
 <dd><p>very light wrapper to handle MetaData in the FilterSystems. This is hard coded
 to find CTRL markered attrs and give back the attached nodes</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -894,6 +899,9 @@ to find CTRL markered attrs and give back the attached nodes</p>
 <li><strong>incMain</strong> – Like the other filters we allow the given top
 node in the hierarchy to be removed from processing. In a MetaRig
 this is the CTRL_Main controller which should be Top World Space</li>
+<li><strong>incOffset</strong> – Like the other filters we allow the secondary root node 
+(OffsetCtrl) in the hierarchy to be removed from processing. In a MetaRig
+this is the CTRL_Offset controller which should be secondary parent under the Main_Ctrl</li>
 </ul>
 </td>
 </tr>
@@ -1498,13 +1506,21 @@ else we validate that testRange is fully within the baseRanges times</p>
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.distanceBetween">
 <code class="descname">distanceBetween</code><span class="sig-paren">(</span><em>nodeA</em>, <em>nodeB</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.distanceBetween" title="Permalink to this definition">¶</a></dt>
-<dd><p>simple calculation to return the distance between 2 objects</p>
+<dd><p>simple calculation to return the distance between 2 objects, also works on components</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this will also work at the Component level</p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="Red9.core.Red9_CoreUtils.getClosestNode">
-<code class="descname">getClosestNode</code><span class="sig-paren">(</span><em>target</em>, <em>nodelist</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.getClosestNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getClosestNode</code><span class="sig-paren">(</span><em>target</em>, <em>nodelist</em>, <em>select=False</em>, <em>return_type=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.getClosestNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>From a list of transforms find the node that is closest to the target node and return</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this will also work at the Component level</p>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1512,6 +1528,85 @@ else we validate that testRange is fully within the baseRanges times</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>target</strong> – the node we’re trying to find the closest match too</li>
 <li><strong>nodelist</strong> – list of nodes we’re going to test against</li>
+<li><strong>select</strong> – if True we select the matching node</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.sortByDistance">
+<code class="descname">sortByDistance</code><span class="sig-paren">(</span><em>source</em>, <em>targets</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.sortByDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>sort target objects by the distance to source object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>source</strong> – string or list, string object name, use as start position to calculate distances to target objects</td>
+</tr>
+</tbody>
+</table>
+<p>or list world space position use as start position to calculate distances to target objects
+:param targets: list of strings, object names</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of string, names of targets objects sorted by distances from closest to farther</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.findByDistance">
+<code class="descname">findByDistance</code><span class="sig-paren">(</span><em>source</em>, <em>targets</em>, <em>index=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.findByDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find a target object base on the distance to source object, use index value to define the distance 0 for closest
+-1 farther, default is 0</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>source</strong> – string or list, string object name, use as start position to calculate distances to target objects</td>
+</tr>
+</tbody>
+</table>
+<p>list world space position use as start position to calculate distances to target objects
+:param targets: list of strings, object names
+:param index: int index of target objects sorted from closest to farther 0 been the closest target object -1
+the farther default is 0
+:return: string target object name</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.getMirrorVertex">
+<code class="descname">getMirrorVertex</code><span class="sig-paren">(</span><em>vertex=None</em>, <em>mirror_axis='x'</em>, <em>selection_radius=1</em>, <em>select=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.getMirrorVertex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.core.Red9_CoreUtils.snapToClosest">
+<code class="descname">snapToClosest</code><span class="sig-paren">(</span><em>target_vtxs</em>, <em>input_vtxs</em>, <em>index=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_CoreUtils.snapToClosest" title="Permalink to this definition">¶</a></dt>
+<dd><p>component snap, given a list of target_vtxs (on any mesh) snap the input_vtxs
+to the closest matching world positions in the target list. Note that these 2
+lists need to be flattened vtx lists ie:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># select target vtx we&#39;re matching too</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target_vtxs</span> <span class="o">=</span> <span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fl</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># select vtx on the input mesh</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_vtxs</span> <span class="o">=</span> <span class="n">cmds</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="n">sl</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fl</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># run the matching</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9Core</span><span class="o">.</span><span class="n">snapToClosest</span><span class="p">(</span><span class="n">target_vtxs</span><span class="p">,</span> <span class="n">input_vtxs</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>target_vtxs</strong> – list of source components, used to match too</li>
+<li><strong>input_vtxs</strong> – list of components we’re going to be snapping</li>
+<li><strong>index</strong> – the index of tolerance. This is the order within the sorted list of closest distances in the match that we use. 0 is the closet, 1 is the second closest etc</li>
 </ul>
 </td>
 </tr>

@@ -73,6 +73,9 @@
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="puppet/Red9_Pro_ikfk_match.html">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
 
         </div>
       </div>
@@ -160,6 +163,43 @@ requires the StudioPack codebase to run</p>
 <code class="descname">playback_performance</code><span class="sig-paren">(</span><em>iteration=3</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.playback_performance" title="Permalink to this definition">¶</a></dt>
 <dd><p>a simple performance checker to test actual framerate rather than
 using the frameRate HUD with isn’t accurate</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.animation.playback_slow_mo_reset">
+<code class="descname">playback_slow_mo_reset</code><span class="sig-paren">(</span><em>*arg</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.playback_slow_mo_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>separated mainly for the callback to reset on file save</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.animation.playback_slow_mo">
+<code class="descname">playback_slow_mo</code><span class="sig-paren">(</span><em>speed=1.0</em>, <em>base_fps=None</em>, <em>reset=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.playback_slow_mo" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple function to run Maya in slow-mo by controlling
+both the fps and the playback speed. Note that we control
+BOTH the fps and playback speed, ramping up the fps if we’re playing
+in slow motion so we maintain smoothness. This could cause glitches
+if you’re anim won’t correctly scale up due to gimble in sub-frames etc</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>base_fps</strong> – the desired base working fps we’ll go back to if speed is 1.0</li>
+<li><strong>speed</strong> – the playback speed desired (0.25, 0.5, 0.75 etc)</li>
+<li><strong>reset</strong> – reset back to the original base for the scene, stored in the scene when you first
+trigger the slow-mo function so we can always reset back.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>this is reset via callbacks on scene save and scene export to ensure that we don’t
+save this into the files base timeline data. These are sourced at the foot of this module</p>
+<p class="last">OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeSave, playback_slow_mo_reset)
+OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeExport, playback_slow_mo_reset)</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -278,6 +318,33 @@ This is aimed at Unity output, mapping complex facial blend systems to a simple 
 <li><strong>mSystem</strong> – if given wire the new jnts to the mSystem so we can verify them later. Wired as %s_%s %  (basewire, blend)
 where basewire is the arg passed in, default is ‘blendTargetWeight’</li>
 <li><strong>basewire</strong> – name used both as the base name for the mesh and the mSystem base wire of the jnts created</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.animation.manage_attr_boundaries">
+<code class="descname">manage_attr_boundaries</code><span class="sig-paren">(</span><em>switch_ctrl</em>, <em>switch_attr</em>, <em>switch_value</em>, <em>timerange=()</em>, <em>keyswitch=True</em>, <em>buffers=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.manage_attr_boundaries" title="Permalink to this definition">¶</a></dt>
+<dd><p>a simple management block to add / manage switched holding keys for given node attr at a given value.
+This is used in the ikfk switch calls to manage / set the buffer keys for the switch attr itself.
+If timerange then we first set keys on switch_ctrl.switch+_attr at timerange[0]-1 and timerange[0]+1
+to hold current values, then cut all keys between the timerange before finally setting keys on the
+actual two timerange frames at the switch_value given.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>switch_ctrl</strong> – controller</li>
+<li><strong>switch_attr</strong> – the attr we’re managing</li>
+<li><strong>switch_value</strong> – the value we want to switch too within the time given</li>
+<li><strong>timerange</strong> – the timerange boundaries we’ll be switching + and - 1 frm, 
+else we key simple holding keys at [currentTime - 1, currentTime]</li>
+<li><strong>keyswitch</strong> – do we just set, or key the boundaries</li>
+<li><strong>buffers</strong> – if timerange and buffers=True (default) then we set the timerange[0]-1 and timerange[1]+1 frames</li>
 </ul>
 </td>
 </tr>
@@ -521,6 +588,7 @@ hook directly into the renderMeshes variable to find the Geo for reference</p>
 <li>self.step=1                     : frame step between compensation keys</li>
 <li>self.smartbake=False            : sparse keyed based on the keys currently on nodes being cached</li>
 <li>self.smartbake_ref=[]           : optional separate nodes to use for the smartBake key extraction process</li>
+<li>self.cached_attrs=[]            : internal caching of given attrs [‘node.attr’, ….] builds up self.cached_data</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -620,7 +688,7 @@ modified reference building code to deal with the animation setup</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.AnimPointCloud.snapPosePntstoNodes">
-<code class="descname">snapPosePntstoNodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.snapPosePntstoNodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">snapPosePntstoNodes</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.AnimPointCloud.snapPosePntstoNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>&lt;&lt; Time enabled function &gt;&gt;
 snap each pntCloud point to their respective Maya nodes over time.
 This call is used in the UI to ‘ReSync’ the anim cloud if you’ve
@@ -948,7 +1016,7 @@ set display attrs of the joints to default values</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder">
-<code class="descname">fbx_to_binder</code><span class="sig-paren">(</span><em>fbxfiles</em>, <em>binderfile=None</em>, <em>usecurrentscene=False</em>, <em>bake=False</em>, <em>runFilter=True</em>, <em>useTakeData=True</em>, <em>fbx_mode='update_anim'</em>, <em>mayafile=True</em>, <em>r9anim=False</em>, <em>import_bnd=False</em>, <em>hikmapping=None</em>, <em>fbx_take=1</em>, <em>spine_fit=False</em>, <em>locomotion_track=False</em>, <em>whole_frame=False</em>, <em>maintain_fps=False</em>, <em>force_start_frm=None</em>, <em>set_timeline=True</em>, <em>hik_process_yup=True</em>, <em>tpose_load=False</em>, <em>tpose_path=''</em>, <em>tpose_frm=0</em>, <em>tpose_forcelock=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fbx_to_binder</code><span class="sig-paren">(</span><em>fbxfiles</em>, <em>binderfile=None</em>, <em>usecurrentscene=False</em>, <em>bake=False</em>, <em>runFilter=True</em>, <em>useTakeData=True</em>, <em>fbx_mode='update_anim'</em>, <em>mayafile=True</em>, <em>r9anim=False</em>, <em>import_bnd=False</em>, <em>hikmapping=None</em>, <em>fbx_take=1</em>, <em>spine_fit=False</em>, <em>locomotion_track=False</em>, <em>whole_frame=False</em>, <em>maintain_fps=False</em>, <em>force_start_frm=None</em>, <em>set_timeline=True</em>, <em>hik_process_yup=True</em>, <em>tpose_load=False</em>, <em>tpose_path=''</em>, <em>tpose_frm=0</em>, <em>tpose_forcelock=False</em>, <em>run_func=[]</em>, <em>custom_timeranges=()</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.fbx_to_binder" title="Permalink to this definition">¶</a></dt>
 <dd><ul class="simple">
 <li>Multiple FBX &gt;&gt;&gt; Binder &gt;&gt;&gt; r9Anim / Maya files / Playblast</li>
 </ul>
@@ -1019,6 +1087,11 @@ systems like XSENS allow you to export with TPose at frame 0 by default and this
 </tr>
 </tbody>
 </table>
+<dl class="docutils">
+<dt>:param run_func:[] additional callable function list that can be called during the process just before any bake function is called, allowing you to injest</dt>
+<dd>custom processes into the systems. Note that this function is passed as func(self) so it has full access to the transfer object if needed. 
+Also by passing self in you can add to it’s internal cleanup arguements such as self.nodes_to_delete</dd>
+</dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">the spine_fit and locomotion_track args both require a Full Red9 PuppetRig or at least a fully setup Pro_MetaRig system. Please contact us for more details!</p>
@@ -1027,7 +1100,7 @@ systems like XSENS allow you to export with TPose at frame 0 by default and this
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.animation.Anim_Transfer.rig_to_binder">
-<code class="descname">rig_to_binder</code><span class="sig-paren">(</span><em>animfiles</em>, <em>binderfile=None</em>, <em>usecurrentscene=False</em>, <em>output_dir=None</em>, <em>bake=False</em>, <em>runFilter=True</em>, <em>xfer_mode='connect_hik'</em>, <em>run_func=None</em>, <em>mayafile=True</em>, <em>r9anim=False</em>, <em>import_bnd=False</em>, <em>hikmapping=None</em>, <em>spine_fit=False</em>, <em>locomotion_track=False</em>, <em>maintain_fps=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.rig_to_binder" title="Permalink to this definition">¶</a></dt>
+<code class="descname">rig_to_binder</code><span class="sig-paren">(</span><em>animfiles</em>, <em>binderfile=None</em>, <em>usecurrentscene=False</em>, <em>output_dir=None</em>, <em>bake=False</em>, <em>runFilter=True</em>, <em>xfer_mode='connect_hik'</em>, <em>run_func=[]</em>, <em>mayafile=True</em>, <em>r9anim=False</em>, <em>import_bnd=False</em>, <em>hikmapping=None</em>, <em>spine_fit=False</em>, <em>locomotion_track=False</em>, <em>maintain_fps=False</em>, <em>matchMethod='metaData'</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.animation.Anim_Transfer.rig_to_binder" title="Permalink to this definition">¶</a></dt>
 <dd><ul class="simple">
 <li>Multiple MayaFiles : PuppetRig &gt;&gt;&gt; Binder  &gt;&gt;&gt; r9Anim / Maya files / Playblast</li>
 </ul>
@@ -1065,13 +1138,30 @@ to stop the process over-writing the input files. if not given we append the sce
 <li><strong>connect_hik_hybrid</strong> : on top of the ‘connect_hik’ method this also copies all animation from all mRig controllers NOT currently bound</li>
 </ul>
 </li>
-<li><strong>run_func</strong> – callable, if given we run this function after the bind is done and before the bake is hit, allowing for specific modifications if required,
-note that the func is passed the instance of the Transfer class object run_func(self)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>:param run_func:[] additional callable function list that can be called during the process just before any bake function is called, allowing you to inject</dt>
+<dd>custom processes into the systems. Note that this function is passed as func(self) so it has full access to the transfer object if needed. 
+Also by passing self in you can add to it’s internal cleanup arguements such as self.nodes_to_delete</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>mayafile</strong> – save the resulting Maya files out. This is a flag so that if this func is being called as part of another process
 we can choose if we want the Maya file or Not, in the ProToBnd the maya file is managed by the exporter wrap directly and this is not called</li>
 <li><strong>r9anim</strong> – export r9Anim filed out. In the ProToBnd the r9Anim file is managed by the exporter wrap directly and this is not called</li>
 <li><strong>hikmapping</strong> – IF the fbx_mode==’connect_hik’ then this is an additional file that can be passed in to change the HIK properties on the
 fly, allowing us to use the same binder file but with different HIK remapping characteristics</li>
+<li><strong>maintain_fps</strong> – maintain the incoming BND files framerate regardless of the incoming Maya files framerate</li>
+<li><strong>spine_fit</strong> – Red9 PuppetRiig internal spine re-fitting process for better spine integrity</li>
+<li><strong>locomotion_track</strong> – PuppetRig process for auto tracking the locomotion root ctrl</li>
+<li><strong>matchMethod</strong> – node matching method used only during the “+hybrid” copy process between the source mRig and the bound destination mRig ctrls</li>
 </ul>
 </td>
 </tr>

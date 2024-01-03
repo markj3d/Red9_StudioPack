@@ -73,6 +73,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/puppet/Red9_Pro_ikfk_match.html">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
 
         </div>
       </div>
@@ -165,13 +168,13 @@ See the documentation on the r9Core.MatchedNodeInputs for more detail.</p>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getChannelBoxSelection" title="Red9.core.Red9_AnimationUtils.getChannelBoxSelection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getChannelBoxSelection</span></code></a>([longNames])</td>
 <td>return a list of attributes selected in the ChannelBox</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getChannelBoxAttrs" title="Red9.core.Red9_AnimationUtils.getChannelBoxAttrs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getChannelBoxAttrs</span></code></a>([node,&nbsp;asDict,&nbsp;incLocked])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getChannelBoxAttrs" title="Red9.core.Red9_AnimationUtils.getChannelBoxAttrs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getChannelBoxAttrs</span></code></a>([node,&nbsp;asDict,&nbsp;…])</td>
 <td>return the status of all attrs on the given node, either as a flat list or a dict.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getNodeAttrStatus" title="Red9.core.Red9_AnimationUtils.getNodeAttrStatus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNodeAttrStatus</span></code></a>([node,&nbsp;asDict,&nbsp;incLocked])</td>
 <td>stub function/ wrapper of getChannelBoxAttrs as the name is a little misleading and not really what the function is doing in hindsight.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getSettableChannels" title="Red9.core.Red9_AnimationUtils.getSettableChannels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSettableChannels</span></code></a>([node,&nbsp;incStatics])</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getSettableChannels" title="Red9.core.Red9_AnimationUtils.getSettableChannels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSettableChannels</span></code></a>([node,&nbsp;incStatics,&nbsp;…])</td>
 <td>return a list of settable attributes on a given node.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes" title="Red9.core.Red9_AnimationUtils.getAnimLayersFromGivenNodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAnimLayersFromGivenNodes</span></code></a>(nodes)</td>
@@ -286,7 +289,7 @@ little misleading and not really what the function is doing in hindsight.</p>
 
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.getChannelBoxAttrs">
-<code class="descname">getChannelBoxAttrs</code><span class="sig-paren">(</span><em>node=None</em>, <em>asDict=True</em>, <em>incLocked=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getChannelBoxAttrs" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getChannelBoxAttrs</code><span class="sig-paren">(</span><em>node=None</em>, <em>asDict=True</em>, <em>incLocked=True</em>, <em>skipcompound=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getChannelBoxAttrs" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the status of all attrs on the given node, either as a flat list or
 a dict. As dict it contains all data which controls the lock, keyable, hidden states etc</p>
 <p>statusDict={‘keyable’:attrs, ‘nonKeyable’:attrs, ‘locked’:attrs}</p>
@@ -299,6 +302,8 @@ a dict. As dict it contains all data which controls the lock, keyable, hidden st
 <li><strong>asDict</strong> – True returns a dict with keys ‘keyable’,’locked’,’nonKeyable’ of attrs
 False returns a list (non ordered) of all attr states.</li>
 <li><strong>incLocked</strong> – True by default - whether to include locked channels in the return (only valid if not asDict)</li>
+<li><strong>skipcompound</strong> – if True we remove the compound parent attrs from any return (double3 or float3 at the moment
+this prevents unlocked componuds like “rotate”, “translate”, “scale” from getting into the return</li>
 </ul>
 </td>
 </tr>
@@ -308,7 +313,7 @@ False returns a list (non ordered) of all attr states.</li>
 
 <dl class="function">
 <dt id="Red9.core.Red9_AnimationUtils.getSettableChannels">
-<code class="descname">getSettableChannels</code><span class="sig-paren">(</span><em>node=None</em>, <em>incStatics=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getSettableChannels" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getSettableChannels</code><span class="sig-paren">(</span><em>node=None</em>, <em>incStatics=True</em>, <em>skipcompound=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.getSettableChannels" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a list of settable attributes on a given node.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -317,6 +322,8 @@ False returns a list (non ordered) of all attr states.</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>node</strong> – node to inspect.</li>
 <li><strong>incStatics</strong> – whether to include non-keyable static channels (On by default).</li>
+<li><strong>skipcompound</strong> – if True we remove the compound parent attrs from any return (double3 or float3 at the moment
+this prevents unlocked componuds like “rotate”, “translate”, “scale” from getting into the return</li>
 </ul>
 </td>
 </tr>
@@ -325,7 +332,7 @@ False returns a list (non ordered) of all attr states.</li>
 <p>FIXME: BUG some Compound attrs such as constraints return invalid data for some of the
 base functions using this as they can’t be simply set. Do we strip them here?
 ie: pointConstraint.target.targetWeight</p>
-<p>#TODO: need to check the blendshape channels are settable also!</p>
+<p># TODO: need to check the blendshape channels are settable also!</p>
 </dd></dl>
 
 <dl class="function">
@@ -959,7 +966,7 @@ if the source jnt has incoming scale connections which would then be propagated 
 
 <dl class="staticmethod">
 <dt id="Red9.core.Red9_AnimationUtils.AnimFunctions.inverseAnimChannels">
-<em class="property">static </em><code class="descname">inverseAnimChannels</code><span class="sig-paren">(</span><em>node</em>, <em>channels</em>, <em>time=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.inverseAnimChannels" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">inverseAnimChannels</code><span class="sig-paren">(</span><em>node</em>, <em>channels=[]</em>, <em>time=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_AnimationUtils.AnimFunctions.inverseAnimChannels" title="Permalink to this definition">¶</a></dt>
 <dd><p>really basic method used in the Mirror calls</p>
 </dd></dl>
 
@@ -1176,7 +1183,7 @@ pack, using a filterSettings node thats passed into the __init__</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>node</strong> – nodes to take the attrs</li>
-<li><strong>side</strong> – valid values are ‘Centre’,’Left’ or ‘Right’ or 0, 1, 2</li>
+<li><strong>side</strong> – valid values are ‘Centre’,’Left’, ‘Right’ or 0, 1, 2 or ‘C’, ‘L’, ‘R’</li>
 <li><strong>slot</strong> – bool Mainly used to pair up left and right paired controllers</li>
 <li><strong>axis</strong> – eg ‘translateX,rotateY,rotateZ’ simple comma separated string
 If this is set then it overrides the default mirror axis.

@@ -128,8 +128,7 @@ produced for the Autodesk MasterClass</p>
 <dl class="function">
 <dt id="Red9.pro_pack.tools.anim_binder.get_bind_nodes">
 <code class="descname">get_bind_nodes</code><span class="sig-paren">(</span><em>rootNode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.get_bind_nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>From selected root find all BindNodes via the marker attribute ‘BindNode’
-Note we’re not casting to PyNodes here for speed here</p>
+<dd><p>From selected root find all BindNodes via the marker attribute ‘BindNode’</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -143,8 +142,7 @@ Note we’re not casting to PyNodes here for speed here</p>
 <dl class="function">
 <dt id="Red9.pro_pack.tools.anim_binder.get_bound_controls">
 <code class="descname">get_bound_controls</code><span class="sig-paren">(</span><em>rootNode=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.get_bound_controls" title="Permalink to this definition">¶</a></dt>
-<dd><p>From selected root find all BoundControllers via the marker attribute ‘BoundCtr’
-Note we’re not casting to PyNodes here for speed here</p>
+<dd><p>From selected root find all BoundControllers via the marker attribute ‘BoundCtr’</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -197,7 +195,7 @@ Those found are then baked out and the marker attribute is deleted</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.tools.anim_binder.bind_skeletons">
-<code class="descname">bind_skeletons</code><span class="sig-paren">(</span><em>source</em>, <em>dest</em>, <em>method='connect'</em>, <em>manage_scales=False</em>, <em>verbose=False</em>, <em>unlock=False</em>, <em>bindroot=True</em>, <em>bindroot_inc=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.bind_skeletons" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bind_skeletons</code><span class="sig-paren">(</span><em>source</em>, <em>dest</em>, <em>method='connect'</em>, <em>manage_scales=False</em>, <em>verbose=False</em>, <em>unlock=False</em>, <em>bindroot=True</em>, <em>bindroot_inc=False</em>, <em>connect_shears=False</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_binder.bind_skeletons" title="Permalink to this definition">¶</a></dt>
 <dd><p>From 2 given root joints search through each hierarchy for child joints, match
 them based on node name, then connect their transform channels trans/rots directly, or
 parentConstrain them depending on the method flag.</p>

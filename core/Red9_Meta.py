@@ -51,6 +51,7 @@ import uuid
 import types
 import inspect
 import traceback
+import pyperclip
 
 
 import Red9.startup.setup as r9Setup
@@ -106,6 +107,7 @@ else:
     RED9_META_CALLBACKS = {}
     RED9_META_CALLBACKS['Open'] = []
     RED9_META_CALLBACKS['New'] = []
+#     RED9_META_CALLBACKS['Reference'] = []
     # RED9_META_CALLBACKS['DuplicatePre'] = []
     # RED9_META_CALLBACKS['DuplicatePost'] = []
 
@@ -2461,7 +2463,8 @@ class MetaClass(object):
 
         keyable = ['int', 'float', 'bool', 'enum', 'double3']
         addCmdEditFlags = ['min', 'minValue', 'max', 'maxValue', 'defaultValue', 'dv',
-                             'softMinValue', 'smn', 'softMaxValue', 'smx', 'enumName']
+                            'softMinValue', 'smn', 'softMaxValue', 'smx', 'enumName',
+                            'hidden', 'h']
         setCmdEditFlags = ['keyable', 'k', 'lock', 'l', 'channelBox', 'cb']
 
         addkwsToEdit = {}
@@ -3292,7 +3295,7 @@ class MetaClass(object):
             return mNodes[0]
 
     @r9General.Timer
-    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False, plugsOnly=False, skip_cAttrs=[], **kws):
+    def getChildren(self, walk=True, mAttrs=None, cAttrs=[], nAttrs=[], asMeta=False, asMap=False, plugsOnly=False, skip_cAttrs=[], type='', **kws):
         '''
         This finds all UserDefined attrs of type message and returns all connected nodes
         This is now being run in the MetaUI on doubleClick. This is a generic call, implemented
@@ -3328,14 +3331,15 @@ class MetaClass(object):
                 nAttrs = [nAttrs]
         for node in childMetaNodes:
             if logging_is_debug():
-                log.debug('MetaNode getChildren : %s >> %s' % (type(node), node.mNode))
+                # log.debug('MetaNode getChildren : %s >> %s' % (type(node), node.mNode))
+                log.debug('MetaNode getChildren : >> %s' % node.mNode)
             attrs = cmds.listAttr(node.mNode, ud=True, st=cAttrs)
             if attrs:
                 for attr in attrs:
                     if skip_cAttrs and attr in skip_cAttrs:
                         continue
                     if cmds.getAttr('%s.%s' % (node.mNode, attr), type=True) == 'message':
-                        msgLinked = cmds.listConnections('%s.%s' % (node.mNode, attr), destination=True, source=False)
+                        msgLinked = cmds.listConnections('%s.%s' % (node.mNode, attr), destination=True, source=False, type=type)
                         if msgLinked:
                             if not nAttrs:
                                 msgLinked = cmds.ls(msgLinked, l=True)  # cast to longNames!
@@ -3435,7 +3439,7 @@ class MetaClass(object):
             This will be depricated soon and replaced by getNodeConnections which is
             more flexible as it returns and filters all plugs between self and the given node.
         '''
-        log.info('getNodeConnetionAttr will be depricated soon!!!!')
+#         log.info('getNodeConnetionAttr will be depricated soon!!!!')
         for con in cmds.listConnections(node, s=True, d=False, p=True) or []:
             if self.mNode in con.split('.')[0]:
                 return con.split('.')[1]
@@ -3715,15 +3719,17 @@ class MetaRig(MetaClass):
         TODO: allow the mirror block to include an offset so that if you need to inverse AND offset
         by 180 to get left and right working you can still do so.
         '''
-        # import Red9_AnimationUtils as r9Anim  # lazy load to avoid cyclic imports
 
         if isinstance(node, list):
             raise StandardError('node must be a single Maya Object')
+        if not cmds.objExists(node):
+            log.warning('Node not found: %s' % node)
+            return
 
         if not ctrType:
             ctrType = r9Core.nodeNameStrip(node)
         if namereplace:
-            ctrType.replace(namereplace[0], namereplace[1])
+            ctrType = ctrType.replace(namereplace[0], namereplace[1])
 
         self.connectChild(node, '%s_%s' % (self.CTRL_Prefix, ctrType))
         if mirrorData:
@@ -3996,6 +4002,7 @@ class MetaRig(MetaClass):
             the inbuilt mirror functions
         '''
         self.MirrorClass = r9Anim.MirrorHierarchy(nodes=self.getChildren(walk=True))
+        self.MirrorClass.settings.metaRig = True
         try:
             self.MirrorClass.getMirrorSets()
             log.debug('Filling the MirrorClass attr on demand')
@@ -4093,16 +4100,73 @@ class MetaRig(MetaClass):
         '''
         return self.getMirror_lastIndexes(side, forceRefresh) + 1
 
-    def mirror(self, nodes=None, mode='Anim'):
+    def mirror(self, nodes=[], mode='Anim', hierarchy=True):
         '''
         direct mapper call to the Mirror functions
 
         :param nodes: nodes to mirror, if None then we process the entire rig
         :param mode: either 'Anim' or 'Pose'
         '''
-        if not self.MirrorClass:
-            self.MirrorClass = self.getMirrorData()
-        self.MirrorClass.mirrorData(nodes, mode)
+
+        if not hierarchy and not nodes:
+            nodes = cmds.ls(sl=True, l=True)
+
+        # we take a fresh instance as the class builds up the index maps
+        # and if we're flicking between hierarchy and nodes then these need updating
+        mirror = r9Anim.MirrorHierarchy(nodes=[self.ctrl_main])
+        mirror.settings.metaRig = True
+
+        # Check for AnimLayers and throw the warning
+        if mode == 'Anim':
+            # slower as we're processing the mirrorSets twice for hierarchy
+            # BUT this is vital info that the user needs prior to running.
+            if hierarchy:
+                animCheckNodes = mirror.getMirrorSets()
+            else:
+                animCheckNodes = nodes
+            print(animCheckNodes)
+            if not r9Anim.animLayersConfirmCheck(animCheckNodes):
+                log.warning('Process Aborted by User')
+                return
+
+        if not hierarchy:
+            mirror.mirrorData(nodes, mode=mode)
+        else:
+                mirror.mirrorData(mode=mode)
+
+    def symmetry(self, nodes=[], mode='Anim', hierarchy=True, side='L'):
+        '''
+        direct mapper call to the Mirror functions
+
+        :param nodes: nodes to mirror, if None then we process the entire rig
+        :param mode: either 'Anim' or 'Pose'
+        '''
+ 
+        if not hierarchy and not nodes:
+            nodes = cmds.ls(sl=True, l=True)
+
+        # we take a fresh instance as the class builds up the index maps
+        # and if we're flicking between hierarchy and nodes then these need updating
+        mirror = r9Anim.MirrorHierarchy(nodes=[self.ctrl_main])
+        mirror.settings.metaRig = True
+
+        # Check for AnimLayers and throw the warning
+        if mode == 'Anim':
+            # slower as we're processing the mirrorSets twice for hierarchy
+            # BUT this is vital info that the user needs prior to running.
+            if hierarchy:
+                animCheckNodes = mirror.getMirrorSets()
+            else:
+                animCheckNodes = nodes
+            print(animCheckNodes)
+            if not r9Anim.animLayersConfirmCheck(animCheckNodes):
+                log.warning('Process Aborted by User')
+                return
+
+        if not hierarchy:
+            mirror.makeSymmetrical(nodes, mode=mode, primeAxis=side)
+        else:
+            mirror.makeSymmetrical(mode=mode, primeAxis=side)
 
     def mirror_delete_all_markers(self, nodes=[]):
         '''
@@ -4128,7 +4192,7 @@ class MetaRig(MetaClass):
         between caching it and loading it you went into notepad and copied some text then that poseCache
         is no longer valid. This returns the state, if it's usable data or not
         '''
-        import pyperclip
+        # import pyperclip
         datamap = pyperclip.paste()
         if type(datamap) == unicode:
             try:
@@ -4169,8 +4233,9 @@ class MetaRig(MetaClass):
             self.attrSetLocked(attr, True)
 
         if to_clipboard:
-            structured = {'poseDict': self.poseCache.poseDict}
-            import pyperclip
+            # structured = {'poseDict': self.poseCache.poseDict}
+            structured = {'poseDict': self.poseCache.poseDict}  # , 'infoDict':self.poseCache.infoDict}
+            
             pyperclip.copy(json.dumps(structured))
 
     def poseCacheLoad(self, nodes=None, attr=None, filepath=None, incRoots=True, relativePose=False, relativeRots='projected',
@@ -4198,11 +4263,12 @@ class MetaRig(MetaClass):
         # fill the data up
         if from_clipboard:
             if self.poseClipboard_valid():
-                import pyperclip
+                # import pyperclip
                 datamap = pyperclip.paste()
                 datamap = json.loads(str(datamap))
                 self.poseCache = r9Pose.PoseData(**kws)  # **kws so we can pass the filterSettings directly if needed
                 self.poseCache.poseDict = datamap['poseDict']
+                # self.poseCache.infoDict = datamap['infoDict']
 
         if attr or filepath:
             self.poseCache = r9Pose.PoseData(**kws)  # **kws so we can pass the filterSettings directly if needed
@@ -4461,7 +4527,8 @@ class MetaRig(MetaClass):
     '''
 
     def saveAnimation(self, filepath=None, incRoots=True, useFilter=True, timerange=(),
-                      storeThumbnail=False, force=False, userInfoData='', autorange=True, **kws):
+                      storeThumbnail=False, force=False, userInfoData='', autorange=True, 
+                      buffer_ends=True, **kws):
         '''
         : PRO_PACK :
             Binding of the animMap format for storing animation data out to file
@@ -4480,7 +4547,13 @@ class MetaRig(MetaClass):
             bounds of the curves themselves, saving all key data for the objects regardless of the current timelines.
             This is designed to be run with the "manageRanges=3" flag in the loadAnim code so we can save and restore
             entire animation files via r9Anim format. This flag is ignored if timerange is passed as an arg
+        :param buffer_ends: Oct 2022 : new functionality that will temporarily insert start and end frame keys into the data
+            before saving to ensure sparce baked data, particularly looping data, is maintained. We manage the tangents so
+            that the data is restored with exactly the same in and out shape regardless of the lack of initial key. Note that
+            this, like Maya itself, requires us to change the key tangents of the keys either side of the start and end frames
+            to 'fixed' to best maintain the curve shape.
         '''
+
         if r9Setup.has_pro_pack():
             from Red9.pro_pack import r9pro
             r9panim_map = r9pro.r9import('r9panim_map')
@@ -4495,7 +4568,8 @@ class MetaRig(MetaClass):
                                     timerange=timerange,
                                     storeThumbnail=storeThumbnail,
                                     force=force,
-                                    autorange=autorange)
+                                    autorange=autorange,
+                                    buffer_ends=buffer_ends)
 
             log.info('AnimMap data saved to : %s' % self.animCache.filepath)
 
@@ -5164,7 +5238,7 @@ class MetaHIKPropertiesNode(MetaClass):
     '''
 
     # these are all measurements specific to the skeleton when completed
-    # if loading generic mapping data on different skeletons we need to skip these
+    # if loading generic mapping data on different skeletons we skip these keys be default
     floor_contact = ['FootBottomToAnkle',
                       'FootBackToAnkle',
                       'FootMiddleToAnkle',
@@ -5339,7 +5413,7 @@ class MetaHIKPropertiesNode(MetaClass):
         save the current mapping to file
 
         :param filepath: filepath to store the mapping out too
-        :param skip_measurements: if true (defulat) we do not store those attrs that are skeleton specific
+        :param skip_measurements: if true (default) we do not store those attrs that are skeleton specific
             only those which control the remapping
         '''
         filepath = os.path.splitext(filepath)[0] + '.hikproperties'
@@ -5774,7 +5848,8 @@ if not RED9_META_CALLBACKS['Open']:
     RED9_META_CALLBACKS['Open'].append(OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeOpen, metaData_sceneCleanups))
 if not RED9_META_CALLBACKS['New']:
     RED9_META_CALLBACKS['New'].append(OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kBeforeNew, metaData_sceneCleanups))
-
+# if not RED9_META_CALLBACKS['Reference']:
+#     RED9_META_CALLBACKS['Reference'].append(OpenMaya.MSceneMessage.addCallback(OpenMaya.MSceneMessage.kAfterReference, metaData_sceneCleanups))
 # if r9Setup.mayaVersion()<=2015:
 #     #dulplicate cache callbacks so the UUIDs are managed correctly
 #     if not RED9_META_CALLBACKS['DuplicatePre']:

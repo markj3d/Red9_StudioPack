@@ -75,6 +75,7 @@ from __future__ import print_function
 
 import maya.cmds as cmds
 import maya.mel as mel
+import maya.OpenMaya as OpenMaya
 
 import Red9.startup.setup as r9Setup
 import Red9_CoreUtils as r9Core
@@ -88,9 +89,11 @@ import random
 import sys
 import re
 import shutil
+import math
+import traceback
 
 import Red9.packages.configobj as configobj
-# from Red9.startup.setup import ProPack_Error
+
 
 import logging
 logging.basicConfig()
@@ -155,8 +158,14 @@ def getChannelBoxSelection(longNames=False):
     :param longNames: return the longNames of the attrs selected, else we default to Maya's short attr names
     '''
     attrs = cmds.channelBox('mainChannelBox', q=True, selectedMainAttributes=True)
+    _attrs = []
     if attrs and longNames:
-        attrs = [cmds.attributeQuery(a, n=cmds.ls(sl=True, l=True)[0], ln=1) for a in attrs]
+        for attr in attrs:
+            try:
+                _attrs.append(cmds.attributeQuery(attr, n=cmds.ls(sl=True, l=True)[0], ln=1))
+            except:
+                pass
+        # attrs = [cmds.attributeQuery(a, n=cmds.ls(sl=True, l=True)[0], ln=1) for a in attrs]
     return attrs
 
 def getNodeAttrStatus(node=None, asDict=True, incLocked=True):
@@ -166,7 +175,23 @@ def getNodeAttrStatus(node=None, asDict=True, incLocked=True):
     '''
     return getChannelBoxAttrs(node=None, asDict=True, incLocked=True)
 
-def getChannelBoxAttrs(node=None, asDict=True, incLocked=True):
+def is_compound_attr(node, attr):
+    '''
+    return True is a given attr is a compound attr. This has a catch in it to prevent errors
+    in the code below when listAttr returns attrs that arne't technically legal when being queried
+    ie, listAttr(node) where node is a parentConstraint and you get .target.targetWeight which can't be queried
+    without some prior work
+    '''
+    try:
+        selection = OpenMaya.MSelectionList()
+        selection.add('%s.%s' % (node, attr))
+        plug = OpenMaya.MPlug()
+        selection.getPlug(0, plug)
+        return plug.isCompound()
+    except:
+        return True
+    
+def getChannelBoxAttrs(node=None, asDict=True, incLocked=True, skipcompound=False):
     '''
     return the status of all attrs on the given node, either as a flat list or
     a dict. As dict it contains all data which controls the lock, keyable, hidden states etc
@@ -177,13 +202,28 @@ def getChannelBoxAttrs(node=None, asDict=True, incLocked=True):
     :param asDict: True returns a dict with keys 'keyable','locked','nonKeyable' of attrs
         False returns a list (non ordered) of all attr states.
     :param incLocked: True by default - whether to include locked channels in the return (only valid if not asDict)
+    :param skipcompound: if True we remove the compound parent attrs from any return (ie double3 or float3 which
+         prevents unlocked compounds like "rotate", "translate", "scale" from getting into the return
     '''
     statusDict = {}
     if not node:
         node = cmds.ls(sl=True, l=True)[0]
-    statusDict['keyable'] = cmds.listAttr(node, keyable=True, unlocked=True)
-    statusDict['locked'] = cmds.listAttr(node, keyable=True, locked=True)
-    statusDict['nonKeyable'] = cmds.listAttr(node, channelBox=True)
+    
+    if skipcompound:
+        # skip double3 or float3 containters
+        statusDict['keyable'] = [attr for attr in cmds.listAttr(node, keyable=True, unlocked=True) or [] \
+                                 if not is_compound_attr(node, attr)]
+
+        statusDict['locked'] = [attr for attr in cmds.listAttr(node, keyable=True, locked=True) or [] \
+                                if not is_compound_attr(node, attr)]
+
+        statusDict['nonKeyable']  = [attr for attr in cmds.listAttr(node, channelBox=True) or [] \
+                                     if not is_compound_attr(node, attr)]
+    else:
+        statusDict['keyable'] = cmds.listAttr(node, keyable=True, unlocked=True)
+        statusDict['locked'] = cmds.listAttr(node, keyable=True, locked=True)
+        statusDict['nonKeyable']  = cmds.listAttr(node, channelBox=True)
+    
     if asDict:
         return statusDict
     else:
@@ -196,18 +236,20 @@ def getChannelBoxAttrs(node=None, asDict=True, incLocked=True):
             attrs.extend(statusDict['locked'])
         return attrs
 
-def getSettableChannels(node=None, incStatics=True):
+def getSettableChannels(node=None, incStatics=True, skipcompound=False):
     '''
     return a list of settable attributes on a given node.
 
     :param node: node to inspect.
     :param incStatics: whether to include non-keyable static channels (On by default).
+    :param skipcompound: if True we remove the compound parent attrs from any return (double3 or float3 at the moment
+        this prevents unlocked componuds like "rotate", "translate", "scale" from getting into the return
 
     FIXME: BUG some Compound attrs such as constraints return invalid data for some of the
     base functions using this as they can't be simply set. Do we strip them here?
     ie: pointConstraint.target.targetWeight
 
-    #TODO: need to check the blendshape channels are settable also!
+    # TODO: need to check the blendshape channels are settable also!
     '''
     if not node:
         node = cmds.ls(sl=True, l=True)[0]
@@ -216,10 +258,14 @@ def getSettableChannels(node=None, incStatics=True):
 
     if not incStatics:
         # keyable and unlocked only
-        return cmds.listAttr(node, k=True, u=True)
+        if not skipcompound:
+            return cmds.listAttr(node, k=True, u=True)
+        else:
+            return [attr for attr in cmds.listAttr(node, k=True, u=True) or [] \
+                        if not is_compound_attr(node, attr)]
     else:
         # all settable attrs in the channelBox
-        return getChannelBoxAttrs(node, asDict=False, incLocked=False)
+        return getChannelBoxAttrs(node, asDict=False, incLocked=False, skipcompound=skipcompound)
 
 def nodesDriven(nodes, allowReferenced=False, skipLocked=False, nodes_only=False):
     '''
@@ -642,7 +688,9 @@ def timeLineRangeProcess(start, end, step=1, incEnds=True, nodes=[], process_ani
     if step < 0:
         startFrm = end
         endFrm = start
-    rng = [time for time in range(int(startFrm), int(endFrm), int(step))]
+
+    # ceil added so that fractional keys are stepped up to, range(int(1.0), int(3.5)) = [1, 2] NOT [1, 2, 3]
+    rng = [time for time in range(int(startFrm), int(math.ceil(endFrm)), int(step))]
     if incEnds:
         rng.append(endFrm)
     return rng
@@ -2848,7 +2896,7 @@ class AnimationUI(object):
             if 'poseSubPath' in AnimationUI and AnimationUI['poseSubPath']:
                 cmds.textFieldButtonGrp('uitfgPoseSubPath', edit=True, text=AnimationUI['poseSubPath'])
             if 'poseRoot' in AnimationUI and AnimationUI['poseRoot']:
-                if cmds.objExists(AnimationUI['poseRoot']) or AnimationUI['poseRoot'] == '****  AUTO__RESOLVED  ****':
+                if AnimationUI['poseRoot'] == '****  AUTO__RESOLVED  ****' or cmds.objExists(AnimationUI['poseRoot']):
                     cmds.textFieldButtonGrp(self.uitfgPoseRootNode, e=True, text=AnimationUI['poseRoot'])
 
             __uiCache_LoadCheckboxes()
@@ -3766,20 +3814,29 @@ class AnimFunctions(object):
                                                 log.debug('skipping time : %s : node : %s' % (t, r9Core.nodeNameStrip(src)))
                                         else:
 #                                             cmds.matchTransform(src, dest, pos=snapTranslates, rot=snapRotates, scl=snapScales)  # still not an option
-                                            cmds.SnapTransforms(source=src, destination=dest,
-                                                                timeEnabled=True,
-#                                                                 time=t,
-                                                                snapRotates=snapRotates,
-                                                                snapTranslates=snapTranslates,
-                                                                snapScales=snapScales)
-                                            cmds.setKeyframe(dest, at=_keyed_attrs)
-
-                                            if logging_is_debug():
-                                                log.debug('Snapfrm %s : source(%s) >> target(%s) ::  %s to %s' % (str(t),
-                                                                                                                  r9Core.nodeNameStrip(src),
-                                                                                                                  r9Core.nodeNameStrip(dest),
-                                                                                                                  dest,
-                                                                                                                  src))
+                                            try:
+                                                cmds.SnapTransforms(source=src, destination=dest,
+                                                                    timeEnabled=True,
+    #                                                                 time=t,
+                                                                    snapRotates=snapRotates,
+                                                                    snapTranslates=snapTranslates,
+                                                                    snapScales=snapScales)
+                                                cmds.setKeyframe(dest, at=_keyed_attrs)
+    
+                                                if logging_is_debug():
+                                                    log.debug('Snapfrm %s : source(%s) >> target(%s) ::  %s to %s' % (str(t),
+                                                                                                                      r9Core.nodeNameStrip(src),
+                                                                                                                      r9Core.nodeNameStrip(dest),
+                                                                                                                      dest,
+                                                                                                                      src))
+                                            except Exception as err:
+                                                if logging_is_debug():
+                                                    log.debug('Snapfrm FAILED : %s : source(%s) >> target(%s) ::  %s to %s' % (str(t),
+                                                                                                                      r9Core.nodeNameStrip(src),
+                                                                                                                      r9Core.nodeNameStrip(dest),
+                                                                                                                      dest,
+                                                                                                                      src))
+                                                    log.debug(traceback.format_exc())
                                     # standard POST-SNAP additional calls
                                     if additionalCalls:
                                         for func in additionalCalls:
@@ -4062,13 +4119,17 @@ class AnimFunctions(object):
         return True
 
     @staticmethod
-    def inverseAnimChannels(node, channels, time=None):
+    def inverseAnimChannels(node, channels=[], time=None):
         '''
         really basic method used in the Mirror calls
         '''
-        if not channels:
-            log.debug('abort: no animChannels passed in to inverse')
-            return
+        if r9General.is_basestring(channels):
+            channels = [channels]
+
+        if not 'animCurve' in cmds.nodeType(node):
+            if not channels:
+                log.debug('abort: no animChannels passed in to inverse')
+                return
         if time:
             cmds.scaleKey(node, valueScale=-1, attribute=channels, time=time)
         else:
@@ -4079,6 +4140,8 @@ class AnimFunctions(object):
         '''
         really basic method used in the Mirror calls
         '''
+        if r9General.is_basestring(channels):
+            channels = [channels]
         for chan in channels:
             try:
                 cmds.setAttr('%s.%s' % (node, chan), cmds.getAttr('%s.%s' % (node, chan)) * -1)
@@ -4803,6 +4866,11 @@ class MirrorHierarchy(object):
                 raise ValueError('given mirror side is not a valid int entry: 0, 1 or 2')
             else:
                 return True
+
+#         # allow simple prefix rather than just full mirror sides
+#         if side in ['C', 'L' ,'R']:
+#             return True
+
         if side not in self.mirrorDict:
             raise ValueError('given mirror side is not a valid key: Left, Right or Centre')
         else:
@@ -4869,7 +4937,7 @@ class MirrorHierarchy(object):
         Add/Set the default attrs required by the MirrorSystems.
 
         :param node: nodes to take the attrs
-        :param side: valid values are 'Centre','Left' or 'Right' or 0, 1, 2
+        :param side: valid values are 'Centre','Left', 'Right' or 0, 1, 2 or 'C', 'L', 'R'
         :param slot: bool Mainly used to pair up left and right paired controllers
         :param axis: eg 'translateX,rotateY,rotateZ' simple comma separated string
             If this is set then it overrides the default mirror axis.
@@ -4883,6 +4951,10 @@ class MirrorHierarchy(object):
         # Note using the MetaClass as all the type checking
         # and attribute handling is done for us
         mClass = r9Meta.MetaClass(node)
+
+        if side in ['C', 'L' ,'R']:
+            side = ['C', 'L', 'R'].index(side)
+
         if self._validateMirrorEnum(side):
             mClass.addAttr(self.mirrorSide, attrType='enum', enumName='Centre:Left:Right', hidden=True)
             mClass.__setattr__(self.mirrorSide, side)

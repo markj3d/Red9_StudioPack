@@ -26,11 +26,10 @@ import os
 # import math
 # import re
 
-import Red9_General as r9General
 import Red9.startup.setup as r9Setup
+import Red9_General as r9General
 import Red9_Meta as r9Meta
 import Red9_CoreUtils as r9Core
-
 
 import wave
 import contextlib
@@ -171,7 +170,7 @@ def inspect_wav(multi=False, audioNodes=[]):
             audio = AudioNode(filepath=audio)
         formatData = ''
         data = audio.gatherInfo()
-        for key, val in data.items():
+        for key, val in sorted(data.items()):
             if not key == 'bwav':
                 formatData += '{:<15}: {:}\n'.format(key, val)
         bWavData = ''
@@ -789,6 +788,10 @@ class AudioNode(object):
         audioseg = audioseg.set_channels(1)
         audioseg.export(output, format="wav")
 
+        # mono_audios = audioseg.split_to_mono()
+        # mono_audios[0].export(output, format="wav")
+
+
     # ---------------------------------------------------------------------------------
     # PRO_PACK : BWAV support ---
     # ---------------------------------------------------------------------------------
@@ -937,7 +940,8 @@ class AudioNode(object):
         '''
         if not self.isLoaded:
             a = cmds.ls(type='audio')
-            cmds.file(self.path, i=True, type='audio', options='o=0')
+            # cmds.file(self.path, i=True, type='audio', options='o=0')
+            cmds.sound(file=self.path, name=r9Core.nodeNameStrip(os.path.splitext(os.path.basename(self.path))[0]))
             b = cmds.ls(type='audio')
 
             if not a == b:
@@ -952,6 +956,7 @@ class AudioNode(object):
             self.isLoaded = True
         else:
             log.info('given Audio Path is already loaded in the Maya Scene')
+
         if active:
             self.setActive()
 
@@ -960,6 +965,7 @@ class AudioNode(object):
         Set the sound node as active on the timeSlider
         '''
         if self.isLoaded:
+
             gPlayBackSlider = mel.eval("string $temp=$gPlayBackSlider")
             cmds.timeControl(gPlayBackSlider, e=True, ds=1, sound=self.audioNode)
 
@@ -1002,7 +1008,8 @@ class AudioNode(object):
         rename the AudioNode so it ties to the wav name
         '''
         try:
-            cmds.rename(self.audioNode, r9Core.nodeNameStrip(os.path.splitext(os.path.basename(self.path))[0]))
+            # cmds.rename(self.audioNode, r9Core.nodeNameStrip(os.path.splitext(os.path.basename(self.path))[0]))
+            self.audioNode = cmds.rename(self.audioNode, r9Core.nodeNameStrip(os.path.splitext(os.path.basename(self.path))[0]))
         except:
             if cmds.referenceQuery(self.audioNode, inr=True):
                 log.info('failed to Rename Referenced Audio Node : %s' % self.audioNode)

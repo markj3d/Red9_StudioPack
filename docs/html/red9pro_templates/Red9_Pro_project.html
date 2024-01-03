@@ -187,8 +187,8 @@ Thats to say if we give it “C:/MyProject/<strong>&lt;audio&gt;</strong>/custom
 </tbody>
 </table>
 <dl class="data">
-<dt id="Red9.pro_pack.core.project.RED9_SCENE_REFERENCE_CALLBACK">
-<code class="descname">RED9_SCENE_REFERENCE_CALLBACK</code><em class="property"> = None</em><a class="headerlink" href="#Red9.pro_pack.core.project.RED9_SCENE_REFERENCE_CALLBACK" title="Permalink to this definition">¶</a></dt>
+<dt id="Red9.pro_pack.core.project.RED9_SCENE_NEW_CALLBACK">
+<code class="descname">RED9_SCENE_NEW_CALLBACK</code><em class="property"> = None</em><a class="headerlink" href="#Red9.pro_pack.core.project.RED9_SCENE_NEW_CALLBACK" title="Permalink to this definition">¶</a></dt>
 <dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># The following keys are always present in the project data, exposed in code via</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">PROJECT_DATA</span>
@@ -213,6 +213,8 @@ Thats to say if we give it “C:/MyProject/<strong>&lt;audio&gt;</strong>/custom
 <li><strong>healthclass_OPEN</strong>: default SceneOpen HealthTest class run if the “health_run_open_callback” checkbox is ticked</li>
 <li><strong>icon</strong>: icon shown in the Maya Toolbox for this project</li>
 <li><strong>mayaVersion</strong>: if the test is active in the health systems we use this to check the required project MayaVersion against</li>
+<li><strong>maya_project</strong>: should point to a dir containing a Maya project workspace.mel that we’ll switch too, but only if the “maya_project_switch” flag is also set</li>
+<li><strong>maya_project_switch</strong>: if “maya_project” has been set to a valid path (one containing a workspace.mel file) then this switches on the management of Maya projects</li>
 <li><strong>p4_project</strong>: Perforce Management: this triggers the Perforce handling for this project</li>
 <li><strong>p4_failpath</strong>: base p4root path to be applied should the P4 connection fail</li>
 <li><strong>pose_projectpath</strong>: default path to set the project folder path too in the pose library</li>
@@ -244,7 +246,8 @@ exposed as direct attributes under the data object</p>
 <p>For base key definitions see the API docs</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">ALL PATHS COMING FROM THIS MUST BE PYTHONIZED NOT OS!!!!!!!  on windows ‘/’ not ‘’</p>
+<p class="last">ALL PATHS COMING FROM THIS MUST BE PYTHONIZED NOT OS!!!!!!!
+by default the Project Manager UI will do this for you</p>
 </div>
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.ProjectBase.unused_default_keys">
@@ -304,14 +307,17 @@ ensure they are relevant to a users environment</p>
 <dt id="Red9.pro_pack.core.project.ProjectBase.resolve_paths">
 <code class="descname">resolve_paths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.ProjectBase.resolve_paths" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function responsible for replacing any key string entries in the project file
-with dynamic data such as the actual p4_clientroot. We currently support 2 different
-key strings : “p4_root+” and “&lt;key&gt;” where key is a key in the project data itself</p>
+with dynamic data, such as the actual p4_clientroot or pointers to another main path.
+Key strings should now use the new format “&lt;key&gt;” where key is a key in the project
+data itself. This can point to any currently available key in the project, making it idea
+for dynamically re-directing paths to match project mounts etc.</p>
+<p>The previous management of “p4_root+” key is still valid, but not recommended.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>the second part of the path must not start with <strong>‘/’</strong> such that if <strong>p4_root=’X:/assets/root’</strong></p>
 <ul class="last simple">
-<li>‘p4_root+resources/rigs/child_biped/Red9_Child_PUB.ma’ - this will yield correct results ‘X:/assets/root/resources/rigs/child_biped/Red9_Child_PUB.ma</li>
-<li>‘p4_root+/resources/rigs/child_biped/Red9_Child_PUB.ma’ - this will yield incorrect ‘X:/resources/rigs/child_biped/Red9_Child_PUB.ma</li>
+<li>‘&lt;p4_root&gt;resources/rigs/child_biped/Red9_Child_PUB.ma’ - this will yield correct results ‘X:/assets/root/resources/rigs/child_biped/Red9_Child_PUB.ma</li>
+<li>‘&lt;p4_root&gt;/resources/rigs/child_biped/Red9_Child_PUB.ma’ - this will yield incorrect ‘X:/resources/rigs/child_biped/Red9_Child_PUB.ma</li>
 </ul>
 </div>
 </dd></dl>
@@ -330,12 +336,12 @@ back to the client.project file</p>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>..note:: </dt>
-<dd>this will save the processed data, so if we’ve built paths or resolved them when we loaded
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this will save the processed data, so if we’ve built paths or resolved them when we loaded
 the data those new values would also get saved out. If you want to change data use the new
-self._raw set of data and save with the raw flag True</dd>
-</dl>
+self._raw set of data and save with the raw flag True</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -394,6 +400,7 @@ This is why we usually ask that clients fill in a technical sign-off doc so that
 <li><strong>self.suspend_openCallback</strong> : mutes the Scene Health test if bound</li>
 <li><strong>self.suppress_warnings</strong> : mutes any of the Scene Health test warnings and popups if True</li>
 <li><strong>self.scene_health_auto_fix</strong> : if True we automatically fix any Scene Health test failures if we can,             assuming the suspend flag isn’t set to True. default = True</li>
+<li><strong>self.scene_health_run_on_switch</strong> : if True (default) then we run the scene health call during the             project switch call as well as on file open</li>
 </ul>
 </div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
@@ -484,7 +491,7 @@ instance of the ProjectBase object to ensure full sync to the incoming data</td>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If a path in the .project json file starts with ‘p4_root+’ and we’re connected to Perforce
+<p class="last">If a path in the .project json file starts with ‘&lt;p4_root&gt;’ and we’re connected to Perforce
 then we replace that element on the fly with the users current p4_root path, reconstructing
 on the fly all paths to be relative to their P4 environment regardless of workspace
 mounts</p>
@@ -549,6 +556,14 @@ projects_available to find that clients initial project instead</li>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.project.Project.set_maya_project">
+<code class="descname">set_maya_project</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.set_maya_project" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the Maya Project to the given workspace if the “maya_project” variable in the project is bound
+to a valid path, containing a workspace.mel Maya project. The key “maya_project_switch” also needs
+to be set to True else this call is ignored.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.set_source_control">
 <code class="descname">set_source_control</code><span class="sig-paren">(</span><em>force=False</em>, <em>bailed=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.set_source_control" title="Permalink to this definition">¶</a></dt>
 <dd><p>Crucial binding of the source control system passed to the r9ie.importexport module bindings
@@ -569,11 +584,11 @@ they call the P4_API</li>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>..note::</dt>
-<dd>This is the main connection call for P4 in the Project Systems and the ONLY place 
-in the API where we actually call self._SOURCE_CONTROL.connect which handles the P4.connect()</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is the main connection call for P4 in the Project Systems and the ONLY place 
+in the API where we actually call self._SOURCE_CONTROL.connect which handles the P4.connect()</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -680,13 +695,25 @@ these variables are pulled directly from the clients own resource/client.project
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.set_scene_open_callback">
-<code class="descname">set_scene_open_callback</code><span class="sig-paren">(</span><em>customHealth=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.set_scene_open_callback" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_scene_open_callback</code><span class="sig-paren">(</span><em>customHealth=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.set_scene_open_callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>set the main RED9_SCENEOPEN_CALLBACK, binding MSceneMessage.kAfterOpen to self.test_scene_health</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.project.Project.kill_scene_open__callback">
 <code class="descname">kill_scene_open__callback</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.kill_scene_open__callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>kill the RED9_SCENEOPEN_CALLBACK api callback</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.project.Project.set_scene_new_callback">
+<code class="descname">set_scene_new_callback</code><span class="sig-paren">(</span><em>customHealth=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.set_scene_new_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the main RED9_SCENENEW_CALLBACK, binding MSceneMessage.kAfterNew to self.test_scene_health</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.project.Project.kill_scene_new__callback">
+<code class="descname">kill_scene_new__callback</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.project.Project.kill_scene_new__callback" title="Permalink to this definition">¶</a></dt>
 <dd><p>kill the RED9_SCENEOPEN_CALLBACK api callback</p>
 </dd></dl>
 

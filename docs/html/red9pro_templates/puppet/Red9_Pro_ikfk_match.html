@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pro_Pack : puppet : ikfk_match &mdash; Red9 3.0 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Pro_Pack : tools : rig_manager" href="../tools/Red9_Pro_rig_manager.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Red9<img src="../../_static/Red9_ProPack_logo.png" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_AnimationUtils.html">Red9_AnimationUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Audio.html">Red9_Audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Core.html">Red9_CoreUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_General.html">Red9_General</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Meta.html">Red9_Meta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_PoseSaver.html">Red9_PoseSaver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Setup.html">Red9_Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../red9core_templates/Red9_Tools.html">Red9_Tools</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_anim_map.html">Pro_Pack : anim_map</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_animation.html">Pro_Pack : animation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_audio.html">Pro_Pack : audio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_export.html">Pro_Pack : exporter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_general.html">Pro_Pack : general</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_importexport.html">Pro_Pack : importexport</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_metadata_pro.html">Pro_Pack : metadata_pro</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_optimiser.html">Pro_Pack : optimiser</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_project.html">Pro_Pack : project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_r9data.html">Pro_Pack : r9Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_rigutils.html">Pro_Pack : rigutils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_skining.html">Pro_Pack : skining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_skinning.html">Pro_Pack : skinning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Red9_Pro_uibase.html">Pro_Pack : uibase</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/Red9_Pro_anim_binder.html">Pro_Pack : tools : anim_binder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/Red9_Pro_anim_tools.html">Pro_Pack : tools : anim_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/Red9_Pro_health_manager.html">Pro_Pack : tools : health_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/Red9_Pro_metahuman_tools.html">Pro_Pack : tools : metahuman_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Red9</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Pro_Pack : puppet : ikfk_match</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/red9pro_templates/puppet/Red9_Pro_ikfk_match.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="pro-pack-puppet-ikfk-match">
+<h1>Pro_Pack : puppet : ikfk_match<a class="headerlink" href="#pro-pack-puppet-ikfk-match" title="Permalink to this headline">¶</a></h1>
+<p>ProPack core IK&gt;FK matching codebase used to configure, connect and match limb
+between IK and FK modes. These work at a sub-system level so all controllers need
+to be wired to a consistent system node. For example, mrig.L_ArmSystem for
+matching the left arm. If you try and add wires to a rig thats a flat structure
+the matching will be a one shot full rig based process so not ideal.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># import statement for the module via the r9pro decompiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9puppet_ikfk_utils</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9puppet_ikfk_utils&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<span class="target" id="module-Red9.pro_pack.puppet.ikfk_match"></span><p>Specific Module to manage the building and extraction of the IKFK systems within Red9 PuppetRig</p>
+<p class="rubric">Main Classes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.add_fkik_matchpnt">
+<code class="descname">add_fkik_matchpnt</code><span class="sig-paren">(</span><em>mSystem</em>, <em>ctrl_wire</em>, <em>fk_wire</em>, <em>matchid</em>, <em>prefix=None</em>, <em>parent=None</em>, <em>target='IK'</em>, <em>current=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.add_fkik_matchpnt" title="Permalink to this definition">¶</a></dt>
+<dd><p>&lt;&lt; LEGACY &gt;&gt; replaced with the version below that uses simple indexing to denote the process order</p>
+<p>Add an ik_match_pnt node into the given mSystem, this parents a new matchpnt transform
+to the given fk_wire controller thats aligned to the IK controller requiring snapping
+during the fk_to_fk_match call</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mSystem</strong> – mSystem to wire the matchpnt too</li>
+<li><strong>ctrl_wire</strong> – mSystem.attr wire connecting the controller to the mSystem, OR the controller object itself - wired to a MetaRigSubSystem
+note that this now also supports ctrl_wire attrs that are connected to the SupportNode also</li>
+<li><strong>fk_wire</strong> – mSystem.attr wire connecting the fk_jnt to the mSystem, OR object to use directly</li>
+<li><strong>matchid</strong> – denotes the matchpnts base wire name - eg : “end”, “pole” creating attr wire ‘mSystem.SupportNode.IK_matchpnt_pole’</li>
+<li><strong>prefix</strong> – usually just the side id for the system ‘L’,’R’,’C’, if not given we ID this from the system mirrorSide</li>
+<li><strong>parent</strong> – if given this becomes the parent for the matchpnt, else we parent it to the given fk_wire node</li>
+<li><strong>target</strong> – ‘IK’ or ‘FK’, reverses the logic of the func. ‘SOLIK’ &amp; ‘SOLFK’ are also now support in the new cache ikfk matching</li>
+<li><strong>current</strong> – <p>if the matchpnt already exists, such as in mGears case, this allows us to purely mark that node rather than creating a new one</p>
+<ul>
+<li>’IK’ the matchpnt is parented under the fk / fk_wire node, and used when snapping to IK mode : the IK ctrl snaps to the FK ctrl</li>
+<li>’FK’ the matchpnt is parented under the ik / ctrl_wire node, and used when snapping to FK mode : the FK ctrl snaps to the IK ctrl</li>
+<li>’SOLIK’ the matchpnt is parented under the fk / fk_wire node BUT we’re expecting that node to be an end SOL chain node not part of the actual fk system</li>
+<li>’SOLFK’ the matchpnt is parented under the ik / ctrl_wire node BUT we’re expecting that node to be an end SOL chain node not part of the actual ik system</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>r9pmeta.add_fkik_matchpnt(mSystem, ctrl_wire=’CTRL_Wrist’, fk_wire=’CTRL_FK_End’, matchid=’end’, prefix=’L’)</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>the matchid is actually used to order the snap function and determine what node gets snapped in what order.
+If the matchid isn’t in the below list then it’s treated as unordered and snapped as it’s found, base id’s</p>
+<ul class="last simple">
+<li><strong>ik_matchpnt_order</strong> :  [‘toe’, ‘ball’, ‘pole’, ‘mid’, ‘end’, ‘ankle’, ‘start’, ‘hip’, ‘clav’]  =  order in which the matchpnts are processed (reversed)</li>
+<li><strong>fk_matchpnt_order</strong> :  [‘toe’, ‘ball’, ‘end’, ‘ankle’, ‘pole’, ‘start’, ‘hip’, ‘clav’] =  order in which the matchpnts are processed (reversed)</li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.add_fkik_matchpnt_2">
+<code class="descname">add_fkik_matchpnt_2</code><span class="sig-paren">(</span><em>mSystem</em>, <em>ctrl_wire</em>, <em>fk_wire</em>, <em>matchindex=-1</em>, <em>prefix=None</em>, <em>parent=None</em>, <em>target='IK'</em>, <em>current=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.add_fkik_matchpnt_2" title="Permalink to this definition">¶</a></dt>
+<dd><p>&lt;&lt;  New Implementation  &gt;&gt;</p>
+<p>Add an ik_match_pnt node into the given mSystem, this parents a new matchpnt transform
+to the given fk_wire controller thats aligned to the IK controller requiring snapping
+during the fk_to_fk_match call</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mSystem</strong> – mSystem to wire the matchpnt too</li>
+<li><strong>ctrl_wire</strong> – mSystem.attr wire connecting the controller to the mSystem, OR the controller object itself - wired to a MetaRigSubSystem
+note that this now also supports ctrl_wire attrs that are connected to the SupportNode also</li>
+<li><strong>fk_wire</strong> – mSystem.attr wire connecting the fk_jnt to the mSystem, OR object to use directly</li>
+<li><strong>matchindex</strong> – denotes the match index which dictates the order in which the matchpnts are processed during the match. -1 = no order for this node, treated as unordered node</li>
+<li><strong>prefix</strong> – usually just the side id for the system ‘L’,’R’,’C’, if not given we ID this from the system mirrorSide</li>
+<li><strong>parent</strong> – if given this becomes the parent for the matchpnt, else we parent it to the given fk_wire node</li>
+<li><strong>target</strong> – ‘IK’ or ‘FK’, reverses the logic of the func. ‘SOLIK’ &amp; ‘SOLFK’ are also now support in the new cache ikfk matching</li>
+<li><strong>current</strong> – <p>if the matchpnt already exists, such as in mGears case, this allows us to purely mark that node rather than creating a new one</p>
+<ul>
+<li>’IK’ the matchpnt is parented under the fk / fk_wire node, and used when snapping to IK mode : the IK ctrl snaps to the FK ctrl</li>
+<li>’FK’ the matchpnt is parented under the ik / ctrl_wire node, and used when snapping to FK mode : the FK ctrl snaps to the IK ctrl</li>
+<li>’SOLIK’ the matchpnt is parented under the fk / fk_wire node BUT we’re expecting that node to be an end SOL chain node not part of the actual fk system</li>
+<li>’SOLFK’ the matchpnt is parented under the ik / ctrl_wire node BUT we’re expecting that node to be an end SOL chain node not part of the actual ik system</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9puppet_ikfk_utils</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9puppet_ikfk_utils&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9puppet_ikfk_utils</span><span class="o">.</span><span class="n">add_fkik_matchpnt_2</span><span class="p">(</span><span class="n">mSystem</span><span class="p">,</span> <span class="n">ctrl_wire</span><span class="o">=</span><span class="s1">&#39;CTRL_Wrist&#39;</span><span class="p">,</span> <span class="n">fk_wire</span><span class="o">=</span><span class="s1">&#39;CTRL_FK_End&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;IK&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># note this call is also bound to r9pmeta so can be called like this also:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9pmeta</span><span class="o">.</span><span class="n">add_fkik_matchpnt_2</span><span class="p">(</span><span class="n">mSystem</span><span class="p">,</span> <span class="n">ctrl_wire</span><span class="o">=</span><span class="s1">&#39;CTRL_Wrist&#39;</span><span class="p">,</span> <span class="n">fk_wire</span><span class="o">=</span><span class="s1">&#39;CTRL_FK_End&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;L&#39;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s1">&#39;IK&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>This setup creates a new matchpnt grp node, parented to the required node, either under the node given as fk_wire (if target=’IK’)
+or under the node given as ik_wire (if target=’FK’). This code will add in a SupportNode to the msystem, if not already found, and wire
+the matchpnt to that under an array attr ‘IK_matchpnt’ (where IK if the target var). It will also wire this matchpnt back to the ctrl as target. 
+This means that the controller we’re trying to match has a direct wire to the matchpnt, and over to the target transform.</p>
+<p>The Matchpnt also has an attr “matchpnt_index” and this denotes the order in which the match will be processed. If this attr is set 
+to -1 (default) then the order is taken from the wiring indexes that the matchpnts are wired to the SupportNode under (it’s a multi-array attr),
+else it uses the index set per pnt. Order is sometimes important to prevent double transforms.</p>
+<p>If you graph the network you’ll see something like this:</p>
+<p class="last">mRig &gt;&gt; L_ArmSystem.SupportNode &gt;&gt; SupportNode.IK_matchpnts (array attr) &gt;&gt; L_Wrist_IKmatchpnt (node itself) &gt;&gt; L_Wrist_Ctr (to be matched)</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.set_ikfk_switch_data">
+<code class="descname">set_ikfk_switch_data</code><span class="sig-paren">(</span><em>mrig</em>, <em>system</em>, <em>mapdata</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.set_ikfk_switch_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>set internal mods to the ikfk systems, allowing full customization at the System level.
+This sets up a new attr on the system mNode that stores the data ready for use by the switch calls.
+Available keys below, please note you can just set one of these to modify the system
+as needed. If not setup we default to the mRig vars which control the Red9 Puppet logic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mrig</strong> – the initialized mrig mNode</li>
+<li><strong>system</strong> – the initialized sub-system mNode we’re managing</li>
+<li><strong>mapdata</strong> – {} customization dict allowing you to modify the default attrs and values used by the switch code</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>mapdata[‘switch_ctrl’] = wire used to connect the control to the system, default ‘CTRL_Switch’, </dt>
+<dd>if not given we search the system for the first node that has the “switch_attr” on it</dd>
+</dl>
+</li>
+<li>mapdata[‘switch_attr’] = attr used by the animators to switch the ikfk blend, default = mrig.ik_fk_switchattr</li>
+<li>mapdata[‘ik_switch_val’] = value of the above attr when in ik mode, default = 0</li>
+<li>mapdata[‘fk_switch_val’] = value of the above attr when in fk mode, default = 1</li>
+<li><dl class="first docutils">
+<dt>mapdata[‘ik_zero_ctrl_attrs’] = additional attrs on the given ctrls that need to be set back to zero during the switch to IK (usually toe, ball attrs etc)</dt>
+<dd>[(CTRL_wire, [attrs]), (…]</dd>
+</dl>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9puppet_ikfk_utils</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9puppet_ikfk_utils&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mapdata</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mapdata</span><span class="p">[</span><span class="s1">&#39;switch_attr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;ikfk_switch&#39;</span>  <span class="c1"># attr we&#39;ll use to switch the ikfk state</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mapdata</span><span class="p">[</span><span class="s1">&#39;ik_switch_val&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>           <span class="c1"># value of the attr when in full IK mode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mapdata</span><span class="p">[</span><span class="s1">&#39;fk_switch_val&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>            <span class="c1"># value of the attr when in FK mode</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># set that data to the system mNode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9puppet_ikfk_utils</span><span class="o">.</span><span class="n">set_ikfk_switch_data</span><span class="p">(</span><span class="n">mrig</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">mapdata</span><span class="o">=</span><span class="n">mapdata</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># to check we can use the semi-private call below</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">_get_ikfk_switch</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">fullmap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.get_ikfk_switch_data">
+<code class="descname">get_ikfk_switch_data</code><span class="sig-paren">(</span><em>mrig</em>, <em>system</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.get_ikfk_switch_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>get any internal mods to the ikfk systems, allowing full customization at the System level.
+:param mrig: the initialized mrig mNode
+:param system: the initialized sub-system mNode we’re managing
+:returns mapdata: {}</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>mapdata[‘switch_ctrl’] = wire used to connect the control to the system, default ‘CTRL_Switch’,</dt>
+<dd>if not given we search the system for the first node that has the “switch_attr” on it</dd>
+</dl>
+</li>
+<li>mapdata[‘switch_attr’] = attr used by the animators to switch the ikfk blend, default = mrig.ik_fk_switchattr</li>
+<li>mapdata[‘ik_switch_val’] = value of the above attr when in ik mode, default = 0</li>
+<li>mapdata[‘fk_switch_val’] = value of the above attr when in fk mode, default = 1</li>
+<li><dl class="first docutils">
+<dt>mapdata[‘ik_zero_ctrl_attrs’] = additional attrs on the given ctrls that need to be set back to zero during the switch to IK (usually toe, ball etc)</dt>
+<dd>[(CTRL_wire, [attrs]), (…]</dd>
+</dl>
+</li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Red9.pro_pack</span> <span class="k">import</span> <span class="n">r9pro</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r9puppet_ikfk_utils</span> <span class="o">=</span> <span class="n">r9pro</span><span class="o">.</span><span class="n">r9import</span><span class="p">(</span><span class="s1">&#39;r9puppet_ikfk_utils&#39;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># to check we can use the semi-private call below</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mapdata</span> <span class="o">=</span> <span class="n">mrig</span><span class="o">.</span><span class="n">_get_ikfk_switch</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.wire_fkik_matchpoints">
+<code class="descname">wire_fkik_matchpoints</code><span class="sig-paren">(</span><em>mrig</em>, <em>force_version=1.08</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.wire_fkik_matchpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>patch to add in ik matchpnts for the ik&gt;fk matching setups</p>
+<p>This is exposed for Clients wanting to patch NON Red9 Puppet based systems
+but requires each system to have mSystem.SupportNode.GRP_IK_chain, GRP_FK_chain as
+wires to denote the group directly above the Ik and Fk chains in the system.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mrig</strong> – the mrig instantiated class to process</li>
+<li><strong>force_version</strong> – if given this forces the build version of the rig to be ignored. Some of the matchpnt logic
+has been clamped to specific build versions for consistency. v1.08 and above triggers the latest logic</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">to run correctly each chain must have the same hierarchy order else the fk
+match will be out of sync. Ideally this is to be run as part of a Red9 Patch
+system and requires a little baby sitting!</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">if the rig is NOT facing the ‘Z’ axis the toe matching data sent to the toe system during the
+ik/fk match will be INCORRECT!</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this is NO longer run with PuppetRig, the code deals with the adding of the nodes internally now</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.get_matchpnts">
+<code class="descname">get_matchpnts</code><span class="sig-paren">(</span><em>mrig</em>, <em>system</em>, <em>mode</em>, <em>cached_solution=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.get_matchpnts" title="Permalink to this definition">¶</a></dt>
+<dd><p>wrap to determine the version of the matchpnts we’re running</p>
+<p>Main code to extract and pair up the matchpnts with their respective ctrls ready 
+to be passed to the snap functions for alignment.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.switch_to_fk">
+<code class="descname">switch_to_fk</code><span class="sig-paren">(</span><em>mrig</em>, <em>mSystems=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.switch_to_fk" title="Permalink to this definition">¶</a></dt>
+<dd><p>switch the entire rig or just a given set of mSystems to FK mode (NO MATCHING)
+This just throws the defined mrig.ik_fk_switchattr attr to mrig.fk_switch_val</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mSystems</strong> – systems to switch mode for</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.switch_to_ik">
+<code class="descname">switch_to_ik</code><span class="sig-paren">(</span><em>mrig</em>, <em>mSystems=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.switch_to_ik" title="Permalink to this definition">¶</a></dt>
+<dd><p>switch the entire rig or just a given set of mSystems to IK mode (NO MATCHING)
+This just throws the defined mrig.ik_fk_switchattr attr to mrig.ik_switch_val</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mSystems</strong> – systems to switch mode for</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.fk_ik_toggle">
+<code class="descname">fk_ik_toggle</code><span class="sig-paren">(</span><em>mrig</em>, <em>mSystem</em>, <em>time=False</em>, <em>verbose=False</em>, <em>keyswitch=True</em>, <em>keyctrls=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.fk_ik_toggle" title="Permalink to this definition">¶</a></dt>
+<dd><p>simple toggle call to switch the current state of the system between fk and ik with matching.
+This checks the mrig.ik_fk_switchattr and if it equals mrig.fk_switch_val toggles over to FK,
+if it equals mrig.ik_switch_val then we switch to IK.</p>
+<p>Used in the DagProcMenu systems</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mSystem</strong> – the mSystem we want to toggle, this expects an instanciated MetaSubSystems
+such as mrig.L_ArmSystem</li>
+<li><strong>time</strong> – if True we match the systems over the current or selected timerange</li>
+<li><strong>verbose</strong> – if True we throw a confirm dialog when dealing with time to make sure this is what the user wanted</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.manage_attr_boundaries">
+<code class="descname">manage_attr_boundaries</code><span class="sig-paren">(</span><em>switch_ctrl</em>, <em>switch_attr</em>, <em>switch_value</em>, <em>timerange=()</em>, <em>keyswitch=True</em>, <em>buffers=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.manage_attr_boundaries" title="Permalink to this definition">¶</a></dt>
+<dd><p>a simple management block to add / manage switched holding keys for given node attr at a given value.
+This is used in the ikfk switch calls to manage / set the buffer keys for the switch attr itself.
+If timerange then we first set keys on switch_ctrl.switch+_attr at timerange[0]-1 and timerange[0]+1
+to hold current values, then cut all keys between the timerange before finally setting keys on the
+actual two timerange frames at the switch_value given.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>switch_ctrl</strong> – controller</li>
+<li><strong>switch_attr</strong> – the attr we’re managing</li>
+<li><strong>switch_value</strong> – the value we want to switch too within the time given</li>
+<li><strong>timerange</strong> – the timerange boundaries we’ll be switching + and - 1 frm, 
+else we key simple holding keys at [currentTime - 1, currentTime]</li>
+<li><strong>keyswitch</strong> – do we just set, or key the boundaries</li>
+<li><strong>buffers</strong> – if timerange and buffers=True (default) then we set the timerange[0]-1 and timerange[1]+1 frames</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.match_ik_polevector">
+<code class="descname">match_ik_polevector</code><span class="sig-paren">(</span><em>mSystem</em>, <em>time=False</em>, <em>matchfk=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.match_ik_polevector" title="Permalink to this definition">¶</a></dt>
+<dd><p>&lt;&lt; RED9 INTERNAL TESTING ONLY &gt;&gt;</p>
+<p>RED9 PUPPET : Single Frame Sub-Routine!
+sub call to the ikfk matching for dealing accurately with the pole vector matching</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mSystem</strong> – system to process</li>
+<li><strong>time</strong> – do we key the results or not? This is static time as the actual timerange calls are managed by the ik_fk_match call internally</li>
+<li><strong>matchfk</strong> – if True we match the mSystem.CTRL_Pole to the fk arms vector, else we match it to the ik system</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.match_ik_toes">
+<code class="descname">match_ik_toes</code><span class="sig-paren">(</span><em>mSystem</em>, <em>time=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.match_ik_toes" title="Permalink to this definition">¶</a></dt>
+<dd><p>RED9 PUPPET : TO &gt; IK : Single Frame Sub-Routine!
+hard coded to the Red9 Puppet - set the toe system up to match the FK input
+State &gt; switching from FK to IK.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mSystem</strong> – system to process</li>
+<li><strong>time</strong> – do we key the results or not? This is static time as the actual timerange calls are managed by the ik_fk_match call internally</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this runs by copying the data form the toe_match_resolver node in the IK setup over to the Foot_Ctrl’s toe channels. 
+The actual match of the rotate is done via the ik_matchpoint for the toe, we push the fk over to the additional
+“toe_match_resolver” transform so that the data is in the correct space before pushing the rotate data to the channels</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.match_zero_attrs">
+<code class="descname">match_zero_attrs</code><span class="sig-paren">(</span><em>mSystem</em>, <em>time=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.match_zero_attrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>RED9 PUPPET : Single Frame Sub-Routine!
+This is passed to the ikfk match calls as an additional_pre func IF the mapdata has the key[‘ik_zero_ctrl_attrs’],
+mapdata is bound directly to the mSystems during the mrig._get_ikfk_switch call.
+this is designed to zero off the given list of data during the ikfk match process.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.match_spline_ik">
+<code class="descname">match_spline_ik</code><span class="sig-paren">(</span><em>mrig</em>, <em>mSystem</em>, <em>time=False</em>, <em>iterations=30</em>, <em>ikchain=[]</em>, <em>fkchain=[]</em>, <em>ctrl_end=None</em>, <em>ctrl_mid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.match_spline_ik" title="Permalink to this definition">¶</a></dt>
+<dd><p>RED9 PUPPET : TO &gt; IK : Single Frame Sub-Routine!
+hard coded to the Red9 Puppet - iteratively tries to fit the IK spine to the fk joints
+State &gt; switching from FK to IK</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mSystem</strong> – system to process</li>
+<li><strong>time</strong> – do we key the results or not? This is static time as the actual timerange calls are managed by the ik_fk_match call internally</li>
+<li><strong>iterations</strong> – iterations run during the fit process, more = closer end result</li>
+<li><strong>ikchain</strong> – the ik joint chain for comparison</li>
+<li><strong>fkchain</strong> – the fk joint chain for comparison</li>
+<li><strong>ctrl_end</strong> – the top controller / end of the spine so usually the Chest_Ctrl</li>
+<li><strong>ctrl_mid</strong> – the mid controller that we’ll be adjusting for the fit code</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">if this is called outside of the ik_fk_match call then you can’t eval time using cmds.currentTime(t, e=True, u=False), you
+must eval the scene for the calculations. You can however still turn off viewport update with refresh(su=True)</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.match_limb_lengths">
+<code class="descname">match_limb_lengths</code><span class="sig-paren">(</span><em>mrig</em>, <em>mSystem</em>, <em>mode</em>, <em>time=False</em>, <em>cached=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.match_limb_lengths" title="Permalink to this definition">¶</a></dt>
+<dd><p>RED9 PUPPET : TO &gt; FK : Single Frame Sub-Routine!</p>
+<p>hard coded to the Red9 Puppet - copy the stretch factor over to the new
+FK stretch attr prior to doing the fk match, ensuring we maintain the stretch length of the IK system
+State &gt; switching from IK to FK</p>
+<p>Note: we can’t run this for the &gt;IK in the Spine systems
+Note: this needs to deal with the slide attrs that we’ve added</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.match_fk_autoclav">
+<code class="descname">match_fk_autoclav</code><span class="sig-paren">(</span><em>mrig</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>timerange=()</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>smartbake_ref=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.match_fk_autoclav" title="Permalink to this definition">¶</a></dt>
+<dd><p>RED9 PUPPET : TO &gt; FK : Timerange Activated Sub-Routine!
+hard coded to the Red9 Puppet - set the toe system up to match the FK input
+State &gt; switching from IK to FK</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mSystem</strong> – system to process</li>
+<li><strong>time</strong> – do we drop keys or not?</li>
+<li><strong>timerange</strong> – range to process over</li>
+<li><strong>step</strong> – frame step between keys if time=True</li>
+<li><strong>smartbake</strong> – if True we look at the mSystem’s current keys and only match over those keys if time enabled</li>
+<li><strong>smartbake_ref</strong> – smartbake=True if given, used as reference nodes to extract keytimes from, else we look at all nodes about to be
+processed which isn’t always what we want. If we still find no keytimes we revert to base range times with step given</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.match_wristlocks">
+<code class="descname">match_wristlocks</code><span class="sig-paren">(</span><em>mrig</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>timerange=()</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>smartbake_ref=[]</em>, <em>keyswitch=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.match_wristlocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>RED9 PUPPET : Timerange Activated Sub-Routine!
+hard coded to the Red9 Puppet - bake the wristLock solution back to the wrist transforms</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mSystem</strong> – system to process</li>
+<li><strong>time</strong> – do we drop keys or not?</li>
+<li><strong>timerange</strong> – range to process over</li>
+<li><strong>step</strong> – frame step between keys if time=True</li>
+<li><strong>smartbake</strong> – if True we look at the mSystem’s current keys and only match over those keys if time enabled</li>
+<li><strong>smartbake_ref</strong> – smartbake=True if given, used as reference nodes to extract keytimes from, else we look at all nodes about to be
+processed which isn’t always what we want. If we still find no keytimes we revert to base range times with step given</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.puppet.ikfk_match.match_pole_trackers">
+<code class="descname">match_pole_trackers</code><span class="sig-paren">(</span><em>mrig</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>timerange=()</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>smartbake_ref=[]</em>, <em>targetvalue=0</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.puppet.ikfk_match.match_pole_trackers" title="Permalink to this definition">¶</a></dt>
+<dd><p>RED9 PUPPET : Match the PoleTracker solution: Timerange Activated Sub-Routine!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mSystem</strong> – system to process</li>
+<li><strong>time</strong> – do we drop keys or not?</li>
+<li><strong>timerange</strong> – range to process over</li>
+<li><strong>step</strong> – frame step between keys if time=True</li>
+<li><strong>smartbake</strong> – if True we look at the mSystem’s current keys and only match over those keys if time enabled</li>
+<li><strong>smartbake_ref</strong> – smartbake=True if given, used as reference nodes to extract keytimes from, else we look at all nodes about to be
+processed which isn’t always what we want. If we still find no keytimes we revert to base range times with step given</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../tools/Red9_Pro_rig_manager.html" class="btn btn-neutral float-left" title="Pro_Pack : tools : rig_manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Red9 Consultancy Limited.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

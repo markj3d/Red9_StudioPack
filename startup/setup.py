@@ -23,11 +23,14 @@ import maya.cmds as cmds
 import maya.mel as mel
 from functools import partial
 
+# Red9 language support for StudioPack
+from language_packs import language_english as LANGUAGE_MAP
+# LANGUAGE_MAP = language_packs.language_english
+
 import logging
 logging.basicConfig()
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
-
 
 __author__ = 'Mark Jackson'
 __buildVersionID__ = 4.0
@@ -68,8 +71,9 @@ installedVersion = False
   2019          .  2019  .  201900  .  2.7.11 2     5.6.1  .  2019     . 2019-01-15
   2020          .  2020  .  202000  .  2.7.11 2     5.12.5 .  2020     . 2019-12-10
   2022          .  2022  .  202200  .  3.7.7  2     5.15.2 .  2022     . 2021-03-29
-  2023          .  2023  .  202300  .  3.9.7  2     5.15.2 .  2023     . 2022-14-15
-
+  2023          .  2023  .  202300  .  3.9.7  2     5.15.2 .  2023     . 2022-03-15
+  2024          .  2024  .  202400  .  3.10.8 2     5.15.2 .  2024     . 2023-03
+  
 ------------------------------------------------------------------------------------------
 '''
 
@@ -81,7 +85,7 @@ installedVersion = False
 # LANGUAGE MAPPING -----------------------------------------------------------------------
 # =========================================================================================
 
-# these are duplicates of the r9General call that should be used outside of this module!!
+# these are duplicates of the r9General call that should not be used outside of this module!!
 def __formatPath(path):
     '''
     take a path and format it to forward slashes with catches for the exceptions so that paths
@@ -95,9 +99,6 @@ def __formatPath_join(path, *paths):
     '''
     return __formatPath(os.path.join(path, *paths))
 
-
-import language_packs.language_english
-LANGUAGE_MAP = language_packs.language_english
 
 def get_language_maps():
     '''
@@ -240,17 +241,24 @@ def maya_dpi_scaling_factor():
     except:
         pass
 
-def mayaVersion():
+def mayaVersion(minor=False):
     '''
-    get the application version back, this doesn't track service packs or extensions
-
-    TODO: need to manage this better and use the API version, eg: 2013.5 returns 2013
+    get the application version back as a float.
+    
+    :param minor: if True we include the service pack version in the return
     '''
-    if 'version' in MAYA_INTERNAL_DATA and MAYA_INTERNAL_DATA['version']:
+    if not minor and 'version' in MAYA_INTERNAL_DATA and MAYA_INTERNAL_DATA['version']:
         return MAYA_INTERNAL_DATA['version']
+    elif minor and 'version_minor' in MAYA_INTERNAL_DATA and MAYA_INTERNAL_DATA['version_minor']:
+        return MAYA_INTERNAL_DATA['version_minor']
     else:
-        MAYA_INTERNAL_DATA['version'] = mel.eval('getApplicationVersionAsFloat')
-        return MAYA_INTERNAL_DATA['version']
+        if minor:
+            version = '%s.%s' % (cmds.about(majorVersion=True), cmds.about(minorVersion=True))
+            MAYA_INTERNAL_DATA['version_minor'] = version
+            return MAYA_INTERNAL_DATA['version_minor']
+        else:
+            MAYA_INTERNAL_DATA['version'] = mel.eval('getApplicationVersionAsFloat')
+            return MAYA_INTERNAL_DATA['version']
 
 def mayaInstallDir():
     '''
@@ -795,6 +803,23 @@ def addToMayaMenus():
                           ann='reset the Internal Maya Production timecode mapping',
                           c="from Red9.pro_pack import r9pro;r9pro.r9import('r9paudio');import r9paudio;r9paudio.timecode_maya_set_production(reset=True)")
 
+                # cmds.menuItem(divider=True, p=TimeSliderMenu)
+                cmds.menuItem(subMenu=True, label='Red9 PRO: Slow-Mo Playback', p=TimeSliderMenu, i='red9.png')
+                cmds.menuItem(label='PRO: Reset', i='red9.png',
+                          ann='Reset the playback rates to original, removing the slow motion mapping',
+                          c="from Red9.pro_pack import r9pro;r9pro.r9import('r9panim');import r9panim;r9panim.playback_slow_mo_reset()")
+                cmds.menuItem(label='PRO: SlowMotion @ 75% fps', i='red9.png',
+                          ann='Toggle the playback rates for slow motion @ 75%',
+                          c="from Red9.pro_pack import r9pro;r9pro.r9import('r9panim');import r9panim;r9panim.playback_slow_mo(speed=0.75)")
+                cmds.menuItem(label='PRO: SlowMotion @ 50% fps', i='red9.png',
+                          ann='Toggle the playback rates for slow motion @ 55%',
+                          c="from Red9.pro_pack import r9pro;r9pro.r9import('r9panim');import r9panim;r9panim.playback_slow_mo(speed=0.50)")
+                cmds.menuItem(label='PRO: SlowMotion @ 25% fps', i='red9.png',
+                          ann='Toggle the playback rates for slow motion @ 25%',
+                          c="from Red9.pro_pack import r9pro;r9pro.r9import('r9panim');import r9panim;r9panim.playback_slow_mo(speed=0.25)")
+                cmds.menuItem(label='PRO: SlowMotion @ 10% fps', i='red9.png',
+                          ann='Toggle the playback rates for slow motion @ 25%',
+                          c="from Red9.pro_pack import r9pro;r9pro.r9import('r9panim');import r9panim;r9panim.playback_slow_mo(speed=0.10)")
         else:
             log.debug('Red9 Timeslider menus already built')
     except:
@@ -1561,10 +1586,10 @@ def has_pro_pack():
             else:
                 return False
         except StandardError, err:
-#             import traceback
+            import traceback
+            print (traceback.format_exc())
             # we have the pro-pack folder so assume we're running legacy build
             log.info('r9Pro : checkr9User : failed validation! : %s' % err)
-#             print traceback.format_exc()
             return True
     else:
         return False
@@ -1701,6 +1726,13 @@ def client_core_path():
     '''
     if client_core_env_path():
         return __formatPath_join(client_core_env_path())
+
+    # if we're in compiled py3 builds we have multiple subfolders, walk over these
+    if os.path.basename(os.path.dirname(red9ModulePath())) in ['python_39', 'python_37', 'python_310']:
+        # return __formatPath_join(os.path.dirname(os.path.dirname(red9ModulePath()), 'Red9_ClientCore'))
+        sys.path.append(os.path.dirname(os.path.dirname(red9ModulePath())))
+        return __formatPath_join(os.path.dirname(os.path.dirname(red9ModulePath())), 'Red9_ClientCore')
+
     return __formatPath_join(os.path.dirname(red9ModulePath()), 'Red9_ClientCore')
 
 def client_core_env_path():

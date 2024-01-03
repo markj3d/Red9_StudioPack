@@ -73,6 +73,9 @@
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="puppet/Red9_Pro_ikfk_match.html">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
 
         </div>
       </div>
@@ -142,14 +145,20 @@ requires the StudioPack codebase to run</p>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pro_MetaRig_FacialUI</span></code></a>(*args,&nbsp;**kws)</td>
 <td>SubClass of the MetaRig, designed to manage facial board style controls for a facial system.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Base</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Facial_MetaHuman" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Facial_MetaHuman"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pro_MetaRig_Facial_MetaHuman</span></code></a>(*args,&nbsp;**kws)</td>
+<td>MetaRig subclass for MetaHuman Facial Rig - binds to the ExportTag_Facial_MetaHuman class</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Base</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Generic Export base class inheriting from MetaClass.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Character" title="Red9.pro_pack.core.metadata_pro.ExportTag_Character"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Character</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Character" title="Red9.pro_pack.core.metadata_pro.ExportTag_Character"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Character</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Export subclass for characters</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Facial" title="Red9.pro_pack.core.metadata_pro.ExportTag_Facial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Facial</span></code></a>(*args,&nbsp;**kws)</td>
+<tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Facial" title="Red9.pro_pack.core.metadata_pro.ExportTag_Facial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Facial</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Export subclass for Facial UI systems</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Facial_MetaHuman" title="Red9.pro_pack.core.metadata_pro.ExportTag_Facial_MetaHuman"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Facial_MetaHuman</span></code></a>(*args,&nbsp;**kws)</td>
+<td>Export subclass for MetaHuman Facial UI systems to output the poly ctrls rather than the joints</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Prop" title="Red9.pro_pack.core.metadata_pro.ExportTag_Prop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExportTag_Prop</span></code></a>(*args,&nbsp;**kws)</td>
 <td>Export subclass for props</td>
@@ -205,85 +214,6 @@ if blank then we generate a new instance and return that</li>
 <dt id="Red9.pro_pack.core.metadata_pro.wire_SRC_basefile">
 <code class="descname">wire_SRC_basefile</code><span class="sig-paren">(</span><em>name=None</em>, <em>prompt=False</em>, <em>exportRoot=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.wire_SRC_basefile" title="Permalink to this definition">¶</a></dt>
 <dd><p>wire an SRC base client file to an SCR_Extension node and hook up the exporter</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.core.metadata_pro.add_fkik_matchpnt">
-<code class="descname">add_fkik_matchpnt</code><span class="sig-paren">(</span><em>mSystem</em>, <em>ctrl_wire</em>, <em>fk_wire</em>, <em>matchid</em>, <em>prefix=None</em>, <em>parent=None</em>, <em>target='IK'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.add_fkik_matchpnt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add an ik_match_pnt node into the given mSystem, this parents a new matchpnt transform
-to the given fk_wire controller thats aligned to the IK controller requiring snapping
-during the fk_to_fk_match call</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mSystem</strong> – mSystem to wire the matchpnt too</li>
-<li><strong>ctrl_wire</strong> – mSystem.attr wire connecting the controller to the mSystem, OR the controller object itself - wired to a MetaRigSubSystem
-note that this now also supports ctrl_wire attrs that are connected to the SupportNode also</li>
-<li><strong>fk_wire</strong> – mSystem.attr wire connecting the fk_jnt to the mSystem, OR object to use directly</li>
-<li><strong>matchid</strong> – denotes the matchpnts base wire name - eg : “end”, “pole” creating attr wire ‘mSystem.SupportNode.IK_matchpnt_pole’</li>
-<li><strong>prefix</strong> – usually just the side id for the system ‘L’,’R’,’C’, if not given we ID this from the system mirrorSide</li>
-<li><strong>parent</strong> – if given this becomes the parent for the matchpnt, else we parent it to the given fk_wrie node</li>
-<li><strong>target</strong> – <p>‘IK’ or ‘FK’, reverses the logic of the func. ‘SOLIK’ &amp; ‘SOLFK’ are also now support in the new cache ikfk matching</p>
-<ul>
-<li>’IK’ the matchpnt is parented under the fk / fk_wire node, and used when snapping to IK mode : the IK ctrl snaps to the FK ctrl</li>
-<li>’FK’ the matchpnt is parented under the ik / ctrl_wire node, and used when snapping to FK mode : the FK ctrl snaps to the IK ctrl</li>
-<li>’SOLIK’ the matchpnt is parented under the fk / fk_wire node BUT we’re expecting that node to be an end SOL chain node not part of the actual fk system</li>
-<li>’SOLFK’ the matchpnt is parented under the ik / ctrl_wire node BUT we’re expecting that node to be an end SOL chain node not part of the actual ik system</li>
-</ul>
-</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>r9pmeta.add_fkik_matchpnt(mSystem, ctrl_wire=’CTRL_Wrist’, fk_wire=’CTRL_FK_End’, matchid=’end’, prefix=’L’)</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>the matchid is actually used to order the snap function and determine what node gets snapped in what order, base id’s</p>
-<ul class="last simple">
-<li><strong>ik_matchpnt_order</strong> :  [‘toe’, ‘ball’, ‘pole’, ‘mid’, ‘end’, ‘ankle’, ‘start’, ‘hip’, ‘clav’]  =  order in which the matchpnts are processed (reversed)</li>
-<li><strong>fk_matchpnt_order</strong> :  [‘toe’, ‘ball’, ‘end’, ‘ankle’, ‘pole’, ‘start’, ‘hip’, ‘clav’] =  order in which the matchpnts are processed (reversed)</li>
-</ul>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.core.metadata_pro.wire_fkik_matchpoints">
-<code class="descname">wire_fkik_matchpoints</code><span class="sig-paren">(</span><em>mrig</em>, <em>force_version=1.08</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.wire_fkik_matchpoints" title="Permalink to this definition">¶</a></dt>
-<dd><p>patch to add in ik matchpnts for the ik&gt;fk matching setups</p>
-<p>This is exposed for Clients wanting to patch NON Red9 Puppet based systems
-but requires each system to have mSystem.SupportNode.GRP_IK_chain, GRP_FK_chain as
-wires to denote the group directly above the Ik and Fk chains in the system.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mrig</strong> – the mrig instantiated class to process</li>
-<li><strong>force_version</strong> – if given this forces the build version of the rig to be ignored. Some of the matchpnt logic
-has been clamped to specific build versions for consistency. v1.08 and above triggers the latest logic</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">to run correctly each chain must have the same hierarchy order else the fk
-match will be out of sync. Ideally this is to be run as part of a Red9 Patch
-system and requires a little baby sitting!</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">if the rig is NOT facing the ‘Z’ axis the toe matching data sent to the toe system during the
-ik/fk match will be INCORRECT!</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">this is NO longer run with PuppetRig, the code deals with the adding of the nodes internally now</p>
-</div>
 </dd></dl>
 
 <dl class="function">
@@ -598,6 +528,21 @@ mesh nodes. If False we clamp the return to just those nodes wired to this mRig 
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_mesh_boundingbox">
+<code class="descname">get_mesh_boundingbox</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_mesh_boundingbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>from the renderMeshes / exportMeshes return the overall bounding box 
+dimensions so we can use that for scale calculations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">x, y, z dimensions</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_root_jnt">
 <code class="descname">get_root_jnt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.get_root_jnt" title="Permalink to this definition">¶</a></dt>
 <dd><p>generic wrapper for some of the healthTests. This should be a reliable and consistent
@@ -674,7 +619,7 @@ connected the child mFacial rig, designed to only output that facial data.</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig">
-<code class="descname">bake_rig</code><span class="sig-paren">(</span><em>selected=False</em>, <em>runFilter=True</em>, <em>deleteStatics=False</em>, <em>sampleby=1</em>, <em>ignoreInFilter=[]</em>, <em>debugView=False</em>, <em>sparseBake=True</em>, <em>timerange=()</em>, <em>whole_start=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bake_rig</code><span class="sig-paren">(</span><em>selected=False</em>, <em>runFilter=True</em>, <em>deleteStatics=False</em>, <em>sampleby=1</em>, <em>ignoreInFilter=[]</em>, <em>debugView=False</em>, <em>sparseBake=True</em>, <em>timerange=()</em>, <em>whole_start=True</em>, <em>proxyAttrPrekey=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.bake_rig" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is a generic bake call for the rig controllers - mainly used in conjunction with the Red9 Binder setup but by no means tied to it.
 This call will bake all animation down to the rig and remove the Binder system hooks if found. It also manages AnimLayer removal during the bake,
 removing a controller from all animation layers if it can do so and should any animLayer become empty, we delete them.</p>
@@ -692,6 +637,8 @@ removing a controller from all animation layers if it can do so and should any a
 <li><strong>sparseBake</strong> – turns on the sparseAnimCurveBake flag in the bakeResults call, True by default</li>
 <li><strong>timerange</strong> – (start, end) optional timerange to bake, by default this uses the standard Red9 timeLineRangeGet func</li>
 <li><strong>whole_start</strong> – if True (default) we clamp tyhe start frame to a whole number, corrects for issues with scenes having frames at subframe times</li>
+<li><strong>proxyAttrPrekey</strong> – if True (default) we set a dumb keyframe on the first frame BEFORE we call the bake process. This by-passes the Maya
+bug where proxyAttrs get their connections deleted during the bake process (still a bug in Maya 2024)</li>
 </ul>
 </td>
 </tr>
@@ -972,7 +919,7 @@ compensation, aimed at situations like parent switching where we need solid hold
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.anim_point_cloud_create">
-<code class="descname">anim_point_cloud_create</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=True</em>, <em>timerange=()</em>, <em>rootReference=None</em>, <em>isVisible=False</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>smartbake_ref=[]</em>, <em>snapScales=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.anim_point_cloud_create" title="Permalink to this definition">¶</a></dt>
+<code class="descname">anim_point_cloud_create</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=True</em>, <em>timerange=()</em>, <em>rootReference=None</em>, <em>isVisible=False</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>smartbake_ref=[]</em>, <em>snapScales=False</em>, <em>cached_attrs=[]</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Base.anim_point_cloud_create" title="Permalink to this definition">¶</a></dt>
 <dd><p>cache the anim data to an animPPC node. This relies on there being a properly
 setup self.settings (filterSettings) cache on the mRig.mNode itself.
 See the self.settings property as to how to set this up</p>
@@ -993,6 +940,7 @@ if False it reverts to a static r9PosePPC and only caches the data at the curren
 <li><strong>smartbake_ref</strong> – if smartbake=True if given, used as reference nodes to extract keytimes from, else we look at all nodes about to be
 processed which isn’t always what we want. If we still find no keytimes we revert to base range times with step given</li>
 <li><strong>snapScales</strong> – also process the local scale information</li>
+<li><strong>cached_attrs</strong> – [] list of attrs who’s values we’re also going to cache on the fly</li>
 </ul>
 </td>
 </tr>
@@ -1393,11 +1341,11 @@ their own internal rigs over the Pro_MetaRig networks:</p>
 </ul>
 </div></blockquote>
 </li>
-<li><p class="first"><strong>self._ik_matchpnt_order</strong> : * [‘toe’, ‘ball’, ‘pole’, ‘mid’, ‘end’, ‘ankle’, ‘start’, ‘hip’, ‘clav’]  =  order in which the matchpnts are processed (reversed)</p>
+<li><p class="first"><strong>self._ik_matchpnt_order</strong> : * [‘toe’, ‘ball’, ‘pole’, ‘mid’, ‘end’, ‘ankle’, ‘start’, ‘hip’, ‘clav’]  : (LEGACY) order in which the matchpnts are processed (reversed)</p>
 </li>
-<li><p class="first"><strong>self._fk_matchpnt_order</strong> : * [‘toe’, ‘ball’, ‘end’, ‘ankle’, ‘pole’, ‘start’, ‘hip’, ‘clav’] =  order in which the matchpnts are processed (reversed)</p>
+<li><p class="first"><strong>self._fk_matchpnt_order</strong> : * [‘toe’, ‘ball’, ‘end’, ‘ankle’, ‘pole’, ‘start’, ‘hip’, ‘clav’] : (LEGACY) order in which the matchpnts are processed (reversed)</p>
 </li>
-<li><p class="first"><strong>self._ik_zero_ctrl_attrs</strong> : * [(CTRL_wire, [attrs]), (…] = additional attrs on the given ctrls which need to be set back to         zero during the switch to IK (usually toe, ball_lift etc)</p>
+<li><p class="first"><strong>self._ik_zero_ctrl_attrs</strong> : * [(CTRL_wire, [attrs]), (…] = additional attrs on the given ctrls which need to be set back to         zero during the switch to IK (usually toe, ball_lift etc)  This can be cast to the mSystem.mNode using the attr “ik_zero_ctrl_attrs”</p>
 </li>
 <li><p class="first"><strong>self.parentSwitchAttr</strong> : [‘parent’] - the pointer to the attr that we use for parentSpace switch management</p>
 </li>
@@ -1411,8 +1359,8 @@ their own internal rigs over the Pro_MetaRig networks:</p>
 <p>self.parentSwitchAttr is a list but we currently only look at the first value for all of the parentSpace switching.
 If you’re trying to connect your own rigs to meta and need to change this value you can either subclass Pro_MetaRig
 OR you can directly add the attr to the mRig node which will overload the class var. This will be dynamically reflected
-in the ParnetSpace UI</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># change the attr we use for parent space management to the new attr &#39;follow&#39;</span>
+in the ParentSpace UI</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># To change the attr we use for parent space management to a new attr &#39;follow&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span> <span class="o">=</span> <span class="n">r9Meta</span><span class="o">.</span><span class="n">getMetaRigs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mrig</span><span class="o">.</span><span class="n">addAttr</span><span class="p">(</span><span class="s1">&#39;parentSwitchAttr&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;follow&#39;</span><span class="p">])</span>
 </pre></div>
@@ -1643,7 +1591,7 @@ This just throws the defined self.ik_fk_switchattr attr to self.ik_switch_val</p
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_toggle">
-<code class="descname">fk_ik_toggle</code><span class="sig-paren">(</span><em>mSystem</em>, <em>time=False</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_toggle" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fk_ik_toggle</code><span class="sig-paren">(</span><em>mSystem</em>, <em>time=False</em>, <em>verbose=False</em>, <em>keyswitch=True</em>, <em>keyctrls=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_toggle" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple toggle call to switch the current state of the system between fk and ik with matching.
 This checks the self.ik_fk_switchattr and if it equals self.fk_switch_val toggles over to FK,
 if it equals self.ik_switch_val then we switch to IK.</p>
@@ -1666,7 +1614,7 @@ such as mrig.L_ArmSystem</li>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match">
-<code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em>, <em>keyctrls=True</em>, <em>ik_chainmethod=None</em>, <em>fk_chainmethod=None</em>, <em>timerange=()</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>smartbake_ref=[]</em>, <em>runfilter=True</em>, <em>autoclav=True</em>, <em>cached_solution=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fk_ik_match</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mSystems=[]</em>, <em>time=False</em>, <em>switch=False</em>, <em>keyswitch=True</em>, <em>keyctrls=True</em>, <em>timerange=()</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>smartbake_ref=[]</em>, <em>runfilter=True</em>, <em>autoclav=True</em>, <em>cached_solution=False</em>, <em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig.fk_ik_match" title="Permalink to this definition">¶</a></dt>
 <dd><p>&gt; TO FK MODE: Set the given systems, match the FK system to that of the IK</p>
 <p>If cached_solution=True the systems change and rather than using the ik_chain data we use the SOL chain via 
 the self._get_sol_chain call. The SOL chain is expected to be the end solved chain in the ikfk limb setup,
@@ -1686,22 +1634,6 @@ and this method will just “cast” the state of the system to the FK mode.</p>
 <li><strong>switch</strong> – also switch the ik_fk_blender attr to leave the system in FK mode</li>
 <li><strong>keyswitch</strong> – if switch is true, this also adds in keys to control the switch mode</li>
 <li><strong>keyctrls</strong> – True by default, this dictates if we key the controllers even when time = False, ie during a static switch</li>
-<li><strong>ik_chainmethod</strong> – <p>None by default as controlled by the internal mRig var self._ik_chainmethod
-method of extracting the ik joints, currently supported:</p>
-<ul>
-<li><strong>jnt_index</strong> - default - straight joint hierarchy from the mSystem.SupportNode.GRP_IK_chain[0]</li>
-<li><strong>ctrl_index</strong> - filtered hierarchy of nurbsCurve from the mSystem.SupportNode.GRP_IK_chain[0]</li>
-<li><strong>ik_wires</strong> - uses the internal mSystem.SupportNode.IK_** wires to directly extract the ik chain nodes.                This is useful if a client has setup a broken hierarchy for the IK systems.                These are processed in the following order [IK_toe, IK_end, IK_pole, IK_start]</li>
-</ul>
-</li>
-<li><strong>fk_chainmethod</strong> – <p>None by default as controlled by the internal mRig var self._fk_chainmethod
-method of extracting the fk controls, currently supported:</p>
-<ul>
-<li><strong>jnt_index</strong> - straight joint hierarchy from the mSystem.SupportNode.GRP_FK_chain[0] node</li>
-<li><strong>ctrl_index</strong> - filtered hierarchy of nurbsCurve controllers from the mSystem.SupportNode.GRP_FK_chain[0] node</li>
-<li><strong>fk_wires</strong> - uses the mSystem’s CTRL_FK* wiring to grab and return the nodes from the mSystem itself</li>
-</ul>
-</li>
 <li><strong>timerange</strong> – (start, end) if given we force the time switch on and use this as the timerange
 rather than auto finding it from the scene</li>
 <li><strong>step</strong> – frame step between keys if time=True</li>
@@ -2027,6 +1959,12 @@ a consistent return for all data</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_head_sizes">
+<code class="descname">get_head_sizes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_head_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>try and resolve the size of the head</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_anchor_pnt">
 <code class="descname">get_anchor_pnt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_anchor_pnt" title="Permalink to this definition">¶</a></dt>
 <dd><p>generic method to extract the relevant node in the FaceRig
@@ -2258,7 +2196,7 @@ so we can have multiple angles of the facial data.</p>
 </tr>
 </tbody>
 </table>
-<p>TODO: get the bounding box width of the main head and use that for the offset!</p>
+<p>note that when called the translation offset is replaced dyncamically offsets[0][0]</p>
 </dd></dl>
 
 <dl class="method">
@@ -2316,6 +2254,12 @@ Designed to be overloaded for your own facial systems</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_eye_aims">
+<code class="descname">get_ctrls_eye_aims</code><span class="sig-paren">(</span><em>select=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.get_ctrls_eye_aims" title="Permalink to this definition">¶</a></dt>
+<dd><p>specific getter for just the eye_aim systems</p>
 </dd></dl>
 
 <dl class="method">
@@ -2473,6 +2417,20 @@ which would render some of the data invalid</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_filter_tiers_add">
+<code class="descname">viseme_map_filter_tiers_add</code><span class="sig-paren">(</span><em>chns=[]</em>, <em>tier=2</em>, <em>remove=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_filter_tiers_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>new block to add in specific filter params to given channels
+to enable us to filter specific controllers more smoothly in the data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_filter_tiers_get">
+<code class="descname">viseme_map_filter_tiers_get</code><span class="sig-paren">(</span><em>tier=None</em>, <em>select=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.viseme_map_filter_tiers_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>return / select those attributes that are flagged with the given bias value.
+This bias is used as a tier for teh filter code so we can filter some attrs more than others</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.parallel_eval_get_nodes">
 <code class="descname">parallel_eval_get_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_FacialUI.parallel_eval_get_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>get nodes within the rig that we know to be expensive in computation
@@ -2498,6 +2456,20 @@ return that framerate back to the user.</p>
 <dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Facial_MetaHuman.getChildren">
 <code class="descname">getChildren</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Facial_MetaHuman.getChildren" title="Permalink to this definition">¶</a></dt>
 <dd><p>we don’t return the ctrl_main for this setup</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Camera">
+<em class="property">class </em><code class="descname">Pro_MetaRig_Camera</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig" title="Red9.pro_pack.core.metadata_pro.Pro_MetaRig"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.Pro_MetaRig</span></code></a></p>
+<p>MetaRig subclass for simple camera rigs - binds to the ExportTag_Camera class for 
+export systems management</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Camera.cutKeys">
+<code class="descname">cutKeys</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.Pro_MetaRig_Camera.cutKeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>overloaded to catch the camera shape node</p>
 </dd></dl>
 
 </dd></dl>
@@ -2587,7 +2559,7 @@ this export tag</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘CHARACTER’,’FACIAL’,’PROP’,’ENVIRONMENT’ or ‘BASE’</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">‘CHARACTER’,’FACIAL’,’PROP’,’ENVIRONMENT’,’VEHICLE’,’RIGID’ or ‘BASE’</td>
 </tr>
 </tbody>
 </table>
@@ -3145,6 +3117,23 @@ to manually save the bpose using the following code.</p>
 </pre></div>
 </div>
 </div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Camera">
+<em class="property">class </em><code class="descname">ExportTag_Camera</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Base" title="Red9.pro_pack.core.metadata_pro.ExportTag_Base"><code class="xref py py-class docutils literal notranslate"><span class="pre">Red9.pro_pack.core.metadata_pro.ExportTag_Base</span></code></a></p>
+<p>Export subclass for cameras</p>
+<dl class="method">
+<dt id="Red9.pro_pack.core.metadata_pro.ExportTag_Camera.build_skeleton_for_output">
+<code class="descname">build_skeleton_for_output</code><span class="sig-paren">(</span><em>bindscales=True</em>, <em>respect_attrlocks=True</em>, <em>exploop=None</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.metadata_pro.ExportTag_Camera.build_skeleton_for_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>overload method for the management of camera data. If the camera is in root space
+then we just select and return it. If it’s grouped then we duplicate and bind all
+attrs as per the rest of the pipe, flagging the duplicate for delete once the export 
+process is complete.</p>
+<p>:return [mNode(camera), [], None]</p>
 </dd></dl>
 
 </dd></dl>

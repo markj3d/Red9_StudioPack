@@ -73,6 +73,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/puppet/Red9_Pro_ikfk_match.html">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
 
         </div>
       </div>
@@ -163,7 +166,7 @@ This includes most of the context managers and decorators.</p>
 <td>write json file to disk</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.core.Red9_General.readJson" title="Red9.core.Red9_General.readJson"><code class="xref py py-obj docutils literal notranslate"><span class="pre">readJson</span></code></a>([filepath])</td>
-<td>file pat to drive where to read the file</td>
+<td>file path to drive where to read the file</td>
 </tr>
 </tbody>
 </table>
@@ -451,12 +454,12 @@ This will internally set : evalmanage=False, cached_eval=False, evale_idle=True<
 
 <dl class="class">
 <dt id="Red9.core.Red9_General.undoContext">
-<em class="property">class </em><code class="descname">undoContext</code><span class="sig-paren">(</span><em>initialUndo=False</em>, <em>undoFuncCache=[]</em>, <em>undoDepth=1</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.undoContext" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">undoContext</code><span class="sig-paren">(</span><em>initialUndo=False</em>, <em>undoFuncCache=[]</em>, <em>undoDepth=1</em>, <em>chunkName=''</em>, <em>exitUndo=False</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.undoContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>CONTEXT MANAGER : Simple Context Manager for chunking the undoState</p>
 <p>If initialUndo is True then the context manager will manage what to do on entry with
 the undoStack. The idea is that if True the code will look at the last functions in the
-undoQueue and if any of those mantch those in the undoFuncCache, it’ll undo them to the
+undoQueue and if any of those match those in the undoFuncCache, it’ll undo them to the
 depth given.</p>
 <p>WHY?????? This is specifically designed for things like floatFliders where you’ve
 set a function to act on the ‘dc’ flag, (drag command) by passing that func through this
@@ -470,6 +473,7 @@ and return to the initial state, pre ALL drags, in one chunk.</p>
 <li><strong>initialUndo</strong> – on first process whether undo on entry to the context manager</li>
 <li><strong>undoFuncCache</strong> – only if initialUndo = True : functions to catch in the undo stack</li>
 <li><strong>undoDepth</strong> – only if initialUndo = True : depth of the undo stack to go to</li>
+<li><strong>exitUndo</strong> – if True we run undo on the chunk on exit</li>
 </ul>
 </td>
 </tr>
@@ -790,7 +794,7 @@ Once downloaded drop it here Red9/pakcages/diffMerge.exe</p>
 <dl class="function">
 <dt id="Red9.core.Red9_General.readJson">
 <code class="descname">readJson</code><span class="sig-paren">(</span><em>filepath=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_General.readJson" title="Permalink to this definition">¶</a></dt>
-<dd><p>file pat to drive where to read the file</p>
+<dd><p>file path to drive where to read the file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

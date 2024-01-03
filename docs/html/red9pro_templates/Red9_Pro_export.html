@@ -73,6 +73,9 @@
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="puppet/Red9_Pro_ikfk_match.html">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
 
         </div>
       </div>
@@ -537,7 +540,7 @@ to refresh and redraw the UI lists</p>
 
 <dl class="method">
 <dt id="Red9.pro_pack.core.exporter.ExportUI.add_export_tag">
-<code class="descname">add_export_tag</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.add_export_tag" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_export_tag</code><span class="sig-paren">(</span><em>tag_type=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportUI.add_export_tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple launch of the RigManager</p>
 </dd></dl>
 
@@ -708,6 +711,24 @@ This allows you to specifically output just a given character from a list iof sc
 <code class="descname">export_main</code><span class="sig-paren">(</span><em>runSceneRoot=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.export_main" title="Permalink to this definition">¶</a></dt>
 <dd><p>stub for custom overloading at the client level, at base level this is
 the skeleton fbx export process, assuming targte engines Unity / Unreal and anim sequence</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportManager.export_custom_aux1">
+<code class="descname">export_custom_aux1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.export_custom_aux1" title="Permalink to this definition">¶</a></dt>
+<dd><p>stub wrap to allow custom hooks for client overloading</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportManager.export_custom_aux2">
+<code class="descname">export_custom_aux2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.export_custom_aux2" title="Permalink to this definition">¶</a></dt>
+<dd><p>stub wrap to allow custom hooks for client overloading</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.core.exporter.ExportManager.export_custom_aux3">
+<code class="descname">export_custom_aux3</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.exporter.ExportManager.export_custom_aux3" title="Permalink to this definition">¶</a></dt>
+<dd><p>stub wrap to allow custom hooks for client overloading</p>
 </dd></dl>
 
 <dl class="method">

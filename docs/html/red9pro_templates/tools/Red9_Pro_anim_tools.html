@@ -73,6 +73,9 @@
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../puppet/Red9_Pro_ikfk_match.html">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
 
         </div>
       </div>
@@ -436,6 +439,77 @@ offset between COG and locomotion ctrl</p>
 <code class="descname">static</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Track_locomotion.static" title="Permalink to this definition">¶</a></dt>
 <dd><p>simple projected extraction without any key management and on the current frame only</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Red9.pro_pack.tools.anim_tools.Anim_Treadmill">
+<em class="property">class </em><code class="descname">Anim_Treadmill</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Anim_Treadmill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PySide2.QtWidgets.QMainWindow</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_MainWindow</span></code></p>
+<p>Basic UI for the management of the Treadmill</p>
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.Anim_Treadmill.ctrl_main_motion_remove">
+<code class="descname">ctrl_main_motion_remove</code><span class="sig-paren">(</span><em>mrig</em>, <em>timerange=()</em>, <em>step=1</em>, <em>smartbake=False</em>, <em>smartbake_ref=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Anim_Treadmill.ctrl_main_motion_remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>remove keyed data from the ctrl_main and re-calculate the rest of the rig to compensate.
+The situation would be that the Main Ctrl has been used to do the bulk of the characters
+motion, think walk on the spot then using the Main to do the transforms in world space.
+We want to remove those Main transformations, reset the Main ctrl and recalculate the
+rest of the rig accordingly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mrig</strong> – the mrig we’re working with</li>
+<li><strong>timerange</strong> – timerange to use, else we process the current timerange as per all Red9 funcs</li>
+<li><strong>step</strong> – the bake step used IF not smartbake</li>
+<li><strong>smartbake</strong> – if True we use the smartbake systems when extracting key data</li>
+<li><strong>smartbake_ref</strong> – additional node used when extracting the smartbake key times</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.pro_pack.tools.anim_tools.Anim_Treadmill.ctrl_main_motion_extract">
+<code class="descname">ctrl_main_motion_extract</code><span class="sig-paren">(</span><em>mrig</em>, <em>refnode</em>, <em>timerange=()</em>, <em>smartbake=False</em>, <em>smartbake_ref=[]</em>, <em>step=1</em>, <em>trans=True</em>, <em>rots=True</em>, <em>projected=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Anim_Treadmill.ctrl_main_motion_extract" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mrig</strong> – the mrig we’re working with</li>
+<li><strong>refnode</strong> – the node used to extract the new motion for the Main Ctrl from</li>
+<li><strong>time</strong> – time range to use, else we process the current timerange as per all Red9 funcs</li>
+<li><strong>smartbake</strong> – if True we use the smartbake systems when extracting key data</li>
+<li><strong>smartbake_ref</strong> – additional node used when extracting the smartbake key times</li>
+<li><strong>step</strong> – the bake step used IF not smartbake</li>
+<li><strong>trans</strong> – match the translate data of the refnode</li>
+<li><strong>rots</strong> – match the rotate data of the refnode</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>track the Main Ctrl to the given refnode and re-calculate all of rig to compensate.
+Animation is maintained but the Main Ctrl gets tracked. This is ideal for extracting
+forward motion from a walk and pushing that to the Main so it can me isolated, think
+automated treadmill. The refnode doens’t have to be part of the rig, any scene node
+can be used.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">this relies on the self.settings data in the mRig and specifically the filterPriority list
+which can be setup in the RigManager&gt;Tab2. This priority order is used throughout the 
+codebase to denote the process order of the main rig nodes.</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Red9.pro_pack.tools.anim_tools.Anim_Treadmill.staticMetaObject">
+<code class="descname">staticMetaObject</code><em class="property"> = &lt;PySide2.QtCore.QMetaObject object&gt;</em><a class="headerlink" href="#Red9.pro_pack.tools.anim_tools.Anim_Treadmill.staticMetaObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

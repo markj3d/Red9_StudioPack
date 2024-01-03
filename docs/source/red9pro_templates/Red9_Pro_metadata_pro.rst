@@ -24,9 +24,11 @@ pipeline when running the Red9 Puppet rig.
 	  Pro_MetaRig_External
 	  Pro_MetaRig_RigidBody
       Pro_MetaRig_FacialUI
+ 	  Pro_MetaRig_Facial_MetaHuman
       ExportTag_Base
       ExportTag_Character
       ExportTag_Facial
+      ExportTag_Facial_MetaHuman
       ExportTag_Prop
       ExportTag_Vehicle
       ExportTag_RigidBody

@@ -311,19 +311,23 @@ def decodeString(val):
     return val
 
 
-def validateString(strText, fix=False, illegals=['-', '#', '!', ' ', '@']):
+def validateString(strText, fix=False, illegals=['-', '#', '!', ' ', '@'], mayanode=False):
     '''
     Function to validate that a string has no illegal characters
 
     :param strText: text to validate
     :param fix: if True then we replace illegals with '_'
     :param illegals: now allow you to pass in what you consider illegals, default=['-', '#', '!', ' ', '@']
+    :param mayanode: if True we assume we're processing a string name for a Maya node and add in '.' to the list. 
+        this is ommitted by default as generally we're processing filenames
     '''
     # numerics=['1','2','3','4','5','6','7','8','9','0']
     # illegals=['-', '#', '!', ' ']
     base = strText
     # if strText[0] in numerics:
     #    raise ValueError('Strings must NOT start with a numeric! >> %s' % strText)
+    if mayanode:
+        illegals.append('.')
     illegal = [i for i in illegals if i in strText]
     if illegal:
         if not fix:
@@ -943,9 +947,19 @@ class FilterNode(object):
         mrig = None
         if not self.settings.metaRig:
             return
+        # if len(self._rootNodes) == 1:
+        #     if r9Meta.isMetaNode(self._rootNodes[0]) and issubclass(type(self._rootNodes[0]), r9Meta.MetaRig):
+        #         mrig = r9Meta.MetaClass(self._rootNodes[0])
+        #     else:
+        #         print 
+        #         mrig = r9Meta.getConnectedMetaSystemRoot(self._rootNodes[0], mInstances=r9Meta.MetaRig)
+
         if len(self._rootNodes) == 1:
-            if r9Meta.isMetaNode(self._rootNodes[0]) and issubclass(type(self._rootNodes[0]), r9Meta.MetaRig):
-                mrig = r9Meta.MetaClass(self._rootNodes[0])
+            if r9Meta.isMetaNode(self._rootNodes[0]):
+                if issubclass(type(self._rootNodes[0]), r9Meta.MetaRig):
+                    mrig = self._rootNodes[0]
+                elif r9Meta.isMetaNodeInherited(self._rootNodes[0], mInstances=r9Meta.MetaRig):
+                    mrig = r9Meta.MetaClass(self._rootNodes[0])
             else:
                 mrig = r9Meta.getConnectedMetaSystemRoot(self._rootNodes[0], mInstances=r9Meta.MetaRig)
             if mrig:
@@ -960,7 +974,7 @@ class FilterNode(object):
                             self.settings.rigData['snapPriority'] = mrig.settings.rigData['snapPriority']
                         else:
                             self.settings.rigData['snapPriority'] = True
-                        self.settings.printSettings()
+#                         self.settings.printSettings()
                         # log.info('==============================================================')
                     except StandardError, err:
                         log.info('mRig has FilterSettings data but is NOT a Pro_MetaRig - settings aborted')
@@ -1249,7 +1263,7 @@ class FilterNode(object):
         :param allow_ref: if False and "safe" we remove all references animCurves, else we leave them in the return
         '''
         animCurves = []
-        treeDepth = 2
+        treeDepth = 3
         if not nodes:
             animCurves = cmds.ls(type='animCurve', r=True)
         else:
@@ -1561,7 +1575,7 @@ class FilterNode(object):
 
             return cmds.ls(self.characterSetMembers, l=True)
 
-    def lsMetaRigControllers(self, walk=True, incMain=True):
+    def lsMetaRigControllers(self, walk=True, incMain=True, incOffset=True):
         '''
         very light wrapper to handle MetaData in the FilterSystems. This is hard coded
         to find CTRL markered attrs and give back the attached nodes
@@ -1570,6 +1584,9 @@ class FilterNode(object):
         :param incMain: Like the other filters we allow the given top
             node in the hierarchy to be removed from processing. In a MetaRig
             this is the CTRL_Main controller which should be Top World Space
+        :param incOffset: Like the other filters we allow the secondary root node 
+            (OffsetCtrl) in the hierarchy to be removed from processing. In a MetaRig
+            this is the CTRL_Offset controller which should be secondary parent under the Main_Ctrl
         '''
         rigCtrls = []
         metaNodes = []
@@ -1600,9 +1617,13 @@ class FilterNode(object):
                 if ctrls and not incMain:
                     if meta.ctrl_main in ctrls:
                         ctrls.remove(meta.ctrl_main)
-#                     # 08/10/2021 added the ctrl_offset to this call so we now ignore the CTRL_Offset
-#                     if meta.ctrl_offset  in ctrls:
-#                         ctrls.remove(meta.ctrl_offset)
+                if ctrls and not incOffset:
+                    try:
+                        # 08/10/2021 added the ctrl_offset to this call so we now ignore the CTRL_Offset
+                        if meta.ctrl_offset  in ctrls:
+                            ctrls.remove(meta.ctrl_offset)
+                    except:
+                        log.debug('Failed to remove OffsetCtrl from stack')
                 rigCtrls.extend(ctrls)
         return rigCtrls
 
@@ -1650,7 +1671,7 @@ class FilterNode(object):
                     self.intersectionData = []
 
             # If FilterSettings have no effect then just return the rootNodes
-            if not self.settings.filterIsActive:
+            if not self.settings.filterIsActive():
                 return self.rootNodes
 
             # Straight Hierarchy Filter ----------------------
@@ -3241,26 +3262,215 @@ def timeIsInRange(baseRange=(), testRange=(), start_inRange=True, end_inRange=Tr
             return end
     return all([start, end])
 
-
 def distanceBetween(nodeA, nodeB):
     '''
-    simple calculation to return the distance between 2 objects
+    simple calculation to return the distance between 2 objects, also works on components
+
+    .. note::
+        this will also work at the Component level
     '''
-    x1, y1, z1, _, _, _ = cmds.xform(nodeA, q=True, ws=True, piv=True)
-    x2, y2, z2, _, _, _ = cmds.xform(nodeB, q=True, ws=True, piv=True)
+    if 'transform' in cmds.nodeType(nodeA):
+        x1, y1, z1, _, _, _ = cmds.xform(nodeA, q=True, ws=True, piv=True)
+    else:
+        x1, y1, z1 = cmds.xform(nodeA, q=True, ws=True, t=True)
+    if 'transform' in cmds.nodeType(nodeB):
+        x2, y2, z2, _, _, _ = cmds.xform(nodeB, q=True, ws=True, piv=True)
+    else:
+        x2, y2, z2 = cmds.xform(nodeB, q=True, ws=True, t=True)
     return math.sqrt(math.pow((x1 - x2), 2) + math.pow((y1 - y2), 2) + math.pow((z1 - z2), 2))
 
-def getClosestNode(target, nodelist):
+def getClosestNode(target, nodelist, select=False, return_type=0):
     '''
     From a list of transforms find the node that is closest to the target node and return
+
+    .. note::
+        this will also work at the Component level
     
     :param target: the node we're trying to find the closest match too
     :param nodelist: list of nodes we're going to test against
+    :param select: if True we select the matching node
     '''
     distances = {}
     for node in nodelist:
         distances[distanceBetween(node, target)] = node
+    if select:
+        cmds.select(distances[sorted(distances)[0]])
     return distances[sorted(distances)[0]]
+
+def sortByDistance(source, targets):
+    """
+    sort target objects by the distance to source object
+
+    :param source: string or list, string object name, use as start position to calculate distances to target objects
+    or list world space position use as start position to calculate distances to target objects
+    :param targets: list of strings, object names
+
+    :return: list of string, names of targets objects sorted by distances from closest to farther
+    """
+
+    if r9General.is_basestring(source):
+        source_xform = cmds.xform(source, q=True, ws=True, t=True)
+
+    if type(source) == list:
+        source_xform = source
+
+    distances = {}
+    for target in targets:
+        target_x, target_y, target_z = cmds.xform(target, q=True, ws=True, t=True)
+        distance = math.sqrt(math.pow((target_x - source_xform[0]), 2) +
+                             math.pow((target_y - source_xform[1]), 2) +
+                             math.pow((target_z - source_xform[2]), 2))
+        distances[distance] = target
+    return [distances[x] for x in sorted(distances)]
+
+def findByDistance(source, targets, index=0):
+    """
+    Find a target object base on the distance to source object, use index value to define the distance 0 for closest
+    -1 farther, default is 0
+
+    :param source: string or list, string object name, use as start position to calculate distances to target objects
+    list world space position use as start position to calculate distances to target objects
+    :param targets: list of strings, object names
+    :param index: int index of target objects sorted from closest to farther 0 been the closest target object -1
+    the farther default is 0
+    :return: string target object name
+    """
+
+    return sortByDistance(source, targets)[index]
+
+def getMirrorVertex(vertex=None, mirror_axis='x', selection_radius=1, select=True):
+
+    currentSelection = cmds.ls(sl=True)
+
+    # Get the selected vertex
+    if not vertex:
+        sel = cmds.ls(sl=True, fl=True)
+        if sel and cmds.nodeType(sel[0]) == 'mesh':
+            vertex = sel[0]
+
+    if not vertex:
+        return []
+
+    # Get the transform node containing the vertex
+    object_name = vertex.split('.')[0]
+
+    # Get the object's world space matrix
+    world_matrix = cmds.xform(object_name, q=True, ws=True, matrix=True)
+    world_matrix_mfn = OpenMaya.MMatrix()
+    OpenMaya.MScriptUtil.createMatrixFromList(world_matrix, world_matrix_mfn)
+
+    # Get the inverse of the object's world space matrix
+    inverse_matrix = world_matrix_mfn.inverse()
+
+    # Get the vertex position in world space
+    position = cmds.pointPosition(vertex)
+    position_mv = OpenMaya.MVector(position[0], position[1], position[2])
+
+    # Get the object's translation values
+    translation = cmds.xform(object_name, q=True, t=True, ws=True)
+    translation_mv = OpenMaya.MVector(translation[0], translation[1], translation[2])
+
+    # Transform the vertex position into object space
+    position_mv = (position_mv - translation_mv) * inverse_matrix
+
+    # Mirror the position along the specified axis
+    if mirror_axis == "x":
+        position_mv.x = -position_mv.x
+    elif mirror_axis == "y":
+        position_mv.y = -position_mv.y
+    elif mirror_axis == "z":
+        position_mv.z = -position_mv.z
+
+    # Transform the mirrored position back into world space
+    position_mv = position_mv * world_matrix_mfn + translation_mv
+
+    # Get the closest vertex to the mirrored position in world space
+    cmds.select(object_name)
+    cmds.polySelectConstraint(m=3, t=1, d=1, db=(0, selection_radius), dp=[position_mv.x, position_mv.y, position_mv.z])
+    mirror_vertex = cmds.ls(sl=True, fl=True)
+    cmds.polySelectConstraint(d=0)
+
+    if not mirror_vertex:
+        return []
+
+    if len(mirror_vertex) > 1:
+        mirror = findByDistance([position_mv.x, position_mv.y, position_mv.z], mirror_vertex)
+    else:
+        mirror = mirror_vertex[0]
+
+    if select:
+        cmds.select(cl=True)
+        cmds.select(mirror)
+    else:
+        cmds.select(cl=True)
+        cmds.select(currentSelection)
+
+    # Return the mirror vertex and wold space position
+    return (mirror, position_mv)
+
+
+# def getMirrorVertex(vertex=None, axis='x', selection_radius=1, select=True):
+#
+#     if not vertex:
+#         sel = cmds.ls(sl=True)
+#         if sel and cmds.nodeType(sel[0]) == 'mesh':
+#             vertex = sel[0]
+#
+#     if vertex:
+#         mesh = vertex.split('.')[0]
+#         pos = cmds.xform(vertex, q=True, os=True, t=True)
+#
+#         m_pos = [0 - pos[0] if axis == 'x' else pos[0],
+#                  0 - pos[1] if axis == 'y' else pos[1],
+#                  0 - pos[2] if axis == 'z' else pos[2]]
+#
+#         cmds.select(mesh)
+#         cmds.polySelectConstraint(m=3, t=1, d=1, db=(0, selection_radius), dp=m_pos)
+#         mirror_vertex = cmds.ls(sl=True, fl=True)
+#         cmds.polySelectConstraint(d=0)
+#
+#         if len(mirror_vertex) > 1:
+#             mirror = findByDistance(m_pos, cmds.ls(sl=True, fl=True))
+#         else:
+#             mirror = mirror_vertex[0]
+#
+#         if select:
+#             cmds.select(cl=True)
+#             cmds.select(mirror)
+#
+#         return mirror
+
+def snapToClosest(target_vtxs, input_vtxs, index=0):
+    '''
+    component snap, given a list of target_vtxs (on any mesh) snap the input_vtxs
+    to the closest matching world positions in the target list. Note that these 2
+    lists need to be flattened vtx lists ie:
+
+    >>> # select target vtx we're matching too
+    >>> target_vtxs = cmds.ls(sl=True, fl=True)
+    >>> # select vtx on the input mesh
+    >>> input_vtxs = cmds.ls(sl=True, fl=True)
+    >>> # run the matching
+    >>> r9Core.snapToClosest(target_vtxs, input_vtxs)
+
+    :param target_vtxs: list of source components, used to match too
+    :param input_vtxs: list of components we're going to be snapping
+    :param index: the index of tolerance. This is the order within the sorted list of closest distances in the match that we use. 0 is the closet, 1 is the second closest etc
+    '''
+    target_ws = {}
+    # cache the world space positions of the input vtx
+    for t_vtx in target_vtxs:
+        target_ws[t_vtx] =  cmds.xform(t_vtx, q=True, ws=True, t=True)
+
+    for i_vtx in input_vtxs:
+        x1, y1, z1 = cmds.xform(i_vtx, q=True, ws=True, t=True)
+        distances = {}
+        # find the closest target vtx
+        for t_vtx, ws in target_ws.items():
+            distances[math.sqrt(math.pow((x1 - ws[0]), 2) + math.pow((y1 - ws[1]), 2) + math.pow((z1 - ws[2]), 2))] = t_vtx
+        closest_vtx = target_ws[distances[sorted(distances)[index]]]
+        # snap into place
+        cmds.xform(i_vtx, ws=True, t=(closest_vtx[0], closest_vtx[1], closest_vtx[2]))
 
 def convertUnits_internalToUI(value, unit):
     '''

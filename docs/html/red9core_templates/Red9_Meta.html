@@ -73,6 +73,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/puppet/Red9_Pro_ikfk_match.html">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
 
         </div>
       </div>
@@ -1970,7 +1973,25 @@ based on their mirror side data</p>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.mirror">
-<code class="descname">mirror</code><span class="sig-paren">(</span><em>nodes=None</em>, <em>mode='Anim'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.mirror" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mirror</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mode='Anim'</em>, <em>hierarchy=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.mirror" title="Permalink to this definition">¶</a></dt>
+<dd><p>direct mapper call to the Mirror functions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> – nodes to mirror, if None then we process the entire rig</li>
+<li><strong>mode</strong> – either ‘Anim’ or ‘Pose’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Red9.core.Red9_Meta.MetaRig.symmetry">
+<code class="descname">symmetry</code><span class="sig-paren">(</span><em>nodes=[]</em>, <em>mode='Anim'</em>, <em>hierarchy=True</em>, <em>side='L'</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.symmetry" title="Permalink to this definition">¶</a></dt>
 <dd><p>direct mapper call to the Mirror functions</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -2244,7 +2265,7 @@ only cutting those nodes that are part of this mRig</li>
 
 <dl class="method">
 <dt id="Red9.core.Red9_Meta.MetaRig.saveAnimation">
-<code class="descname">saveAnimation</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>incRoots=True</em>, <em>useFilter=True</em>, <em>timerange=()</em>, <em>storeThumbnail=False</em>, <em>force=False</em>, <em>userInfoData=''</em>, <em>autorange=True</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.saveAnimation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">saveAnimation</code><span class="sig-paren">(</span><em>filepath=None</em>, <em>incRoots=True</em>, <em>useFilter=True</em>, <em>timerange=()</em>, <em>storeThumbnail=False</em>, <em>force=False</em>, <em>userInfoData=''</em>, <em>autorange=True</em>, <em>buffer_ends=True</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.core.Red9_Meta.MetaRig.saveAnimation" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>: PRO_PACK :</dt>
 <dd>Binding of the animMap format for storing animation data out to file</dd>
@@ -2268,6 +2289,11 @@ the current playback timeranges. If this is False and you pass in no timerange t
 bounds of the curves themselves, saving all key data for the objects regardless of the current timelines.
 This is designed to be run with the “manageRanges=3” flag in the loadAnim code so we can save and restore
 entire animation files via r9Anim format. This flag is ignored if timerange is passed as an arg</li>
+<li><strong>buffer_ends</strong> – Oct 2022 : new functionality that will temporarily insert start and end frame keys into the data
+before saving to ensure sparce baked data, particularly looping data, is maintained. We manage the tangents so
+that the data is restored with exactly the same in and out shape regardless of the lack of initial key. Note that
+this, like Maya itself, requires us to change the key tangents of the keys either side of the start and end frames
+to ‘fixed’ to best maintain the curve shape.</li>
 </ul>
 </td>
 </tr>
@@ -2802,7 +2828,7 @@ and useful for management in the systems</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>filepath</strong> – filepath to store the mapping out too</li>
-<li><strong>skip_measurements</strong> – if true (defulat) we do not store those attrs that are skeleton specific
+<li><strong>skip_measurements</strong> – if true (default) we do not store those attrs that are skeleton specific
 only those which control the remapping</li>
 </ul>
 </td>

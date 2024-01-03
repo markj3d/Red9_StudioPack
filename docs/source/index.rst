@@ -77,6 +77,8 @@ We also support a number of Maya.env variables that can be modified to control t
 | **RED9_PROJECT_RESOURCES=path**  : custom folder containing x.project files, these are mounted by the ProjectManager
 | **RED9_CLIENTCORE=path**  : custom path that allows you to direct the ClientCore path to suiot your company structures
 | **RED9_PERFORCE_FORCE_ABORT=1**  : 0 or 1 hard abort for any Perforce binding & handling
+| **RED9_LICENSE_LOCATION=path**  : custom path to find the R9USER license file
+| **RED9_AIR_GAPPED=1**  : 0 or 1 designed for nodelocked based licenses where machines have no physical intrnal connection
 
 For more details please visit our website or contact us: info@red9consultancy.com
 
@@ -100,7 +102,17 @@ ProPack tools
 
         red9pro_templates/tools/*
  
- 
+
+ProPack puppet
+-------------
+
+	These modules are specific to puppet rig and tooling around that, this will expand over the next few years
+
+    .. toctree::
+        :glob:
+
+        red9pro_templates/puppet/*
+		
 **Indices and tables**
 =======================
 

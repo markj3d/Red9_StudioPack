@@ -73,6 +73,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/puppet/Red9_Pro_ikfk_match.html">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
 
         </div>
       </div>
@@ -372,7 +375,7 @@ up the self.matchedPairs data [(src,dest),(src,dest)]</p>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">this replaced the original call self._poseLoad_buildcache()</p>
+<p class="last">this is the core process block for both r9Pose and r9Anim</p>
 </div>
 </dd></dl>
 
@@ -473,6 +476,18 @@ from this class instance, wraps things up nicely for you:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">_applyData</span><span class="p">(</span><span class="n">percent</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>The class by default binds an instance of our FilterSettings object and thats used to find and match
+the nodes we’re going to both store and load. For example, if you have a standard rig with nurbs ctrls
+you can use the following</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span> <span class="o">=</span> <span class="n">r9Pose</span><span class="o">.</span><span class="n">PoseData</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">hierarchy</span><span class="o">=</span><span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">nodeTypes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nurbsCurve&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pose</span><span class="o">.</span><span class="n">poseSave</span><span class="p">(</span><span class="s1">&#39;Red9_FacialBoard&#39;</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="s1">&#39;C:/mypose&#39;</span><span class="p">,</span> <span class="n">useFilter</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p># or you can pass a FilterSettings object directly into the __init__</p>
+</div></blockquote>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>If the root node of the hierarchy passed into the poseSave() has a message attr

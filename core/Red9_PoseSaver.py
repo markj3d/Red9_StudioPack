@@ -30,15 +30,16 @@ import Red9_CoreUtils as r9Core
 import Red9_General as r9General
 import Red9_AnimationUtils as r9Anim
 import Red9_Meta as r9Meta
+
 import maya.OpenMaya as OpenMaya
-
-
 import maya.cmds as cmds
+
 import os
 import Red9.packages.configobj as configobj
 import time
 import getpass
 import json
+import traceback
 
 
 import logging
@@ -195,6 +196,7 @@ class DataMap(object):
 
         self.nodesToStore = []  # built by the buildDataMap func
         self.nodesToLoad = []  # build in the processPoseFile func
+        self.required_shape_dependancies = {}  # new dic to manage dependent shape nodes such as camera data
 
         # make sure we have a settings object
         if filterSettings:
@@ -333,7 +335,8 @@ class DataMap(object):
                 return nodes
         else:
             log.debug('getNodes - useFilter=False : no custom poseHandler')
-            return nodes
+            return nodes   
+        return nodes
 
     def getSkippedAttrs(self, rootNode=None):
         '''
@@ -413,12 +416,37 @@ class DataMap(object):
                 'quaternion': [rots.x, rots.y, rots.z, rots.w],
                 'euler': euler}
 
+    def _required_shapes(self, nodes):
+        '''
+        simple wrap to iterate over the nodes list and insert required shape nodes
+        such as camera shape nodes so that that data is also injected into the
+        pose and r9Anim data. 
+
+        self.required_shape_dependancies is filled with [shp] = node  where shp is
+        the extended shape that's to be included in save/load, and node is the dependent node
+        that this shp was found under. This is used by the match code to directly pull
+        the correct data block out when the dependents are loaded back in
+        '''
+        shps = []
+        self.required_shape_dependancies = {}  # used in the save only
+        try:
+            for node in nodes:
+                dependents = cmds.listRelatives(node, type='camera', f=True)
+                if dependents:
+                    self.required_shape_dependancies[dependents[0]] = node
+                    shps.append(dependents[0])
+        except Exception, err:
+            log.debug(err)
+        return shps
+
     def _collectNodeData_attrs(self, node, key):
         '''
+
         Capture and build attribute data from this node and fill the
         data to the datamap[key]
         '''
-        channels = r9Anim.getSettableChannels(node, incStatics=True)
+        channels = r9Anim.getSettableChannels(node, incStatics=True, skipcompound=True)  # no longer allow double3 or float3 compound attrs to slip through
+
         if channels:
             self.poseDict[key]['attrs'] = {}
             self.poseDict[key]['attrs_kWorld'] = {}
@@ -437,6 +465,7 @@ class DataMap(object):
                 except:
                     log.debug('%s : attr is invalid in this instance' % attr)
 
+            # get the world space data for all transform nodes
             if cmds.nodeType(node) in ['transform', 'joint']:
                 self.poseDict[key]['attrs_kWorld'] = self._getTranforms(node, worldspace=True)
 
@@ -499,10 +528,21 @@ class DataMap(object):
             self.poseDict[key]['ID'] = i  # selection order index
             self.poseDict[key]['longName'] = node  # longNode name
             mirrorID = getMirrorID(node)
+
             if mirrorID:
                 self.poseDict[key]['mirrorID'] = mirrorID  # add the mirrorIndex
+
             if self.metaPose:
-                self.poseDict[key]['metaData'] = getMetaDict(node, mNodes=mNodes)  # metaSystem the node is wired too
+                _metadata = getMetaDict(node, mNodes=mNodes)   # metaSystem the node is wired too
+                if _metadata:
+                    self.poseDict[key]['metaData'] = _metadata
+
+            if 'transform' in cmds.nodeType(node, inherited=True):   # Oct 22 for sanity on load
+                self.poseDict[key]['rotateOrder'] = cmds.getAttr('%s.rotateOrder' % node)
+
+            if node in self.required_shape_dependancies:
+                self.poseDict[key]['dependency_key'] = r9Core.nodeNameStrip(self.required_shape_dependancies[node])
+
             # the above blocks are the generic info used to map the data on load
             # this call is the specific collection of data for this node required by this map type
             self._collectNodeData(node, key)
@@ -581,6 +621,12 @@ class DataMap(object):
         if not self.nodesToStore:
             raise IOError('No Matching Nodes found to store the pose data from')
 
+        # extend with required shapes (cameras and shape nodes that we also need to dynamically inject)
+        shps = self._required_shapes(self.nodesToStore)
+        if shps:
+            log.debug('extending to node shapes %s' % shps)
+            self.nodesToStore.extend(shps)
+
         return self.nodesToStore
 
     # --------------------------------------------------------------------------------
@@ -611,6 +657,7 @@ class DataMap(object):
 
         for key, dest in self.matchedPairs:
             log.debug('Applying Key Block : %s' % key)
+            
             try:
                 if 'attrs' not in self.poseDict[key]:
                     continue 
@@ -828,7 +875,7 @@ class DataMap(object):
         :param read: if True we read the r9Anim from file, else we skip the load
 
         .. note::
-            this replaced the original call self._poseLoad_buildcache()
+            this is the core process block for both r9Pose and r9Anim
         '''
         self.nodesToLoad = []
 
@@ -852,14 +899,18 @@ class DataMap(object):
         if self.metaPose:
             # set the mRig in a consistent manner
             self.setMetaRig(nodes[0])
-            if 'metaPose' in self.infoDict and self.metaRig:
-                try:
-                    if eval(self.infoDict['metaPose']):
+            if self.infoDict:
+                if 'metaPose' in self.infoDict and self.metaRig:
+                    try:
+                        if eval(self.infoDict['metaPose']):
+                            self.matchMethod = 'metaData'
+                    except:
                         self.matchMethod = 'metaData'
-                except:
-                    self.matchMethod = 'metaData'
+                else:
+                    log.debug('Warning, trying to load a NON metaPose to a MRig - switching to NameMatching')
             else:
-                log.debug('Warning, trying to load a NON metaPose to a MRig - switching to NameMatching')
+                # in clipboard mode from mRig the infoDict isn't built
+                self.matchMethod = 'metaData'
 
         # fill the skip list, these attrs will be totally ignored by the code
         self.skipAttrs = self.getSkippedAttrs(nodes[0])
@@ -877,14 +928,49 @@ class DataMap(object):
             if rematched:
                 self.matchedPairs.extend(rematched)
 
+        # run the new required shape match logic to extend the load data to important subnodes
+        # which aren't part of the base filtered hierarchy of nodes
+        matched_required_extras, new_nodes_to_load = self._match_required_shapes()
+        if matched_required_extras:
+            self.matchedPairs.extend(matched_required_extras)
+            self.nodesToLoad.extend(new_nodes_to_load)
+
         return self.nodesToLoad
+
+    def _match_required_shapes(self):
+        '''
+        new proc to match up dependency keys in the data against the current nodelist.
+        This uses the "dependency_key" in the node block to then match the parent key
+        if ot's already been matched. Ie, if the 'Camera1' has already been matched by 
+        _matchNodesToPoseData func then we use the matchedPairs to find the key, and therefore
+        the correct parent destination node to extract and match the shape too
+        '''
+        dependents = {}
+        dependents_matched = []
+        new_nodes_to_load = []
+
+        # first see if the poseDic contains any dependent keys
+        for key in self.poseDict.keys():
+            if 'dependency_key' in self.poseDict[key]:
+                dependents[self.poseDict[key]['dependency_key']] = key
+        log.debug('dependent keys found in poseDict : %s' % dependents)
+
+        if dependents:
+            for key, dest in self.matchedPairs:
+                if key in dependents:
+                    # extend with required shapes (cameras and shape nodes that we also need to dynamically inject)
+                    shp_node = self._required_shapes([dest])
+                    if shp_node:
+                        dependents_matched.append((dependents[key], shp_node[0]))
+                        new_nodes_to_load.append(shp_node[0])
+        log.debug('dependents_matched : %s' % dependents_matched)
+        return dependents_matched, new_nodes_to_load
 
     @r9General.Timer
     def _matchNodesToPoseData(self, nodes, matchMethod=None, returnfails=False):
         '''
         Main filter to extract matching data pairs prior to processing
         return : tuple such that :  (poseDict[key], destinationNode)
-        NOTE: I've changed this so that matchMethod is now an internal PoseData attr
 
         :param nodes: nodes to try and match from the poseDict
         :param matchMethod: if given this over-rides self.matchMethod so you can do additional checks without mutating the class var
@@ -965,7 +1051,7 @@ class DataMap(object):
                 matched = False
                 try:
                     metaDict = getMetaDict(node)
-
+                    # if metaDict:
                     for key in poseKeys:
                         if poseKeys[key]['metaData'] == metaDict:
                             matchedPairs.append((key, node))
@@ -1130,6 +1216,18 @@ class PoseData(DataMap):
         >>>
         >>> # now we can dial in a percentage of the pose, we bind this to a floatSlider in the UI
         >>> pose._applyData(percent=20)
+        
+    The class by default binds an instance of our FilterSettings object and thats used to find and match
+    the nodes we're going to both store and load. For example, if you have a standard rig with nurbs ctrls
+    you can use the following
+    
+        >>> pose = r9Pose.PoseData()
+        >>> pose.settings.hierarchy=True
+        >>> pose.settings.nodeTypes=['nurbsCurve']
+        >>> pose.poseSave('Red9_FacialBoard', filepath='C:/mypose', useFilter=True)
+        
+        # or you can pass a FilterSettings object directly into the __init__
+
 
     .. note::
         If the root node of the hierarchy passed into the poseSave() has a message attr
@@ -1196,7 +1294,7 @@ class PoseData(DataMap):
                 self.skeletonDict[key]['longName'] = jnt.replace(parentNode[0], '')
             else:
                 self.skeletonDict[key]['longName'] = jnt
-            for attr in ['translateX', 'translateY', 'translateZ', 'rotateX', 'rotateY', 'rotateZ', 'jointOrientX', 'jointOrientY', 'jointOrientZ']:
+            for attr in ['translateX', 'translateY', 'translateZ', 'rotateX', 'rotateY', 'rotateZ', 'scaleX', 'scaleY', 'scaleZ', 'jointOrientX', 'jointOrientY', 'jointOrientZ', 'segmentScaleCompensate']:
                 try:
                     self.skeletonDict[key]['attrs'][attr] = cmds.getAttr('%s.%s' % (jnt, attr))
                 except:
@@ -1506,6 +1604,7 @@ class PoseData(DataMap):
                     if objs:
                         cmds.select(objs)
         except StandardError, err:
+            log.debug(traceback.format_exc())
             log.info('Pose Load Failed! : , %s' % err)
         finally:
             self._post_load()
@@ -1677,7 +1776,10 @@ class PosePointCloud(object):
         self.isVisible = True  # Do we build the visual reference setup or not?
         self.mRig = None
         self.ppcMeta = None  # MetaNode to cache the data
-
+        self.cached_attrs = []  # list of attrs to cache to self under self._cached_data
+        self.cached_data = {}
+        self.scale = 1
+        self.dynamic_scale = True
         if filterSettings:
             if not issubclass(type(filterSettings), r9Core.FilterNode_Settings):
                 raise StandardError('filterSettings param requires an r9Core.FilterNode_Settings object')
@@ -1704,11 +1806,16 @@ class PosePointCloud(object):
         pull existing data back from the metaNode
         '''
         if self.getCurrentInstances():
-            self.ppcMeta = self.getCurrentInstances()[0]
-            self.posePointCloudNodes = self.ppcMeta.posePointCloudNodes
-            self.posePointRoot = self.ppcMeta.posePointRoot[0]
-            self.baseClass = self.ppcMeta.baseClass
-            self.snapScales = self.ppcMeta.snapScales
+            try:
+                self.ppcMeta = self.getCurrentInstances()[0]
+                self.posePointCloudNodes = self.ppcMeta.posePointCloudNodes
+                self.posePointRoot = self.ppcMeta.posePointRoot[0]
+                self.baseClass = self.ppcMeta.baseClass
+                self.snapScales = self.ppcMeta.snapScales
+                return True
+            except Exception as err:
+                log.error(err)
+                log.warning('Base PPC : Failed to Sync current instance of PPC')
 
     def getInputNodes(self):
         '''
@@ -1726,7 +1833,9 @@ class PosePointCloud(object):
             if self.prioritySnapOnly:
                 # take from the flt instance as that now manages metaRig specific settings internally
                 self.settings.searchPattern = flt.settings.filterPriority
-            self.inputNodes = flt.processFilter()
+            
+            # by-pass for unloaded references linked to mNode systems
+            self.inputNodes = [node for node in flt.processFilter() if cmds.nodeType(node) == 'transform']
 
             self.settings.searchPattern = __searchPattern_cached  # restore the settings back!!
 
@@ -1738,6 +1847,20 @@ class PosePointCloud(object):
                 self.mRig = r9Meta.getMetaRigs()[0]
             self.meshes = self.mRig.renderMeshes
 
+            if self.mRig and self.dynamic_scale:
+
+                # try using the PuppetRig controlScale attr first
+                if hasattr(self.mRig, 'masterNode') and cmds.objExists('%s.controlScale' % self.mRig.masterNode[0]):
+                    self.scale = cmds.getAttr('%s.controlScale' % self.mRig.masterNode[0]) / 8.964  # 8.964 is the base controlScale of our PuppetRig so used as the base calculation
+                    log.info('visual scale pulled from controlScale attr : %s' % self.scale)
+                # if not use the overall bounding box scale of the connected renderMeshes
+                elif hasattr(self.mRig, 'get_mesh_boundingbox'):
+                    try:
+                        bbY = self.mRig.get_mesh_boundingbox()[1]
+                        self.scale = bbY / 172  # 172 is the base height of our PuppetRig so used as the base calculation
+                        log.info('visual scale calculated from renderMeshes boundingBox : %s' % self.scale)
+                    except:
+                        log.debug('mesh bounding box data not returned correctly')
         if self.inputNodes:
             self.inputNodes.reverse()  # for the snapping operations
         return self.inputNodes
@@ -1778,16 +1901,30 @@ class PosePointCloud(object):
         '''
         return r9Meta.getMetaNodes(mClassGrps=['PPCROOT'])
 
+    def _get_cached_attrs(self, *args, **kws):
+        '''
+        single time func to grab a list of attrs at currentTime, sent into the snapTransforms
+        so it's called per frame to build up the cached lists
+        '''
+        for attr in self.cached_attrs:
+            self.cached_data.setdefault(attr, {})
+            # only under the time key for consistency with the animPPC
+            self.cached_data[attr][cmds.currentTime(q=True)] = cmds.getAttr(attr)
+
     def snapPosePntstoNodes(self):
         '''
         snap each pntCloud point to their respective Maya nodes
         '''
+
         for pnt, node in self.posePointCloudNodes:
             try:
                 log.debug('snapping PPT : %s' % pnt)
                 r9Anim.AnimFunctions.snap([node, pnt], snapScales=self.snapScales)
             except:
                 log.debug('FAILED : snapping PPT : %s' % pnt)
+
+        # build the cache data up if required. This is to sync with the ProPack cache systems
+        self._get_cached_attrs()
 
     def snapNodestoPosePnts(self):
         '''
@@ -1828,16 +1965,16 @@ class PosePointCloud(object):
         self.posePointRoot = cmds.ls(cmds.spaceLocator(name='posePointCloud'), sl=True, l=True)[0]
         cmds.setAttr('%s.visibility' % self.posePointRoot, self.isVisible)
 
-        ppcShape = cmds.listRelatives(self.posePointRoot, type='shape', f=True)[0]
-        cmds.setAttr("%s.localScaleZ" % ppcShape, 30)
-        cmds.setAttr("%s.localScaleX" % ppcShape, 30)
-        cmds.setAttr("%s.localScaleY" % ppcShape, 30)
-
         if rootReference:
             self.rootReference = rootReference
 
         # run the filterCode based on the settings object
         self.getInputNodes()
+
+        ppcShape = cmds.listRelatives(self.posePointRoot, type='shape', f=True)[0]
+        cmds.setAttr("%s.localScaleZ" % ppcShape, self.scale * 30)
+        cmds.setAttr("%s.localScaleX" % ppcShape, self.scale * 30)
+        cmds.setAttr("%s.localScaleY" % ppcShape, self.scale * 30)
 
         if self.mayaUpAxis == 'y':
             cmds.setAttr('%s.rotateOrder' % self.posePointRoot, 2)  # to prevent as much gimal as possible
@@ -1955,11 +2092,14 @@ class PosePointCloud(object):
             cmds.refresh()
 
     def delete(self):
-        root = self.posePointRoot
-        if not root:
-            root = self.ppcMeta.posePointRoot[0]
-        self.ppcMeta.delete()
-        cmds.delete(root)
+        try:
+            root = self.posePointRoot
+            if not root:
+                root = self.ppcMeta.posePointRoot[0]
+            self.ppcMeta.delete()
+            cmds.delete(root)
+        except:
+            log.debug('failed to delete PPC node')
 
     def deleteCurrentInstances(self):
         '''

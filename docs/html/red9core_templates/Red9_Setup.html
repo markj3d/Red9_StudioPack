@@ -73,6 +73,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../red9pro_templates/puppet/Red9_Pro_ikfk_match.html">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
 
         </div>
       </div>
@@ -125,8 +128,8 @@ Built to allow users to tailor and use these Maya boot calls in their own pipeli
 <tr class="row-even"><td><a class="reference internal" href="#Red9.startup.setup.maya_screen_mapping" title="Red9.startup.setup.maya_screen_mapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maya_screen_mapping</span></code></a>()</td>
 <td>return the maya applications screen size mapping data.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#Red9.startup.setup.mayaVersion" title="Red9.startup.setup.mayaVersion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mayaVersion</span></code></a>()</td>
-<td>get the application version back, this doesn’t track service packs or extensions</td>
+<tr class="row-odd"><td><a class="reference internal" href="#Red9.startup.setup.mayaVersion" title="Red9.startup.setup.mayaVersion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mayaVersion</span></code></a>([minor])</td>
+<td>get the application version back as a float.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#Red9.startup.setup.mayaInstallDir" title="Red9.startup.setup.mayaInstallDir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mayaInstallDir</span></code></a>()</td>
 <td>This is more for future reference, we read the key from the win registry and return the MAYA_INSTALL_LOCATION</td>
@@ -189,7 +192,8 @@ Built to allow users to tailor and use these Maya boot calls in their own pipeli
 2019          .  2019  .  201900  .  2.7.11 2     5.6.1  .  2019     . 2019-01-15
 2020          .  2020  .  202000  .  2.7.11 2     5.12.5 .  2020     . 2019-12-10
 2022          .  2022  .  202200  .  3.7.7  2     5.15.2 .  2022     . 2021-03-29
-2023          .  2023  .  202300  .  3.9.7  2     5.15.2 .  2023     . 2022-14-15</p>
+2023          .  2023  .  202300  .  3.9.7  2     5.15.2 .  2023     . 2022-03-15
+2024          .  2024  .  202400  .  3.10.8 2     5.15.2 .  2024     . 2023-03</p>
 </div></blockquote>
 </div></blockquote>
 </dd></dl>
@@ -265,9 +269,16 @@ so we can consistently scale icon widgets as expected.</p>
 
 <dl class="function">
 <dt id="Red9.startup.setup.mayaVersion">
-<code class="descname">mayaVersion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.mayaVersion" title="Permalink to this definition">¶</a></dt>
-<dd><p>get the application version back, this doesn’t track service packs or extensions</p>
-<p>TODO: need to manage this better and use the API version, eg: 2013.5 returns 2013</p>
+<code class="descname">mayaVersion</code><span class="sig-paren">(</span><em>minor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.startup.setup.mayaVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the application version back as a float.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>minor</strong> – if True we include the service pack version in the return</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">

@@ -73,6 +73,9 @@
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="puppet/Red9_Pro_ikfk_match.html">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
 
         </div>
       </div>
@@ -108,6 +111,24 @@
 </div>
 <span class="target" id="module-Red9.pro_pack.UI.uibase"></span><p>This module is the base for all the Qt windows in Red9pro</p>
 <p class="rubric">Main Classes</p>
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.get_ui">
+<code class="descname">get_ui</code><span class="sig-paren">(</span><em>key=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.get_ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>get back the current instance of the given Red9 UI</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.close_all_ui_instances">
+<code class="descname">close_all_ui_instances</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.close_all_ui_instances" title="Permalink to this definition">¶</a></dt>
+<dd><p>close all ProPack QT UI instances</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.reset_ui_settings">
+<code class="descname">reset_ui_settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.reset_ui_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete the r9ui.settings file and reset the global vars</p>
+</dd></dl>
+
 <dl class="function">
 <dt id="Red9.pro_pack.UI.uibase.style_sheet">
 <code class="descname">style_sheet</code><span class="sig-paren">(</span><em>colour</em>, <em>txt_colour='black'</em>, <em>widget=None</em>, <em>opacity=None</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.style_sheet" title="Permalink to this definition">¶</a></dt>
@@ -158,15 +179,21 @@ against multiple display scale factors in 4k</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.UI.uibase.createicon">
-<code class="descname">createicon</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.createicon" title="Permalink to this definition">¶</a></dt>
+<code class="descname">createicon</code><span class="sig-paren">(</span><em>path</em>, <em>target_size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.createicon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a QIcon object from a given path</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> – path to an image</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> – path to an image</li>
+<li><strong>target_size</strong> – if given this will scale the pixMap used in the icon so that it’s consistent with the given size,
+without scaling like this icons will only scale to the maximum size of the original png, this by-passes that limitation</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">custom QIcon object</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">custom QIcon object</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -185,7 +212,7 @@ against multiple display scale factors in 4k</p>
 <dl class="function">
 <dt id="Red9.pro_pack.UI.uibase.progress_start">
 <code class="descname">progress_start</code><span class="sig-paren">(</span><em>progress_bar</em>, <em>maximum</em>, <em>legend=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.progress_start" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wraper to manage QProgressBar object cont and legend</p>
+<dd><p>Wrapper to manage QProgressBar object cont and legend</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -227,7 +254,7 @@ against multiple display scale factors in 4k</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.UI.uibase.setr9btn">
-<code class="descname">setr9btn</code><span class="sig-paren">(</span><em>btn</em>, <em>baseheight=20</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.setr9btn" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setr9btn</code><span class="sig-paren">(</span><em>btn</em>, <em>baseheight=20</em>, <em>basewidth=300</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.setr9btn" title="Permalink to this definition">¶</a></dt>
 <dd><p>the Red9 base banner on all Red9 QT windows</p>
 </dd></dl>
 
@@ -235,6 +262,75 @@ against multiple display scale factors in 4k</p>
 <dt id="Red9.pro_pack.UI.uibase.setr9css">
 <code class="descname">setr9css</code><span class="sig-paren">(</span><em>uiinstance</em>, <em>css=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.setr9css" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.validateEmail">
+<code class="descname">validateEmail</code><span class="sig-paren">(</span><em>email</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.validateEmail" title="Permalink to this definition">¶</a></dt>
+<dd><p>from a given email string validate it’s characters</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.get_pyide_ui_path">
+<code class="descname">get_pyide_ui_path</code><span class="sig-paren">(</span><em>ui_file</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.get_pyide_ui_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.compile_ui_to_py">
+<code class="descname">compile_ui_to_py</code><span class="sig-paren">(</span><em>ui_file</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.compile_ui_to_py" title="Permalink to this definition">¶</a></dt>
+<dd><p>compile and save .py files for .ui file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ui_file</strong> – string path to .ui file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string path to compiled .py file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.load_ui_py">
+<code class="descname">load_ui_py</code><span class="sig-paren">(</span><em>py_data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.load_ui_py" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.loadUiType">
+<code class="descname">loadUiType</code><span class="sig-paren">(</span><em>ui_file</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.loadUiType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pyside “loadUiType” command like PyQt4 has one, so we have to convert the
+.ui file to .py code in-memory first and then execute it in a special form
+to retrieve the form_class.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">base_class</span><span class="p">,</span> <span class="n">form_class</span> <span class="o">=</span> <span class="n">loadUiType</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;D:\ui.ui&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Test</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="n">form_class</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">get_maya_main_window</span><span class="p">()):</span>
+<span class="gp">&gt;&gt;&gt; </span>       <span class="nb">super</span><span class="p">(</span><span class="n">Test</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>       <span class="bp">self</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.UI.uibase.loadUi">
+<code class="descname">loadUi</code><span class="sig-paren">(</span><em>uifile</em>, <em>parent=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.loadUi" title="Permalink to this definition">¶</a></dt>
+<dd><p>legacy needs to be remove use loadUiType instead</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>uifile</strong> – path to .ui file</li>
+<li><strong>parent</strong> – patent window for .ui file, if no parent guiven, it will use the main maya ui</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">.ui file as an instance</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.UI.uibase.MessageBox">
@@ -306,69 +402,6 @@ EX.</p>
 </table>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.UI.uibase.get_pyide_ui_path">
-<code class="descname">get_pyide_ui_path</code><span class="sig-paren">(</span><em>ui_file</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.get_pyide_ui_path" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.UI.uibase.compile_ui_to_py">
-<code class="descname">compile_ui_to_py</code><span class="sig-paren">(</span><em>ui_file</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.compile_ui_to_py" title="Permalink to this definition">¶</a></dt>
-<dd><p>compile and save .py files for .ui file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ui_file</strong> – string path to .ui file</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">string path to compiled .py file</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.UI.uibase.load_ui_py">
-<code class="descname">load_ui_py</code><span class="sig-paren">(</span><em>py_data</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.load_ui_py" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.UI.uibase.loadUiType">
-<code class="descname">loadUiType</code><span class="sig-paren">(</span><em>ui_file</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.loadUiType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pyside “loadUiType” command like PyQt4 has one, so we have to convert the
-.ui file to .py code in-memory first and then execute it in a special form
-to retrieve the form_class.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">base_class</span><span class="p">,</span> <span class="n">form_class</span> <span class="o">=</span> <span class="n">loadUiType</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;D:\ui.ui&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Test</span><span class="p">(</span><span class="n">base_class</span><span class="p">,</span> <span class="n">form_class</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>   <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">get_maya_main_window</span><span class="p">()):</span>
-<span class="gp">&gt;&gt;&gt; </span>       <span class="nb">super</span><span class="p">(</span><span class="n">Test</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span>       <span class="bp">self</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.UI.uibase.loadUi">
-<code class="descname">loadUi</code><span class="sig-paren">(</span><em>uifile</em>, <em>parent=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.loadUi" title="Permalink to this definition">¶</a></dt>
-<dd><p>legacy needs to be remove use loadUiType instead</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>uifile</strong> – path to .ui file</li>
-<li><strong>parent</strong> – patent window for .ui file, if no parent guiven, it will use the main maya ui</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">.ui file as an instance</p>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="function">
@@ -504,12 +537,6 @@ to retrieve the form_class.</p>
 <dt id="Red9.pro_pack.UI.uibase.setComboBox">
 <code class="descname">setComboBox</code><span class="sig-paren">(</span><em>comboBox</em>, <em>data=None</em>, <em>setCurrentIndex=True</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.setComboBox" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-<dl class="function">
-<dt id="Red9.pro_pack.UI.uibase.validateEmail">
-<code class="descname">validateEmail</code><span class="sig-paren">(</span><em>email</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.UI.uibase.validateEmail" title="Permalink to this definition">¶</a></dt>
-<dd><p>from a given email string validate it’s characters</p>
-</dd></dl>
 
 <dl class="class">
 <dt id="Red9.pro_pack.UI.uibase.R9_float_slider_widget">

@@ -73,6 +73,9 @@
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_project_manager.html">Pro_Pack : tools : project_manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/Red9_Pro_rig_manager.html">Pro_Pack : tools : rig_manager</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="puppet/Red9_Pro_ikfk_match.html">Pro_Pack : puppet : ikfk_match</a></li>
+</ul>
 
         </div>
       </div>
@@ -1412,7 +1415,7 @@ prevents us running this on older rigs that haven’t been tested against this</
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.mRigs_geo_display_attr_test">
-<code class="descname">mRigs_geo_display_attr_test</code><span class="sig-paren">(</span><em>expected=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_geo_display_attr_test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mRigs_geo_display_attr_test</code><span class="sig-paren">(</span><em>expected=None</em>, <em>meshes=[]</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_geo_display_attr_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>test to see if main control has geo_display attr and check that render meshes overrideDisplayType are
 connected to main control.geo_display</p>
 </dd></dl>
@@ -1421,6 +1424,21 @@ connected to main control.geo_display</p>
 <dt id="Red9.pro_pack.core.optimiser.mRigs_geo_display_attr_fix">
 <code class="descname">mRigs_geo_display_attr_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_geo_display_attr_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>add geo_display Att to main ctrl if do not exist and connect render meshes to control.geo_display attr</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_ctrl_name_match_test">
+<code class="descname">mRigs_ctrl_name_match_test</code><span class="sig-paren">(</span><em>expected=True</em>, <em>mRigs=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_ctrl_name_match_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>given 2 mRigs first do a full connection mapping then compare the names of 
+ctrls based on their wiring to the mRig networks. First rig given (or found)
+is the master rig, second rig given (or found) is the rig we’re testing</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mRigs_ctrl_name_match_fix">
+<code class="descname">mRigs_ctrl_name_match_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mRigs_ctrl_name_match_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>fix for ctrl name errors, fixes use the actual mAttr wire back to the ctrls parent mSubSystem
+for consistency</p>
 </dd></dl>
 
 <dl class="function">
@@ -1758,7 +1776,7 @@ This ONLY tests skinClusters attached to mesh objects</p>
 
 <dl class="function">
 <dt id="Red9.pro_pack.core.optimiser.skin_method_test">
-<code class="descname">skin_method_test</code><span class="sig-paren">(</span><em>expected='dq'</em>, <em>skins=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skin_method_test" title="Permalink to this definition">¶</a></dt>
+<code class="descname">skin_method_test</code><span class="sig-paren">(</span><em>expected='linear'</em>, <em>skins=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.skin_method_test" title="Permalink to this definition">¶</a></dt>
 <dd><p>Test to check the skinMethod used by all skinClusters matches the expected
 either dq or linear. This ONLY tests skinClusters attached to mesh objects</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -2251,6 +2269,19 @@ Once downloaded drop it here Red9/packages/diffMerge.exe</p>
 <dt id="Red9.pro_pack.core.optimiser.mesh_frozen_xforms_fix">
 <code class="descname">mesh_frozen_xforms_fix</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_frozen_xforms_fix" title="Permalink to this definition">¶</a></dt>
 <dd><p>fix method : freeze the failed meshes transforms</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mesh_lock_normals_test">
+<code class="descname">mesh_lock_normals_test</code><span class="sig-paren">(</span><em>root=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_lock_normals_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if meshes have nolrmals lock</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Red9.pro_pack.core.optimiser.mesh_lock_normals_fix">
+<code class="descname">mesh_lock_normals_fix</code><span class="sig-paren">(</span><em>HealthObject</em><span class="sig-paren">)</span><a class="headerlink" href="#Red9.pro_pack.core.optimiser.mesh_lock_normals_fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fix method to unlock normals
+:return: list of meshes that have normals unlocked</p>
 </dd></dl>
 
 <dl class="function">

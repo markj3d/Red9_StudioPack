@@ -112,4 +112,12 @@ class Test_MirrorSetups(object):
                                           clearCurrent=True)
         assert self.checkData()
 
+class Test_base_functions(object):
 
+    def setup(self):
+        cmds.file(new=True, f=True)
+
+    def test_timeLineRangeProcess(self):
+        assert r9Anim.timeLineRangeProcess(1.0, 10.0, 1) == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10.0]
+        assert r9Anim.timeLineRangeProcess(1.0, 10.15, 1) == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10.15]
+    

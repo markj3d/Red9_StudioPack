@@ -121,6 +121,31 @@
         "url": "https://youtu.be/qSrXXKhtFeY",
         "info": "This is a complex subject, the Red9 PRO_TO_BND is already a complex beast when it comes to animation remapping but it just got more powerful. This time we go through how we can now insert a HIK definition, on the fly, into a skeleton during the remapping process. This cuts back on the need for your FBX files to contain a HIK definition in the first place, removing 1 step in the process to remapping complex MoCap data. This was initially designed for XSens data and we now include a base preset for XSens with ProPack, but this system isn't limited in any way.\n\nWe also go through the ability in the RigManager to load, save and deal with HIK definitions via our pose system."
     }, 
+    
+    "control_builder": {
+    	"title": "Control Builder",
+        "chapters": [
+        	"0:00 Introduction",
+        	"0:24 control builder basics",
+            "3:30 swap shapes", 
+            "6:17 cv transform, setting up rig controllers",
+            "7:10 using cv cache to duplicate shapes",
+            "11:10 offsetParentMatrix OPM integration"
+        ], 
+        "date": 20220922, 
+        "tags": [
+            "propack", 
+            "animation", 
+            "cache",
+            "swap",
+            "offsetparent",
+            "shape",
+            "controls"
+        ], 
+        "url": "https://youtu.be/baIWYTHDBkY",
+        "info": "Here we cover the Red9 Control Builder, designed specifically to make the job of building and managing simple rig controls faster. This comes with a standard library of shapes and includes a ton of additional features for manipulating, caching, switching and colouring your rig controls. We've even started to integrate the new OffsetParentMatrix nodes into the toolset."
+    }, 
+   
     "copy_xforms": {
     	"title": "Copy Xforms & HUD",
         "chapters": [
@@ -497,6 +522,30 @@
         "url": "https://youtu.be/-kvvFDa_KRY",
         "info": "We go through the updated Project Manager UI and how new users can now simply create and use projects to manage all aspects of the Maya environment as well as Perforce connections and hooks. This is a massively important part of the ProPack and by exposing the new Edit Mode we open it up for all users not just TD's. The new version also allow the project files to be re-directed, via a Maya Environment variable, so that studios can all point to a central folder of project files to switch between."
     },
+    "project_manager_03": {
+    	"title": "Project & Maya Workspaces / Projects",
+    	"chapters": [ 
+    		"0:00 Introduction",
+    		"0:13 Maya Project Switch Support",
+			"3:30 Scene Health Test Update",
+			"5:24 mRig RMB DAG mute menu"
+		],
+        "date": 20221007, 
+        "tags": [
+            "mrig", 
+            "propack", 
+            "maya project",
+            "workspace",
+            "health",
+            "scene open",
+            "project_manager", 
+            "DAG",
+            "menu",
+            "ui"
+        ], 
+        "url": "https://youtu.be/T4QuQwgP5Os",
+        "info": "Another update to our Red9 Project systems, in this release, (Oct 22) we've added in Maya Project management so that when you switch Red9 project, you can also switch your Maya project / workspace at the same time. Additionally we've changed when the scene health tests are triggered, these used to only be called on scene open but for consistency we've now changed that to be called on file new and on project switch."
+    }, 
     "r9anim_basics": {
     	"title": "Animation Format",
         "date": 20180125, 
@@ -564,6 +613,22 @@
         "url": "https://youtu.be/d6R87BDagWo",
         "info": "This is a massive uplift to our already feature rich Red9 Animation format (r9Anim). This time we've concentrated on data integrity and speed.\n\nLoading is now around 4 - 5 times faster, particularly on dense data. When saving we now pass any nodes that are constrained, part of an animLayer, or driven by any other means, through our new frame sampler. Initially this was to speed up the way we saved layer data which previously passed through Maya's own anim layer merge code but that can be very slow. Since developing this we've decided that animation data, regardless of what's driving it, should always be capable of loading back to a fresh rig exactly as it was saved. The sampler does this as it basically saves out baked data, but only where that's needed."
     }, 
+    "r9anim_update_04": {
+    	"title": "Animation Format update Oct2022 - Buffer Keys / Static Keys",
+        "date": 20221010,
+        "tags": [
+            "r9anim", 
+            "propack", 
+            "animation", 
+            "buffer keys",
+            "static keys",
+            "startframe",
+            "endframe",
+            "ui"
+        ], 
+        "url": "https://youtu.be/K-OYYDk-0Lk",
+        "info": "New behaviour for the r9Anim data when dealing with sparce keys around the start and end frames. We used to only save keys that fell within the range of the timeline, however in some cases that would result in the loss of shape for the data. We now insert 'buffer keys' at the start and end frame to maintain, 100%, the original curve shape."
+    },
     "rig_manager__art_rig": {
     	"title": "Unreal ART Rig Integrations - massive expansion on capabilities",
         "date": 20190118, 
@@ -667,6 +732,20 @@
         "url": "https://youtu.be/vza2bEEPlzY",
         "info": "This is probably the most used tool in the entire StudioPack. Track and Stabilizer is used to final anim shots, track objects, maintain contact points and just help you animators out. No need to manage complex constraint switching, just track objects live to create your animation data. If we had a a penny for each time this was used in production we'd be living on a desert island!"
     },
+    "treadmill": {
+    	"title": "Animation Treadmill",
+        "date": 20221006, 
+        "tags": [
+            "treadmill", 
+            "animation", 
+            "world space",
+            "spot",
+            "main",
+            "mocap"
+        ], 
+        "url": "https://youtu.be/QDSMb_UAIN8",
+        "info": "Treadmill is a simple tool that makes it fast and easy to convert a characters overall motion, such as a run, into an run on the spot. This is done by pushing the animation of the character from it's various child controls, over to the top controller in the rig and recalculating the rest of the data accordingly. The process is 2 way, you can easily go back and forth at the click of a button."
+    },
     "skinning_01": {
     	"title": "Skin Tools",
         "date": 20171102, 
@@ -687,5 +766,18 @@
         ], 
         "url": "https://youtu.be/qhLB3b8rks0",
         "info": "Here's a quick peak at just how deep the Red9 ProPack goes, quick regression test of all the UI's, more coming soon!"
+    },
+    "video_help": {
+    	"title": "Video Help",
+        "date": 20221011, 
+        "tags": [
+        	"training",
+        	"help",
+        	"video",
+        	"search",
+            "ui"
+        ], 
+        "url": "https://youtu.be/JG30OmEEXoQ",
+        "info": "Video Help is a fast search UI within Maya that's there to help the learning experience for new users of Red9 ProPack. Each video on our YouTube channel is cataloged and indexed by tag, chapter and description making it a great resource. What's more the search field can take multiple strings, 'exp,fbx' will search for all matches of 'exp' and 'fbx', where 'exp+fbx' will search only those making both exp and fbx. This also takes regex entries for more advanced users."
     }
 }
